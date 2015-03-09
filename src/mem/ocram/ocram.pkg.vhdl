@@ -3,16 +3,16 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- ============================================================================
--- Package:				 	VHDL package for component declarations, types and functions
---									assoziated to the PoC.mem.ocram namespace
---
 -- Authors:				 	Martin Zabel
 -- 
+-- Package:				 	VHDL package for component declarations, types and functions
+--									associated to the PoC.mem.ocram namespace
+--
 -- Description:
 -- ------------------------------------
--- On-Chip RAM for FPGAs and so on.
+--		On-Chip RAM for FPGAs and so on.
 --
--- Detailed documentation is included in each module.
+--		A detailed documentation is included in each module.
 --
 -- License:
 -- ============================================================================
@@ -32,9 +32,10 @@
 -- limitations under the License.
 -- ============================================================================
 
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+library	ieee;
+use			ieee.std_logic_1164.all;
+use			ieee.numeric_std.all;
+
 
 package ocram is
   
@@ -128,8 +129,7 @@ package ocram is
   end component;
 end ocram;
 
-package body ocram is
 
-  
+package body ocram is
 
 end ocram;

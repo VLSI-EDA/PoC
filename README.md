@@ -8,13 +8,13 @@ in a variety of hardware designs.
 
 Table of Content:
 ================================================================================
- 1. Overview
- 2. Download
- 3. Requirements 
- 4. Configure PoC on a local system  
- 5. Integrating PoC into projects  
- 6. Using PoC  
- 7. Updating PoC
+ 1. [Overview](#1-overview)
+ 2. [Download](#2-download)
+ 3. [Requirements](#3-requirements)
+ 4. [Configure PoC on a local system](#4-configure-poc-on-a-local-system)
+ 5. [Integrating PoC into projects](#5-integrating-poc-into-projects)
+ 6. [Using PoC](#6-using-poc)
+ 7. [Updating PoC](#7-updating-poc)
 
 
 1 Overview
@@ -24,23 +24,27 @@ Table of Content:
 
 2 Download
 ================================================================================
-The PoC Library can be [downloaded][21] as a zip-file (master branch) or cloned
-with git from GitHub. GitHub offers HTTPS and SSH as transfer protocols. Here are
-the repository URLs:
+The PoC Library can be [downloaded][21] as a zip-file (latest 'master' branch) or
+cloned with `git` from GitHub. GitHub offers HTTPS and SSH as transfer protocols.
 
-    https:  https://github.com/VLSI-EDA/PoC.git  
-    ssh:    ssh://git@github.com:VLSI-EDA/PoC.git
+For SSH protocol use the URL `ssh://git@github.com:VLSI-EDA/PoC.git` or command
+line instruction:
 
-Cloning PoC with git command line tools:
-
+    cd <GitRoot>
     git clone ssh://git@github.com:VLSI-EDA/PoC.git PoC
+
+For HTTPS protocol use the URL `https://github.com/VLSI-EDA/PoC.git` or command
+line instruction:
+
+    cd <GitRoot>
+    git clone https://github.com/VLSI-EDA/PoC.git PoC
 
 3 Requirements
 ================================================================================
 ### Common requirements:
 
  - Python 3.4
-     - colorama ([pypi.python.org/pypi/colorama][301])
+     - [colorama][301]
  - Syntheis tool chains:
      - Xilinx ISE 14.7 or
      - Xilinx Vivado 2014.x or
@@ -58,7 +62,8 @@ Cloning PoC with git command line tools:
 ### Windows specific requirements:
 
  - PowerShell 4.0 ([Windows Management Framework 4.0][321])
-    - Local script execution is allowed (execution policy is set to 'RemoteSigned' - [read more][322])    
+    - Allow local script execution ([read more][322])  
+      `PS> Set-ExecutionPolicy RemoteSigned`
     - PowerShell Community Extensions 3.2 ([pscx.codeplex.com][323])
 
 
@@ -91,7 +96,7 @@ the PoC Library as a [submodule][511] into that folder.
     cd <ProjectRoot>
     mkdir -p lib/PoC
     git submodule add ssh://git@github.com:VLSI-EDA/PoC.git lib/PoC
-    git add .gitmodules lib/PoC
+    git add .gitmodules lib/PoC/
     git commit -m "Added new git submodule PoC in 'lib/PoC' (PoC Library)."
 
 ### 5.2 ...

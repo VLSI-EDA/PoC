@@ -5,8 +5,8 @@
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	VHDL package for component declarations, types and
---									functions associated to the PoC.xil namespace
+-- Module:				 	VHDL package for component declarations, types and functions
+--									associated to the PoC.xil namespace
 -- 
 -- Description:
 -- ------------------------------------

@@ -4,7 +4,7 @@
 -- 
 -- =============================================================================
 -- Package:					VHDL package for component declarations, types and functions
---									assoziated to the PoC.arith namespace
+--									associated to the PoC.arith namespace
 --
 -- Authors:					Thomas B. Preusser
 --									Martin Zabel
