@@ -99,7 +99,21 @@ the PoC Library as a [submodule][511] into that folder.
     git add .gitmodules lib/PoC/
     git commit -m "Added new git submodule PoC in 'lib/PoC' (PoC Library)."
 
-### 5.2 ...
+### 5.2 Compile shipped Xilinx IPCores (*.xco files) to netlists
+
+The PoC Library is shipped with some pre configured IPCores from Xilinx. These IPCores are shipped as \*.xco files and need to be compiled to netlists (\*.ngc files) and there auxillary files (\*.ncf files; \*vhdl files; ...). This can be done by invoking `Netlist.py` through one of the provided wrapper scripts: netlist.[sh|ps1].
+
+The following example compiles `PoC.xil.ChipScopeICON_1` (`xil_ChipScopeICON_1.xco`) from `<PoCRoot>/src/xil/` for a Kintex-7 325T device into `<PoCRoot>/netlist/XC7K325T-2FFG900/xil/`.
+
+**Linux example:**
+
+    cd <PoCRoot>/netlist
+    netlist.sh --coregen PoC.xil.ChipScopeICON_1 --board KC705
+
+**Windows example:**
+
+    cd <PoCRoot>/netlist
+    netlist.ps1 --coregen PoC.xil.ChipScopeICON_1 --board KC705
 
 
 6 Using PoC
