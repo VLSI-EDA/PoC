@@ -58,7 +58,7 @@ architecture xilinx of xil_SystemMonitor_Virtex6 is
 	signal aux_channel_n				: STD_LOGIC_VECTOR(15 downto 0);
 
 	signal SysMonitor_Alarm			: STD_LOGIC_VECTOR(2 downto 0);
-	
+	signal SysMonitor_OverTemp	: STD_LOGIC;
 begin
 	genAUXChannel : for i in 0 to 15 generate
 		aux_channel_p(i) <= '0';
@@ -108,7 +108,7 @@ begin
 			VN									=> VN,
 			VP									=> VP,
 			-- Alarms
-			OT									=> Alarm_OverTemp,
+			OT									=> SysMonitor_OverTemp,
 			ALM									=> SysMonitor_Alarm,
 			-- Status
 			CHANNEL							=> open,
@@ -122,4 +122,6 @@ begin
 		);
 	
 	Alarm_UserTemp	<= SysMonitor_Alarm(0);
+	Alarm_OverTemp	<= SysMonitor_OverTemp;
+	Alarm						<= SysMonitor_Alarm(0) or SysMonitor_OverTemp;
 end;
