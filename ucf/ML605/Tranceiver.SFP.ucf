@@ -1,0 +1,28 @@
+## =============================================================================================================================================================
+## Xilinx User Constraint File (UCF)
+## =============================================================================================================================================================
+##	Board:					Xilinx - Virtex 6 ML605
+##	FPGA:						Xilinx Virtex 6
+##		Device:				XC6VLX240T
+##		Package:			FF1156
+##		Speedgrade:		-1
+## =============================================================================================================================================================
+## High Speed I/O (Transceiver)
+## =============================================================================================================================================================
+##
+## Transceiver - SFP interface
+## =============================================================================
+##	Bank:						113
+##	ReferenceClock
+##		Location:			??
+NET "VC707_SFP_TX_Disable"											LOC = "AP33" | IOSTANDARD = LVCMOS18; ## ; low-active; external 4k7 pullup resistor; level shifted by Q4 (NDS331N)
+NET "VC707_SFP_LossOfSync"											LOC = "BB38" | IOSTANDARD = LVCMOS18; ## ; low-active; external 4k7 pullup resistor; level shifted by U69 (SN74AVC1T45)
+##
+## SFP LVDS signal-pairs
+## --------------------------
+##	Bank:						??
+##	Location:				??
+NET "VC707_SFP_TX_n"														LOC = "AM3";													## ??
+NET "VC707_SFP_TX_p"														LOC = "AM4";													## ??
+NET "VC707_SFP_RX_n"														LOC = "AL5";													## ??
+NET "VC707_SFP_RX_p"														LOC = "AL6";													## ??

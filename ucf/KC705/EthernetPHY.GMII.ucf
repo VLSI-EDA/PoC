@@ -1,0 +1,52 @@
+##
+## Ethernet PHY - Marvell Alaska Ultra
+## -----------------------------------------------------------------------------
+##	Bank:						14, 15, 117
+##		VCCO:					2.5V, 2.5V (VCC2V5_FPGA, VCC2V5_FPGA)
+##	Location:				U37
+##		Vendor:				Marvell
+##		Device:				M88E1111 - BAB1C000
+##		MDIO-Address:	0x05 (---0 0111b)
+##		I²C-Address:	I²C management mode is not enabled
+##
+## single-ended, parallel TX path
+NET "KC705_EthernetPHY_TX_Valid"								LOC = "M27";						## {OUT}		U37.16
+NET "KC705_EthernetPHY_TX_Error"								LOC = "N29";						## {OUT}		U37.13
+NET "KC705_EthernetPHY_TX_DATA<0>"							LOC = "N27";						## {OUT}		U37.18
+NET "KC705_EthernetPHY_TX_DATA<1>"							LOC = "N25";						## {OUT}		U37.19
+NET "KC705_EthernetPHY_TX_DATA<2>"							LOC = "M29";						## {OUT}		U37.20
+NET "KC705_EthernetPHY_TX_DATA<3>"							LOC = "L28";						## {OUT}		U37.24
+NET "KC705_EthernetPHY_TX_DATA<4>"							LOC = "J26";						## {OUT}		U37.25
+NET "KC705_EthernetPHY_TX_DATA<5>"							LOC = "K26";						## {OUT}		U37.26
+NET "KC705_EthernetPHY_TX_DATA<6>"							LOC = "L30";						## {OUT}		U37.28
+NET "KC705_EthernetPHY_TX_DATA<7>"							LOC = "J28";						## {OUT}		U37.29
+NET "KC705_EthernetPHY_TX_*"										IOSTANDARD = LVCMOS25;
+NET "KC705_EthernetPHY_TX_*"										SLEW = FAST;
+##
+## single-ended, parallel RX path
+NET "KC705_EthernetPHY_RX_Valid"								LOC = "R28";						## {IN}			U37.4
+NET "KC705_EthernetPHY_RX_Error"								LOC = "V26";						## {IN}			U37.8
+NET "KC705_EthernetPHY_RX_DATA<0>"							LOC = "U30";						## {IN}			U37.3
+NET "KC705_EthernetPHY_RX_DATA<1>"							LOC = "U25";						## {IN}			U37.128
+NET "KC705_EthernetPHY_RX_DATA<2>"							LOC = "T25";						## {IN}			U37.126
+NET "KC705_EthernetPHY_RX_DATA<3>"							LOC = "U28";						## {IN}			U37.125
+NET "KC705_EthernetPHY_RX_DATA<4>"							LOC = "R19";						## {IN}			U37.124
+NET "KC705_EthernetPHY_RX_DATA<5>"							LOC = "T27";						## {IN}			U37.123
+NET "KC705_EthernetPHY_RX_DATA<6>"							LOC = "T26";						## {IN}			U37.121
+NET "KC705_EthernetPHY_RX_DATA<7>"							LOC = "T28";						## {IN}			U37.120
+NET "KC705_EthernetPHY_RX_*"										IOSTANDARD = LVCMOS25;
+NET "KC705_EthernetPHY_RX_*"										SLEW = FAST;
+##
+## Timing names
+NET "KC705_EthernetPHY_RX_Clock"								TNM_NET = "TGRP_EthernetPHY_RX_Clock";
+NET "KC705_EthernetPHY_RX_Data[?]"							TNM			= "EthernetPHY_RX";
+NET "KC705_EthernetPHY_RX_Valid"								TNM			= "EthernetPHY_RX";
+NET "KC705_EthernetPHY_RX_Error"								TNM			= "EthernetPHY_RX";
+##
+## RX clock frequency
+TIMESPEC "TS_EthernetPHY_RX_Clock" = PERIOD "TGRP_EthernetPHY_RX_Clock" 125 MHz HIGH 50%;
+##
+## according to IEEE 802.3 clause 35.4.2.3:
+##		t_SETUP(RCVR) = 2.0 ns
+##		t_HOLD(RCVR)	= 0.0 ns
+TIMEGRP "EthernetPHY_RX" OFFSET = IN 2.0 VALID 2.0 ns BEFORE "KC705_EthernetPHY_RX_Clock" RISING;

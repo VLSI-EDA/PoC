@@ -1,0 +1,25 @@
+## =============================================================================================================================================================
+## Xilinx User Constraint File (UCF)
+## =============================================================================================================================================================
+##	Board:					Xilinx - Virtex 6 ML605
+##	FPGA:						Xilinx Virtex 6
+##		Device:				XC6VLX240T
+##		Package:			FF1156
+##		Speedgrade:		-1
+## =============================================================================================================================================================
+## Low Speed I/O
+## =============================================================================================================================================================
+##
+## USB UART
+## =============================================================================
+##	Bank:						24
+##		VCCO:					2.5V (VCC2V5_FPGA)
+##	Location:				U34
+##		Vendor:				Silicon Labs
+##		Device:				CP2103-GM
+##		Baud-Rate:		300 Bd - 1 MBd
+##	Note:						USB-UART is the master, FPGA is the slave => so TX is an input and RX an output
+NET "ML605_USB_UART_TX"						LOC = "J24" | IOSTANDARD = LVCMOS25;		## {IN}			U34.25 {OUT}
+NET "ML605_USB_UART_RX"						LOC = "J25" | IOSTANDARD = LVCMOS25;		## {OUT}		U34.24 {IN}
+NET "ML605_USB_UART_RTS_n"				LOC = "T23" | IOSTANDARD = LVCMOS25;		## {IN}			U34.23 {OUT}	Ready to Transmit (USB-UART has new data)
+NET "ML605_USB_UART_CTS_n"				LOC = "T24" | IOSTANDARD = LVCMOS25;		## {OUT}		U34.22 {IN}		Clear to Send (FPGA is able to receive data)

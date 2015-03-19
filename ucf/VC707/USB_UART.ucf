@@ -1,0 +1,11 @@
+## USB UART
+## =============================================================================
+##	Bank:						13
+##		VCCO:					1,8V (VCC1V8_FPGA)
+##	Location:				U44
+##		Vendor:				
+##		Device:				
+NET "VC707_USB_UART_RX"						LOC = "AU36" | IOSTANDARD = LVCMOS18;		## 
+NET "VC707_USB_UART_RTS"					LOC = "AT32" | IOSTANDARD = LVCMOS18;		## 
+NET "VC707_USB_UART_TX"						LOC = "AU33" | IOSTANDARD = LVCMOS18;		## 
+NET "VC707_USB_UART_CTS"					LOC = "AR34" | IOSTANDARD = LVCMOS18;		## 

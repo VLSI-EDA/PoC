@@ -1,0 +1,18 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## LEDs
+## =============================================================================
+##	Bank:						15
+##		VCCO:					1,8V (VCC1V8_FPGA)
+##	Location:				DS2, DS3, DS4, DS5, DS6, DS7, DS8, DS9
+## -----------------------------------------------------------------------------
+NET "VC707_GPIO_LED<0>"									LOC = "AM39"	| IOSTANDARD = LVCMOS18;			## DS2
+NET "VC707_GPIO_LED<1>"									LOC = "AN39"	| IOSTANDARD = LVCMOS18;			## DS3
+NET "VC707_GPIO_LED<2>"									LOC = "AR37"	| IOSTANDARD = LVCMOS18;			## DS4
+NET "VC707_GPIO_LED<3>"									LOC = "AT37"	| IOSTANDARD = LVCMOS18;			## DS5
+NET "VC707_GPIO_LED<4>"									LOC = "AR35"	| IOSTANDARD = LVCMOS18;			## DS6
+NET "VC707_GPIO_LED<5>"									LOC = "AP41"	| IOSTANDARD = LVCMOS18;			## DS7
+NET "VC707_GPIO_LED<6>"									LOC = "AP42"	| IOSTANDARD = LVCMOS18;			## DS8
+NET "VC707_GPIO_LED<7>"									LOC = "AU39"	| IOSTANDARD = LVCMOS18;			## DS9

@@ -1,0 +1,19 @@
+## Liquid Cristal Display
+## =============================================================================================================================================================
+##	Bank:						15
+##		VCCO:					1,8V (VCC1V8_FPGA)
+##	Connector:			J23 (LCD header)
+##	Display
+##		Vendor:				DisplayTech
+##		Device:				S162DBABC (162D Series)
+##	LCD Driver
+##		Vendor:				Sitronix
+##		Device:				ST7066U (compatible: Samsung KS0066U)
+##		Size:					2 lines, 16 Characters, 40 Segments (5 x 8 Pixel)
+NET "VC707_LCD_DB[4]"														LOC = "AT42" | IOSTANDARD = LVCMOS18;				## J23 - Pin 4			; level shifted by U33 (TXS0108E)
+NET "VC707_LCD_DB[5]"														LOC = "AR38" | IOSTANDARD = LVCMOS18;				## J23 - Pin 3			; level shifted by U33 (TXS0108E)
+NET "VC707_LCD_DB[6]"														LOC = "AR39" | IOSTANDARD = LVCMOS18;				## J23 - Pin 2			; level shifted by U33 (TXS0108E)
+NET "VC707_LCD_DB[7]"														LOC = "AN40" | IOSTANDARD = LVCMOS18;				## J23 - Pin 1			; level shifted by U33 (TXS0108E)
+NET "VC707_LCD_E"																LOC = "AT40" | IOSTANDARD = LVCMOS18;				## J23 - Pin 9			; level shifted by U33 (TXS0108E)
+NET "VC707_LCD_RS"															LOC = "AN41" | IOSTANDARD = LVCMOS18;				## J23 - Pin 11			; level shifted by U33 (TXS0108E)
+NET "VC707_LCD_RW"															LOC = "AR42" | IOSTANDARD = LVCMOS18;				## J23 - Pin 10			; level shifted by U33 (TXS0108E)

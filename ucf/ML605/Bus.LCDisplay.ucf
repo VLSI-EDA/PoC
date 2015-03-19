@@ -1,0 +1,32 @@
+## =============================================================================================================================================================
+## Xilinx User Constraint File (UCF)
+## =============================================================================================================================================================
+##	Board:					Xilinx - Virtex 6 ML605
+##	FPGA:						Xilinx Virtex 6
+##		Device:				XC6VLX240T
+##		Package:			FF1156
+##		Speedgrade:		-1
+## =============================================================================================================================================================
+## Low Speed Bus
+## =============================================================================================================================================================
+##
+## Liquid Cristal Display
+## =============================================================================================================================================================
+##	Bank:						33, 14
+##		VCCO:					2,5V (VCC2V5_FPGA)
+##	Connector:			J41 (LCD header)
+##	Display
+##		Vendor:				DisplayTech
+##		Device:				S162DBABC (162D Series)
+##	LCD Driver
+##		Vendor:				Sitronix
+##		Device:				ST7066U (compatible: Samsung KS0066U)
+##		Size:					2 lines, 16 Characters, 40 Segments (5 x 8 Pixel)
+NET "ML605_LCD_E"										LOC = "AK12";								## J41.9			; level shifted by U33 (ST2378E)
+NET "ML605_LCD_RS"									LOC =  "T28";								## J41.11			; level shifted by U33 (ST2378E)	; Bank 14
+NET "ML605_LCD_RW"									LOC = "AC14";								## J41.10			; level shifted by U33 (ST2378E)
+NET "ML605_LCD_DB[4]"								LOC = "AD14";								## J41.4			; level shifted by U33 (ST2378E)
+NET "ML605_LCD_DB[5]"								LOC = "Ak11";								## J41.3			; level shifted by U33 (ST2378E)
+NET "ML605_LCD_DB[6]"								LOC = "AJ11";								## J41.2			; level shifted by U33 (ST2378E)
+NET "ML605_LCD_DB[7]"								LOC = "AE12";								## J41.1			; level shifted by U33 (ST2378E)
+NET "ML605_LCD_*"										IOSTANDARD = LVCMOS25;			##

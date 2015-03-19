@@ -1,0 +1,21 @@
+##
+## Liquid Cristal Display
+## =============================================================================================================================================================
+##	Bank:						33, 14
+##		VCCO:					1.5V (VCC1V5_FPGA)
+##	Location:				J31 (LCD header)
+##	Display
+##		Vendor:				DisplayTech
+##		Device:				S162DBABC (162D Series)
+##	LCD Driver
+##		Vendor:				Sitronix
+##		Device:				ST7066U (compatible: Samsung KS0066U)
+##		Size:					2 lines, 16 Characters, 40 Segments (5 x 8 Pixel)
+NET "KC705_LCD_E"									LOC = "AB10";									## J31.9			; level shifted by U10 (TXS0108E)
+NET "KC705_LCD_RS"								LOC =  "Y11";									## J31.11			; level shifted by U10 (TXS0108E)	; Bank 14 #$ error: bank 33??
+NET "KC705_LCD_RW"								LOC = "AB13";									## J31.10			; level shifted by U10 (TXS0108E)
+NET "KC705_LCD_DB[4]"							LOC = "AA13";									## J31.4			; level shifted by U10 (TXS0108E)
+NET "KC705_LCD_DB[5]"							LOC = "AA10";									## J31.3			; level shifted by U10 (TXS0108E)
+NET "KC705_LCD_DB[6]"							LOC = "AA11";									## J31.2			; level shifted by U10 (TXS0108E)
+NET "KC705_LCD_DB[7]"							LOC =  "Y10";									## J31.1			; level shifted by U10 (TXS0108E)
+NET "KC705_LCD_*"									IOSTANDARD = LVCMOS15;				##

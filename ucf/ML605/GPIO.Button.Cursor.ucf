@@ -1,0 +1,24 @@
+## =============================================================================================================================================================
+## Xilinx User Constraint File (UCF)
+## =============================================================================================================================================================
+##	Board:					Xilinx - Virtex 6 ML605
+##	FPGA:						Xilinx Virtex 6
+##		Device:				XC6VLX240T
+##		Package:			FF1156
+##		Speedgrade:		-1
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## Cursor Buttons
+## =============================================================================
+##	Bank:						15
+##		VCCO:					1,8V (VCC1V8_FPGA)
+##	Location:				SW5, SW6, SW7, SW8, SW9
+## -----------------------------------------------------------------------------
+NET "ML605_GPIO_Button_North"						LOC = "A19";							## SW 5; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Button_West"						LOC = "H17";							## SW 8; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Button_Center"					LOC = "G26";							## SW 9; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Button_East"						LOC = "G17";							## SW 7; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Button_South"						LOC = "A18";							## SW 6; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Button_*"								IOSTANDARD = LVCMOS18;		## 

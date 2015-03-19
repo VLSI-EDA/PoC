@@ -1,0 +1,34 @@
+## =============================================================================================================================================================
+## Xilinx User Constraint File (UCF)
+## =============================================================================================================================================================
+##	Board:					Xilinx - Kintex 7 KC705
+##	FPGA:						Xilinx Kintex 7
+##		Device:				XC7K325T
+##		Package:			FFG900
+##		Speedgrade:		-2
+##	
+##	Notes:
+##		Power Rail 4 driving VADJ_FPGA is defaulted to 2.5V (choices: 1.8V, 2.5V, 3.3V)
+##
+## =============================================================================================================================================================
+## Clock Sources
+## =============================================================================================================================================================
+##
+## User Clock
+## -----------------------------------------------------------------------------
+#$	##		Bank:						13, 114
+#$	##			VCCO:					1.8V (VCC1V8_FPGA)
+##		Location:				U70 (SI5324)
+##			Vendor:				Silicon Labs
+##			Device:				SI5324-C-GM - Any-Frequency Precision Clock Multiplier/Jitter Attenuator
+#$	##			I²C-Address:	0xA0 (1010 000xb)
+#$	NET "KC705_Si5324_Alarm_n"							LOC = "AU34"	| IOSTANDARD = LVCMOS25; ## U24.3; level shifted by U33 (SN74AVC1T45)
+#$	NET "KC705_Si5324_Reset_n"							LOC = "AT36"	| IOSTANDARD = LVCMOS25; ## U24.1; level shifted by U39 (SN74AVC4T245)
+#$	
+## recovered clock output
+#$	NET "KC705_Si5324_ClockIn_n"						LOC = "AW33"	| IOSTANDARD = LVCMOS25;	## U24.17
+#$	NET "KC705_Si5324_ClockIn_p"						LOC = "AW32"	| IOSTANDARD = LVCMOS25;	## U24.16
+
+## feedback input clock to transceiver quad at bank 114
+NET "KC705_Si5324_ClockOut_n"						LOC = "L7"		| IOSTANDARD = LVCMOS25;	## U70.29
+NET "KC705_Si5324_ClockOut_p"						LOC = "L8"		| IOSTANDARD = LVCMOS25;	## U70.28

@@ -23,14 +23,8 @@
 --		
 --			Xilinx ISE UCF or XCF file:
 --				NET "*_async"		TIG;
---				INST "*_meta"		TNM = "METASTABILITY_FFS";
+--				INST "*FF1_METASTABILITY_FFS" TNM = "METASTABILITY_FFS";
 --				TIMESPEC "TS_MetaStability" = FROM FFS TO "METASTABILITY_FFS" TIG;
---				
---				## Assign synchronization FF pairs to the same slice -> minimal routing delay
---				BEGIN MODEL xil_SyncBits
---				  INST "FF1"	RLOC = X0Y0;
---				  INST "FF2"	RLOC = X0Y0;
---				END;
 --			
 --			Xilinx Vivado xdc file:
 --				TODO
@@ -98,7 +92,7 @@ begin
 	begin
 		Data_async	<= Input(i);
 	
-		FF1 : FD
+		FF1_METASTABILITY_FFS : FD
 			generic map (
 				INIT		=> to_bit(INIT_I(i))
 			)

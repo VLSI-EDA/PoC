@@ -1,0 +1,6 @@
+## =============================================================================
+## MetaStability timing settings
+## =============================================================================
+NET "*_async"		TIG;
+
+TIMESPEC "TS_MetaStability" = FROM FFS TO "METASTABILITY_FFS" TIG;

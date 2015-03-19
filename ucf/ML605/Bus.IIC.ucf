@@ -1,0 +1,55 @@
+## =============================================================================================================================================================
+## Xilinx User Constraint File (UCF)
+## =============================================================================================================================================================
+##	Board:					Xilinx - Virtex 6 ML605
+##	FPGA:						Xilinx Virtex 6
+##		Device:				XC6VLX240T
+##		Package:			FF1156
+##		Speedgrade:		-1
+## =============================================================================================================================================================
+## Low Speed Bus
+## =============================================================================================================================================================
+##
+## I²C-MainBus
+## =============================================================================
+##	Bank:						13, 15
+##		VCCO:					1,8V (VCC1V8_FPGA)
+##	Location:				U52 (PCA9548ARGER)
+##		Vendor:				Texas Instruments
+##		Device:				PCA9548A-RGER - 8-Channel I²C Switch with Reset
+##		I²C-Address:	0x74 (0111 010xb)
+## -----------------------------------------------------------------------------
+##	Devices:				8
+##		Channel 0:		UserClock
+##			Location:			U34
+##			Vendor:				
+##			Device:				Si570
+##			Address:			0xE0 (1110 000xb)
+##		Channel 1:		FMC Connector 1
+##			Location:			
+##		Channel 2:		FMC Connector 2
+##			Location:			
+##		Channel 3:		EEPROM
+##			Location:			
+##			Vendor:				
+##			Device:				
+##			Address:			0xA8 (1010 100xb)
+##		Channel 4:		SFP
+##			Location:			P3
+##			Address:			0xA0 (1010 000xb)
+##		Channel 5:		HDMI
+##			Location:			
+##			Vendor:				
+##			Device:				
+##			Address:			0x72 (0111 001xb)
+##		Channel 6:		DDR3
+##			Location:			
+##			Address:			0xA0, 0x30 (1010 000xb, 0011 000xb)
+##		Channel 7:		SI5324
+##			Location:			U24 (SI5324C-C-GM)
+##			Vendor:				Silicon Labs
+##			Device:				SI5324 - Any-Frequency Precision Clock Multiplier/Jitter Attenuator
+##			Address:			0xA0 (1010 000xb)
+NET "VC707_IIC_SerialClock"					LOC = "AT35"	| IOSTANDARD = LVCMOS18;			## U52 - Pin 19 - SerialClock
+NET "VC707_IIC_SerialData"					LOC = "AU32"	| IOSTANDARD = LVCMOS18;			## U52 - Pin 20 - SerialData
+NET "VC707_IIC_Switch_Reset_n"			LOC = "AY42"	| IOSTANDARD = LVCMOS18;			## U52 - Pin 24 - Reset (low-active); level shifted by U70 (TXS0108E)

@@ -1,0 +1,18 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## LEDs
+## -----------------------------------------------------------------------------
+##	Bank:						17, 18, 33
+##		VCCO:					2.5, 2.5, 1.5V (VADJ_FPGA, VADJ_FPGA, VCC1V5_FPGA)
+##	Location:				DS1, DS2, DS3, DS4, DS10, DS25, DS26, DS27
+## -----------------------------------------------------------------------------
+NET "KC705_GPIO_LED<0>"									LOC =  "AB8"	| IOSTANDARD = LVCMOS15;			## {OUT}	DS4; Bank 33; VCCO=VCC1V5_FPGA
+NET "KC705_GPIO_LED<1>"									LOC =  "AA8"	| IOSTANDARD = LVCMOS15;			## {OUT}	DS1; Bank 33; VCCO=VCC1V5_FPGA
+NET "KC705_GPIO_LED<2>"									LOC =  "AC9"	| IOSTANDARD = LVCMOS15;			## {OUT}	DS10; Bank 33; VCCO=VCC1V5_FPGA
+NET "KC705_GPIO_LED<3>"									LOC =  "AB9"	| IOSTANDARD = LVCMOS15;			## {OUT}	DS2; Bank 33; VCCO=VCC1V5_FPGA
+NET "KC705_GPIO_LED<4>"									LOC = "AE26"	| IOSTANDARD = LVCMOS25;			## {OUT}	DS3; Bank 13; VCCO=VADJ_FPGA
+NET "KC705_GPIO_LED<5>"									LOC =  "G19"	| IOSTANDARD = LVCMOS25;			## {OUT}	DS25; Bank 17; VCCO=VADJ_FPGA
+NET "KC705_GPIO_LED<6>"									LOC =  "E18"	| IOSTANDARD = LVCMOS25;			## {OUT}	DS26; Bank 17; VCCO=VADJ_FPGA
+NET "KC705_GPIO_LED<7>"									LOC =  "F16"	| IOSTANDARD = LVCMOS25;			## {OUT}	DS27; Bank 18; VCCO=VADJ_FPGA

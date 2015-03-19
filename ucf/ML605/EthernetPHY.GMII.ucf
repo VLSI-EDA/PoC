@@ -1,0 +1,58 @@
+## =============================================================================================================================================================
+## Xilinx User Constraint File (UCF)
+## =============================================================================================================================================================
+##	Board:					Xilinx - Virtex 6 ML605
+##	FPGA:						Xilinx Virtex 6
+##		Device:				XC6VLX240T
+##		Package:			FF1156
+##		Speedgrade:		-1
+## =============================================================================================================================================================
+## Ethernet PHY - Marvell Alaska Ultra
+## =============================================================================================================================================================
+##	Bank:						33
+##		VCCO:					2,5V (VCC2V5_FPGA)
+##	Location:				U80
+##		Vendor:				Marvell
+##		Device:				M88E1111 - 
+##		MDIO-Address:	0x05 (---0 0111b)
+##		I²C-Address:	I²C management mode is not enabled
+##
+## single-ended, parallel TX path
+NET "ML605_EthernetPHY_TX_Valid"								LOC = "AJ10"						## {OUT}		U80.16
+NET "ML605_EthernetPHY_TX_Error"								LOC = "AH10"						## {OUT}		U80.13
+NET "ML605_EthernetPHY_TX_DATA<0>"							LOC = "AM11"						## {OUT}		U80.18
+NET "ML605_EthernetPHY_TX_DATA<1>"							LOC = "AL11"						## {OUT}		U80.19
+NET "ML605_EthernetPHY_TX_DATA<2>"							LOC = "AG10"						## {OUT}		U80.20
+NET "ML605_EthernetPHY_TX_DATA<3>"							LOC = "AG11"						## {OUT}		U80.24
+NET "ML605_EthernetPHY_TX_DATA<4>"							LOC = "AL10"						## {OUT}		U80.25
+NET "ML605_EthernetPHY_TX_DATA<5>"							LOC = "AM10"						## {OUT}		U80.26
+NET "ML605_EthernetPHY_TX_DATA<6>"							LOC = "AE11"						## {OUT}		U80.28
+NET "ML605_EthernetPHY_TX_DATA<7>"							LOC = "AF11"						## {OUT}		U80.29
+##
+## single-ended, parallel RX path
+NET "ML605_EthernetPHY_RX_Valid"								LOC = "AM13"						## {IN}			U80.4
+NET "ML605_EthernetPHY_RX_Error"								LOC = "AG12"						## {IN}			U80.8
+NET "ML605_EthernetPHY_RX_DATA<0>"							LOC = "AN13"						## {IN}			U80.3
+NET "ML605_EthernetPHY_RX_DATA<1>"							LOC = "AF14"						## {IN}			U80.128
+NET "ML605_EthernetPHY_RX_DATA<2>"							LOC = "AE14"						## {IN}			U80.126
+NET "ML605_EthernetPHY_RX_DATA<3>"							LOC = "AN12"						## {IN}			U80.125
+NET "ML605_EthernetPHY_RX_DATA<4>"							LOC = "AM12"						## {IN}			U80.124
+NET "ML605_EthernetPHY_RX_DATA<5>"							LOC = "AD11"						## {IN}			U80.123
+NET "ML605_EthernetPHY_RX_DATA<6>"							LOC = "AC12"						## {IN}			U80.121
+NET "ML605_EthernetPHY_RX_DATA<7>"							LOC = "AC13"						## {IN}			U80.120
+NET "ML605_EthernetPHY_*"												IOSTANDARD = LVCMOS25;
+NET "ML605_EthernetPHY_*"												SLEW = FAST;
+##
+## Timing names
+NET "ML605_EthernetPHY_RX_Clock"								TNM_NET = "TGRP_EthernetPHY_RX_Clock";
+NET "ML605_EthernetPHY_RX_Data[?]"							TNM			= "EthernetPHY_RX";
+NET "ML605_EthernetPHY_RX_Valid"								TNM			= "EthernetPHY_RX";
+NET "ML605_EthernetPHY_RX_Error"								TNM			= "EthernetPHY_RX";
+##
+## RX clock frequency
+TIMESPEC "TS_EthernetPHY_RX_Clock" = PERIOD "TGRP_EthernetPHY_RX_Clock" 125 MHz HIGH 50%;
+##
+## according to IEEE 802.3 clause 35.4.2.3:
+##		t_SETUP(RCVR) = 2.0 ns
+##		t_HOLD(RCVR)	= 0.0 ns
+TIMEGRP "EthernetPHY_RX" OFFSET = IN 2.0 VALID 2.0 ns BEFORE "ML605_EthernetPHY_RX_Clock" RISING;

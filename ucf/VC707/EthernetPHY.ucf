@@ -1,0 +1,13 @@
+## Ethernet PHY - Marvell Alaska Ultra
+## =============================================================================
+##	Bank:						14
+##		VCCO:					1,8V (VCC1V8_FPGA)
+##	Location:				U50
+##		Vendor:				Marvell
+##		Device:				M88E1111 - 
+##		MDIO-Address:	0x05 (---0 0111b)
+##		I²C-Address:	I²C management mode is not enabled
+NET "VC707_EthernetPHY_Reset_n"									LOC = "AJ33" | IOSTANDARD = LVCMOS18; ## U50 - Pin K3					; level shifted by U70 (TXS0108E)
+NET "VC707_EthernetPHY_Interrupt_n"							LOC = "AL31" | IOSTANDARD = LVCMOS18; ## U50 - Pin L1					; level shifted by U70 (TXS0108E)
+NET "VC707_EthernetPHY_Management_Clock"				LOC = "AH31" | IOSTANDARD = LVCMOS18; ## U50 - Pin L3					; level shifted by U70 (TXS0108E)
+NET "VC707_EthernetPHY_Management_Data"					LOC = "AK33" | IOSTANDARD = LVCMOS18; ## U50 - Pin M1					; level shifted by U70 (TXS0108E)

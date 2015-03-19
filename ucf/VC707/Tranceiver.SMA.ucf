@@ -1,0 +1,16 @@
+## Transceiver - SMA interface
+## =============================================================================
+##	Bank:						113
+##	ReferenceClock
+##		Location:			J25, J26
+NET "VC707_SMA_RefClock_n"											LOC = "AK7";													## J26
+NET "VC707_SMA_RefClock_p"											LOC = "AK8";													## J25
+
+## SMA LVDS signal-pairs
+## --------------------------
+##	Bank:						113
+##	Location:				P27, J28, J29, J30
+NET "VC707_SMA_TX_n"														LOC = "AP3";													## J30
+NET "VC707_SMA_TX_p"														LOC = "AP4";													## J29
+NET "VC707_SMA_RX_n"														LOC = "AN5";													## J28
+NET "VC707_SMA_RX_p"														LOC = "AN6";													## J27

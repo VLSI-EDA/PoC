@@ -1,0 +1,25 @@
+## =============================================================================================================================================================
+## Xilinx User Constraint File (UCF)
+## =============================================================================================================================================================
+##	Board:					Xilinx - Virtex 6 ML605
+##	FPGA:						Xilinx Virtex 6
+##		Device:				XC6VLX240T
+##		Package:			FF1156
+##		Speedgrade:		-1
+## =============================================================================================================================================================
+## Ethernet PHY - Marvell Alaska Ultra
+## =============================================================================================================================================================
+##	Bank:						33
+##		VCCO:					2,5V (VCC2V5_FPGA)
+##	Location:				U80
+##		Vendor:				Marvell
+##		Device:				M88E1111 - 
+##		MDIO-Address:	0x05 (---0 0111b)
+##		I²C-Address:	I²C management mode is not enabled
+##
+## common signals and management
+## --------------------------
+NET "ML605_EthernetPHY_Reset_n"									LOC = "AH13" | IOSTANDARD = LVCMOS25; ## {IN}			U80.36
+NET "ML605_EthernetPHY_Interrupt_n"							LOC = "AH14" | IOSTANDARD = LVCMOS25; ## {IN}			U80.32
+NET "ML605_EthernetPHY_Management_Clock"				LOC = "AP14" | IOSTANDARD = LVCMOS25; ## {OUT}		U80.35
+NET "ML605_EthernetPHY_Management_Data"					LOC = "AN14" | IOSTANDARD = LVCMOS25; ## {INOUT}	U80.33

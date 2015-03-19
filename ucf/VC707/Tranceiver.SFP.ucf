@@ -1,0 +1,18 @@
+## Transceiver - SFP interface
+## =============================================================================
+##	Bank:						13, 15
+##		VCCO:					1,8V (VCC1V8_FPGA)
+##	Location:				P3
+##		I²C-Address:	0xA0 (1010 000xb)
+NET "VC707_SFP_TX_Disable"											LOC = "AP33" | IOSTANDARD = LVCMOS18; ## ; low-active; external 4k7 pullup resistor; level shifted by Q4 (NDS331N)
+NET "VC707_SFP_LossOfSync"											LOC = "BB38" | IOSTANDARD = LVCMOS18; ## ; low-active; external 4k7 pullup resistor; level shifted by U69 (SN74AVC1T45)
+
+## SGMII LVDS signal-pairs
+## --------------------------
+##	Bank:						113
+##	ReferenceClock
+##		Location:			P3
+NET "VC707_SFP_TX_n"														LOC = "AM3";													## 
+NET "VC707_SFP_TX_p"														LOC = "AM4";													## 
+NET "VC707_SFP_RX_n"														LOC = "AL5";													## 
+NET "VC707_SFP_RX_p"														LOC = "AL6";													## 

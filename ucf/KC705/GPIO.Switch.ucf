@@ -1,0 +1,15 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## DIP-Switches
+## -----------------------------------------------------------------------------
+##	Bank:						13
+##		VCCO:					2.5V (VADJ_FPGA)
+##	Location:				SW11
+## -----------------------------------------------------------------------------
+NET "KC705_GPIO_Switches<0>"						LOC =  "Y29";								## {IN}		SW11.4; high-active; external 4k7 pulldown resistor
+NET "KC705_GPIO_Switches<1>"						LOC =  "W29";								## {IN}		SW11.3; high-active; external 4k7 pulldown resistor
+NET "KC705_GPIO_Switches<2>"						LOC = "AA28";								## {IN}		SW11.2; high-active; external 4k7 pulldown resistor
+NET "KC705_GPIO_Switches<3>"						LOC =  "Y28";								## {IN}		SW11.1; high-active; external 4k7 pulldown resistor
+NET "KC705_GPIO_Switches<?>"						IOSTANDARD = LVCMOS25;			##

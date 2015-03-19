@@ -1,0 +1,13 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## Rotary-Button
+## -----------------------------------------------------------------------------
+#$	##	Bank:						13
+#$	##		VCCO:					1,8V (VCC1V8_FPGA)
+##	Location:				SW8
+## -----------------------------------------------------------------------------
+#$	NET "KC705_GPIO_Rotary_Button"					LOC = "AW31"	| IOSTANDARD = LVCMOS18;			## {IN}		SW10.5; high-active; external 4k7 pulldown resistor
+#$	NET "KC705_GPIO_Rotary_IncA"						LOC = "AR33"	| IOSTANDARD = LVCMOS18;			## {IN}		SW10.1; high-active; external 4k7 pulldown resistor
+#$	NET "KC705_GPIO_Rotary_IncB"						LOC = "AT31"	| IOSTANDARD = LVCMOS18;			## {IN}		SW10.6; high-active; external 4k7 pulldown resistor
