@@ -3,10 +3,10 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- =============================================================================
--- Package:					Project specific configuration.
--- 
 -- Authors:         Patrick Lehmann
 --
+-- Package:					Project specific configuration.
+-- 
 -- Description:
 -- ------------------------------------
 --		This is a template file. 
@@ -21,7 +21,7 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,9 +44,9 @@ package my_project is
   -- Change these lines to setup configuration.
   constant MY_PROJECT_DIR				: string	:= "CHANGE THIS";		-- e.g. "d:/vhdl/myproject/", "/home/me/projects/myproject/"
 	constant MY_OPERATING_SYSTEM	: string	:= "CHANGE THIS";		-- e.g. "WINDOWS", "LINUX"
-end my_project;
+end;
 
 
 package body my_project is
 
-end my_project;
+end;

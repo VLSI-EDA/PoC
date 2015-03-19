@@ -45,15 +45,15 @@ line instruction:
 
  - Python 3.4
      - [colorama][301]
- - Syntheis tool chains:
+ - Synthesis tool chains:
      - Xilinx ISE 14.7 or
      - Xilinx Vivado 2014.x or
      - Altera Quartus II 13.x
  - Simulation tool chains:
      - Xilinx ISE Simulator 14.7 or
      - Xilinx Vivado Simulator 2014.x or
-     - Menthor Graphics ModelSim Altera Edition or
-     - Menthor Graphics QuestaSim or
+     - Mentor Graphics ModelSim Altera Edition or
+     - Mentor Graphics QuestaSim or
      - [GHDL][302] and [GTKWave][303]
 
 ### Linux specific requirements:
@@ -101,7 +101,7 @@ the PoC Library as a [submodule][511] into that folder.
 
 ### 5.2 Compile shipped Xilinx IPCores (*.xco files) to netlists
 
-The PoC Library is shipped with some pre configured IPCores from Xilinx. These IPCores are shipped as \*.xco files and need to be compiled to netlists (\*.ngc files) and there auxillary files (\*.ncf files; \*vhdl files; ...). This can be done by invoking `Netlist.py` through one of the provided wrapper scripts: netlist.[sh|ps1].
+The PoC Library is shipped with some pre configured IPCores from Xilinx. These IPCores are shipped as \*.xco files and need to be compiled to netlists (\*.ngc files) and there axillary files (\*.ncf files; \*vhdl files; ...). This can be done by invoking `Netlist.py` through one of the provided wrapper scripts: netlist.[sh|ps1].
 
 The following example compiles `PoC.xil.ChipScopeICON_1` (`xil_ChipScopeICON_1.xco`) from `<PoCRoot>/src/xil/` for a Kintex-7 325T device into `<PoCRoot>/netlist/XC7K325T-2FFG900/xil/`.
 
