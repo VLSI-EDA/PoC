@@ -94,7 +94,7 @@ begin
 			Q				=> Reset_meta
 	);
 
-	FF2 : FDP
+	FF2_METASTABILITY_FFS : FDP
 		generic map (
 			INIT		=> '1'
 		)

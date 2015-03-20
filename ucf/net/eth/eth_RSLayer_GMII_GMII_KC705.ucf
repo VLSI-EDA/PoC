@@ -5,14 +5,11 @@
 ##
 ## Set the IDELAY values on the data inputs. Please modify so that above timing constraint is fulfilled.
 INST "*genRS_GMII.genPHY_GMII.GMII/IODly_RX_Clock"							IDELAY_VALUE = 0;
-INST "*genRS_GMII.genPHY_GMII.GMII/blkIDelay.genIDelay[?].dly"	IDELAY_VALUE = -26;		# ML605 = 26
+INST "*genRS_GMII.genPHY_GMII.GMII/blkIDelay.genIDelay[?].dly"	IDELAY_VALUE = 28;
 ##
 ## Group all IODELAY-related instances
 INST "*genRS_GMII.genPHY_GMII.GMII/IODly_RX_Clock"							IODELAY_GROUP = "EthernetPHY_IODelayGroup";
 INST "*genRS_GMII.genPHY_GMII.GMII/blkIDelay.genIDelay[?].dly"	IODELAY_GROUP = "EthernetPHY_IODelayGroup";
-##
-## Place BUFG to prevent placement skewing IODELAY value
-INST "*genRS_GMII.genPHY_GMII.GMII/BUFG_RX_Clock"								LOC = "BUFGCTRL_X?Y?";	# ML605 = X0Y6
 ##
 ## GMII Receiver Constraints:  place flip-flops in IOB, might also be enforced by XST option "-iob true"
 INST "*genRS_GMII.genPHY_GMII.GMII/PHY_Interface.TX_Data_?" 	 	IOB = true;

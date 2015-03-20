@@ -50,3 +50,4 @@ TIMESPEC "TS_EthernetPHY_RX_Clock" = PERIOD "TGRP_EthernetPHY_RX_Clock" 125 MHz 
 ##		t_SETUP(RCVR) = 2.0 ns
 ##		t_HOLD(RCVR)	= 0.0 ns
 TIMEGRP "EthernetPHY_RX" OFFSET = IN 2.0 VALID 2.0 ns BEFORE "KC705_EthernetPHY_RX_Clock" RISING;
+##TIMEGRP "EthernetPHY_RX" OFFSET = IN 2.7 VALID 3.2 ns BEFORE "KC705_EthernetPHY_RX_Clock" RISING;		-- from CoreGen Wizard
