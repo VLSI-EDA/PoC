@@ -48,6 +48,8 @@ package board is
 	
 	TYPE T_BOARD IS (
 		BOARD_CUSTOM,
+		BOARD_S3SK200,	BOARD_S3SK1000,
+		BOARD_S3ESK500,	BOARD_S3ESK1600,
 		BOARD_ML505,
 		BOARD_ML605,
 		BOARD_KC705,
@@ -99,6 +101,50 @@ package body board is
 	-- board description
 	-- ===========================================================================
 	CONSTANT C_BOARD_DESCRIPTION_LIST		: T_BOARD_DESCRIPTION_VECTOR		:= (
+		BOARD_S3SK200 => (
+			FPGADevice									=> conf("XC3S200FT256"),														-- XC2S200FT256
+			Ethernet => (
+				IPStyle										=> conf("IPSTYLE_SOFT"),
+				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
+				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
+				PHY_DeviceAddress					=> x"07",
+				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
+				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
+			)
+		),
+				BOARD_S3SK1000 => (
+			FPGADevice									=> conf("XC3S1000FT256"),														-- XC2S200FT256
+			Ethernet => (
+				IPStyle										=> conf("IPSTYLE_SOFT"),
+				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
+				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
+				PHY_DeviceAddress					=> x"07",
+				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
+				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
+			)
+		),
+				BOARD_S3ESK500 => (
+			FPGADevice									=> conf("XC3S500EFT256"),														-- XC2S200FT256
+			Ethernet => (
+				IPStyle										=> conf("IPSTYLE_SOFT"),
+				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
+				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
+				PHY_DeviceAddress					=> x"07",
+				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
+				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
+			)
+		),
+		BOARD_S3ESK1600 => (
+			FPGADevice									=> conf("XC3S1600EFT256"),														-- XC2S200FT256
+			Ethernet => (
+				IPStyle										=> conf("IPSTYLE_SOFT"),
+				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
+				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
+				PHY_DeviceAddress					=> x"07",
+				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
+				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
+			)
+		),
 		BOARD_ML505 => (
 			FPGADevice									=> conf("XC5VLX50T-1FF1136"),												-- XC5VLX50T-1FF1136
 			Ethernet => (
