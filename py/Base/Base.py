@@ -1,0 +1,3 @@
+
+class BaseExtractor(object):
+  pass

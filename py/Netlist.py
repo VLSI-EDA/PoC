@@ -33,13 +33,15 @@
 
 from pathlib import Path
 
-import PoC
-import PoCCompiler
-import PoCXCOCompiler
-import PoCXSTCompiler
+from Base.Exceptions import *
+from Base.PoCBase import CommandLineProgram
+from PoC.Entity import *
+from PoC.Config import *
+from Compiler import *
+from Compiler.Exceptions import *
 
 
-class PoCNetList(PoC.PoCBase):
+class NetList(CommandLineProgram):
 	__netListConfigFileName = "configuration.ini"
 	
 	dryRun = False
@@ -48,8 +50,7 @@ class PoCNetList(PoC.PoCBase):
 	def __init__(self, debug, verbose, quiet):
 		super(self.__class__, self).__init__(debug, verbose, quiet)
 
-		if not ((self.platform == "Windows") or (self.platform == "Linux")):
-			raise PoC.PoCPlatformNotSupportedException(self.platform)
+		if not ((self.platform == "Windows") or (self.platform == "Linux")):	raise PlatformNotSupportedException(self.platform)
 		
 		self.readNetListConfiguration()
 		
@@ -62,18 +63,20 @@ class PoCNetList(PoC.PoCBase):
 		netListConfigFilePath	= self.files["PoCNLConfig"]
 		
 		self.printDebug("Reading NetList configuration from '%s'" % str(netListConfigFilePath))
-		if not netListConfigFilePath.exists():
-			raise PoCNotConfiguredException("PoC netlist configuration file does not exist. (%s)" % str(netListConfigFilePath))
+		if not netListConfigFilePath.exists():	raise NotConfiguredException("PoC netlist configuration file does not exist. (%s)" % str(netListConfigFilePath))
 			
 		self.netListConfig = ConfigParser(interpolation=ExtendedInterpolation())
 		self.netListConfig.optionxform = str
-		self.netListConfig.read([str(self.files['PoCPrivateConfig']), str(self.files['PoCPublicConfig']), str(self.files["PoCNLConfig"])])
+		self.netListConfig.read([
+			str(self.files['PoCPrivateConfig']),
+			str(self.files['PoCPublicConfig']),
+			str(self.files["PoCNLConfig"])
+		])
 
 
 	def coreGenCompilation(self, entity, showLogs, showReport, deviceString=None, boardString=None):
 		# check if ISE is configure
-		if (len(self.pocConfig.options("Xilinx-ISE")) == 0):
-			raise PoCNotConfiguredException("Xilinx ISE is not configured on this system.")
+		if (len(self.pocConfig.options("Xilinx-ISE")) == 0):	raise NotConfiguredException("Xilinx ISE is not configured on this system.")
 		
 		# prepare some paths
 		self.directories["ISEInstallation"] = Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])
@@ -81,25 +84,24 @@ class PoCNetList(PoC.PoCBase):
 	
 		# check if the appropriate environment is loaded
 		from os import environ
-		if (environ.get('XILINX') == None):
-			raise PoC.PoCEnvironmentException("Xilinx ISE environment is not loaded in this shell environment. ")
+		if (environ.get('XILINX') == None):	raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment. ")
 
 		if (boardString is not None):
-			device = PoC.PoCDevice(self.netListConfig['BOARDS'][boardString])
+			device = Device(self.netListConfig['BOARDS'][boardString])
 		elif (deviceString is not None):
-			device = PoC.PoCDevice(deviceString)
-		else: raise PoC.PoCException("No board or device given.")
+			device = Device(deviceString)
+		else: raise BaseException("No board or device given.")
 
-		entityToCompile = PoC.PoCEntity(self, entity)
+		entityToCompile = Entity(self, entity)
 
-		compiler = PoCXCOCompiler.PoCXCOCompiler(self, showLogs, showReport)
+		compiler = XCOCompiler.Compiler(self, showLogs, showReport)
 		compiler.dryRun = self.dryRun
 		compiler.run(entityToCompile, device)
 		
 	def xstCompilation(self, entity, showLogs, showReport, deviceString=None, boardString=None):
 		# check if ISE is configure
 		if (len(self.pocConfig.options("Xilinx-ISE")) == 0):
-			raise PoCNotConfiguredException("Xilinx ISE is not configured on this system.")
+			raise NotConfiguredException("Xilinx ISE is not configured on this system.")
 		
 		# prepare some paths
 		self.directories["ISEInstallation"] = Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])
@@ -108,26 +110,26 @@ class PoCNetList(PoC.PoCBase):
 		# check if the appropriate environment is loaded
 		from os import environ
 		if (environ.get('XILINX') == None):
-			raise PoC.PoCEnvironmentException("Xilinx ISE environment is not loaded in this shell environment. ")
+			raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment. ")
 
 		if (boardString is not None):
-			device = PoC.PoCDevice(self.netListConfig['BOARDS'][boardString])
+			device = Device(self.netListConfig['BOARDS'][boardString])
 		elif (deviceString is not None):
-			device = PoC.PoCDevice(deviceString)
-		else: raise PoC.PoCException("No board or device given.")
+			device = Device(deviceString)
+		else: raise BaseException("No board or device given.")
 		
-		entityToCompile = PoC.PoCEntity(self, entity)
+		entityToCompile = Entity(self, entity)
 
-		compiler = PoCXSTCompiler.PoCXSTCompiler(self, showLogs, showReport)
+		compiler = XSTCompiler.Compiler(self, showLogs, showReport)
 		compiler.dryRun = self.dryRun
 		compiler.run(entityToCompile, device)
 
 
 # main program
 def main():
-	print("========================================================================")
-	print("                  PoC Library - NetList Service Tool                    ")
-	print("========================================================================")
+	print("=" * 80)
+	print("{: ^80s}".format("The PoC Library - NetList Service Tool"))
+	print("=" * 80)
 	print()
 	
 	try:
@@ -155,7 +157,7 @@ def main():
 		group21.add_argument('-h', '--help',												dest="help",				help='show this help message and exit',		action='store_const', const=True, default=False)
 		group211 = group21.add_mutually_exclusive_group()
 		group211.add_argument(		 '--coregen',	metavar="<Entity>",	dest="coreGen",			help='use Xilinx IP-Core Generator (CoreGen)')
-		group211.add_argument(		 '--xst',			metavar="<Entity>",	dest="xst",					help='use Xilinx Synthesis Tool (XST)')
+		group211.add_argument(		 '--xst',			metavar="<Entity>",	dest="xst",					help='use Xilinx Compiler Tool (XST)')
 		group3 = group211.add_argument_group('Specify target platform')
 		group31 = group3.add_mutually_exclusive_group()
 		group31.add_argument('--device',				metavar="<Device>",	dest="device",			help='target device (e.g. XC5VLX50T-1FF1136)')
@@ -175,7 +177,7 @@ def main():
 
 		
 	try:
-		netList = PoCNetList(args.debug, args.verbose, args.quiet)
+		netList = NetList(args.debug, args.verbose, args.quiet)
 		#netList.dryRun = True
 	
 		if (args.help == True):
@@ -188,34 +190,34 @@ def main():
 		else:
 			argParser.print_help()
 		
-	except PoCCompiler.PoCCompilerException as ex:
+	except CompilerException as ex:
 		print("ERROR: %s" % ex.message)
 		print()
 		return
 		
-	except PoC.PoCEnvironmentException as ex:
+	except EnvironmentException as ex:
 		print("ERROR: %s" % ex.message)
 		print()
 		print("Please run this script with it's provided wrapper or manually load the required environment before executing this script.")
 		return
 	
-	except PoC.PoCNotConfiguredException as ex:
+	except NotConfiguredException as ex:
 		print("ERROR: %s" % ex.message)
 		print()
 		print("Please run 'poc.[sh/cmd] --configure' in PoC root directory.")
 		return
 	
-	except PoC.PoCPlatformNotSupportedException as ex:
+	except PlatformNotSupportedException as ex:
 		print("ERROR: Unknown platform '%s'" % ex.message)
 		print()
 		return
 	
-	except PoC.PoCException as ex:
+	except BaseException as ex:
 		print("ERROR: %s" % ex.message)
 		print()
 		return
 	
-	except PoC.NotImplementedException as ex:
+	except NotImplementedException as ex:
 		print("ERROR: %s" % ex.message)
 		print()
 		return
@@ -243,7 +245,7 @@ else:
 	from sys import exit
 	
 	print("=" * 80)
-	print("{: ^80s}".format("PoC Library - NetList Service Tool"))
+	print("{: ^80s}".format("The PoC Library - NetList Service Tool"))
 	print("=" * 80)
 	print()
 	print("This is no library file!")

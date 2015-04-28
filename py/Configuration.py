@@ -34,23 +34,22 @@
 
 from pathlib import Path
 
-import PoC
+from Base.Exceptions import *
+from Base.PoCBase import CommandLineProgram
+from collections import OrderedDict
 
-
-class PoCConfiguration(PoC.PoCBase):
+class Configuration(CommandLineProgram):
 	
-	__privateSections = ["PoC", "Xilinx", "Xilinx-ISE", "Xilinx-LabTools", "Xilinx-Vivado", "Xilinx-HardwareServer", "Altera-QuartusII", "Altera-ModelSim", "Questa-ModelSim", "GHDL", "GTKWave", "Solutions"]
+	__privateSections = ["PoC", "Xilinx", "Xilinx-ISE", "Xilinx-LabTools", "Xilinx-Vivado", "Xilinx-HardwareServer", "Altera-QuartusII", "Altera-ModelSim", "Questa-SIM", "GHDL", "GTKWave", "Solutions"]
 	
 	def __init__(self, debug, verbose, quiet):
 		try:
 			super(self.__class__, self).__init__(debug, verbose, quiet)
 
-			if not ((self.platform == "Windows") or (self.platform == "Linux")):
-				raise PoC.PoCPlatformNotSupportedException(self.platform)
+			if not ((self.platform == "Windows") or (self.platform == "Linux")):	raise PlatformNotSupportedException(self.platform)
 				
-		except PoC.PoCNotConfiguredException as ex:
+		except NotConfiguredException as ex:
 			from configparser import ConfigParser, ExtendedInterpolation
-			from collections import OrderedDict
 			
 			self.printVerbose("Configuration file does not exists; creating a new one")
 			
@@ -67,7 +66,7 @@ class PoCConfiguration(PoC.PoCBase):
 			self.pocConfig['Xilinx-HardwareServer'] =	OrderedDict()
 			self.pocConfig['Altera-QuartusII'] =			OrderedDict()
 			self.pocConfig['Altera-ModelSim'] =				OrderedDict()
-			self.pocConfig['Questa-ModelSim'] =				OrderedDict()
+			self.pocConfig['Questa-SIM'] =						OrderedDict()
 			self.pocConfig['GHDL'] =									OrderedDict()
 			self.pocConfig['GTKWave'] =								OrderedDict()
 			self.pocConfig['Solutions'] =							OrderedDict()
@@ -82,7 +81,7 @@ class PoCConfiguration(PoC.PoCBase):
 			self.readPoCConfiguration()
 	
 	def autoConfiguration(self):
-		raise PoC.NotImplementedException("No automatic configuration available!")
+		raise NotImplementedException("No automatic configuration available!")
 	
 	def manualConfiguration(self):
 		self.printConfigurationHelp()
@@ -95,7 +94,7 @@ class PoCConfiguration(PoC.PoCBase):
 				try:
 					self.manualConfigureWindowsISE()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
@@ -106,7 +105,7 @@ class PoCConfiguration(PoC.PoCBase):
 				try:
 					self.manualConfigureWindowsLabTools()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
@@ -117,7 +116,7 @@ class PoCConfiguration(PoC.PoCBase):
 				try:
 					self.manualConfigureWindowsVivado()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
@@ -128,22 +127,44 @@ class PoCConfiguration(PoC.PoCBase):
 				try:
 					self.manualConfigureWindowsHardwareServer()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
-			
+				
+			# configure Questa-SIM on Windows
+			next = False
+			while (next == False):
+				try:
+					self.manualConfigureWindowsQuestaSIM()
+					next = True
+				except BaseException as ex:
+					print("FAULT: %s" % ex.message)
+				except Exception as ex:
+					raise
+				
 			# configure GHDL on Windows
 			next = False
 			while (next == False):
 				try:
 					self.manualConfigureWindowsGHDL()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
-		
+				
+			# configure GTKWave on Windows
+			next = False
+			while (next == False):
+				try:
+					self.manualConfigureWindowsGTKW()
+					next = True
+				except BaseException as ex:
+					print("FAULT: %s" % ex.message)
+				except Exception as ex:
+					raise
+				
 		# configure Linux
 		elif (self.platform == 'Linux'):
 			# configure ISE on Linux
@@ -152,7 +173,7 @@ class PoCConfiguration(PoC.PoCBase):
 				try:
 					self.manualConfigureLinuxISE()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
@@ -163,7 +184,7 @@ class PoCConfiguration(PoC.PoCBase):
 				try:
 					self.manualConfigureLinuxLabTools()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
@@ -174,7 +195,7 @@ class PoCConfiguration(PoC.PoCBase):
 				try:
 					self.manualConfigureLinuxVivado()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
@@ -185,23 +206,45 @@ class PoCConfiguration(PoC.PoCBase):
 				try:
 					self.manualConfigureLinuxHardwareServer()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
-					
+			
+			# configure Questa-SIM on Linux
+			next = False
+			while (next == False):
+				try:
+					self.manualConfigureLinuxQuestaSIM()
+					next = True
+				except BaseException as ex:
+					print("FAULT: %s" % ex.message)
+				except Exception as ex:
+					raise
+			
 			# configure GHDL on Linux
 			next = False
 			while (next == False):
 				try:
 					self.manualConfigureLinuxGHDL()
 					next = True
-				except PoC.PoCException as ex:
+				except BaseException as ex:
+					print("FAULT: %s" % ex.message)
+				except Exception as ex:
+					raise
+			
+			# configure GTKWave on Linux
+			next = False
+			while (next == False):
+				try:
+					self.manualConfigureLinuxGTKW()
+					next = True
+				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
 				except Exception as ex:
 					raise
 		else:
-			raise PoC.PoCPlatformNotSupportedException(self.platform)
+			raise PlatformNotSupportedException(self.platform)
 	
 		# remove non private sections from pocConfig
 		sections = self.pocConfig.sections()
@@ -244,8 +287,8 @@ class PoCConfiguration(PoC.PoCBase):
 				xilinxDirectoryPath = Path(xilinxDirectory)
 				iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
 				
-				if not xilinxDirectoryPath.exists():	raise PoC.PoCException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not iseDirectoryPath.exists():			raise PoC.PoCException("Xilinx ISE version '%s' is not installed." % iseVersion)
+				if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+				if not iseDirectoryPath.exists():			raise BaseException("Xilinx ISE version '%s' is not installed." % iseVersion)
 				
 				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
 				self.pocConfig['Xilinx-ISE']['Version'] = iseVersion
@@ -254,7 +297,7 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isXilinxISE == 'n'):
 				self.pocConfig['Xilinx-ISE'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
+				raise BaseException("unknown option")
 	
 	def manualConfigureWindowsLabTools(self):
 		# Ask for installed Xilinx LabTools
@@ -272,8 +315,8 @@ class PoCConfiguration(PoC.PoCBase):
 				xilinxDirectoryPath = Path(xilinxDirectory)
 				labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
 				
-				if not xilinxDirectoryPath.exists():		raise PoC.PoCException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not labToolsDirectoryPath.exists():	raise PoC.PoCException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
+				if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+				if not labToolsDirectoryPath.exists():	raise BaseException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
 				
 				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
 				self.pocConfig['Xilinx-LabTools']['Version'] = labToolsVersion
@@ -282,7 +325,7 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isXilinxLabTools == 'n'):
 				self.pocConfig['Xilinx-LabTools'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
+				raise BaseException("unknown option")
 	
 	def manualConfigureWindowsVivado(self):
 		# Ask for installed Xilinx Vivado
@@ -300,8 +343,8 @@ class PoCConfiguration(PoC.PoCBase):
 				xilinxDirectoryPath = Path(xilinxDirectory)
 				vivadoDirectoryPath = xilinxDirectoryPath / "Vivado" / vivadoVersion
 			
-				if not xilinxDirectoryPath.exists():	raise PoC.PoCException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not vivadoDirectoryPath.exists():	raise PoC.PoCException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
+				if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+				if not vivadoDirectoryPath.exists():	raise BaseException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
 			
 				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
 				self.pocConfig['Xilinx-Vivado']['Version'] = vivadoVersion
@@ -310,7 +353,7 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isXilinxVivado == 'n'):
 				self.pocConfig['Xilinx-Vivado'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
+				raise BaseException("unknown option")
 	
 	def manualConfigureWindowsHardwareServer(self):
 		# Ask for installed Xilinx HardwareServer
@@ -328,8 +371,8 @@ class PoCConfiguration(PoC.PoCBase):
 				xilinxDirectoryPath = Path(xilinxDirectory)
 				hardwareServerDirectoryPath = xilinxDirectoryPath / "HardwareServer" / hardwareServerVersion
 			
-				if not xilinxDirectoryPath.exists():					raise PoC.PoCException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not hardwareServerDirectoryPath.exists():	raise PoC.PoCException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
+				if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+				if not hardwareServerDirectoryPath.exists():	raise BaseException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
 			
 				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
 				self.pocConfig['Xilinx-HardwareServer']['Version'] = hardwareServerVersion
@@ -338,8 +381,35 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isXilinxHardwareServer == 'n'):
 				self.pocConfig['Xilinx-HardwareServer'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
-		
+				raise BaseException("unknown option")
+
+	def manualConfigureWindowsQuestaSIM(self):
+		# Ask for installed Questa-SIM
+		isQuestaSIM = input('Is Questa-SIM installed on your system? [Y/n/p]: ')
+		isQuestaSIM = isQuestaSIM if isQuestaSIM != "" else "Y"
+		if (isQuestaSIM != 'p'):
+			if (isQuestaSIM == 'Y'):
+				questaSIMDirectory =	input('Questa-SIM Installation Directory [C:\Mentor\QuestaSim64\\10.2c]: ')
+				questaSIMVersion =		input('Questa-SIM Version Number [10.2c]: ')
+				print()
+			
+				questaSIMDirectory =	questaSIMDirectory	if questaSIMDirectory != ""	else "C:\Mentor\QuestaSim64\\10.2c"
+				questaSIMVersion =		questaSIMVersion		if questaSIMVersion != ""		else "10.2c"
+			
+				questaSIMDirectoryPath =	Path(questaSIMDirectory)
+				questaSIMExecutablePath = questaSIMDirectoryPath / "win64" / "vsim.exe"
+			
+				if not questaSIMDirectoryPath.exists():		raise BaseException("Questa-SIM Installation Directory '%s' does not exist." % questaSIMDirectory)
+				if not questaSIMExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
+			
+				self.pocConfig['Questa-SIM']['Version'] =								questaSIMVersion
+				self.pocConfig['Questa-SIM']['InstallationDirectory'] =	questaSIMDirectoryPath.as_posix()
+				self.pocConfig['Questa-SIM']['BinaryDirectory'] =				'${InstallationDirectory}/win64'
+			elif (isQuestaSIM == 'n'):
+				self.pocConfig['Questa-SIM'] = {}
+			else:
+				raise BaseException("unknown option")
+
 	def manualConfigureWindowsGHDL(self):
 		# Ask for installed GHDL
 		isGHDL = input('Is GHDL installed on your system? [Y/n/p]: ')
@@ -356,8 +426,8 @@ class PoCConfiguration(PoC.PoCBase):
 				ghdlDirectoryPath = Path(ghdlDirectory)
 				ghdlExecutablePath = ghdlDirectoryPath / "bin" / "ghdl.exe"
 			
-				if not ghdlDirectoryPath.exists():	raise PoC.PoCException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
-				if not ghdlExecutablePath.exists():	raise PoC.PoCException("GHDL is not installed.")
+				if not ghdlDirectoryPath.exists():	raise BaseException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
+				if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
 			
 				self.pocConfig['GHDL']['Version'] = ghdlVersion
 				self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
@@ -365,8 +435,35 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isGHDL == 'n'):
 				self.pocConfig['GHDL'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
-		
+				raise BaseException("unknown option")
+	
+	def manualConfigureWindowsGTKW(self):
+		# Ask for installed GTKWave
+		isGTKW = input('Is GTKWave installed on your system? [Y/n/p]: ')
+		isGTKW = isGTKW if isGTKW != "" else "Y"
+		if (isGTKW != 'p'):
+			if (isGTKW == 'Y'):
+				gtkwDirectory =	input('GTKWave Installation Directory [C:\Program Files (x86)\GTKWave]: ')
+				gtkwVersion =		input('GTKWave Version Number [3.3.61]: ')
+				print()
+			
+				gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "C:\Program Files (x86)\GTKWave"
+				gtkwVersion = gtkwVersion if gtkwVersion != "" else "3.3.61"
+			
+				gtkwDirectoryPath = Path(gtkwDirectory)
+				gtkwExecutablePath = gtkwDirectoryPath / "bin" / "gtkwave.exe"
+			
+				if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave Installation Directory '%s' does not exist." % gtkwDirectory)
+				if not gtkwExecutablePath.exists():	raise BaseException("GTKWave is not installed.")
+			
+				self.pocConfig['GTKWave']['Version'] = gtkwVersion
+				self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
+				self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+			elif (isGTKW == 'n'):
+				self.pocConfig['GTKWave'] = {}
+			else:
+				raise BaseException("unknown option")
+	
 	def manualConfigureLinuxISE(self):
 		# Ask for installed Xilinx ISE
 		isXilinxISE = input('Is Xilinx ISE installed on your system? [Y/n/p]: ')
@@ -383,8 +480,8 @@ class PoCConfiguration(PoC.PoCBase):
 				xilinxDirectoryPath = Path(xilinxDirectory)
 				iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
 			
-				if not xilinxDirectoryPath.exists():	raise PoC.PoCException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not iseDirectoryPath.exists():			raise PoC.PoCException("Xilinx ISE version '%s' is not installed." % iseVersion)
+				if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+				if not iseDirectoryPath.exists():			raise BaseException("Xilinx ISE version '%s' is not installed." % iseVersion)
 			
 				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
 				self.pocConfig['Xilinx-ISE']['Version'] = iseVersion
@@ -393,7 +490,7 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isXilinxISE == 'n'):
 				self.pocConfig['Xilinx-ISE'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
+				raise BaseException("unknown option")
 	
 	def manualConfigureLinuxLabTools(self):
 		# Ask for installed Xilinx LabTools
@@ -411,8 +508,8 @@ class PoCConfiguration(PoC.PoCBase):
 				xilinxDirectoryPath = Path(xilinxDirectory)
 				labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
 			
-				if not xilinxDirectoryPath.exists():		raise PoC.PoCException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not labToolsDirectoryPath.exists():	raise PoC.PoCException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
+				if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+				if not labToolsDirectoryPath.exists():	raise BaseException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
 			
 				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
 				self.pocConfig['Xilinx-LabTools']['Version'] = labToolsVersion
@@ -421,7 +518,7 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isXilinxLabTools == 'n'):
 				self.pocConfig['Xilinx-LabTools'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
+				raise BaseException("unknown option")
 		
 	def manualConfigureLinuxVivado(self):
 		# Ask for installed Xilinx Vivado
@@ -439,8 +536,8 @@ class PoCConfiguration(PoC.PoCBase):
 				xilinxDirectoryPath = Path(xilinxDirectory)
 				vivadoDirectoryPath = xilinxDirectoryPath / "Vivado" / vivadoVersion
 			
-				if not xilinxDirectoryPath.exists():	raise PoC.PoCException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not vivadoDirectoryPath.exists():	raise PoC.PoCException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
+				if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+				if not vivadoDirectoryPath.exists():	raise BaseException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
 			
 				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
 				self.pocConfig['Xilinx-Vivado']['Version'] = vivadoVersion
@@ -449,7 +546,7 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isXilinxVivado == 'n'):
 				self.pocConfig['Xilinx-Vivado'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
+				raise BaseException("unknown option")
 	
 	def manualConfigureLinuxHardwareServer(self):
 		# Ask for installed Xilinx HardwareServer
@@ -467,8 +564,8 @@ class PoCConfiguration(PoC.PoCBase):
 				xilinxDirectoryPath = Path(xilinxDirectory)
 				hardwareServerDirectoryPath = xilinxDirectoryPath / "HardwareServer" / hardwareServerVersion
 			
-				if not xilinxDirectoryPath.exists():					raise PoC.PoCException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not hardwareServerDirectoryPath.exists():	raise PoC.PoCException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
+				if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+				if not hardwareServerDirectoryPath.exists():	raise BaseException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
 			
 				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
 				self.pocConfig['Xilinx-HardwareServer']['Version'] = hardwareServerVersion
@@ -477,7 +574,34 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isXilinxHardwareServer == 'n'):
 				self.pocConfig['Xilinx-HardwareServer'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
+				raise BaseException("unknown option")
+			
+	def manualConfigureLinuxQuestaSIM(self):
+		# Ask for installed Questa-SIM
+		isQuestaSIM = input('Is Questa-SIM installed on your system? [Y/n/p]: ')
+		isQuestaSIM = isQuestaSIM if isQuestaSIM != "" else "Y"
+		if (isQuestaSIM != 'p'):
+			if (isQuestaSIM == 'Y'):
+				questaSIMDirectory =	input('Questa-SIM Installation Directory [/opt/QuestaSim/10.2c]: ')
+				questaSIMVersion =		input('Questa-SIM Version Number [10.2c]: ')
+				print()
+			
+				questaSIMDirectory =	questaSIMDirectory	if questaSIMDirectory != ""	else "/opt/QuestaSim/10.2c"
+				questaSIMVersion =		questaSIMVersion		if questaSIMVersion != ""		else "10.2c"
+			
+				questaSIMDirectoryPath = Path(questaSIMDirectory)
+				questaSIMExecutablePath = questaSIMDirectoryPath / "bin" / "vsim"
+			
+				if not questaSIMDirectoryPath.exists():		raise BaseException("Questa-SIM Installation Directory '%s' does not exist." % questaSIMDirectory)
+				if not questaSIMExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
+			
+				self.pocConfig['Questa-SIM']['Version'] =								questaSIMVersion
+				self.pocConfig['Questa-SIM']['InstallationDirectory'] =	questaSIMDirectoryPath.as_posix()
+				self.pocConfig['Questa-SIM']['BinaryDirectory'] =				'${InstallationDirectory}/bin'
+			elif (isQuestaSIM == 'n'):
+				self.pocConfig['Questa-SIM'] = {}
+			else:
+				raise BaseException("unknown option")
 	
 	def manualConfigureLinuxGHDL(self):
 		# Ask for installed GHDL
@@ -495,8 +619,8 @@ class PoCConfiguration(PoC.PoCBase):
 				ghdlDirectoryPath = Path(ghdlDirectory)
 				ghdlExecutablePath = ghdlDirectoryPath / "ghdl"
 			
-				if not ghdlDirectoryPath.exists():	raise PoC.PoCException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
-				if not ghdlExecutablePath.exists():	raise PoC.PoCException("GHDL is not installed.")
+				if not ghdlDirectoryPath.exists():	raise BaseException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
+				if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
 			
 				self.pocConfig['GHDL']['Version'] = ghdlVersion
 				self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
@@ -504,8 +628,35 @@ class PoCConfiguration(PoC.PoCBase):
 			elif (isGHDL == 'n'):
 				self.pocConfig['GHDL'] = {}
 			else:
-				raise PoC.PoCException("unknown option")
-				
+				raise BaseException("unknown option")
+
+	def manualConfigureLinuxGTKW(self):
+		# Ask for installed GTKWave
+		isGTKW = input('Is GTKWave installed on your system? [Y/n/p]: ')
+		isGTKW = isGTKW if isGTKW != "" else "Y"
+		if (isGTKW != 'p'):
+			if (isGTKW == 'Y'):
+				gtkwDirectory =	input('GTKWave Installation Directory [/usr/bin]: ')
+				gtkwVersion =		input('GTKWave Version Number [3.3.61]: ')
+				print()
+			
+				gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "/usr/bin"
+				gtkwVersion = gtkwVersion if gtkwVersion != "" else "3.3.61"
+			
+				gtkwDirectoryPath = Path(gtkwDirectory)
+				gtkwExecutablePath = gtkwDirectoryPath / "gtkwave"
+			
+				if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave Installation Directory '%s' does not exist." % gtkwDirectory)
+				if not gtkwExecutablePath.exists():	raise BaseException("GTKWave is not installed.")
+			
+				self.pocConfig['GTKWave']['Version'] = gtkwVersion
+				self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
+				self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}'
+			elif (isGTKW == 'n'):
+				self.pocConfig['GTKWave'] = {}
+			else:
+				raise BaseException("unknown option")
+	
 	def newSolution(self, solutionName):
 		print("new solution: name=%s" % solutionName)
 		print("solution here: %s" % self.directories['Working'])
@@ -526,7 +677,7 @@ class PoCConfiguration(PoC.PoCBase):
 			self.pocConfig['Solutions'] = OrderedDict()
 		
 		if self.pocConfig.has_option('Solutions', solutionName):
-			raise PoC.PoCException("Solution is already registered in PoC Library.")
+			raise BaseException("Solution is already registered in PoC Library.")
 		
 		# 
 		solutionFileDirectoryName = input("Where is the solution file 'solution.ini' stored? [./py]: ")
@@ -540,7 +691,7 @@ class PoCConfiguration(PoC.PoCBase):
 			solutionFilePath = ((self.directories['Working'] / solutionFilePath).resolve()) / "solution.ini"
 			
 		if (not solutionFilePath.exists()):
-			raise PoC.PoCException("Solution file '%s' does not exist." % str(solutionFilePath))
+			raise BaseException("Solution file '%s' does not exist." % str(solutionFilePath))
 		
 		self.pocConfig['Solutions'][solutionName] = solutionFilePath.as_posix()
 	
@@ -566,15 +717,15 @@ class PoCConfiguration(PoC.PoCBase):
 			
 			if		(self.platform == "Windows"):		return (str(iseInstallationDirectoryPath / "settings64.bat"))
 			elif	(self.platform == "Linux"):			return (str(iseInstallationDirectoryPath / "settings64.sh"))
-			else:	raise PoCPlatformNotSupportedException(self.platform)
+			else:	raise PlatformNotSupportedException(self.platform)
 		elif (len(self.pocConfig.options("Xilinx-LabTools")) != 0):
 			labToolsInstallationDirectoryPath = Path(self.pocConfig['Xilinx-LabTools']['InstallationDirectory'])
 			
 			if		(self.platform == "Windows"):		return (str(labToolsInstallationDirectoryPath / "settings64.bat"))
 			elif	(self.platform == "Linux"):			return (str(labToolsInstallationDirectoryPath / "settings64.sh"))
-			else:	raise PoCPlatformNotSupportedException(self.platform)
+			else:	raise PlatformNotSupportedException(self.platform)
 		else:
-			raise PoCNotConfiguredException("ERROR: Xilinx ISE or Xilinx LabTools is not configured on this system.")
+			raise NotConfiguredException("ERROR: Xilinx ISE or Xilinx LabTools is not configured on this system.")
 			
 	def getVivadoSettingsFile(self):
 		if (len(self.pocConfig.options("Xilinx-Vivado")) != 0):
@@ -582,15 +733,15 @@ class PoCConfiguration(PoC.PoCBase):
 			
 			if		(self.platform == "Windows"):		return (str(vivadoInstallationDirectoryPath / "settings64.bat"))
 			elif	(self.platform == "Linux"):			return (str(vivadoInstallationDirectoryPath / "settings64.sh"))
-			else:	raise PoCPlatformNotSupportedException(self.platform)
+			else:	raise PlatformNotSupportedException(self.platform)
 		elif (len(self.pocConfig.options("Xilinx-HardwareServer")) != 0):
 			hardwareServerInstallationDirectoryPath = Path(self.pocConfig['Xilinx-HardwareServer']['InstallationDirectory'])
 			
 			if		(self.platform == "Windows"):		return (str(hardwareServerInstallationDirectoryPath / "settings64.bat"))
 			elif	(self.platform == "Linux"):			return (str(hardwareServerInstallationDirectoryPath / "settings64.sh"))
-			else:	raise PoCPlatformNotSupportedException(self.platform)
+			else:	raise PlatformNotSupportedException(self.platform)
 		else:
-			raise PoCNotConfiguredException("ERROR: Xilinx Vivado or Xilinx HardwareServer is not configured on this system.")
+			raise NotConfiguredException("ERROR: Xilinx Vivado or Xilinx HardwareServer is not configured on this system.")
 	
 # main program
 def main():
@@ -641,14 +792,14 @@ def main():
 
 	# create class instance and start processing
 	try:
-		config = PoCConfiguration(args.debug, args.verbose, args.quiet)
+		config = Configuration(args.debug, args.verbose, args.quiet)
 		
 		if (args.help == True):
 			argParser.print_help()
 			return
 		elif args.configurePoC:
 			print("=" * 80)
-			print("{: ^80s}".format("PoC Library - Repository Service Tool"))
+			print("{: ^80s}".format("The PoC Library - Repository Service Tool"))
 			print("=" * 80)
 			print()
 		
@@ -657,7 +808,7 @@ def main():
 			exit(0)
 		elif args.newSolution:
 			print("=" * 80)
-			print("{: ^80s}".format("PoC Library - Repository Service Tool"))
+			print("{: ^80s}".format("The PoC Library - Repository Service Tool"))
 			print("=" * 80)
 			print()
 			
@@ -666,7 +817,7 @@ def main():
 			
 		elif args.addSolution:
 			print("=" * 80)
-			print("{: ^80s}".format("PoC Library - Repository Service Tool"))
+			print("{: ^80s}".format("The PoC Library - Repository Service Tool"))
 			print("=" * 80)
 			print()
 			
@@ -683,7 +834,7 @@ def main():
 			argParser.print_help()
 			exit(0)
 	
-	except PoC.PoCNotConfiguredException as ex:
+	except NotConfiguredException as ex:
 		from colorama import Fore, Back, Style
 		print(Fore.RED + "ERROR: %s" % ex.message)
 		print()
@@ -691,19 +842,19 @@ def main():
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 		exit(1)
 	
-	except PoC.PoCPlatformNotSupportedException as ex:
+	except PlatformNotSupportedException as ex:
 		from colorama import Fore, Back, Style
 		print(Fore.RED + "ERROR: Unknown platform '%s'" % ex.message)
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 		exit(1)
 		
-	except PoC.PoCException as ex:
+	except BaseException as ex:
 		from colorama import Fore, Back, Style
 		print(Fore.RED + "ERROR: %s" % ex.message)
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 		exit(1)
 
-	except PoC.NotImplementedException as ex:
+	except NotImplementedException as ex:
 		from colorama import Fore, Back, Style
 		print(Fore.RED + "ERROR: %s" % ex.message)
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
@@ -736,7 +887,7 @@ else:
 	from sys			import exit
 	from colorama	import Fore, Back, Style
 	print(Fore.RED + "=" * 80)
-	print("{: ^80s}".format("PoC Library - Repository Service Tool"))
+	print("{: ^80s}".format("The PoC Library - Repository Service Tool"))
 	print("=" * 80)
 	print()
 	print("This is no library file!")

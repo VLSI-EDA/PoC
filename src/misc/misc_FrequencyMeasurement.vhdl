@@ -76,10 +76,10 @@ architecture rtl of misc_FrequencyMeasurement is
 	signal Frequency_Counter_us				: UNSIGNED(31 downto 0)										:= (others => '0');
 	
 	signal CaptureResult							: STD_LOGIC;
-	signal CaptureResult_d1						: STD_LOGIC																:= '0';
-	signal CaptureResult_d2						: STD_LOGIC																:= '0';
+	signal CaptureResult_d						: STD_LOGIC																:= '0';
 	signal Result_en									: STD_LOGIC;
 	signal Result_d										: T_SLV_32																:= (others => '0');
+	signal Done_r											: STD_LOGIC																:= '0';
 begin
 	
 	TimeBase_Counter_rst	<= Start;
@@ -126,10 +126,9 @@ begin
 		end if;
 	end process;
 	
-	CaptureResult			<= sync1_Busy(1);
-	CaptureResult_d1	<= CaptureResult		when rising_edge(Reference_Clock);
-	CaptureResult_d2	<= CaptureResult_d1	when rising_edge(Reference_Clock);
-	Result_en					<= CaptureResult_d1	and not CaptureResult;
+	CaptureResult		<= sync1_Busy(1);
+	CaptureResult_d	<= CaptureResult		when rising_edge(Reference_Clock);
+	Result_en				<= CaptureResult_d	and not CaptureResult;
 	
 	-- Result_d can becaptured from Frequency_Counter_us, because it's stable
 	-- for more than one clock cycle and will not change until the next Start
@@ -138,10 +137,13 @@ begin
 		if rising_edge(Reference_Clock) then
 			if (Result_en = '1') then
 				Result_d	<= std_logic_vector(Frequency_Counter_us);
+				Done_r		<= '1';
+			elsif (Start = '1') then
+				Done_r		<= '0';
 			end if;
 		end if;
 	end process;
 	
-	Done		<= CaptureResult_d2;
+	Done		<= Done_r;
 	Result	<= Result_d;
 end;

@@ -4,13 +4,24 @@
 -- 
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
+--									Thomas B. Preusser
 -- 
--- Module:				 	Debounce module for BITS many unreliable input pins
+-- Module:				 	Debounce module for BITS many bouncing input pins.
 --
 -- Description:
 -- ------------------------------------
---		This module debounces several input pins. Each wire (pin) is feed through
---		a PoC.io.GlitchFilter. An optional two FF input synchronizes can be added.
+--		This module debounces several input pins preventing input changes
+--    following a previous one within the configured BOUNCE_TIME to pass.
+--    Internally, the forwarded state is locked for, at least, this BOUNCE_TIME.
+--    As the backing timer is restarted on every input fluctuation, the next
+--    passing input update must have seen a stabilized input.
+--
+--    The parameter COMMON_LOCK uses a single internal timer for all processed
+--    inputs. Thus, all inputs must stabilize before any one may pass changed.
+--    This option is usually fully acceptable for user inputs such as push buttons.
+--
+--    The parameter ADD_INPUT_SYNCHRONIZERS triggers the optional instantiation
+--    of a two-FF input synchronizer on each input bit.
 --
 -- License:
 -- ============================================================================
@@ -32,61 +43,129 @@
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
-use			IEEE.NUMERIC_STD.all;
 
 library PoC;
-use			PoC.utils.all;
 use			PoC.physical.all;
-
 
 entity io_Debounce is
   generic (
-		CLOCK_FREQ							: FREQ				:= 100.0 MHz;
-		DEBOUNCE_TIME						: TIME				:= 5.0 ms;
-		BITS										: POSITIVE		:= 1;
-		ADD_INPUT_SYNCHRONIZER	: BOOLEAN			:= TRUE
-	);
+    CLOCK_FREQ  : freq;
+    BOUNCE_TIME : time;
+
+    BITS                    : positive := 1;
+    ADD_INPUT_SYNCHRONIZERS : boolean  := true;
+    COMMON_LOCK             : boolean  := false
+  );
   port (
-		Clock		: in	STD_LOGIC;
-		Input		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		Output	: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
-	);
+    clk    : in  std_logic;
+		rst    : in  std_logic;
+    Input  : in  std_logic_vector(BITS-1 downto 0);
+    Output : out std_logic_vector(BITS-1 downto 0)
+  );
 end;
 
 
+library IEEE;
+use IEEE.numeric_std.all;
+
+library PoC;
+use			PoC.utils.all;
+
 architecture rtl of io_Debounce is
-	signal Input_sync					: STD_LOGIC_VECTOR(Input'range);
+
+	-- Number of required locking cycles
+	constant LOCK_COUNT_X : integer := TimingToCycles(BOUNCE_TIME, CLOCK_FREQ) - 1;
+
+	-- Input Refinements
+  signal sync : std_logic_vector(Input'range);                -- Synchronized
+  signal prev : std_logic_vector(Input'range) := (others => '0');  -- Delayed
+
+	signal active : std_logic_vector(Input'range);  -- Allow Output Updates
 
 begin
-	-- input synchronization
-	genNoSync : if (ADD_INPUT_SYNCHRONIZER = FALSE) generate
-		Input_sync	<= Input;
-	end generate;	
-	genSync : if (ADD_INPUT_SYNCHRONIZER = TRUE) generate
-		sync : entity PoC.sync_Flag
-			generic map (
-				BITS		=> BITS
-			)
-			port map (
-				Clock		=> Clock,				-- Clock to be synchronized to
-				Input		=> Input,				-- Data to be synchronized
-				Output	=> Input_sync		-- synchronised data
-			);
-	end generate;
 
-	-- glitch filter
-	genGF : for i in 0 to BITS - 1 generate
-		constant SPIKE_SUPPRESSION_CYCLES		: NATURAL		:= TimingToCycles(DEBOUNCE_TIME, CLOCK_FREQ);
+  -----------------------------------------------------------------------------
+  -- Input Synchronization
+  genNoSync: if not ADD_INPUT_SYNCHRONIZERS generate
+    sync <= Input;
+  end generate;
+  genSync: if ADD_INPUT_SYNCHRONIZERS generate
+    sync_i : entity PoC.sync_Flag
+      generic map (
+        BITS => BITS
+      )
+      port map (
+        Clock  => clk,  								-- Clock to be synchronized to
+        Input  => Input,  							-- Data to be synchronized
+        Output => sync  								-- synchronised data
+      );
+  end generate;
+
+	-----------------------------------------------------------------------------
+	-- Bounce Filter
+	process(clk)
 	begin
-		GF : entity PoC.io_GlitchFilter
-			generic map (
-				HIGH_SPIKE_SUPPRESSION_CYCLES		=> SPIKE_SUPPRESSION_CYCLES,
-				LOW_SPIKE_SUPPRESSION_CYCLES		=> SPIKE_SUPPRESSION_CYCLES
-			)
-			port map (
-				Clock		=> Clock,
-				Input		=> Input_sync(i),
-				Output	=> Output(i)
-			);
-	end generate;
+		if rising_edge(clk) then
+			prev <= sync;
+			if rst = '1' then
+				Output <= sync;
+			else
+				for i in Output'range loop
+					if active(i) = '1' then
+						Output(i) <= sync(i);
+					end if;
+				end loop;
+			end if;
+		end if;
+	end process;
+
+	genNoLock: if LOCK_COUNT_X <= 0 generate
+		active <= (others => '1');
+	end generate genNoLock;
+	genLock: if LOCK_COUNT_X > 0 generate
+
+    function numberOfLocks return positive is
+		begin
+			if COMMON_LOCK then
+				return  1;
+			else
+				return  BITS;
+			end if;
+		end numberOfLocks;
+		constant LOCKS : positive := numberOfLocks;
+
+		signal toggle : std_logic_vector(LOCKS-1 downto 0);
+		signal locked : std_logic_vector(LOCKS-1 downto 0);
+	begin
+
+    genOneLock: if COMMON_LOCK generate
+      toggle(0) <= '1' when prev /= sync else '0';
+      active    <= (others => not locked(0));
+    end generate genOneLock;
+    genManyLocks: if not COMMON_LOCK generate
+      toggle <= prev xor sync;
+      active <= not locked;
+    end generate genManyLocks;
+
+		genLocks: for i in 0 to LOCKS-1 generate
+			signal Lock : signed(log2ceil(LOCK_COUNT_X+1) downto 0) := (others => '0');
+		begin
+			process(clk)
+			begin
+				if rising_edge(clk) then
+					if rst = '1' then
+						Lock <= (others => '0');
+					else
+						if toggle(i) = '1' then
+							Lock <= to_signed(-LOCK_COUNT_X, Lock'length);
+						elsif locked(i) = '1' then
+							Lock <= Lock + 1;
+						end if;
+					end if;
+				end if;
+			end process;
+			locked(i) <= Lock(Lock'left);
+		end generate genLocks;
+	end generate genLock;
+
 end;

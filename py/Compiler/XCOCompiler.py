@@ -46,12 +46,12 @@ else:
 	exit(1)
 
 from pathlib import Path
-import re
-	
-import PoCCompiler
-from libDecorators import property
 
-class PoCXCOCompiler(PoCCompiler.PoCCompiler):
+from Base.Exceptions import *
+from Compiler.Base import PoCCompiler 
+from Compiler.Exceptions import *
+
+class Compiler(PoCCompiler):
 
 	__executables = {}
 
@@ -63,10 +63,11 @@ class PoCXCOCompiler(PoCCompiler.PoCCompiler):
 		elif (host.platform == "Linux"):
 			self.__executables['CoreGen'] =	"coregen"
 		else:
-			raise PoC.PoCPlatformNotSupportedException(self.platform)
+			raise PlatformNotSupportedException(self.platform)
 		
 	def run(self, pocEntity, device):
 		import os
+		import re
 		import shutil
 		import subprocess
 		import textwrap
@@ -103,7 +104,7 @@ class PoCXCOCompiler(PoCCompiler.PoCCompiler):
 		copyTasks = []
 		for item in copyFileList.split("\n"):
 			list1 = re.split("\s+->\s+", item)
-			if (len(list1) != 2):				raise PoCCompiler.PoCCompilerException("Expected 2 arguments for every copy task!")
+			if (len(list1) != 2): raise CompilerException("Expected 2 arguments for every copy task!")
 			
 			copyTasks.append((Path(list1[0]), Path(list1[1])))
 		
@@ -214,7 +215,7 @@ class PoCXCOCompiler(PoCCompiler.PoCCompiler):
 		self.printNonQuiet('  copy result files into output directory...')
 		for task in copyTasks:
 			(fromPath, toPath) = task
-			if not fromPath.exists():		raise PoCCompiler.PoCCompilerException("File '%s' does not exist!" % str(fromPath))
+			if not fromPath.exists(): raise CompilerException("File '%s' does not exist!" % str(fromPath))
 			
 			toDirectoryPath = toPath.parent
 			if not toDirectoryPath.exists():

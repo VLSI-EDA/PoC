@@ -1,5 +1,5 @@
 <NotepadPlus>
-    <UserLang name="Xilinx UCF" ext="ucf xcf" udlVersion="2.1">
+    <UserLang name="Xilinx UCF" ext="ucf xcf ncf" udlVersion="2.1">
         <Settings>
             <Global caseIgnored="no" allowFoldOfComments="yes" foldCompact="no" forcePureLC="0" decimalSeparator="0" />
             <Prefix Keywords1="yes" Keywords2="yes" Keywords3="yes" Keywords4="yes" Keywords5="yes" Keywords6="no" Keywords7="no" Keywords8="no" />
@@ -24,7 +24,7 @@
             <Keywords name="Folders in comment, open"></Keywords>
             <Keywords name="Folders in comment, middle"></Keywords>
             <Keywords name="Folders in comment, close"></Keywords>
-            <Keywords name="Keywords1">NET LOC IOSTANDARD DRIVE CONFIG PART PULLUP NODELAY SLEW TNM TNM_NET TIMESPEC PERIOD HIGH INPUT_JITTER INSt OFFSET BEFORE AFTER IN VALID IOB IDELAY_VALUE IODELAY_GROUP FROM TO INST TIMEGRP RISING FALLING TIG</Keywords>
+            <Keywords name="Keywords1">NET LOC IOSTANDARD DRIVE CONFIG PART PULLUP NODELAY SLEW TNM TNM_NET TIMESPEC PERIOD HIGH INPUT_JITTER INSt OFFSET BEFORE AFTER IN VALID IOB IDELAY_VALUE IODELAY_GROUP FROM TO INST TIMEGRP RISING FALLING TIG KEEP S</Keywords>
             <Keywords name="Keywords2">LVCMOS15 LVCMOS18 LVCMOS25 LVCMOS33 LVDS LVDS_15 LVDS_25 SLOW FAST false true FFS</Keywords>
             <Keywords name="Keywords3">BEGIN END DEFINE INCLUDE TRUE</Keywords>
             <Keywords name="Keywords4">MHz ps ns</Keywords>

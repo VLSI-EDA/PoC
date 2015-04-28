@@ -51,13 +51,6 @@
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
-library UniSim;
-use			UniSim.vComponents.all;
-
-library PoC;
-use			PoC.utils.ALL;
-
-
 entity xil_SyncBits is
 	generic (
 		BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
@@ -70,48 +63,90 @@ entity xil_SyncBits is
 	);
 end;
 
+library IEEE;
+use			IEEE.STD_LOGIC_1164.all;
+
+entity xil_SyncBit is
+	generic (
+		INIT					: BIT							-- initialitation bit
+	);
+	port (
+		Clock					: in	STD_LOGIC;	-- Clock to be synchronized to
+		Input					: in	STD_LOGIC;	-- Data to be synchronized
+		Output				: out	STD_LOGIC		-- synchronised data
+	);
+end;
+
+library IEEE;
+use			IEEE.STD_LOGIC_1164.all;
+
+library PoC;
+use			PoC.utils.ALL;
 
 architecture rtl of xil_SyncBits is
-	attribute ASYNC_REG				: STRING;
-	attribute SHREG_EXTRACT		: STRING;
-
-	constant INIT_I						: STD_LOGIC_VECTOR		:= resize(descend(INIT), BITS);
-
+	constant INIT_I						: BIT_VECTOR		:= to_bitvector(resize(descend(INIT), BITS));
 begin
 	gen : for i in 0 to BITS - 1 generate
-		signal Data_async				: STD_LOGIC;
-		signal Data_meta				: STD_LOGIC;
-		signal Data_sync				: STD_LOGIC;
-	
-		-- Mark register Data_async's input as asynchronous
-		attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
-
-		-- Prevent XST from translating two FFs into SRL plus FF
-		attribute SHREG_EXTRACT of Data_meta	: signal is "NO";
-		attribute SHREG_EXTRACT of Data_sync	: signal is "NO";
-	begin
-		Data_async	<= Input(i);
-	
-		FF1_METASTABILITY_FFS : FD
+		Sync : entity PoC.xil_SyncBit
 			generic map (
-				INIT		=> to_bit(INIT_I(i))
+				INIT	=> INIT_I(i)
 			)
 			port map (
-				C				=> Clock,
-				D				=> Data_async,
-				Q				=> Data_meta
+				Clock		=> Clock,
+				Input		=> Input(i),
+				Output	=> Output(i)
 			);
-
-		FF2 : FD
-			generic map (
-				INIT		=> to_bit(INIT_I(i))
-			)
-			port map (
-				C				=> Clock,
-				D				=> Data_meta,
-				Q				=> Data_sync
-			);
-		
-		Output(i)		<= Data_sync;
 	end generate;
+end architecture;
+
+library IEEE;
+use			IEEE.STD_LOGIC_1164.all;
+
+library UniSim;
+use			UniSim.vComponents.all;
+
+architecture rtl of xil_SyncBit is
+	attribute ASYNC_REG				: STRING;
+	attribute SHREG_EXTRACT		: STRING;
+	attribute RLOC						: STRING;
+
+	signal Data_async				: STD_LOGIC;
+	signal Data_meta				: STD_LOGIC;
+	signal Data_sync				: STD_LOGIC;
+	
+	-- Mark register Data_async's input as asynchronous
+	attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
+
+	-- Prevent XST from translating two FFs into SRL plus FF
+	attribute SHREG_EXTRACT of Data_meta	: signal is "NO";
+	attribute SHREG_EXTRACT of Data_sync	: signal is "NO";
+		
+	-- Assign synchronization FF pairs to the same slice -> minimal routing delay
+	attribute RLOC of Data_meta						: signal is "X0Y0";
+	attribute RLOC of Data_sync						: signal is "X0Y0";
+		
+begin
+	Data_async	<= Input;
+
+	FF1_METASTABILITY_FFS : FD
+		generic map (
+			INIT		=> INIT
+		)
+		port map (
+			C				=> Clock,
+			D				=> Data_async,
+			Q				=> Data_meta
+		);
+
+	FF2 : FD
+		generic map (
+			INIT		=> INIT
+		)
+		port map (
+			C				=> Clock,
+			D				=> Data_meta,
+			Q				=> Data_sync
+		);
+	
+	Output	<= Data_sync;
 end architecture;

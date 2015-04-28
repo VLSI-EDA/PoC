@@ -3,9 +3,9 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- ============================================================================
--- Package:					Global board configuration settings.
---
 -- Authors:					Patrick Lehmann
+--
+-- Package:					Global board configuration settings.
 --
 -- Description:
 -- ------------------------------------
@@ -14,7 +14,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,9 +44,12 @@ use			PoC.strings.all;
 package board is
 	-- TODO: 
 	-- ===========================================================================
-	SUBTYPE T_CONFIG_STRING		IS STRING(1 TO 64);
+	subtype T_BOARD_STRING					is STRING(1 to 16);
+	subtype T_BOARD_CONFIG_STRING		is STRING(1 to 64);
 	
-	TYPE T_BOARD IS (
+	constant C_BOARD_STRING_EMPTY	: T_BOARD_STRING		:= (others => NUL);
+	
+	type T_BOARD is (
 		BOARD_CUSTOM,
 		BOARD_S3SK200,	BOARD_S3SK1000,
 		BOARD_S3ESK500,	BOARD_S3ESK1600,
@@ -61,29 +64,29 @@ package board is
 		BOARD_S2GXAV
 	);
 	
-	TYPE T_BOARD_ETHERNET_DESC IS RECORD
-		IPStyle										: T_CONFIG_STRING;
-		RS_DataInterface					: T_CONFIG_STRING;
-		PHY_Device								: T_CONFIG_STRING;
+	type T_BOARD_ETHERNET_DESC is record
+		IPStyle										: T_BOARD_CONFIG_STRING;
+		RS_DataInterface					: T_BOARD_CONFIG_STRING;
+		PHY_Device								: T_BOARD_CONFIG_STRING;
 		PHY_DeviceAddress					: T_SLV_8;
-		PHY_DataInterface					: T_CONFIG_STRING;
-		PHY_ManagementInterface		: T_CONFIG_STRING;
-	END RECORD;
+		PHY_DataInterface					: T_BOARD_CONFIG_STRING;
+		PHY_ManagementInterface		: T_BOARD_CONFIG_STRING;
+	end record;
 
-	TYPE T_BOARD_DESCRIPTION IS RECORD
-		FPGADevice	: T_CONFIG_STRING;
+	type T_BOARD_DESCRIPTION is record
+		FPGADevice	: T_BOARD_CONFIG_STRING;
 		Ethernet		: T_BOARD_ETHERNET_DESC;
 	
-	END RECORD;
+	end record;
 
-	TYPE T_BOARD_DESCRIPTION_VECTOR	IS ARRAY (T_BOARD) OF T_BOARD_DESCRIPTION;
+	type T_BOARD_DESCRIPTION_VECTOR	is array (T_BOARD) of T_BOARD_DESCRIPTION;
 
 
 	-- Functions extracting board and PCB properties from "MY_BOARD"
 	-- which is declared in package "my_config".
 	-- ===========================================================================
-	function MY_DEVICE_STRING(BoardConfig : string := "None") return string;
-	function MY_BOARD_STRUCT(BoardConfig : string := "None")	return T_BOARD_DESCRIPTION;
+	function MY_DEVICE_STRING(BoardConfig : string := C_BOARD_STRING_EMPTY) return string;
+	function MY_BOARD_STRUCT(BoardConfig : string := C_BOARD_STRING_EMPTY)	return T_BOARD_DESCRIPTION;
 
 end;
 
@@ -93,9 +96,9 @@ package body board is
 	-- private functions required by board description
 	-- ModelSim requires that this functions is defined before it is used below.
 	-- ===========================================================================
-	function conf(str : string) return T_CONFIG_STRING is
+	function conf(str : string) return T_BOARD_CONFIG_STRING is
 	begin
-		return resize(str, T_CONFIG_STRING'length);
+		return resize(str, T_BOARD_CONFIG_STRING'length);
 	end function;
 
 	-- board description
@@ -265,24 +268,23 @@ package body board is
 	-- public functions
 	-- ===========================================================================
 	-- TODO: comment
-	function MY_BOARD_STRUCT(BoardConfig : string := "None") return T_BOARD_DESCRIPTION is
-		constant MY_BRD : T_CONFIG_STRING := ite((BoardConfig = "None"), conf(MY_BOARD), conf(BoardConfig));
+	function MY_BOARD_STRUCT(BoardConfig : string := C_BOARD_STRING_EMPTY) return T_BOARD_DESCRIPTION is
+		constant MY_BRD : T_BOARD_CONFIG_STRING := ite((BoardConfig /= C_BOARD_STRING_EMPTY), conf(BoardConfig), conf(MY_BOARD));
   begin
 		for i in T_BOARD loop
-			if str_match("BOARD_" & str_to_upper(MY_BRD), str_to_upper(t_board'image(i))) then
+			if str_imatch("BOARD_" & str_trim(MY_BRD), t_board'image(i)) then
 				return  C_BOARD_DESCRIPTION_LIST(i);
 			end if;
 		end loop;
 
 		report "Unknown board name in MY_BOARD = " & MY_BRD & "." severity failure;
 		-- return statement is explicitly missing otherwise XST won't stop
-	end function MY_BOARD_STRUCT;
+	end function;
 
 	-- TODO: comment
-	function MY_DEVICE_STRING(BoardConfig : string := "None") return string is
-		constant DEV_STRING	: T_CONFIG_STRING											:= MY_BOARD_STRUCT(BoardConfig).FPGADevice;
-		constant Result			: string(1 to str_length(DEV_STRING))	:= DEV_STRING(1 to str_length(DEV_STRING));
+	function MY_DEVICE_STRING(BoardConfig : string := C_BOARD_STRING_EMPTY) return string is
+		constant BRD_STRUCT	: T_BOARD_DESCRIPTION := MY_BOARD_STRUCT(BoardConfig);
   begin
-		return Result;
-	end function MY_DEVICE_STRING;
-end board;
+		return BRD_STRUCT.FPGADevice(1 to 32);
+	end function;
+end package body;

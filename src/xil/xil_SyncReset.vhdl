@@ -67,6 +67,7 @@ end;
 architecture rtl of xil_SyncReset is
 	attribute ASYNC_REG											: STRING;
 	attribute SHREG_EXTRACT									: STRING;
+	attribute RLOC													: STRING;
 
 	signal Reset_async											: STD_LOGIC;
 	signal Reset_meta												: STD_LOGIC;
@@ -80,6 +81,10 @@ architecture rtl of xil_SyncReset is
 	attribute SHREG_EXTRACT of Reset_meta		: signal is "NO";
 	attribute SHREG_EXTRACT of Reset_sync		: signal is "NO";
 
+	-- Assign synchronization FF pairs to the same slice -> minimal routing delay
+	attribute RLOC of Reset_meta						: signal is "X0Y0";
+	attribute RLOC of Reset_sync						: signal is "X0Y0";
+	
 begin
 	Reset_async		<= Input;
 

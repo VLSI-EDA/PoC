@@ -3,11 +3,11 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- ============================================================================
--- Package:					String related functions and types
---
 -- Authors:					Thomas B. Preusser
 --									Martin Zabel
 --									Patrick Lehmann
+--
+-- Package:					String related functions and types
 --
 -- Description:
 -- ------------------------------------
@@ -15,7 +15,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,17 +43,17 @@ use			PoC.my_config.MY_VERBOSE;
 package strings is
 	-- Type declarations
 	-- ===========================================================================
-	SUBTYPE T_RAWCHAR				IS STD_LOGIC_VECTOR(7 DOWNTO 0);
-	TYPE		T_RAWSTRING			IS ARRAY (NATURAL RANGE <>) OF T_RAWCHAR;
+	subtype T_RAWCHAR				is STD_LOGIC_VECTOR(7 downto 0);
+	type		T_RAWSTRING			is array (NATURAL range <>) of T_RAWCHAR;
 	
 	-- testing area:
 	-- ===========================================================================
-	FUNCTION to_IPStyle(str : STRING)			RETURN T_IPSTYLE;
+	function to_IPStyle(str : STRING)			return T_IPSTYLE;
 
 	-- to_char
-	FUNCTION to_char(value : STD_LOGIC)		RETURN CHARACTER;
-	FUNCTION to_char(value : NATURAL)			RETURN CHARACTER;
-	FUNCTION to_char(rawchar : T_RAWCHAR) RETURN CHARACTER;	
+	function to_char(value : STD_LOGIC)		return CHARACTER;
+	function to_char(value : NATURAL)			return CHARACTER;
+	function to_char(rawchar : T_RAWCHAR) return CHARACTER;	
 
 	-- chr_is* function
 	function chr_isDigit(chr : character)					return boolean;
@@ -111,13 +111,14 @@ package strings is
 	FUNCTION resize(rawstr : T_RAWSTRING; size : POSITIVE; FillChar : T_RAWCHAR := x"00") RETURN T_RAWSTRING;
 
 	-- Character functions
-	function to_LowerChar(chr : character) return character;
-	function to_UpperChar(chr : character) return character;
+	function chr_to_lower(chr : character) return character;
+	function chr_to_upper(chr : character) return character;
 	
 	-- String functions
 	function str_length(str : STRING)									return NATURAL;
 	function str_equal(str1 : STRING; str2 : STRING)	return BOOLEAN;
 	function str_match(str1 : STRING; str2 : STRING)	return BOOLEAN;
+	function str_imatch(str1 : STRING; str2 : STRING)	return BOOLEAN;
 	function str_pos(str : STRING; chr : CHARACTER; start : NATURAL := 0)	return INTEGER;
 	function str_pos(str : STRING; search : STRING; start : NATURAL := 0)	return INTEGER;
 	function str_find(str : STRING; chr : CHARACTER)	return BOOLEAN;
@@ -138,7 +139,7 @@ package body strings is
 	FUNCTION to_IPStyle(str : STRING) RETURN T_IPSTYLE IS
 	BEGIN
 		FOR I IN T_IPSTYLE'pos(T_IPSTYLE'low) TO T_IPSTYLE'pos(T_IPSTYLE'high) LOOP
-			IF str_match(str_to_upper(str), str_to_upper(T_IPSTYLE'image(T_IPSTYLE'val(I)))) THEN
+			IF str_imatch(str, T_IPSTYLE'image(T_IPSTYLE'val(I))) THEN
 				RETURN T_IPSTYLE'val(I);
 			END IF;
 		END LOOP;
@@ -308,16 +309,16 @@ package body strings is
 	-- ===========================================================================
 	function str_format(value : REAL; precision : NATURAL := 3) return STRING is
 		constant s		: REAL			:= sign(value);
-		constant int	: INTEGER		:= integer((value * s) - 0.5);																		-- force ROUND_DOWN
-		constant frac	: INTEGER		:= integer((((value * s) - real(int)) * 10.0**precision) - 0.5);	-- force ROUND_DOWN
+		constant int	: INTEGER		:= integer(floor(value * s));
+		constant frac	: INTEGER		:= integer(floor(((value * s) - real(int)) * 10.0**precision));
 		constant res	: STRING		:= raw_format_nat_dec(int) & "." & raw_format_nat_dec(frac);
 	begin
---		assert (not MY_VERBOSE)
---			report "str_format:" & CR &
---						 "  value:" & REAL'image(value) & CR &
---						 "  int = " & INTEGER'image(int) & CR &
---						 "  frac = " & INTEGER'image(frac)
---			severity note;
+		assert (not MY_VERBOSE)
+			report "str_format:" & CR &
+						 "  value:" & REAL'image(value) & CR &
+						 "  int = " & INTEGER'image(int) & CR &
+						 "  frac = " & INTEGER'image(frac)
+			severity note;
 		return ite((s	< 0.0), "-" & res, res);
 	end function;
 	
@@ -548,28 +549,28 @@ package body strings is
 
 	-- resize
 	-- ===========================================================================
-	FUNCTION resize(str : STRING; size : POSITIVE; FillChar : CHARACTER := NUL) RETURN STRING IS
-		CONSTANT MaxLength	: NATURAL								:= imin(size, str'length);
-		VARIABLE Result			: STRING(1 TO size)			:= (OTHERS => FillChar);
-	BEGIN
+	function resize(str : STRING; size : POSITIVE; FillChar : CHARACTER := NUL) return STRING is
+		constant MaxLength	: NATURAL								:= imin(size, str'length);
+		variable Result			: STRING(1 to size)			:= (others => FillChar);
+	begin
 		--report "resize: str='" & str & "' size=" & INTEGER'image(size) severity note;
 		if (MaxLength > 0) then
 			Result(1 TO MaxLength) := str(str'low TO str'low + MaxLength - 1);
 		end if;
-		RETURN Result;
-	END FUNCTION;
+		return Result;
+	end function;
 
-	FUNCTION resize(rawstr : T_RAWSTRING; size : POSITIVE; FillChar : T_RAWCHAR := x"00") RETURN T_RAWSTRING IS
-		CONSTANT MaxLength	: POSITIVE																					:= imin(size, rawstr'length);
-		VARIABLE Result			: T_RAWSTRING(rawstr'low TO rawstr'low + size - 1)	:= (OTHERS => FillChar);
-	BEGIN
-		Result(rawstr'low TO rawstr'low + MaxLength - 1) := rawstr(rawstr'low TO rawstr'low + MaxLength - 1);
-		RETURN Result;
-	END;
+	function resize(rawstr : T_RAWSTRING; size : POSITIVE; FillChar : T_RAWCHAR := x"00") return T_RAWSTRING is
+		constant MaxLength	: POSITIVE																					:= imin(size, rawstr'length);
+		variable Result			: T_RAWSTRING(rawstr'low TO rawstr'low + size - 1)	:= (others => FillChar);
+	begin
+		Result(rawstr'low to rawstr'low + MaxLength - 1) := rawstr(rawstr'low to rawstr'low + MaxLength - 1);
+		return Result;
+	end function;
 
 	-- Character functions
 	-- ===========================================================================
-	function to_LowerChar(chr : character) return character is
+	function chr_to_lower(chr : character) return character is
 	begin
 		if chr_isUpperAlpha(chr) then
 			return character'val(character'pos(chr) - character'pos('A') + character'pos('a'));
@@ -578,7 +579,7 @@ package body strings is
 		end if;
 	end function;
 	
-	function to_UpperChar(chr : character) return character is
+	function chr_to_upper(chr : character) return character is
 	begin
 		if chr_isLowerAlpha(chr) then
 			return character'val(character'pos(chr) - character'pos('a') + character'pos('A'));
@@ -589,36 +590,44 @@ package body strings is
 	
 	-- String functions
 	-- ===========================================================================
-	FUNCTION str_length(str : STRING) RETURN NATURAL IS
-		VARIABLE l	: NATURAL		:= 0;
-	BEGIN
-		FOR I IN str'range LOOP
-			IF (str(I) = NUL) THEN
-				RETURN l;
-			ELSE
-				l := l + 1;
-			END IF;
-		END LOOP;
-		RETURN str'length;
-	END FUNCTION;
+	function str_length(str : STRING) return NATURAL is
+	begin
+		for i in str'range loop
+			if (str(i) = NUL) then
+				return i - str'low;
+			end if;
+		end loop;
+		return str'length;
+	end function;
 	
-	FUNCTION str_equal(str1 : STRING; str2 : STRING) RETURN BOOLEAN IS
-	BEGIN
-		IF str1'length /= str2'length THEN
-			RETURN FALSE;
-		ELSE
-			RETURN (str1 = str2);
-		END IF;
-	END FUNCTION;
+	function str_equal(str1 : STRING; str2 : STRING) return BOOLEAN is
+	begin
+		if str1'length /= str2'length then
+			return FALSE;
+		else
+			return (str1 = str2);
+		end if;
+	end function;
 
-	FUNCTION str_match(str1 : STRING; str2 : STRING) RETURN BOOLEAN IS
-	BEGIN
-		IF str_length(str1) /= str_length(str2) THEN
-			RETURN FALSE;
-		ELSE
-			RETURN (resize(str1, str_length(str1)) = resize(str2, str_length(str1)));
-		END IF;
-	END FUNCTION;
+	function str_match(str1 : STRING; str2 : STRING) return BOOLEAN is
+		constant len1 : NATURAL := str_length(str1);
+	begin
+		if (len1 /= str_length(str2)) then
+			return FALSE;
+		else
+			return (resize(str1, len1) = resize(str2, len1));
+		end if;
+	end function;
+
+	function str_imatch(str1 : STRING; str2 : STRING) return BOOLEAN is
+		constant len1 : NATURAL := str_length(str1);
+	begin
+		if (len1 /= str_length(str2)) then
+			return FALSE;
+		else
+			return (str_to_lower(resize(str1, len1)) = str_to_lower(resize(str2, len1)));
+		end if;
+	end function;
 
 	function str_pos(str : STRING; chr : CHARACTER; start : NATURAL := 0) return INTEGER is
 	begin
@@ -688,7 +697,7 @@ package body strings is
 		variable pos		: INTEGER;
 	begin
 		pos := str_pos(str, search);
-		report "str_replace: pos=" & INTEGER'image(pos) severity note;
+--		report "str_replace: pos=" & INTEGER'image(pos) severity note;
 		if (pos > 0) then
 			if (pos = 1) then
 				return replace & str(search'length + 1 to str'length);
@@ -703,13 +712,13 @@ package body strings is
 	end function;
 	
 	function str_trim(str : STRING) return STRING is
-		constant len	: NATURAL	:= str_length(str);
 	begin
-		if (len = 0) then
-			return "";
-		else
-			return resize(str, len);
-		end if;
+		for i in str'range loop
+			if (str(i) = NUL) then
+				return str(str'low to i - 1);
+			end if;
+		end loop;
+		return str;
 	end function;
 	
 	function str_ltrim(str : STRING; char : CHARACTER) return STRING is
@@ -727,7 +736,7 @@ package body strings is
 		VARIABLE temp		: STRING(str'range);
 	BEGIN
 		FOR I IN str'range LOOP
-			temp(I)	:= to_LowerChar(str(I));
+			temp(I)	:= chr_to_lower(str(I));
 		END LOOP;
 		RETURN temp;
 	END FUNCTION;
@@ -736,7 +745,7 @@ package body strings is
 		VARIABLE temp		: STRING(str'range);
 	BEGIN
 		FOR I IN str'range LOOP
-			temp(I)	:= to_UpperChar(str(I));
+			temp(I)	:= chr_to_upper(str(I));
 		END LOOP;
 		RETURN temp;
 	END FUNCTION;

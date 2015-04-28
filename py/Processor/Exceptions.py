@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:				 	Patrick Lehmann
 # 
-# Python Class:			Base class for all PoC***Compilers
+# Python Class:			TODO
 # 
 # Description:
 # ------------------------------------
@@ -39,82 +39,23 @@ else:
 	from sys import exit
 
 	print("=" * 80)
-	print("{: ^80s}".format("PoC Library - Python Class PoCCompiler"))
+	print("{: ^80s}".format("The PoC Library - Python Module Processor.Exceptions"))
 	print("=" * 80)
 	print()
 	print("This is no executable file!")
 	exit(1)
 
-import PoC
-from libDecorators import property
+from Base.Exceptions import *
 
-class PoCCompiler(object):
-	# private fields
-	__host =				None
-	__debug =				False
-	__verbose =			False
-	__quiet =				False
-	__showLogs =		False
-	__showReport =	False
-	__dryRun =			False
-
-	def __init__(self, host, showLogs, showReport):
-		self.__host =				host
-		
-		self.__debug =			host.debug
-		self.__verbose =		host.verbose
-		self.__quiet =			host.quiet
-		self.__showLogs =		showLogs
-		self.__showReport =	showReport
-
-	# class properties
-	# ============================================================================
-	@property
-	def host():
-		def fget(self):
-			return self.__host
-	
-	@property
-	def debug():
-		def fget(self):
-			return self.__debug
-	
-	@property
-	def verbose():
-		def fget(self):
-			return self.__verbose
-	
-	@property
-	def quiet():
-		def fget(self):
-			return self.__quiet
-	
-	@property
-	def showLogs():
-		def fget(self):
-			return self.__showLogs
-	
-	@property
-	def showReport():
-		def fget(self):
-			return self.__showReport
-	
-	# print messages
-	# ============================================================================
-	def printDebug(self, message):
-		if (self.debug):
-			print("DEBUG: " + message)
-	
-	def printVerbose(self, message):
-		if (self.verbose):
-			print(message)
-	
-	def printNonQuiet(self, message):
-		if (not self.quiet):
-			print(message)
-
-
-class PoCCompilerException(PoC.PoCException):
+class ProcessorException(BaseException):
 	def __init__(self, message=""):
 		super().__init__(message)
 		self.message = message
+		
+class PostProcessorException(ProcessorException):
+	def __init__(self, message=""):
+		super().__init__(message)
+		self.message = message
+
+#class EndOfReportException(ProcessorException):
+#	pass

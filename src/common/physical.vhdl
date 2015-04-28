@@ -57,7 +57,7 @@ library IEEE;
 use			IEEE.math_real.all;
 
 library PoC;
-use			PoC.my_config.MY_VERBOSE;
+use			PoC.config.VERBOSE;
 use			PoC.utils.all;
 use			PoC.strings.all;
 
@@ -69,7 +69,7 @@ package physical is
 		kHz = 1000 Hz;
 		MHz = 1000 kHz;
 		GHz = 1000 MHz;
-		THz = 1000 GHz;
+--	THz = 1000 GHz;
 	end units;
 
 	type BAUD is range 0 to INTEGER'high units
@@ -84,7 +84,7 @@ package physical is
 		KiB = 1024 Byte;
 		MiB = 1024 KiB;
 		GiB = 1024 MiB;
-		TiB = 1024 GiB;
+--	TiB = 1024 GiB;
 	end units;
 	
 	--
@@ -155,26 +155,26 @@ package physical is
 	function kHz2Time(f_kHz : NATURAL)	return TIME;
 	function MHz2Time(f_MHz : NATURAL)	return TIME;
 	function GHz2Time(f_GHz : NATURAL)	return TIME;
-	function THz2Time(f_THz : NATURAL)	return TIME;
+--	function THz2Time(f_THz : NATURAL)	return TIME;
 
 	function Hz2Time(f_Hz : REAL)				return TIME;
 	function kHz2Time(f_kHz : REAL) 		return TIME;
 	function MHz2Time(f_MHz : REAL) 		return TIME;
 	function GHz2Time(f_GHz : REAL) 		return TIME;
-	function THz2Time(f_THz : REAL) 		return TIME;
+--	function THz2Time(f_THz : REAL) 		return TIME;
 	
 	-- convert standard types (NATURAL, REAL) to frequency (FREQ)
 	function Hz2Freq(f_Hz : NATURAL)		return FREQ;
 	function kHz2Freq(f_kHz : NATURAL)	return FREQ;
 	function MHz2Freq(f_MHz : NATURAL)	return FREQ;
 	function GHz2Freq(f_GHz : NATURAL)	return FREQ;
-	function THz2Freq(f_THz : NATURAL)	return FREQ;
+--	function THz2Freq(f_THz : NATURAL)	return FREQ;
 	
 	function Hz2Freq(f_Hz : REAL)				return FREQ;
 	function kHz2Freq(f_kHz : REAL)			return FREQ;
 	function MHz2Freq(f_MHz : REAL)			return FREQ;
 	function GHz2Freq(f_GHz : REAL)			return FREQ;
-	function THz2Freq(f_THz : REAL)			return FREQ;
+--	function THz2Freq(f_THz : REAL)			return FREQ;
 	
 	-- convert physical types (TIME, FREQ) to standard type (REAL)
 	function to_real(t : TIME;			scale : TIME)		return REAL;
@@ -183,17 +183,17 @@ package physical is
 	function to_real(mem : MEMORY;	scale : MEMORY)	return REAL;
 	
 	-- calculate needed counter cycles to achieve a given 1. timing/delay and 2. frequency/period
-	function TimingToCycles(Timing : TIME; Clock_Period			: TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return NATURAL;
-	function TimingToCycles(Timing : TIME; Clock_Frequency	: FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return NATURAL;
+	function TimingToCycles(Timing : TIME; Clock_Period			: TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL;
+	function TimingToCycles(Timing : TIME; Clock_Frequency	: FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL;
 	
 	function CyclesToDelay(Cycles : NATURAL; Clock_Period			: TIME) return TIME;
 	function CyclesToDelay(Cycles : NATURAL; Clock_Frequency	: FREQ) return TIME;
 	
 	-- convert and format physical types to STRING
-	function to_string(t : TIME; precision : NATURAL := 3)			return STRING;
-	function to_string(f : FREQ; precision : NATURAL := 3)			return STRING;
-	function to_string(br : BAUD; precision : NATURAL := 3)			return STRING;
-	function to_string(mem : MEMORY; precision : NATURAL := 3)	return STRING;
+	function to_string(t : TIME; precision : NATURAL)			return STRING;
+	function to_string(f : FREQ; precision : NATURAL)			return STRING;
+	function to_string(br : BAUD; precision : NATURAL)		return STRING;
+	function to_string(mem : MEMORY; precision : NATURAL)	return STRING;
 end physical;
 
 
@@ -250,26 +250,28 @@ package body physical is
 		if		(f < 1.0 kHz) then res := div(1.0  Hz, f) * 1.0 sec;
 		elsif (f < 1.0 MHz) then res := div(1.0 kHz, f) * 1.0 ms;
 		elsif (f < 1.0 GHz) then res := div(1.0 MHz, f) * 1.0 us;
-		elsif (f < 1.0 THz) then res := div(1.0 GHz, f) * 1.0 ns;
-		else										 res := div(1.0 THz, f) * 1.0 ps;
+--	elsif (f < 1.0 THz) then res := div(1.0 GHz, f) * 1.0 ns;
+		else										 res := div(1.0 GHz, f) * 1.0 ns;
+--	else										 res := div(1.0 THz, f) * 1.0 ps;
 		end if;
 
-		assert not MY_VERBOSE report "to_time: f= " & to_string(f) & "  return " & to_string(res) severity note;
+		assert not VERBOSE report "to_time: f= " & to_string(f, 3) & "  return " & to_string(res, 3) severity note;
 		return res;
 	end function;
 
 	function to_freq(p : TIME) return FREQ is
 		variable res : FREQ;
 	begin
-		if		(p < 1.0 ps)	then res := div(1.0 fs, p) * 1.0 THz;
-		elsif (p < 1.0 ns)	then res := div(1.0 ps, p) * 1.0 GHz;
+--	if		(p < 1.0 ps)	then res := div(1.0 fs, p) * 1.0 THz;
+		if		(p < 1.0 ns)	then res := div(1.0 ps, p) * 1.0 GHz;
+--	elsif (p < 1.0 ns)	then res := div(1.0 ps, p) * 1.0 GHz;
 		elsif (p < 1.0 us)	then res := div(1.0 ns, p) * 1.0 MHz;
 		elsif (p < 1.0 ms)	then res := div(1.0 us, p) * 1.0 kHz;
 		elsif (p < 1.0 sec) then res := div(1.0 ms, p) * 1.0  Hz;
 		else report "to_freq: input period exceeds output frequency scale." severity failure;
 		end if;
 
-		assert not MY_VERBOSE report "to_freq: p= " & to_string(p) & "  return " & to_string(res) severity note;
+		assert not VERBOSE report "to_freq: p= " & to_string(p, 3) & "  return " & to_string(res, 3) severity note;
 		return res;
 	end function;
 	
@@ -282,7 +284,7 @@ package body physical is
 		else											res := div(br, 1.0 GBd) * 1.0 GHz;
 		end if;
 
-		assert not MY_VERBOSE report "to_freq: br= " & to_string(br) & "  return " & to_string(res) severity note;
+		assert not VERBOSE report "to_freq: br= " & to_string(br, 3) & "  return " & to_string(res, 3) severity note;
 		return res;
 	end function;
 	
@@ -605,10 +607,10 @@ package body physical is
 		return 1.0 ns / f_GHz;
 	end function;
 	
-	function THz2Time(f_THz : NATURAL) return TIME is
-	begin
-		return 1.0 ps / f_THz;
-	end function;
+--	function THz2Time(f_THz : NATURAL) return TIME is
+--	begin
+--		return 1.0 ps / f_THz;
+--	end function;
 
 	
 	function Hz2Time(f_Hz : REAL) return TIME is
@@ -631,10 +633,10 @@ package body physical is
 		return 1.0 ns / f_GHz;
 	end function;
 	
-	function THz2Time(f_THz : REAL) return TIME is
-	begin
-		return 1.0 ps / f_THz;
-	end function;
+--	function THz2Time(f_THz : REAL) return TIME is
+--	begin
+--		return 1.0 ps / f_THz;
+--	end function;
 	
 	-- convert standard types (NATURAL, REAL) to frequency (FREQ)
 	-- ===========================================================================
@@ -658,10 +660,10 @@ package body physical is
 		return f_GHz * 1.0 GHz;
 	end function;
 	
-	function THz2Freq(f_THz : NATURAL) return FREQ is
-	begin
-		return f_THz * 1.0 THz;
-	end function;
+--	function THz2Freq(f_THz : NATURAL) return FREQ is
+--	begin
+--		return f_THz * 1.0 THz;
+--	end function;
 	
 	function Hz2Freq(f_Hz : REAL) return FREQ is
 	begin
@@ -683,10 +685,10 @@ package body physical is
 		return f_GHz * 1.0 GHz;
 	end function;
 	
-	function THz2Freq(f_THz : REAL )return FREQ is
-	begin
-		return f_THz * 1.0 THz;
-	end function;
+--	function THz2Freq(f_THz : REAL )return FREQ is
+--	begin
+--		return f_THz * 1.0 THz;
+--	end function;
 	
 	-- convert physical types (TIME, FREQ) to standard type (REAL)
 	-- ===========================================================================
@@ -708,7 +710,7 @@ package body physical is
 		elsif	(scale = 1.0 kHz) then	return div(f, 1.0 kHz);
 		elsif	(scale = 1.0 MHz) then	return div(f, 1.0 MHz);
 		elsif	(scale = 1.0 GHz) then	return div(f, 1.0 GHz);
-		elsif	(scale = 1.0 THz) then	return div(f, 1.0 THz);
+--	elsif	(scale = 1.0 THz) then	return div(f, 1.0 THz);
 		else	report "to_real: scale must have a value of '1.0 <unit>'" severity failure;
 		end if;
 	end;
@@ -729,7 +731,7 @@ package body physical is
 		elsif	(scale = 1.0 KiB)		then	return div(mem, 1.0 KiB);
 		elsif	(scale = 1.0 MiB)		then	return div(mem, 1.0 MiB);
 		elsif	(scale = 1.0 GiB)		then	return div(mem, 1.0 GiB);
-		elsif	(scale = 1.0 TiB)		then	return div(mem, 1.0 TiB);
+--	elsif	(scale = 1.0 TiB)		then	return div(mem, 1.0 TiB);
 		else	report "to_real: scale must have a value of '1.0 <unit>'" severity failure;
 		end if;
 	end;
@@ -739,7 +741,7 @@ package body physical is
 	--	@param Timing					A given timing or delay, which should be achived
 	--	@param Clock_Period		The period of the circuits clock
 	--	@RoundingStyle				Default = round to nearest; other choises: ROUND_UP, ROUND_DOWN
-	function TimingToCycles(Timing : TIME; Clock_Period : TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return NATURAL is
+	function TimingToCycles(Timing : TIME; Clock_Period : TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL is
 		variable res_real	: REAL;
 		variable res_nat	: NATURAL;
 		variable res_time	: TIME;
@@ -748,19 +750,17 @@ package body physical is
 		res_real := div(Timing, Clock_Period);	
 		case RoundingStyle is
 			when ROUND_TO_NEAREST =>	res_nat := natural(round(res_real));
-			when ROUND_UP =>					res_nat := natural(res_real + 0.5);
-			when ROUND_DOWN =>				res_nat := natural(res_real);
+			when ROUND_UP =>					res_nat := natural(ceil(res_real));
+			when ROUND_DOWN =>				res_nat := natural(floor(res_real));
 			when others =>	report "RoundingStyle '" & T_ROUNDING_STYLE'image(RoundingStyle) & "' not supported." severity failure;
 		end case;
 		res_time	:= CyclesToDelay(res_nat, Clock_Period);
 		res_dev		:= (1.0 - div(res_time, Timing)) * 100.0;
 		
-		report "res_real: " & REAL'image(res_real) severity note;
-		
-		assert (not MY_VERBOSE)
+		assert (not VERBOSE)
 			report "TimingToCycles: " & 	CR &
-						 "  Timing: " &					to_string(Timing) & CR &
-						 "  Clock_Period: " &		to_string(Clock_Period) & CR &
+						 "  Timing: " &					to_string(Timing, 3) & CR &
+						 "  Clock_Period: " &		to_string(Clock_Period, 3) & CR &
 						 "  RoundingStyle: " &	str_substr(T_ROUNDING_STYLE'image(RoundingStyle), 7) & CR &
 						 "  res_real = " &			str_format(res_real, 3) & CR &
 						 "  => " &							INTEGER'image(res_nat)
@@ -777,7 +777,7 @@ package body physical is
 		return res_nat;
 	end;
 	
-	function TimingToCycles(Timing : TIME; Clock_Frequency	: FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return NATURAL is
+	function TimingToCycles(Timing : TIME; Clock_Frequency	: FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL is
 	begin
 		return TimingToCycles(Timing, to_time(Clock_Frequency), RoundingStyle);
 	end function;
@@ -793,7 +793,7 @@ package body physical is
 	end function;
 	
 	-- convert and format physical types to STRING
-	function to_string(t : TIME; precision : NATURAL := 3) return STRING is
+	function to_string(t : TIME; precision : NATURAL) return STRING is
 		variable unit		: STRING(1 to 3)	:= (others => NUL);
 		variable value	: REAL;
 	begin
@@ -820,7 +820,7 @@ package body physical is
 		return str_format(value, precision) & " " & str_trim(unit);
 	end function;
 		
-	function to_string(f : FREQ; precision : NATURAL := 3) return STRING is
+	function to_string(f : FREQ; precision : NATURAL) return STRING is
 		variable unit		: STRING(1 to 3)	:= (others => NUL);
 		variable value	: REAL;
 	begin
@@ -833,18 +833,18 @@ package body physical is
 		elsif (f < 1.0 GHz) then
 			unit					:= "MHz";
 			value					:= to_real(f, 1.0 MHz);
-		elsif (f < 1.0 THz) then
+		else	--if (f < 1.0 THz) then
 			unit					:= "GHz";
 			value					:= to_real(f, 1.0 GHz);
-		else
-			unit					:= "THz";
-			value					:= to_real(f, 1.0 THz);
+--	else
+--		unit					:= "THz";
+--		value					:= to_real(f, 1.0 THz);
 		end if;
 
 		return str_format(value, precision) & " " & str_trim(unit);
 	end function;
 		
-	function to_string(br : BAUD; precision : NATURAL := 3) return STRING is
+	function to_string(br : BAUD; precision : NATURAL) return STRING is
 		variable unit		: STRING(1 to 3)	:= (others => NUL);
 		variable value	: REAL;
 	begin
@@ -865,7 +865,7 @@ package body physical is
 		return str_format(value, precision) & " " & str_trim(unit);
 	end function;
 		
-	function to_string(mem : MEMORY; precision : NATURAL := 3) return STRING is
+	function to_string(mem : MEMORY; precision : NATURAL) return STRING is
 		variable unit		: STRING(1 to 3)	:= (others => NUL);
 		variable value	: REAL;
 	begin
@@ -878,12 +878,12 @@ package body physical is
 		elsif (mem < 1.0 GiB) then
 			unit					:= "MiB";
 			value					:= to_real(mem, 1.0 MiB);
-		elsif (mem < 1.0 TiB) then
+		else	--if (mem < 1.0 TiB) then
 			unit					:= "GiB";
 			value					:= to_real(mem, 1.0 GiB);
-		else
-			unit					:= "TiB";
-			value					:= to_real(mem, 1.0 TiB);
+--	else
+--		unit					:= "TiB";
+--		value					:= to_real(mem, 1.0 TiB);
 		end if;
 
 		return str_format(value, precision) & " " & str_trim(unit);
