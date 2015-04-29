@@ -1,0 +1,22 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Mon Apr 27 21:49:26 2015
+[*]
+[dumpfile] "D:\git\SATAController\lib\PoC\gtkwave\arith\arith_prng_tb.vcd"
+[savefile] "D:\git\SATAController\lib\PoC\gtkwave\arith\arith_prng.gtkw"
+[timestart] 0
+[size] 1920 996
+[pos] -34 -34
+*-28.403215 1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 197
+[signals_width] 209
+[sst_expanded] 1
+[sst_vpaned_height] 292
+@28
+prng.clk
+prng.got
+prng.rst
+@22
+prng.val[7:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="D:/git/SATAController/Projects/PicoBlazeDMATest_KC705_ISE/ise/arith_counter_gray_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="arith_counter_gray_tb" />
+            <top_module name="board" />
+            <top_module name="config" />
+            <top_module name="math_real" />
+            <top_module name="my_config" />
+            <top_module name="my_project" />
+            <top_module name="numeric_std" />
+            <top_module name="physical" />
+            <top_module name="simulation" />
+            <top_module name="std_logic_1164" />
+            <top_module name="strings" />
+            <top_module name="textio" />
+            <top_module name="utils" />
+            <top_module name="vectors" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="7" />
+   <wvobject fp_name="/arith_counter_gray_tb/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_counter_gray_tb/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_counter_gray_tb/inc" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">inc</obj_property>
+      <obj_property name="ObjectShortName">inc</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_counter_gray_tb/dec" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">dec</obj_property>
+      <obj_property name="ObjectShortName">dec</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_counter_gray_tb/val" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">val[7:0]</obj_property>
+      <obj_property name="ObjectShortName">val[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_counter_gray_tb/cry" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">cry</obj_property>
+      <obj_property name="ObjectShortName">cry</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_counter_gray_tb/isim_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">isim_i[7:0]</obj_property>
+      <obj_property name="ObjectShortName">isim_i[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>
