@@ -66,6 +66,13 @@ package xil is
 		Data					: T_XIL_DRP_DATA;
 	end record;
 
+	constant C_XIL_DRP_BUS_IN_EMPTY : T_XIL_DRP_BUS_IN := (
+		Clock			=> '0',
+		Enable		=> '0',
+		ReadWrite => '0',
+		Address		=> (others => '0'),
+		Data			=> (others => '0'));
+
 	type T_XIL_DRP_BUS_OUT is record
 		Data					: T_XIL_DRP_DATA;
 		Ack						: STD_LOGIC;

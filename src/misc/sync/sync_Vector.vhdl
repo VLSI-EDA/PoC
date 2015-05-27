@@ -40,11 +40,11 @@
 -- limitations under the License.
 -- =============================================================================
 
-LIBRARY IEEE;
+library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 use			IEEE.NUMERIC_STD.all;
 
-LIBRARY PoC;
+library PoC;
 use			PoC.utils.all;
 
 

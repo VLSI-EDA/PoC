@@ -176,11 +176,17 @@ package physical is
 	function GHz2Freq(f_GHz : REAL)			return FREQ;
 --	function THz2Freq(f_THz : REAL)			return FREQ;
 	
-	-- convert physical types (TIME, FREQ) to standard type (REAL)
+	-- convert physical types to standard type (REAL)
 	function to_real(t : TIME;			scale : TIME)		return REAL;
 	function to_real(f : FREQ;			scale : FREQ)		return REAL;
 	function to_real(br : BAUD;			scale : BAUD)		return REAL;
 	function to_real(mem : MEMORY;	scale : MEMORY)	return REAL;
+	
+	-- convert physical types to standard type (INTEGER)
+	function to_int(t : TIME;			scale : TIME;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return INTEGER;
+	function to_int(f : FREQ;			scale : FREQ;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return INTEGER;
+	function to_int(br : BAUD;		scale : BAUD;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return INTEGER;
+	function to_int(mem : MEMORY;	scale : MEMORY;	RoundingStyle : T_ROUNDING_STYLE := ROUND_UP)					return INTEGER;
 	
 	-- calculate needed counter cycles to achieve a given 1. timing/delay and 2. frequency/period
 	function TimingToCycles(Timing : TIME; Clock_Period			: TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL;
@@ -690,7 +696,7 @@ package body physical is
 --		return f_THz * 1.0 THz;
 --	end function;
 	
-	-- convert physical types (TIME, FREQ) to standard type (REAL)
+	-- convert physical types to standard type (REAL)
 	-- ===========================================================================
 	function to_real(t : TIME; scale : TIME) return REAL is
 	begin
@@ -734,6 +740,52 @@ package body physical is
 --	elsif	(scale = 1.0 TiB)		then	return div(mem, 1.0 TiB);
 		else	report "to_real: scale must have a value of '1.0 <unit>'" severity failure;
 		end if;
+	end;
+	
+	-- convert physical types to standard type (INTEGER)
+	-- ===========================================================================
+	function to_int(t : TIME; scale : TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return INTEGER is
+	begin
+		case RoundingStyle is
+			when ROUND_UP =>					return integer(ceil(to_real(t, scale)));
+			when ROUND_DOWN =>				return integer(floor(to_real(t, scale)));
+			when ROUND_TO_NEAREST =>	return integer(round(to_real(t, scale)));
+			when others =>						null;
+		end case;
+		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
+	end;
+
+	function to_int(f : FREQ; scale : FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return INTEGER is
+	begin
+		case RoundingStyle is
+			when ROUND_UP =>					return integer(ceil(to_real(f, scale)));
+			when ROUND_DOWN =>				return integer(floor(to_real(f, scale)));
+			when ROUND_TO_NEAREST =>	return integer(round(to_real(f, scale)));
+			when others =>						null;
+		end case;
+		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
+	end;
+
+	function to_int(br : BAUD; scale : BAUD; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return INTEGER is
+	begin
+		case RoundingStyle is
+			when ROUND_UP =>					return integer(ceil(to_real(br, scale)));
+			when ROUND_DOWN =>				return integer(floor(to_real(br, scale)));
+			when ROUND_TO_NEAREST =>	return integer(round(to_real(br, scale)));
+			when others =>						null;
+		end case;
+		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
+	end;
+	
+	function to_int(mem : MEMORY; scale : MEMORY; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return INTEGER is
+	begin
+		case RoundingStyle is
+			when ROUND_UP =>					return integer(ceil(to_real(mem, scale)));
+			when ROUND_DOWN =>				return integer(floor(to_real(mem, scale)));
+			when ROUND_TO_NEAREST =>	return integer(round(to_real(mem, scale)));
+			when others =>						null;
+		end case;
+		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
 	end;
 	
 	-- calculate needed counter cycles to achieve a given 1. timing/delay and 2. frequency/period

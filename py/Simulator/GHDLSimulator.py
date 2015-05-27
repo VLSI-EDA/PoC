@@ -232,11 +232,7 @@ class Simulator(PoCSimulator):
 				'--work=test',
 				testbenchName
 			]
-
-			# append RUNOPTS to save simulation results to *.vcd file
-			if (self.__guiMode):
-				parameterList += [('--vcd=%s' % str(vcdFilePath))]
-				
+			
 			command = " ".join(parameterList)
 		
 			self.printDebug("call ghdl: %s" % str(parameterList))
@@ -277,12 +273,17 @@ class Simulator(PoCSimulator):
 					print("    %s: '%s' in file '%s' at line %s" % (err['Type'], err['Component'], err['File'], err['Line']))
 			
 				raise SimulatorException("Errors while GHDL analysis phase.")
-
-	
+			
+			
 			# run simulation
 			self.printNonQuiet("  running simulation...")
 		
 			parameterList = [str(exeFilePath)]
+			
+			# append RUNOPTS to save simulation results to *.vcd file
+			if (self.__guiMode):
+				parameterList += [('--vcd=%s' % str(vcdFilePath))]
+			
 			command = " ".join(parameterList)
 		
 			self.printDebug("call ghdl: %s" % str(parameterList))

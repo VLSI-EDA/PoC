@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="./isim.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="board" />
+            <top_module name="config" />
+            <top_module name="math_real" />
+            <top_module name="my_config" />
+            <top_module name="my_project" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="strings" />
+            <top_module name="sync_command_tb" />
+            <top_module name="utils" />
+            <top_module name="vcomponents" />
+            <top_module name="vectors" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="4" />
+   <wvobject fp_name="/sync_command_tb/clock1" type="logic" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">clock1</obj_property>
+      <obj_property name="ObjectShortName">clock1</obj_property>
+      <obj_property name="label">clock1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_command_tb/clock2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock2</obj_property>
+      <obj_property name="ObjectShortName">clock2</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider41" type="divider">
+      <obj_property name="label">Synchronize a command signal</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#808000</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="group68" type="group">
+      <obj_property name="label">Sync Command</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/sync_command_tb/syncCmd/input" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">input[1:0]</obj_property>
+         <obj_property name="ObjectShortName">input[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/sync_command_tb/syncCmd/busy" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">busy</obj_property>
+         <obj_property name="ObjectShortName">busy</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider120" type="divider">
+         <obj_property name="label">XClock</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="BkColor">#008080</obj_property>
+         <obj_property name="TextColor">230 230 230</obj_property>
+      </wvobject>
+      <wvobject fp_name="/sync_command_tb/syncCmd/output" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">output[1:0]</obj_property>
+         <obj_property name="ObjectShortName">output[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/sync_command_tb/syncCmd/changed" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">changed</obj_property>
+         <obj_property name="ObjectShortName">changed</obj_property>
+      </wvobject>
+      <wvobject fp_name="group134" type="group">
+         <obj_property name="label">Internal</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/sync_command_tb/syncCmd/iscommand_clk1" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">iscommand_clk1</obj_property>
+            <obj_property name="ObjectShortName">iscommand_clk1</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_command_tb/syncCmd/d0" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">d0</obj_property>
+            <obj_property name="ObjectShortName">d0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_command_tb/syncCmd/d1" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">d1[1:0]</obj_property>
+            <obj_property name="ObjectShortName">d1[1:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_command_tb/syncCmd/t2" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">t2</obj_property>
+            <obj_property name="ObjectShortName">t2</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_command_tb/syncCmd/d3" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">d3</obj_property>
+            <obj_property name="ObjectShortName">d3</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_command_tb/syncCmd/d4" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">d4</obj_property>
+            <obj_property name="ObjectShortName">d4</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_command_tb/syncCmd/d5" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">d5[1:0]</obj_property>
+            <obj_property name="ObjectShortName">d5[1:0]</obj_property>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+</wave_config>

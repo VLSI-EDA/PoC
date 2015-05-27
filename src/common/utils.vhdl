@@ -48,17 +48,17 @@ package utils is
 	-- ==========================================================================
 	
   --+ Vectors of primitive standard types +++++++++++++++++++++++++++++++++++++
-	TYPE		T_BOOLVEC						IS ARRAY(NATURAL RANGE <>) OF BOOLEAN;
-	TYPE		T_INTVEC						IS ARRAY(NATURAL RANGE <>) OF INTEGER;
-	TYPE		T_NATVEC						IS ARRAY(NATURAL RANGE <>) OF NATURAL;
-	TYPE		T_POSVEC						IS ARRAY(NATURAL RANGE <>) OF POSITIVE;
-	TYPE		T_REALVEC						IS ARRAY(NATURAL RANGE <>) OF REAL;
+	type		T_BOOLVEC						is array(NATURAL range <>) of BOOLEAN;
+	type		T_INTVEC						is array(NATURAL range <>) of INTEGER;
+	type		T_NATVEC						is array(NATURAL range <>) of NATURAL;
+	type		T_POSVEC						is array(NATURAL range <>) of POSITIVE;
+	type		T_REALVEC						is array(NATURAL range <>) of REAL;
 	
 	--+ Integer subranges sometimes useful for speeding up simulation ++++++++++
-	SUBTYPE T_INT_8							IS INTEGER RANGE -128 TO 127;
-	SUBTYPE T_INT_16						IS INTEGER RANGE -32768 TO 32767;
-	SUBTYPE T_UINT_8						IS INTEGER RANGE 0 TO 255;
-	SUBTYPE T_UINT_16						IS INTEGER RANGE 0 TO 65535;
+	subtype T_INT_8							is INTEGER range -128 to 127;
+	subtype T_INT_16						is INTEGER range -32768 to 32767;
+	subtype T_UINT_8						is INTEGER range 0 to 255;
+	subtype T_UINT_16						is INTEGER range 0 to 65535;
 
 	--+ Enums ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	-- Intellectual Property (IP) type

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="./isim.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="board" />
+            <top_module name="config" />
+            <top_module name="math_real" />
+            <top_module name="my_config" />
+            <top_module name="my_project" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="strings" />
+            <top_module name="sync_strobe_tb" />
+            <top_module name="utils" />
+            <top_module name="vcomponents" />
+            <top_module name="vectors" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="4" />
+   <wvobject fp_name="/sync_strobe_tb/clock1" type="logic" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">clock1</obj_property>
+      <obj_property name="ObjectShortName">clock1</obj_property>
+      <obj_property name="label">clock1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_strobe_tb/clock2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock2</obj_property>
+      <obj_property name="ObjectShortName">clock2</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider53" type="divider">
+      <obj_property name="label">Synchronize a strobe signal</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#808000</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="group71" type="group">
+      <obj_property name="label">Sync Strobe</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/sync_strobe_tb/syncStrobe/input" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">input[0:0]</obj_property>
+         <obj_property name="ObjectShortName">input[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/sync_strobe_tb/syncStrobe/busy" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">busy[0:0]</obj_property>
+         <obj_property name="ObjectShortName">busy[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider120" type="divider">
+         <obj_property name="label">XClock</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="BkColor">#008080</obj_property>
+         <obj_property name="TextColor">230 230 230</obj_property>
+      </wvobject>
+      <wvobject fp_name="/sync_strobe_tb/syncStrobe/output" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">output[0:0]</obj_property>
+         <obj_property name="ObjectShortName">output[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="group95" type="group">
+         <obj_property name="label">Internal</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/sync_strobe_tb/syncStrobe/\gen(0)\/d0" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">d0</obj_property>
+            <obj_property name="ObjectShortName">d0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_strobe_tb/syncStrobe/\gen(0)\/changed_clk1" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">changed_clk1</obj_property>
+            <obj_property name="ObjectShortName">changed_clk1</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_strobe_tb/syncStrobe/\gen(0)\/t1" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">t1</obj_property>
+            <obj_property name="ObjectShortName">t1</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_strobe_tb/syncStrobe/\gen(0)\/d2" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">d2</obj_property>
+            <obj_property name="ObjectShortName">d2</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_strobe_tb/syncStrobe/\gen(0)\/changed_clk2" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">changed_clk2</obj_property>
+            <obj_property name="ObjectShortName">changed_clk2</obj_property>
+         </wvobject>
+         <wvobject fp_name="/sync_strobe_tb/syncStrobe/\gen(0)\/busy_i" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">busy_i</obj_property>
+            <obj_property name="ObjectShortName">busy_i</obj_property>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+</wave_config>

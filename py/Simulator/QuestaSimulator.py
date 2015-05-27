@@ -235,7 +235,7 @@ class Simulator(PoCSimulator):
 				parameterList += ['-do', ('do {%s}; do {%s}' % (str(tclWaveFilePath), str(tclGUIFilePath)))]
 			else:
 				self.printDebug("Didn't find waveform script: '%s'. Loading default commands." % str(tclWaveFilePath))
-				parameterList += ['-do', ('%s; do {%s}' % ("add wave *", str(tclGUIFilePath)))]
+				parameterList += ['-do', ('add wave *; do {%s}' % str(tclGUIFilePath))]
 		else:
 			parameterList += [
 				'-c',

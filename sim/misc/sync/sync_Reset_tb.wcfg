@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="./isim.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="board" />
+            <top_module name="config" />
+            <top_module name="math_real" />
+            <top_module name="my_config" />
+            <top_module name="my_project" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="strings" />
+            <top_module name="sync_reset_tb" />
+            <top_module name="utils" />
+            <top_module name="vcomponents" />
+            <top_module name="vectors" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="4" />
+   <wvobject fp_name="/sync_reset_tb/clock1" type="logic" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">clock1</obj_property>
+      <obj_property name="ObjectShortName">clock1</obj_property>
+      <obj_property name="label">clock1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_reset_tb/clock2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock2</obj_property>
+      <obj_property name="ObjectShortName">clock2</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider77" type="divider">
+      <obj_property name="label">Synchronize a reset signal</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#808000</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="group70" type="group">
+      <obj_property name="label">Sync Reset</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/sync_reset_tb/syncReset/input" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">input</obj_property>
+         <obj_property name="ObjectShortName">input</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider120" type="divider">
+         <obj_property name="label">XClock</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="BkColor">#008080</obj_property>
+         <obj_property name="TextColor">230 230 230</obj_property>
+      </wvobject>
+      <wvobject fp_name="/sync_reset_tb/syncReset/output" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">output</obj_property>
+         <obj_property name="ObjectShortName">output</obj_property>
+      </wvobject>
+      <wvobject fp_name="group42" type="group">
+         <obj_property name="label">Internal</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="group118" type="group">
+            <obj_property name="label">gen[0].Sync</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject fp_name="/sync_reset_tb/syncReset/genxilinx/sync/reset_async" type="logic" db_ref_id="1">
+               <obj_property name="ElementShortName">reset_async</obj_property>
+               <obj_property name="ObjectShortName">reset_async</obj_property>
+            </wvobject>
+            <wvobject fp_name="/sync_reset_tb/syncReset/genxilinx/sync/reset_meta" type="logic" db_ref_id="1">
+               <obj_property name="ElementShortName">reset_meta</obj_property>
+               <obj_property name="ObjectShortName">reset_meta</obj_property>
+            </wvobject>
+            <wvobject fp_name="/sync_reset_tb/syncReset/genxilinx/sync/reset_sync" type="logic" db_ref_id="1">
+               <obj_property name="ElementShortName">reset_sync</obj_property>
+               <obj_property name="ObjectShortName">reset_sync</obj_property>
+            </wvobject>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+</wave_config>
