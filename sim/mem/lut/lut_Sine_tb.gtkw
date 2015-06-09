@@ -1,0 +1,44 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Mon Jun 08 11:48:28 2015
+[*]
+[dumpfile] "D:\git\SATAController\lib\PoC\temp\ghdl\lut_Sine_tb.vcd"
+[dumpfile_mtime] "Mon Jun 08 11:45:39 2015"
+[dumpfile_size] 353327
+[savefile] "D:\git\SATAController\lib\PoC\sim\mem\lut\lut_Sine_tb.gtkw"
+[timestart] 0
+[size] 1920 996
+[pos] -1 -1
+*-32.340569 23100000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 197
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 292
+@22
+lut_in[7:0]
+@8022
+lut_q1_out[7:0]
+@20000
+-
+-
+-
+@8022
+lut_q2_out[7:0]
+@20000
+-
+-
+-
+@8420
+lut_q3_out[7:0]
+@20000
+-
+-
+-
+@8420
+lut_q4_out[7:0]
+@20000
+-
+-
+-
+[pattern_trace] 1
+[pattern_trace] 0

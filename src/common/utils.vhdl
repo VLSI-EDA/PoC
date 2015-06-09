@@ -71,7 +71,7 @@ package utils is
 	type T_BYTE_ORDER			is (LITTLE_ENDIAN, BIG_ENDIAN);
 	
 	-- rounding style
-	type T_ROUNDING_STYLE	is (ROUND_TO_NEAREST, ROUND_TO_ZERO, ROUND_TO_INF, ROUND_UP, ROUND_DOWN);
+	type T_ROUNDING_STYLE	is (ROUND_NONE, ROUND_TO_NEAREST, ROUND_TO_ZERO, ROUND_TO_INF, ROUND_UP, ROUND_DOWN);
 
 	type T_BCD				is array(3 downto 0) of std_logic;
 	type T_BCD_VECTOR	is array(NATURAL range <>) of T_BCD;

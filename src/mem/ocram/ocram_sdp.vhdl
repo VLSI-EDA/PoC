@@ -3,17 +3,16 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- ============================================================================
--- Module:				 	Simple dual-port memory.
---
 -- Authors:				 	Martin Zabel
 --									Thomas B. Preusser
+--
+-- Module:				 	Simple dual-port memory.
 -- 
 -- Description:
 -- ------------------------------------
 -- Inferring / instantiating simple dual-port memory, with:
---
--- * dual clock, clock enable,
--- * 1 read port plus 1 write port.
+--	* dual clock, clock enable,
+--	* 1 read port plus 1 write port.
 -- 
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
@@ -55,20 +54,19 @@
 -- limitations under the License.
 -- ============================================================================
 
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+library	IEEE;
+use			IEEE.std_logic_1164.all;
+use			IEEE.numeric_std.all;
 
-library poc;
-use poc.config.all;
+library PoC;
+use			PoC.config.all;
+
 
 entity ocram_sdp is
-  
   generic (
     A_BITS : positive;-- := 10;
     D_BITS : positive--  := 32
   );
-
   port (
     rclk : in  std_logic;                             -- read clock
     rce  : in  std_logic;                             -- read clock-enable
@@ -79,8 +77,8 @@ entity ocram_sdp is
     wa   : in  unsigned(A_BITS-1 downto 0);           -- write address
     d    : in  std_logic_vector(D_BITS-1 downto 0);   -- data in
     q    : out std_logic_vector(D_BITS-1 downto 0));  -- data out
-
 end ocram_sdp;
+
 
 architecture rtl of ocram_sdp is
 

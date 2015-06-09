@@ -50,16 +50,17 @@ use			PoC.utils.all;
 
 entity sync_Vector IS
   generic (
-	  BITS								: POSITIVE					:= 8;											-- number of bit to be synchronized
+	  MASTER_BITS					: POSITIVE					:= 8;											-- number of bit to be synchronized
+		SLAVE_BITS					: NATURAL						:= 0;
 		INIT								: STD_LOGIC_VECTOR	:= x"00000000"						-- 
 	);
   PORT (
-		Clock1							: in	STD_LOGIC;															-- <Clock>	input clock
-		Clock2							: in	STD_LOGIC;															-- <Clock>	output clock
-		Input								: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);		-- @Clock1:	input vector
-		Output							: out STD_LOGIC_VECTOR(BITS - 1 downto 0);		-- @Clock2:	output vector
-		Busy								: out	STD_LOGIC;															-- @Clock1:	busy bit 
-		Changed							: out	STD_LOGIC																-- @Clock2:	changed bit
+		Clock1							: in	STD_LOGIC;																									-- <Clock>	input clock
+		Clock2							: in	STD_LOGIC;																									-- <Clock>	output clock
+		Input								: in	STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0);	-- @Clock1:	input vector
+		Output							: out STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0);	-- @Clock2:	output vector
+		Busy								: out	STD_LOGIC;																									-- @Clock1:	busy bit 
+		Changed							: out	STD_LOGIC																										-- @Clock2:	changed bit
 	);
 end;
 
@@ -67,13 +68,13 @@ end;
 architecture rtl of sync_Vector is
 	attribute SHREG_EXTRACT				: STRING;
 	
-	constant INIT_I								: STD_LOGIC_VECTOR												:= descend(INIT)(BITS - 1 downto 0);
+	constant INIT_I								: STD_LOGIC_VECTOR												:= descend(INIT)((MASTER_BITS + SLAVE_BITS) - 1 downto 0);
 	
-	signal D0											: STD_LOGIC_VECTOR(BITS - 1 downto 0)			:= INIT_I;
-	signal T1											: STD_LOGIC																:= '0';
-	signal D2											: STD_LOGIC																:= '0';
-	signal D3											: STD_LOGIC																:= '0';
-	signal D4											: STD_LOGIC_VECTOR(BITS - 1 downto 0)			:= INIT_I;
+	signal D0											: STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0)		:= INIT_I;
+	signal T1											: STD_LOGIC																										:= '0';
+	signal D2											: STD_LOGIC																										:= '0';
+	signal D3											: STD_LOGIC																										:= '0';
+	signal D4											: STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0)		:= INIT_I;
 
 	signal Changed_Clk1						: STD_LOGIC;
 	signal Changed_Clk2						: STD_LOGIC;
@@ -121,7 +122,7 @@ begin
 	syncClk2_In		<= T1;
 	syncClk1_In		<= D2;
 	
-	Changed_Clk1	<='0' when (D0 = Input) else '1';		-- input change detection
+	Changed_Clk1	<='0' when (D0(MASTER_BITS - 1 downto 0) = Input(MASTER_BITS - 1 downto 0)) else '1';		-- input change detection
 	Changed_Clk2	<= syncClk2_Out xor D2;							-- level change detection; restore strobe signal from flag
 	Busy_i				<= T1 xor syncClk1_Out;							-- calculate busy signal
 	
@@ -131,9 +132,6 @@ begin
 	Changed				<= D3;
 		
 	syncClk2 : entity PoC.sync_Flag
-		generic map (
-			BITS				=> 1							-- number of bit to be synchronized
-		)
 		port map (
 			Clock				=> Clock2,				-- <Clock>	output clock domain
 			Input(0)		=> syncClk2_In,		-- @async:	input bits
@@ -141,9 +139,6 @@ begin
 		);
 	
 	syncClk1 : entity PoC.sync_Flag
-		generic map (
-			BITS				=> 1							-- number of bit to be synchronized
-		)
 		port map (
 			Clock				=> Clock1,				-- <Clock>	output clock domain
 			Input(0)		=> syncClk1_In,		-- @async:	input bits

@@ -40,7 +40,7 @@ PoC_ExitCode=0
 PoC_PythonScriptDir=py
 
 # define color escape codes
-RED='\e[0;31m'			# Yellow
+RED='\e[0;31m'			# Red
 YELLOW='\e[1;33m'		# Yellow
 NOCOLOR='\e[0m'			# No Color
 
