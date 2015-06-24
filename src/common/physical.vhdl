@@ -57,7 +57,7 @@ library IEEE;
 use			IEEE.math_real.all;
 
 library PoC;
-use			PoC.config.VERBOSE;
+use			PoC.config.POC_VERBOSE;
 use			PoC.utils.all;
 use			PoC.strings.all;
 
@@ -261,7 +261,7 @@ package body physical is
 --	else										 res := div(1.0 THz, f) * 1.0 ps;
 		end if;
 
-		assert not VERBOSE report "to_time: f= " & to_string(f, 3) & "  return " & to_string(res, 3) severity note;
+		assert not POC_VERBOSE report "to_time: f= " & to_string(f, 3) & "  return " & to_string(res, 3) severity note;
 		return res;
 	end function;
 
@@ -277,7 +277,7 @@ package body physical is
 		else report "to_freq: input period exceeds output frequency scale." severity failure;
 		end if;
 
-		assert not VERBOSE report "to_freq: p= " & to_string(p, 3) & "  return " & to_string(res, 3) severity note;
+		assert not POC_VERBOSE report "to_freq: p= " & to_string(p, 3) & "  return " & to_string(res, 3) severity note;
 		return res;
 	end function;
 	
@@ -290,7 +290,7 @@ package body physical is
 		else											res := div(br, 1.0 GBd) * 1.0 GHz;
 		end if;
 
-		assert not VERBOSE report "to_freq: br= " & to_string(br, 3) & "  return " & to_string(res, 3) severity note;
+		assert not POC_VERBOSE report "to_freq: br= " & to_string(br, 3) & "  return " & to_string(res, 3) severity note;
 		return res;
 	end function;
 	
@@ -809,7 +809,7 @@ package body physical is
 		res_time	:= CyclesToDelay(res_nat, Clock_Period);
 		res_dev		:= (1.0 - div(res_time, Timing)) * 100.0;
 		
-		assert (not VERBOSE)
+		assert (not POC_VERBOSE)
 			report "TimingToCycles: " & 	CR &
 						 "  Timing: " &					to_string(Timing, 3) & CR &
 						 "  Clock_Period: " &		to_string(Clock_Period, 3) & CR &

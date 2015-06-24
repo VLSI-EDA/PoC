@@ -1,0 +1,18 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## LELD
+## -----------------------------------------------------------------------------
+##	Bank:						MISC, 1
+##		VCCO:					3.3, (VCC3V3)
+##	Location:				LD0, LD1, LD2, LD3, LD4, LD5, LD6, LD7
+## -----------------------------------------------------------------------------
+NET "Atlys_GPIO_LED<0>"									LOC = "U18"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD0; Bank 1;		VCCO=VCC3V3
+NET "Atlys_GPIO_LED<1>"									LOC = "M14"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD1; Bank 1;		VCCO=VCC3V3
+NET "Atlys_GPIO_LED<2>"									LOC = "N14"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD2; Bank 1;		VCCO=VCC3V3
+NET "Atlys_GPIO_LED<3>"									LOC = "L14"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD3; Bank 1;		VCCO=VCC3V3
+NET "Atlys_GPIO_LED<4>"									LOC = "M13"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD4; Bank 1;		VCCO=VCC3V3
+NET "Atlys_GPIO_LED<5>"									LOC = "D4"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD5; Bank MISC;	VCCO=VCC3V3
+NET "Atlys_GPIO_LED<6>"									LOC = "P16"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD6; Bank MISC;	VCCO=VCC3V3
+NET "Atlys_GPIO_LED<7>"									LOC = "N12"	| IOSTANDARD = LVCMOS25;			## {OUT}	LD7; Bank MISC;	VCCO=VCC3V3

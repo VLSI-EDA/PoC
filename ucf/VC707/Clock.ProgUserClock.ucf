@@ -1,0 +1,14 @@
+##
+## User Clock
+## -----------------------------------------------------------------------------
+##		Bank:						14
+##			VCCO:					1.8V (VCC1V8_FPGA)
+##		Location:				U34 (SI570)
+##			Vendor:				Silicon Labs
+##			Device:				SI570BAB0000544DG
+##			Frequency:		10 - 810 MHz, 50ppm
+##			Default Freq:	156.250 MHz
+##			I²C-Address:	0x5D #$ (0111 010xb)
+NET "VC707_ProgUserClock_n"				LOC = "AL34" | IOSTANDARD = LVDS;				## {IN}		U34.5
+NET "VC707_ProgUserClock_p"				LOC = "AK34" | IOSTANDARD = LVDS;				## {IN}		U34.4
+NET "VC707_ProgUserClock_p"				TNM_NET = "NET_ProgUserClock";

@@ -1,0 +1,19 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## DIP-Switches
+## -----------------------------------------------------------------------------
+##	Bank:						MISC, 0, 2, 3
+##		VCCO:					3.3V, 3.3V, 3.3, V1.8V
+##	Location:				SW0, SW1, SW2, SW3, SW4, SW5, SW6, SW7
+## -----------------------------------------------------------------------------
+NET "Atlys_GPIO_Switches<0>"						LOC = "A10";								## {IN}		SW0; high-active
+NET "Atlys_GPIO_Switches<1>"						LOC = "D14";								## {IN}		SW1; high-active
+NET "Atlys_GPIO_Switches<2>"						LOC = "C14";								## {IN}		SW2; high-active
+NET "Atlys_GPIO_Switches<3>"						LOC = "P15";								## {IN}		SW3; high-active
+NET "Atlys_GPIO_Switches<4>"						LOC = "P12";								## {IN}		SW4; high-active
+NET "Atlys_GPIO_Switches<5>"						LOC = "R5";									## {IN}		SW5; high-active
+NET "Atlys_GPIO_Switches<6>"						LOC = "T5";									## {IN}		SW6; high-active
+NET "Atlys_GPIO_Switches<7>"						LOC = "E4";									## {IN}		SW7; high-active
+NET "Atlys_GPIO_Switches<?>"						IOSTANDARD = LVCMOS33;			##

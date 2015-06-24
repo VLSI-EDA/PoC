@@ -1,0 +1,15 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## Cursor Buttons
+## -----------------------------------------------------------------------------
+##	Bank:						3
+##		VCCO:					1.8V (VCC1V8)
+##	Location:				BTNU, BTNl, BTNC, BTNR, BTND
+## -----------------------------------------------------------------------------
+NET "Atlys_GPIO_Button_North"						LOC = "N4"	| IOSTANDARD = LVCMOS15;			## {IN}		BTNU; high-active; external 10k pulldown resistor; Bank 3; VCCO=VCC1V8
+NET "Atlys_GPIO_Button_West"						LOC = "P4"	| IOSTANDARD = LVCMOS15;			## {IN}		BTNL; high-active; external 10k pulldown resistor; Bank 3; VCCO=VCC1V8
+NET "Atlys_GPIO_Button_Center"					LOC = "F5"	| IOSTANDARD = LVCMOS25;			## {IN}		BTNC; high-active; external 10k pulldown resistor; Bank 3; VCCO=VCC1V8
+NET "Atlys_GPIO_Button_East"						LOC = "F6"	| IOSTANDARD = LVCMOS15;			## {IN}		BTNR; high-active; external 10k pulldown resistor; Bank 3; VCCO=VCC1V8
+NET "Atlys_GPIO_Button_South"						LOC = "P3"	| IOSTANDARD = LVCMOS15;			## {IN}		BTND; high-active; external 10k pulldown resistor; Bank 3; VCCO=VCC1V8

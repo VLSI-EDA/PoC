@@ -1,0 +1,9 @@
+##
+## I²C-Bus
+## -----------------------------------------------------------------------------
+##	Bank:						0
+##		VCCO:					3.3V (VCC3V3)
+##	Location:				JA (PMODA)
+## -----------------------------------------------------------------------------
+NET "Atlys_JA_SerialClock"						LOC = "C13" | IOSTANDARD = LVCMOS33;			## {INOUT}		JA - Pin 17 - SerialClock
+NET "Atlys_JA_SerialData"							LOC = "A13" | IOSTANDARD = LVCMOS33;			## {INOUT}		JA - Pin 18 - SerialData

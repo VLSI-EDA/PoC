@@ -1,0 +1,12 @@
+##
+## USB UART
+## -----------------------------------------------------------------------------
+##	Bank:						0
+##		VCCO:					3.3V (VCC3V3)
+##	Location:				IC7
+##		Vendor:				EXAR
+##		Device:				XR21V1410L16
+##		Baud-Rate:		300 Bd - 12 MBd
+##	Note:						FPGA is the master, USB-UART is the slave => so TX is an output and RX an input
+NET "Atlys_USB_UART_TX"						LOC = "B16" | IOSTANDARD = LVCMOS33;		## {OUT}			IC7.10	{IN}
+NET "Atlys_USB_UART_RX"						LOC = "A16" | IOSTANDARD = LVCMOS33;		## {IN}				IC7.9		{OUT}

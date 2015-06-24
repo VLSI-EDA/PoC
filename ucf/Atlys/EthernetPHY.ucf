@@ -1,0 +1,17 @@
+##
+## Ethernet PHY - Marvell Alaska Ultra
+## -----------------------------------------------------------------------------
+##	Bank:						1
+##		VCCO:					3.3V (VCC3V3)
+##	Location:				IC8
+##		Vendor:				Marvell
+##		Device:				M88E1111 - RCJ1
+##		MDIO-Address:	0x05 (---0 0111b)
+##		I²C-Address:	I²C management mode is not enabled
+##
+## common signals and management
+## --------------------------
+NET "KC705_EthernetPHY_Reset_n"									LOC = "G13" | IOSTANDARD = LVCMOS33;	## {IN}			IC8.36
+NET "KC705_EthernetPHY_Interrupt_n"							LOC = "L16" | IOSTANDARD = LVCMOS33;	## {IN}			IC8.32
+NET "KC705_EthernetPHY_Management_Clock"				LOC = "F16" | IOSTANDARD = LVCMOS33;	## {OUT}		IC8.35
+NET "KC705_EthernetPHY_Management_Data"					LOC = "N17" | IOSTANDARD = LVCMOS33;	## {INOUT}	IC8.33

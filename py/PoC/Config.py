@@ -232,6 +232,11 @@ class Device:
 			raise NotImplementedException("fullName() not implemented for vendor Altera")
 			return "ep...."
 	
+	def series(self):
+		if (self.generation == 7):
+			if self.family in [Families.Artix, Families.Kintex, Families.Virtex, Families.Zynq]:
+				return "Series-7"
+	
 	def __str__(self):
 		return self.fullName()
 	

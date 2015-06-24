@@ -161,8 +161,7 @@ class Simulator(PoCSimulator):
 			'--O2',
 			'--debug', 'typical',
 			'--snapshot',	snapshotName,
-			'--rangecheck',
-			'--stats'
+			'--rangecheck'
 		]
 		
 		# append debug options
@@ -196,8 +195,7 @@ class Simulator(PoCSimulator):
 		self.printNonQuiet("  running simulation...")
 		parameterList = [
 			str(xSimExecutablePath),
-			'--log', str(xSimLogFilePath),
-			'--stats'
+			'--log', str(xSimLogFilePath)
 		]
 		
 		if (not self.__guiMode):

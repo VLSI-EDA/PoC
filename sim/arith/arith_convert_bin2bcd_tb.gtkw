@@ -1,0 +1,60 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Tue Jun 09 18:27:05 2015
+[*]
+[dumpfile] "D:\git\SATAController\lib\PoC\temp\ghdl\arith_convert_bin2bcd_tb.vcd"
+[dumpfile_mtime] "Tue Jun 09 18:22:03 2015"
+[dumpfile_size] 26233
+[savefile] "D:\git\SATAController\lib\PoC\sim\arith\arith_convert_bin2bcd_tb.gtkw"
+[timestart] 0
+[size] 1920 996
+[pos] -209 -209
+*-27.066833 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] conv1.
+[treeopen] conv2.
+[sst_width] 197
+[signals_width] 227
+[sst_expanded] 1
+[sst_vpaned_height] 292
+@28
+clock
+reset
+start
+@800200
+-Conv1
+@24
+conv1.binary[29:0]
+@28
+conv1.busy
+conv1.sign
+@24
+conv1.(0).digit_d[3:0]
+conv1.(1).digit_d[3:0]
+conv1.(2).digit_d[3:0]
+conv1.(3).digit_d[3:0]
+conv1.(4).digit_d[3:0]
+conv1.(5).digit_d[3:0]
+conv1.(6).digit_d[3:0]
+conv1.(7).digit_d[3:0]
+@1000200
+-Conv1
+@800200
+-Conv2
+@421
+conv2.binary[26:0]
+@28
+conv2.busy
+conv2.sign
+@24
+conv2.(0).digit_d[3:0]
+conv2.(1).digit_d[3:0]
+conv2.(2).digit_d[3:0]
+conv2.(3).digit_d[3:0]
+conv2.(4).digit_d[3:0]
+conv2.(5).digit_d[3:0]
+conv2.(6).digit_d[3:0]
+conv2.(7).digit_d[3:0]
+@1000200
+-Conv2
+[pattern_trace] 1
+[pattern_trace] 0

@@ -89,12 +89,9 @@ class Simulator(PoCSimulator):
 
 		# setup all needed paths to execute fuse
 		ghdlExecutablePath =	self.host.directories["GHDLBinary"] / self.__executables['ghdl']
-		gtkwExecutablePath =	self.host.directories["GTKWBinary"] / self.__executables['gtkwave']
-		
 		testbenchName =				self.host.tbConfig[str(pocEntity)]['TestbenchModule']
 		fileListFilePath =		self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['fileListFile']
 		vcdFilePath =					tempGHDLPath / (testbenchName + ".vcd")
-		gtkwSaveFilePath =		self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['gtkwSaveFile']
 		
 		if (self.verbose):
 			print("  Commands to be run:")
@@ -233,10 +230,6 @@ class Simulator(PoCSimulator):
 				testbenchName
 			]
 
-			# append RUNOPTS to save simulation results to *.vcd file
-			if (self.__guiMode):
-				parameterList += [('--vcd=%s' % str(vcdFilePath))]
-				
 			command = " ".join(parameterList)
 		
 			self.printDebug("call ghdl: %s" % str(parameterList))
@@ -283,6 +276,10 @@ class Simulator(PoCSimulator):
 			self.printNonQuiet("  running simulation...")
 		
 			parameterList = [str(exeFilePath)]
+			# append RUNOPTS to save simulation results to *.vcd file
+			if (self.__guiMode):
+				parameterList += [('--vcd=%s' % str(vcdFilePath))]
+				
 			command = " ".join(parameterList)
 		
 			self.printDebug("call ghdl: %s" % str(parameterList))
@@ -318,6 +315,9 @@ class Simulator(PoCSimulator):
 		else:	# guiMode
 			# run GTKWave GUI
 			self.printNonQuiet("  launching GTKWave...")
+
+			gtkwExecutablePath =	self.host.directories["GTKWBinary"] / self.__executables['gtkwave']
+			gtkwSaveFilePath =		self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['gtkwSaveFile']
 		
 			parameterList = [
 				str(gtkwExecutablePath),

@@ -1,0 +1,20 @@
+##
+## HDMI IN (RX)
+## -----------------------------------------------------------------------------
+##	Bank:						1
+##		VCCO:					3.3V (VCC3V3)
+##	Location:				IC2 (J3)
+##		Vendor:				Texas Instruments
+##		Device:				TMDS141RHAR
+## -----------------------------------------------------------------------------
+NET "Atlys_TMDS_RX_Clock_p"						LOC = "H17" | IOSTANDARD = LVCMOS33;			## {IN}		
+NET "Atlys_TMDS_RX_Clock_n"						LOC = "H18" | IOSTANDARD = LVCMOS33;			## {IN}		
+NET "Atlys_TMDS_RX_0_p"								LOC = "K17" | IOSTANDARD = LVCMOS33;			## {IN}		
+NET "Atlys_TMDS_RX_0_n"								LOC = "K18" | IOSTANDARD = LVCMOS33;			## {IN}		
+NET "Atlys_TMDS_RX_1_p"								LOC = "L17" | IOSTANDARD = LVCMOS33;			## {IN}		
+NET "Atlys_TMDS_RX_1_n"								LOC = "L18" | IOSTANDARD = LVCMOS33;			## {IN}		
+NET "Atlys_TMDS_RX_2_p"								LOC = "J16" | IOSTANDARD = LVCMOS33;			## {IN}		
+NET "Atlys_TMDS_RX_2_n"								LOC = "J18" | IOSTANDARD = LVCMOS33;			## {IN}		
+
+NET "Atlys_TMDS_RX_SerialClock"				LOC = "M16" | IOSTANDARD = LVCMOS33;			## {INOUT}	
+NET "Atlys_TMDS_RX_SerialData"				LOC = "M18" | IOSTANDARD = LVCMOS33;			## {INOUT}	

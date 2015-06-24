@@ -39,7 +39,7 @@ else:
 	from sys import exit
 
 	print("=" * 80)
-	print("{: ^80s}".format("PoC Library - Python Class PoCCompiler"))
+	print("{: ^80s}".format("The PoC Library - Python Class PoCCompiler"))
 	print("=" * 80)
 	print()
 	print("This is no executable file!")

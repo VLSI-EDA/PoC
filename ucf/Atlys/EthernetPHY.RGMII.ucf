@@ -1,0 +1,44 @@
+##
+## Ethernet PHY - Marvell Alaska Ultra
+## -----------------------------------------------------------------------------
+##	Bank:						11
+##		VCCO:					3.3V (VCC3V3)
+##	Location:				IC8
+##		Vendor:				Marvell
+##		Device:				M88E1111 - RCJ1
+##		MDIO-Address:	0x05 (---0 0111b)
+##		I²C-Address:	I²C management mode is not enabled
+##
+## single-ended, parallel TX path
+NET "Atlys_EthernetPHY_TX_Valid"								LOC = "H15";						## {OUT}		IC8.16
+NET "Atlys_EthernetPHY_TX_Error"								LOC = "G18";						## {OUT}		IC8.13
+NET "Atlys_EthernetPHY_TX_DATA<0>"							LOC = "H16";						## {OUT}		IC8.18
+NET "Atlys_EthernetPHY_TX_DATA<1>"							LOC = "H13";						## {OUT}		IC8.19
+NET "Atlys_EthernetPHY_TX_DATA<2>"							LOC = "K14";						## {OUT}		IC8.20
+NET "Atlys_EthernetPHY_TX_DATA<3>"							LOC = "K13";						## {OUT}		IC8.24
+NET "Atlys_EthernetPHY_TX_*"										IOSTANDARD = LVCMOS33;
+NET "Atlys_EthernetPHY_TX_*"										SLEW = FAST;
+##
+## single-ended, parallel RX path
+NET "Atlys_EthernetPHY_RX_Valid"								LOC = "F17";						## {IN}			IC8.4
+NET "Atlys_EthernetPHY_RX_Error"								LOC = "F18";						## {IN}			IC8.8
+NET "Atlys_EthernetPHY_RX_DATA<0>"							LOC = "G16";						## {IN}			IC8.3
+NET "Atlys_EthernetPHY_RX_DATA<1>"							LOC = "H14";						## {IN}			IC8.128
+NET "Atlys_EthernetPHY_RX_DATA<2>"							LOC = "E16";						## {IN}			IC8.126
+NET "Atlys_EthernetPHY_RX_DATA<3>"							LOC = "F15";						## {IN}			IC8.125
+NET "Atlys_EthernetPHY_RX_*"										IOSTANDARD = LVCMOS33;
+NET "Atlys_EthernetPHY_RX_*"										SLEW = FAST;
+##
+## Timing names
+NET "Atlys_EthernetPHY_RX_Clock"								TNM_NET = "TGRP_EthernetPHY_RX_Clock";
+NET "Atlys_EthernetPHY_RX_Data[?]"							TNM			= "EthernetPHY_RX";
+NET "Atlys_EthernetPHY_RX_Valid"								TNM			= "EthernetPHY_RX";
+NET "Atlys_EthernetPHY_RX_Error"								TNM			= "EthernetPHY_RX";
+##
+## RX clock frequency
+TIMESPEC "TS_EthernetPHY_RX_Clock" = PERIOD "TGRP_EthernetPHY_RX_Clock" 125 MHz HIGH 50%;
+##
+## according to IEEE 802.3 clause 35.4.2.3:
+##		t_SETUP(RCVR) = 2.0 ns
+##		t_HOLD(RCVR)	= 0.0 ns
+TIMEGRP "EthernetPHY_RX" OFFSET = IN 2.0 VALID 2.0 ns BEFORE "Atlys_EthernetPHY_RX_Clock" RISING;
