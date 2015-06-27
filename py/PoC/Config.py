@@ -105,7 +105,10 @@ class SubTypes(Enum):
 	GT =	104
 
 	def __str__(self):
-		return self.name.lower()
+		if (self == SubTypes.Unknown):
+			return "??"
+		else:
+			return self.name.lower()
 
 	def groups(self):
 		if	 (self == SubTypes.X):		return ("x",	"")
@@ -125,13 +128,27 @@ class SubTypes(Enum):
 class Packages(Enum):
 	Unknown = 0
 	
-	FF =	1
-	FFG = 2
+	TQG =	1
+	
+	CPG = 10
+	CSG = 11
+	
+	FF =	20
+	FFG =	21
+	FTG =	22
+	FGG =	23
+	FLG =	24
+
+	RB =	30
+	RBG =	31
+	RS =	32
+	RF =	33
 	
 	def __str__(self):
-		if	 (self == Packages.FF):			return "ff"
-		elif (self == Packages.FFG):		return "ffg"
-		else:														return "??"
+		if (self == Packages.Unknown):
+			return "??"
+		else:
+			return self.name.lower()
 
 class Device:
 	# PoCDevice members
@@ -153,17 +170,18 @@ class Device:
 			self.generation = int(deviceString[2:3])
 
 			temp = deviceString[3:4].lower()
-			if	 (temp == repr(Families.Artix)):	self.family = Families.Artix
-			elif (temp == repr(Families.Kintex)):	self.family = Families.Kintex
-			elif (temp == repr(Families.Virtex)):	self.family = Families.Virtex
-			elif (temp == repr(Families.Zynq)):		self.family = Families.Zynq
+			if	 (temp == repr(Families.Artix)):		self.family = Families.Artix
+			elif (temp == repr(Families.Kintex)):		self.family = Families.Kintex
+			elif (temp == repr(Families.Spartan)):	self.family = Families.Spartan
+			elif (temp == repr(Families.Virtex)):		self.family = Families.Virtex
+			elif (temp == repr(Families.Zynq)):			self.family = Families.Zynq
 			else: raise Exception("Unknown device family.")
 
-			deviceRegExpStr =  r"(?P<st1>[cfhlstx]{0,2})"			# device subtype - part 1
+			deviceRegExpStr =  r"(?P<st1>[a-z]{0,2})"			# device subtype - part 1
 			deviceRegExpStr += r"(?P<no>\d{1,4})"							# device number
 			deviceRegExpStr += r"(?P<st2>[t]{0,1})"						# device subtype - part 2
-			deviceRegExpStr += r"(?P<sg>[-1-3]{2})"						# speed grade
-			deviceRegExpStr += r"(?P<pack>[fg]{1,3})"					# package
+			deviceRegExpStr += r"(?P<sg>[-1-5]{2})"						# speed grade
+			deviceRegExpStr += r"(?P<pack>[a-z]{1,3})"			# package
 			deviceRegExpStr += r"(?P<pins>\d{1,4})"						# pin count
 			
 			deviceRegExp = re.compile(deviceRegExpStr)
@@ -178,6 +196,8 @@ class Device:
 				self.speedGrade =	int(deviceRegExpMatch.group('sg'))
 				self.package =		Packages[package.upper()]
 				self.pinCount =		int(deviceRegExpMatch.group('pins'))
+		
+			print(str(self))
 		
 		# vendor = Altera
 		if (deviceString[0:2].lower() == "ep"):
