@@ -76,7 +76,7 @@ end;
 
 
 architecture rtl of io_FanControl is
-	constant TIME_STARTUP			: TIME																							:= 500.0 ms;	-- StartUp time
+	constant TIME_STARTUP			: TIME																							:= 500 ms;		-- StartUp time
 	constant PWM_RESOLUTION		: POSITIVE																					:= 4;					-- 4 Bit resolution => 0 to 15 steps
 	constant PWM_FREQ					: FREQ																							:= 100 Hz;		-- 
 
@@ -188,7 +188,7 @@ begin
 	Tacho : entity PoC.io_FrequencyCounter
 		generic map (
 			CLOCK_FREQ					=> CLOCK_FREQ,					--
-			TIMEBASE						=> (60.0 sec / 64.0),		-- ca. 1 second
+			TIMEBASE						=> (60 sec / 64),				-- ca. 1 second
 			RESOLUTION					=> 8										-- max. ca. 256 RPS -> max. ca. 16k RPM
 		)
 		port map (

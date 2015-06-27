@@ -42,9 +42,9 @@ end;
 
 
 architecture test of sync_Command_tb is 
-	constant CLOCK_1_PERIOD		: TIME								:= 10.000 ns;
-	constant CLOCK_2_PERIOD		: TIME								:= 16.666 ns;
-	constant CLOCK_2_OFFSET		: TIME								:=  2.000 ps;
+	constant CLOCK_1_PERIOD		: TIME								:= 10 ns;
+	constant CLOCK_2_PERIOD		: TIME								:= 17 ns;
+	constant CLOCK_2_OFFSET		: TIME								:=  2 ps;
 	
 	signal Clock1							: STD_LOGIC						:= '1';
 	signal Clock2_i						: STD_LOGIC						:= '1';

@@ -51,7 +51,7 @@ use			PoC.xil.all;
 entity xil_Reconfigurator is
 	generic (
 		DEBUG						: BOOLEAN										:= FALSE;																				-- 
-		CLOCK_FREQ			: FREQ											:= 0.0 MHz;																			-- 
+		CLOCK_FREQ			: FREQ											:= 100 MHz;																			-- 
 		CONFIG_ROM			: in	T_XIL_DRP_CONFIG_ROM	:= (0 downto 0 => C_XIL_DRP_CONFIG_SET_EMPTY)		-- 
 	);
 	port (

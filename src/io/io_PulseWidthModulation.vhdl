@@ -41,8 +41,8 @@ use			PoC.physical.all;
 
 entity io_PulseWidthModulation is
 	generic (
-		CLOCK_FREQ								: FREQ									:= 100.0 MHz;
-		PWM_FREQ									: FREQ									:= 1.0 kHz;
+		CLOCK_FREQ								: FREQ									:= 100 MHz;
+		PWM_FREQ									: FREQ									:= 1 kHz;
 		PWM_RESOLUTION						: POSITIVE							:= 8
 	);
 	port (

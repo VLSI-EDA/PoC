@@ -47,7 +47,7 @@ END;
 
 
 ARCHITECTURE test OF arith_prng_tb IS
-	CONSTANT CLOCK_PERIOD_100MHZ			: TIME															:= 10.0 ns;
+	CONSTANT CLOCK_PERIOD_100MHZ			: TIME															:= 10 ns;
 
 	CONSTANT COMPARE_LIST_8_BITS			: T_SLVV_8(0 TO 255)								:= (
 		x"12", x"24", x"48", x"90", x"21", x"42", x"85", x"0A", x"14", x"28", x"51", x"A2", x"45", x"8B", x"17", x"2E",
