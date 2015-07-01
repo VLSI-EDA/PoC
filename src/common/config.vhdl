@@ -42,7 +42,6 @@ use			PoC.strings.all;
 
 package config is
 
-	constant POC_VERBOSE			: boolean	:= MY_VERBOSE;
 	constant PROJECT_DIR			: string	:= MY_PROJECT_DIR;
 	constant OPERATING_SYSTEM	: string	:= MY_OPERATING_SYSTEM;
 
@@ -162,28 +161,26 @@ package config is
 	function getFSMEncoding_gray(debug : BOOLEAN) return STRING;
 end config;
 
+
 package body config is
 	function getLocalDeviceString(DeviceString : STRING) return STRING is
---		constant MY_DEVICE_STR	: STRING := MY_DEVICE_STRING;
+		constant MY_DEVICE_STR	: STRING := MY_DEVICE_STRING;
 	begin
---		if (not str_imatch(DeviceString, "None")) then		-- if DeviceString is populated
---			if (DeviceString'length >= 32) then
---				return DeviceString(1 to 32);
---			else
---				return DeviceString & (DeviceString'length + 1 to 32 => NUL);
---			end if;
-----			return resize(DeviceString, 32);
---		elsif (not str_imatch(MY_DEVICE, "None")) then		-- if MY_DEVICE is set, prefer it
---			if (MY_DEVICE'length >= 32) then
---				return MY_DEVICE(1 to 32);
---			else
---				return MY_DEVICE & (MY_DEVICE'length + 1 to 32 => NUL);
---			end if;
---			return resize(MY_DEVICE, 32);
---		else																						-- otherwise use MY_BOARD
-			return resize("XC7K325T-2FFG900C", 32);
-----			return MY_DEVICE_STR;
---		end if;
+		if (POC_VERBOSE = TRUE) then
+			report "getLocalDeviceString: DeviceString='" & str_trim(DeviceString) & "' MY_DEVICE='" & str_trim(MY_DEVICE) & "' MY_DEVICE_STR='" & str_trim(MY_DEVICE_STR) & "'"  severity NOTE;
+		end if;
+		-- if DeviceString is populated
+		if ((str_length(DeviceString) /= 0) and (str_imatch(DeviceString, "None") = FALSE)) then
+			return resize(DeviceString, T_DEVICE_STRING'length);
+			
+		-- if MY_DEVICE is set, prefer it
+		elsif ((str_length(DeviceString) /= 0) and (str_imatch(MY_DEVICE, "None") = FALSE)) then
+			return resize(MY_DEVICE, T_DEVICE_STRING'length);
+			
+		-- otherwise use MY_BOARD
+		else
+			return resize(MY_DEVICE_STR, T_DEVICE_STRING'length);
+		end if;
 	end function;
 
 	function extractFirstNumber(str : STRING) return NATURAL is
@@ -218,7 +215,7 @@ package body config is
 		case VEN_STR is
 			when "XC"		=> return VENDOR_XILINX;
 			when "EP"		=> return VENDOR_ALTERA;
-			when others	=> report "Unknown vendor in MY_DEVICE = " & MY_DEV & "." severity failure;
+			when others	=> report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
 	end VENDOR;
@@ -239,7 +236,7 @@ package body config is
 					when "2S"	 => return DEVICE_STRATIX2;
 					when "4S"	 => return DEVICE_STRATIX4;
 					when "5S"	 => return DEVICE_STRATIX5;
-					when others => report "Unknown Altera device in MY_DEVICE = " & MY_DEV & "." severity failure;
+					when others => report "Unknown Altera device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 
 			when VENDOR_XILINX =>
@@ -252,7 +249,7 @@ package body config is
 					when "6V"	 => return DEVICE_VIRTEX6;
 					when "7V"	 => return DEVICE_VIRTEX7;
 					when "7Z"	 => return DEVICE_ZYNQ7;
-					when others => report "Unknown Xilinx device in MY_DEVICE = " & MY_DEV & "." severity failure;
+					when others => report "Unknown Xilinx device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 				
 			when others => report "Unknown vendor in MY_DEVICE = " & MY_DEV & "." severity failure;
@@ -271,7 +268,7 @@ package body config is
 				case FAM_CHAR is
 					when 'C'		=> return DEVICE_FAMILY_CYCLONE;
 					when 'S'		=> return DEVICE_FAMILY_STRATIX;
-					when others	=> report "Unknown Altera device family in MY_DEVICE = " & MY_DEV & "." severity failure;
+					when others	=> report "Unknown Altera device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 
 			when VENDOR_XILINX =>
@@ -281,10 +278,10 @@ package body config is
 					when 'S'		=> return DEVICE_FAMILY_SPARTAN;
 					when 'V'		=> return DEVICE_FAMILY_VIRTEX;
 					when 'Z'		=> return DEVICE_FAMILY_ZYNQ;
-					when others => report "Unknown Xilinx device family in MY_DEVICE = " & MY_DEV & "." severity failure;
+					when others => report "Unknown Xilinx device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 				
-			when others => report "Unknown vendor in MY_DEVICE = " & MY_DEV & "." severity failure;
+			when others => report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
 	end DEVICE_FAMILY;
@@ -306,7 +303,7 @@ package body config is
 		case VEN is
 			when VENDOR_ALTERA =>		return extractFirstNumber(MY_DEV(5 to MY_DEV'high));
 			when VENDOR_XILINX =>		return extractFirstNumber(MY_DEV(5 to MY_DEV'high));
-			when others =>					report "Unknown vendor in MY_DEVICE = " & MY_DEV & "." severity failure;
+			when others =>					report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 															-- return statement is explicitly missing otherwise XST won't stop
 		end case;
 	end function;
@@ -322,14 +319,14 @@ package body config is
 			when DEVICE_STRATIX2 =>
 				if		chr_isDigit(DEV_SUB_STR(1)) then																						return DEVICE_SUBTYPE_NONE;
 				elsif	(DEV_SUB_STR = "GX") then																										return DEVICE_SUBTYPE_GX;
-				else	report "Unknown Stratix II subtype: MY_DEVICE = " & MY_DEV & "." severity failure;
+				else	report "Unknown Stratix II subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_STRATIX4 =>
 				if		(DEV_SUB_STR(1) = 'E') then																									return DEVICE_SUBTYPE_E;
 				elsif	(DEV_SUB_STR = "GX") then																										return DEVICE_SUBTYPE_GX;
 --				elsif	(DEV_SUB_STR = "GT") then																										return DEVICE_SUBTYPE_GT;
-				else	report "Unknown Stratix II subtype: MY_DEVICE = " & MY_DEV & "." severity failure;
+				else	report "Unknown Stratix II subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_SPARTAN3 => report "TODO: parse Spartan3 / Spartan3E / Spartan3AN device subtype." severity failure;
@@ -337,7 +334,7 @@ package body config is
 			when DEVICE_SPARTAN6 =>
 				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_LX;
 				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_LXT;
-				else	report "Unknown Virtex-5 subtype: MY_DEVICE = " & MY_DEV & "." severity failure;
+				else	report "Unknown Virtex-5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 			
 			when DEVICE_VIRTEX5 =>
@@ -346,7 +343,7 @@ package body config is
 				elsif	((DEV_SUB_STR = "SX") and (			str_find(MY_DEV(7 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_SXT;
 				elsif	((DEV_SUB_STR = "TX") and (			str_find(MY_DEV(7 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_TXT;
 				elsif	((DEV_SUB_STR = "FX") and (			str_find(MY_DEV(7 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_FXT;
-				else	report "Unknown Virtex-5 subtype: MY_DEVICE = " & MY_DEV & "." severity failure;
+				else	report "Unknown Virtex-5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_VIRTEX6 =>
@@ -355,24 +352,24 @@ package body config is
 				elsif	((DEV_SUB_STR = "SX") and (			str_find(MY_DEV(7 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_SXT;
 				elsif	((DEV_SUB_STR = "CX") and (			str_find(MY_DEV(7 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_CXT;
 				elsif	((DEV_SUB_STR = "HX") and (			str_find(MY_DEV(7 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_HXT;
-				else	report "Unknown Virtex-6 subtype: MY_DEVICE = " & MY_DEV & "." severity failure;
+				else	report "Unknown Virtex-6 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_ARTIX7 =>
 				if		(													(			str_find(MY_DEV(5 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_T;
-				else	report "Unknown Artix-7 subtype: MY_DEVICE = " & MY_DEV & "." severity failure;
+				else	report "Unknown Artix-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 				
 			when DEVICE_KINTEX7 =>
 				if		(													(			str_find(MY_DEV(5 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_T;
-				else	report "Unknown Kintex-7 subtype: MY_DEVICE = " & MY_DEV & "." severity failure;
+				else	report "Unknown Kintex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 				
 			when DEVICE_VIRTEX7 =>
 				if		(														(		str_find(MY_DEV(5 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_T;
 				elsif	((DEV_SUB_STR(1) = 'X') and (		str_find(MY_DEV(6 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_XT;
 				elsif	((DEV_SUB_STR(1) = 'H') and (		str_find(MY_DEV(6 TO MY_DEV'high), 'T'))) then	return DEVICE_SUBTYPE_HT;
-				else	report "Unknown Virtex-7 subtype: MY_DEVICE = " & MY_DEV & "." severity failure;
+				else	report "Unknown Virtex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when others => report "Transceiver type is unknown for the given device." severity failure;
@@ -493,7 +490,7 @@ package body config is
 			case VENDOR is
 				when VENDOR_XILINX =>		return "auto";
 				when VENDOR_ALTERA =>		return "default";
-				when others =>					report "Unknown vendor ." severity failure;
+				when others =>					report "Unknown vendor." severity failure;
 																-- return statement is explicitly missing otherwise XST won't stop
 			end case;
 		end if;

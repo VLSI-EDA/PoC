@@ -51,17 +51,28 @@ package board is
 	
 	type T_BOARD is (
 		BOARD_CUSTOM,
-		BOARD_S3SK200,	BOARD_S3SK1000,
-		BOARD_S3ESK500,	BOARD_S3ESK1600,
-		BOARD_ML505,
-		BOARD_ML605,
+		-- Spartan-3 boards
+		BOARD_S3SK200, BOARD_S3SK1000, BOARD_S3ESK500, BOARD_S3ESK1600,
+		-- Spartan-6 boards
+		BOARD_ATLYS,
+		-- Kintex-7 boards
 		BOARD_KC705,
+		-- Virtex-5 boards
+		BOARD_ML505,
+		-- Virtex-6 boards
+		BOARD_ML605,
+		-- Virtex-7 boards
 		BOARD_VC707,
+		-- Zynq-7000 boards
 		BOARD_ZEDBOARD,
+		-- Cyclon III boards
 		BOARD_DE0,
+		-- Stratix II boards
+		BOARD_S2GXAV,
+		-- Stratix IV boards
 		BOARD_DE4,
-		BOARD_DE5,
-		BOARD_S2GXAV
+		-- Stratix V boards
+		BOARD_DE5
 	);
 	
 	type T_BOARD_ETHERNET_DESC is record
@@ -76,7 +87,6 @@ package board is
 	type T_BOARD_DESCRIPTION is record
 		FPGADevice	: T_BOARD_CONFIG_STRING;
 		Ethernet		: T_BOARD_ETHERNET_DESC;
-	
 	end record;
 
 	type T_BOARD_DESCRIPTION_VECTOR	is array (T_BOARD) of T_BOARD_DESCRIPTION;
@@ -97,13 +107,23 @@ package body board is
 	-- ModelSim requires that this functions is defined before it is used below.
 	-- ===========================================================================
 	function conf(str : string) return T_BOARD_CONFIG_STRING is
+		variable MaxLength	: NATURAL																		:= T_BOARD_CONFIG_STRING'length;
+		variable Result			: STRING(1 to T_BOARD_CONFIG_STRING'length)	:= (others => NUL);
 	begin
-		return resize(str, T_BOARD_CONFIG_STRING'length);
+		if (str'length < T_BOARD_CONFIG_STRING'length) then
+			MaxLength := str'length;
+		end if;
+		if (MaxLength > 0) then
+			Result(1 to MaxLength) := str(str'low to str'low + MaxLength - 1);
+		end if;
+		return Result;
 	end function;
 
 	-- board description
 	-- ===========================================================================
 	CONSTANT C_BOARD_DESCRIPTION_LIST		: T_BOARD_DESCRIPTION_VECTOR		:= (
+		-- Xilinx boards
+		-- =========================================================================
 		BOARD_S3SK200 => (
 			FPGADevice									=> conf("XC3S200FT256"),														-- XC2S200FT256
 			Ethernet => (
@@ -138,7 +158,29 @@ package body board is
 			)
 		),
 		BOARD_S3ESK1600 => (
-			FPGADevice									=> conf("XC3S1600EFT256"),														-- XC2S200FT256
+			FPGADevice									=> conf("XC3S1600EFT256"),													-- XC2S200FT256
+			Ethernet => (
+				IPStyle										=> conf("IPSTYLE_SOFT"),
+				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
+				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
+				PHY_DeviceAddress					=> x"07",
+				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
+				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
+			)
+		),
+		BOARD_ATLYS => (
+			FPGADevice									=> conf("XC6SLX45-3CSG324"),												-- XC6SLX45-3CSG324
+			Ethernet => (
+				IPStyle										=> conf("IPSTYLE_HARD"),
+				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
+				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
+				PHY_DeviceAddress					=> x"07",
+				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
+				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
+			)
+		),
+		BOARD_KC705 => (
+			FPGADevice									=> conf("XC7K325T-2FFG900C"),												-- XC7K325T-2FFG900C
 			Ethernet => (
 				IPStyle										=> conf("IPSTYLE_SOFT"),
 				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
@@ -170,17 +212,6 @@ package body board is
 				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
 			)
 		),
-		BOARD_KC705 => (
-			FPGADevice									=> conf("XC7K325T-2FFG900C"),												-- XC7K325T-2FFG900C
-			Ethernet => (
-				IPStyle										=> conf("IPSTYLE_SOFT"),
-				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
-				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
-				PHY_DeviceAddress					=> x"07",
-				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
-				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
-			)
-		),
 		BOARD_VC707 => (
 			FPGADevice									=> conf("XC7VX485T-2FFG1761C"),											-- XC7VX485T-2FFG1761C
 			Ethernet => (
@@ -204,8 +235,20 @@ package body board is
 			)
 		),
 		-- Altera boards
+		-- =========================================================================
 		BOARD_DE0 => (
 			FPGADevice									=> conf("EP3C16F484"),															-- EP3C16F484
+			Ethernet => (
+				IPStyle										=> conf("IPSTYLE_SOFT"),
+				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
+				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
+				PHY_DeviceAddress					=> x"07",
+				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
+				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
+			)
+		),
+		BOARD_S2GXAV => (
+			FPGADevice									=> conf("EP2SGX90FF1508C3"),												-- EP2SGX90FF1508C3
 			Ethernet => (
 				IPStyle										=> conf("IPSTYLE_SOFT"),
 				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
@@ -238,18 +281,6 @@ package body board is
 			)
 		),
 		
-		BOARD_S2GXAV => (
-			FPGADevice									=> conf("EP2SGX90FF1508C3"),												-- EP2SGX90FF1508C3
-			Ethernet => (
-				IPStyle										=> conf("IPSTYLE_SOFT"),
-				RS_DataInterface					=> conf("NET_ETH_RS_DATA_INTERFACE_GMII"),
-				PHY_Device								=> conf("NET_ETH_PHY_DEVICE_MARVEL_88E1111"),
-				PHY_DeviceAddress					=> x"07",
-				PHY_DataInterface					=> conf("NET_ETH_PHY_DATA_INTERFACE_GMII"),
-				PHY_ManagementInterface		=> conf("NET_ETH_PHY_MANAGEMENT_INTERFACE_MDIO")
-			)
-		),
-		
 		-- custom board / dummy entry
 		BOARD_CUSTOM => (
 			FPGADevice									=> conf("Device is unknown for a custom board"),
@@ -264,15 +295,16 @@ package body board is
 		)
 	);
 
-
 	-- public functions
 	-- ===========================================================================
 	-- TODO: comment
 	function MY_BOARD_STRUCT(BoardConfig : string := C_BOARD_STRING_EMPTY) return T_BOARD_DESCRIPTION is
-		constant MY_BRD : T_BOARD_CONFIG_STRING := ite((BoardConfig /= C_BOARD_STRING_EMPTY), conf(BoardConfig), conf(MY_BOARD));
+		constant MY_BRD			: T_BOARD_CONFIG_STRING := ite((BoardConfig /= C_BOARD_STRING_EMPTY), conf(BoardConfig), conf(MY_BOARD));
+		constant BOARD_NAME	: STRING								:= "BOARD_" & str_trim(MY_BRD);
   begin
+--		report "PoC configuration: used board is '" & str_trim(MY_BRD) & "'" severity NOTE;
 		for i in T_BOARD loop
-			if str_imatch("BOARD_" & str_trim(MY_BRD), t_board'image(i)) then
+			if str_imatch(BOARD_NAME, T_BOARD'image(i)) then
 				return  C_BOARD_DESCRIPTION_LIST(i);
 			end if;
 		end loop;
@@ -285,6 +317,7 @@ package body board is
 	function MY_DEVICE_STRING(BoardConfig : string := C_BOARD_STRING_EMPTY) return string is
 		constant BRD_STRUCT	: T_BOARD_DESCRIPTION := MY_BOARD_STRUCT(BoardConfig);
   begin
-		return BRD_STRUCT.FPGADevice(1 to 32);
+--		report "PoC configuration: used FPGA is '" & str_trim(BRD_STRUCT.FPGADevice) & "'" severity NOTE;
+		return BRD_STRUCT.FPGADevice;
 	end function;
 end package body;

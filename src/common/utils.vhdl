@@ -37,12 +37,14 @@ use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
 
 library	PoC;
+use			PoC.my_config.all;
 
 
 package utils is
   --+ Environment +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   -- Distinguishes Simulation from Synthesis
 	constant SIMULATION					: BOOLEAN;				-- deferred constant declaration
+	constant POC_VERBOSE				: BOOLEAN		:= MY_VERBOSE;
 	
 	-- Type declarations
 	-- ==========================================================================

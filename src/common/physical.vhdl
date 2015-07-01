@@ -57,7 +57,7 @@ library IEEE;
 use			IEEE.math_real.all;
 
 library PoC;
-use			PoC.config.POC_VERBOSE;
+use			PoC.config.all;
 use			PoC.utils.all;
 use			PoC.strings.all;
 
