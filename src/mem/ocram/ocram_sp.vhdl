@@ -55,7 +55,7 @@ use			PoC.strings.all;
 entity ocram_sp is
 	generic (
 		A_BITS		: positive;
-		D_BITS	´	: positive;
+		D_BITS		: positive;
 		FILENAME	: STRING		:= ""
 	);
 	port (

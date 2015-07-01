@@ -52,7 +52,7 @@ use			PoC.strings.all;
 entity ocrom_sp is
 	generic (
 		A_BITS		: positive;
-		D_BITS	´	: positive;
+		D_BITS		: positive;
 		FILENAME	: STRING		:= ""
 	);
 	port (
