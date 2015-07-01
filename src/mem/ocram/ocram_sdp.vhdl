@@ -5,6 +5,7 @@
 -- ============================================================================
 -- Authors:				 	Martin Zabel
 --									Thomas B. Preusser
+--									Patrick Lehmann
 --
 -- Module:				 	Simple dual-port memory.
 -- 
@@ -54,83 +55,153 @@
 -- limitations under the License.
 -- ============================================================================
 
+library STD;
+use			STD.TextIO.all;
+
 library	IEEE;
 use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
+use			IEEE.std_logic_textio.all;
 
 library PoC;
 use			PoC.config.all;
+use			PoC.utils.all;
+use			PoC.strings.all;
 
 
 entity ocram_sdp is
-  generic (
-    A_BITS : positive;-- := 10;
-    D_BITS : positive--  := 32
-  );
-  port (
-    rclk : in  std_logic;                             -- read clock
-    rce  : in  std_logic;                             -- read clock-enable
-    wclk : in  std_logic;                             -- write clock
-    wce  : in  std_logic;                             -- write clock-enable
-    we   : in  std_logic;                             -- write enable
-    ra   : in  unsigned(A_BITS-1 downto 0);           -- read address
-    wa   : in  unsigned(A_BITS-1 downto 0);           -- write address
-    d    : in  std_logic_vector(D_BITS-1 downto 0);   -- data in
-    q    : out std_logic_vector(D_BITS-1 downto 0));  -- data out
-end ocram_sdp;
+	generic (
+		A_BITS		: positive;
+		D_BITS		: positive;
+		FILENAME	: STRING		:= ""
+	);
+	port (
+		rclk : in	std_logic;														 -- read clock
+		rce	: in	std_logic;														 -- read clock-enable
+		wclk : in	std_logic;														 -- write clock
+		wce	: in	std_logic;														 -- write clock-enable
+		we	 : in	std_logic;														 -- write enable
+		ra	 : in	unsigned(A_BITS-1 downto 0);					 -- read address
+		wa	 : in	unsigned(A_BITS-1 downto 0);					 -- write address
+		d		: in	std_logic_vector(D_BITS-1 downto 0);	 -- data in
+		q		: out std_logic_vector(D_BITS-1 downto 0));	-- data out
+end entity;
 
 
 architecture rtl of ocram_sdp is
+	attribute ramstyle	: string;
 
-  constant DEPTH : positive := 2**A_BITS;
-  
-begin  -- rtl
+	constant DEPTH			: positive := 2**A_BITS;
+	
+begin
 
-  gInfer: if VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA generate
-    -- RAM can be infered correctly
-    -- Xilinx notes:
-    --   WRITE_MODE is set to WRITE_FIRST, but this also means that read data
-    --   is unknown on the opposite port. (As expected.)
-    -- Altera notes:
-    --   Setting attribute "ramstyle" to "no_rw_check" supresses generation of
-    --   bypass logic, when 'clk1'='clk2' and 'ra' is feed from a register.
-    --   This is the expected behaviour.
-    --   With two different clocks, synthesis complains about an undefined
-    --   read-write behaviour, that can be ignored.
-    type ram_t is array(0 to DEPTH-1) of std_logic_vector(D_BITS-1 downto 0);
-    signal ram : ram_t;
-    attribute ramstyle : string;
-    attribute ramstyle of ram : signal is "no_rw_check";
-  begin
-    process (wclk)
-    begin
-      if rising_edge(wclk) then
-        if (wce and we) = '1' then
-          ram(to_integer(wa)) <= d;
-        end if;
-      end if;
-    end process;
+	gInfer: if VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA generate
+		-- RAM can be inferred correctly
+		-- Xilinx notes:
+		--	 WRITE_MODE is set to WRITE_FIRST, but this also means that read data
+		--	 is unknown on the opposite port. (As expected.)
+		-- Altera notes:
+		--	 Setting attribute "ramstyle" to "no_rw_check" suppresses generation of
+		--	 bypass logic, when 'clk1'='clk2' and 'ra' is feed from a register.
+		--	 This is the expected behaviour.
+		--	 With two different clocks, synthesis complains about an undefined
+		--	 read-write behaviour, that can be ignored.
 
-    process (rclk)
-    begin
-      if rising_edge(rclk) then
-        -- read data doesn't care, when reading at write address
-        if rce = '1' then
-        --synthesis translate_off
-          if Is_X(std_logic_vector(ra)) then
-            q <= (others => 'X');
-          else
-        --synthesis translate_on
-            q <= ram(to_integer(ra));
-        --synthesis translate_off
-          end if;
-        --synthesis translate_on
-        end if;
-      end if;
-    end process;
-  end generate gInfer;
-  
-  assert VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA
-    report "Device not yet supported."
-    severity failure;
+		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
+		type		ram_t		is array(0 to DEPTH - 1) of word_t;
+		
+	begin
+		genLoadFile : if (str_length(FileName) /= 0) generate
+			-- Read a *.mem or *.hex file
+			impure function ocram_ReadMemFile(FileName : STRING) return ram_t is
+				file FileHandle				: TEXT open READ_MODE is FileName;
+				variable CurrentLine	: LINE;
+				variable TempWord			: STD_LOGIC_VECTOR((div_ceil(word_t'length, 4) * 4) - 1 downto 0);
+				variable Result				: ram_t		:= (others => (others => '0'));
+				
+			begin
+				-- discard the first line of a mem file
+				if (str_to_lower(FileName(FileName'length - 3 to FileName'length)) = ".mem") then
+					readline(FileHandle, CurrentLine);
+				end if;
+
+				for i in 0 to DEPTH - 1 loop
+					exit when endfile(FileHandle);
+
+					readline(FileHandle, CurrentLine);
+					hread(CurrentLine, TempWord);
+					Result(i)		:= resize(TempWord, word_t'length);
+				end loop;
+
+				return Result;
+			end function;
+
+			signal ram								: ram_t		:= ocram_ReadMemFile(FILENAME);
+			attribute ramstyle of ram	: signal is "no_rw_check";
+			
+		begin
+			process (wclk)
+			begin
+				if rising_edge(wclk) then
+					if (wce and we) = '1' then
+						ram(to_integer(wa)) <= d;
+					end if;
+				end if;
+			end process;
+
+			process (rclk)
+			begin
+				if rising_edge(rclk) then
+					-- read data doesn't care, when reading at write address
+					if rce = '1' then
+					--synthesis translate_off
+						if Is_X(std_logic_vector(ra)) then
+							q <= (others => 'X');
+						else
+					--synthesis translate_on
+							q <= ram(to_integer(ra));
+					--synthesis translate_off
+						end if;
+					--synthesis translate_on
+					end if;
+				end if;
+			end process;
+		end generate;
+		genNoLoadFile : if (str_length(FileName) = 0) generate
+			signal ram								: ram_t;
+			attribute ramstyle of ram	: signal is "no_rw_check";
+			
+		begin
+			process (wclk)
+			begin
+				if rising_edge(wclk) then
+					if (wce and we) = '1' then
+						ram(to_integer(wa)) <= d;
+					end if;
+				end if;
+			end process;
+
+			process (rclk)
+			begin
+				if rising_edge(rclk) then
+					-- read data doesn't care, when reading at write address
+					if rce = '1' then
+					--synthesis translate_off
+						if Is_X(std_logic_vector(ra)) then
+							q <= (others => 'X');
+						else
+					--synthesis translate_on
+							q <= ram(to_integer(ra));
+					--synthesis translate_off
+						end if;
+					--synthesis translate_on
+					end if;
+				end if;
+			end process;
+		end generate;
+	end generate gInfer;
+	
+	assert VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA
+		report "Device not yet supported."
+		severity failure;
 end rtl;

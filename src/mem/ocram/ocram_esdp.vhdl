@@ -3,10 +3,11 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- ============================================================================
+-- Authors:				 	Martin Zabel
+--									Patrick Lehmann
+-- 
 -- Module:				 	Enhanced simple dual-port memory.
 --
--- Authors:				 	Martin Zabel
--- 
 -- Description:
 -- ------------------------------------
 -- Inferring / instantiating enhanced simple dual-port memory, with:
@@ -60,121 +61,191 @@
 -- limitations under the License.
 -- ============================================================================
 
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+library STD;
+use			STD.TextIO.all;
 
-library poc;
-use poc.config.all;
+library	IEEE;
+use			IEEE.std_logic_1164.all;
+use			IEEE.numeric_std.all;
+use			IEEE.std_logic_textio.all;
+
+library PoC;
+use			PoC.config.all;
+use			PoC.utils.all;
+use			PoC.strings.all;
+
 
 entity ocram_esdp is
-  
-  generic (
-    A_BITS : positive;-- := 10;
-    D_BITS : positive--  := 32
-  );
-
-  port (
-    clk1 : in  std_logic;
-    clk2 : in  std_logic;
-    ce1  : in  std_logic;
-    ce2  : in  std_logic;
-    we1  : in  std_logic;
-    a1   : in  unsigned(A_BITS-1 downto 0);
-    a2   : in  unsigned(A_BITS-1 downto 0);
-    d1   : in  std_logic_vector(D_BITS-1 downto 0);
-    q1   : out std_logic_vector(D_BITS-1 downto 0);
-    q2   : out std_logic_vector(D_BITS-1 downto 0)
-  );
-
+	generic (
+		A_BITS		: positive;
+		D_BITS		: positive;
+		FILENAME	: STRING		:= ""
+	);
+	port (
+		clk1 : in	std_logic;
+		clk2 : in	std_logic;
+		ce1	: in	std_logic;
+		ce2	: in	std_logic;
+		we1	: in	std_logic;
+		a1	 : in	unsigned(A_BITS-1 downto 0);
+		a2	 : in	unsigned(A_BITS-1 downto 0);
+		d1	 : in	std_logic_vector(D_BITS-1 downto 0);
+		q1	 : out std_logic_vector(D_BITS-1 downto 0);
+		q2	 : out std_logic_vector(D_BITS-1 downto 0)
+	);
 end ocram_esdp;
 
+
 architecture rtl of ocram_esdp is
+	constant DEPTH : positive := 2**A_BITS;
+	
+begin
+	gInfer: if VENDOR = VENDOR_XILINX generate
+		-- RAM can be inferred correctly
+		-- XST Advanced HDL Synthesis generates extended simple dual-port
+		-- memory as expected.
+				-- RAM can be inferred correctly only for newer FPGAs!
+		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
+		type		ram_t		is array(0 to DEPTH - 1) of word_t;
+		
+	begin
+		genLoadFile : if (str_length(FileName) /= 0) generate
+			-- Read a *.mem or *.hex file
+			impure function ocram_ReadMemFile(FileName : STRING) return ram_t is
+				file FileHandle				: TEXT open READ_MODE is FileName;
+				variable CurrentLine	: LINE;
+				variable TempWord			: STD_LOGIC_VECTOR((div_ceil(word_t'length, 4) * 4) - 1 downto 0);
+				variable Result				: ram_t		:= (others => (others => '0'));
+				
+			begin
+				-- discard the first line of a mem file
+				if (str_to_lower(FileName(FileName'length - 3 to FileName'length)) = ".mem") then
+					readline(FileHandle, CurrentLine);
+				end if;
 
-  component ocram_esdp_altera
-    generic (
-      A_BITS : positive;
-      D_BITS : positive);
-    port (
-      clk1 : in  std_logic;
-      clk2 : in  std_logic;
-      ce1  : in  std_logic;
-      ce2  : in  std_logic;
-      we1  : in  std_logic;
-      a1   : in  unsigned(A_BITS-1 downto 0);
-      a2   : in  unsigned(A_BITS-1 downto 0);
-      d1   : in  std_logic_vector(D_BITS-1 downto 0);
-      q1   : out std_logic_vector(D_BITS-1 downto 0);
-      q2   : out std_logic_vector(D_BITS-1 downto 0));
-  end component;
-  
-  constant DEPTH : positive := 2**A_BITS;
-  
-begin  -- rtl
+				for i in 0 to DEPTH - 1 loop
+					exit when endfile(FileHandle);
 
-  gInfer: if VENDOR = VENDOR_XILINX generate
-    -- RAM can be infered correctly
-    -- XST Advanced HDL Synthesis generates extended simple dual-port
-    -- memory as expected.
-    type ram_t is array(0 to DEPTH-1) of std_logic_vector(D_BITS-1 downto 0);
-    signal ram : ram_t;
+					readline(FileHandle, CurrentLine);
+					hread(CurrentLine, TempWord);
+					Result(i)		:= resize(TempWord, word_t'length);
+				end loop;
 
-    signal a1_reg : unsigned(A_BITS-1 downto 0);
-    signal a2_reg : unsigned(A_BITS-1 downto 0);
-  
-  begin
-    process (clk1)
-    begin
-      if rising_edge(clk1) then
-        if ce1 = '1' then
-          if we1 = '1' then
-            ram(to_integer(a1)) <= d1;
-          end if;
+				return Result;
+			end function;
 
-          a1_reg <= a1;
-        end if;
-      end if;
-    end process;
+			signal ram			: ram_t		:= ocram_ReadMemFile(FILENAME);
+			signal a1_reg		: unsigned(A_BITS-1 downto 0);
+			signal a2_reg		: unsigned(A_BITS-1 downto 0);
+			
+		begin
+			process (clk1)
+			begin
+				if rising_edge(clk1) then
+					if ce1 = '1' then
+						if we1 = '1' then
+							ram(to_integer(a1)) <= d1;
+						end if;
 
-    q1 <= ram(to_integer(a1_reg));        -- gets new data
+						a1_reg <= a1;
+					end if;
+				end if;
+			end process;
 
-    process (clk2)
-    begin  -- process
-      if rising_edge(clk2) then
-        if ce2 = '1' then
-          a2_reg <= a2;
-        end if;
-      end if;
-    end process;
-    
-    -- read data is unknown, when reading at write address
-    q2 <= ram(to_integer(a2_reg));
-    
-  end generate gInfer;
+			q1 <= ram(to_integer(a1_reg));				-- gets new data
 
-  gAltera: if VENDOR = VENDOR_ALTERA generate
-    -- Direct instantiation of altsyncram (including component
-    -- declaration above) is not sufficient for ModelSim.
-    -- That requires also usage of altera_mf library.
-    i: ocram_esdp_altera
-      generic map (
-        A_BITS => A_BITS,
-        D_BITS => D_BITS)
-      port map (
-        clk1 => clk1,
-        clk2 => clk2,
-        ce1  => ce1,
-        ce2  => ce2,
-        we1  => we1,
-        a1   => a1,
-        a2   => a2,
-        d1   => d1,
-        q1   => q1,
-        q2   => q2);
-    
-  end generate gAltera;
-  
-  assert VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA
-    report "Device not yet supported."
-    severity failure;
+			process (clk2)
+			begin	-- process
+				if rising_edge(clk2) then
+					if ce2 = '1' then
+						a2_reg <= a2;
+					end if;
+				end if;
+			end process;
+			
+			-- read data is unknown, when reading at write address
+			q2 <= ram(to_integer(a2_reg));
+		end generate;
+		genNoLoadFile : if (str_length(FileName) = 0) generate
+			signal ram			: ram_t;
+			signal a1_reg		: unsigned(A_BITS-1 downto 0);
+			signal a2_reg		: unsigned(A_BITS-1 downto 0);
+			
+		begin
+			process (clk1)
+			begin
+				if rising_edge(clk1) then
+					if ce1 = '1' then
+						if we1 = '1' then
+							ram(to_integer(a1)) <= d1;
+						end if;
+
+						a1_reg <= a1;
+					end if;
+				end if;
+			end process;
+
+			q1 <= ram(to_integer(a1_reg));				-- gets new data
+
+			process (clk2)
+			begin	-- process
+				if rising_edge(clk2) then
+					if ce2 = '1' then
+						a2_reg <= a2;
+					end if;
+				end if;
+			end process;
+			
+			-- read data is unknown, when reading at write address
+			q2 <= ram(to_integer(a2_reg));
+		end generate;
+	end generate gInfer;
+
+	gAltera: if VENDOR = VENDOR_ALTERA generate
+		component ocram_esdp_altera
+			generic (
+				A_BITS		: positive;
+				D_BITS		: positive;
+				FILENAME	: STRING		:= ""
+			);
+			port (
+				clk1 : in	std_logic;
+				clk2 : in	std_logic;
+				ce1	: in	std_logic;
+				ce2	: in	std_logic;
+				we1	: in	std_logic;
+				a1	 : in	unsigned(A_BITS-1 downto 0);
+				a2	 : in	unsigned(A_BITS-1 downto 0);
+				d1	 : in	std_logic_vector(D_BITS-1 downto 0);
+				q1	 : out std_logic_vector(D_BITS-1 downto 0);
+				q2	 : out std_logic_vector(D_BITS-1 downto 0)
+			);
+		end component;
+	begin
+		-- Direct instantiation of altsyncram (including component
+		-- declaration above) is not sufficient for ModelSim.
+		-- That requires also usage of altera_mf library.
+		i: ocram_esdp_altera
+			generic map (
+				A_BITS		=> A_BITS,
+				D_BITS		=> D_BITS,
+				FILENAME	=> FILENAME
+			)
+			port map (
+				clk1 => clk1,
+				clk2 => clk2,
+				ce1	=> ce1,
+				ce2	=> ce2,
+				we1	=> we1,
+				a1	 => a1,
+				a2	 => a2,
+				d1	 => d1,
+				q1	 => q1,
+				q2	 => q2
+			);
+	end generate gAltera;
+	
+	assert VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA
+		report "Device not yet supported."
+		severity failure;
 end rtl;

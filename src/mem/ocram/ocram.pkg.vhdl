@@ -4,13 +4,14 @@
 -- 
 -- ============================================================================
 -- Authors:				 	Martin Zabel
+--									Patrick Lehmann
 -- 
 -- Package:				 	VHDL package for component declarations, types and functions
 --									associated to the PoC.mem.ocram namespace
 --
 -- Description:
 -- ------------------------------------
---		On-Chip RAM for FPGAs and so on.
+--		On-Chip RAMs and ROMs for FPGAs.
 --
 --		A detailed documentation is included in each module.
 --
@@ -32,17 +33,21 @@
 -- limitations under the License.
 -- ============================================================================
 
-library	ieee;
-use			ieee.std_logic_1164.all;
-use			ieee.numeric_std.all;
+library	IEEE;
+use			IEEE.std_logic_1164.all;
+use			IEEE.numeric_std.all;
 
 
 package ocram is
-  
+	-- RAMs (RWMs)
+	-- ===========================================================================
+	-- Single-Port
   component ocram_sp
     generic (
-      A_BITS : positive;
-      D_BITS : positive);
+      A_BITS		: positive;
+      D_BITS		: positive;
+			FILENAME	: STRING		:= ""
+		);
     port (
       clk : in  std_logic;
       ce  : in  std_logic;
@@ -52,10 +57,13 @@ package ocram is
       q   : out std_logic_vector(D_BITS-1 downto 0));
   end component;
   
+	-- Simple-Dual-Port
   component ocram_sdp
     generic (
-      A_BITS : positive;
-      D_BITS : positive);
+      A_BITS		: positive;
+      D_BITS		: positive;
+			FILENAME	: STRING		:= ""
+		);
     port (
       rclk : in  std_logic;
       rce  : in  std_logic;
@@ -68,10 +76,13 @@ package ocram is
       q    : out std_logic_vector(D_BITS-1 downto 0));
   end component;
 
+	-- Enhanced-Simple-Dual-Port
   component ocram_esdp
     generic (
-      A_BITS : positive;
-      D_BITS : positive);
+      A_BITS		: positive;
+      D_BITS		: positive;
+			FILENAME	: STRING		:= ""
+		);
     port (
       clk1 : in  std_logic;
       clk2 : in  std_logic;
@@ -85,10 +96,13 @@ package ocram is
       q2   : out std_logic_vector(D_BITS-1 downto 0));
   end component;
 
+	-- True-Dual-Port
   component ocram_tdp
     generic (
-      A_BITS : positive;
-      D_BITS : positive);
+      A_BITS		: positive;
+      D_BITS		: positive;
+			FILENAME	: STRING		:= ""
+		);
     port (
       clk1 : in  std_logic;
       clk2 : in  std_logic;
@@ -104,6 +118,44 @@ package ocram is
       q2   : out std_logic_vector(D_BITS-1 downto 0));
   end component;
 
+	-- ROMs
+	-- ===========================================================================
+	-- Single-Port
+	component ocrom_sp is
+		generic (
+			A_BITS		: positive;
+			D_BITS		: positive;
+			FILENAME	: STRING		:= ""
+		);
+		port (
+			clk	: in	std_logic;
+			ce	: in	std_logic;
+			a		: in	unsigned(A_BITS-1 downto 0);
+			q		: out	std_logic_vector(D_BITS-1 downto 0)
+		);
+	end component;
+	
+	-- Dual-Port
+	component ocrom_dp is
+		generic (
+			A_BITS		: positive;
+			D_BITS		: positive;
+			FILENAME	: STRING		:= ""
+		);
+		port (
+			clk1 : in	std_logic;
+			clk2 : in	std_logic;
+			ce1	: in	std_logic;
+			ce2	: in	std_logic;
+			a1	 : in	unsigned(A_BITS-1 downto 0);
+			a2	 : in	unsigned(A_BITS-1 downto 0);
+			q1	 : out std_logic_vector(D_BITS-1 downto 0);
+			q2	 : out std_logic_vector(D_BITS-1 downto 0)
+		);
+	end component;
+	
+	-- Wishbone Adapter
+	-- ===========================================================================
   component ocram_wb
     generic (
       A_BITS      : positive;
@@ -127,9 +179,9 @@ package ocram is
       ram_d    : out std_logic_vector(D_BITS-1 downto 0);
       ram_q    : in  std_logic_vector(D_BITS-1 downto 0));
   end component;
-end ocram;
+end package;
 
 
 package body ocram is
 
-end ocram;
+end package body;
