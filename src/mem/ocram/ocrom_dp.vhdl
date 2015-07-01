@@ -136,7 +136,7 @@ begin
 			q2 <= rom(to_integer(a2_reg));		-- returns new data
 		end generate;
 		genNoLoadFile : if (str_length(FileName) = 0) generate
-			assert FALSE "Do you really want to generate a block of zeros?" severity FAILURE;
+			assert FALSE report "Do you really want to generate a block of zeros?" severity FAILURE;
 		end generate;
 	end generate gXilinx;
 	

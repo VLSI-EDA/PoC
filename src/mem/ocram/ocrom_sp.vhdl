@@ -116,7 +116,7 @@ begin
 			q <= rom(to_integer(a_reg));					-- gets new data
 		end generate;
 		genNoLoadFile : if (str_length(FileName) = 0) generate
-			assert FALSE "Do you really want to generate a block of zeros?" severity FAILURE;
+			assert FALSE report "Do you really want to generate a block of zeros?" severity FAILURE;
 		end generate;
 	end generate gInfer;
 
