@@ -112,7 +112,7 @@ begin
 				return Result;
 			end function;
 
-			signal rom			: rom_t			:= ocrom_ReadMemFile(FILENAME);
+			constant rom		: rom_t			:= ocrom_ReadMemFile(FILENAME);
 			signal a1_reg		: unsigned(A_BITS-1 downto 0);
 			signal a2_reg		: unsigned(A_BITS-1 downto 0);
 			

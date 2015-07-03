@@ -101,7 +101,7 @@ begin
 				return Result;
 			end function;
 
-			signal rom		: rom_t		:= ocram_ReadMemFile(FILENAME);
+			constant rom	: rom_t		:= ocram_ReadMemFile(FILENAME);
 			signal a_reg	: unsigned(A_BITS-1 downto 0);
 		begin
 			process (clk)
