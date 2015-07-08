@@ -8,4 +8,4 @@
 ##		VCCO:					3.3V (VCC3V3)
 ##	Location:				BTN1
 ## -----------------------------------------------------------------------------
-NET "Atlys_GPIO_Button_Reset"						LOC =  ""	| IOSTANDARD = LVCMOS33;			## {IN}		BTN1; high-active; external 10k pullup resistor
+NET "Atlys_GPIO_Button_Reset_n"					LOC =  "T15"	| IOSTANDARD = LVCMOS33;			## {IN}		BTN1; high-active; external 10k pullup resistor
