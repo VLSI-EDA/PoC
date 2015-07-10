@@ -59,9 +59,9 @@ PACKAGE components IS
 	function neg(value : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;		-- calculate 2's complement
 	
 	-- counter
-	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC; init : NATURAL := 0) return UNSIGNED;
+	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : NATURAL := 0) return UNSIGNED;
 	function upcounter_equal(cnt : UNSIGNED; value : NATURAL) return STD_LOGIC;
-	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC; en : STD_LOGIC; init : INTEGER := 0) return SIGNED;
+	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : INTEGER := 0) return SIGNED;
 	function downcounter_equal(cnt : SIGNED; value : INTEGER) return STD_LOGIC;
 	function downcounter_neg(cnt : SIGNED) return STD_LOGIC;
 
@@ -75,6 +75,12 @@ PACKAGE components IS
 	function comp(value1 : STD_LOGIC_VECTOR; value2 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;
 	function comp(value1 : UNSIGNED; value2 : UNSIGNED) return UNSIGNED;
 	function comp(value1 : SIGNED; value2 : SIGNED) return SIGNED;
+	function comp_allzero(value	: STD_LOGIC_VECTOR)	return STD_LOGIC;
+	function comp_allzero(value	: UNSIGNED)					return STD_LOGIC;
+	function comp_allzero(value	: SIGNED)						return STD_LOGIC;
+	function comp_allone(value	: STD_LOGIC_VECTOR)	return STD_LOGIC;
+	function comp_allone(value	: UNSIGNED)					return STD_LOGIC;
+	function comp_allone(value	: SIGNED)						return STD_LOGIC;
 	
 	-- multiplexing
 	function mux(sel : STD_LOGIC; sl0		: STD_LOGIC;				sl1		: STD_LOGIC)				return STD_LOGIC;
@@ -157,7 +163,7 @@ package body components is
 	end function;
 	
 	-- counter
-	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC; init : NATURAL := 0) return UNSIGNED is
+	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : NATURAL := 0) return UNSIGNED is
 	begin
 		if (rst = '1') then
 			return to_unsigned(init, cnt'length);
@@ -170,11 +176,11 @@ package body components is
 	
 	function upcounter_equal(cnt : UNSIGNED; value : NATURAL) return STD_LOGIC is
 	begin
-		-- optimized comparision for only up counting values
+		-- optimized comparison for only up counting values
 		return to_sl((cnt and to_unsigned(value, cnt'length)) = value);
 	end function;
 	
-	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC; en : STD_LOGIC; init : INTEGER := 0) return SIGNED is
+	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : INTEGER := 0) return SIGNED is
 	begin
 		if (rst = '1') then
 			return to_signed(init, cnt'length);
@@ -187,7 +193,7 @@ package body components is
 	
 	function downcounter_equal(cnt : SIGNED; value : INTEGER) return STD_LOGIC is
 	begin
-		-- optimized comparision for only down counting values
+		-- optimized comparison for only down counting values
 		return to_sl((cnt nor to_signed(value, cnt'length)) /= value);
 	end function;
 
@@ -221,6 +227,12 @@ package body components is
 	-- return value 1- => value1 < value2 (difference is negative)
 	-- return value 00 => value1 = value2 (difference is zero)
 	-- return value -1 => value1 > value2 (difference is positive)
+	function comp(value1 : STD_LOGIC_VECTOR; value2 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
+	begin
+		report "Comparing two STD_LOGIC_VECTORs - implicit conversion to UNSIGNED" severity WARNING;
+		return std_logic_vector(comp(unsigned(value1), unsigned(value2)));
+	end function;
+
 	function comp(value1 : UNSIGNED; value2 : UNSIGNED) return UNSIGNED is
 	begin
 		if (value1 < value2) then
@@ -230,12 +242,6 @@ package body components is
 		else
 			return "01";
 		end if;
-	end function;
-
-	function comp(value1 : STD_LOGIC_VECTOR; value2 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
-	begin
-		report "Comparing two STD_LOGIC_VECTORs - implicit conversion to UNSIGNED" severity WARNING;
-		return std_logic_vector(comp(unsigned(value1), unsigned(value2)));
 	end function;
 
 	function comp(value1 : SIGNED; value2 : SIGNED) return SIGNED is
@@ -248,6 +254,37 @@ package body components is
 			return "01";
 		end if;
 	end function;
+	
+	function comp_allzero(value	: STD_LOGIC_VECTOR) return STD_LOGIC is
+	begin
+		return comp_allzero(unsigned(value));
+	end function;
+	
+	function comp_allzero(value	: UNSIGNED) return STD_LOGIC is
+	begin
+		return to_sl(value = (value'range => '0'));
+	end function;
+	
+	function comp_allzero(value	: SIGNED) return STD_LOGIC is
+	begin
+		return to_sl(value = (value'range => '0'));
+	end function;
+	
+	function comp_allone(value	: STD_LOGIC_VECTOR) return STD_LOGIC is
+	begin
+		return comp_allone(unsigned(value));
+	end function;
+	
+	function comp_allone(value	: UNSIGNED) return STD_LOGIC is
+	begin
+		return to_sl(value = (value'range => '1'));
+	end function;
+	
+	function comp_allone(value	: SIGNED) return STD_LOGIC is
+	begin
+		return to_sl(value = (value'range => '1'));
+	end function;
+	
 	
 	-- multiplexing
 	function mux(sel : STD_LOGIC; sl0 : STD_LOGIC; sl1 : STD_LOGIC) return STD_LOGIC is
