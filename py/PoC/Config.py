@@ -85,24 +85,25 @@ class Families(Enum):
 	
 @unique
 class SubTypes(Enum):
-	Unknown = 0
+	Unknown =		0
+	NoSubType = 1
 	# Xilinx device subtypes
-	X =			1
-	T =			2
-	XT =		3
-	HT =		4
-	LX =		5
-	SXT =		6
-	LXT =		7
-	TXT =		8
-	FXT =		9
-	CXT =	 10
-	HXT =	 11
+	X =		101
+	T =		102
+	XT =	103
+	HT =	104
+	LX =	105
+	SXT =	106
+	LXT =	107
+	TXT =	108
+	FXT =	109
+	CXT =	110
+	HXT =	111
 	# Altera device subtypes
-	E =		101
-	GS =	102
-	GX =	103
-	GT =	104
+	E =		201
+	GS =	202
+	GX =	203
+	GT =	204
 
 	def __str__(self):
 		if (self == SubTypes.Unknown):
@@ -111,18 +112,19 @@ class SubTypes(Enum):
 			return self.name.lower()
 
 	def groups(self):
-		if	 (self == SubTypes.X):		return ("x",	"")
-		elif (self == SubTypes.T):		return ("",		"t")
-		elif (self == SubTypes.XT):		return ("x",	"t")
-		elif (self == SubTypes.HT):		return ("h",	"t")
-		elif (self == SubTypes.LX):		return ("lx",	"")
-		elif (self == SubTypes.SXT):	return ("sx",	"t")
-		elif (self == SubTypes.LXT):	return ("lx",	"t")
-		elif (self == SubTypes.TXT):	return ("tx",	"t")
-		elif (self == SubTypes.FXT):	return ("fx",	"t")
-		elif (self == SubTypes.CXT):	return ("cx",	"t")
-		elif (self == SubTypes.HXT):	return ("hx",	"t")
-		else:													return ("??", "?")
+		if	 (self == SubTypes.NoSubType):	return ("",	"")
+		elif (self == SubTypes.X):					return ("x",	"")
+		elif (self == SubTypes.T):					return ("",		"t")
+		elif (self == SubTypes.XT):					return ("x",	"t")
+		elif (self == SubTypes.HT):					return ("h",	"t")
+		elif (self == SubTypes.LX):					return ("lx",	"")
+		elif (self == SubTypes.SXT):				return ("sx",	"t")
+		elif (self == SubTypes.LXT):				return ("lx",	"t")
+		elif (self == SubTypes.TXT):				return ("tx",	"t")
+		elif (self == SubTypes.FXT):				return ("fx",	"t")
+		elif (self == SubTypes.CXT):				return ("cx",	"t")
+		elif (self == SubTypes.HXT):				return ("hx",	"t")
+		else:																return ("??", "?")
 	
 @unique
 class Packages(Enum):
@@ -138,6 +140,7 @@ class Packages(Enum):
 	FTG =	22
 	FGG =	23
 	FLG =	24
+	FT =	25
 
 	RB =	30
 	RBG =	31
@@ -177,12 +180,12 @@ class Device:
 			elif (temp == repr(Families.Zynq)):			self.family = Families.Zynq
 			else: raise Exception("Unknown device family.")
 
-			deviceRegExpStr =  r"(?P<st1>[a-z]{0,2})"			# device subtype - part 1
-			deviceRegExpStr += r"(?P<no>\d{1,4})"							# device number
-			deviceRegExpStr += r"(?P<st2>[t]{0,1})"						# device subtype - part 2
-			deviceRegExpStr += r"(?P<sg>[-1-5]{2})"						# speed grade
+			deviceRegExpStr =  r"(?P<st1>[a-z]{0,2})"				# device subtype - part 1
+			deviceRegExpStr += r"(?P<no>\d{1,4})"						# device number
+			deviceRegExpStr += r"(?P<st2>[t]{0,1})"					# device subtype - part 2
+			deviceRegExpStr += r"(?P<sg>[-1-5]{2})"					# speed grade
 			deviceRegExpStr += r"(?P<pack>[a-z]{1,3})"			# package
-			deviceRegExpStr += r"(?P<pins>\d{1,4})"						# pin count
+			deviceRegExpStr += r"(?P<pins>\d{1,4})"					# pin count
 			
 			deviceRegExp = re.compile(deviceRegExpStr)
 			deviceRegExpMatch = deviceRegExp.match(deviceString[4:].lower())
@@ -191,11 +194,20 @@ class Device:
 				subtype = deviceRegExpMatch.group('st1') + deviceRegExpMatch.group('st2')
 				package = deviceRegExpMatch.group('pack')
 				
-				self.subtype =		SubTypes[subtype.upper()]
+				print("SubType: %s" % subtype)
+				
+				if (subtype != ""):
+					self.subtype =	SubTypes[subtype.upper()]
+				else:
+					self.subtype =	SubTypes.NoSubType
+				
 				self.number =			int(deviceRegExpMatch.group('no'))
 				self.speedGrade =	int(deviceRegExpMatch.group('sg'))
 				self.package =		Packages[package.upper()]
 				self.pinCount =		int(deviceRegExpMatch.group('pins'))
+			else:
+				print("Error:")
+				print(deviceRegExpMatch)
 		
 			print(str(self))
 		
@@ -256,6 +268,12 @@ class Device:
 		if (self.generation == 7):
 			if self.family in [Families.Artix, Families.Kintex, Families.Virtex, Families.Zynq]:
 				return "Series-7"
+		else:
+			print("here")
+			return "%s-%i" % (
+				str(self.family),
+				self.generation
+			)
 	
 	def __str__(self):
 		return self.fullName()
