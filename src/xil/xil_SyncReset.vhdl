@@ -88,7 +88,7 @@ architecture rtl of xil_SyncReset is
 begin
 	Reset_async		<= Input;
 
-	FF1_METASTABILITY_FFS : FDP
+	FF2_METASTABILITY_FFS : FDP
 		generic map (
 			INIT		=> '1'
 		)
@@ -99,7 +99,7 @@ begin
 			Q				=> Reset_meta
 	);
 
-	FF2_METASTABILITY_FFS : FDP
+	FF3_METASTABILITY_FFS : FDP
 		generic map (
 			INIT		=> '1'
 		)

@@ -16,11 +16,15 @@
 ##		VCCO:					1,8V (VCC1V8_FPGA)
 ##	Location:				SW2
 ## -----------------------------------------------------------------------------
-NET "ML605_GPIO_Switches<0>"				LOC = "AV30"	| IOSTANDARD = LVCMOS18;			## SW2.1; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Switches<1>"				LOC = "AY33"	| IOSTANDARD = LVCMOS18;			## SW2.2; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Switches<2>"				LOC = "BA31"	| IOSTANDARD = LVCMOS18;			## SW2.3; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Switches<3>"				LOC = "BA32"	| IOSTANDARD = LVCMOS18;			## SW2.4; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Switches<4>"				LOC = "AW30"	| IOSTANDARD = LVCMOS18;			## SW2.5; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Switches<5>"				LOC = "AY30"	| IOSTANDARD = LVCMOS18;			## SW2.6; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Switches<6>"				LOC = "BA30"	| IOSTANDARD = LVCMOS18;			## SW2.7; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Switches<7>"				LOC = "BB31"	| IOSTANDARD = LVCMOS18;			## SW2.8; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<0>"				LOC = "AV30";			## SW2.1; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<1>"				LOC = "AY33";			## SW2.2; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<2>"				LOC = "BA31";			## SW2.3; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<3>"				LOC = "BA32";			## SW2.4; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<4>"				LOC = "AW30";			## SW2.5; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<5>"				LOC = "AY30";			## SW2.6; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<6>"				LOC = "BA30";			## SW2.7; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<7>"				LOC = "BB31";			## SW2.8; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Switches<?>"				IOSTANDARD = LVCMOS18;			##
+
+# Ignore timings on async I/O pins
+NET "ML605_GPIO_Switches<?>"				TIG;

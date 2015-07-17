@@ -8,7 +8,11 @@
 ##		Device:				CP2103-GM
 ##		Baud-Rate:		300 Bd - 1 MBd
 ##	Note:						USB-UART is the master, FPGA is the slave => so TX is an input and RX an output
-NET "KC705_USB_UART_TX"						LOC = "M19" | IOSTANDARD = LVCMOS25;		## {IN}			U34.25 {OUT}
-NET "KC705_USB_UART_RX"						LOC = "K24" | IOSTANDARD = LVCMOS25;		## {OUT}		U34.24 {IN}
-NET "KC705_USB_UART_RTS_n"				LOC = "K23" | IOSTANDARD = LVCMOS25;		## {IN}			U34.23 {OUT}	Ready to Transmit (USB-UART has new data)
-NET "KC705_USB_UART_CTS_n"				LOC = "L27" | IOSTANDARD = LVCMOS25;		## {OUT}		U34.22 {IN}		Clear to Send (FPGA is able to receive data)
+NET "KC705_USB_UART_TX"						LOC = "M19";		## {IN}			U34.25 {OUT}
+NET "KC705_USB_UART_RX"						LOC = "K24";		## {OUT}		U34.24 {IN}
+NET "KC705_USB_UART_RTS_n"				LOC = "K23";		## {IN}			U34.23 {OUT}	Ready to Transmit (USB-UART has new data)
+NET "KC705_USB_UART_CTS_n"				LOC = "L27";		## {OUT}		U34.22 {IN}		Clear to Send (FPGA is able to receive data)
+NET "KC705_USB_UART_*"						IOSTANDARD = LVCMOS25;
+
+# Ignore timings on async I/O pins
+NET "KC705_USB_UART_*"						TIG;

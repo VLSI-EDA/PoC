@@ -13,3 +13,6 @@ NET "KC705_GPIO_Switches<1>"						LOC =  "W29";								## {IN}		SW11.3; high-act
 NET "KC705_GPIO_Switches<2>"						LOC = "AA28";								## {IN}		SW11.2; high-active; external 4k7 pulldown resistor
 NET "KC705_GPIO_Switches<3>"						LOC =  "Y28";								## {IN}		SW11.1; high-active; external 4k7 pulldown resistor
 NET "KC705_GPIO_Switches<?>"						IOSTANDARD = LVCMOS25;			##
+
+# Ignore timings on async I/O pins
+NET "KC705_GPIO_Switches<?>"						TIG;

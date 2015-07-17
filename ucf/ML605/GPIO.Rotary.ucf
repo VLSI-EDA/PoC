@@ -16,6 +16,10 @@
 ##		VCCO:					1,8V (VCC1V8_FPGA)
 ##	Location:				SW10
 ## -----------------------------------------------------------------------------
-NET "ML605_GPIO_Rotary_Button"					LOC = "AW31"	| IOSTANDARD = LVCMOS18;			## SW10.5; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Rotary_IncA"						LOC = "AR33"	| IOSTANDARD = LVCMOS18;			## SW10.1; high-active; external 4k7 pulldown resistor
-NET "ML605_GPIO_Rotary_IncB"						LOC = "AT31"	| IOSTANDARD = LVCMOS18;			## SW10.6; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Rotary_Button"					LOC = "AW31";			## SW10.5; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Rotary_IncA"						LOC = "AR33";			## SW10.1; high-active; external 4k7 pulldown resistor
+NET "ML605_GPIO_Rotary_IncB"						LOC = "AT31";			## SW10.6; high-active; external 4k7 pulldown resistor
+NET "Ml605_GPIO_Rotary_*"								IOSTANDARD = LVCMOS18;
+
+# Ignore timings on async I/O pins
+NET "ML605_GPIO_Rotary_*"								TIG;

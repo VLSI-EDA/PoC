@@ -13,3 +13,6 @@ NET "KC705_GPIO_Button_West"						LOC =  "AC6"	| IOSTANDARD = LVCMOS15;			## {IN
 NET "KC705_GPIO_Button_Center"					LOC =  "G12"	| IOSTANDARD = LVCMOS25;			## {IN}		SW5; high-active; external 4k7 pulldown resistor; Bank 18; VCCO=VADJ_FPGA
 NET "KC705_GPIO_Button_East"						LOC =  "AG5"	| IOSTANDARD = LVCMOS15;			## {IN}		SW3; high-active; external 4k7 pulldown resistor; Bank 34; VCCO=VCC1V5_FPGA
 NET "KC705_GPIO_Button_South"						LOC = "AB12"	| IOSTANDARD = LVCMOS15;			## {IN}		SW4; high-active; external 4k7 pulldown resistor; Bank 33; VCCO=VCC1V5_FPGA
+
+# Ignore timings on async I/O pins
+NET "KC705_GPIO_Button_*"								TIG;

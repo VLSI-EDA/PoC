@@ -26,3 +26,5 @@ NET "KC705_SystemClock_200MHz_n"				LOC = "AD11";						## {IN}		U6.5
 NET "KC705_SystemClock_200MHz_p"				LOC = "AD12";						## {IN}		U6.4
 NET "KC705_SystemClock_200MHz_?"				IOSTANDARD = LVDS;
 NET "KC705_SystemClock_200MHz_p"				TNM_NET = "NET_SystemClock_200MHz";
+
+TIMESPEC "TS_SystemClock"	= PERIOD "NET_SystemClock_200MHz"		200 MHz	HIGH 50 %;

@@ -8,8 +8,12 @@
 ##		VCCO:					1,8V (VCC1V8_FPGA)
 ##	Location:				SW3, SW4, SW5, SW6, SW7
 ## -----------------------------------------------------------------------------
-NET "VC707_GPIO_Button_North"						LOC = "AR40"	| IOSTANDARD = LVCMOS18;			## SW 3; high-active; external 4k7 pulldown resistor
-NET "VC707_GPIO_Button_West"						LOC = "AW40"	| IOSTANDARD = LVCMOS18;			## SW 7; high-active; external 4k7 pulldown resistor
-NET "VC707_GPIO_Button_Center"					LOC = "AV39"	| IOSTANDARD = LVCMOS18;			## SW 6; high-active; external 4k7 pulldown resistor
-NET "VC707_GPIO_Button_East"						LOC = "AU38"	| IOSTANDARD = LVCMOS18;			## SW 4; high-active; external 4k7 pulldown resistor
-NET "VC707_GPIO_Button_South"						LOC = "AP40"	| IOSTANDARD = LVCMOS18;			## SW 5; high-active; external 4k7 pulldown resistor
+NET "VC707_GPIO_Button_North"						LOC = "AR40";			## SW 3; high-active; external 4k7 pulldown resistor
+NET "VC707_GPIO_Button_West"						LOC = "AW40";			## SW 7; high-active; external 4k7 pulldown resistor
+NET "VC707_GPIO_Button_Center"					LOC = "AV39";			## SW 6; high-active; external 4k7 pulldown resistor
+NET "VC707_GPIO_Button_East"						LOC = "AU38";			## SW 4; high-active; external 4k7 pulldown resistor
+NET "VC707_GPIO_Button_South"						LOC = "AP40";			## SW 5; high-active; external 4k7 pulldown resistor
+NET "VC707_GPIO_Button_*"								IOSTANDARD = LVCMOS18;
+
+# Ignore timings on async I/O pins
+NET "VC707_GPIO_Button_*"								TIG;

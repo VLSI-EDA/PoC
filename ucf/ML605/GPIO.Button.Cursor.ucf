@@ -22,3 +22,6 @@ NET "ML605_GPIO_Button_Center"					LOC = "G26";							## SW 9; high-active; exte
 NET "ML605_GPIO_Button_East"						LOC = "G17";							## SW 7; high-active; external 4k7 pulldown resistor
 NET "ML605_GPIO_Button_South"						LOC = "A18";							## SW 6; high-active; external 4k7 pulldown resistor
 NET "ML605_GPIO_Button_*"								IOSTANDARD = LVCMOS18;		## 
+
+# Ignore timings on async I/O pins
+NET "ML605_GPIO_Button_*"								TIG;

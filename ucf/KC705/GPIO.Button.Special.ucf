@@ -9,3 +9,6 @@
 ##	Location:				SW7
 ## -----------------------------------------------------------------------------
 NET "KC705_GPIO_Button_CPU_Reset"				LOC =  "AB7"	| IOSTANDARD = LVCMOS15;			## {IN}		SW7; high-active; external 4k7 pulldown resistor
+
+# Ignore timings on async I/O pins
+NET "KC705_GPIO_Button_CPU_Reset"				TIG;

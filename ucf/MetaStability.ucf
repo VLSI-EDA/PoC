@@ -2,5 +2,5 @@
 ## MetaStability timing settings
 ## =============================================================================
 NET "*_async"		TIG;
-
+INST "*_meta*"	TNM = "METASTABILITY_FFS";
 TIMESPEC "TS_MetaStability" = FROM FFS TO "METASTABILITY_FFS" TIG;
