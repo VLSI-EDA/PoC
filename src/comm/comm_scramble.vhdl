@@ -1,34 +1,39 @@
---
--- Copyright (c) 2011
--- Technische Universitaet Dresden, Dresden, Germany
--- Faculty of Computer Science
--- Institute for Computer Engineering
--- Chair for VLSI-Design, Diagnostics and Architecture
+-- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
+-- vim: tabstop=2:shiftwidth=2:noexpandtab
+-- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
--- For internal educational use only.
--- The distribution of source code or generated files
--- is prohibited.
+-- =============================================================================
+-- Authors:					Thomas B. Preusser
 --
-
---
--- Entity: scramble
--- Author(s): Thomas B. Preusser <thomas.preusser@tu-dresden.de>
+-- Module:					Computes XOR masks for stream scrambling from an LFSR generator.
 -- 
--- Computes XOR masks for stream scrambling from an LFSR generator.
--- May be used for SATA scrambling with the polynomial 0x1A011.
+-- Description:
+-- ------------------------------------
+--		The LFSR computation is unrolled to generate an arbitrary number of mask
+--		bits in parallel. The mask are output in little endian. The generated bit
+--		sequence is independent from the chosen output width.
 --
--- The LFSR computation is unrolled to generate an arbitrary number
--- of mask bits in parallel. The mask are output in little endian.
--- The generated bit sequence is independent from the chosen output
--- width.
---
---
--- Revision:    $Revision: 1.1 $
--- Last change: $Date: 2011-02-24 09:04:46 $
---
+-- License:
+-- =============================================================================
+-- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+--										 Chair for VLSI-Design, Diagnostics and Architecture
+-- 
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+-- 
+--		http://www.apache.org/licenses/LICENSE-2.0
+-- 
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+-- =============================================================================
 
-library IEEE;
-use IEEE.std_logic_1164.all;
+library	IEEE;
+use			IEEE.std_logic_1164.all;
+
 
 entity comm_scramble is
   generic (
@@ -45,6 +50,7 @@ entity comm_scramble is
     mask : out std_logic_vector(BITS-1 downto 0)
   );
 end comm_scramble;
+
 
 architecture rtl of comm_scramble is
 

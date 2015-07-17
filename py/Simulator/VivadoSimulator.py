@@ -135,7 +135,7 @@ class Simulator(PoCSimulator):
 						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
 							vhdlFilePath = self.host.directories["PoCRoot"] / filesLineRegExpMatch.group('VHDLFile')
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
-						vhdlFilePath = self.host.directories["VivadoInstallation"] / "Vivado/vhdl/src" / filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["VivadoInstallation"] / "data/vhdl/src" / filesLineRegExpMatch.group('VHDLFile')
 					vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
 					xSimProjectFileContent += "vhdl %s \"%s\"\n" % (vhdlLibraryName, str(vhdlFilePath))
 					
