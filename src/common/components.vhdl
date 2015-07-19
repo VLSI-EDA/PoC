@@ -9,7 +9,7 @@
 --
 -- Description:
 -- ------------------------------------
---		This packages describes common primtives like flip flops and multiplexers
+--		This packages describes common primitives like flip flops and multiplexers
 --		as a function to use them as one-liners.
 --
 -- License:
@@ -86,6 +86,7 @@ PACKAGE components IS
 	function mux(sel : STD_LOGIC; sl0		: STD_LOGIC;				sl1		: STD_LOGIC)				return STD_LOGIC;
 	function mux(sel : STD_LOGIC; slv0	: STD_LOGIC_VECTOR;	slv1	: STD_LOGIC_VECTOR)	return STD_LOGIC_VECTOR;
 	function mux(sel : STD_LOGIC; us0		: UNSIGNED;					us1		: UNSIGNED)					return UNSIGNED;
+	function mux(sel : STD_LOGIC; s0		: SIGNED;						s1		: SIGNED)						return SIGNED;
 end;
 
 
@@ -294,11 +295,16 @@ package body components is
 	
 	function mux(sel : STD_LOGIC; slv0 : STD_LOGIC_VECTOR; slv1 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
 	begin
-		return (slv0 and not (slv0'range => sel)) or (slv1 and (slv0'range => sel));
+		return (slv0 and not (slv0'range => sel)) or (slv1 and (slv1'range => sel));
 	end function;
 
 	function mux(sel : STD_LOGIC; us0 : UNSIGNED; us1 : UNSIGNED) return UNSIGNED is
 	begin
-		return (us0 and not (us0'range => sel)) or (us1 and (us0'range => sel));
+		return (us0 and not (us0'range => sel)) or (us1 and (us1'range => sel));
+	end function;
+	
+	function mux(sel : STD_LOGIC; s0 : SIGNED; s1 : SIGNED) return SIGNED is
+	begin
+		return (s0 and not (s0'range => sel)) or (s1 and (s1'range => sel));
 	end function;
 END PACKAGE BODY;

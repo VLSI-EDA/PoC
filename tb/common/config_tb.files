@@ -19,10 +19,5 @@ vhdl		poc		"src/common/components.vhdl"						# PoC components
 vhdl-93	poc		"tb/common/simulation.v93.vhdl"					# PoC simulation helper
 vhdl-08	poc		"tb/common/simulation.v08.vhdl"					# PoC simulation helper
 
-# PoC.arith
-vhdl		poc		"src/arith/arith.pkg.vhdl"									# Package
-vhdl		poc		"src/arith/arith_convert_bin2bcd.vhdl"			# Unit Under Test
-
 # Testbench file(s)
-vhdl		test	"tb/arith/arith_convert_bin2bcd_tb.vhdl"		# Testbench
-
+vhdl		test	"tb/common/config_tb.vhdl"							# Testbench

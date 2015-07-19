@@ -15,7 +15,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -140,19 +140,23 @@ package utils is
 
 	--+ Conversions ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  -- To std_logic: to_sl
-	FUNCTION to_sl(Value : BOOLEAN)		RETURN STD_LOGIC;
-	FUNCTION to_sl(Value : CHARACTER) RETURN STD_LOGIC;
+	-- to integer: to_int
+	function to_int(bool : BOOLEAN; zero : INTEGER := 0; one : INTEGER := 1)		return INTEGER;
+	function to_int(sl : STD_LOGIC; zero : INTEGER := 0; one : INTEGER := 1)		return INTEGER;
+	
+	-- to std_logic: to_sl
+	function to_sl(Value : BOOLEAN)		return STD_LOGIC;
+	function to_sl(Value : CHARACTER) return STD_LOGIC;
 
-	-- To std_logic_vector: to_slv
-	FUNCTION to_slv(Value : NATURAL; Size : POSITIVE)		RETURN STD_LOGIC_VECTOR;					-- short for std_logic_vector(to_unsigned(Value, Size))
+	-- to std_logic_vector: to_slv
+	function to_slv(Value : NATURAL; Size : POSITIVE)		return STD_LOGIC_VECTOR;					-- short for std_logic_vector(to_unsigned(Value, Size))
 	
 	-- TODO: comment
-	FUNCTION to_index(slv : UNSIGNED; max : NATURAL := 0) RETURN INTEGER;
-	FUNCTION to_index(slv : STD_LOGIC_VECTOR; max : NATURAL := 0) RETURN INTEGER;
+	function to_index(slv : UNSIGNED; max : NATURAL := 0) return INTEGER;
+	function to_index(slv : STD_LOGIC_VECTOR; max : NATURAL := 0) return INTEGER;
 	
 	-- is_*
-	FUNCTION is_sl(c : CHARACTER) RETURN BOOLEAN;
+	function is_sl(c : CHARACTER) return BOOLEAN;
 
 	--+ Basic Vector Utilities +++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -264,36 +268,36 @@ package body utils is
 	constant SIMULATION	: BOOLEAN		:= is_simulation;
 
 	-- Divisions: div_*
-	FUNCTION div_ceil(a : NATURAL; b : POSITIVE) RETURN NATURAL IS	-- calculates: ceil(a / b)
-	BEGIN
-		RETURN (a + (b - 1)) / b;
-	END FUNCTION;
+	function div_ceil(a : NATURAL; b : POSITIVE) return NATURAL is	-- calculates: ceil(a / b)
+	begin
+		return (a + (b - 1)) / b;
+	end function;
 
 	-- Power functions: *_pow2
 	-- ==========================================================================
 	-- is input a power of 2?
-	FUNCTION is_pow2(int : NATURAL) RETURN BOOLEAN IS
-	BEGIN
-		RETURN ceil_pow2(int) = int;
-	END FUNCTION;
+	function is_pow2(int : NATURAL) return BOOLEAN is
+	begin
+		return ceil_pow2(int) = int;
+	end function;
 	
 	-- round to next power of 2
-	FUNCTION ceil_pow2(int : NATURAL) RETURN POSITIVE IS
-	BEGIN
-		RETURN 2 ** log2ceil(int);
-	END FUNCTION;
+	function ceil_pow2(int : NATURAL) return POSITIVE is
+	begin
+		return 2 ** log2ceil(int);
+	end function;
 	
 	-- round to previous power of 2
-	FUNCTION floor_pow2(int : NATURAL) RETURN NATURAL IS
-		VARIABLE temp : UNSIGNED(30 DOWNTO 0)	:= to_unsigned(int, 31);
-	BEGIN
-		FOR I IN temp'range LOOP
-			IF (temp(I) = '1') THEN
-				RETURN 2 ** I;
-			END IF;
-		END LOOP;
-		RETURN 0;
-	END FUNCTION;
+	function floor_pow2(int : NATURAL) return NATURAL is
+		variable temp : UNSIGNED(30 downto 0)	:= to_unsigned(int, 31);
+	begin
+		for i in temp'range loop
+			if (temp(i) = '1') then
+				return 2 ** i;
+			end if;
+		end loop;
+		return 0;
+	end function;
 
 	-- Logarithms: log*ceil*
 	-- ==========================================================================
@@ -594,6 +598,25 @@ package body utils is
 		end loop;
 		return  res;
 	end slv_xor;
+
+	-- Convert to integer: to_int
+	function to_int(bool : BOOLEAN; zero : INTEGER := 0; one : INTEGER := 1) return INTEGER is
+	begin
+		if (bool = FALSE) then
+			return zero;
+		else
+			return one;
+		end if;
+	end function;
+	
+	function to_int(sl : STD_LOGIC; zero : INTEGER := 0; one : INTEGER := 1) return INTEGER is
+	begin
+		if (sl = '0') then
+			return zero;
+		else
+			return one;
+		end if;
+	end function;
 	
 	-- Convert to bit: to_sl
 	-- ==========================================================================

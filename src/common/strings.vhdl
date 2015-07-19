@@ -38,6 +38,7 @@ use			IEEE.math_real.all;
 
 library	PoC;
 use			PoC.utils.all;
+--use			PoC.FileIO.all;
 
 
 package strings is
@@ -70,6 +71,7 @@ package strings is
 	function raw_format_bool_str(value : BOOLEAN)				return STRING;
 	function raw_format_slv_bin(slv : STD_LOGIC_VECTOR)	return STRING;
 	function raw_format_slv_oct(slv : STD_LOGIC_VECTOR)	return STRING;
+	function raw_format_slv_dec(slv : STD_LOGIC_VECTOR) return STRING;
 	function raw_format_slv_hex(slv : STD_LOGIC_VECTOR)	return STRING;
 	function raw_format_nat_bin(value : NATURAL)				return STRING;
 	function raw_format_nat_oct(value : NATURAL)				return STRING;
@@ -268,6 +270,42 @@ package body strings is
 		return Result;
 	end function;
 	
+	function raw_format_slv_dec(slv : STD_LOGIC_VECTOR) return STRING is
+		variable Value				: STD_LOGIC_VECTOR(slv'length - 1 downto 0);
+		variable Result				: STRING(1 to div_ceil(slv'length, 3));
+		
+		subtype TT_BCD			is INTEGER range 0 to 31;
+		type TT_BCD_VECTOR	is array(natural range <>) of TT_BCD;
+		
+		variable Temp		: TT_BCD_VECTOR(div_ceil(slv'length, 3) - 1 downto 0)		:= (others => 0);
+		variable Carry	: T_UINT_8;
+		
+		variable Pos		: NATURAL	:= 0;
+
+	begin
+		-- convert input slv to a downto ranged vector
+		Value := ite(slv'ascending, descend(slv), slv);
+	
+		for i in Value'range loop
+			Carry		:= to_int(Value(i));
+			for j in Temp'reverse_range loop
+				Temp(j)	:= Temp(j) * 2 + Carry;
+				Carry		:=						to_int(Temp(j) > 9);
+				Temp(j)	:= Temp(j) - to_int((Temp(j) > 9), 0, 10);
+			end loop;
+		end loop;
+	
+		for i in Result'range loop
+			Result(i)		:= to_char(Temp(Temp'high - i + 1));
+			if ((Result(i) /= '0') and (Pos = 0)) then
+				Pos	:= i;
+			end if;
+		end loop;
+	
+		-- trim leading zeros, except the last
+		return Result(imin(Pos, Result'high) to Result'high);
+	end function;
+	
 	function raw_format_slv_hex(slv : STD_LOGIC_VECTOR) return STRING is
 		variable Value				: STD_LOGIC_VECTOR(4*div_ceil(slv'length, 4) - 1 downto 0);
 		variable Digit				: STD_LOGIC_VECTOR(3 downto 0);
@@ -374,6 +412,11 @@ package body strings is
 				j						:= j + 1;
 			end loop;
 		elsif (format = 'd') then
+--			if (slv'length < 32) then
+--				return INTEGER'image(int);
+--			else
+--				return raw_format_slv_dec(slv);
+--			end if;
 			Result(Result'length - str'length + 1 to Result'high)	:= str;
 		elsif (format = 'h') then
 			for i in Result'reverse_range loop
