@@ -19,7 +19,7 @@
 --		USAGE:
 --			1) Copy this file into your project's source directory and rename it to
 --				 "my_config.vhdl".
---			2) Add file to library "poc" in your synthesis tool.
+--			2) Add file to library "PoC" in your synthesis tool.
 --			3) Change setup appropriately.
 --
 -- License:
@@ -44,15 +44,15 @@ library PoC;
 
 
 package my_config is
-  -- Change these lines to setup configuration.
-  constant MY_BOARD		: string	:= "CHANGE THIS"; -- e.g. ML505, KC705
-  constant MY_DEVICE	: string	:= "CHANGE THIS"; -- e.g. XC5VLX50T, EP2SGX90
+	-- Change these lines to setup configuration.
+	constant MY_BOARD		: string	:= "CHANGE THIS"; -- e.g. Custom, ML505, KC705, Atlys
+	constant MY_DEVICE	: string	:= "CHANGE THIS"; -- e.g. None, XC5VLX50T-1FF1136, EP2SGX90FF1508C3
 	
-	-- 
-  constant MY_VERBOSE	: boolean	:= false;					-- activate detailed report statements in functions and procedures
-end;
+	-- For internal use only
+	constant MY_VERBOSE	: boolean	:= FALSE;					-- activate detailed report statements in functions and procedures
+end package;
 
 
 package body my_config is
 
-end;
+end package body;
