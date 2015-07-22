@@ -602,20 +602,15 @@ package body utils is
 	-- Convert to integer: to_int
 	function to_int(bool : BOOLEAN; zero : INTEGER := 0; one : INTEGER := 1) return INTEGER is
 	begin
-		if (bool = FALSE) then
-			return zero;
-		else
-			return one;
-		end if;
+		return ite(bool, one, zero);
 	end function;
 	
 	function to_int(sl : STD_LOGIC; zero : INTEGER := 0; one : INTEGER := 1) return INTEGER is
 	begin
-		if (sl = '0') then
-			return zero;
-		else
+		if (sl = '1') then
 			return one;
 		end if;
+		return zero;
 	end function;
 	
 	-- Convert to bit: to_sl

@@ -6,127 +6,118 @@ functions such as FIFOs, RAM wrapper, and ALUs. The hardware modules are
 typically provided as VHDL or Verilog source code, so it can be easily re-used
 in a variety of hardware designs.
 
-## Table of Content:
+Table of Content:
+================================================================================
  1. [Overview](#1-overview)
  2. [Download](#2-download)
  3. [Requirements](#3-requirements)
-	- [Common Requirements](#common-requirements)
-	- [Optional Tools](#optional-tools)
- 4. [Configure PoC on a Local System](#4-configure-poc-on-a-local-system)
+ 4. [Configure PoC on a local system](#4-configure-poc-on-a-local-system)
  5. [Integrating PoC into projects](#5-integrating-poc-into-projects)
- 6. [Using PoC-Library](#6-using-poc-library)
- 7. [Updating PoC-Library](#7-updating-picoblaze-library)
+ 6. [Using PoC](#6-using-poc)
+ 7. [Updating PoC](#7-updating-poc)
 
-------
 
-> All Windows command line instructions are intended for **Windows PowerShell**, if not marked otherwise. So executing the following instructions in Windows Command Prompt (`cmd.exe`) won't function or result in errors! PowerShell is shipped with Windows since Vista. See the [requirements](Requirements) wiki page on where to download or update PowerShell.
-
-## 1 Overview
+1 Overview
+================================================================================
 
 
 
+2 Download
+================================================================================
+The PoC Library can be [downloaded][21] as a zip-file (latest 'master' branch) or
+cloned with `git` from GitHub. GitHub offers HTTPS and SSH as transfer protocols.
 
-## 2 Download
-
-The PicoBlaze-Library can be downloaded as a [zip-file][download] or
-cloned with `git clone` from GitHub. For SSH protocol use the URL `ssh://git@github.com:VLSI-EDA/PoC.git` or the command line instruction:
+For SSH protocol use the URL `ssh://git@github.com:VLSI-EDA/PoC.git` or command
+line instruction:
 
     cd <GitRoot>
-    git clone --recursive git@github.com:VLSI-EDA/PoC.git PoC
-    cd PoC
-    git remote rename origin github
+    git clone ssh://git@github.com:VLSI-EDA/PoC.git PoC
 
-**Note:** The option `--recursive` performs a recursive clone operation for all integrated [git submodules][git_submod]. An additional `git submodule init` and `git submodule update` is not needed anymore. 
+For HTTPS protocol use the URL `https://github.com/VLSI-EDA/PoC.git` or command
+line instruction:
 
-The library is meant to be included into another git repository as a git submodule. This can be achieved with the following instructions:
+    cd <GitRoot>
+    git clone https://github.com/VLSI-EDA/PoC.git PoC
 
-    cd <ProjectRoot>
-    mkdir lib -ErrorAction SilentlyContinue; cd lib
-    git submodule add git@github.com:VLSI-EDA/PoC.git PoC
-    cd PoC
-    git remote rename origin github
-    cd ..\..
-    git add .gitmodules lib\PoC
-    git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
+3 Requirements
+================================================================================
+### Common requirements:
 
+ - Python 3.4
+     - [colorama][301]
+ - Synthesis tool chains:
+     - Xilinx ISE 14.7 or
+     - Xilinx Vivado 2014.x or
+     - Altera Quartus II 13.x
+ - Simulation tool chains:
+     - Xilinx ISE Simulator 14.7 or
+     - Xilinx Vivado Simulator 2014.x or
+     - Mentor Graphics ModelSim Altera Edition or
+     - Mentor Graphics QuestaSim or
+     - [GHDL][302] and [GTKWave][303]
 
-A detailed explanation and full command line examples for Windows and Linux are provided on the [Download](Download) wiki page.
+### Linux specific requirements:
 
- [download]: https://github.com/VLSI-EDA/PoC/archive/master.zip
+ 
+### Windows specific requirements:
 
-## 3 Requirements
-
-##### Common Requirements
-
-A VHDL synthesis tool chain is need to compile all source files into a FPGA configuration.  If needed, a simulation tool chain can be used to simulate and debug the modules and packages.
-
-See the [requirements](Requirements#common-requirements) wiki page for more details.  
-
-
-##### Optional Tools
-
-There are several optional tools, which ease the use of this library.
-
-See the [optional tools](Requirements#optional-tools) wiki page for more details.
-
-## 4 Configure PoC on a Local System
+ - PowerShell 4.0 ([Windows Management Framework 4.0][321])
+    - Allow local script execution ([read more][322])  
+      `PS> Set-ExecutionPolicy RemoteSigned`
+    - PowerShell Community Extensions 3.2 ([pscx.codeplex.com][323])
 
 
-## 5 Integrating PoC into projects
+4 Configure PoC on a local system
+================================================================================
 
-To run PoC's automated testbenches or use the netlist compilaltion scripts of PoC, it's required to configure a synthesis and simulation tool chain.
+### 4.1 Linux system
 
-    cd <ProjectRoot>
-    cd lib\PoC\
+Run the following command line instructions to configure PoC on your local system.
+
+    cd <PoCRoot>
+    ./poc.sh --configure
+
+
+### 4.2 Windows system
+
+All Windows command line instructions are build for PowerShell. So executing the following instructions in `cmd.exe` won't function or result in errors! PowerShell is shipped with Windows since Vista.  
+
+    cd <PoCRoot>
     .\poc.ps1 --configure
 
-TODO: wiki page link, step-by-step config flow, images
+5 Integrating PoC into projects
+================================================================================
 
-### 5.1 Adding the library as git submodules
+### 5.1 Adding PoC as a git submodule
 
-The PoC-Library is meant to be included in other project or repos as a submodule. Therefore it's recommended to create a library folder and add the PoC-Library and it's dependencies as git submodules.
-
-The following command line instructions will create a library folder `lib/` and clone all depenencies
-as git [submodules][git_submod] into subfolders.
-
-    cd <ProjectRoot>
-    mkdir lib -ErrorAction SilentlyContinue; cd lib
-    git submodule add git@github.com:VLSI-EDA/PoC.git PoC
-    cd PoC
-    git remote rename origin github
-    cd ..\..
-    git add .gitmodules lib\PoC
-    git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
-
-[git_submod]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
-
-### 5.2 Configuring PoC on a Local System
-
-To run PoC's automated testbenches or use the netlist compilaltion scripts of PoC, it's required to configure a synthesis and simulation tool chain.
+The following command line instructions will create the folder `lib/PoC` and clone
+the PoC Library as a [submodule][511] into that folder.
 
     cd <ProjectRoot>
-    cd lib\PoC\
-    .\poc.ps1 --configure
+    mkdir -p lib/PoC
+    git submodule add ssh://git@github.com:VLSI-EDA/PoC.git lib/PoC
+    git add .gitmodules lib/PoC/
+    git commit -m "Added new git submodule PoC in 'lib/PoC' (PoC Library)."
 
-TODO: wiki page link, step-by-step config flow, images
+### 5.2 Compile shipped Xilinx IPCores (*.xco files) to netlists
 
-### 5.3 Compiling shipped Xilinx IPCores (*.xco files) to netlists
+The PoC Library is shipped with some pre configured IPCores from Xilinx. These IPCores are shipped as \*.xco files and need to be compiled to netlists (\*.ngc files) and there axillary files (\*.ncf files; \*vhdl files; ...). This can be done by invoking `Netlist.py` through one of the provided wrapper scripts: netlist.[sh|ps1].
 
-The PoC-Library is shipped with some pre-configured IPCores from Xilinx. These IPCores are shipped as \*.xco files and need to be compiled to netlists (\*.ngc files) and there auxillary
-files (\*.ncf files; \*.vhdl files; ...). This can be done by invoking PoC's `Netlist.py` through one of the
-provided wrapper scripts: netlist.[sh|ps1].
+The following example compiles `PoC.xil.ChipScopeICON_1` (`xil_ChipScopeICON_1.xco`) from `<PoCRoot>/src/xil/` for a Kintex-7 325T device into `<PoCRoot>/netlist/XC7K325T-2FFG900/xil/`.
 
-**Example:** Compiling all needed IPCores from PoC for a KC705 board:
+**Linux example:**
 
-    cd <ProjectRoot>
-    cd lib\PoC\netlist
-    foreach ($i in 1..15) {
-      .\netlist.ps1 --coregen PoC.xil.ChipScopeICON_$i --board KC705
-    }
+    cd <PoCRoot>/netlist
+    netlist.sh --coregen PoC.xil.ChipScopeICON_1 --board KC705
+
+**Windows example:**
+
+    cd <PoCRoot>/netlist
+    netlist.ps1 --coregen PoC.xil.ChipScopeICON_1 --board KC705
 
 
-## 6 Using the PoC-Library
-
+6 Using PoC
+================================================================================
 
 ### 6.1 Standalone
 
@@ -140,10 +131,16 @@ provided wrapper scripts: netlist.[sh|ps1].
 
 ### 6.5 In Xilinx Vivado (Synth and xSim)
 
+7 Updating PoC
+================================================================================
 
-## 6 Configuring a System-on-FPGA with the library
 
 
-
-## 7 Updating PoC-Library
-
+ [21]: https://github.com/VLSI-EDA/PoC/archive/master.zip
+ [301]: https://pypi.python.org/pypi/colorama
+ [302]: https://sourceforge.net/projects/ghdl-updates/
+ [303]: http://gtkwave.sourceforge.net/
+ [321]: http://www.microsoft.com/en-US/download/details.aspx?id=40855
+ [322]: https://technet.microsoft.com/en-us/library/hh849812.aspx
+ [323]: http://pscx.codeplex.com/
+ [511]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
