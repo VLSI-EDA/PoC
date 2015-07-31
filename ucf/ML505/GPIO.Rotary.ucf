@@ -1,0 +1,11 @@
+##
+## Rotary-Button
+## =============================================================================
+##	Bank:						17
+##		VCCO:					1,8V (VCC1V8)
+#$;	Location:				SW2
+## -----------------------------------------------------------------------------
+NET "ML505_GPIO_Rotary_Button"					LOC = "AH29";						## SW2.5; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Rotary_IncA"						LOC = "AH30";						## SW2.1; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Rotary_IncB"						LOC = "AG30";						## SW2.6; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Rotary_*"								IOSTANDARD = LVCMOS18;

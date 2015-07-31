@@ -1,0 +1,17 @@
+## Transceiver - SMA interface
+## =============================================================================
+##	Bank:						3
+##	ReferenceClock
+##		Location:			J25, J26
+NET "ML505_SMA_RefClock_p"											LOC = "H14";													## J25
+NET "ML505_SMA_RefClock_n"											LOC = "H15";													## J26
+
+## SMA LVDS signal-pairs
+## --------------------------
+##	Bank:						116
+##	LOC X0Y4 - GTP_DUAL port 1
+##	Location:				P27, J28, J29, J30
+NET "ML505_SMA_TX_p"														LOC = "L2";													## J29
+NET "ML505_SMA_TX_n"														LOC = "K2";													## J30
+NET "ML505_SMA_RX_p"														LOC = "K1";													## J27
+NET "ML505_SMA_RX_n"														LOC = "J1";													## J28

@@ -1,0 +1,21 @@
+##
+## Liquid Cristal Display
+## =============================================================================================================================================================
+##	Bank:						3, 12
+##		VCCO:					2.5V, 3.3V (VCC2V5, VCC3V3)
+##	Connector:			J (LCD header)
+##	Display
+##		Vendor:				DisplayTech
+##		Device:				S162DBABC (162D Series)
+##	LCD Driver
+##		Vendor:				Sitronix
+##		Device:				ST7066U (compatible: Samsung KS0066U)
+##		Size:					2 lines, 16 Characters, 40 Segments (5 x 8 Pixel)
+NET "ML505_LCD_DB[4]"							LOC = "T9";					## J8.4			level shifted by U3 (XC95144XL)
+NET "ML505_LCD_DB[5]"							LOC = "G7";					## J8.3			level shifted by U3 (XC95144XL)
+NET "ML505_LCD_DB[6]"							LOC = "G6";					## J8.2			level shifted by U3 (XC95144XL)
+NET "ML505_LCD_DB[7]"							LOC = "T11";				## J8.1			level shifted by U3 (XC95144XL)
+NET "ML505_LCD_E"									LOC = "AC9";				## J8.9			level shifted by U3 (XC95144XL)
+NET "ML505_LCD_RS"								LOC = "J17";				## J8.11		level shifted by U3 (XC95144XL)	; Bank 3
+NET "ML505_LCD_RW"								LOC = "AC10";				## J8.10		level shifted by U3 (XC95144XL)
+NET "ML505_LCD_*"									IOSTANDARD = LVCMOS25;

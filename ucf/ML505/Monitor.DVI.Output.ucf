@@ -1,0 +1,27 @@
+##
+## Video - DVI Transmitter
+## =============================================================================
+##	Bank:						15, 18, 22
+##		VCCO:					1.8V, 3.3V, 3.3V (VCC1V8, VCC3V3, VCC3V3)
+##	Location:				U17
+## -----------------------------------------------------------------------------
+NET  "ML505_Video_DVI_Reset_n"			LOC = "AK6";		## 
+NET  "ML505_Video_DVI_Clock_n"			LOC = "AL10";		## 
+NET  "ML505_Video_DVI_Clock_p"			LOC = "AL11";		## 
+NET  "ML505_Video_DVI_HSync"       	LOC = "AM12";		## 
+NET  "ML505_Video_DVI_VSync"       	LOC = "AM11";		## 
+NET  "ML505_Video_DVI_DataEnable" 	LOC = "AE8";		## 
+NET  "ML505_Video_DVI_Data<0>"			LOC = "AB8";		## 
+NET  "ML505_Video_DVI_Data<1>"		 	LOC = "AC8";		## 
+NET  "ML505_Video_DVI_Data<2>"		 	LOC = "AN12";		## 
+NET  "ML505_Video_DVI_Data<3>"		 	LOC = "AP12";		## 
+NET  "ML505_Video_DVI_Data<4>"		 	LOC = "AA9";		## 
+NET  "ML505_Video_DVI_Data<5>"		 	LOC = "AA8";		## 
+NET  "ML505_Video_DVI_Data<6>"		 	LOC = "AM13";		## 
+NET  "ML505_Video_DVI_Data<7>"		 	LOC = "AN13";		## 
+NET  "ML505_Video_DVI_Data<8>"		 	LOC = "AA10";		## 
+NET  "ML505_Video_DVI_Data<9>"		 	LOC = "AB10";		## 
+NET  "ML505_Video_DVI_Data<10>"			LOC = "AP14";		## 
+NET  "ML505_Video_DVI_Data<11>"			LOC = "AN14";		## 
+NET  "ML505_Video_DVI_GPIO1"				LOC = "N30";		## 
+NET  "ML505_Video_DVI_*"						SLEW = FAST;

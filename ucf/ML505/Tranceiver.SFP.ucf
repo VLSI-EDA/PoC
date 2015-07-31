@@ -1,0 +1,24 @@
+## Transceiver - SFP interface
+## =============================================================================
+##	Bank:						19
+##		VCCO:					1.8V (VCC1V8)
+##	Location:				P19
+##		I²C-Address:	0xA0 (1010 000xb)
+NET "ML505_SFP_TX_Disable"							LOC = "K24" | IOSTANDARD = LVCMOS18; ## ; low-active; external 4k7 pullup resistor; level shifted by Q42 (NDS331N)
+
+## SGMII LVDS signal-pairs
+## --------------------------
+##	Bank:						116
+##	ReferenceClock
+##		Location:			P3
+##	LOC X0Y4 - GTP_DUAL port 0
+NET "ML505_SFP_TX_p"										LOC = "F2";						## 
+NET "ML505_SFP_TX_n"										LOC = "G2";						## 
+NET "ML505_SFP_RX_p"										LOC = "G1";						## 
+NET "ML505_SFP_RX_n"										LOC = "H1";						## 
+
+## Bank 15; 1.8 V
+NET "ML505_SFP_SerialClock"							LOC = "R26";					## level shifted by Q42 (NDS331N)
+NET "ML505_SFP_SerialData"							LOC = "U28";					## level shifted by Q42 (NDS331N)
+
+NET "ML505_SFP_Serial*"									PULLUP;

@@ -1,0 +1,7 @@
+## SMA Clock
+## =============================================================================
+##		Bank:						14
+##			VCCO:					2.5V (VCC2V5_FPGA)
+##		Location:				J10, J11
+NET "ML505_SMAClock_in_p"					LOC = "H14" | IOSTANDARD = LVCMOS25;	## {INOUT}	J10
+NET "ML505_SMAClock_in_n"					LOC = "H15" | IOSTANDARD = LVCMOS25;	## {INOUT}	J11

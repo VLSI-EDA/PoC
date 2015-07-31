@@ -1,0 +1,14 @@
+##
+## LEDs
+## =============================================================================
+##	Bank:						2, 20
+##		VCCO:					3,3V (VCC1V8_FPGA)
+##	Location:				DS20, DS21, DS22, DS23, DS24
+## -----------------------------------------------------------------------------
+NET "ML505_GPIO_LED_North"							LOC = "AF13";						## DS20
+NET "ML505_GPIO_LED_East"								LOC = "AG23";						## DS21
+NET "ML505_GPIO_LED_South"							LOC = "AG12";						## DS22
+NET "ML505_GPIO_LED_West"								LOC = "AF23";						## DS23
+NET "ML505_GPIO_LED_Center"							LOC = "E8";							## DS24
+NET "ML505_GPIO_LED_*"									IOSTANDARD = LVCMOS18;
+NET "ML505_GPIO_LED_*"									SLEW = SLOW;

@@ -1,0 +1,22 @@
+##
+## =============================================================================================================================================================
+## Ethernet PHY - Marvell Alaska Ultra
+## =============================================================================================================================================================
+##	Bank:						3, 11, 22
+##		VCCO:					2.5V (VCC2V5_FPGA), 2.5V (VCC2V5_FPGA), 3.3V (VCC3V3_FPGA)
+##	Location:				U16
+##		Vendor:				Marvell
+##		Device:				M88E1111 - 
+##		MDIO-Address:	0x05 (---0 0111b)
+##		I²C-Address:	I²C management mode is not enabled
+##		Configuration:	set J20 to 3-5 and 4-6 to select 2.5 V for VCCO_EXP (Bank 11 and 13)
+##										set J22 to 1-2 for MII/GMII interface
+##										set J23 to 1-2 for MII/GMII interface
+##										set J24 = OFF to disable RGMII
+##
+## common signals and management
+## --------------------------
+NET "ML505_EthernetPHY_Reset_n"									LOC = "J14" | IOSTANDARD = LVCMOS25; ## {IN}			U16.36; Bank 3; no DCI
+NET "ML505_EthernetPHY_Interrupt_n"							LOC = "H20" | IOSTANDARD = LVCMOS25; ## {IN}			U16.32; Bank 3; no DCI
+NET "ML505_EthernetPHY_Management_Clock"				LOC = "H19" | IOSTANDARD = LVCMOS25; ## {OUT}			U16.35; Bank 3; no DCI
+NET "ML505_EthernetPHY_Management_Data"					LOC = "H13" | IOSTANDARD = LVCMOS25; ## {INOUT}		U16.33; Bank 3; no DCI

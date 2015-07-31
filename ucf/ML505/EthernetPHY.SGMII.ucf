@@ -1,0 +1,21 @@
+##
+## SGMII LVDS signal-pairs
+## --------------------------
+##	Bank:						112
+##	Transceiver:		
+##		Location:			X0Y3 - Port 0
+##	Device:					Ethernet PHY
+##		Location:			U16 (M88E1111)
+##		Vendor:				Marvel
+##		Device:				M88E1111
+##	ReferenceClock
+##		Location:			U29 (ICS844021I_TSSOP8)
+##		Vendor:				Integrated Device Technology
+##		Device:				ICS844021I
+##		Frequency:		125 MHz
+NET "ML505_EthernetPHY_RefClock_125MHz_n"				LOC = "P3";														## {IN}			U29.NQ0
+NET "ML505_EthernetPHY_RefClock_125MHz_p"				LOC = "P4";														## {IN}			U29.Q0
+NET "ML505_EthernetPHY_SGMII_TX_p"							LOC = "M2";														## {OUT}		U16.113
+NET "ML505_EthernetPHY_SGMII_TX_n"							LOC = "N2";														## {OUT}		U16.112
+NET "ML505_EthernetPHY_SGMII_RX_p"							LOC = "N1";														## {IN}			U16.107
+NET "ML505_EthernetPHY_SGMII_RX_n"							LOC = "P1";														## {IN}			U16.105

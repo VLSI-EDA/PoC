@@ -16,4 +16,4 @@ set_property PACKAGE_PIN	AU39			[get_ports VC707_GPIO_LED[7]]
 # set I/O standard
 set_property IOSTANDARD		LVCMOS18	[get_ports -regexp {VC707_GPIO_LED\[\d\]}]
 # Ignore timings on async I/O pins
-#set_false_path									-to [get_ports -regexp {VC707_GPIO_LED\[\d\]}]
+set_false_path									-to [get_ports -regexp {VC707_GPIO_LED\[\d\]}]

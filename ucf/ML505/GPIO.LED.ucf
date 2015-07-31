@@ -1,0 +1,16 @@
+##
+## LEDs
+## =============================================================================
+##	Bank:						3, 21
+##		VCCO:					2.5V, 1.8V (VCC2V5, VCC1V8)
+##	Location:				DS10, DS11, DS12, DS13, DS14, DS15, DS16, DS17
+## -----------------------------------------------------------------------------
+NET "ML505_GPIO_LED<0>"									LOC = "H18"	 | IOSTANDARD = LVCMOS25;			## DS17
+NET "ML505_GPIO_LED<1>"									LOC = "L18"	 | IOSTANDARD = LVCMOS25;			## DS16
+NET "ML505_GPIO_LED<2>"									LOC = "G15"	 | IOSTANDARD = LVCMOS25;			## DS15
+NET "ML505_GPIO_LED<3>"									LOC = "AD26" | IOSTANDARD = LVCMOS18;			## DS13; level-shifted by NDS331N to 2.5V
+NET "ML505_GPIO_LED<4>"									LOC = "G16"	 | IOSTANDARD = LVCMOS25;			## DS14
+NET "ML505_GPIO_LED<5>"									LOC = "AD25" | IOSTANDARD = LVCMOS18;			## DS12; level-shifted by NDS331N to 2.5V
+NET "ML505_GPIO_LED<6>"									LOC = "AD24" | IOSTANDARD = LVCMOS18;			## DS11; level-shifted by NDS331N to 2.5V
+NET "ML505_GPIO_LED<7>"									LOC = "AE24" | IOSTANDARD = LVCMOS18;			## DS10; level-shifted by NDS331N to 2.5V
+NET "ML505_GPIO_LED<?>"									SLEW = SLOW;

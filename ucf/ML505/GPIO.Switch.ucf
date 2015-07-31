@@ -1,0 +1,16 @@
+##
+## DIP-Switches
+## =============================================================================
+##	Bank:						15, 21
+##		VCCO:					1.8V (VCC1V8)
+##	Location:				SW 8
+## -----------------------------------------------------------------------------
+NET "ML505_GPIO_Switches<0>"						LOC = "U25";						## SW8.1; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Switches<1>"						LOC = "AG27";						## SW8.2; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Switches<2>"						LOC = "AF25";						## SW8.3; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Switches<3>"						LOC = "AF26";						## SW8.4; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Switches<4>"						LOC = "AE27";						## SW8.5; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Switches<5>"						LOC = "AE26";						## SW8.6; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Switches<6>"						LOC = "AC25";						## SW8.7; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Switches<7>"						LOC = "AC24";						## SW8.8; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Switches<*>"						IOSTANDARD = LVCMOS18;

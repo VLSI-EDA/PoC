@@ -1,0 +1,27 @@
+##
+## single-ended, parallel TX path
+NET "ML505_EthernetPHY_TX_Valid"								LOC = "AJ10"	| IOSTANDARD = LVCMOS25; ## {OUT}		U16.16; Bank 22; DCI using 49.9 ohm resistor
+NET "ML505_EthernetPHY_TX_Error"								LOC = "AJ9"		| IOSTANDARD = LVCMOS25; ## {OUT}		U16.13; Bank 22; DCI using 49.9 ohm resistor
+NET "ML505_EthernetPHY_TX_DATA<0>"							LOC = "AF11"	| IOSTANDARD = LVCMOS25; ## {OUT}		U16.18; Bank 22; DCI using 49.9 ohm resistor
+NET "ML505_EthernetPHY_TX_DATA<1>"							LOC = "AE11"	| IOSTANDARD = LVCMOS25; ## {OUT}		U16.19; Bank 22; DCI using 49.9 ohm resistor
+NET "ML505_EthernetPHY_TX_DATA<2>"							LOC = "AH9"		| IOSTANDARD = LVCMOS25; ## {OUT}		U16.20; Bank 22; DCI using 49.9 ohm resistor
+NET "ML505_EthernetPHY_TX_DATA<3>"							LOC = "AH10"	| IOSTANDARD = LVCMOS25; ## {OUT}		U16.24; Bank 22; DCI using 49.9 ohm resistor
+##
+## single-ended, parallel RX path
+NET "ML505_EthernetPHY_RX_Valid"								LOC = "E32"		| IOSTANDARD = LVCMOS25; ## {IN}		U16.4; Bank 11
+NET "ML505_EthernetPHY_RX_Error"								LOC = "E33"		| IOSTANDARD = LVCMOS25; ## {IN}		U16.8; Bank 11
+NET "ML505_EthernetPHY_RX_DATA<0>"							LOC = "A33"		| IOSTANDARD = LVCMOS25; ## {IN}		U16.3; Bank 11
+NET "ML505_EthernetPHY_RX_DATA<1>"							LOC = "B33"		| IOSTANDARD = LVCMOS25; ## {IN}		U16.128; Bank 11
+NET "ML505_EthernetPHY_RX_DATA<2>"							LOC = "C33"		| IOSTANDARD = LVCMOS25; ## {IN}		U16.126; Bank 11
+NET "ML505_EthernetPHY_RX_DATA<3>"							LOC = "C32"		| IOSTANDARD = LVCMOS25; ## {IN}		U16.125; Bank 11
+##
+#NET "ML505_EthernetPHY_TX_*"										IOSTANDARD = "LVCMOS33";
+NET "ML505_EthernetPHY_TX_*"										SLEW = FAST;
+#NET "ML505_EthernetPHY_RX_*"										IOSTANDARD = "LVCMOS25";
+NET "ML505_EthernetPHY_RX_*"										SLEW = FAST;
+##
+## Timing names
+NET "ML505_EthernetPHY_RX_Clock"								TNM_NET = "TGRP_EthernetPHY_RX_Clock";
+NET "ML505_EthernetPHY_RX_Data[?]"							TNM			= "EthernetPHY_RX";
+NET "ML505_EthernetPHY_RX_Valid"								TNM			= "EthernetPHY_RX";
+NET "ML505_EthernetPHY_RX_Error"								TNM			= "EthernetPHY_RX";

@@ -1,0 +1,15 @@
+##
+## I2C-MonitorBus
+## =============================================================================
+##	Bank:							15
+##		VCCO:						1.8V (VCC1V8)
+## -----------------------------------------------------------------------------
+##	Devices:					??
+##		Location:				
+##			Vendor:				
+##			Device:				
+##			I²C-Address:	
+NET "ML505_IIC_Monitor_SerialClock"						LOC = "U27";			## 
+NET "ML505_IIC_Monitor_SerialData"						LOC = "T29";			## 
+NET "ML505_IIC_Monitor_*"											PULLUP;
+NET "ML505_IIC_Monitor_*"											IOSTANDARD = LVCMOS18;

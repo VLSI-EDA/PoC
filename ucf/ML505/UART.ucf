@@ -1,0 +1,15 @@
+## UART - Universal Asynchronous Receiver Transmitter
+## =============================================================================
+##	Bank:						4, 20
+##		VCCO:					3.3V (VCC3V3_FPGA)
+##	Location:				U13 (ADM3202ARUZ)
+##		Vendor:				Analog Devices
+##		Device:				ADM3202 - Low Power, 3.3 V, RS-232 Line Driver/Receiver
+##		Baud-Rate:		up to 460 kBaud
+##	Note:						FPGA is the master => so TX is an output and RX an input
+NET "ML505_UART1_TX"						LOC = "AG20";		## {OUT}	U13.10	{IN}	
+NET "ML505_UART1_RX"						LOC = "AG15";		## {IN}		U13.9		{OUT}	
+NET "ML505_UART2_TX"						LOC = "F10";		## {OUT}	U13.11	{IN}	
+NET "ML505_UART2_RX"						LOC = "G10";		## {IN}		U13.12	{OUT}	
+NET "ML505_UART?_?X"						IOSTANDARD = LVCMOS33;
+NET "ML505_UART?_?X"						SLEW = FAST;

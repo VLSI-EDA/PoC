@@ -12,5 +12,5 @@ set_property PACKAGE_PIN	BB37			[get_ports VC707_FanControl_Tacho]
 # set I/O standard
 set_property IOSTANDARD		LVCMOS18	[get_ports -regexp {VC707_FanControl_.*}]
 # Ignore timings on async I/O pins
-#set_false_path								-to		[get_ports VC707_FanControl_PWM]
+set_false_path								-to		[get_ports VC707_FanControl_PWM]
 set_false_path								-from	[get_ports VC707_FanControl_Tacho]

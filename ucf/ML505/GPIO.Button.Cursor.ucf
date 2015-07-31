@@ -1,0 +1,13 @@
+##
+## Cursor Buttons
+## =============================================================================
+##	Bank:						18
+##		VCCO:					3.3V (VCC1V8_FPGA)
+##	Location:				SW10, SW11, SW12, SW13, SW14
+## -----------------------------------------------------------------------------
+NET "ML505_GPIO_Button_North"						LOC = "U8"	| IOSTANDARD = LVCMOS18;			## SW10; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Button_West"						LOC = "AJ7"	| IOSTANDARD = LVCMOS18;			## SW13; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Button_Center"					LOC = "AJ6"	| IOSTANDARD = LVCMOS18;			## SW14; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Button_East"						LOC = "AK7"	| IOSTANDARD = LVCMOS18;			## SW12; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Button_South"						LOC = "V8"	| IOSTANDARD = LVCMOS18;			## SW11; high-active; external 4k7 pulldown resistor
+NET "ML505_GPIO_Button_*"								IOSTANDARD = LVCMOS33;										## 
