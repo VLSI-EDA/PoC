@@ -41,6 +41,10 @@ use			IEEE.numeric_std.all;
 library	altera_mf;
 use			altera_mf.all;
 
+library PoC;
+use			PoC.utils.all;
+use			PoC.strings.all;
+
 
 entity ocram_tdp_altera is
 	generic (
