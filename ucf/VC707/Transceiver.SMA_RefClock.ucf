@@ -1,0 +1,8 @@
+## Transceiver - SMA interface
+## =============================================================================
+##	Bank:						113
+##	ReferenceClock
+##		Location:			J25, J26
+NET "VC707_SMA_RefClock_n"											LOC = "AK7";													## J26
+NET "VC707_SMA_RefClock_p"											LOC = "AK8";													## J25
+

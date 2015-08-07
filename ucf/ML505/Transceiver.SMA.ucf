@@ -1,10 +1,7 @@
 ## Transceiver - SMA interface
 ## =============================================================================
 ##	Bank:						3
-##	ReferenceClock
-##		Location:			J25, J26
-NET "ML505_SMA_RefClock_p"											LOC = "H14";													## J25
-NET "ML505_SMA_RefClock_n"											LOC = "H15";													## J26
+##	ReferenceClock (see Transceiver.SMA_RefClock.ucf)
 
 ## SMA LVDS signal-pairs
 ## --------------------------

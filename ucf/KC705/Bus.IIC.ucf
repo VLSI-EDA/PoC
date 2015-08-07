@@ -1,12 +1,12 @@
 ##
-## I²C-MainBus
+## I2C-MainBus
 ## -----------------------------------------------------------------------------
 ##	Bank:						15
 ##		VCCO:					2.5V (VCC2V5_FPGA)
 ##	Location:				U49 (PCA9548ARGER)
 ##		Vendor:				Texas Instruments
-##		Device:				PCA9548A-RGER - 8-Channel I²C Switch with Reset
-##		I²C-Address:	0x74 (0111 010xb)
+##		Device:				PCA9548A-RGER - 8-Channel I2C Switch with Reset
+##		I2C-Address:	0x74 (0111 010xb)
 ## -----------------------------------------------------------------------------
 ##	Devices:				8
 ##		Channel 0:		Programmable UserClock

@@ -82,15 +82,15 @@ class Compiler(PoCCompiler):
 		# create temporary directory for CoreGen if not existent
 		tempCoreGenPath = self.host.directories["CoreGenTemp"]
 		if not (tempCoreGenPath).exists():
-			self.printVerbose("Creating temporary directory for core generator files.")
-			self.printDebug("Temporary directors: %s" % str(tempCoreGenPath))
+			self.printVerbose("    Creating temporary directory for core generator files.")
+			self.printDebug("    Temporary directory: %s" % str(tempCoreGenPath))
 			tempCoreGenPath.mkdir(parents=True)
 
 		# create output directory for CoreGen if not existent
 		coreGenOutputPath = self.host.directories["PoCNetList"] / deviceString
 		if not (coreGenOutputPath).exists():
-			self.printVerbose("Creating temporary directory for core generator files.")
-			self.printDebug("Temporary directors: %s" % str(coreGenOutputPath))
+			self.printVerbose("    Creating output directory for core generator files.")
+			self.printDebug("    Output directory: %s" % str(coreGenOutputPath))
 			coreGenOutputPath.mkdir(parents=True)
 			
 		# add the key Device to section SPECIAL at runtime to change interpolation results

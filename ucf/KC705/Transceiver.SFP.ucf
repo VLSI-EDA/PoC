@@ -19,3 +19,8 @@ NET "KC705_SFP_TX_n"														LOC = "H1";													## {OUT}
 NET "KC705_SFP_TX_p"														LOC = "H2";													## {OUT}	
 NET "KC705_SFP_RX_n"														LOC = "G3";													## {IN}		
 NET "KC705_SFP_RX_p"														LOC = "G4";													## {IN}		
+
+# Ignore timings on async I/O pins
+NET "KC705_SFP_TX_Disable"		TIG;
+NET "KC705_SFP_LossOfSync"		TIG;
+
