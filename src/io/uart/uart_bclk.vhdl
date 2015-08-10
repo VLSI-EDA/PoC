@@ -54,8 +54,8 @@ entity uart_bclk is
 	port (
 		clk				: in	std_logic;
 		rst				: in	std_logic;
-		bclk_r		: out	std_logic;
-		bclk_x8_r	: out	std_logic
+		bclk			: out	std_logic;
+		bclk_x8		: out	std_logic
 	);
 end entity;
 
@@ -85,7 +85,7 @@ begin
   -- outputs
 	-- ---------------------------------------------------------------------------
 	-- only x8_cnt_done is pulsed for one clock cycle!
-	bclk_r			<= (x1_cnt_done and x8_cnt_done)	when rising_edge(clk);
-	bclk_x8_r		<= x8_cnt_done										when rising_edge(clk);
+	bclk			<= (x1_cnt_done and x8_cnt_done)	when rising_edge(clk);
+	bclk_x8		<= x8_cnt_done										when rising_edge(clk);
   
 end;

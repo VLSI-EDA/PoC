@@ -17,8 +17,8 @@
 -- 
 --	old comments:
 --		UART BAUD rate generator
---		bclk_r    = bit clock is rising
---		bclk_x8_r = bit clock times 8 is rising
+--		bclk	    = bit clock is rising
+--		bclk_x8		= bit clock times 8 is rising
 --
 --
 -- License:
@@ -274,15 +274,15 @@ begin
 		port map (
 			clk					=> Clock,
 			rst					=> Reset,
-			bclk_r			=> BitClock,
-			bclk_x8_r		=> BitClock_x8
+			bclk				=> BitClock,
+			bclk_x8			=> BitClock_x8
 		);
 	
 	TX : entity PoC.uart_tx
 		port map (
 			clk			=> Clock,
 			rst			=> Reset,
-			bclk_r	=> BitClock,
+			bclk		=> BitClock,
 			stb			=> FC_TX_Strobe,
 			din			=> FC_TX_Data,
 			rdy			=> TXUART_Ready,
@@ -294,11 +294,11 @@ begin
 			OUT_REGS => RX_OUT_REGS
 		)
 		port map (
-			clk				=> Clock,
-			rst				=> Reset,
-			bclk_x8_r	=> BitClock_x8,
-			dos				=> RXUART_Strobe,
-			dout			=> RXUART_Data,
-			rxd				=> UART_RX
+			clk			=> Clock,
+			rst			=> Reset,
+			bclk_x8	=> BitClock_x8,
+			dos			=> RXUART_Strobe,
+			dout		=> RXUART_Data,
+			rxd			=> UART_RX
 		);
 end;

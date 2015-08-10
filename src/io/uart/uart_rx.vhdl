@@ -15,7 +15,7 @@
 --	old comments:
 --		Serial configuration: 8 data bits, 1 stop bit, no parity
 --		
---		bclk_x8_r = bit clock (defined by BAUD rate) times 8
+--		bclk_x8 = bit clock (defined by BAUD rate) times 8
 --		dos       = data out strobe, signals that dout is valid, active high for one
 --		            cycle 
 --		dout      = data out = received byte
@@ -59,7 +59,7 @@ entity uart_rx is
 	port (
 		clk       : in  std_logic;
 		rst       : in  std_logic;
-		bclk_x8_r : in  std_logic;
+		bclk_x8 	: in  std_logic;
 		rxd       : in  std_logic;
 		dos       : out std_logic;
 		dout      : out std_logic_vector(7 downto 0)
@@ -90,15 +90,15 @@ architecture rtl of uart_rx is
 begin
 
   rxd_falling    <= (not rxd_reg1) and rxd_reg2;
-  bclk_rising    <= bclk_x8_r when (comp_allone(bclk_cnt) = '1') else '0';
+  bclk_rising    <= bclk_x8 when (comp_allone(bclk_cnt) = '1') else '0';
 
   -- shift_cnt count from 0 to 9 (1 start bit + 8 data bits)
 	shift_cnt		<= upcounter_next(cnt => shift_cnt, rst => start_bclk, en => shift_sr) when rising_edge(clk);
   shift_done	<= upcounter_equal(cnt => shift_cnt, value => 9);
 
-	bclk_cnt		<= upcounter_next(cnt => bclk_cnt, rst => start_bclk, en => bclk_x8_r, init => 4) when rising_edge(clk);
+	bclk_cnt		<= upcounter_next(cnt => bclk_cnt, rst => start_bclk, en => bclk_x8, init => 4) when rising_edge(clk);
 	
-  process (state, rxd_falling, bclk_x8_r, bclk_rising, shift_done)
+  process (state, rxd_falling, bclk_x8, bclk_rising, shift_done)
   begin
     next_state <= state;
     start_bclk <= '0';
@@ -108,7 +108,7 @@ begin
     case state is
       when IDLE =>
         -- wait for start bit
-        if (rxd_falling and bclk_x8_r) = '1' then
+        if (rxd_falling and bclk_x8) = '1' then
           next_state <= RDATA;
           start_bclk <= '1';            -- = rst_shift_cnt
         end if;
@@ -142,7 +142,7 @@ begin
 
       rxd_reg1 <= rxd;
 
-      if bclk_x8_r = '1' then
+      if bclk_x8 = '1' then
         -- align to bclk_x8, so when we can easily check for
         -- the falling edge of the start bit
         rxd_reg2 <= rxd_reg1;
