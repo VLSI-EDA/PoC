@@ -174,19 +174,6 @@ package io is
 		IO_LCDBUS_STATUS_WRITING,
 		IO_LCDBUS_STATUS_ERROR
 	);
-	
-	-- Subnamespace PoC.io.uart
-  -- =========================================================================
-	constant C_UART_TYPICAL_BAUDRATES		: T_BAUDVEC		:= (
-		 0 =>		 300 Bd,	 1 =>		 600 Bd,	 2 =>		1200 Bd,	 3 =>		1800 Bd,	 4 =>		2400 Bd,
-		 5 =>		4000 Bd,	 6 =>		4800 Bd,	 7 =>		7200 Bd,	 8 =>		9600 Bd,	 9 =>	 14400 Bd,
-		10 =>	 16000 Bd,	11 =>	 19200 Bd,	12 =>	 28800 Bd,	13 =>	 38400 BD,	14 =>	 51200 Bd,
-		15 =>	 56000 Bd,	16 =>	 57600 Bd,	17 =>	 64000 Bd,	18 =>	 76800 Bd,	19 =>	115200 Bd,
-		20 =>	128000 Bd,	21 =>	153600 Bd,	22 =>	230400 Bd,	23 =>	250000 Bd,	24 =>	256000 BD,
-		25 =>	460800 Bd,	26 =>	500000 Bd,	27 =>	576000 Bd,	28 =>	921600 Bd
-	);
-	
-	function uart_IsTypicalBaudRate(br : BAUD) return BOOLEAN;
 
   -- Component Declarations
   -- =========================================================================
@@ -205,7 +192,7 @@ package io is
     );
 	end component;
 
-end io;
+end package;
 
 
 package body io is
@@ -238,14 +225,5 @@ package body io is
 	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : STD_LOGIC := '0') return STD_LOGIC_VECTOR is
 	begin
 		return io_7SegmentDisplayEncoding(std_logic_vector(digit), dot);
-	end function;
-
-	function uart_IsTypicalBaudRate(br : BAUD) return BOOLEAN is
-	begin
-		for i in C_UART_TYPICAL_BAUDRATES'range loop
-			next when (br /= C_UART_TYPICAL_BAUDRATES(i));
-			return TRUE;
-		end loop;
-		return FALSE;
 	end function;
 end package body;

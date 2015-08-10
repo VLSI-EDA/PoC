@@ -36,6 +36,7 @@ use			IEEE.numeric_std.all;
 
 library	PoC;
 use			PoC.utils.all;
+use			PoC.physical.all;
 
 
 package uart is
@@ -103,37 +104,41 @@ package uart is
 	-- ===========================================================================
 	-- UART with FIFOs and optional flow control
 	component uart_fifo is
-		generic (
-			CLOCK_FREQ			: FREQ;
-			BAUDRATE				: BAUD;
-			TX_MIN_DEPTH		: POSITIVE;
-			RX_MIN_DEPTH		: POSITIVE;
-			RX_OUT_REGS			: BOOLEAN;
-			
-			SWFC_XON_CHAR			: std_logic_vector(7 downto 0)	:= x"11";		-- ^Q
-			SWFC_XON_TRIGGER	: real													:= 0.0625;
-			SWFC_XOFF_CHAR		: std_logic_vector(7 downto 0)	:= x"13";		-- ^S
-			SWFC_XOFF_TRIGGER	: real													:= 0.75
-			);
-		port (
-			clk						: in	std_logic;
-			rst						: in	std_logic;
+	generic (
+		CLOCK_FREQ			: FREQ														:= 100 MHz;
+		BAUDRATE				: BAUD														:= 115200 Bd;
+		FLOWCONTROL			: T_IO_UART_FLOWCONTROL_KIND			:= UART_FLOWCONTROL_NONE;
+		TX_MIN_DEPTH		: POSITIVE												:= 16;
+		TX_ESTATE_BITS	: NATURAL													:= 1;
+		RX_MIN_DEPTH		: POSITIVE												:= 16;
+		RX_FSTATE_BITS	: NATURAL													:= 1;
+		RX_OUT_REGS			: BOOLEAN													:= FALSE;
+		
+		SWFC_XON_CHAR			: std_logic_vector(7 downto 0)	:= x"11";		-- ^Q
+    SWFC_XON_TRIGGER	: real													:= 0.0625;
+		SWFC_XOFF_CHAR		: std_logic_vector(7 downto 0)	:= x"13";		-- ^S
+		SWFC_XOFF_TRIGGER	: real													:= 0.75
+	);
+	port (
+		Clock					: in	std_logic;
+		Reset					: in	std_logic;
 
-			-- FIFO interface
-			TX_Valid			: in	STD_LOGIC;
-			TX_Data				: in	STD_LOGIC_VECTOR(7 downto 0);
-			TX_got				: out	STD_LOGIC;
-			
-			RX_Valid			: out	STD_LOGIC;
-			RX_Data				: out	STD_LOGIC_VECTOR(7 downto 0);
-			RX_got				: in	STD_LOGIC;
-			RX_FillState	: out	STD_LOGIC_VECTOR(RX_FSTATE_BITS - 1 downto 0);
-			RX_Overflow		: out	std_logic;
-			
-			-- External Pins
-			rxd						: in	std_logic;
-			txd						: out	std_logic
-		);
+		-- FIFO interface
+		TX_put				: in	STD_LOGIC;
+		TX_Data				: in	STD_LOGIC_VECTOR(7 downto 0);
+		TX_Full				: out	STD_LOGIC;
+		TX_EmptyState	: out	STD_LOGIC_VECTOR(TX_ESTATE_BITS - 1 downto 0);
+		
+		RX_Valid			: out	STD_LOGIC;
+		RX_Data				: out	STD_LOGIC_VECTOR(7 downto 0);
+		RX_got				: in	STD_LOGIC;
+		RX_FullState	: out	STD_LOGIC_VECTOR(RX_FSTATE_BITS - 1 downto 0);
+		RX_Overflow		: out	std_logic;
+		
+		-- External Pins
+		UART_RX				: in	std_logic;
+		UART_TX				: out	std_logic
+	);
 	end component;
 end package;
 
