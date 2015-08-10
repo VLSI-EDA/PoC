@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="./isim.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="board" />
+            <top_module name="components" />
+            <top_module name="config" />
+            <top_module name="math_real" />
+            <top_module name="my_config" />
+            <top_module name="my_project" />
+            <top_module name="numeric_std" />
+            <top_module name="physical" />
+            <top_module name="simulation" />
+            <top_module name="std_logic_1164" />
+            <top_module name="strings" />
+            <top_module name="textio" />
+            <top_module name="uart" />
+            <top_module name="uart_rx_tb" />
+            <top_module name="utils" />
+            <top_module name="vectors" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="7" />
+   <wvobject fp_name="/uart_rx_tb/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/uart_rx_tb/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/uart_rx_tb/bitclock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">bitclock</obj_property>
+      <obj_property name="ObjectShortName">bitclock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/uart_rx_tb/bitclock_x8" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">bitclock_x8</obj_property>
+      <obj_property name="ObjectShortName">bitclock_x8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/uart_rx_tb/uart_rx" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">uart_rx</obj_property>
+      <obj_property name="ObjectShortName">uart_rx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/uart_rx_tb/rx_strobe" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_strobe</obj_property>
+      <obj_property name="ObjectShortName">rx_strobe</obj_property>
+   </wvobject>
+   <wvobject fp_name="/uart_rx_tb/rx_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>
