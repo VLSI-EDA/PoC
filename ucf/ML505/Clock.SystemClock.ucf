@@ -10,7 +10,7 @@
 ##			Frequency:			200 MHz
 NET "ML505_SystemClock_200MHz_n"				LOC = "K19";				## {IN}		U8.OUT5_N_16
 NET "ML505_SystemClock_200MHz_p"				LOC = "L19";				## {IN}		U8.OUT5_P_15
-NET "ML505_SystemClock_200MHz_p"				IOSTANDARD = LVDS_25;
+NET "ML505_SystemClock_200MHz_?"				IOSTANDARD = LVDS_25;
 ##
 NET "ML505_SystemClock_200MHz_p"				TNM_NET = "TGRP_SystemClock";
 TIMESPEC "TS_SystemClock"	= PERIOD "TGRP_SystemClock"		200 MHz	HIGH 50 %;
