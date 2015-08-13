@@ -10,3 +10,6 @@
 ##	Note:						FPGA is the master, USB-UART is the slave => so TX is an output and RX an input
 NET "Atlys_USB_UART_TX"						LOC = "B16" | IOSTANDARD = LVCMOS33;		## {OUT}			IC7.10	{IN}
 NET "Atlys_USB_UART_RX"						LOC = "A16" | IOSTANDARD = LVCMOS33;		## {IN}				IC7.9		{OUT}
+
+## Ignore timings on async I/O pins
+NET "Atlys_USB_UART_?X"						TIG;

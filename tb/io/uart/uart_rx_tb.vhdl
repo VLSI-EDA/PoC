@@ -117,7 +117,7 @@ begin
 	process
 	begin
 		for i in DATA_STREAM'range loop
-			wait until rising_edge(RX_Strobe);
+			wait until rising_edge(Clock) and (RX_Strobe = '1');
 			report TIME'image(NOW) severity NOTE;
 			tbAssert((RX_Data = DATA_STREAM(i)), "Data Byte " & INTEGER'image(i) & " received: " & to_string(RX_Data, 'h') & " expected: " & to_string(DATA_STREAM(i), 'h'));
 		end loop;

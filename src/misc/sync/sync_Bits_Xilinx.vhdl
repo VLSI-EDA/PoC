@@ -5,7 +5,7 @@
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	xil_SyncBits
+-- Module:				 	sync_Bits_Xilinx
 -- 
 -- Description:
 -- ------------------------------------
@@ -51,7 +51,8 @@
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
-entity xil_SyncBits is
+
+entity sync_Bits_Xilinx is
 	generic (
 		BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
 		INIT					: STD_LOGIC_VECTOR		:= x"00000000"				-- initialitation bits
@@ -61,12 +62,14 @@ entity xil_SyncBits is
 		Input					: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- Data to be synchronized
 		Output				: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- synchronised data
 	);
-end;
+end entity;
+
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
-entity xil_SyncBit is
+
+entity sync_Bit_Xilinx is
 	generic (
 		INIT					: BIT							-- initialitation bit
 	);
@@ -75,7 +78,8 @@ entity xil_SyncBit is
 		Input					: in	STD_LOGIC;	-- Data to be synchronized
 		Output				: out	STD_LOGIC		-- synchronised data
 	);
-end;
+end entity;
+
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -83,11 +87,12 @@ use			IEEE.STD_LOGIC_1164.all;
 library PoC;
 use			PoC.utils.ALL;
 
-architecture rtl of xil_SyncBits is
+
+architecture rtl of sync_Bits_Xilinx is
 	constant INIT_I						: BIT_VECTOR		:= to_bitvector(resize(descend(INIT), BITS));
 begin
 	gen : for i in 0 to BITS - 1 generate
-		Sync : entity PoC.xil_SyncBit
+		Sync : entity PoC.sync_Bit_Xilinx
 			generic map (
 				INIT	=> INIT_I(i)
 			)
@@ -99,13 +104,15 @@ begin
 	end generate;
 end architecture;
 
+
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
 library UniSim;
 use			UniSim.vComponents.all;
 
-architecture rtl of xil_SyncBit is
+
+architecture rtl of sync_Bit_Xilinx is
 	attribute ASYNC_REG				: STRING;
 	attribute SHREG_EXTRACT		: STRING;
 	attribute RLOC						: STRING;

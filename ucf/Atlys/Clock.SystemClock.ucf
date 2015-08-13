@@ -13,3 +13,5 @@
 NET "Atlys_SystemClock_100MHz"				LOC = "L15";						## {IN}		IC12.3
 NET "Atlys_SystemClock_100MHz"				IOSTANDARD = LVCMOS33;
 NET "Atlys_SystemClock_100MHz"				TNM_NET = "NET_SystemClock_100MHz";
+
+TIMESPEC "TS_SystemClock"					= PERIOD "NET_SystemClock_100MHz"		100 MHz	HIGH 50 %;		# 100 MHz oscillator (50%/50% duty-cycle)

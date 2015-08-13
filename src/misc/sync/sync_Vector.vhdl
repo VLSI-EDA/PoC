@@ -131,14 +131,14 @@ begin
 	Busy					<= Busy_i;
 	Changed				<= D3;
 		
-	syncClk2 : entity PoC.sync_Flag
+	syncClk2 : entity PoC.sync_Bits
 		port map (
 			Clock				=> Clock2,				-- <Clock>	output clock domain
 			Input(0)		=> syncClk2_In,		-- @async:	input bits
 			Output(0)		=> syncClk2_Out		-- @Clock:	output bits
 		);
 	
-	syncClk1 : entity PoC.sync_Flag
+	syncClk1 : entity PoC.sync_Bits
 		port map (
 			Clock				=> Clock1,				-- <Clock>	output clock domain
 			Input(0)		=> syncClk1_In,		-- @async:	input bits

@@ -11,7 +11,8 @@
 -- ------------------------------------
 --		This module synchronizes one reset signal from clock-domain 'Clock1' to
 --		clock-domain 'Clock'. The clock-domain boundary crossing is done by two
---		synchronizer D-FFs. All bits are independent from each other.
+--		synchronizer D-FFs. If a known vendor like Altera or Xilinx are
+--		recognized, a vendor specific implementation is choosen.
 -- 
 --		ATTENTION:
 --			Use this synchronizer only for reset signals.
@@ -52,6 +53,7 @@ use			IEEE.STD_LOGIC_1164.all;
 library	PoC;
 use			PoC.config.all;
 use			PoC.utils.all;
+use			PoC.sync.all;
 
 
 entity sync_Reset is
@@ -60,13 +62,12 @@ entity sync_Reset is
 		Input			: in	STD_LOGIC;		-- @async:	reset input
 		Output		: out STD_LOGIC			-- @Clock:	reset output
 	);
-end;
+end entity;
 
 
 architecture rtl of sync_Reset is
-
 begin
-	genGeneric : if (VENDOR /= VENDOR_XILINX) generate
+	genGeneric : if ((VENDOR /= VENDOR_ALTERA) and (VENDOR /= VENDOR_XILINX)) generate
 		attribute ASYNC_REG										: STRING;
 		attribute SHREG_EXTRACT								: STRING;
 		
@@ -99,22 +100,23 @@ begin
 		Output		<= Data_sync;
 	end generate;
 
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
-		-- locally component declaration removes the dependancy to 'PoC.xil.all'
-		component xil_SyncReset is
-			port (
-				Clock		: in	STD_LOGIC;	-- Clock to be synchronized to
-				Input		: in	STD_LOGIC;	-- high active asynchronous reset
-				Output	: out	STD_LOGIC		-- "Synchronised" reset signal
-			);
-		end component;
-	begin
-		-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
-		sync : xil_SyncReset
+	-- use dedicated and optimized 2 D-FF synchronizer for Altera FPGAs
+	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+		sync : sync_Reset_Altera
 			port map (
 				Clock			=> Clock,
 				Input			=> Input,
 				Output		=> Output
 			);
 	end generate;
-end;
+	
+	-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
+	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+		sync : sync_Reset_Xilinx
+			port map (
+				Clock			=> Clock,
+				Input			=> Input,
+				Output		=> Output
+			);
+	end generate;
+end architecture;

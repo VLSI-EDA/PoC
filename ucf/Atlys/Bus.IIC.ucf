@@ -7,3 +7,6 @@
 ## -----------------------------------------------------------------------------
 NET "Atlys_JA_SerialClock"						LOC = "C13" | IOSTANDARD = LVCMOS33;			## {INOUT}		JA - Pin 17 - SerialClock
 NET "Atlys_JA_SerialData"							LOC = "A13" | IOSTANDARD = LVCMOS33;			## {INOUT}		JA - Pin 18 - SerialData
+
+## Ignore timings on async I/O pins
+NET "Atlys_JA_Serial*"								TIG;

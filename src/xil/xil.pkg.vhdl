@@ -303,18 +303,6 @@ package xil is
 		);
 	end component;
 	
-	component xil_SyncBlock is
-		generic (
-			BITS						: POSITIVE						:= 1;									-- number of bit to be synchronized
-			INIT						: STD_LOGIC_VECTOR		:= x"00000000"				-- initialisation bits
-		);
-		port (
-			Clock						: in	STD_LOGIC;														-- Clock to be synchronized to
-			Input						: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- Data to be synchronized
-			Output					: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- synchronised data
-		);
-	end component;
-	
 	component xil_SystemMonitor_Virtex6 is
 		port (
 			Reset						: in	STD_LOGIC;				-- Reset signal for the System Monitor control logic

@@ -7,7 +7,7 @@
 ##		Vendor:				Marvell
 ##		Device:				M88E1111 - RCJ1
 ##		MDIO-Address:	0x05 (---0 0111b)
-##		I²C-Address:	I²C management mode is not enabled
+##		I2C-Address:	I2C management mode is not enabled
 ##
 ## common signals and management
 ## --------------------------
@@ -15,3 +15,8 @@ NET "KC705_EthernetPHY_Reset_n"									LOC = "G13" | IOSTANDARD = LVCMOS33;	## 
 NET "KC705_EthernetPHY_Interrupt_n"							LOC = "L16" | IOSTANDARD = LVCMOS33;	## {IN}			IC8.32
 NET "KC705_EthernetPHY_Management_Clock"				LOC = "F16" | IOSTANDARD = LVCMOS33;	## {OUT}		IC8.35
 NET "KC705_EthernetPHY_Management_Data"					LOC = "N17" | IOSTANDARD = LVCMOS33;	## {INOUT}	IC8.33
+
+## Ignore timings on async I/O pins
+NET "KC705_EthernetPHY_Reset_n"									TIG;
+NET "KC705_EthernetPHY_Interrupt_n"							TIG;
+NET "KC705_EthernetPHY_Management_*"						TIG;

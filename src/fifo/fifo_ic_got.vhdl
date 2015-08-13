@@ -2,8 +2,8 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
--- ============================================================================================================================================================
--- Module:					FIFO, independent clocks (ic) and first-word-fall-through mode
+-- ===========================================================================
+-- Module:					FIFO, independent clocks (ic), first-word-fall-through mode
 -- 
 -- Authors:					Thomas B. Preusser
 --									Steffen Koehler
@@ -49,8 +49,9 @@
 --		                      fstate_rd == 3 => 3/4 full
 --
 -- License:
--- ============================================================================================================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany, Chair for VLSI-Design, Diagnostics and Architecture
+-- ===========================================================================
+-- Copyright 2007-2014 Technische Universitaet Dresden - Germany
+--                     Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -113,12 +114,14 @@ architecture rtl of fifo_ic_got is
   signal IP1 : std_logic_vector(AN-1 downto 0);                     -- IP + 1
   signal IP0 : std_logic_vector(AN-1 downto 0) := (others => '0');  -- Write Pointer IP
   signal IPz : std_logic_vector(AN-1 downto 0) := (others => '0');  -- IP delayed by one clock
+	signal OPs : std_logic_vector(AN-1 downto 0) := (others => '0');  -- Sync stage: OP0 -> OPc
   signal OPc : std_logic_vector(AN-1 downto 0) := (others => '0');  -- Copy of OP
   signal Ful : std_logic                       := '0';              -- RAM full
 
   -- Registers, clk_rd domain
   signal OP1 : std_logic_vector(AN-1 downto 0);                     -- OP + 1
   signal OP0 : std_logic_vector(AN-1 downto 0) := (others => '0');  -- Read Pointer OP
+  signal IPs : std_logic_vector(AN-1 downto 0) := (others => '0');  -- Sync stage: IPz -> IPc
   signal IPc : std_logic_vector(AN-1 downto 0) := (others => '0');  -- Copy of IP
   signal Avl : std_logic                       := '0';              -- RAM Data available
   signal Vld : std_logic                       := '0';              -- Output Valid
@@ -162,11 +165,13 @@ begin
       if rst_wr = '1' then
         IP0 <= (others => '0');
         IPz <= (others => '0');
+				OPs <= (others => '0');
         OPc <= (others => '0');
         Ful <= '0';
       else
         IPz <= IP0;
-        OPc <= OP0;
+        OPs <= OP0;
+        OPc <= OPs;
         if puti = '1' then
           IP0 <= IP1;
           if IP1(A_BITS-1 downto 0) = OPc(A_BITS-1 downto 0) then
@@ -215,11 +220,13 @@ begin
     if rising_edge(clk_rd) then
       if rst_rd = '1' then
         OP0 <= (others => '0');
+				IPs <= (others => '0');
         IPc <= (others => '0');
         Avl <= '0';
         Vld <= '0';
       else
-        IPc <= IPz;
+        IPs <= IPz;
+        IPc <= IPs;
         if geti = '1' then
           OP0 <= OP1;
           if OP1(A_BITS-1 downto 0) = IPc(A_BITS-1 downto 0) then

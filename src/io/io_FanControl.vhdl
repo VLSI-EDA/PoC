@@ -127,7 +127,7 @@ begin
 				);
 		end generate;
 
-		sync : entity PoC.xil_SyncBits
+		sync : entity PoC.sync_Bits
 			generic map (
 				BITS			=> 2,
 				INIT			=> "00"

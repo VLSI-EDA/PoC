@@ -50,7 +50,7 @@ entity uart_tx is
   port (
     clk    : in  std_logic;
     rst    : in  std_logic;
-    bclk_r : in  std_logic;
+    bclk   : in  std_logic;
     stb    : in  std_logic;
     din    : in  std_logic_vector(7 downto 0);
     rdy    : out std_logic;
@@ -76,7 +76,7 @@ architecture rtl of uart_tx is
 
 begin
 
-	process (state, stb, bclk_r, shift_done)
+	process (state, stb, bclk, shift_done)
 	begin
 		next_state <= state;
 		start_tx   <= '0';
@@ -91,7 +91,7 @@ begin
 				end if;
 
 			when TDATA =>
-				if bclk_r = '1' then
+				if bclk = '1' then
 					-- also shift stop bit into sr0!
 					shift_sr <= '1';
 					

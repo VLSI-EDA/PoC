@@ -9,3 +9,6 @@
 ##	Location:				BTN1
 ## -----------------------------------------------------------------------------
 NET "Atlys_GPIO_Button_Reset_n"					LOC =  "T15"	| IOSTANDARD = LVCMOS33;			## {IN}		BTN1; high-active; external 10k pullup resistor
+
+## Ignore timings on async I/O pins
+NET "Atlys_GPIO_Button_Reset_n"					TIG;

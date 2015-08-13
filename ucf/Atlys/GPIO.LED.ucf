@@ -16,3 +16,6 @@ NET "Atlys_GPIO_LED<4>"									LOC = "M13"	| IOSTANDARD = LVCMOS33;			## {OUT}	
 NET "Atlys_GPIO_LED<5>"									LOC = "D4"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD5; Bank MISC;	VCCO=VCC3V3
 NET "Atlys_GPIO_LED<6>"									LOC = "P16"	| IOSTANDARD = LVCMOS33;			## {OUT}	LD6; Bank MISC;	VCCO=VCC3V3
 NET "Atlys_GPIO_LED<7>"									LOC = "N12"	| IOSTANDARD = LVCMOS25;			## {OUT}	LD7; Bank MISC;	VCCO=VCC3V3
+
+## Ignore timings on async I/O pins
+NET "Atlys_GPIO_LED<?>"									TIG;

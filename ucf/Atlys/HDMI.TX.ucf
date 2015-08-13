@@ -7,14 +7,21 @@
 ##		Vendor:				Texas Instruments
 ##		Device:				TMDS141RHAR
 ## -----------------------------------------------------------------------------
-NET "Atlys_TMDS_TX_Clock_p"						LOC = "B6" | IOSTANDARD = LVCMOS33;				## {OUT}		
-NET "Atlys_TMDS_TX_Clock_n"						LOC = "A6" | IOSTANDARD = LVCMOS33;				## {OUT}		
-NET "Atlys_TMDS_TX_0_p"								LOC = "D8" | IOSTANDARD = LVCMOS33;				## {OUT}		
-NET "Atlys_TMDS_TX_0_n"								LOC = "C8" | IOSTANDARD = LVCMOS33;				## {OUT}		
-NET "Atlys_TMDS_TX_1_p"								LOC = "C7" | IOSTANDARD = LVCMOS33;				## {OUT}		
-NET "Atlys_TMDS_TX_1_n"								LOC = "A7" | IOSTANDARD = LVCMOS33;				## {OUT}		
-NET "Atlys_TMDS_TX_2_p"								LOC = "B8" | IOSTANDARD = LVCMOS33;				## {OUT}		
-NET "Atlys_TMDS_TX_2_n"								LOC = "A8" | IOSTANDARD = LVCMOS33;				## {OUT}		
+NET "Atlys_TMDS_TX_Clock_p"						LOC = "B6"								## {OUT}		
+NET "Atlys_TMDS_TX_Clock_n"						LOC = "A6"								## {OUT}		
+NET "Atlys_TMDS_TX_0_p"								LOC = "D8"								## {OUT}		
+NET "Atlys_TMDS_TX_0_n"								LOC = "C8"								## {OUT}		
+NET "Atlys_TMDS_TX_1_p"								LOC = "C7"								## {OUT}		
+NET "Atlys_TMDS_TX_1_n"								LOC = "A7"								## {OUT}		
+NET "Atlys_TMDS_TX_2_p"								LOC = "B8"								## {OUT}		
+NET "Atlys_TMDS_TX_2_n"								LOC = "A8"								## {OUT}		
+NET "Atlys_TMDS_TX_*_?"								IOSTANDARD = LVCMOS33;
+NET "Atlys_TMDS_TX_*_?"								SLEW = FAST;
 
-NET "Atlys_TMDS_TX_SerialClock"				LOC = "D9" | IOSTANDARD = LVCMOS33;				## {INOUT}	
-NET "Atlys_TMDS_TX_SerialData"				LOC = "C9" | IOSTANDARD = LVCMOS33;				## {INOUT}	
+NET "Atlys_TMDS_TX_SerialClock"				LOC = "D9"								## {INOUT}	
+NET "Atlys_TMDS_TX_SerialData"				LOC = "C9"								## {INOUT}	
+NET "Atlys_TMDS_TX_Serial*"						IOSTANDARD = LVCMOS33;
+NET "Atlys_TMDS_TX_Serial*"						SLEW = FAST;
+
+## Ignore timings on async I/O pins
+NET "Atlys_TMDS_TX_Serial*"						TIG;

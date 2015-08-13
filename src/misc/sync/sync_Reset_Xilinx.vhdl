@@ -5,7 +5,7 @@
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	xil_SyncReset
+-- Module:				 	sync_Reset_Xilinx
 -- 
 -- Description:
 -- ------------------------------------
@@ -16,7 +16,7 @@
 --		a Xilinx FPGA is detected.
 --		
 --		ATTENTION:
---			Only use this synchronizer for reset signals.
+--			Use this synchronizer only for reset signals.
 --
 --		CONSTRAINTS:
 --			This relative placement of the internal sites is constrained by RLOCs.
@@ -51,20 +51,20 @@
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
-library UNISIM;
-use			UNISIM.VCOMPONENTS.all;
+library UniSim;
+use			UniSim.VComponents.all;
 
 
-entity xil_SyncReset is
+entity sync_Reset_Xilinx is
 	port (
 		Clock				: in	STD_LOGIC;					-- Clock to be synchronized to
 		Input				: in	STD_LOGIC;					-- high active asynchronous reset
 		Output			: out	STD_LOGIC						-- "Synchronised" reset signal
 	);
-end;
+end entity;
 
 
-architecture rtl of xil_SyncReset is
+architecture rtl of sync_Reset_Xilinx is
 	attribute ASYNC_REG											: STRING;
 	attribute SHREG_EXTRACT									: STRING;
 	attribute RLOC													: STRING;
@@ -111,4 +111,4 @@ begin
 	);
 
 	Output	<= Reset_sync;
-end;
+end architecture;

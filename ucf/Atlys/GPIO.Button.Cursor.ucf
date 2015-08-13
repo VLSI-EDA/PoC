@@ -13,3 +13,6 @@ NET "Atlys_GPIO_Button_West"						LOC = "P4"	| IOSTANDARD = LVCMOS15;			## {IN}	
 NET "Atlys_GPIO_Button_Center"					LOC = "F5"	| IOSTANDARD = LVCMOS25;			## {IN}		BTNC; high-active; external 10k pulldown resistor; Bank 3; VCCO=VCC1V8
 NET "Atlys_GPIO_Button_East"						LOC = "F6"	| IOSTANDARD = LVCMOS15;			## {IN}		BTNR; high-active; external 10k pulldown resistor; Bank 3; VCCO=VCC1V8
 NET "Atlys_GPIO_Button_South"						LOC = "P3"	| IOSTANDARD = LVCMOS15;			## {IN}		BTND; high-active; external 10k pulldown resistor; Bank 3; VCCO=VCC1V8
+
+## Ignore timings on async I/O pins
+NET "Atlys_GPIO_Button_*"								TIG;

@@ -17,3 +17,6 @@ NET "Atlys_GPIO_Switches<5>"						LOC = "R5";									## {IN}		SW5; high-active
 NET "Atlys_GPIO_Switches<6>"						LOC = "T5";									## {IN}		SW6; high-active
 NET "Atlys_GPIO_Switches<7>"						LOC = "E4";									## {IN}		SW7; high-active
 NET "Atlys_GPIO_Switches<?>"						IOSTANDARD = LVCMOS33;			##
+
+## Ignore timings on async I/O pins
+NET "Atlys_GPIO_Switches<?>"						TIG;
