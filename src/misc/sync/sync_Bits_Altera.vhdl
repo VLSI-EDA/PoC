@@ -56,22 +56,22 @@ end entity;
 
 
 architecture rtl of sync_Bits_Altera is
-	attribute altera_attribute	: STRING;
-	attribute preserve					: BOOLEAN;
-	
+	attribute PRESERVE					: BOOLEAN;
+	attribute ALTERA_ATTRIBUTE	: STRING;
+
+	-- Apply a SDC constraint to meta stable flip flop
+	attribute ALTERA_ATTRIBUTE of rtl				: architecture is "-name SDC_STATEMENT ""set_false_path -to [get_registers {*|sync_Bits_Altera:*|\gen:*:Data_meta}] """;
 begin
 	gen : for i in 0 to BITS - 1 generate
 		signal Data_async				: STD_LOGIC;
 		signal Data_meta				: STD_LOGIC		:= INIT(i);
 		signal Data_sync				: STD_LOGIC		:= INIT(i);
 
-		-- Apply a SDC constraint to meta stable flip flop
-		attribute altera_attribute of rtl					: architecture is "-name SDC_STATEMENT ""set_false_path -to *|alt_SyncBits:*|Data_meta """;
-		-- Notity the synthesizer / timing analysator to identity a synchronizer circuit
-		attribute altera_attribute of Data_meta		: signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
 		-- preserve both registers (no optimization, shift register extraction, ...)
-		attribute preserve of Data_meta						: signal is TRUE;
-		attribute preserve of Data_sync						: signal is TRUE;
+		attribute PRESERVE of Data_meta						: signal is TRUE;
+		attribute PRESERVE of Data_sync						: signal is TRUE;
+		-- Notity the synthesizer / timing analysator to identity a synchronizer circuit
+		attribute ALTERA_ATTRIBUTE of Data_meta		: signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
 	begin
 		Data_async	<= Input(i);
 	

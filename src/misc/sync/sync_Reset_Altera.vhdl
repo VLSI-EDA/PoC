@@ -44,14 +44,10 @@ use			IEEE.STD_LOGIC_1164.all;
 
 
 entity sync_Reset_Altera is
-	generic (
-		BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
-		INIT					: STD_LOGIC_VECTOR		:= x"00000000"				-- initialitation bits
-	);
 	port (
-		Clock					: in	STD_LOGIC;														-- Clock to be synchronized to
-		Input					: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- Data to be synchronized
-		Output				: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- synchronised data
+		Clock					: in	STD_LOGIC;		-- Clock to be synchronized to
+		Input					: in	STD_LOGIC;		-- Data to be synchronized
+		Output				: out	STD_LOGIC			-- synchronised data
 	);
 end entity;
 
@@ -59,34 +55,31 @@ end entity;
 architecture rtl of sync_Reset_Altera is
 	attribute altera_attribute	: STRING;
 	attribute preserve					: BOOLEAN;
-begin
-	gen : for i in 0 to BITS - 1 generate
-		signal Data_async				: STD_LOGIC;
-		signal Data_meta				: STD_LOGIC		:= '1';
-		signal Data_sync				: STD_LOGIC		:= '1';
 
-		-- Apply a SDC constraint to meta stable flip flop
-		attribute altera_attribute of rtl					: architecture is "-name SDC_STATEMENT ""set_false_path -to *|sync_Reset_Altera:*|Data_meta """;
-		-- Notity the synthesizer / timing analysator to identity a synchronizer circuit
-		attribute altera_attribute of Data_meta		: signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
-		-- preserve both registers (no optimization, shift register extraction, ...)
-		attribute preserve of Data_meta						: signal is TRUE;
-		attribute preserve of Data_sync						: signal is TRUE;
+	signal Data_async				: STD_LOGIC;
+	signal Data_meta				: STD_LOGIC		:= '1';
+	signal Data_sync				: STD_LOGIC		:= '1';
+
+	-- Apply a SDC constraint to meta stable flip flop
+	--attribute altera_attribute of rtl					: architecture is "-name SDC_STATEMENT ""set_false_path -to *|sync_Reset_Altera:*|Data_meta """;
+	-- Notity the synthesizer / timing analysator to identity a synchronizer circuit
+	attribute altera_attribute of Data_meta		: signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
+	-- preserve both registers (no optimization, shift register extraction, ...)
+	attribute preserve of Data_meta						: signal is TRUE;
+	attribute preserve of Data_sync						: signal is TRUE;
+begin
+	Data_async	<= '0';
+	
+	process(Clock)
 	begin
-		Data_async	<= '0';
-	
-		process(Clock)
-		begin
-			if (Input = '1') then
-				Data_meta <= '1';
-				Data_sync <= '1';
-			elsif rising_edge(Clock) then
-				Data_meta <= Data_async;
-				Data_sync <= Data_meta;
-			end if;
-		end process;
-			
-		Output(i)		<= Data_sync;
-	end generate;
-	
+		if (Input = '1') then
+			Data_meta <= '1';
+			Data_sync <= '1';
+		elsif rising_edge(Clock) then
+			Data_meta <= Data_async;
+			Data_sync <= Data_meta;
+		end if;
+	end process;
+		
+	Output		<= Data_sync;
 end architecture;

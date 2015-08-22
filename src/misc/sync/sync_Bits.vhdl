@@ -59,13 +59,13 @@ use			PoC.sync.all;
 
 entity sync_Bits is
   generic (
-	  BITS								: POSITIVE						:= 1;										-- number of bit to be synchronized
-		INIT								: STD_LOGIC_VECTOR		:= x"00000000"
+	  BITS								: POSITIVE						:= 1;									-- number of bit to be synchronized
+		INIT								: STD_LOGIC_VECTOR		:= x"00000000"				-- initialitation bits
 	);
   port (
-		Clock								: in	STD_LOGIC;															-- <Clock>	output clock domain
-		Input								: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);		-- @async:	input bits
-		Output							: out STD_LOGIC_VECTOR(BITS - 1 downto 0)			-- @Clock:	output bits
+		Clock								: in	STD_LOGIC;														-- <Clock>	output clock domain
+		Input								: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- @async:	input bits
+		Output							: out STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- @Clock:	output bits
 	);
 end entity;
 
