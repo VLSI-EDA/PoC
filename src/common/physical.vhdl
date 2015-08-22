@@ -846,7 +846,7 @@ package body physical is
 	
 	-- convert and format physical types to STRING
 	function to_string(t : TIME; precision : NATURAL) return STRING is
-		variable unit		: STRING(1 to 3)	:= (others => NUL);
+		variable unit		: STRING(1 to 3)	:= (others => C_POC_NUL);
 		variable value	: REAL;
 	begin
 		if (t < 1 ps) then
@@ -873,7 +873,7 @@ package body physical is
 	end function;
 		
 	function to_string(f : FREQ; precision : NATURAL) return STRING is
-		variable unit		: STRING(1 to 3)	:= (others => NUL);
+		variable unit		: STRING(1 to 3)	:= (others => C_POC_NUL);
 		variable value	: REAL;
 	begin
 		if (f < 1 kHz) then
@@ -897,7 +897,7 @@ package body physical is
 	end function;
 		
 	function to_string(br : BAUD; precision : NATURAL) return STRING is
-		variable unit		: STRING(1 to 3)	:= (others => NUL);
+		variable unit		: STRING(1 to 3)	:= (others => C_POC_NUL);
 		variable value	: REAL;
 	begin
 		if (br < 1 kBd) then
@@ -918,7 +918,7 @@ package body physical is
 	end function;
 		
 	function to_string(mem : MEMORY; precision : NATURAL) return STRING is
-		variable unit		: STRING(1 to 3)	:= (others => NUL);
+		variable unit		: STRING(1 to 3)	:= (others => C_POC_NUL);
 		variable value	: REAL;
 	begin
 		if (mem < 1 KiB) then

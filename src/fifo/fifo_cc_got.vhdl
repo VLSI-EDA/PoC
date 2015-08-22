@@ -65,7 +65,7 @@ use			IEEE.numeric_std.all;
 library	poc;
 use			poc.config.all;
 use			poc.utils.all;
-use			poc.ocram.ocram_sdp;
+use			poc.ocram.all;
 
 
 entity fifo_cc_got is

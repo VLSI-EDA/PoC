@@ -751,13 +751,13 @@ package body vectors is
 	end function;
 	
 	function to_string(slvv : T_SLVV_8; sep : CHARACTER := ':') return STRING is
-		constant hex_len			: POSITIVE								:= ite((sep = NUL), (slvv'length * 2), (slvv'length * 3) - 1);
+		constant hex_len			: POSITIVE								:= ite((sep = C_POC_NUL), (slvv'length * 2), (slvv'length * 3) - 1);
 		variable Result				: STRING(1 to hex_len)		:= (others => sep);
 		variable pos					: POSITIVE								:= 1;
 	begin
 		for i in slvv'range loop
 			Result(pos to pos + 1)	:= to_string(slvv(i), 'h');
-			pos											:= pos + ite((sep = NUL), 2, 3);
+			pos											:= pos + ite((sep = C_POC_NUL), 2, 3);
 		end loop;
 		return Result;
 	end function;

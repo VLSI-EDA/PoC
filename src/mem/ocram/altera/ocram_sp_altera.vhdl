@@ -41,6 +41,10 @@ use			IEEE.numeric_std.all;
 library	altera_mf;
 use			altera_mf.all;
 
+library PoC;
+use			PoC.utils.all;
+use			PoC.strings.all;
+
 
 entity ocram_sp_altera is
 	generic (
@@ -56,7 +60,7 @@ entity ocram_sp_altera is
 		d		: in	std_logic_vector(D_BITS-1 downto 0);
 		q		: out std_logic_vector(D_BITS-1 downto 0)
 	);
-end ocram_sp_altera;
+end entity;
 
 
 architecture rtl of ocram_sp_altera is
@@ -122,4 +126,4 @@ begin
 			data_a									=> d,
 			q_a											=> q
 		);
-end rtl;
+end architecture;

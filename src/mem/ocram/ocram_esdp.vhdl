@@ -119,7 +119,7 @@ begin
 				
 			begin
 				-- discard the first line of a mem file
-				if (str_to_lower(FileName(FileName'length - 3 to FileName'length)) = ".mem") then
+				if (str_toLower(FileName(FileName'length - 3 to FileName'length)) = ".mem") then
 					readline(FileHandle, CurrentLine);
 				end if;
 

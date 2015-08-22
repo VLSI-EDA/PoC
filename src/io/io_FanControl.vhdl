@@ -55,7 +55,6 @@ use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.physical.all;
 use			PoC.components.all;
---use			PoC.io.all;
 use			PoC.xil.all;
 
 
@@ -78,7 +77,7 @@ end;
 architecture rtl of io_FanControl is
 	constant TIME_STARTUP			: TIME																							:= 500 ms;		-- StartUp time
 	constant PWM_RESOLUTION		: POSITIVE																					:= 4;					-- 4 Bit resolution => 0 to 15 steps
-	constant PWM_FREQ					: FREQ																							:= 100 Hz;		-- 
+	constant PWM_FREQ					: FREQ																							:= 10 Hz;			-- 
 
 	constant TACHO_RESOLUTION	: POSITIVE																					:= 8;
 
@@ -126,7 +125,7 @@ begin
 					VN									=> '0'
 				);
 		end generate;
-
+		
 		sync : entity PoC.sync_Bits
 			generic map (
 				BITS			=> 2,
@@ -146,6 +145,17 @@ begin
 			elsif (OverTemperature_sync = '1') then		PWM_PWMIn <= to_slv(2**(PWM_RESOLUTION) - 1, PWM_RESOLUTION);			-- 100%
 			elsif (UserTemperature_sync = '1') then		PWM_PWMIn <= to_slv(2**(PWM_RESOLUTION - 1), PWM_RESOLUTION);			-- 50%
 			else																			PWM_PWMIn <= to_slv(4, PWM_RESOLUTION);														-- 13%
+			end if;
+		end process;
+	end generate;
+	
+	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+		process(StartUp)
+		begin
+			if		(StartUp = '1') then
+				PWM_PWMIn <= to_slv(2**(PWM_RESOLUTION) - 1, PWM_RESOLUTION);			-- 100%; start up
+			else
+				PWM_PWMIn <= to_slv(2**(PWM_RESOLUTION - 1), PWM_RESOLUTION);			-- 50%
 			end if;
 		end process;
 	end generate;

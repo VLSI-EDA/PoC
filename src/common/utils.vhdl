@@ -41,10 +41,14 @@ use			PoC.my_config.all;
 
 
 package utils is
-  --+ Environment +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  -- Distinguishes Simulation from Synthesis
+	-- PoC settings
+	-- ==========================================================================
+	constant POC_VERBOSE					: BOOLEAN			:= MY_VERBOSE;	
+
+  -- Environment
+	-- ==========================================================================
+  -- Distinguishes simulation from synthesis
 	constant SIMULATION					: BOOLEAN;				-- deferred constant declaration
-	constant POC_VERBOSE				: BOOLEAN		:= MY_VERBOSE;
 	
 	-- Type declarations
 	-- ==========================================================================
@@ -86,15 +90,15 @@ package utils is
 
   --+ Division ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   -- Calculates: ceil(a / b)
-	FUNCTION div_ceil(a : NATURAL; b : POSITIVE) RETURN NATURAL;
+	function div_ceil(a : NATURAL; b : POSITIVE) return NATURAL;
 	
   --+ Power +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   -- is input a power of 2?
-	FUNCTION is_pow2(int : NATURAL)			RETURN BOOLEAN;
+	function is_pow2(int : NATURAL)			return BOOLEAN;
   -- round to next power of 2
-	FUNCTION ceil_pow2(int : NATURAL)		RETURN POSITIVE;
+	function ceil_pow2(int : NATURAL)		return POSITIVE;
   -- round to previous power of 2
-	FUNCTION floor_pow2(int : NATURAL)	RETURN NATURAL;
+	function floor_pow2(int : NATURAL)	return NATURAL;
 
   --+ Logarithm ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   -- Calculates: ceil(ld(arg))
@@ -102,9 +106,9 @@ package utils is
   -- Calculates: max(1, ceil(ld(arg)))
   function log2ceilnz(arg : positive) return positive;
   -- Calculates: ceil(lg(arg))
-	FUNCTION log10ceil(arg		: POSITIVE)	RETURN NATURAL;
+	function log10ceil(arg		: POSITIVE)	return NATURAL;
   -- Calculates: max(1, ceil(lg(arg)))
-	FUNCTION log10ceilnz(arg	: POSITIVE)	RETURN POSITIVE;
+	function log10ceilnz(arg	: POSITIVE)	return POSITIVE;
 	
 	--+ if-then-else (ite) +++++++++++++++++++++++++++++++++++++++++++++++++++++
 	function ite(cond : BOOLEAN; value1 : INTEGER; value2 : INTEGER) return INTEGER;
@@ -160,7 +164,7 @@ package utils is
 
 	--+ Basic Vector Utilities +++++++++++++++++++++++++++++++++++++++++++++++++
 
-  -- Aggregate Functions
+  -- Aggregate functions
   function slv_or  (vec : STD_LOGIC_VECTOR) return STD_LOGIC;
   function slv_nor (vec : STD_LOGIC_VECTOR) return STD_LOGIC;
   function slv_and (vec : STD_LOGIC_VECTOR) return STD_LOGIC;
@@ -224,11 +228,11 @@ package utils is
   function mssb_idx(arg : bit_vector) return integer;
 
 	-- Swap sub vectors in vector (endian reversal)
-	FUNCTION swap(slv : STD_LOGIC_VECTOR; Size : POSITIVE) RETURN STD_LOGIC_VECTOR;
+	function swap(slv : STD_LOGIC_VECTOR; Size : POSITIVE) return STD_LOGIC_VECTOR;
 
 	-- generate bit masks
-	FUNCTION genmask_high(Bits : NATURAL; MaskLength : POSITIVE) RETURN STD_LOGIC_VECTOR;
-	FUNCTION genmask_low(Bits : NATURAL; MaskLength : POSITIVE) RETURN STD_LOGIC_VECTOR;
+	function genmask_high(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR;
+	function genmask_low(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR;
 
 	--+ Encodings ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -247,7 +251,7 @@ package utils is
 	-- Binary-Code to Gray-Code
 	function bin2gray(value : std_logic_vector) return std_logic_vector;
 	
-end package utils;
+end package;
 
 
 package body utils is
@@ -289,8 +293,9 @@ package body utils is
 	
 	-- round to previous power of 2
 	function floor_pow2(int : NATURAL) return NATURAL is
-		variable temp : UNSIGNED(30 downto 0)	:= to_unsigned(int, 31);
+		variable temp : UNSIGNED(30 downto 0);
 	begin
+		temp	:= to_unsigned(int, 31);
 		for i in temp'range loop
 			if (temp(i) = '1') then
 				return 2 ** i;
@@ -302,10 +307,12 @@ package body utils is
 	-- Logarithms: log*ceil*
 	-- ==========================================================================
 	function log2ceil(arg : positive) return natural is
-		variable tmp : positive		:= 1;
-		variable log : natural		:= 0;
+		variable tmp : positive;
+		variable log : natural;
 	begin
 		if arg = 1 then	return 0; end if;
+		tmp := 1;
+		log := 0;
 		while arg > tmp loop
 			tmp := tmp * 2;
 			log := log + 1;
@@ -319,10 +326,12 @@ package body utils is
 	end function;
 
 	function log10ceil(arg : positive) return natural is
-		variable tmp : positive		:= 1;
-		variable log : natural		:= 0;
+		variable tmp : positive;
+		variable log : natural;
 	begin
 		if arg = 1 then	return 0; end if;
+		tmp := 1;
+		log := 0;
 		while arg > tmp loop
 			tmp := tmp * 10;
 			log := log + 1;
@@ -423,49 +432,53 @@ package body utils is
 		return arg2;
 	end function;
 	
-	FUNCTION imin(vec : T_INTVEC) RETURN INTEGER IS
-		VARIABLE Result		: INTEGER		:= INTEGER'high;
-	BEGIN
-		FOR I IN vec'range LOOP
-			IF (vec(I) < Result) THEN
-				Result	:= vec(I);
-			END IF;
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
-	
-	FUNCTION imin(vec : T_NATVEC) RETURN NATURAL IS
-		VARIABLE Result		: natural := NATURAL'high;
-	BEGIN
-		FOR I IN vec'range LOOP
-			IF (vec(I) < Result) THEN
-				Result	:= vec(I);
-			END IF;
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
-	
-	FUNCTION imin(vec : T_POSVEC) RETURN POSITIVE IS
-		VARIABLE Result		: positive := POSITIVE'high;
-	BEGIN
-		FOR I IN vec'range LOOP
-			IF (vec(I) < Result) THEN
-				Result	:= vec(I);
-			END IF;
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
-
-	function rmin(vec : T_REALVEC) return real is
-		variable  res : real := real'high;
+	function imin(vec : T_INTVEC) return INTEGER is
+		variable Result		: INTEGER;
 	begin
+		Result	:= INTEGER'high;
 		for i in vec'range loop
-			if vec(i) < res then
-				res := vec(i);
+			if (vec(I) < Result) then
+				Result	:= vec(I);
 			end if;
 		end loop;
-		return  res;
-	end rmin;
+		return Result;
+	end function;
+	
+	function imin(vec : T_NATVEC) return NATURAL is
+		variable Result		: NATURAL;
+	begin
+		Result	:= NATURAL'high;
+		for i in vec'range loop
+			if (vec(I) < Result) then
+				Result	:= vec(I);
+			end if;
+		end loop;
+		return Result;
+	end function;
+	
+	function imin(vec : T_POSVEC) return POSITIVE is
+		variable Result		: POSITIVE;
+	begin
+		Result	:= POSITIVE'high;
+		for i in vec'range loop
+			if (vec(I) < Result) then
+				Result	:= vec(I);
+			end if;
+		end loop;
+		return Result;
+	end function;
+
+	function rmin(vec : T_REALVEC) return REAL is
+		variable  Result : REAL;
+	begin
+		Result	:= REAL'high;
+		for i in vec'range loop
+			if vec(i) < Result then
+				Result := vec(i);
+			end if;
+		end loop;
+		return  Result;
+	end function;
 
 	function imax(arg1 : integer; arg2 : integer) return integer is
 	begin
@@ -479,91 +492,100 @@ package body utils is
 		return arg2;
 	end function;
 	
-	FUNCTION imax(vec : T_INTVEC) RETURN INTEGER IS
-		VARIABLE Result		: INTEGER		:= INTEGER'low;
-	BEGIN
-		FOR I IN vec'range LOOP
-			IF (vec(I) > Result) THEN
-				Result	:= vec(I);
-			END IF;
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
-	
-	FUNCTION imax(vec : T_NATVEC) RETURN NATURAL IS
-		VARIABLE Result		: natural := NATURAL'low;
-	BEGIN
-		FOR I IN vec'range LOOP
-			IF (vec(I) > Result) THEN
-				Result	:= vec(I);
-			END IF;
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
-	
-	FUNCTION imax(vec : T_POSVEC) RETURN POSITIVE IS
-		VARIABLE Result		: positive := POSITIVE'low;
-	BEGIN
-		FOR I IN vec'range LOOP
-			IF (vec(I) > Result) THEN
-				Result	:= vec(I);
-			END IF;
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
-
-	function rmax(vec : T_REALVEC) return real is
-		variable  res : real := real'low;
+	function imax(vec : T_INTVEC) return INTEGER is
+		variable Result		: INTEGER;
 	begin
+		Result		:= INTEGER'low;
 		for i in vec'range loop
-			if vec(i) > res then
-				res := vec(i);
+			if (vec(I) > Result) then
+				Result	:= vec(I);
 			end if;
 		end loop;
-		return  res;
-	end rmax;
-
-	FUNCTION isum(vec : T_NATVEC) RETURN NATURAL IS
-		VARIABLE Result		: NATURAL		:= 0;
-	BEGIN
-		FOR I IN vec'range LOOP
-			Result	:= Result + vec(I);
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
+		return Result;
+	end function;
 	
-	FUNCTION isum(vec : T_POSVEC) RETURN POSITIVE IS
-		VARIABLE Result		: NATURAL	:= 0;
-	BEGIN
-		FOR I IN vec'range LOOP
+	function imax(vec : T_NATVEC) return NATURAL is
+		variable Result		: NATURAL;
+	begin
+		Result		:= NATURAL'low;
+		for i in vec'range loop
+			if (vec(I) > Result) then
+				Result	:= vec(I);
+			end if;
+		end loop;
+		return Result;
+	end function;
+	
+	function imax(vec : T_POSVEC) return POSITIVE is
+		variable Result		: POSITIVE;
+	begin
+		Result		:= POSITIVE'low;
+		for i in vec'range loop
+			if (vec(I) > Result) then
+				Result	:= vec(I);
+			end if;
+		end loop;
+		return Result;
+	end function;
+
+	function rmax(vec : T_REALVEC) return REAL is
+		variable  Result : REAL;
+	begin
+		Result		:= REAL'low;
+		for i in vec'range loop
+			if vec(i) > Result then
+				Result := vec(i);
+			end if;
+		end loop;
+		return  Result;
+	end function;
+
+	function isum(vec : T_INTVEC) return INTEGER is
+		variable  Result : INTEGER;
+	begin
+		Result		:= 0;
+		for i in vec'range loop
+			Result	:= Result + vec(i);
+		end loop;
+		return  Result;
+	end function;
+	
+	function isum(vec : T_NATVEC) return NATURAL is
+		variable Result		: NATURAL;
+	begin
+		Result		:= 0;
+		for i in vec'range loop
 			Result	:= Result + vec(I);
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
-
-	function isum(vec : T_INTVEC) return integer is
-		variable  res : integer := 0;
-	begin
-		for i in vec'range loop
-			res	:= res + vec(i);
 		end loop;
-		return  res;
-	end isum;
-
-	function rsum(vec : T_REALVEC) return real is
-		variable  res : real := 0.0;
+		return Result;
+	end function;
+	
+	function isum(vec : T_POSVEC) return POSITIVE is
+		variable Result		: POSITIVE;
 	begin
+		Result		:= 0;
 		for i in vec'range loop
-			res	:= res + vec(i);
+			Result	:= Result + vec(I);
 		end loop;
-		return  res;
-	end rsum;
+		return Result;
+	end function;
+
+	function rsum(vec : T_REALVEC) return REAL is
+		variable  Result : REAL;
+	begin
+		Result		:= 0.0;
+		for i in vec'range loop
+			Result	:= Result + vec(i);
+		end loop;
+		return  Result;
+	end function;
 
 	-- Vector aggregate functions: slv_*
 	-- ==========================================================================
 	function slv_or(vec : STD_LOGIC_VECTOR) return STD_LOGIC is
-		variable Result : STD_LOGIC := '0';
+		variable Result : STD_LOGIC;
 	begin
+		Result		:= '0';
 		for i in vec'range loop
 			Result	:= Result or vec(i);
 		end loop;
@@ -576,8 +598,9 @@ package body utils is
 	end function;
 
 	function slv_and(vec : STD_LOGIC_VECTOR) return STD_LOGIC is
-		variable Result : STD_LOGIC := '1';
+		variable Result : STD_LOGIC;
 	begin
+		Result		:= '1';
 		for i in vec'range loop
 			Result	:= Result and vec(i);
 		end loop;
@@ -639,11 +662,11 @@ package body utils is
 	-- ==========================================================================
 	-- short for std_logic_vector(to_unsigned(Value, Size))
 	-- the return value is guaranteed to have the range (Size-1 downto 0)
-	FUNCTION to_slv(Value : NATURAL; Size : POSITIVE) RETURN STD_LOGIC_VECTOR IS
+	function to_slv(Value : NATURAL; Size : POSITIVE) return STD_LOGIC_VECTOR is
 	  constant  res : std_logic_vector(Size-1 downto 0) := std_logic_vector(to_unsigned(Value, Size));
-	BEGIN
+	begin
 		return  res;
-	END FUNCTION;
+	end function;
 
 	function to_index(slv : UNSIGNED; max : NATURAL := 0) return INTEGER is
 		variable  res : integer;
@@ -664,13 +687,13 @@ package body utils is
 	
   -- is_*
   -- ==========================================================================
-  FUNCTION is_sl(c : CHARACTER) RETURN BOOLEAN IS
-  BEGIN
-    CASE C IS
-      WHEN 'U'|'X'|'0'|'1'|'Z'|'W'|'L'|'H'|'-' => return  true;
-      WHEN OTHERS                              => return  false;
-    END CASE;
-  END FUNCTION;
+  function is_sl(c : CHARACTER) return BOOLEAN is
+  begin
+    case c is
+      when 'U'|'X'|'0'|'1'|'Z'|'W'|'L'|'H'|'-' => return  true;
+      when OTHERS                              => return  false;
+    end case;
+  end function;
 
 	
 	-- Reverse vector elements
@@ -698,43 +721,43 @@ package body utils is
 	
 	-- Swap sub vectors in vector
 	-- ==========================================================================
-	FUNCTION swap(slv : STD_LOGIC_VECTOR; Size : POSITIVE) RETURN STD_LOGIC_VECTOR IS
+	function swap(slv : STD_LOGIC_VECTOR; Size : POSITIVE) return STD_LOGIC_VECTOR IS
 		CONSTANT SegmentCount	: NATURAL													:= slv'length / Size;
-		VARIABLE FromH				: NATURAL;
-		VARIABLE FromL				: NATURAL;
-		VARIABLE ToH					: NATURAL;
-		VARIABLE ToL					: NATURAL;
-		VARIABLE Result : STD_LOGIC_VECTOR(slv'length - 1 DOWNTO 0);
-	BEGIN
-		FOR I IN 0 TO SegmentCount - 1 LOOP
+		variable FromH				: NATURAL;
+		variable FromL				: NATURAL;
+		variable ToH					: NATURAL;
+		variable ToL					: NATURAL;
+		variable Result : STD_LOGIC_VECTOR(slv'length - 1 DOWNTO 0);
+	begin
+		for i in 0 TO SegmentCount - 1 loop
 			FromH		:= ((I + 1) * Size) - 1;
 			FromL		:= I * Size;
 			ToH			:= ((SegmentCount - I) * Size) - 1;
 			ToL			:= (SegmentCount - I - 1) * Size;
 			Result(ToH DOWNTO ToL)	:= slv(FromH DOWNTO FromL);
-		END LOOP;
-		RETURN Result;
-	END FUNCTION;
+		end loop;
+		return Result;
+	end function;
 
 	-- generate bit masks
 	-- ==========================================================================
-		FUNCTION genmask_high(Bits : NATURAL; MaskLength : POSITIVE) RETURN STD_LOGIC_VECTOR IS
-	BEGIN
-		IF (Bits = 0) THEN
-			RETURN (MaskLength - 1 DOWNTO 0 => '0');
-		ELSE	
-			RETURN (MaskLength - 1 DOWNTO MaskLength - Bits + 1 => '1') & (MaskLength - Bits DOWNTO 0 => '0');
-		END IF;
-	END FUNCTION;
+	function genmask_high(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR IS
+	begin
+		if (Bits = 0) then
+			return (MaskLength - 1 DOWNTO 0 => '0');
+		else	
+			return (MaskLength - 1 DOWNTO MaskLength - Bits + 1 => '1') & (MaskLength - Bits DOWNTO 0 => '0');
+		end if;
+	end function;
 
-	FUNCTION genmask_low(Bits : NATURAL; MaskLength : POSITIVE) RETURN STD_LOGIC_VECTOR IS
-	BEGIN
-		IF (Bits = 0) THEN
-			RETURN (MaskLength - 1 DOWNTO 0 => '0');
-		ELSE	
-			RETURN (MaskLength - 1 DOWNTO Bits => '0') & (Bits - 1 DOWNTO 0 => '1');
-		END IF;
-	END FUNCTION;
+	function genmask_low(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR is
+	begin
+		if (Bits = 0) then
+			return (MaskLength - 1 DOWNTO 0 => '0');
+		else	
+			return (MaskLength - 1 DOWNTO Bits => '0') & (Bits - 1 DOWNTO 0 => '1');
+		end if;
+	end function;
 
 	-- binary encoding conversion functions
 	-- ==========================================================================
@@ -910,4 +933,4 @@ package body utils is
 		res := vec;
 		return  res;
 	end descend;
-end utils;
+end package body;

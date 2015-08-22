@@ -115,7 +115,7 @@ package stream is
 	
 	constant C_SIM_STREAM_FRAMEGROUP_8_EMPTY	: T_SIM_STREAM_FRAMEGROUP_8		:= (
 		Active						=> FALSE,
-		Name							=> (others => nul),
+		Name							=> (others => C_POC_NUL),
 		PrePause					=> 0,
 		PostPause					=> 0,
 		DataCount					=> 0,
@@ -123,7 +123,7 @@ package stream is
 	);
 	constant C_SIM_STREAM_FRAMEGROUP_32_EMPTY	: T_SIM_STREAM_FRAMEGROUP_32	:= (
 		Active						=> FALSE,
-		Name							=> (others => nul),
+		Name							=> (others => C_POC_NUL),
 		PrePause					=> 0,
 		PostPause					=> 0,
 		DataCount					=> 0,
