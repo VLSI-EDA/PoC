@@ -39,10 +39,12 @@ package my_config is
   -- Change these lines to setup configuration.
   constant MY_BOARD		: string	:= "ML605";		-- ML605 - Xilinx Virtex 6 reference design board: XC6VLX240T
   constant MY_DEVICE	: string	:= "None";		-- infer from MY_BOARD
+		
+	-- For internal use only
 	constant MY_VERBOSE	: boolean	:= FALSE;
-end;
+end package;
 
 
 package body my_config is
 
-end;
+end package body;

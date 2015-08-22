@@ -10,15 +10,9 @@
 -- Package:					Project specific configuration.
 -- 
 -- Description:
--- ------------
---		This file was created from the template file:
---
---           <PoCRoot>/src/common/my_config.template.vhdl
---
---    and customized for:
---
---           ML505 prototyping board
---
+-- ------------------------------------
+--		This file was created from template <PoCRoot>/src/common/my_config.template.vhdl.
+--		
 --
 -- License:
 -- =============================================================================
@@ -45,8 +39,10 @@ package my_config is
   -- Change these lines to setup configuration.
   constant MY_BOARD		: string	:= "ML505";			-- ML505 - Xilinx Virtex 5 reference design board: XC5VLX50T
   constant MY_DEVICE	: string	:= "None";			-- infer from MY_BOARD
+		
+	-- For internal use only
 	constant MY_VERBOSE	: boolean	:= FALSE;
-end;
+end package;
 
 package body my_config is
-end;
+end package body;
