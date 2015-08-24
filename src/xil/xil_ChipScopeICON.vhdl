@@ -57,7 +57,7 @@ entity xil_ChipScopeICON is
   port (
 		ControlBus	: inout	T_XIL_CHIPSCOPE_CONTROL_VECTOR(PORTS - 1 downto 0)
 	);
-end;
+end entity;
 
 
 architecture rtl of xil_ChipScopeICON is
@@ -273,4 +273,4 @@ begin
 				control14		=> ControlBus(14)
 			);
 	end generate;
-end;
+end architecture;

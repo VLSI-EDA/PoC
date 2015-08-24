@@ -111,6 +111,7 @@ package utils is
 	function log10ceilnz(arg	: POSITIVE)	return POSITIVE;
 	
 	--+ if-then-else (ite) +++++++++++++++++++++++++++++++++++++++++++++++++++++
+	function ite(cond : BOOLEAN; value1 : BOOLEAN; value2 : BOOLEAN) return BOOLEAN;
 	function ite(cond : BOOLEAN; value1 : INTEGER; value2 : INTEGER) return INTEGER;
 	function ite(cond : BOOLEAN; value1 : REAL;	value2 : REAL) return REAL;
 	function ite(cond : BOOLEAN; value1 : STD_LOGIC; value2 : STD_LOGIC) return STD_LOGIC;
@@ -346,6 +347,15 @@ package body utils is
 
 	-- if-then-else (ite)
 	-- ==========================================================================
+	function ite(cond : BOOLEAN; value1 : BOOLEAN; value2 : BOOLEAN) return BOOLEAN is
+	begin
+		if cond then
+			return value1;
+		else
+			return value2;
+		end if;
+	end function;
+	
 	function ite(cond : BOOLEAN; value1 : INTEGER; value2 : INTEGER) return INTEGER is
 	begin
 		if cond then
