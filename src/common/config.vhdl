@@ -39,7 +39,6 @@ use			IEEE.numeric_std.all;
 library	PoC;
 use			PoC.my_config.all;
 use			PoC.my_project.all;
---use			PoC.board.all;
 use			PoC.utils.all;
 
 
@@ -211,8 +210,9 @@ package config is
 	-- Functions extracting board and PCB properties from "MY_BOARD"
 	-- which is declared in package "my_config".
 	-- ===========================================================================
-	function MY_DEVICE_STRING(BoardConfig : STRING := C_BOARD_STRING_EMPTY) return STRING;
+	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY)						return T_BOARD;
 	function MY_BOARD_STRUCT(BoardConfig : STRING := C_BOARD_STRING_EMPTY)	return T_BOARD_DESCRIPTION;
+	function MY_DEVICE_STRING(BoardConfig : STRING := C_BOARD_STRING_EMPTY) return STRING;
 	
 	-- Functions extracting device and architecture properties from "MY_DEVICE"
 	-- which is declared in package "my_config".
@@ -618,7 +618,7 @@ package body config is
 	-- Public functions
 	-- ===========================================================================
 	-- TODO: comment
-	function MY_BOARD_STRUCT(BoardConfig : string := C_BOARD_STRING_EMPTY) return T_BOARD_DESCRIPTION is
+	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY) return T_BOARD is
 		-- inlined function from PoC.utils, to break dependency
 		function ite(cond : BOOLEAN; value1 : STRING; value2 : STRING) return STRING is begin
 			if cond then	return value1;	else	return value2;	end if;
@@ -626,16 +626,22 @@ package body config is
 	
 		constant MY_BRD			: T_BOARD_CONFIG_STRING := ite((BoardConfig /= C_BOARD_STRING_EMPTY), conf(BoardConfig), conf(MY_BOARD));
 		constant BOARD_NAME	: STRING								:= "BOARD_" & str_trim(MY_BRD);
-  begin
+	begin
 --		report "PoC configuration: used board is '" & str_trim(MY_BRD) & "'" severity NOTE;
 		for i in T_BOARD loop
 			if str_imatch(BOARD_NAME, T_BOARD'image(i)) then
-				return  C_BOARD_DESCRIPTION_LIST(i);
+				return  i;
 			end if;
 		end loop;
 
 		report "Unknown board name in MY_BOARD = " & MY_BRD & "." severity failure;
 		-- return statement is explicitly missing otherwise XST won't stop
+	end function;
+	
+	function MY_BOARD_STRUCT(BoardConfig : string := C_BOARD_STRING_EMPTY) return T_BOARD_DESCRIPTION is
+		constant BRD			: T_BOARD := BOARD(BoardConfig);
+  begin
+		return  C_BOARD_DESCRIPTION_LIST(BRD);
 	end function;
 
 	-- TODO: comment

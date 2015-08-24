@@ -43,71 +43,64 @@
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
+use			IEEE.numeric_std.all;
 
 library PoC;
+use			PoC.utils.all;
 use			PoC.physical.all;
+
 
 entity io_Debounce is
   generic (
-    CLOCK_FREQ  : freq;
-    BOUNCE_TIME : time;
-
+    CLOCK_FREQ 							: freq;
+    BOUNCE_TIME							: time;
     BITS                    : positive := 1;
     ADD_INPUT_SYNCHRONIZERS : boolean  := true;
     COMMON_LOCK             : boolean  := false
   );
   port (
-    clk    : in  std_logic;
-		rst    : in  std_logic;
-    Input  : in  std_logic_vector(BITS-1 downto 0);
-    Output : out std_logic_vector(BITS-1 downto 0)
+    Clock		: in	std_logic;
+		Reset		: in	std_logic							:= '0';
+    Input		: in	std_logic_vector(BITS-1 downto 0);
+    Output	: out	std_logic_vector(BITS-1 downto 0)
   );
 end;
 
 
-library IEEE;
-use IEEE.numeric_std.all;
-
-library PoC;
-use			PoC.utils.all;
-
 architecture rtl of io_Debounce is
-
 	-- Number of required locking cycles
 	constant LOCK_COUNT_X : integer := TimingToCycles(BOUNCE_TIME, CLOCK_FREQ) - 1;
 
 	-- Input Refinements
-  signal sync : std_logic_vector(Input'range);                -- Synchronized
-  signal prev : std_logic_vector(Input'range) := (others => '0');  -- Delayed
-
-	signal active : std_logic_vector(Input'range);  -- Allow Output Updates
+  signal sync		: std_logic_vector(Input'range);										-- Synchronized
+  signal prev		: std_logic_vector(Input'range) := (others => '0');	-- Delayed
+	signal active	: std_logic_vector(Input'range);										-- Allow Output Updates
 
 begin
-
   -----------------------------------------------------------------------------
   -- Input Synchronization
   genNoSync: if not ADD_INPUT_SYNCHRONIZERS generate
     sync <= Input;
   end generate;
   genSync: if ADD_INPUT_SYNCHRONIZERS generate
-    sync_i : entity PoC.sync_Flag
+    sync_i : entity PoC.sync_Bits
       generic map (
         BITS => BITS
       )
       port map (
-        Clock  => clk,  								-- Clock to be synchronized to
-        Input  => Input,  							-- Data to be synchronized
-        Output => sync  								-- synchronised data
+        Clock  => Clock,  	-- Clock to be synchronized to
+        Input  => Input,  	-- Data to be synchronized
+        Output => sync  		-- synchronised data
       );
   end generate;
 
 	-----------------------------------------------------------------------------
 	-- Bounce Filter
-	process(clk)
+	process(Clock)
 	begin
-		if rising_edge(clk) then
+		if rising_edge(Clock) then
 			prev <= sync;
-			if rst = '1' then
+			if (Reset = '1') then
 				Output <= sync;
 			else
 				for i in Output'range loop
@@ -123,19 +116,10 @@ begin
 		active <= (others => '1');
 	end generate genNoLock;
 	genLock: if LOCK_COUNT_X > 0 generate
+		constant LOCKS	: positive := ite(COMMON_LOCK, 1, BITS);
 
-    function numberOfLocks return positive is
-		begin
-			if COMMON_LOCK then
-				return  1;
-			else
-				return  BITS;
-			end if;
-		end numberOfLocks;
-		constant LOCKS : positive := numberOfLocks;
-
-		signal toggle : std_logic_vector(LOCKS-1 downto 0);
-		signal locked : std_logic_vector(LOCKS-1 downto 0);
+		signal toggle		: std_logic_vector(LOCKS-1 downto 0);
+		signal locked		: std_logic_vector(LOCKS-1 downto 0);
 	begin
 
     genOneLock: if COMMON_LOCK generate
@@ -150,10 +134,10 @@ begin
 		genLocks: for i in 0 to LOCKS-1 generate
 			signal Lock : signed(log2ceil(LOCK_COUNT_X+1) downto 0) := (others => '0');
 		begin
-			process(clk)
+			process(Clock)
 			begin
-				if rising_edge(clk) then
-					if rst = '1' then
+				if rising_edge(Clock) then
+					if (Reset = '1') then
 						Lock <= (others => '0');
 					else
 						if toggle(i) = '1' then
