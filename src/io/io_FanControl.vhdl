@@ -231,10 +231,10 @@ begin
 		signal Tacho_Freq					: STD_LOGIC_VECTOR(TACHO_RESOLUTION - 1 downto 0);
 	begin
 		-- Input Synchronization
-		genNoSync: if (ADD_INPUT_SYNCHRONIZERS = FALSE) generate
+		genNoSync : if (ADD_INPUT_SYNCHRONIZERS = FALSE) generate
 			Tacho_sync <= Fan_Tacho;
 		end generate;
-		genSync: if (ADD_INPUT_SYNCHRONIZERS = TRUE) generate
+		genSync : if (ADD_INPUT_SYNCHRONIZERS = TRUE) generate
 			sync_i : entity PoC.sync_Bits
 				port map (
 					Clock  		=> Clock,					-- Clock to be synchronized to

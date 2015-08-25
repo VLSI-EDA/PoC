@@ -471,7 +471,7 @@ package body config is
 	constant C_BOARD_UART_DTE_115200_NONE		: T_BOARD_UART_DESC	:= brd_CreateUART(TRUE,		"NONE",				"115.2 kBd");
 	constant C_BOARD_UART_DCE_115200_NONE		: T_BOARD_UART_DESC	:= brd_CreateUART(FALSE,	"NONE",				"115.2 kBd");
 	constant C_BOARD_UART_DCE_115200_HWCTS	: T_BOARD_UART_DESC	:= brd_CreateUART(FALSE,	"HW_CTS_RTS",	"115.2 kBd");
-	constant C_BOARD_UART_DTE_460800_NONE		: T_BOARD_UART_DESC	:= brd_CreateUART(FALSE,	"NONE",				"460.08 kBd");
+	constant C_BOARD_UART_DTE_460800_NONE		: T_BOARD_UART_DESC	:= brd_CreateUART(FALSE,	"NONE",				"460.8 kBd");
 	constant C_BOARD_UART_DTE_921600_NONE		: T_BOARD_UART_DESC	:= brd_CreateUART(FALSE,	"NONE",				"921.6 kBd");
 
 	function brd_CreateEthernet(IPStyle : STRING; RS_DataInt : STRING; PHY_Device : STRING; PHY_DevAddress : STD_LOGIC_VECTOR(7 downto 0); PHY_DataInt : STRING; PHY_MgntInt : STRING) return T_BOARD_ETHERNET_DESC is
@@ -525,7 +525,7 @@ package body config is
 		),
 		BOARD_ATLYS => (
 			FPGADevice =>			conf32("XC6SLX45-3CSG324"),						-- XC6SLX45-3CSG324
-			UART =>						C_BOARD_UART_DTE_460800_NONE,--C_BOARD_UART_DTE_921600_NONE,
+			UART =>						C_BOARD_UART_DTE_460800_NONE,
 			Ethernet =>	(
 				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
@@ -585,7 +585,7 @@ package body config is
 		),
 		BOARD_DE4 => (
 			FPGADevice =>			conf32("EP4SGX230KF40C2"),						-- EP4SGX230KF40C2
-			UART =>						brd_CreateUART(FALSE, "NONE", "460.08 kBd"),
+			UART =>						C_BOARD_UART_DTE_460800_NONE,
 			Ethernet => (
 				0 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"00", "RGMII", "MDIO"),
 				1 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"01", "RGMII", "MDIO"),

@@ -322,11 +322,10 @@ package body physical is
 		-- read fractional part
 		if ((pos < 0) and (-pos < str'high)) then
 			for i in -pos+1 to str'high loop
-				digits := digits + 1;
-				next when ((digits = 0) and (str(i) = '0'));
-				if (chr_isDigit(str(i)) = TRUE) then	frac := frac * 10 + to_digit_dec(str(i));
-				elsif (str(i) = ' ') then							pos	:= i;		exit;
-				else																	pos := 0;		exit;
+				if ((frac = 0) and (str(i) = '0')) then	next;
+				elsif (chr_isDigit(str(i)) = TRUE) then	frac	:= frac * 10 + to_digit_dec(str(i));
+				elsif (str(i) = ' ') then								digits	:= i + pos - 1;	pos	:= i;	exit;
+				else																														pos	:= 0;	exit;
 				end if;
 			end loop;
 		end if;
@@ -338,21 +337,28 @@ package body physical is
 																		return int * 1 Bd;
 		elsif (pos + 2 = str'high) then
 			if (str(pos to pos + 2) = "kBd") then
-				if (digits <= 4) then				return (int * 1 kBd) + (frac * 10**(4 - digits) * 1 Bd);
-				else												return (int * 1 kBd) + (frac / 10**(digits - 4) * 100 Bd);
+				if (frac = 0) then					return (int * 1 kBd);
+				elsif (digits <= 3) then		return (int * 1 kBd) + (frac * 10**(3 - digits) * 1 Bd);
+				else												return (int * 1 kBd) + (frac / 10**(digits - 3) * 100 Bd);
 				end if;
 			elsif (str(pos to pos + 2) = "MBd") then
-				if (digits <= 4) then				return (int * 1 MBd) + (frac * 10**(4 - digits) * 1 kBd);
-				elsif (digits <= 7) then		return (int * 1 MBd) + (frac * 10**(7 - digits) * 1 Bd);
-				else												return (int * 1 MBd) + (frac / 10**(digits - 7) * 100000 Bd);
+				if (frac = 0) then					return (int * 1 kBd);
+				elsif (digits <= 3) then		return (int * 1 MBd) + (frac * 10**(3 - digits) * 1 kBd);
+				elsif (digits <= 6) then		return (int * 1 MBd) + (frac * 10**(6 - digits) * 1 Bd);
+				else												return (int * 1 MBd) + (frac / 10**(digits - 6) * 100000 Bd);
 				end if;
 			elsif (str(pos to pos + 2) = "GBd") then
-				if (digits <= 4) then				return (int * 1 GBd) + (frac * 10**(4 - digits) * 1 MBd);
-				elsif (digits <= 7) then		return (int * 1 GBd) + (frac * 10**(7 - digits) * 1 kBd);
-				elsif (digits <= 10) then		return (int * 1 GBd) + (frac * 10**(10 - digits) * 1 Bd);
-				else												return (int * 1 GBd) + (frac / 10**(digits - 10) * 100000000 Bd);
+				if (frac = 0) then					return (int * 1 kBd);
+				elsif (digits <= 3) then		return (int * 1 GBd) + (frac * 10**(3 - digits) * 1 MBd);
+				elsif (digits <= 6) then		return (int * 1 GBd) + (frac * 10**(6 - digits) * 1 kBd);
+				elsif (digits <= 9) then		return (int * 1 GBd) + (frac * 10**(9 - digits) * 1 Bd);
+				else												return (int * 1 GBd) + (frac / 10**(digits - 9) * 100000000 Bd);
 				end if;
-			else report "to_baud: Unknown unit." severity FAILURE;		end if;
+			else
+				report "to_baud: Unknown unit." severity FAILURE;
+			end if;
+		else
+			report "to_baud: Unknown format" severity FAILURE;
 		end if;
 	end function;
 	

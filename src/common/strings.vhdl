@@ -241,7 +241,7 @@ package body strings is
 		return chr_isLowerAlpha(chr) or chr_isUpperAlpha(chr);
 	end function;
 	
-	-- str_format_* functions
+	-- raw_format_* functions
 	-- ===========================================================================
 	function raw_format_bool_bin(value : BOOLEAN) return STRING is
 	begin
@@ -374,19 +374,14 @@ package body strings is
 	-- str_format_* functions
 	-- ===========================================================================
 	function str_format(value : REAL; precision : NATURAL := 3) return STRING is
-		constant s		: REAL			:= sign(value);
-		constant int	: INTEGER		:= integer(floor(value * s));
-		constant frac	: INTEGER		:= integer(floor(((value * s) - real(int)) * 10.0**precision));
-		constant res	: STRING		:= raw_format_nat_dec(int) & "." & raw_format_nat_dec(frac);
+		constant s				: REAL		:= sign(value);
+		constant val			: REAL		:= value * s;
+		constant int			: INTEGER	:= integer(floor(val));
+		constant frac			: INTEGER	:= integer(round((val - real(int)) * 10.0**precision));
+		constant frac_str	: STRING	:= INTEGER'image(frac);
+		constant res			: STRING	:= INTEGER'image(int) & "." & (1 to (precision - frac_str'length) => '0') & frac_str;
 	begin
-		if (POC_VERBOSE = TRUE) then
-			report "str_format:" & CR &
-						 "  value:" & REAL'image(value) & CR &
-						 "  int = " & INTEGER'image(int) & CR &
-						 "  frac = " & INTEGER'image(frac)
-			severity note;
-		end if;
-		return ite((s	< 0.0), "-" & res, res);
+		return ite ((s < 0.0), "-" & res, res);
 	end function;
 	
 	-- to_string
