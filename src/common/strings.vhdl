@@ -379,7 +379,7 @@ package body strings is
 		constant int			: INTEGER	:= integer(floor(val));
 		constant frac			: INTEGER	:= integer(round((val - real(int)) * 10.0**precision));
 		constant frac_str	: STRING	:= INTEGER'image(frac);
-		constant res			: STRING	:= INTEGER'image(int) & "." & (1 to (precision - frac_str'length) => '0') & frac_str;
+		constant res			: STRING	:= INTEGER'image(int) & "." & (2 to (precision - frac_str'length + 1) => '0') & frac_str;
 	begin
 		return ite ((s < 0.0), "-" & res, res);
 	end function;

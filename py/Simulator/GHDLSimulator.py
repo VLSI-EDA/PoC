@@ -132,14 +132,12 @@ class Simulator(PoCSimulator):
 						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
 							vhdlFilePath = self.host.directories["PoCRoot"] / filesLineRegExpMatch.group('VHDLFile')
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
-						if not self.host.directories.__contains__("ISEInstallation"):
-							# check if ISE is configure
-							if (len(self.host.pocConfig.options("Xilinx-ISE")) == 0):
-								raise NotConfiguredException("This testbench requires some Xilinx Primitves. Please configure Xilinx ISE / Vivado")
-
-							self.host.directories["ISEInstallation"] = Path(self.host.pocConfig['Xilinx-ISE']['InstallationDirectory'])
+						# check if ISE or Vivado is configure
+						if not self.host.directories.__contains__("XilinxPrimitiveSource"):
+							raise NotConfiguredException("This testbench requires some Xilinx Primitves. Please configure Xilinx ISE / Vivado")
 						
-						vhdlFilePath = self.host.directories["ISEInstallation"] / "ISE/vhdl/src" / filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / filesLineRegExpMatch.group('VHDLFile')
+						
 					vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
 
 					if (not vhdlFilePath.exists()):

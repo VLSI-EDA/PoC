@@ -104,7 +104,6 @@ class Testbench(CommandLineProgram):
 
 		entityToSimulate = Entity(self, module)
 
-
 		simulator = ISESimulator.Simulator(self, showLogs, showReport, guiMode)
 		simulator.run(entityToSimulate)
 
@@ -156,6 +155,11 @@ class Testbench(CommandLineProgram):
 		if (len(self.pocConfig.options("GTKWave")) != 0):		
 			self.directories["GTKWInstallation"] =	Path(self.pocConfig['GTKWave']['InstallationDirectory'])
 			self.directories["GTKWBinary"] =				Path(self.pocConfig['GTKWave']['BinaryDirectory'])
+		
+		if (len(self.pocConfig.options("Xilinx-ISE")) != 0):
+			self.directories["XilinxPrimitiveSource"] =		Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])			/ "ISE/vhdl/src"
+		elif (len(self.pocConfig.options("Xilinx-Vivado")) != 0):
+			self.directories["XilinxPrimitiveSource"] =		Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])	/ "data/vhdl/src"
 		
 		entityToSimulate = Entity(self, module)
 
