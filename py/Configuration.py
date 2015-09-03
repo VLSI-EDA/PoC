@@ -34,11 +34,14 @@
 
 from pathlib import Path
 
+from lib.Functions import Exit
 from Base.Exceptions import *
 from Base.PoCBase import CommandLineProgram
 from collections import OrderedDict
 
 class Configuration(CommandLineProgram):
+	
+	headLine = "The PoC Library - Repository Service Tool"
 	
 	__privateSections = ["PoC", "Xilinx", "Xilinx-ISE", "Xilinx-LabTools", "Xilinx-Vivado", "Xilinx-HardwareServer", "Altera-QuartusII", "Altera-ModelSim", "Questa-SIM", "GHDL", "GTKWave", "Solutions"]
 	
@@ -834,62 +837,24 @@ def main():
 			argParser.print_help()
 			exit(0)
 	
-	except NotConfiguredException as ex:
-		from colorama import Fore, Back, Style
-		print(Fore.RED + "ERROR: %s" % ex.message)
-		print()
-		print("Please run 'poc.[sh/cmd] --configure' in PoC root directory.")
-		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
-		exit(1)
-	
-	except PlatformNotSupportedException as ex:
-		from colorama import Fore, Back, Style
-		print(Fore.RED + "ERROR: Unknown platform '%s'" % ex.message)
-		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
-		exit(1)
+#	except ConfiguratorException as ex:
+#		from colorama import Fore, Back, Style
+#		print(Fore.RED + "ERROR:" + Fore.RESET + " %s" % ex.message)
+#		if isinstance(ex.__cause__, FileNotFoundError):
+#			print(Fore.RED + "CAUSE:   FileNotFound: '%s'" % str(ex.__cause__))
+#		print()
+#		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
+#		exit(1)
 		
-	except BaseException as ex:
-		from colorama import Fore, Back, Style
-		print(Fore.RED + "ERROR: %s" % ex.message)
-		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
-		exit(1)
-
-	except NotImplementedException as ex:
-		from colorama import Fore, Back, Style
-		print(Fore.RED + "ERROR: %s" % ex.message)
-		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
-		exit(1)
-
-	except Exception as ex:
-		from traceback	import print_tb
-		from colorama		import Fore, Back, Style
-		print(Fore.RED + "FATAL: %s" % ex.__str__())
-		print("-" * 80)
-		print_tb(ex.__traceback__)
-		print("-" * 80)
-		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
-		exit(1)
-
-
+	except NotConfiguredException as ex:				Exit.printNotConfiguredException(ex)
+	except PlatformNotSupportedException as ex:	Exit.printPlatformNotSupportedException(ex)
+	except BaseException as ex:									Exit.printBaseException(ex)
+	except NotImplementedException as ex:				Exit.printNotImplementedException(ex)
+	except Exception as ex:											Exit.printException(ex)
+			
 # entry point
 if __name__ == "__main__":
-	from sys import version_info
-	
-	if (version_info<(3,4,0)):
-		from colorama		import Fore, Back, Style
-		print(Fore.RED + "ERROR: Used Python interpreter is to old: %s" % version_info)
-		print("Minimal required Python version is 3.4.0")
-		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
-		exit(1)
-		
+	Exit.versionCheck((3,4,0))
 	main()
 else:
-	from sys			import exit
-	from colorama	import Fore, Back, Style
-	print(Fore.RED + "=" * 80)
-	print("{: ^80s}".format("The PoC Library - Repository Service Tool"))
-	print("=" * 80)
-	print()
-	print("This is no library file!")
-	print(Fore.RESET + Back.RESET + Style.RESET_ALL)
-	exit(1)
+	Exit.printThisIsNoLibraryFile(Configuration.headLine)
