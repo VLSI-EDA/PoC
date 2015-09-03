@@ -75,10 +75,14 @@ package config is
 		BOARD_KC705,
 		-- Virtex-5 boards
 		BOARD_ML505,
+		BOARD_ML506,
+		BOARD_ML507,
+		BOARD_XUPV5,
 		-- Virtex-6 boards
 		BOARD_ML605,
 		-- Virtex-7 boards
 		BOARD_VC707,
+		BOARD_VC709,
 		-- Zynq-7000 boards
 		BOARD_ZEDBOARD,
 		-- Cyclon III boards
@@ -547,6 +551,30 @@ package body config is
 				others =>	C_BOARD_ETH_EMPTY),
 			EthernetCount => 1
 		),
+		BOARD_ML506 => (
+			FPGADevice =>			conf32("XC5VSX50T-1FFG1136"),					-- XC5VSX50T-1FFG1136
+			UART =>						C_BOARD_UART_DCE_115200_NONE,
+			Ethernet => (
+				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
+				others =>	C_BOARD_ETH_EMPTY),
+			EthernetCount => 1
+		),
+		BOARD_ML507 => (
+			FPGADevice =>			conf32("XC5VFX70T-1FFG1136"),					-- XC5VFX70T-1FFG1136
+			UART =>						C_BOARD_UART_DCE_115200_NONE,
+			Ethernet => (
+				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
+				others =>	C_BOARD_ETH_EMPTY),
+			EthernetCount => 1
+		),
+		BOARD_XUPV5 => (
+			FPGADevice =>			conf32("XC5VLX110T-1FF1136"),					-- XC5VLX110T-1FF1136
+			UART =>						C_BOARD_UART_DCE_115200_NONE,
+			Ethernet => (
+				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
+				others =>	C_BOARD_ETH_EMPTY),
+			EthernetCount => 1
+		),
 		BOARD_ML605 => (
 			FPGADevice =>			conf32("XC6VLX240T-1FF1156"),					-- XC6VLX240T-1FF1156
 			UART =>						C_BOARD_UART_EMPTY,
@@ -562,6 +590,12 @@ package body config is
 				0 =>			C_BOARD_ETH_SOFT_SGMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
 			EthernetCount =>	1
+		),
+		BOARD_VC709 => (
+			FPGADevice =>			conf32("XC7VX690T-2FFG1761C"),				-- XC7VX690T-2FFG1761C
+			UART =>						C_BOARD_UART_DTE_921600_NONE,
+			Ethernet =>				C_BOARD_ETH_NONE,
+			EthernetCount =>	0
 		),
 		BOARD_ZEDBOARD => (
 			FPGADevice =>			conf32("XC7Z020-1CLG484"),						-- XC7Z020-1CLG484
