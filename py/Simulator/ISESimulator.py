@@ -128,17 +128,21 @@ class Simulator(PoCSimulator):
 				
 				if (filesLineRegExpMatch is not None):
 					if (filesLineRegExpMatch.group('Keyword') == "vhdl"):
-						vhdlFilePath = self.host.directories["PoCRoot"] / filesLineRegExpMatch.group('VHDLFile')
+						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
 					elif (filesLineRegExpMatch.group('Keyword')[0:5] == "vhdl-"):
 						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
-							vhdlFilePath = self.host.directories["PoCRoot"] / filesLineRegExpMatch.group('VHDLFile')
+							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
-						vhdlFilePath = self.host.directories["ISEInstallation"] / "ISE/vhdl/src" / filesLineRegExpMatch.group('VHDLFile')
+						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / vhdlFileName
+						
 					vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
 					iSimProjectFileContent += "vhdl %s \"%s\"\n" % (vhdlLibraryName, str(vhdlFilePath))
 					
 					if (not vhdlFilePath.exists()):
-						raise SimulatorException("Can not find " + str(vhdlFilePath)) from FileNotFoundError(str(vhdlFilePath))
+						raise SimulatorException("Can not add '" + vhdlFileName + "' to project file.") from FileNotFoundError(str(vhdlFilePath))
 		
 		# write iSim project file
 		self.printDebug("Writing iSim project file to '%s'" % str(prjFilePath))

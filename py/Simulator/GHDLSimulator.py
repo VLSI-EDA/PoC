@@ -127,21 +127,24 @@ class Simulator(PoCSimulator):
 		
 				if (filesLineRegExpMatch is not None):
 					if (filesLineRegExpMatch.group('Keyword') == "vhdl"):
-						vhdlFilePath = self.host.directories["PoCRoot"] / filesLineRegExpMatch.group('VHDLFile')
+						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
 					elif (filesLineRegExpMatch.group('Keyword')[0:5] == "vhdl-"):
 						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
-							vhdlFilePath = self.host.directories["PoCRoot"] / filesLineRegExpMatch.group('VHDLFile')
+							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
-						# check if ISE or Vivado is configure
+						# check if ISE or Vivado is configured
 						if not self.host.directories.__contains__("XilinxPrimitiveSource"):
-							raise NotConfiguredException("This testbench requires some Xilinx Primitves. Please configure Xilinx ISE / Vivado")
+							raise NotConfiguredException("This testbench requires some Xilinx Primitves. Please configure Xilinx ISE or Vivado.")
 						
-						vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / filesLineRegExpMatch.group('VHDLFile')
-						
+						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / vhdlFileName
+					
 					vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
 
 					if (not vhdlFilePath.exists()):
-						raise SimulatorException("Can not analyse " + str(vhdlFilePath)) from FileNotFoundError(str(vhdlFilePath))
+						raise SimulatorException("Can not analyse '" + vhdlFileName + "'.") from FileNotFoundError(str(vhdlFilePath))
 					
 					# assemble fuse command as list of parameters
 					parameterList = [

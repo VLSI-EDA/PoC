@@ -140,10 +140,12 @@ class Simulator(PoCSimulator):
 		
 				if (filesLineRegExpMatch is not None):
 					if (filesLineRegExpMatch.group('Keyword') == "vhdl"):
-						vhdlFilePath = self.host.directories["PoCRoot"] / filesLineRegExpMatch.group('VHDLFile')
+						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
 					elif (filesLineRegExpMatch.group('Keyword')[0:5] == "vhdl-"):
 						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
-							vhdlFilePath = self.host.directories["PoCRoot"] / filesLineRegExpMatch.group('VHDLFile')
+							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
 						self.printVerbose("    skipped xilinx specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
 						
@@ -173,7 +175,7 @@ class Simulator(PoCSimulator):
 
 					# 
 					if (not vhdlFilePath.exists()):
-						raise SimulatorException("Can not compile " + str(vhdlFilePath)) from FileNotFoundError(str(vhdlFilePath))
+						raise SimulatorException("Can not compile '" + vhdlFileName + "'.") from FileNotFoundError(str(vhdlFilePath))
 					
 					if (self.__vhdlStandard == "87"):
 						vhdlStandard = "-87"

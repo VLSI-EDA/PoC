@@ -95,8 +95,9 @@ class Testbench(CommandLineProgram):
 		if (len(self.pocConfig.options("Xilinx-ISE")) == 0):	raise NotConfiguredException("Xilinx ISE is not configured on this system.")
 		
 		# prepare some paths
-		self.directories["ISEInstallation"] = Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])
-		self.directories["ISEBinary"] =				Path(self.pocConfig['Xilinx-ISE']['BinaryDirectory'])
+		self.directories["ISEInstallation"] = 			Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])
+		self.directories["ISEBinary"] =							Path(self.pocConfig['Xilinx-ISE']['BinaryDirectory'])
+		self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory']) / "ISE/vhdl/src"
 		
 		# check if the appropriate environment is loaded
 		from os import environ
@@ -112,9 +113,10 @@ class Testbench(CommandLineProgram):
 		if (len(self.pocConfig.options("Xilinx-Vivado")) == 0):	raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
 
 		# prepare some paths
-		self.directories["VivadoInstallation"] =	Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])
-		self.directories["VivadoBinary"] =				Path(self.pocConfig['Xilinx-Vivado']['BinaryDirectory'])
-
+		self.directories["VivadoInstallation"] =		Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])
+		self.directories["VivadoBinary"] =					Path(self.pocConfig['Xilinx-Vivado']['BinaryDirectory'])
+		self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory']) / "data/vhdl/src"
+		
 		entityToSimulate = Entity(self, module)
 
 		simulator = VivadoSimulator.Simulator(self, showLogs, showReport, guiMode)
@@ -135,10 +137,6 @@ class Testbench(CommandLineProgram):
 		else:
 			raise NotConfiguredException("Neither Mentor Graphics Questa-SIM nor ModelSim are configured on this system.")
 
-		if (len(self.pocConfig.options("GTKWave")) != 0):		
-			self.directories["GTKWInstallation"] =	Path(self.pocConfig['GTKWave']['InstallationDirectory'])
-			self.directories["GTKWBinary"] =				Path(self.pocConfig['GTKWave']['BinaryDirectory'])
-
 		entityToSimulate = Entity(self, module)
 
 		simulator = QuestaSimulator.Simulator(self, showLogs, showReport, vhdlStandard, guiMode)
@@ -152,14 +150,16 @@ class Testbench(CommandLineProgram):
 		self.directories["GHDLInstallation"] =	Path(self.pocConfig['GHDL']['InstallationDirectory'])
 		self.directories["GHDLBinary"] =				Path(self.pocConfig['GHDL']['BinaryDirectory'])
 		
+		if (len(self.pocConfig.options("Xilinx-ISE")) != 0):
+			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])			/ "ISE/vhdl/src"
+		elif (len(self.pocConfig.options("Xilinx-Vivado")) != 0):
+			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])	/ "data/vhdl/src"
+		
 		if (len(self.pocConfig.options("GTKWave")) != 0):		
 			self.directories["GTKWInstallation"] =	Path(self.pocConfig['GTKWave']['InstallationDirectory'])
 			self.directories["GTKWBinary"] =				Path(self.pocConfig['GTKWave']['BinaryDirectory'])
-		
-		if (len(self.pocConfig.options("Xilinx-ISE")) != 0):
-			self.directories["XilinxPrimitiveSource"] =		Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])			/ "ISE/vhdl/src"
-		elif (len(self.pocConfig.options("Xilinx-Vivado")) != 0):
-			self.directories["XilinxPrimitiveSource"] =		Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])	/ "data/vhdl/src"
+		elif guiMode:
+			raise NotConfiguredException("No GHDL compatible waveform viewer is configured on this system.")
 		
 		entityToSimulate = Entity(self, module)
 
@@ -260,6 +260,8 @@ def main():
 	
 	except SimulatorException as ex:
 		print("ERROR: %s" % ex.message)
+		if isinstance(ex.__cause__, FileNotFoundError):
+			print("CAUSE:   FileNotFound: '%s'" % str(ex.__cause__))
 		print()
 		return
 		
