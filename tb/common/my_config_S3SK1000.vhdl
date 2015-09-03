@@ -50,8 +50,3 @@ package my_config is
 	-- For internal use only
   constant MY_VERBOSE : boolean	:= true;
 end package;
-
-
-package body my_config is
-
-end package body;

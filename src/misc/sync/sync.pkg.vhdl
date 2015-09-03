@@ -101,8 +101,3 @@ package sync is
 	end component;
 
 end package;
-
-
-package body sync is
-
-end package body;

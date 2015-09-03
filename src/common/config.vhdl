@@ -256,17 +256,9 @@ end package;
 
 
 package body config is
-	-- private functions required by board description
-	-- ModelSim requires that this functions is defined before it is used below.
-	-- ===========================================================================
-	function ite(cond : BOOLEAN; value1 : CHARACTER; value2 : CHARACTER) return CHARACTER is
-	begin
-		if cond then		return value1;	else	return value2;	end if;
-	end function;
-	
 	-- default fill and string termination character for fixed size strings
 	-- ===========================================================================	
-	constant C_POC_NUL			: CHARACTER		:= '`';
+	constant C_POC_NUL											: CHARACTER								:= '`';
 
 	-- deferred constant
 	-- ===========================================================================	
@@ -277,6 +269,9 @@ package body config is
 	constant C_DEVICE_STRING_EMPTY					: T_DEVICE_STRING					:= (others => C_POC_NUL);
 	
 
+	-- private functions required by board description
+	-- ModelSim requires that this functions is defined before it is used below.
+	-- ===========================================================================
 	-- chr_is* function
 	function chr_isDigit(chr : CHARACTER) return boolean is
 	begin

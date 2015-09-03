@@ -180,8 +180,3 @@ package ocram is
       ram_q    : in  std_logic_vector(D_BITS-1 downto 0));
   end component;
 end package;
-
-
-package body ocram is
-
-end package body;

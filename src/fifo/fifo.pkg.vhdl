@@ -252,7 +252,5 @@ package fifo is
       rollback  : in  std_logic
     );
   end component;
-end fifo;
-
-package body fifo is
-end fifo;
+	
+end package;

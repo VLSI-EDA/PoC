@@ -111,8 +111,3 @@ package ddrio is
 		);
 	end component;
 end package;
-
-
-package body ddrio is
-
-end package body;

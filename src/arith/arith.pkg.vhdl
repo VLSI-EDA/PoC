@@ -169,6 +169,3 @@ package arith is
   end component;
 
 end package;
-
-package body arith is
-end package body;

@@ -71,7 +71,4 @@ package comm is
 		);
 	end component;
 	
-end comm;
-
-package body comm is
-end comm;
+end package;

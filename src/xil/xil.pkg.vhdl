@@ -140,9 +140,5 @@ package xil is
 			VN							: in	STD_LOGIC
 		);
 	end component;
-end;
-
-
-package body xil is
-
-end package body;
+	
+end package;
