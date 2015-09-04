@@ -90,6 +90,10 @@ class NetList(CommandLineProgram):
 		if (environ.get('XILINX') == None):	raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment. ")
 
 		if (boardString is not None):
+			if not self.netListConfig.has_option('BOARDS', boardString):
+				from configparser import NoOptionError
+				raise CompilerException("Board '" + boardString + "' not found.") from NoOptionError(boardString, 'BOARDS')
+		
 			device = Device(self.netListConfig['BOARDS'][boardString])
 		elif (deviceString is not None):
 			device = Device(deviceString)
@@ -116,6 +120,10 @@ class NetList(CommandLineProgram):
 			raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment. ")
 
 		if (boardString is not None):
+			if not self.netListConfig.has_option('BOARDS', boardString):
+				from configparser import NoOptionError
+				raise CompilerException("Board '" + boardString + "' not found.") from NoOptionError(boardString, 'BOARDS')
+				
 			device = Device(self.netListConfig['BOARDS'][boardString])
 		elif (deviceString is not None):
 			device = Device(deviceString)
@@ -130,6 +138,9 @@ class NetList(CommandLineProgram):
 
 # main program
 def main():
+	import colorama
+	colorama.init()
+	
 	print("=" * 80)
 	print("{: ^80s}".format("The PoC Library - NetList Service Tool"))
 	print("=" * 80)
@@ -170,14 +181,7 @@ def main():
 		args = argParser.parse_args()
 		
 	except Exception as ex:
-		from traceback import print_tb
-		print("FATAL: %s" % ex.__str__())
-		print("-" * 80)
-		print_tb(ex.__traceback__)
-		print("-" * 80)
-		print()
-		return
-
+		Exit.printException(ex)
 		
 	try:
 		netList = NetList(args.debug, args.verbose, args.quiet)
@@ -195,9 +199,13 @@ def main():
 		
 	except CompilerException as ex:
 		from colorama import Fore, Back, Style
+		from configparser import Error
+		
 		print(Fore.RED + "ERROR:" + Fore.RESET + " %s" % ex.message)
 		if isinstance(ex.__cause__, FileNotFoundError):
-			print(Fore.RED + "CAUSE:   FileNotFound: '%s'" % str(ex.__cause__))
+			print(Fore.YELLOW + "  FileNotFound:" + Fore.RESET + " '%s'" % str(ex.__cause__))
+		elif isinstance(ex.__cause__, Error):
+			print(Fore.YELLOW + "  configparser.Error:" + Fore.RESET + " %s" % str(ex.__cause__))
 		print()
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 		exit(1)

@@ -30,21 +30,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
+#
 # entry point
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
-	from sys import exit
+	from lib.Functions import Exit
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.ISESimulator")
 
-	print("=" * 80)
-	print("{: ^80s}".format("The PoC Library - Python Module Simulator.ISESimulator"))
-	print("=" * 80)
-	print()
-	print("This is no executable file!")
-	exit(1)
-
+# load dependencies
 from pathlib import Path
 
 from Base.Exceptions import *
@@ -91,6 +86,10 @@ class Simulator(PoCSimulator):
 		# setup all needed paths to execute fuse
 		#vhpcompExecutablePath =	self.host.directories["ISEBinary"] / self.__executables['vhpcomp']
 		fuseExecutablePath =		self.host.directories["ISEBinary"] / self.__executables['fuse']
+		
+		if not self.host.tbConfig.has_section(str(pocEntity)):
+			from configparser import NoSectionError
+			raise SimulatorException("Testbench '" + str(pocEntity) + "' not found.") from NoSectionError(str(pocEntity))
 		
 		testbenchName =			self.host.tbConfig[str(pocEntity)]['TestbenchModule']
 		fileListFilePath =	self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['fileListFile']

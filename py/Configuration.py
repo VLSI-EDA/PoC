@@ -40,7 +40,6 @@ from Base.PoCBase import CommandLineProgram
 from collections import OrderedDict
 
 class Configuration(CommandLineProgram):
-	
 	headLine = "The PoC Library - Repository Service Tool"
 	
 	__privateSections = ["PoC", "Xilinx", "Xilinx-ISE", "Xilinx-LabTools", "Xilinx-Vivado", "Xilinx-HardwareServer", "Altera-QuartusII", "Altera-ModelSim", "Questa-SIM", "GHDL", "GTKWave", "Solutions"]
@@ -278,387 +277,401 @@ class Configuration(CommandLineProgram):
 		# Ask for installed Xilinx ISE
 		isXilinxISE = input('Is Xilinx ISE installed on your system? [Y/n/p]: ')
 		isXilinxISE = isXilinxISE if isXilinxISE != "" else "Y"
-		if (isXilinxISE != 'p'):
-			if (isXilinxISE == 'Y'):
-				xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
-				iseVersion =			input('Xilinx ISE Version Number [14.7]: ')
-				print()
-				
-				xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
-				iseVersion = iseVersion if iseVersion != "" else "14.7"
-				
-				xilinxDirectoryPath = Path(xilinxDirectory)
-				iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
-				
-				if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not iseDirectoryPath.exists():			raise BaseException("Xilinx ISE version '%s' is not installed." % iseVersion)
-				
-				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-				self.pocConfig['Xilinx-ISE']['Version'] = iseVersion
-				self.pocConfig['Xilinx-ISE']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/ISE_DS'
-				self.pocConfig['Xilinx-ISE']['BinaryDirectory'] = '${InstallationDirectory}/ISE/bin/nt64'
-			elif (isXilinxISE == 'n'):
-				self.pocConfig['Xilinx-ISE'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isXilinxISE  in ['p', 'P']):
+			pass
+		elif (isXilinxISE in ['n', 'N']):
+			self.pocConfig['Xilinx-ISE'] = {}
+		elif (isXilinxISE in ['y', 'Y']):
+			xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
+			iseVersion =			input('Xilinx ISE Version Number [14.7]: ')
+			print()
+			
+			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
+			iseVersion = iseVersion if iseVersion != "" else "14.7"
+			
+			xilinxDirectoryPath = Path(xilinxDirectory)
+			iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
+			
+			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not iseDirectoryPath.exists():			raise BaseException("Xilinx ISE version '%s' is not installed." % iseVersion)
+			
+			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
+			self.pocConfig['Xilinx-ISE']['Version'] = iseVersion
+			self.pocConfig['Xilinx-ISE']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/ISE_DS'
+			self.pocConfig['Xilinx-ISE']['BinaryDirectory'] = '${InstallationDirectory}/ISE/bin/nt64'
+		else:
+			raise BaseException("unknown option")
 	
 	def manualConfigureWindowsLabTools(self):
 		# Ask for installed Xilinx LabTools
 		isXilinxLabTools = input('Is Xilinx LabTools installed on your system? [Y/n/p]: ')
 		isXilinxLabTools = isXilinxLabTools if isXilinxLabTools != "" else "Y"
-		if (isXilinxLabTools != 'p'):
-			if (isXilinxLabTools == 'Y'):
-				xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
-				labToolsVersion =	input('Xilinx LabTools Version Number [14.7]: ')
-				print()
-				
-				xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
-				labToolsVersion = labToolsVersion if labToolsVersion != "" else "14.7"
-				
-				xilinxDirectoryPath = Path(xilinxDirectory)
-				labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
-				
-				if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not labToolsDirectoryPath.exists():	raise BaseException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
-				
-				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-				self.pocConfig['Xilinx-LabTools']['Version'] = labToolsVersion
-				self.pocConfig['Xilinx-LabTools']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/LabTools'
-				self.pocConfig['Xilinx-LabTools']['BinaryDirectory'] = '${InstallationDirectory}/LabTools/bin/nt64'
-			elif (isXilinxLabTools == 'n'):
-				self.pocConfig['Xilinx-LabTools'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isXilinxLabTools  in ['p', 'P']):
+			pass
+		elif (isXilinxLabTools in ['n', 'N']):
+			self.pocConfig['Xilinx-LabTools'] = {}
+		elif (isXilinxLabTools in ['y', 'Y']):
+			xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
+			labToolsVersion =	input('Xilinx LabTools Version Number [14.7]: ')
+			print()
+			
+			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
+			labToolsVersion = labToolsVersion if labToolsVersion != "" else "14.7"
+			
+			xilinxDirectoryPath = Path(xilinxDirectory)
+			labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
+			
+			if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not labToolsDirectoryPath.exists():	raise BaseException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
+			
+			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
+			self.pocConfig['Xilinx-LabTools']['Version'] = labToolsVersion
+			self.pocConfig['Xilinx-LabTools']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/LabTools'
+			self.pocConfig['Xilinx-LabTools']['BinaryDirectory'] = '${InstallationDirectory}/LabTools/bin/nt64'
+		else:
+			raise BaseException("unknown option")
 	
 	def manualConfigureWindowsVivado(self):
 		# Ask for installed Xilinx Vivado
 		isXilinxVivado = input('Is Xilinx Vivado installed on your system? [Y/n/p]: ')
 		isXilinxVivado = isXilinxVivado if isXilinxVivado != "" else "Y"
-		if (isXilinxVivado != 'p'):
-			if (isXilinxVivado == 'Y'):
-				xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
-				vivadoVersion =		input('Xilinx Vivado Version Number [2014.1]: ')
-				print()
-			
-				xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
-				vivadoVersion = vivadoVersion if vivadoVersion != "" else "2014.1"
-			
-				xilinxDirectoryPath = Path(xilinxDirectory)
-				vivadoDirectoryPath = xilinxDirectoryPath / "Vivado" / vivadoVersion
-			
-				if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not vivadoDirectoryPath.exists():	raise BaseException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
-			
-				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-				self.pocConfig['Xilinx-Vivado']['Version'] = vivadoVersion
-				self.pocConfig['Xilinx-Vivado']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/Vivado/${Version}'
-				self.pocConfig['Xilinx-Vivado']['BinaryDirectory'] = '${InstallationDirectory}/bin'
-			elif (isXilinxVivado == 'n'):
-				self.pocConfig['Xilinx-Vivado'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isXilinxVivado  in ['p', 'P']):
+			pass
+		elif (isXilinxVivado in ['n', 'N']):
+			self.pocConfig['Xilinx-Vivado'] = {}
+		elif (isXilinxVivado in ['y', 'Y']):
+			xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
+			vivadoVersion =		input('Xilinx Vivado Version Number [2014.1]: ')
+			print()
+		
+			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
+			vivadoVersion = vivadoVersion if vivadoVersion != "" else "2014.1"
+		
+			xilinxDirectoryPath = Path(xilinxDirectory)
+			vivadoDirectoryPath = xilinxDirectoryPath / "Vivado" / vivadoVersion
+		
+			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not vivadoDirectoryPath.exists():	raise BaseException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
+		
+			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
+			self.pocConfig['Xilinx-Vivado']['Version'] = vivadoVersion
+			self.pocConfig['Xilinx-Vivado']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/Vivado/${Version}'
+			self.pocConfig['Xilinx-Vivado']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+		else:
+			raise BaseException("unknown option")
 	
 	def manualConfigureWindowsHardwareServer(self):
 		# Ask for installed Xilinx HardwareServer
 		isXilinxHardwareServer = input('Is Xilinx HardwareServer installed on your system? [Y/n/p]: ')
 		isXilinxHardwareServer = isXilinxHardwareServer if isXilinxHardwareServer != "" else "Y"
-		if (isXilinxHardwareServer != 'p'):
-			if (isXilinxHardwareServer == 'Y'):
-				xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
-				hardwareServerVersion =		input('Xilinx HardwareServer Version Number [2014.1]: ')
-				print()
-			
-				xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
-				hardwareServerVersion = hardwareServerVersion if hardwareServerVersion != "" else "2014.1"
-			
-				xilinxDirectoryPath = Path(xilinxDirectory)
-				hardwareServerDirectoryPath = xilinxDirectoryPath / "HardwareServer" / hardwareServerVersion
-			
-				if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not hardwareServerDirectoryPath.exists():	raise BaseException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
-			
-				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-				self.pocConfig['Xilinx-HardwareServer']['Version'] = hardwareServerVersion
-				self.pocConfig['Xilinx-HardwareServer']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/HardwareServer/${Version}'
-				self.pocConfig['Xilinx-HardwareServer']['BinaryDirectory'] = '${InstallationDirectory}/bin'
-			elif (isXilinxHardwareServer == 'n'):
-				self.pocConfig['Xilinx-HardwareServer'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isXilinxHardwareServer  in ['p', 'P']):
+			pass
+		elif (isXilinxHardwareServer in ['n', 'N']):
+			self.pocConfig['Xilinx-HardwareServer'] = {}
+		elif (isXilinxHardwareServer in ['y', 'Y']):
+			xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
+			hardwareServerVersion =		input('Xilinx HardwareServer Version Number [2014.1]: ')
+			print()
+		
+			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
+			hardwareServerVersion = hardwareServerVersion if hardwareServerVersion != "" else "2014.1"
+		
+			xilinxDirectoryPath = Path(xilinxDirectory)
+			hardwareServerDirectoryPath = xilinxDirectoryPath / "HardwareServer" / hardwareServerVersion
+		
+			if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not hardwareServerDirectoryPath.exists():	raise BaseException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
+		
+			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
+			self.pocConfig['Xilinx-HardwareServer']['Version'] = hardwareServerVersion
+			self.pocConfig['Xilinx-HardwareServer']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/HardwareServer/${Version}'
+			self.pocConfig['Xilinx-HardwareServer']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+		else:
+			raise BaseException("unknown option")
 
 	def manualConfigureWindowsQuestaSIM(self):
 		# Ask for installed Questa-SIM
 		isQuestaSIM = input('Is Questa-SIM installed on your system? [Y/n/p]: ')
 		isQuestaSIM = isQuestaSIM if isQuestaSIM != "" else "Y"
-		if (isQuestaSIM != 'p'):
-			if (isQuestaSIM == 'Y'):
-				questaSIMDirectory =	input('Questa-SIM Installation Directory [C:\Mentor\QuestaSim64\\10.2c]: ')
-				questaSIMVersion =		input('Questa-SIM Version Number [10.2c]: ')
-				print()
-			
-				questaSIMDirectory =	questaSIMDirectory	if questaSIMDirectory != ""	else "C:\Mentor\QuestaSim64\\10.2c"
-				questaSIMVersion =		questaSIMVersion		if questaSIMVersion != ""		else "10.2c"
-			
-				questaSIMDirectoryPath =	Path(questaSIMDirectory)
-				questaSIMExecutablePath = questaSIMDirectoryPath / "win64" / "vsim.exe"
-			
-				if not questaSIMDirectoryPath.exists():		raise BaseException("Questa-SIM Installation Directory '%s' does not exist." % questaSIMDirectory)
-				if not questaSIMExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
-			
-				self.pocConfig['Questa-SIM']['Version'] =								questaSIMVersion
-				self.pocConfig['Questa-SIM']['InstallationDirectory'] =	questaSIMDirectoryPath.as_posix()
-				self.pocConfig['Questa-SIM']['BinaryDirectory'] =				'${InstallationDirectory}/win64'
-			elif (isQuestaSIM == 'n'):
-				self.pocConfig['Questa-SIM'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isQuestaSIM  in ['p', 'P']):
+			pass
+		elif (isQuestaSIM in ['n', 'N']):
+			self.pocConfig['Questa-SIM'] = {}
+		elif (isQuestaSIM in ['y', 'Y']):
+			questaSIMDirectory =	input('Questa-SIM Installation Directory [C:\Mentor\QuestaSim64\\10.2c]: ')
+			questaSIMVersion =		input('Questa-SIM Version Number [10.2c]: ')
+			print()
+		
+			questaSIMDirectory =	questaSIMDirectory	if questaSIMDirectory != ""	else "C:\Mentor\QuestaSim64\\10.2c"
+			questaSIMVersion =		questaSIMVersion		if questaSIMVersion != ""		else "10.2c"
+		
+			questaSIMDirectoryPath =	Path(questaSIMDirectory)
+			questaSIMExecutablePath = questaSIMDirectoryPath / "win64" / "vsim.exe"
+		
+			if not questaSIMDirectoryPath.exists():		raise BaseException("Questa-SIM Installation Directory '%s' does not exist." % questaSIMDirectory)
+			if not questaSIMExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
+		
+			self.pocConfig['Questa-SIM']['Version'] =								questaSIMVersion
+			self.pocConfig['Questa-SIM']['InstallationDirectory'] =	questaSIMDirectoryPath.as_posix()
+			self.pocConfig['Questa-SIM']['BinaryDirectory'] =				'${InstallationDirectory}/win64'
+		else:
+			raise BaseException("unknown option")
 
 	def manualConfigureWindowsGHDL(self):
 		# Ask for installed GHDL
 		isGHDL = input('Is GHDL installed on your system? [Y/n/p]: ')
 		isGHDL = isGHDL if isGHDL != "" else "Y"
-		if (isGHDL != 'p'):
-			if (isGHDL == 'Y'):
-				ghdlDirectory =	input('GHDL Installation Directory [C:\Program Files (x86)\GHDL]: ')
-				ghdlVersion =		input('GHDL Version Number [0.31]: ')
-				print()
-			
-				ghdlDirectory = ghdlDirectory if ghdlDirectory != "" else "C:\Program Files (x86)\GHDL"
-				ghdlVersion = ghdlVersion if ghdlVersion != "" else "0.31"
-			
-				ghdlDirectoryPath = Path(ghdlDirectory)
-				ghdlExecutablePath = ghdlDirectoryPath / "bin" / "ghdl.exe"
-			
-				if not ghdlDirectoryPath.exists():	raise BaseException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
-				if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
-			
-				self.pocConfig['GHDL']['Version'] = ghdlVersion
-				self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
-				self.pocConfig['GHDL']['BinaryDirectory'] = '${InstallationDirectory}/bin'
-			elif (isGHDL == 'n'):
-				self.pocConfig['GHDL'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isGHDL  in ['p', 'P']):
+			pass
+		elif (isGHDL in ['n', 'N']):
+			self.pocConfig['GHDL'] = {}
+		elif (isGHDL in ['y', 'Y']):
+			ghdlDirectory =	input('GHDL Installation Directory [C:\Program Files (x86)\GHDL]: ')
+			ghdlVersion =		input('GHDL Version Number [0.31]: ')
+			print()
+		
+			ghdlDirectory = ghdlDirectory if ghdlDirectory != "" else "C:\Program Files (x86)\GHDL"
+			ghdlVersion = ghdlVersion if ghdlVersion != "" else "0.31"
+		
+			ghdlDirectoryPath = Path(ghdlDirectory)
+			ghdlExecutablePath = ghdlDirectoryPath / "bin" / "ghdl.exe"
+		
+			if not ghdlDirectoryPath.exists():	raise BaseException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
+			if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
+		
+			self.pocConfig['GHDL']['Version'] = ghdlVersion
+			self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
+			self.pocConfig['GHDL']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+		else:
+			raise BaseException("unknown option")
 	
 	def manualConfigureWindowsGTKW(self):
 		# Ask for installed GTKWave
 		isGTKW = input('Is GTKWave installed on your system? [Y/n/p]: ')
 		isGTKW = isGTKW if isGTKW != "" else "Y"
-		if (isGTKW != 'p'):
-			if (isGTKW == 'Y'):
-				gtkwDirectory =	input('GTKWave Installation Directory [C:\Program Files (x86)\GTKWave]: ')
-				gtkwVersion =		input('GTKWave Version Number [3.3.61]: ')
-				print()
-			
-				gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "C:\Program Files (x86)\GTKWave"
-				gtkwVersion = gtkwVersion if gtkwVersion != "" else "3.3.61"
-			
-				gtkwDirectoryPath = Path(gtkwDirectory)
-				gtkwExecutablePath = gtkwDirectoryPath / "bin" / "gtkwave.exe"
-			
-				if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave Installation Directory '%s' does not exist." % gtkwDirectory)
-				if not gtkwExecutablePath.exists():	raise BaseException("GTKWave is not installed.")
-			
-				self.pocConfig['GTKWave']['Version'] = gtkwVersion
-				self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
-				self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}/bin'
-			elif (isGTKW == 'n'):
-				self.pocConfig['GTKWave'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isGTKW  in ['p', 'P']):
+			pass
+		elif (isGTKW in ['n', 'N']):
+			self.pocConfig['GTKWave'] = {}
+		elif (isGTKW in ['y', 'Y']):
+			gtkwDirectory =	input('GTKWave Installation Directory [C:\Program Files (x86)\GTKWave]: ')
+			gtkwVersion =		input('GTKWave Version Number [3.3.61]: ')
+			print()
+		
+			gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "C:\Program Files (x86)\GTKWave"
+			gtkwVersion = gtkwVersion if gtkwVersion != "" else "3.3.61"
+		
+			gtkwDirectoryPath = Path(gtkwDirectory)
+			gtkwExecutablePath = gtkwDirectoryPath / "bin" / "gtkwave.exe"
+		
+			if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave Installation Directory '%s' does not exist." % gtkwDirectory)
+			if not gtkwExecutablePath.exists():	raise BaseException("GTKWave is not installed.")
+		
+			self.pocConfig['GTKWave']['Version'] = gtkwVersion
+			self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
+			self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+		else:
+			raise BaseException("unknown option")
 	
 	def manualConfigureLinuxISE(self):
 		# Ask for installed Xilinx ISE
 		isXilinxISE = input('Is Xilinx ISE installed on your system? [Y/n/p]: ')
 		isXilinxISE = isXilinxISE if isXilinxISE != "" else "Y"
-		if (isXilinxISE != 'p'):
-			if (isXilinxISE == 'Y'):
-				xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
-				iseVersion =			input('Xilinx ISE Version Number [14.7]: ')
-				print()
-			
-				xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
-				iseVersion = iseVersion if iseVersion != "" else "14.7"
-			
-				xilinxDirectoryPath = Path(xilinxDirectory)
-				iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
-			
-				if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not iseDirectoryPath.exists():			raise BaseException("Xilinx ISE version '%s' is not installed." % iseVersion)
-			
-				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-				self.pocConfig['Xilinx-ISE']['Version'] = iseVersion
-				self.pocConfig['Xilinx-ISE']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/ISE_DS'
-				self.pocConfig['Xilinx-ISE']['BinaryDirectory'] = '${InstallationDirectory}/ISE/bin/lin64'
-			elif (isXilinxISE == 'n'):
-				self.pocConfig['Xilinx-ISE'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isXilinxISE  in ['p', 'P']):
+			pass
+		elif (isXilinxISE in ['n', 'N']):
+			self.pocConfig['Xilinx-ISE'] = {}
+		elif (isXilinxISE in ['y', 'Y']):
+			xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
+			iseVersion =			input('Xilinx ISE Version Number [14.7]: ')
+			print()
+		
+			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
+			iseVersion = iseVersion if iseVersion != "" else "14.7"
+		
+			xilinxDirectoryPath = Path(xilinxDirectory)
+			iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
+		
+			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not iseDirectoryPath.exists():			raise BaseException("Xilinx ISE version '%s' is not installed." % iseVersion)
+		
+			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
+			self.pocConfig['Xilinx-ISE']['Version'] = iseVersion
+			self.pocConfig['Xilinx-ISE']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/ISE_DS'
+			self.pocConfig['Xilinx-ISE']['BinaryDirectory'] = '${InstallationDirectory}/ISE/bin/lin64'
+		else:
+			raise BaseException("unknown option")
 	
 	def manualConfigureLinuxLabTools(self):
 		# Ask for installed Xilinx LabTools
 		isXilinxLabTools = input('Is Xilinx LabTools installed on your system? [Y/n/p]: ')
 		isXilinxLabTools = isXilinxLabTools if isXilinxLabTools != "" else "Y"
-		if (isXilinxLabTools != 'p'):
-			if (isXilinxLabTools == 'Y'):
-				xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
-				labToolsVersion =	input('Xilinx LabTools Version Number [14.7]: ')
-				print()
-			
-				xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
-				labToolsVersion = labToolsVersion if labToolsVersion != "" else "14.7"
-			
-				xilinxDirectoryPath = Path(xilinxDirectory)
-				labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
-			
-				if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not labToolsDirectoryPath.exists():	raise BaseException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
-			
-				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-				self.pocConfig['Xilinx-LabTools']['Version'] = labToolsVersion
-				self.pocConfig['Xilinx-LabTools']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/LabTools'
-				self.pocConfig['Xilinx-LabTools']['BinaryDirectory'] = '${InstallationDirectory}/LabTools/bin/lin64'
-			elif (isXilinxLabTools == 'n'):
-				self.pocConfig['Xilinx-LabTools'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isXilinxLabTools  in ['p', 'P']):
+			pass
+		elif (isXilinxLabTools in ['n', 'N']):
+			self.pocConfig['Xilinx-LabTools'] = {}
+		elif (isXilinxLabTools in ['y', 'Y']):
+			xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
+			labToolsVersion =	input('Xilinx LabTools Version Number [14.7]: ')
+			print()
+		
+			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
+			labToolsVersion = labToolsVersion if labToolsVersion != "" else "14.7"
+		
+			xilinxDirectoryPath = Path(xilinxDirectory)
+			labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
+		
+			if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not labToolsDirectoryPath.exists():	raise BaseException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
+		
+			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
+			self.pocConfig['Xilinx-LabTools']['Version'] = labToolsVersion
+			self.pocConfig['Xilinx-LabTools']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/LabTools'
+			self.pocConfig['Xilinx-LabTools']['BinaryDirectory'] = '${InstallationDirectory}/LabTools/bin/lin64'
+		else:
+			raise BaseException("unknown option")
 		
 	def manualConfigureLinuxVivado(self):
 		# Ask for installed Xilinx Vivado
 		isXilinxVivado = input('Is Xilinx Vivado installed on your system? [Y/n/p]: ')
 		isXilinxVivado = isXilinxVivado if isXilinxVivado != "" else "Y"
-		if (isXilinxVivado != 'p'):
-			if (isXilinxVivado == 'Y'):
-				xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
-				vivadoVersion =		input('Xilinx Vivado Version Number [2014.1]: ')
-				print()
-			
-				xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
-				vivadoVersion = vivadoVersion if vivadoVersion != "" else "2014.1"
-			
-				xilinxDirectoryPath = Path(xilinxDirectory)
-				vivadoDirectoryPath = xilinxDirectoryPath / "Vivado" / vivadoVersion
-			
-				if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not vivadoDirectoryPath.exists():	raise BaseException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
-			
-				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-				self.pocConfig['Xilinx-Vivado']['Version'] = vivadoVersion
-				self.pocConfig['Xilinx-Vivado']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/Vivado/${Version}'
-				self.pocConfig['Xilinx-Vivado']['BinaryDirectory'] = '${InstallationDirectory}/bin'
-			elif (isXilinxVivado == 'n'):
-				self.pocConfig['Xilinx-Vivado'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isXilinxVivado  in ['p', 'P']):
+			pass
+		elif (isXilinxVivado in ['n', 'N']):
+			self.pocConfig['Xilinx-Vivado'] = {}
+		elif (isXilinxVivado in ['y', 'Y']):
+			xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
+			vivadoVersion =		input('Xilinx Vivado Version Number [2015.2]: ')
+			print()
+		
+			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
+			vivadoVersion = vivadoVersion if vivadoVersion != "" else "2015.2"
+		
+			xilinxDirectoryPath = Path(xilinxDirectory)
+			vivadoDirectoryPath = xilinxDirectoryPath / "Vivado" / vivadoVersion
+		
+			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not vivadoDirectoryPath.exists():	raise BaseException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
+		
+			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
+			self.pocConfig['Xilinx-Vivado']['Version'] = vivadoVersion
+			self.pocConfig['Xilinx-Vivado']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/Vivado/${Version}'
+			self.pocConfig['Xilinx-Vivado']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+		else:
+			raise BaseException("unknown option")
 	
 	def manualConfigureLinuxHardwareServer(self):
 		# Ask for installed Xilinx HardwareServer
 		isXilinxHardwareServer = input('Is Xilinx HardwareServer installed on your system? [Y/n/p]: ')
 		isXilinxHardwareServer = isXilinxHardwareServer if isXilinxHardwareServer != "" else "Y"
-		if (isXilinxHardwareServer != 'p'):
-			if (isXilinxHardwareServer == 'Y'):
-				xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
-				hardwareServerVersion =		input('Xilinx HardwareServer Version Number [2014.1]: ')
-				print()
-			
-				xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
-				hardwareServerVersion = hardwareServerVersion if hardwareServerVersion != "" else "2014.1"
-			
-				xilinxDirectoryPath = Path(xilinxDirectory)
-				hardwareServerDirectoryPath = xilinxDirectoryPath / "HardwareServer" / hardwareServerVersion
-			
-				if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
-				if not hardwareServerDirectoryPath.exists():	raise BaseException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
-			
-				self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-				self.pocConfig['Xilinx-HardwareServer']['Version'] = hardwareServerVersion
-				self.pocConfig['Xilinx-HardwareServer']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/HardwareServer/${Version}'
-				self.pocConfig['Xilinx-HardwareServer']['BinaryDirectory'] = '${InstallationDirectory}/bin'
-			elif (isXilinxHardwareServer == 'n'):
-				self.pocConfig['Xilinx-HardwareServer'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isXilinxHardwareServer  in ['p', 'P']):
+			pass
+		elif (isXilinxHardwareServer in ['n', 'N']):
+			self.pocConfig['Xilinx-HardwareServer'] = {}
+		elif (isXilinxHardwareServer in ['y', 'Y']):
+			xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
+			hardwareServerVersion =		input('Xilinx HardwareServer Version Number [2015.2]: ')
+			print()
+		
+			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
+			hardwareServerVersion = hardwareServerVersion if hardwareServerVersion != "" else "2015.2"
+		
+			xilinxDirectoryPath = Path(xilinxDirectory)
+			hardwareServerDirectoryPath = xilinxDirectoryPath / "HardwareServer" / hardwareServerVersion
+		
+			if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not hardwareServerDirectoryPath.exists():	raise BaseException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
+		
+			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
+			self.pocConfig['Xilinx-HardwareServer']['Version'] = hardwareServerVersion
+			self.pocConfig['Xilinx-HardwareServer']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/HardwareServer/${Version}'
+			self.pocConfig['Xilinx-HardwareServer']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+		else:
+			raise BaseException("unknown option")
 			
 	def manualConfigureLinuxQuestaSIM(self):
 		# Ask for installed Questa-SIM
 		isQuestaSIM = input('Is Questa-SIM installed on your system? [Y/n/p]: ')
 		isQuestaSIM = isQuestaSIM if isQuestaSIM != "" else "Y"
-		if (isQuestaSIM != 'p'):
-			if (isQuestaSIM == 'Y'):
-				questaSIMDirectory =	input('Questa-SIM Installation Directory [/opt/QuestaSim/10.2c]: ')
-				questaSIMVersion =		input('Questa-SIM Version Number [10.2c]: ')
-				print()
-			
-				questaSIMDirectory =	questaSIMDirectory	if questaSIMDirectory != ""	else "/opt/QuestaSim/10.2c"
-				questaSIMVersion =		questaSIMVersion		if questaSIMVersion != ""		else "10.2c"
-			
-				questaSIMDirectoryPath = Path(questaSIMDirectory)
-				questaSIMExecutablePath = questaSIMDirectoryPath / "bin" / "vsim"
-			
-				if not questaSIMDirectoryPath.exists():		raise BaseException("Questa-SIM Installation Directory '%s' does not exist." % questaSIMDirectory)
-				if not questaSIMExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
-			
-				self.pocConfig['Questa-SIM']['Version'] =								questaSIMVersion
-				self.pocConfig['Questa-SIM']['InstallationDirectory'] =	questaSIMDirectoryPath.as_posix()
-				self.pocConfig['Questa-SIM']['BinaryDirectory'] =				'${InstallationDirectory}/bin'
-			elif (isQuestaSIM == 'n'):
-				self.pocConfig['Questa-SIM'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isQuestaSIM  in ['p', 'P']):
+			pass
+		elif (isQuestaSIM in ['n', 'N']):
+			self.pocConfig['Questa-SIM'] = {}
+		elif (isQuestaSIM in ['y', 'Y']):
+			questaSIMDirectory =	input('Questa-SIM Installation Directory [/opt/QuestaSim/10.2c]: ')
+			questaSIMVersion =		input('Questa-SIM Version Number [10.2c]: ')
+			print()
+		
+			questaSIMDirectory =	questaSIMDirectory	if questaSIMDirectory != ""	else "/opt/QuestaSim/10.2c"
+			questaSIMVersion =		questaSIMVersion		if questaSIMVersion != ""		else "10.2c"
+		
+			questaSIMDirectoryPath = Path(questaSIMDirectory)
+			questaSIMExecutablePath = questaSIMDirectoryPath / "bin" / "vsim"
+		
+			if not questaSIMDirectoryPath.exists():		raise BaseException("Questa-SIM Installation Directory '%s' does not exist." % questaSIMDirectory)
+			if not questaSIMExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
+		
+			self.pocConfig['Questa-SIM']['Version'] =								questaSIMVersion
+			self.pocConfig['Questa-SIM']['InstallationDirectory'] =	questaSIMDirectoryPath.as_posix()
+			self.pocConfig['Questa-SIM']['BinaryDirectory'] =				'${InstallationDirectory}/bin'
+		else:
+			raise BaseException("unknown option")
 	
 	def manualConfigureLinuxGHDL(self):
 		# Ask for installed GHDL
 		isGHDL = input('Is GHDL installed on your system? [Y/n/p]: ')
 		isGHDL = isGHDL if isGHDL != "" else "Y"
-		if (isGHDL != 'p'):
-			if (isGHDL == 'Y'):
-				ghdlDirectory =	input('GHDL Installation Directory [/usr/bin]: ')
-				ghdlVersion =		input('GHDL Version Number [0.31]: ')
-				print()
-			
-				ghdlDirectory = ghdlDirectory if ghdlDirectory != "" else "/usr/bin"
-				ghdlVersion = ghdlVersion if ghdlVersion != "" else "0.31"
-			
-				ghdlDirectoryPath = Path(ghdlDirectory)
-				ghdlExecutablePath = ghdlDirectoryPath / "ghdl"
-			
-				if not ghdlDirectoryPath.exists():	raise BaseException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
-				if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
-			
-				self.pocConfig['GHDL']['Version'] = ghdlVersion
-				self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
-				self.pocConfig['GHDL']['BinaryDirectory'] = '${InstallationDirectory}'
-			elif (isGHDL == 'n'):
-				self.pocConfig['GHDL'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isGHDL  in ['p', 'P']):
+			pass
+		elif (isGHDL in ['n', 'N']):
+			self.pocConfig['GHDL'] = {}
+		elif (isGHDL in ['y', 'Y']):
+			ghdlDirectory =	input('GHDL Installation Directory [/usr/bin]: ')
+			ghdlVersion =		input('GHDL Version Number [0.31]: ')
+			print()
+		
+			ghdlDirectory = ghdlDirectory if ghdlDirectory != "" else "/usr/bin"
+			ghdlVersion = ghdlVersion if ghdlVersion != "" else "0.31"
+		
+			ghdlDirectoryPath = Path(ghdlDirectory)
+			ghdlExecutablePath = ghdlDirectoryPath / "ghdl"
+		
+			if not ghdlDirectoryPath.exists():	raise BaseException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
+			if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
+		
+			self.pocConfig['GHDL']['Version'] = ghdlVersion
+			self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
+			self.pocConfig['GHDL']['BinaryDirectory'] = '${InstallationDirectory}'
+		else:
+			raise BaseException("unknown option")
 
 	def manualConfigureLinuxGTKW(self):
 		# Ask for installed GTKWave
 		isGTKW = input('Is GTKWave installed on your system? [Y/n/p]: ')
 		isGTKW = isGTKW if isGTKW != "" else "Y"
-		if (isGTKW != 'p'):
-			if (isGTKW == 'Y'):
-				gtkwDirectory =	input('GTKWave Installation Directory [/usr/bin]: ')
-				gtkwVersion =		input('GTKWave Version Number [3.3.61]: ')
-				print()
-			
-				gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "/usr/bin"
-				gtkwVersion = gtkwVersion if gtkwVersion != "" else "3.3.61"
-			
-				gtkwDirectoryPath = Path(gtkwDirectory)
-				gtkwExecutablePath = gtkwDirectoryPath / "gtkwave"
-			
-				if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave Installation Directory '%s' does not exist." % gtkwDirectory)
-				if not gtkwExecutablePath.exists():	raise BaseException("GTKWave is not installed.")
-			
-				self.pocConfig['GTKWave']['Version'] = gtkwVersion
-				self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
-				self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}'
-			elif (isGTKW == 'n'):
-				self.pocConfig['GTKWave'] = {}
-			else:
-				raise BaseException("unknown option")
+		if (isGTKW  in ['p', 'P']):
+				pass
+		elif (isGTKW in ['n', 'N']):
+			self.pocConfig['GTKWave'] = {}
+		elif (isGTKW in ['y', 'Y']):
+			gtkwDirectory =	input('GTKWave Installation Directory [/usr/bin]: ')
+			gtkwVersion =		input('GTKWave Version Number [3.3.61]: ')
+			print()
+		
+			gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "/usr/bin"
+			gtkwVersion = gtkwVersion if gtkwVersion != "" else "3.3.61"
+		
+			gtkwDirectoryPath = Path(gtkwDirectory)
+			gtkwExecutablePath = gtkwDirectoryPath / "gtkwave"
+		
+			if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave Installation Directory '%s' does not exist." % gtkwDirectory)
+			if not gtkwExecutablePath.exists():	raise BaseException("GTKWave is not installed.")
+		
+			self.pocConfig['GTKWave']['Version'] = gtkwVersion
+			self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
+			self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}'
+		else:
+			raise BaseException("unknown option")
 	
 	def newSolution(self, solutionName):
 		print("new solution: name=%s" % solutionName)
@@ -783,15 +796,7 @@ def main():
 		args = argParser.parse_args()
 
 	except Exception as ex:
-		from traceback	import print_tb
-		from colorama		import Fore, Back, Style
-		
-		print(Fore.RED + "FATAL: %s" % ex.__str__())
-		print("-" * 80)
-		print_tb(ex.__traceback__)
-		print("-" * 80)
-		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
-		exit(1)
+		Exit.printException(ex)
 
 	# create class instance and start processing
 	try:
@@ -802,16 +807,17 @@ def main():
 			return
 		elif args.configurePoC:
 			print("=" * 80)
-			print("{: ^80s}".format("The PoC Library - Repository Service Tool"))
+			print("{: ^80s}".format(Configuration.headLine))
 			print("=" * 80)
 			print()
 		
 			#config.autoConfiguration()
 			config.manualConfiguration()
 			exit(0)
+			
 		elif args.newSolution:
 			print("=" * 80)
-			print("{: ^80s}".format("The PoC Library - Repository Service Tool"))
+			print("{: ^80s}".format(Configuration.headLine))
 			print("=" * 80)
 			print()
 			
@@ -820,7 +826,7 @@ def main():
 			
 		elif args.addSolution:
 			print("=" * 80)
-			print("{: ^80s}".format("The PoC Library - Repository Service Tool"))
+			print("{: ^80s}".format(Configuration.headLine))
 			print("=" * 80)
 			print()
 			
@@ -841,7 +847,7 @@ def main():
 #		from colorama import Fore, Back, Style
 #		print(Fore.RED + "ERROR:" + Fore.RESET + " %s" % ex.message)
 #		if isinstance(ex.__cause__, FileNotFoundError):
-#			print(Fore.RED + "CAUSE:   FileNotFound: '%s'" % str(ex.__cause__))
+#			print(Fore.YELLOW + "  FileNotFound:" + Fore.RESET + " '%s'" % str(ex.__cause__))
 #		print()
 #		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 #		exit(1)

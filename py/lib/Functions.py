@@ -42,7 +42,19 @@ class Exit(object):
 			print("Minimal required Python version is %s" % (".".join(version)))
 			print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 			exit(1)
-			
+	
+	@classmethod
+	def printThisIsNoExecutableFile(cls, message):
+		from colorama		import Fore, Back, Style, init
+		init()
+		print("=" * 80)
+		print("{: ^80s}".format(message))
+		print("=" * 80)
+		print()
+		print(Fore.RED + "ERROR:" + Fore.RESET + " This is not a executable file!")
+		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
+		exit(1)
+	
 	@classmethod
 	def printThisIsNoLibraryFile(cls, message):
 		from colorama		import Fore, Back, Style, init

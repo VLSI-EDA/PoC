@@ -36,15 +36,10 @@ if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
-	from sys import exit
+	from lib.Functions import Exit
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Class PoCCompiler")
 
-	print("=" * 80)
-	print("{: ^80s}".format("The PoC Library - Python Class PoCCompiler"))
-	print("=" * 80)
-	print()
-	print("This is no executable file!")
-	exit(1)
-
+# load dependencies
 from Base.Exceptions import *
 from Compiler.Exceptions import *
 

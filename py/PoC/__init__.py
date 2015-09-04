@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:               Patrick Lehmann
 # 
-# Python Sub Module:    Saves the PoC Library configuration as python source code.
+# Python Sub Module:    Saves The PoC-Library configuration as python source code.
 # 
 # Description:
 # ------------------------------------
@@ -30,13 +30,12 @@
 # limitations under the License.
 # ==============================================================================
 
+# entry point
+if __name__ != "__main__":
+	# place library initialization code here
+	pass
+else:
+	from lib.Functions import Exit
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
-## entry point
-#if __name__ == "__main__":
-#  print("PoC Library - Repository Service Tool")
-#  print("========================================================================")
-#  print()
-#  print("This is no executable file!")
-#else:
-#  pass
-#  
+# load dependencies

@@ -15,7 +15,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2014 Technische Universitaet Dresden - Germany
+# Copyright 2007-2015 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,16 +36,10 @@ if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
-	from sys import exit
+	from lib.Functions import Exit
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Base.PoCBase")
 
-	print("=" * 80)
-	print("{: ^80s}".format("The PoC Library - Python Module Base.PoCBase"))
-	print("=" * 80)
-	print()
-	print("This is no executable file!")
-	exit(1)
-
-
+# load dependencies
 from pathlib import Path
 from Base.Exceptions import *
 

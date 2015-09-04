@@ -30,21 +30,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
+#
 # entry point
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
-	from sys import exit
+	from lib.Functions import Exit
+	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Simulator.Exceptions")
 
-	print("=" * 80)
-	print("{: ^80s}".format("PoC Library - Python Module Simulator.Exceptions"))
-	print("=" * 80)
-	print()
-	print("This is no executable file!")
-	exit(1)
-
+# load dependencies
 from Base.Exceptions import *
 
 class SimulatorException(BaseException):

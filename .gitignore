@@ -1,7 +1,6 @@
 # general file excludes
 ~*.tmp
 ~*.docx
-*.fmt
 *~
 *.o
 ~$*
@@ -17,21 +16,18 @@ __pycache__
 !/netlist/template.cgc
 
 # ignore folders
-temp/
-vSim/
+/temp/
+/vSim/
 
 # ignore files from PoC
-/tb/common/my_project.vhdl
 /py/config.private.ini
+/tb/common/my_project.vhdl
 
 # ignore Quartus files
-other/quartus/*/db/
-other/quartus/*/incremental_db/
-other/quartus/*/output_files/
-other/quartus/*/simulation/
-other/quartus/*/*.rpt
-other/quartus/*/*.qws
-other/quartus/*/*.bak
+/other/quartus/*/
+!/other/quartus/*/*.qpf
+!/other/quartus/*/*.qsf
+!/other/quartus/*/*.vhdl
 
 # general whitelist
 !.publish

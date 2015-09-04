@@ -30,21 +30,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
+#
 # entry point
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
-	from sys import exit
+	from lib.Functions import Exit
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Class Compiler(PoCCompiler)")
 
-	print("=" * 80)
-	print("{: ^80s}".format("The PoC Library - Python Class Compiler(PoCCompiler)"))
-	print("=" * 80)
-	print()
-	print("This is no executable file!")
-	exit(1)
-
+# load dependencies
 from pathlib import Path
 
 from Base.Exceptions import *
@@ -97,6 +92,10 @@ class Compiler(PoCCompiler):
 		self.host.netListConfig['SPECIAL'] = {}
 		self.host.netListConfig['SPECIAL']['Device'] = deviceString
 		self.host.netListConfig['SPECIAL']['OutputDir'] = tempCoreGenPath.as_posix()
+		
+		if not self.host.netListConfig.has_section(str(pocEntity)):
+			from configparser import NoSectionError
+			raise CompilerException("IP-Core '" + str(pocEntity) + "' not found.") from NoSectionError(str(pocEntity))
 		
 		# read copy tasks
 		copyFileList = self.host.netListConfig[str(pocEntity)]['Copy']
@@ -215,7 +214,7 @@ class Compiler(PoCCompiler):
 		self.printNonQuiet('  copy result files into output directory...')
 		for task in copyTasks:
 			(fromPath, toPath) = task
-			if not fromPath.exists(): raise CompilerException("File '%s' does not exist!" % str(fromPath))
+			if not fromPath.exists(): raise CompilerException("Can not copy '" + str(fromPath) + "' to destination.") from FileNotFoundError(str(fromPath))
 			
 			toDirectoryPath = toPath.parent
 			if not toDirectoryPath.exists():
