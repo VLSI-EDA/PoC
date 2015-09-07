@@ -139,7 +139,7 @@ package utils is
 	function rmax(vec : T_REALVEC) return real;	       							-- Calculates: max(vec) of real vector
 
 	function isum(vec : T_NATVEC) return NATURAL;										-- Calculates: sum(vec) for a natural vector
-	function isum(vec : T_POSVEC) return POSITIVE;									-- Calculates: sum(vec) for a positive vector
+	function isum(vec : T_POSVEC) return natural;									-- Calculates: sum(vec) for a positive vector
 	function isum(vec : T_INTVEC) return integer; 									-- Calculates: sum(vec) of integer vector
 	function rsum(vec : T_REALVEC) return real;	       							-- Calculates: sum(vec) of real vector
 
@@ -570,12 +570,12 @@ package body utils is
 		return Result;
 	end function;
 	
-	function isum(vec : T_POSVEC) return POSITIVE is
-		variable Result		: POSITIVE;
+	function isum(vec : T_POSVEC) return natural is
+		variable Result : natural;
 	begin
-		Result		:= 0;
+		Result := 0;
 		for i in vec'range loop
-			Result	:= Result + vec(I);
+			Result := Result + vec(I);
 		end loop;
 		return Result;
 	end function;
@@ -807,7 +807,7 @@ package body utils is
 		variable result		: std_logic_vector(2**value'length - 1 downto 0);
 	begin
 		result	:= (others => '0');
-		result(to_index(value)) := '1';
+		result(to_index(value, 0)) := '1';
 		return result;
 	end function;
 	

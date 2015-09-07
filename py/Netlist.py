@@ -45,7 +45,7 @@ from Compiler.Exceptions import *
 class NetList(CommandLineProgram):
 	__netListConfigFileName = "configuration.ini"
 	
-	headLine = "The PoC Library - NetList Service Tool"
+	headLine = "The PoC-Library - NetList Service Tool"
 	
 	dryRun = False
 	netListConfig = None
@@ -138,13 +138,13 @@ class NetList(CommandLineProgram):
 
 # main program
 def main():
-	import colorama
-	colorama.init()
+	from colorama import Fore, Back, Style, init
+	init()
 	
-	print("=" * 80)
+	print(Fore.MAGENTA + "=" * 80)
 	print("{: ^80s}".format("The PoC Library - NetList Service Tool"))
 	print("=" * 80)
-	print()
+	print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 	
 	try:
 		import argparse
@@ -206,7 +206,6 @@ def main():
 			print(Fore.YELLOW + "  FileNotFound:" + Fore.RESET + " '%s'" % str(ex.__cause__))
 		elif isinstance(ex.__cause__, Error):
 			print(Fore.YELLOW + "  configparser.Error:" + Fore.RESET + " %s" % str(ex.__cause__))
-		print()
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 		exit(1)
 		

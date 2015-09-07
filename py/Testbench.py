@@ -41,7 +41,7 @@ from Simulator import *
 from Simulator.Exceptions import *
 
 class Testbench(CommandLineProgram):
-	headLine = "The PoC Library - Testbench Service Tool"
+	headLine = "The PoC-Library - Testbench Service Tool"
 	
 	# configuration files
 	__tbConfigFileName = "configuration.ini"
@@ -172,13 +172,13 @@ class Testbench(CommandLineProgram):
 
 # main program
 def main():
-	import colorama
-	colorama.init()
+	from colorama import Fore, Back, Style, init
+	init()
 
-	print("=" * 80)
+	print(Fore.MAGENTA + "=" * 80)
 	print("{: ^80s}".format(Testbench.headLine))
 	print("=" * 80)
-	print()
+	print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 	
 	try:
 		import argparse
@@ -267,7 +267,6 @@ def main():
 			print(Fore.YELLOW + "  FileNotFound:" + Fore.RESET + " '%s'" % str(ex.__cause__))
 		elif isinstance(ex.__cause__, Error):
 			print(Fore.YELLOW + "  configparser.Error:" + Fore.RESET + " %s" % str(ex.__cause__))
-		print()
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 		exit(1)
 
