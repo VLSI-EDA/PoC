@@ -6,3 +6,6 @@
 ##	Location:				SW7
 ## -----------------------------------------------------------------------------
 NET "ML505_GPIO_Button_CPU_Reset_n"							LOC = "E9"	| IOSTANDARD = LVCMOS33;			## {IN}			low-active; external 4k7 pullup resistor
+
+## Ignore timings on async I/O pins
+NET "ML505_GPIO_Button_CPU_Reset_n"							TIG;

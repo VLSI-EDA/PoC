@@ -18,5 +18,5 @@ NET "VC707_GPIO_Switches<6>"						LOC = "BA30";			## SW2.7; high-active; externa
 NET "VC707_GPIO_Switches<7>"						LOC = "BB31";			## SW2.8; high-active; external 4k7 pulldown resistor
 NET "VC707_GPIO_Switches<?>"						IOSTANDARD = LVCMOS18;
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "VC707_GPIO_Switches<?>"						TIG;

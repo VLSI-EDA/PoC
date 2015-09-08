@@ -15,5 +15,5 @@ set_property PACKAGE_PIN	U22				[get_ports KC705_FanControl_Tacho]
 # set I/O standard
 set_property IOSTANDARD		LVCMOS25	[get_ports -regexp {KC705_FanControl_.*}]
 # Ignore timings on async I/O pins
-#set_false_path								-to		[get_ports KC705_FanControl_PWM]
+set_false_path								-to		[get_ports KC705_FanControl_PWM]
 set_false_path								-from	[get_ports KC705_FanControl_Tacho]

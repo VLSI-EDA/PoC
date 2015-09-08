@@ -17,6 +17,9 @@
 ##			Vendor:				Analog Devices
 ##			Device:				ADT7476
 ##			I²C-Address:	0x2C
-NET "ML505_IIC_SerialClock"						LOC = "F9";			## 2x external 10k pullup resistors
-NET "ML505_IIC_SerialData"						LOC = "F8";			## 2x external 10k pullup resistors
-NET "ML505_IIC_*"											IOSTANDARD = LVCMOS33;
+NET "ML505_IIC_Main_SerialClock"		LOC = "F9";			## 2x external 10k pullup resistors
+NET "ML505_IIC_Main_SerialData"			LOC = "F8";			## 2x external 10k pullup resistors
+NET "ML505_IIC_Main_*"							IOSTANDARD = LVCMOS33;
+
+## Ignore timings on async I/O pins
+NET "ML505_IIC_Main_*"							TIG;

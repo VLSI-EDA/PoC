@@ -19,3 +19,6 @@ NET "ML505_LCD_E"									LOC = "AC9";				## J8.9			level shifted by U3 (XC95144
 NET "ML505_LCD_RS"								LOC = "J17";				## J8.11		level shifted by U3 (XC95144XL)	; Bank 3
 NET "ML505_LCD_RW"								LOC = "AC10";				## J8.10		level shifted by U3 (XC95144XL)
 NET "ML505_LCD_*"									IOSTANDARD = LVCMOS25;
+
+## Ignore timings on async I/O pins
+NET "ML505_LCD_*"									TIG;

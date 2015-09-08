@@ -28,4 +28,4 @@ set_property PACKAGE_PIN	F16				[get_ports KC705_GPIO_LED[7]]
 set_property IOSTANDARD		LVCMOS15	[get_ports -regexp {KC705_GPIO_LED\[[0-3]]}]
 set_property IOSTANDARD		LVCMOS25	[get_ports -regexp {KC705_GPIO_LED\[[4-7]]}]
 # Ignore timings on async I/O pins
-#set_false_path									-to [get_ports -regexp {KC705_GPIO_LED\[\d\]}]
+set_false_path									-to [get_ports -regexp {KC705_GPIO_LED\[\d\]}]

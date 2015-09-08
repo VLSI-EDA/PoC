@@ -15,5 +15,5 @@ NET "VC707_GPIO_Button_East"						LOC = "AU38";			## SW 4; high-active; external
 NET "VC707_GPIO_Button_South"						LOC = "AP40";			## SW 5; high-active; external 4k7 pulldown resistor
 NET "VC707_GPIO_Button_*"								IOSTANDARD = LVCMOS18;
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "VC707_GPIO_Button_*"								TIG;

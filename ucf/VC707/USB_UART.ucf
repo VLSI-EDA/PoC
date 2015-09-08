@@ -6,10 +6,10 @@
 ##		Vendor:				
 ##		Device:				
 NET "VC707_USB_UART_RX"						LOC = "AU36";		## 
-NET "VC707_USB_UART_RTS_n"					LOC = "AT32";		## 
+NET "VC707_USB_UART_RTS_n"				LOC = "AT32";		## 
 NET "VC707_USB_UART_TX"						LOC = "AU33";		## 
-NET "VC707_USB_UART_CTS_n"					LOC = "AR34";		## 
+NET "VC707_USB_UART_CTS_n"				LOC = "AR34";		## 
 NET "VC707_USB_UART_*"						IOSTANDARD = LVCMOS18;
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "VC707_USB_UART_*"						TIG;

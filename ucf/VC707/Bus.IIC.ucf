@@ -43,5 +43,5 @@ NET "VC707_IIC_SerialData"						LOC = "AU32";			## U52 - Pin 20 - SerialData
 NET "VC707_IIC_Switch_Reset_n"				LOC = "AY42";			## U52 - Pin 24 - Reset (low-active); level shifted by U70 (TXS0108E)
 NET "VC707_IIC_*"											IOSTANDARD = LVCMOS18;
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "VC707_IIC_*"											TIG;

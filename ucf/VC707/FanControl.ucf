@@ -9,5 +9,5 @@ NET "VC707_FanControl_PWM"							LOC = "BA37";			## Q1.Gate; external 1k pullup 
 NET "VC707_FanControl_Tacho"						LOC = "BB37";			## J48 - Pin 3; voltage limited by D2 (DDZ9678 - 1.8V zener-diode)
 NET "VC707_FanControl_*"								IOSTANDARD = LVCMOS18;
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "VC707_FanControl_*"								TIG;

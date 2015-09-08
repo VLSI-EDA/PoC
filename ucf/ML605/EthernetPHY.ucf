@@ -23,3 +23,8 @@ NET "ML605_EthernetPHY_Reset_n"									LOC = "AH13" | IOSTANDARD = LVCMOS25; ##
 NET "ML605_EthernetPHY_Interrupt_n"							LOC = "AH14" | IOSTANDARD = LVCMOS25; ## {IN}			U80.32
 NET "ML605_EthernetPHY_Management_Clock"				LOC = "AP14" | IOSTANDARD = LVCMOS25; ## {OUT}		U80.35
 NET "ML605_EthernetPHY_Management_Data"					LOC = "AN14" | IOSTANDARD = LVCMOS25; ## {INOUT}	U80.33
+
+## Ignore timings on async I/O pins
+NET "ML605_EthernetPHY_Reset_n"									TIG;
+NET "ML605_EthernetPHY_Interrupt_n"							TIG;
+NET "ML605_EthernetPHY_Management_*"						TIG;

@@ -21,7 +21,7 @@ Table of Content:
 
 TODO TODO TODO
 
-Other repositories: [PoC-Examples][poc_ex]
+Related repositories: [PoC-Examples][poc_ex]
 
  [poc_ex]:  https://github.com/VLSI-EDA/PoC-Examples
 
@@ -30,7 +30,7 @@ Other repositories: [PoC-Examples][poc_ex]
 
 **The PoC-Library** can be downloaded as a [zip-file][download] (latest 'master' branch) or
 cloned with `git clone` from GitHub. GitHub offers HTTPS and SSH as transfer protocols.
-See the [Download][wiki-download] wiki page for more details.
+See the [Download][wiki:download] wiki page for more details.
 
 For SSH protocol use the URL `ssh://git@github.com:VLSI-EDA/PoC.git` or command
 line instruction:
@@ -53,7 +53,7 @@ The PoC-Library comes with some scripts to ease most of the common tasks, like
 running testbenches or generating IP cores. We choose to use Python as a platform
 independent scripting environment. All Python scripts are wrapped in PowerShell
 or Bash scripts, to hide some platform specifics of Windows or Linux. See the
-[Requirements][wiki-requirements] wiki page for more details and download sources.
+[Requirements][wiki:requirements] wiki page for more details and download sources.
 
 #### Common requirements:
 
@@ -100,7 +100,7 @@ To explore PoC's full potential, it's required to configure some paths and
 synthesis or simulation tool chains. The following commands start a guided
 configuration process. Please follow the instructions. It's possible to
 relaunch the process at every time, for example to register new tools or to
-update tool versions. See the [Configuration][wiki-configuration] wiki page
+update tool versions. See the [Configuration][wiki:configuration] wiki page
 for more details.
 
 ##### Linux:
@@ -117,7 +117,7 @@ cd <PoCRoot>
 > All Windows command line instructions are intended for **Windows PowerShell**,
 > if not marked otherwise. So executing the following instructions in Windows
 > Command Prompt (`cmd.exe`) won't function or result in errors! See the
-> [Requirements][wiki-requirements] wiki page on where to download or update
+> [Requirements][wiki:requirements] wiki page on where to download or update
 > PowerShell.
 
 ```PowerShell
@@ -132,7 +132,7 @@ recommended to create a library folder and add the PoC-Library as a git submodul
 After the repository linking is done, some short configuration steps are required
 to setup paths and tool chains. The following command line instructions show a
 short example on how to integrate PoC. A detailed list of steps can be found on the
-[Integration][wiki-integration] wiki page.
+[Integration][wiki:integration] wiki page.
 
 #### 5.1 Adding the Library as a git submodule
 
@@ -208,9 +208,9 @@ TODO TODO TODO
 ## 7 Updating PoC
 
 
- [wiki-download]:		https://github.com/VLSI-EDA/PoC/wiki/Download
- [wiki-requirements]:	https://github.com/VLSI-EDA/PoC/wiki/Requirements
- [wiki-configuration]:	https://github.com/VLSI-EDA/PoC/wiki/Configuration
- [wiki-integration]:	https://github.com/VLSI-EDA/PoC/wiki/Integration
+ [wiki:download]:		https://github.com/VLSI-EDA/PoC/wiki/Download
+ [wiki:requirements]:	https://github.com/VLSI-EDA/PoC/wiki/Requirements
+ [wiki:configuration]:	https://github.com/VLSI-EDA/PoC/wiki/Configuration
+ [wiki:integration]:	https://github.com/VLSI-EDA/PoC/wiki/Integration
 
 

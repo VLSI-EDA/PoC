@@ -28,6 +28,8 @@ NET "ML605_EthernetPHY_TX_DATA<4>"							LOC = "AL10"						## {OUT}		U80.25
 NET "ML605_EthernetPHY_TX_DATA<5>"							LOC = "AM10"						## {OUT}		U80.26
 NET "ML605_EthernetPHY_TX_DATA<6>"							LOC = "AE11"						## {OUT}		U80.28
 NET "ML605_EthernetPHY_TX_DATA<7>"							LOC = "AF11"						## {OUT}		U80.29
+NET "ML605_EthernetPHY_TX_*"										IOSTANDARD = LVCMOS25;
+NET "ML605_EthernetPHY_TX_*"										SLEW = FAST;
 ##
 ## single-ended, parallel RX path
 NET "ML605_EthernetPHY_RX_Valid"								LOC = "AM13"						## {IN}			U80.4

@@ -20,3 +20,8 @@ NET "ML505_EthernetPHY_Reset_n"									LOC = "J14" | IOSTANDARD = LVCMOS25; ## 
 NET "ML505_EthernetPHY_Interrupt_n"							LOC = "H20" | IOSTANDARD = LVCMOS25; ## {IN}			U16.32; Bank 3; no DCI
 NET "ML505_EthernetPHY_Management_Clock"				LOC = "H19" | IOSTANDARD = LVCMOS25; ## {OUT}			U16.35; Bank 3; no DCI
 NET "ML505_EthernetPHY_Management_Data"					LOC = "H13" | IOSTANDARD = LVCMOS25; ## {INOUT}		U16.33; Bank 3; no DCI
+
+## Ignore timings on async I/O pins
+NET "ML505_EthernetPHY_Reset_n"									TIG;
+NET "ML505_EthernetPHY_Interrupt_n"							TIG;
+NET "ML505_EthernetPHY_Management_*"						TIG;

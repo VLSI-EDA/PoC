@@ -9,3 +9,6 @@
 #$	##NET "KC705_PMBus_Clock"								LOC = "AW37" | IOSTANDARD = LVCMOS18; ## 
 #$	##NET "KC705_PMBus_Data"								LOC = "AY39" | IOSTANDARD = LVCMOS18; ## 
 #$	##NET "KC705_PMBus_Alert"								LOC = "AV38" | IOSTANDARD = LVCMOS18; ## 
+
+## Ignore timings on async I/O pins
+#$	NET "KC705_LCD_*"									TIG;

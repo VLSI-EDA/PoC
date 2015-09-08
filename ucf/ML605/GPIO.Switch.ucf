@@ -26,5 +26,5 @@ NET "ML605_GPIO_Switches<6>"				LOC = "BA30";			## SW2.7; high-active; external 
 NET "ML605_GPIO_Switches<7>"				LOC = "BB31";			## SW2.8; high-active; external 4k7 pulldown resistor
 NET "ML605_GPIO_Switches<?>"				IOSTANDARD = LVCMOS18;			##
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "ML605_GPIO_Switches<?>"				TIG;

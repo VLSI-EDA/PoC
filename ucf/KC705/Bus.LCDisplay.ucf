@@ -19,3 +19,6 @@ NET "KC705_LCD_DB[5]"							LOC = "AA10";									## J31.3			; level shifted by 
 NET "KC705_LCD_DB[6]"							LOC = "AA11";									## J31.2			; level shifted by U10 (TXS0108E)
 NET "KC705_LCD_DB[7]"							LOC =  "Y10";									## J31.1			; level shifted by U10 (TXS0108E)
 NET "KC705_LCD_*"									IOSTANDARD = LVCMOS15;				##
+
+## Ignore timings on async I/O pins
+NET "KC705_LCD_*"									TIG;

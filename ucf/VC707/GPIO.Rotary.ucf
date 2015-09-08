@@ -13,5 +13,5 @@ NET "VC707_GPIO_Rotary_IncA"						LOC = "AR33";			## SW10.1; high-active; extern
 NET "VC707_GPIO_Rotary_IncB"						LOC = "AT31";			## SW10.6; high-active; external 4k7 pulldown resistor
 NET "VC707_GPIO_Rotary_*"								IOSTANDARD = LVCMOS18;
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "VC707_GPIO_Rotary_*"								TIG;

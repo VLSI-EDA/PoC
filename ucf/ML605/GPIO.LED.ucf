@@ -25,3 +25,6 @@ NET "ML605_GPIO_LED<5>"									LOC = "AG23";						## DS14
 NET "ML605_GPIO_LED<6>"									LOC = "AE24";						## DS22
 NET "ML605_GPIO_LED<7>"									LOC = "AD24";						## DS21
 NET "ML605_GPIO_LED<?>"									IOSTANDARD = LVCMOS18;	## 
+
+## Ignore timings on async I/O pins
+NET "ML605_GPIO_LED<?>"									TIG;

@@ -15,4 +15,3 @@
 ## --------------------------
 NET "KC705_SMA_RefClock_n"											LOC = "J7";													## {IN}		J15; external 0.01 uF decoupling capacitor
 NET "KC705_SMA_RefClock_p"											LOC = "J8";													## {IN}		J16; external 0.01 uF decoupling capacitor
-

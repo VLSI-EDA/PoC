@@ -13,3 +13,6 @@ NET "ML505_IIC_Monitor_SerialClock"						LOC = "U27";			##
 NET "ML505_IIC_Monitor_SerialData"						LOC = "T29";			## 
 NET "ML505_IIC_Monitor_*"											PULLUP;
 NET "ML505_IIC_Monitor_*"											IOSTANDARD = LVCMOS18;
+
+## Ignore timings on async I/O pins
+NET "ML505_IIC_Monitor_*"											TIG;

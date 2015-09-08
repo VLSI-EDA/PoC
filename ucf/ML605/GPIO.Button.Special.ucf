@@ -18,5 +18,5 @@
 ## -----------------------------------------------------------------------------
 NET "ML605_GPIO_Button_CPU_Reset"		LOC = "H10"	| IOSTANDARD = LVCMOS15;			## {IN}			high-active; breaker / normally closed
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "ML605_GPIO_Button_CPU_Reset"		TIG;

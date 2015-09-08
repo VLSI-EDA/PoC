@@ -12,3 +12,6 @@ NET "ML505_GPIO_LED_West"								LOC = "AF23";						## DS23
 NET "ML505_GPIO_LED_Center"							LOC = "E8";							## DS24
 NET "ML505_GPIO_LED_*"									IOSTANDARD = LVCMOS18;
 NET "ML505_GPIO_LED_*"									SLEW = SLOW;
+
+## Ignore timings on async I/O pins
+NET "ML505_GPIO_LED_*"									TIG;

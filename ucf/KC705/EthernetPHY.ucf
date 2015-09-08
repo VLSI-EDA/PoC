@@ -15,3 +15,8 @@ NET "KC705_EthernetPHY_Reset_n"									LOC = "L20" | IOSTANDARD = LVCMOS25;	## 
 NET "KC705_EthernetPHY_Interrupt_n"							LOC = "N30" | IOSTANDARD = LVCMOS25;	## {IN}			U37.32
 NET "KC705_EthernetPHY_Management_Clock"				LOC = "R23" | IOSTANDARD = LVCMOS25;	## {OUT}		U37.35
 NET "KC705_EthernetPHY_Management_Data"					LOC = "J21" | IOSTANDARD = LVCMOS25;	## {INOUT}	U37.33
+
+## Ignore timings on async I/O pins
+NET "KC705_EthernetPHY_Reset_n"									TIG;
+NET "KC705_EthernetPHY_Interrupt_n"							TIG;
+NET "KC705_EthernetPHY_Management_*"						TIG;

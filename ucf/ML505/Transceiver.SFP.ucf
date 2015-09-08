@@ -20,5 +20,9 @@ NET "ML505_SFP_RX_n"										LOC = "H1";						##
 ## Bank 15; 1.8 V
 NET "ML505_SFP_SerialClock"							LOC = "R26";					## level shifted by Q42 (NDS331N)
 NET "ML505_SFP_SerialData"							LOC = "U28";					## level shifted by Q42 (NDS331N)
-
 NET "ML505_SFP_Serial*"									PULLUP;
+
+## Ignore timings on async I/O pins
+NET "ML505_SFP_TX_Disable"							TIG;
+NET "ML505_SFP_Serial*"									TIG;
+

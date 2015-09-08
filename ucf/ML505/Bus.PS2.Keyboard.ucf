@@ -7,3 +7,6 @@
 NET "ML505_PS2_Keyboard_SerialClock"			LOC = "T26";						## external 4k7 pullup resistor
 NET "ML505_PS2_Keyboard_SerialData"				LOC = "T25";						## external 4k7 pullup resistor
 NET "ML505_PS2_Keyboard_*"								IOSTANDARD = LVCMOS18;
+
+## Ignore timings on async I/O pins
+NET "ML505_PS2_Keyboard_*"								TIG;

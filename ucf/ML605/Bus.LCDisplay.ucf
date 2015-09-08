@@ -30,3 +30,6 @@ NET "ML605_LCD_DB[5]"								LOC = "Ak11";								## J41.3			; level shifted by 
 NET "ML605_LCD_DB[6]"								LOC = "AJ11";								## J41.2			; level shifted by U33 (ST2378E)
 NET "ML605_LCD_DB[7]"								LOC = "AE12";								## J41.1			; level shifted by U33 (ST2378E)
 NET "ML605_LCD_*"										IOSTANDARD = LVCMOS25;			##
+
+## Ignore timings on async I/O pins
+NET "ML605_LCD_*"										TIG;

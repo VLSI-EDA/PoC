@@ -11,3 +11,8 @@ NET "VC707_EthernetPHY_Reset_n"									LOC = "AJ33" | IOSTANDARD = LVCMOS18; ##
 NET "VC707_EthernetPHY_Interrupt_n"							LOC = "AL31" | IOSTANDARD = LVCMOS18; ## U50 - Pin L1					; level shifted by U70 (TXS0108E)
 NET "VC707_EthernetPHY_Management_Clock"				LOC = "AH31" | IOSTANDARD = LVCMOS18; ## U50 - Pin L3					; level shifted by U70 (TXS0108E)
 NET "VC707_EthernetPHY_Management_Data"					LOC = "AK33" | IOSTANDARD = LVCMOS18; ## U50 - Pin M1					; level shifted by U70 (TXS0108E)
+
+## Ignore timings on async I/O pins
+NET "VC707_EthernetPHY_Reset_n"									TIG;
+NET "VC707_EthernetPHY_Interrupt_n"							TIG;
+NET "VC707_EthernetPHY_Management_*"						TIG;

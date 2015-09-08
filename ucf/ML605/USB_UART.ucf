@@ -25,5 +25,5 @@ NET "ML605_USB_UART_RTS_n"				LOC = "T23";		## {IN}			U34.23 {OUT}	Ready to Tran
 NET "ML605_USB_UART_CTS_n"				LOC = "T24";		## {OUT}		U34.22 {IN}		Clear to Send (FPGA is able to receive data)
 NET "ML605_USB_UART_*"						IOSTANDARD = LVCMOS25;
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "ML605_USB_UART_*"						TIG;

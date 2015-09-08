@@ -14,3 +14,6 @@ NET "ML505_GPIO_Switches<5>"						LOC = "AE26";						## SW8.6; high-active; exte
 NET "ML505_GPIO_Switches<6>"						LOC = "AC25";						## SW8.7; high-active; external 4k7 pulldown resistor
 NET "ML505_GPIO_Switches<7>"						LOC = "AC24";						## SW8.8; high-active; external 4k7 pulldown resistor
 NET "ML505_GPIO_Switches<*>"						IOSTANDARD = LVCMOS18;
+
+## Ignore timings on async I/O pins
+NET "ML505_GPIO_Switches<*>"						TIG;

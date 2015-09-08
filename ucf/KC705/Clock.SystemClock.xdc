@@ -25,6 +25,6 @@
 set_property PACKAGE_PIN	AD12		[get_ports KC705_SystemClock_200MHz_p]
 set_property PACKAGE_PIN	AD11		[get_ports KC705_SystemClock_200MHz_n]
 # set I/O standard
-set_property IOSTANDARD		LVDS	[get_ports -regexp {KC705_SystemClock_200MHz_[p|n]}]
+set_property IOSTANDARD		LVDS		[get_ports -regexp {KC705_SystemClock_200MHz_[p|n]}]
 # specify a 200 MHz clock
 create_clock -period 5.000 -name NET_SystemClock_200MHz [get_ports KC705_SystemClock_200MHz_p]

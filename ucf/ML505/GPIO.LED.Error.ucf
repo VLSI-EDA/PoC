@@ -9,3 +9,6 @@ NET "ML505_GPIO_LED_Error<0>"						LOC = "F6";							## DS6
 NET "ML505_GPIO_LED_Error<1>"						LOC = "T10";						## DS5
 NET "ML505_GPIO_LED_Error<?>"						IOSTANDARD = LVCMOS33;
 NET "ML505_GPIO_LED_Error<?>"						SLEW = SLOW;
+
+## Ignore timings on async I/O pins
+NET "ML505_GPIO_LED_Error<?>"						TIG;

@@ -12,5 +12,5 @@ NET "KC705_FanControl_PWM"							LOC =  "L26";			## {OUT}		Q17.Gate; external 1k
 NET "KC705_FanControl_Tacho"						LOC =  "U22";			## {IN}			J61.3; voltage limited by D15 (MM3Z2V7B; 2.7V zener-diode)
 NET "KC705_FanControl_*"								IOSTANDARD = LVCMOS25;
 
-# Ignore timings on async I/O pins
+## Ignore timings on async I/O pins
 NET "KC705_FanControl_*"								TIG;

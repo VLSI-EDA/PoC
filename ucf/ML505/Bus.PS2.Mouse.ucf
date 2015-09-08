@@ -7,3 +7,6 @@
 NET "ML505_PS2_Mouse_SerialClock"			LOC = "R27";						## external 4k7 pullup resistor
 NET "ML505_PS2_Mouse_SerialData"			LOC = "U26";						## external 4k7 pullup resistor
 NET "ML505_PS2_Mouse_*"								IOSTANDARD = LVCMOS18;
+
+## Ignore timings on async I/O pins
+NET "ML505_PS2_Mouse_*"								TIG;

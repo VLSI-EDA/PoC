@@ -20,5 +20,5 @@ NET "ML605_FanControl_PWM"					LOC = "L10";						## {OUT}		Q24.Gate; external 10
 NET "ML605_FanControl_Tacho"				LOC = "M10";						## {IN}			J59.3; voltage limited by D16 (1N4148)
 NET "ML605_FanControl_*"						IOSTANDARD = LVCMOS25;	##
 
-# Ignore timings on async I/O pins
-NET "Ml605_FanControl_*"						TIG;
+## Ignore timings on async I/O pins
+NET "ML605_FanControl_*"						TIG;
