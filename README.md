@@ -103,15 +103,16 @@ relaunch the process at every time, for example to register new tools or to
 update tool versions. See the [Configuration][wiki-configuration] wiki page
 for more details.
 
-**Linux example:**
+##### Linux:
 
 Run the following command line instructions to configure PoC on your local system.
 
-    cd <PoCRoot>
-    ./poc.sh --configure
+```Bash
+cd <PoCRoot>
+./poc.sh --configure
+```
 
-
-**Windows example:**
+##### Windows (PowerShell):
 
 > All Windows command line instructions are intended for **Windows PowerShell**,
 > if not marked otherwise. So executing the following instructions in Windows
@@ -119,9 +120,10 @@ Run the following command line instructions to configure PoC on your local syste
 > [Requirements][wiki-requirements] wiki page on where to download or update
 > PowerShell.
 
-    cd <PoCRoot>
-    .\poc.ps1 --configure
-
+```PowerShell
+cd <PoCRoot>
+.\poc.ps1 --configure
+```
 
 ## 5 Integrating PoC into projects
 
@@ -137,22 +139,26 @@ short example on how to integrate PoC. A detailed list of steps can be found on 
 The following command line instructions will create the folder `lib\PoC\` and clone
 the PoC-Library as a git [submodule][git_submod] into that folder.
 
-    cd <ProjectRoot>
-    mkdir lib | cd
-    git submodule add git@github.com:VLSI-EDA/PoC.git PoC
-    cd PoC
-    git remote rename origin github
-    cd ..\..
-    git add .gitmodules lib\PoC
-    git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
+```PowerShell
+cd <ProjectRoot>
+mkdir lib | cd
+git submodule add git@github.com:VLSI-EDA/PoC.git PoC
+cd PoC
+git remote rename origin github
+cd ..\..
+git add .gitmodules lib\PoC
+git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
+```
 
  [git_submod]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
 
 #### 5.2 Configuring PoC on a Local System
 
-    cd <ProjectRoot>
-    cd lib\PoC\
-    .\poc.ps1 --configure
+```PowerShell
+cd <ProjectRoot>
+cd lib\PoC\
+.\poc.ps1 --configure
+```
 
 #### 5.3 Creating PoC's my_config and my_project Files
 
@@ -161,10 +167,11 @@ determine the most suitable implementation depending on the provided platform in
 Copy these two template files into your project's source folder. Rename these files to
 *.vhdl and configure the constants in these files.  
 
-    cd <ProjectRoot>
-    cp lib\src\common\my_config.vhdl.template src\common\my_config.vhdl
-    cp lib\src\common\my_project.vhdl.template src\common\my_project.vhdl
-
+```PowerShell
+cd <ProjectRoot>
+cp lib\src\common\my_config.vhdl.template src\common\my_config.vhdl
+cp lib\src\common\my_project.vhdl.template src\common\my_project.vhdl
+```
 
 #### 5.4 Compile shipped Xilinx IP cores (*.xco files) to Netlists
 
@@ -177,9 +184,10 @@ netlist.[sh|ps1].
 The following example compiles `PoC.xil.ChipScopeICON_1` from `<PoCRoot>\src\xil\xil_ChipScopeICON_1.xco`
 for a Kintex-7 325T device into `<PoCRoot>/netlist/XC7K325T-2FFG900/xil/`.
 
-    cd <PoCRoot>/netlist
-    netlist.ps1 --coregen PoC.xil.ChipScopeICON_1 --board KC705
-
+```PowerShell
+cd <PoCRoot>/netlist
+.\netlist.ps1 --coregen PoC.xil.ChipScopeICON_1 --board KC705
+```
 
 ## 6 Using PoC
 
