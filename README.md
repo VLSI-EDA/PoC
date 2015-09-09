@@ -35,38 +35,47 @@ See the [Download][wiki:download] wiki page for more details.
 For SSH protocol use the URL `ssh://git@github.com:VLSI-EDA/PoC.git` or command
 line instruction:
 
-    cd <GitRoot>
-    git clone ssh://git@github.com:VLSI-EDA/PoC.git PoC
+```PowerShell
+cd <GitRoot>
+git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC
+```
 
 For HTTPS protocol use the URL `https://github.com/VLSI-EDA/PoC.git` or command
 line instruction:
 
-    cd <GitRoot>
-    git clone https://github.com/VLSI-EDA/PoC.git PoC
+```PowerShell
+cd <GitRoot>
+git clone --recursive https://github.com/VLSI-EDA/PoC.git PoC
+```
+
+**Note:** The option `--recursive` performs a recursive clone operation for all
+linked [git submodules][git_submod]. An additional `git submodule init` and
+`git submodule update` call is not needed anymore. 
 
  [download]: https://github.com/VLSI-EDA/PoC/archive/master.zip
+ [git_submod]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
 
 
 ## 3 Requirements
 
-The PoC-Library comes with some scripts to ease most of the common tasks, like
+**The PoC-Library** comes with some scripts to ease most of the common tasks, like
 running testbenches or generating IP cores. We choose to use Python as a platform
 independent scripting environment. All Python scripts are wrapped in PowerShell
 or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 [Requirements][wiki:requirements] wiki page for more details and download sources.
 
-#### Common requirements:
+##### Common requirements:
 
  - Programming languages and runtimes:
 	- [Python 3][python] (&ge; 3.4):
 	     - [colorama][colorama]
  - Synthesis tool chains:
      - Xilinx ISE 14.7 or
-     - Xilinx Vivado 2014.x or
-     - Altera Quartus II 13.x
+     - Xilinx Vivado &ge; 2014.1 or
+     - Altera Quartus-II &ge; 13.0
  - Simulation tool chains:
      - Xilinx ISE Simulator 14.7 or
-     - Xilinx Vivado Simulator 2014.x or
+     - Xilinx Vivado Simulator &ge; 2014.1 or
      - Mentor Graphics ModelSim Altera Edition or
      - Mentor Graphics QuestaSim or
      - [GHDL][ghdl] and [GTKWave][gtkwave]
@@ -76,17 +85,17 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  [ghdl]:		https://sourceforge.net/projects/ghdl-updates/
  [gtkwave]:		http://gtkwave.sourceforge.net/
 
-#### Linux specific requirements:
+##### Linux specific requirements:
  
  - Debian specific:
 	- bash is configured as `/bin/sh` ([read more](https://wiki.debian.org/DashAsBinSh))  
       `dpkg-reconfigure dash`
  
-#### Windows specific requirements:
+##### Windows specific requirements:
 
  - PowerShell 4.0 ([Windows Management Framework 4.0][wmf40])
     - Allow local script execution ([read more][execpol])  
-      `PS> Set-ExecutionPolicy RemoteSigned`
+      `Set-ExecutionPolicy RemoteSigned`
     - PowerShell Community Extensions 3.2 ([pscx.codeplex.com][pscx])
 
  [wmf40]:   http://www.microsoft.com/en-US/download/details.aspx?id=40855
@@ -94,7 +103,7 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  [pscx]:    http://pscx.codeplex.com/
 
 
-## 4 Configure PoC on a Local System
+## 4 Configure PoC on a Local System (Stand Alone)
 
 To explore PoC's full potential, it's required to configure some paths and
 synthesis or simulation tool chains. The following commands start a guided
@@ -103,29 +112,20 @@ relaunch the process at every time, for example to register new tools or to
 update tool versions. See the [Configuration][wiki:configuration] wiki page
 for more details.
 
-##### Linux:
-
-Run the following command line instructions to configure PoC on your local system.
-
-```Bash
-cd <PoCRoot>
-./poc.sh --configure
-```
-
-##### Windows (PowerShell):
-
 > All Windows command line instructions are intended for **Windows PowerShell**,
 > if not marked otherwise. So executing the following instructions in Windows
 > Command Prompt (`cmd.exe`) won't function or result in errors! See the
 > [Requirements][wiki:requirements] wiki page on where to download or update
 > PowerShell.
 
+Run the following command line instructions to configure PoC on your local system.
+
 ```PowerShell
 cd <PoCRoot>
 .\poc.ps1 --configure
 ```
 
-## 5 Integrating PoC into projects
+## 5 Integrating PoC into Projects
 
 **The PoC-Library** is meant to be integrated into HDL projects. Therefore it's
 recommended to create a library folder and add the PoC-Library as a git submodule.
@@ -162,20 +162,34 @@ cd lib\PoC\
 
 #### 5.3 Creating PoC's my_config and my_project Files
 
-The PoC-Library needs two VHDL files for it's configuration. These files are used to
+**The PoC-Library** needs two VHDL files for it's configuration. These files are used to
 determine the most suitable implementation depending on the provided platform information.
 Copy these two template files into your project's source folder. Rename these files to
-*.vhdl and configure the constants in these files.  
+*.vhdl and configure the VHDL constants in these files.  
 
 ```PowerShell
 cd <ProjectRoot>
-cp lib\src\common\my_config.vhdl.template src\common\my_config.vhdl
-cp lib\src\common\my_project.vhdl.template src\common\my_project.vhdl
+cp lib\PoC\src\common\my_config.vhdl.template src\common\my_config.vhdl
+cp lib\PoC\src\common\my_project.vhdl.template src\common\my_project.vhdl
+```
+
+`my_config.vhdl` defines two global constants, which need to be adjusted:
+
+```VHDL
+constant MY_BOARD            : string := "CHANGE THIS"; -- e.g. Custom, ML505, KC705, Atlys
+constant MY_DEVICE           : string := "CHANGE THIS"; -- e.g. None, XC5VLX50T-1FF1136, EP2SGX90FF1508C3
+```
+
+`my_project.vhdl` also defines two global constants, which need to be adjusted:
+
+```VHDL
+constant MY_PROJECT_DIR      : string := "CHANGE THIS"; -- e.g. d:/vhdl/myproject/, /home/me/projects/myproject/"
+constant MY_OPERATING_SYSTEM : string := "CHANGE THIS"; -- e.g. WINDOWS, LINUX
 ```
 
 #### 5.4 Compile shipped Xilinx IP cores (*.xco files) to Netlists
 
-The PoC-Library are shipped with some pre-configured IP cores from Xilinx. These
+**The PoC-Library** is shipped with some pre-configured IP cores from Xilinx. These
 IP cores are shipped as \*.xco files and need to be compiled to netlists (\*.ngc
 files) and there auxillary files (\*.ncf files; \*.vhdl files; ...). This can be
 done by invoking PoC's `Netlist.py` through one of the provided wrapper scripts:
