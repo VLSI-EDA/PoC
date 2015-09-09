@@ -195,7 +195,7 @@ package body strings is
 		return CHARACTER'val(to_integer(unsigned(rawchar)));
 	end function;
 
-		-- chr_is* function
+	-- chr_is* function
 	function chr_isDigit(chr : character) return boolean is
 	begin
 		return (character'pos('0') <= character'pos(chr)) and (character'pos(chr) <= character'pos('9'));
@@ -624,7 +624,7 @@ package body strings is
 		variable Result			: STRING(1 to size);
 	begin
 		Result := (others => FillChar);
-		if (str'length > 0) then
+		if (str'length > 0) then		-- workaround for Quartus II
 			Result(1 to imin(size, imax(1, str'length))) := ite((str'length > 0), str(1 to imin(size, str'length)), ConstNUL);
 		end if;
 		return Result;

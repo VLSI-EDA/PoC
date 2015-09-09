@@ -317,4 +317,5 @@ begin
 			dout		=> RXUART_Data,
 			rxd			=> UART_RX_sync
 		);
-end;
+
+end architecture;

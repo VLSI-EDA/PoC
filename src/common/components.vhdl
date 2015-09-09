@@ -307,4 +307,4 @@ package body components is
 	begin
 		return (s0 and not (s0'range => sel)) or (s1 and (s1'range => sel));
 	end function;
-END PACKAGE BODY;
+end package body;
