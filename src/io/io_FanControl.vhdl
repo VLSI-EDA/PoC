@@ -65,14 +65,17 @@ entity io_FanControl is
 		ENABLE_TACHO						: BOOLEAN			:= FALSE
 	);
 	port (
+		-- Global Control
 		Clock										: in	STD_LOGIC;
 		Reset										: in	STD_LOGIC;
-		
+
+		-- Fan Control derived from internal System Health Monitor
 		Fan_PWM									: out	STD_LOGIC;
-		Fan_Tacho								: in	STD_LOGIC;
-		
-		TachoFrequency					: out STD_LOGIC_VECTOR(ite(ENABLE_TACHO, 16, 1) - 1 downto 0)
-	);
+
+    -- Decoding of Speed Sensor (Requires ENABLE_TACHO)
+    Fan_Tacho      : in  std_logic := 'X';
+    TachoFrequency : out std_logic_vector(15 downto 0)
+  );
 end;
 
 
@@ -224,7 +227,7 @@ begin
 	-- tacho signal interpretation -> convert to RPM
 	-- ==========================================================================================================================================================
 	genNoTacho : if (ENABLE_TACHO = FALSE) generate
-		TachoFrequency		<= (TachoFrequency'range => '0');
+		TachoFrequency <= (TachoFrequency'range => 'X');
 	end generate;
 	genTacho : if (ENABLE_TACHO = TRUE) generate
 		signal Tacho_sync					: STD_LOGIC;
