@@ -1,174 +1,127 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
--- ============================================================================
--- Authors:				 	Martin Zabel
---									Patrick Lehmann
--- 
--- Module:				 	UART Receiver
 --
--- Description:
--- ------------------------------------
---	TODO
--- 
---	old comments:
---		Serial configuration: 8 data bits, 1 stop bit, no parity
---		
---		bclk_x8 = bit clock (defined by BAUD rate) times 8
---		dos       = data out strobe, signals that dout is valid, active high for one
---		            cycle 
---		dout      = data out = received byte
---		
---		OUT_REGS:
---		If disabled, then dos is a combinatorial output. Further merging of logic is
---		possible but timing constraints might fail. If enabled, 9 more registers are
---		required. But now, dout toggles only after receiving of full byte.
+-- ===========================================================================
 --
+-- Authors:        Thomas B. Preusser
+--
+-- Module:				 uart_rx
+--
+-- Description:    UART (RS232) Receiver: 1 Start + 8 Data + 1 Stop
+-- ------------
 --
 -- License:
--- ============================================================================
+-- ===========================================================================
 -- Copyright 2008-2015 Technische Universitaet Dresden - Germany
---										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--                     Chair for VLSI-Design, Diagnostics and Architecture
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
---		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
+--              http://www.apache.org/licenses/LICENSE-2.0
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- ===========================================================================
 
-library	IEEE;
-use			IEEE.std_logic_1164.all;
-use			IEEE.numeric_std.all;
-
-library PoC;
-use			PoC.components.all;
-
+library IEEE;
+use IEEE.std_logic_1164.all;
 
 entity uart_rx is
-	generic (
-		OUT_REGS : boolean
+  generic (
+    SYNC_DEPTH : natural := 2  -- use zero for already clock-synchronous rx
 	);
-	port (
-		clk       : in  std_logic;
-		rst       : in  std_logic;
-		bclk_x8 	: in  std_logic;
-		rxd       : in  std_logic;
-		dos       : out std_logic;
-		dout      : out std_logic_vector(7 downto 0)
-	);
-end entity;
+  port (
+    -- Global Control
+    clk : in std_logic;
+    rst : in std_logic;
 
+    -- Bit Clock and RX Line
+    bclk_x8 : in std_logic;  	-- bit clock, eight strobes per bit length
+    rx      : in std_logic;
+
+    -- Byte Stream Output
+    do  : out std_logic_vector(7 downto 0);
+    stb : out std_logic
+  );
+end uart_rx;
+
+
+library IEEE;
+use IEEE.numeric_std.all;
 
 architecture rtl of uart_rx is
-	type states is (IDLE, RDATA);
-	signal state			: states	:= IDLE;
-	signal next_state	: states;
 
-	-- registers
-	signal rxd_reg1			: std_logic											:= '1';
-	signal rxd_reg2			: std_logic											:= '1';
-	signal sr						: std_logic_vector(7 downto 0)	:= (others => '0');  -- data only
-	signal bclk_cnt			: unsigned(2 downto 0)					:= to_unsigned(4, 3);
-	signal shift_cnt		: unsigned(3 downto 0)					:= (others => '0');
+  -- RX Synchronization
+  signal rxs : std_logic_vector(0 to SYNC_DEPTH) := (0 => 'Z', others => '1');
 
-	-- control signals
-	signal rxd_falling    : std_logic;
-	signal bclk_rising    : std_logic;
-	signal start_bclk     : std_logic;
-	signal shift_sr       : std_logic;
-	signal shift_done     : std_logic;
-	signal put_data       : std_logic;
+  --                Buf        Cnt  Vld
+  --   Idle     "---------0"    X    0
+  --   Start    "0111111111"  5->16  0   -- 1.5 bit length after start of start bit
+  --   Recv     "dcba011111"  9->16  0   -- shifting left to right (LSB first)
+  --   Done     "1hgfedcba0"    X    1   -- Output Strobe
+
+	-- Data Buffer
+  signal Buf : std_logic_vector(9 downto 0) := (0      => '0', others => '-');
+	-- Bit Clock Counter: 8 ticks per bit
+  signal Cnt : unsigned(4 downto 0)         := (others => '-');
+	-- Output Strobe
+  signal Vld : std_logic                    := '0';
 
 begin
 
-  rxd_falling    <= (not rxd_reg1) and rxd_reg2;
-  bclk_rising    <= bclk_x8 when (comp_allone(bclk_cnt) = '1') else '0';
+  -- RX Synchronization, Synchronized Signal on rxs(SYNC_DEPTH)
+	rxs(0) <= rx;
+	genSyncFF: if SYNC_DEPTH > 0 generate
+		process(clk)
+		begin
+			if rising_edge(clk) then
+				if rst = '1' then
+					rxs(1 to SYNC_DEPTH) <= (others => '1');
+				else
+					rxs(1 to SYNC_DEPTH) <= rxs(0 to SYNC_DEPTH-1);
+				end if;
+			end if;
+		end process;
+	end generate genSyncFF;
 
-  -- shift_cnt count from 0 to 9 (1 start bit + 8 data bits)
-	shift_cnt		<= upcounter_next(cnt => shift_cnt, rst => start_bclk, en => shift_sr) when rising_edge(clk);
-  shift_done	<= upcounter_equal(cnt => shift_cnt, value => 9);
-
-	bclk_cnt		<= upcounter_next(cnt => bclk_cnt, rst => start_bclk, en => bclk_x8, init => 4) when rising_edge(clk);
-	
-  process (state, rxd_falling, bclk_x8, bclk_rising, shift_done)
-  begin
-    next_state <= state;
-    start_bclk <= '0';
-    shift_sr   <= '0';
-    put_data   <= '0';
-    
-    case state is
-      when IDLE =>
-        -- wait for start bit
-        if (rxd_falling and bclk_x8) = '1' then
-          next_state <= RDATA;
-          start_bclk <= '1';            -- = rst_shift_cnt
-        end if;
-
-      when RDATA =>
-        if bclk_rising = '1' then
-          -- bit clock keeps running
-          if shift_done = '1' then
-            -- stop bit reached
-            put_data   <= '1';
-            next_state <= IDLE;
-            
-          else
-            -- TODO: check start bit?
-            shift_sr <= '1';
-          end if;
-        end if;
-        
-      when others => null;
-    end case;
-  end process;
-
-  process (clk)
+  -- Reception State
+  process(clk)
   begin
     if rising_edge(clk) then
+			Vld <= '0';
       if rst = '1' then
-        state <= IDLE;
+        Buf <= (0      => '0', others => '-');
+        Cnt <= (others => '-');
       else
-        state <= next_state;
-      end if;
-
-      rxd_reg1 <= rxd;
-
-      if bclk_x8 = '1' then
-        -- align to bclk_x8, so when we can easily check for
-        -- the falling edge of the start bit
-        rxd_reg2 <= rxd_reg1;
-      end if;
-
-      if shift_sr = '1' then
-        -- shift into MSB
-        sr <= rxd_reg2 & sr(sr'left downto 1);
+				if Buf(0) = '0' then
+					-- Idle
+					if rxs(SYNC_DEPTH) = '0' then
+						-- Start Bit -> Receive Byte
+						Buf <= (Buf'left => '0', others => '1');
+						Cnt <= to_unsigned(5, Cnt'length);
+					else
+						Buf <= (0 => '0', others => '-');
+						Cnt <= (others => '-');
+					end if;
+				elsif bclk_x8 = '1' then
+					if Cnt(Cnt'left) = '1' then
+						Buf <= rxs(SYNC_DEPTH) & Buf(Buf'left downto 1);
+						Vld <= rxs(SYNC_DEPTH) and not Buf(1);
+					end if;
+					Cnt <= Cnt + (Cnt(4) & Cnt(4) & "001");
+				end if;
       end if;
     end if;
   end process;
 
-  -- output
-  gOutRegs: if OUT_REGS = true generate
-    process (clk)
-    begin
-      if rising_edge(clk) then
-        dos  <= put_data and rxd_reg2;  -- check stop bit
-        dout <= sr;
-      end if;
-    end process;
-  end generate gOutRegs;
+  -- Outputs
+  do  <= Buf(8 downto 1);
+  stb <= Vld;
 
-  gNoOutRegs: if OUT_REGS = false generate
-    dos  <= put_data and rxd_reg2;      -- check stop bit
-    dout <= sr;
-  end generate gNoOutRegs;
-  
-end;
+end rtl;

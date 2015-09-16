@@ -102,16 +102,13 @@ begin
 		);
 
 	RX : entity PoC.uart_rx
-		generic map (
-			OUT_REGS	=> FALSE
-		)
 		port map (
 			clk				=> Clock,
 			rst				=> Reset,
 			bclk_x8		=> BitClock_x8,
-			dos				=> RX_Strobe,
-			dout			=> RX_Data,
-			rxd				=> UART_RX
+			rx 				=> UART_RX,
+			do  			=> RX_Data,
+			stb				=> RX_Strobe
 		);
 
 	process
