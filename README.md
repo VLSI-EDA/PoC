@@ -14,6 +14,7 @@ Table of Content:
  5. [Integrating PoC into projects](#5-integrating-poc-into-projects)
  6. [Using PoC](#6-using-poc)
  7. [Updating PoC](#7-updating-poc)
+ 8. [References](#8-references)
 
 --------------------------------------------------------------------------------
 
@@ -227,4 +228,10 @@ TODO TODO TODO
  [wiki:configuration]:	https://github.com/VLSI-EDA/PoC/wiki/Configuration
  [wiki:integration]:	https://github.com/VLSI-EDA/PoC/wiki/Integration
 
+## 8 References
 
+- [The Q27 Project](https://github.com/preusser/q27):
+  27-Queens Puzzle: Massively Parellel Enumeration and Solution Counting
+
+If you are using the PoC Library, please let us know. We are grateful for
+your project's reference.
