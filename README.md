@@ -1,9 +1,14 @@
 # The PoC-Library
 
-PoC - "Pile of Cores" provides implementations for often required hardware
-functions such as FIFOs, RAM wrapper, and ALUs. The hardware modules are
-typically provided as VHDL or Verilog source code, so it can be easily re-used
-in a variety of hardware designs.
+The **PoC-Library** is published and maintained by 
+
+> **Chair for VLSI Design, Diagnostics and Architecture**
+> **Faculty of Computer Science**
+> **Technische Universität Dresden, Germany**
+> Nöthnitzer Straße 46
+> 01187 Dresden
+> Germany
+> **http://vlsi-eda.inf.tu-dresden.de**
 
 Table of Content:
 --------------------------------------------------------------------------------
@@ -19,6 +24,11 @@ Table of Content:
 --------------------------------------------------------------------------------
 
 ## 1 Overview
+
+PoC - "Pile of Cores" provides implementations for often required hardware
+functions such as FIFOs, RAM wrapper, and ALUs. The hardware modules are
+typically provided as VHDL or Verilog source code, so it can be easily re-used
+in a variety of hardware designs.
 
 TODO TODO TODO
 
