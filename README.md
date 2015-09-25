@@ -1,9 +1,7 @@
 # The PoC-Library
 
-This library is published and maintained by  
-**Chair for VLSI Design, Diagnostics and Architecture**  
-Faculty of Computer Science  
-Technische Universität Dresden, Germany  
+This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - 
+Faculty of Computer Science, Technische Universität Dresden, Germany  
 **http://vlsi-eda.inf.tu-dresden.de**
 
 Table of Content:
