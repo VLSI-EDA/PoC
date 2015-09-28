@@ -4,12 +4,14 @@ This library is published and maintained by **Chair for VLSI Design, Diagnostics
 Faculty of Computer Science, Technische Universität Dresden, Germany  
 **http://vlsi-eda.inf.tu-dresden.de**
 
+![Logo: Technische Universität Dresden](https://github.com/VLSI-EDA/PoC/wiki/images/logo_tud.gif)
+
 Table of Content:
 --------------------------------------------------------------------------------
  1. [Overview](#1-overview)
  2. [Download](#2-download)
  3. [Requirements](#3-requirements)
- 4. [Configure PoC on a Local System](#4-configure-poc-on-a-local-system)
+ 4. [Configure PoC on a Local System](#4-configure-poc-on-a-local-system-stand-alone)
  5. [Integrating PoC into projects](#5-integrating-poc-into-projects)
  6. [Using PoC](#6-using-poc)
  7. [Updating PoC](#7-updating-poc)
@@ -227,15 +229,28 @@ TODO TODO TODO
 ## 7 Updating PoC
 
 
+## 8 References
+
+ -  [PoC-Examples][poc_ex]:  
+    A list of examples and reference implementations for the PoC-Library
+ -  [The Q27 Project][q27]:  
+    27-Queens Puzzle: Massively Parellel Enumeration and Solution Counting
+ -  [PicoBlaze-Library][pb_lib]:  
+    The PicoBlaze-Library offers several PicoBlaze devices and code routines
+    to extend a common PicoBlaze environment to a little System on a Chip (SoC or SoFPGA).
+ -  [PicoBlaze-Examples][pb_ex]:  
+    A SoFPGA reference implementation, based on the PoC-Library and the PicoBlaze-Library.
+
+ [poc_ex]:  https://github.com/VLSI-EDA/PoC-Examples
+ [q27]:			https://github.com/preusser/q27
+ [pb_lib]:  https://github.com/Paebbels/PicoBlaze-Library
+ [pb_ex]:		https://github.com/Paebbels/PicoBlaze-Examples
+ 
+ 
+If you are using the PoC-Library, please let us know. We are grateful for
+your project's reference.
+
  [wiki:download]:		https://github.com/VLSI-EDA/PoC/wiki/Download
  [wiki:requirements]:	https://github.com/VLSI-EDA/PoC/wiki/Requirements
  [wiki:configuration]:	https://github.com/VLSI-EDA/PoC/wiki/Configuration
  [wiki:integration]:	https://github.com/VLSI-EDA/PoC/wiki/Integration
-
-## 8 References
-
-- [The Q27 Project](https://github.com/preusser/q27):
-  27-Queens Puzzle: Massively Parellel Enumeration and Solution Counting
-
-If you are using the PoC Library, please let us know. We are grateful for
-your project's reference.
