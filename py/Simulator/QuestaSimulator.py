@@ -131,7 +131,7 @@ class Simulator(PoCSimulator):
 		# add empty line if logs are enabled
 		if self.showLogs:		print()
 		
-		vhdlLibraries = {}
+		vhdlLibraries = []
 		
 		with fileListFilePath.open('r') as fileFileHandle:
 			for line in fileFileHandle:
@@ -160,6 +160,8 @@ class Simulator(PoCSimulator):
 						
 						try:
 							vLibLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, shell=False, universal_newlines=True)
+							vhdlLibraries.append(vhdlLibraryName)
+
 						except subprocess.CalledProcessError as ex:
 								print("ERROR while executing vlib: %s" % str(vhdlFilePath))
 								print("Return Code: %i" % ex.returncode)

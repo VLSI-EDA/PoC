@@ -47,8 +47,8 @@ begin
 	begin
 		if (SimQuiet = FALSE) then
 			report "is simulation?: " & boolean'image(SIMULATION)								severity note;
-			report "Vendor:         " & vendor_t'image(VENDOR)									severity note;
-			report "Device:         " & device_t'image(DEVICE)									severity note;
+			report "Vendor:         " & T_VENDOR'image(VENDOR)									severity note;
+			report "Device:         " & T_DEVICE'image(DEVICE)									severity note;
 			report "Device Number:  " & integer'image(DEVICE_NUMBER)						severity note;
 			report "Device Subtype: " & T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)	severity note;
 			report "Device Series:  " & integer'image(DEVICE_SERIES)						severity note;
@@ -58,8 +58,8 @@ begin
 		end if;
 
 		tbAssert((SIMULATION = TRUE),											"SIMULATION="				& BOOLEAN'image(SIMULATION)											&	"    Expected=TRUE");
-		tbAssert((VENDOR = VENDOR_XILINX),								"VENDOR= "					& VENDOR_T'image(VENDOR)												&	"    Expected=VENDOR_XILINX");
-		tbAssert((DEVICE = DEVICE_KINTEX7),								"DEVICE="						& DEVICE_T'image(DEVICE)												&	"    Expected=DEVICE_KINTEX7");
+		tbAssert((VENDOR = VENDOR_XILINX),								"VENDOR= "					& T_VENDOR'image(VENDOR)												&	"    Expected=VENDOR_XILINX");
+		tbAssert((DEVICE = DEVICE_KINTEX7),								"DEVICE="						& T_DEVICE'image(DEVICE)												&	"    Expected=DEVICE_KINTEX7");
 		tbAssert((DEVICE_FAMILY = DEVICE_FAMILY_KINTEX),	"DEVICE_FAMILY="		& T_DEVICE_FAMILY'image(DEVICE_FAMILY)					&	"    Expected=DEVICE_FAMILY_KINTEX");
 		tbAssert((DEVICE_NUMBER = 325),										"DEVICE_NUMBER="		& INTEGER'image(DEVICE_NUMBER)									&	"    Expected=325");
 		tbAssert((DEVICE_SUBTYPE = DEVICE_SUBTYPE_T),			"DEVICE_SUBTYPE="		& T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)				&	"    Expected=DEVICE_SUBTYPE_T");
