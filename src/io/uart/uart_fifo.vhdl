@@ -52,21 +52,22 @@ use			PoC.uart.all;
 entity uart_fifo is
 	generic (
 		-- Communication Parameters
-		CLOCK_FREQ  : FREQ;
-		BAUDRATE    : BAUD;
+		CLOCK_FREQ							: FREQ;
+		BAUDRATE								: BAUD;
+		ADD_INPUT_SYNCHRONIZERS	: BOOLEAN												:= TRUE;
 
 		-- Buffer Dimensioning
-		TX_MIN_DEPTH   : positive := 16;
-		TX_ESTATE_BITS : natural  :=  0;
-		RX_MIN_DEPTH   : positive := 16;
-		RX_FSTATE_BITS : natural  :=  0;
+		TX_MIN_DEPTH 						: positive											:= 16;
+		TX_ESTATE_BITS					: natural												:=	0;
+		RX_MIN_DEPTH						: positive											:= 16;
+		RX_FSTATE_BITS					: natural												:=	0;
 
 		-- Flow Control
-		FLOWCONTROL       : T_IO_UART_FLOWCONTROL_KIND   := UART_FLOWCONTROL_NONE;
-		SWFC_XON_CHAR     : std_logic_vector(7 downto 0) := x"11";  -- ^Q
-		SWFC_XON_TRIGGER  : real                         := 0.0625;
-		SWFC_XOFF_CHAR    : std_logic_vector(7 downto 0) := x"13";  -- ^S
-		SWFC_XOFF_TRIGGER : real                         := 0.75
+		FLOWCONTROL							: T_IO_UART_FLOWCONTROL_KIND		:= UART_FLOWCONTROL_NONE;
+		SWFC_XON_CHAR						: std_logic_vector(7 downto 0)	:= x"11";	-- ^Q
+		SWFC_XON_TRIGGER				: real													:= 0.0625;
+		SWFC_XOFF_CHAR					: std_logic_vector(7 downto 0)	:= x"13";	-- ^S
+		SWFC_XOFF_TRIGGER				: real													:= 0.75
 	);
 	port (
 		Clock					: in	std_logic;
@@ -110,7 +111,7 @@ architecture rtl of uart_fifo is
 
 	signal BitClock				: STD_LOGIC;
 	signal BitClock_x8		: STD_LOGIC;
-  
+	
 	signal UART_RX_sync		: STD_LOGIC;
 	
 begin
@@ -121,50 +122,50 @@ begin
 	-- ===========================================================================
 	TXFIFO : entity PoC.fifo_cc_got
 		generic map (
-			D_BITS         => 8,							-- Data Width
-			MIN_DEPTH      => TX_MIN_DEPTH,		-- Minimum FIFO Depth
-			DATA_REG       => TRUE,						-- Store Data Content in Registers
-			STATE_REG      => FALSE,					-- Registered Full/Empty Indicators
-			OUTPUT_REG     => FALSE,					-- Registered FIFO Output
-			ESTATE_WR_BITS => TX_ESTATE_BITS,	-- Empty State Bits
-			FSTATE_RD_BITS => 0								-- Full State Bits
+			D_BITS					=> 8,								-- Data Width
+			MIN_DEPTH				=> TX_MIN_DEPTH,		-- Minimum FIFO Depth
+			DATA_REG				=> TRUE,						-- Store Data Content in Registers
+			STATE_REG				=> FALSE,						-- Registered Full/Empty Indicators
+			OUTPUT_REG			=> FALSE,						-- Registered FIFO Output
+			ESTATE_WR_BITS	=> TX_ESTATE_BITS,	-- Empty State Bits
+			FSTATE_RD_BITS	=> 0								-- Full State Bits
 		)
 		port map (
-			rst  		  => Reset,
-			clk  		  => Clock,
-			put  		  => TX_put,
-			din  		  => TX_Data,
-			full 		  => TX_Full,
-			estate_wr	=> TX_EmptyState,
+			rst							=> Reset,
+			clk							=> Clock,
+			put							=> TX_put,
+			din							=> TX_Data,
+			full 						=> TX_Full,
+			estate_wr				=> TX_EmptyState,
 			
-			valid 		=> TXFIFO_Valid,
-			dout  		=> TXFIFO_Data,
-			got   		=> FC_TX_got,
-			fstate_rd	=> open
+			valid 					=> TXFIFO_Valid,
+			dout						=> TXFIFO_Data,
+			got	 						=> FC_TX_got,
+			fstate_rd				=> open
 		);
 
   RXFIFO : entity PoC.fifo_cc_got
 		generic map (
-			D_BITS         => 8,							-- Data Width
-			MIN_DEPTH      => RX_MIN_DEPTH,		-- Minimum FIFO Depth
-			DATA_REG       => TRUE,						-- Store Data Content in Registers
-			STATE_REG      => FALSE,					-- Registered Full/Empty Indicators
-			OUTPUT_REG     => FALSE,					-- Registered FIFO Output
-			ESTATE_WR_BITS => 0,							-- Empty State Bits
-			FSTATE_RD_BITS => RX_FSTATE_BITS	-- Full State Bits
+			D_BITS					=> 8,							-- Data Width
+			MIN_DEPTH				=> RX_MIN_DEPTH,		-- Minimum FIFO Depth
+			DATA_REG				=> TRUE,						-- Store Data Content in Registers
+			STATE_REG				=> FALSE,					-- Registered Full/Empty Indicators
+			OUTPUT_REG			=> FALSE,					-- Registered FIFO Output
+			ESTATE_WR_BITS	=> 0,							-- Empty State Bits
+			FSTATE_RD_BITS	=> RX_FSTATE_BITS	-- Full State Bits
 		)
 		port map (
-			rst  		  => Reset,
-			clk  		  => Clock,
-			put  		  => FC_RX_put,
-			din  		  => FC_RX_Data,
-			full 		  => RXFIFO_Full,
-			estate_wr	=> open,
+			rst							=> Reset,
+			clk							=> Clock,
+			put							=> FC_RX_put,
+			din							=> FC_RX_Data,
+			full 						=> RXFIFO_Full,
+			estate_wr				=> open,
 			
-			valid 		=> RX_Valid,
-			dout  		=> RX_Data,
-			got   		=> RX_got,
-			fstate_rd	=> RX_FullState
+			valid 					=> RX_Valid,
+			dout						=> RX_Data,
+			got	 						=> RX_got,
+			fstate_rd				=> RX_FullState
 		);
 
 	genNOFC : if (FLOWCONTROL = UART_FLOWCONTROL_NONE) generate
@@ -186,8 +187,8 @@ begin
 	-- Software Flow Control
 	-- ===========================================================================
 	genSWFC : if (FLOWCONTROL = UART_FLOWCONTROL_XON_XOFF) generate
-	  constant XON				: std_logic_vector(7 downto 0) := x"11";  -- ^Q
-		constant XOFF				: std_logic_vector(7 downto 0) := x"13";  -- ^S
+		constant XON				: std_logic_vector(7 downto 0)	:= x"11";	-- ^Q
+		constant XOFF				: std_logic_vector(7 downto 0)	:= x"13";	-- ^S
 
 		constant XON_TRIG		: integer	:= integer(SWFC_XON_TRIGGER		* real(2**RX_FSTATE_BITS));
 		constant XOFF_TRIG	: integer	:= integer(SWFC_XOFF_TRIGGER	* real(2**RX_FSTATE_BITS));
@@ -273,11 +274,11 @@ begin
 	genNoSync : if (ADD_INPUT_SYNCHRONIZERS = FALSE) generate
 		UART_RX_sync <= UART_RX;
 	end generate;
-	genSync: if (ADD_INPUT_SYNCHRONIZERS = TRUE) generate
+	genSync : if (ADD_INPUT_SYNCHRONIZERS = TRUE) generate
 		sync_i : entity PoC.sync_Bits
 			port map (
-				Clock  		=> Clock,					-- Clock to be synchronized to
-				Input(0)  => UART_RX,				-- Data to be synchronized
+				Clock			=> Clock,					-- Clock to be synchronized to
+				Input(0)	=> UART_RX,				-- Data to be synchronized
 				Output(0) => UART_RX_sync		-- synchronised data
 			);
 	end generate;
@@ -301,7 +302,7 @@ begin
 			clk			=> Clock,
 			rst			=> Reset,
 			bclk		=> BitClock,
-			tx			=> UART_TX
+			tx			=> UART_TX,
 			di			=> FC_TX_Data,
 			put			=> FC_TX_Strobe,
 			ful			=> TXUART_Full
@@ -313,7 +314,7 @@ begin
 			rst			=> Reset,
 			bclk_x8	=> BitClock_x8,
 			rx			=> UART_RX_sync,
-			do  		=> RXUART_Data,
+			do			=> RXUART_Data,
 			stb			=> RXUART_Strobe
 		);
 

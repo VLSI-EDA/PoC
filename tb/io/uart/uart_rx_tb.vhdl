@@ -48,7 +48,7 @@ end entity;
 
 architecture tb of uart_rx_tb is
 	constant CLOCK_FREQ		: FREQ			:= 100 MHz;
-	constant BAUDRATE			: BAUD			:= 4.2 MBd;
+	constant BAUDRATE			: BAUD			:= 2.1 MBd;
 	
 	signal Clock					: STD_LOGIC;
 	signal Reset					: STD_LOGIC;

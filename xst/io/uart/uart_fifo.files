@@ -16,3 +16,6 @@ vhdl		poc		"src/io/uart/uart_tx.vhdl"
 vhdl		poc		"src/io/uart/uart_fifo.vhdl"
 vhdl		poc		"src/mem/ocram/ocram.pkg.vhdl"
 vhdl		poc		"src/mem/ocram/ocram_sdp.vhdl"
+vhdl		poc		"src/misc/sync/sync.pkg.vhdl
+vhdl		poc		"src/misc/sync/sync_Bits.vhdl
+vhdl		poc		"src/misc/sync/sync_Xilinx.vhdl
