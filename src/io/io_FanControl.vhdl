@@ -52,6 +52,7 @@ use			IEEE.STD_LOGIC_1164.all;
 library PoC;
 use			PoC.config.all;
 use			PoC.utils.all;
+use			PoC.strings.all;
 use			PoC.vectors.all;
 use			PoC.physical.all;
 use			PoC.components.all;
@@ -102,7 +103,7 @@ begin
 		signal TC_Timeout					: STD_LOGIC;
 		signal StartUp						: STD_LOGIC;
 	begin
-		genML605 : if (BOARD = BOARD_ML605) generate
+		genML605 : if (str_imatch(BOARD_NAME, "ML605") = TRUE) generate
 			SystemMonitor : xil_SystemMonitor_Virtex6
 				port map (
 					Reset								=> Reset,										-- Reset signal for the System Monitor control logic
@@ -114,7 +115,7 @@ begin
 					VN									=> '0'
 				);
 		end generate;
-		genSeries7Board : if ((BOARD = BOARD_KC705) or (BOARD = BOARD_VC707)) generate
+		genSeries7Board : if ((str_imatch(BOARD_NAME, "KC705") or str_imatch(BOARD_NAME, "VC707")) = TRUE) generate
 			SystemMonitor : xil_SystemMonitor_Series7
 				port map (
 					Reset								=> Reset,										-- Reset signal for the System Monitor control logic
@@ -175,7 +176,7 @@ begin
 		signal TC_Timeout					: STD_LOGIC;
 		signal StartUp						: STD_LOGIC;
 	begin
-		genDE4 : if (BOARD = BOARD_DE4) generate
+		genDE4 : if (str_imatch(BOARD_NAME, "DE4") = TRUE) generate
 			OverTemperature_sync		<= '0';
 			UserTemperature_sync		<= '1';
 		end generate;
