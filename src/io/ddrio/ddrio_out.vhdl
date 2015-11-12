@@ -12,15 +12,18 @@
 -- ------------------------------------
 --	Instantiates chip-specific DDR output registers.
 --		
---	"OutputEnable" (Tri-State) is high-active. It is automatically inverted if
---	necessary. If an output enable is not required, you may save some logic by
---	setting NO_OUTPUT_ENABLE = true. However, "OutputEnable" must be set to '1'.
---	
 --	Both data "DataOut_high/low" as well as "OutputEnable" are sampled with
 --	the rising_edge(Clock) from the on-chip logic. "DataOut_high" is brought
 --	out with this rising edge. "DataOut_low" is brought out with the falling
 --	edge.
 --	
+--	"OutputEnable" (Tri-State) is high-active. It is automatically inverted if
+--	necessary. If an output enable is not required, you may save some logic by
+--	setting NO_OUTPUT_ENABLE = true.
+--	
+--  If NO_OUTPUT_ENABLE = false then output is disabled after power-up.
+--  If NO_OUTPUT_ENABLE = true then output after power-up equals INIT_VALUE.
+--
 --	"Pad" must be connected to a PAD because FPGAs only have these registers in
 --	IOBs.
 --
@@ -55,12 +58,12 @@ entity ddrio_out is
 	generic (
 		NO_OUTPUT_ENABLE		: BOOLEAN			:= false;
 		BITS								: POSITIVE;
-		INIT_VALUE					: BIT_VECTOR	:= "1"
+		INIT_VALUE					: BIT_VECTOR	:= x"FFFFFFFF"
 	);
 	port (
 		Clock					: in	STD_LOGIC;
-		ClockEnable		: in	STD_LOGIC;
-		OutputEnable	: in	STD_LOGIC;		
+		ClockEnable		: in	STD_LOGIC := '1';
+		OutputEnable	: in	STD_LOGIC := '1';		
 		DataOut_high	: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
 		DataOut_low		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
 		Pad						: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
@@ -95,7 +98,9 @@ begin
 	genAltera : if (VENDOR = VENDOR_ALTERA) generate
 		i : ddrio_out_altera
 			generic map (
-				BITS					=> BITS
+				NO_OUTPUT_ENABLE	=> NO_OUTPUT_ENABLE,
+				BITS							=> BITS,
+				INIT_VALUE				=> INIT_VALUE
 			)
 			port map (
 				Clock					=> Clock,

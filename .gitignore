@@ -24,10 +24,15 @@ __pycache__
 /tb/common/my_project.vhdl
 
 # ignore Quartus files
-/other/quartus/*/
-!/other/quartus/*/*.qpf
-!/other/quartus/*/*.qsf
-!/other/quartus/*/*.vhdl
+/other/quartus/**/*.*
+/other/quartus/**/db/
+/other/quartus/**/incremental_db/
+/other/quartus/**/output_files/
+/other/quartus/**/simulation/
+/other/quartus/**/greybox_tmp/
+!/other/quartus/**/*.qpf
+!/other/quartus/**/*.qsf
+!/other/quartus/**/*.vhdl
 
 # general whitelist
 !.publish

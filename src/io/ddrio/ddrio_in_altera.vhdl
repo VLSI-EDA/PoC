@@ -36,12 +36,13 @@ use			IEEE.std_logic_1164.ALL;
 library	Altera_mf;
 use			Altera_mf.Altera_MF_Components.all;
 
+library poc;
+use poc.utils.all;
 
-entity ddrio_in_xilinx is
+entity ddrio_in_altera is
 	generic (
-		BITS						: POSITIVE;
-		INIT_VALUE_HIGH	: BIT_VECTOR	:= "1";
-		INIT_VALUE_LOW	: BIT_VECTOR	:= "1"
+		BITS					: POSITIVE;
+		INIT_VALUE		: BIT_VECTOR	:= x"FFFFFFFF"
 	);
 	port (
 		Clock					: in	STD_LOGIC;
@@ -53,19 +54,24 @@ entity ddrio_in_xilinx is
 end entity;
 
 
-architecture rtl of ddrio_in_xilinx is
+architecture rtl of ddrio_in_altera is
 
 begin
-	iff : altddio_in
-		generic map (
-			WIDTH										=> BITS,
-			INTENDED_DEVICE_FAMILY	=> "STRATIXII"		-- TODO: built device string from PoC.config information
-		)
-		port map (
-			inclock			=> Clock,
-			inclocken		=> ClockEnable,
-			dataout_h		=> DataIn_high,
-			dataout_l		=> DataIn_low,
-			datain			=> Pad
-		);
+	-- One instantiation for each output pin is required to support different
+	-- initialization values. The macro does not allow different initialization
+	-- of the low and the high part. 
+	gen : for i in 0 to BITS - 1 generate
+		iff : altddio_in
+			generic map (
+				WIDTH					=> 1,
+				POWER_UP_HIGH => ite(INIT_VALUE(i) = '1', "ON", "OFF")
+				)
+			port map (
+				inclock				=> Clock,
+				inclocken			=> ClockEnable,
+				dataout_h(0)	=> DataIn_high(i),
+				dataout_l(0)	=> DataIn_low(i),
+				datain(0)			=> Pad(i)
+				);
+	end generate;
 end architecture;

@@ -42,7 +42,7 @@ entity ddrio_out_xilinx is
 	generic (
 		NO_OUTPUT_ENABLE		: BOOLEAN			:= false;
 		BITS								: POSITIVE;
-		INIT_VALUE					: BIT_VECTOR	:= "1"
+		INIT_VALUE					: BIT_VECTOR	:= x"FFFFFFFF"
 	);
 	port (
 		Clock					: in	STD_LOGIC;
@@ -58,7 +58,7 @@ end entity;
 architecture rtl of ddrio_out_xilinx is
 
 begin
-	gen : for i in 0 to WIDTH - 1 generate
+	gen : for i in 0 to BITS - 1 generate
 		signal o : std_logic;
 	begin
 		off : ODDR
@@ -77,7 +77,7 @@ begin
 				S		=> '0'
 			);
 
-		genOE : if not NO_OE generate
+		genOE : if not NO_OUTPUT_ENABLE generate
 			signal oe_n : std_logic;
 			signal t    : std_logic;
 		 begin
@@ -102,7 +102,7 @@ begin
 			Pad(i) <= o when t = '0' else 'Z';  -- 't' is low-active!
 		end generate genOE;
 
-		genNoOE : if NO_OE generate
+		genNoOE : if NO_OUTPUT_ENABLE generate
 			Pad(i) <= o;
 		end generate genNoOE;
 	end generate;

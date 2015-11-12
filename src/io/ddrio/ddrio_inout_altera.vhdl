@@ -40,17 +40,21 @@ use			Altera_mf.Altera_MF_Components.all;
 
 entity ddrio_inout_altera is
 	generic (
-		BITS								: POSITIVE
+		BITS						: POSITIVE
 	);
 	port (
-		Clock					: in		STD_LOGIC;
-		ClockEnable		: in		STD_LOGIC;
-		OutputEnable	: in		STD_LOGIC;		
-		DataOut_high	: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataOut_low		: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataIn_high		: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataIn_low		: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		Pad						: inout	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		ClockOut				: in		STD_LOGIC;
+		ClockOutEnable	: in		STD_LOGIC;
+		OutputEnable		: in		STD_LOGIC;		
+		DataOut_high		: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		DataOut_low			: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		
+		ClockIn					: in		STD_LOGIC;
+		ClockInEnable		: in		STD_LOGIC;
+		DataIn_high			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		DataIn_low			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		
+		Pad							: inout	STD_LOGIC_VECTOR(BITS - 1 downto 0)
 	);
 end entity;
 
@@ -58,20 +62,22 @@ end entity;
 architecture rtl of ddrio_inout_altera is
 
 begin
-	ioff : altddio_in
+	-- Generic POWER_UP_HIGH must be left "OFF" to disable output after power-up.
+	-- In consequence data input register power-up low.
+	ioff : altddio_bidir
 		generic map (
-			WIDTH										=> BITS,
-			INTENDED_DEVICE_FAMILY	=> "STRATIXII"		-- TODO: built device string from PoC.config information
+			OE_REG 			=> "REGISTERED",
+			WIDTH				=> BITS
 		)
 		port map (
-			outclock		=> Clock,
-			outclocken	=> ClockEnable,
+			outclock		=> ClockOut,
+			outclocken	=> ClockOutEnable,
 			oe					=> OutputEnable,
 			datain_h		=> DataOut_high,
 			datain_l		=> DataOut_low,
 			
-			inclock			=> Clock,
-			inclocken		=> ClockEnable,
+			inclock			=> ClockIn,
+			inclocken		=> ClockInEnable,
 			dataout_h		=> DataIn_high,
 			dataout_l		=> DataIn_low,
 

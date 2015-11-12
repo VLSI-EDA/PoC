@@ -12,15 +12,27 @@
 -- ------------------------------------
 --	Instantiates chip-specific DDR input and output registers.
 --	
---	"OutputEnable" (Tri-State) is high-active. It is automatically inverted if
---	necessary. If an output enable is not required, you may save some logic by
---	setting NO_OUTPUT_ENABLE = true. However, "OutputEnable" must be set to '1'.
---	
 --	Both data "DataOut_high/low" as well as "OutputEnable" are sampled with
 --	the rising_edge(Clock) from the on-chip logic. "DataOut_high" is brought
 --	out with this rising edge. "DataOut_low" is brought out with the falling
 --	edge.
 --	
+--	"OutputEnable" (Tri-State) is high-active. It is automatically inverted if
+--	necessary. Output is disabled after power-up.
+--	
+--	Both data "DataIn_high/low" are synchronously outputted to the on-chip logic
+--  with the rising edge of "Clock". "DataIn_high" is the value at the "Pad" 
+--  sampled with the same rising edge. "DataIn_low" is the value sampled with 
+--  the falling edge directly before this rising edge. Thus sampling starts with
+--  the falling edge of the clock as depicted in the following waveform.
+--               __      ____      ____      __
+--  Clock          |____|    |____|    |____|
+--  Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
+--  DataIn_low      ... >< 0      >< 2      ><
+--  DataIn_high     ... >< 1      >< 3      ><
+--
+--	< i > is the value of the i-th data bit on the line.
+--
 --	"Pad" must be connected to a PAD because FPGAs only have these registers in
 --	IOBs.
 --
@@ -51,28 +63,28 @@ use			PoC.config.all;
 use			PoC.ddrio.all;
 
 
-entity ddrio_out is
+entity ddrio_inout is
 	generic (
-		NO_OUTPUT_ENABLE		: BOOLEAN			:= false;
-		BITS								: POSITIVE;
-		INIT_VALUE_OUT			: BIT_VECTOR	:= "1";
-		INIT_VALUE_IN_HIGH	: BIT_VECTOR	:= "1";
-		INIT_VALUE_IN_LOW		: BIT_VECTOR	:= "1"
+		BITS					: POSITIVE
 	);
 	port (
-		Clock					: in		STD_LOGIC;
-		ClockEnable		: in		STD_LOGIC;
-		OutputEnable	: in		STD_LOGIC;		
-		DataOut_high	: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataOut_low		: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataIn_high		: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataIn_low		: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		Pad						: inout	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		ClockOut				: in		STD_LOGIC;
+		ClockOutEnable	: in		STD_LOGIC;
+		OutputEnable		: in		STD_LOGIC;		
+		DataOut_high		: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		DataOut_low			: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		
+		ClockIn					: in		STD_LOGIC;
+		ClockInEnable		: in		STD_LOGIC;
+		DataIn_high			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		DataIn_low			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		
+		Pad							: inout	STD_LOGIC_VECTOR(BITS - 1 downto 0)
 	);
 end entity;
 
 
-architecture rtl of ddrio_out is
+architecture rtl of ddrio_inout is
   
 begin
 	assert (VENDOR = VENDOR_XILINX) or (VENDOR = VENDOR_ALTERA)
@@ -82,38 +94,38 @@ begin
 	genXilinx : if (VENDOR = VENDOR_XILINX) generate
 		inst : ddrio_inout_xilinx
 			generic map (
-				NO_OUTPUT_ENABLE		=> NO_OUTPUT_ENABLE,
-				BITS								=> BITS,
-				INIT_VALUE_OUT			=> INIT_VALUE_OUT,
-				INIT_VALUE_IN_HIGH	=> INIT_VALUE_IN_HIGH,
-				INIT_VALUE_IN_LOW		=> INIT_VALUE_IN_LOW
+				BITS						=> BITS
 			)
 			port map (
-				Clock					=> Clock,
-				ClockEnable		=> ClockEnable,
-				OutputEnable	=> OutputEnable,
-				DataOut_high	=> DataOut_high,
-				DataOut_low		=> DataOut_low,
-				DataIn_high		=> DataIn_high,
-				DataIn_low		=> DataIn_low,
-				Pad						=> Pad
+				ClockOut				=> ClockOut,
+				ClockOutEnable	=> ClockOutEnable,
+				OutputEnable		=> OutputEnable,
+				DataOut_high		=> DataOut_high,
+				DataOut_low			=> DataOut_low,
+				ClockIn					=> ClockIn,
+				ClockInEnable		=> ClockInEnable,
+				DataIn_high			=> DataIn_high,
+				DataIn_low			=> DataIn_low,
+				Pad							=> Pad
 			);
 	end generate;
 
 	genAltera : if (VENDOR = VENDOR_ALTERA) generate
 		inst : ddrio_inout_altera
 			generic map (
-				BITS								=> BITS
+				BITS						=> BITS
 			)
 			port map (
-				Clock					=> Clock,
-				ClockEnable		=> ClockEnable,
-				OutputEnable	=> OutputEnable,
-				DataOut_high	=> DataOut_high,
-				DataOut_low		=> DataOut_low,
-				DataIn_high		=> DataIn_high,
-				DataIn_low		=> DataIn_low,
-				Pad						=> Pad
+				ClockOut				=> ClockOut,
+				ClockOutEnable	=> ClockOutEnable,
+				OutputEnable		=> OutputEnable,
+				DataOut_high		=> DataOut_high,
+				DataOut_low			=> DataOut_low,
+				ClockIn					=> ClockIn,
+				ClockInEnable		=> ClockInEnable,
+				DataIn_high			=> DataIn_high,
+				DataIn_low			=> DataIn_low,
+				Pad							=> Pad
 			);
 	end generate;
 end architecture;

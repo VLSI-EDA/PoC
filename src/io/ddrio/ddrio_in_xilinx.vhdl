@@ -39,9 +39,8 @@ use			UniSim.vComponents.all;
 
 entity ddrio_in_xilinx is
 	generic (
-		BITS						: POSITIVE;
-		INIT_VALUE_HIGH	: BIT_VECTOR	:= "1";
-		INIT_VALUE_LOW	: BIT_VECTOR	:= "1"
+		BITS					: POSITIVE;
+		INIT_VALUE		: BIT_VECTOR	:= x"FFFFFFFF"
 	);
 	port (
 		Clock					: in	STD_LOGIC;
@@ -56,12 +55,12 @@ end entity;
 architecture rtl of ddrio_in_xilinx is
 
 begin
-	gen : for i in 0 to WIDTH - 1 generate
+	gen : for i in 0 to BITS - 1 generate
 		iff : IDDR
 			generic map(
 				DDR_CLK_EDGE	=> "SAME_EDGE",
-				INIT_Q1				=> INIT_VALUE_HIGH(i),
-				INIT_Q2				=> INIT_VALUE_LOW(i),
+				INIT_Q1				=> INIT_VALUE(i),
+				INIT_Q2				=> INIT_VALUE(i),
 				SRTYPE				=> "SYNC"
 			)
 			port map (
