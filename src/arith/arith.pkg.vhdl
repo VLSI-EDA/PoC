@@ -113,7 +113,7 @@ package arith is
 	component arith_prng
 		generic (
 			BITS		: positive;
-			SEED		: natural		:= 0
+			SEED		: std_logic_vector := "0"
 		);
 		port (
 			clk		: in	std_logic;

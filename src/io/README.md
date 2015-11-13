@@ -13,6 +13,7 @@ as well as low-speed bus protocol controllers.
  - [`PoC.io.lcd`][io_lcd] - LC-Display bus controllers
  - [`PoC.io.mdio`][io_mdio] - Management Data I/O (MDIO) controllers for Ethernet PHYs
  - [`PoC.io.ow`][io_ow] - OneWire / iButton bus controllers
+ - [`PoC.io.pmod`][io_pmod] - Digilent Periphery Modules (Pmod)
  - [`PoC.io.ps2`][io_ps2] - Periphery bus of the Personal System/2 (PS/2)
  - [`PoC.io.uart`][io_uart] - Universal Asynchronous Receiver Transmitter (UART) controllers
  - [`PoC.io.vga`][io_vga] - VGA, DVI, HDMI controllers
@@ -20,7 +21,7 @@ as well as low-speed bus protocol controllers.
 
 ## Package(s)
 
-The package [`io][io.pkg] holds all enum, function and component declarations for this namespace.
+The package [`io`][io.pkg] holds all enum, function and component declarations for this namespace.
 
 ```VHDL
 library PoC;
@@ -36,6 +37,7 @@ use     PoC.io.all;
  -  `io_FanControl`
  -  `io_FrequencyCounter`
  -  `io_GlitchFilter`
+ -  `io_keyPadScanner`
  -  `io_PulseWidthModulation`
  -  `io_TimingCounter`
 
@@ -47,6 +49,7 @@ use     PoC.io.all;
  [io_lcd]:			lcd
  [io_mdio]:			mdio
  [io_ow]:			ow
+ [io_pmod]:			pmod
  [io_ps2]:			ps2
  [io_uart]:			uart
  [io_vga]:			vga
