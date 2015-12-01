@@ -78,14 +78,14 @@ class Compiler(PoCCompiler):
 		tempCoreGenPath = self.host.directories["CoreGenTemp"]
 		if not (tempCoreGenPath).exists():
 			self.printVerbose("    Creating temporary directory for core generator files.")
-			self.printDebug("    Temporary directory: %s" % str(tempCoreGenPath))
+			self.printDebug("    Temporary directory: {0}.".format(tempCoreGenPath))
 			tempCoreGenPath.mkdir(parents=True)
 
 		# create output directory for CoreGen if not existent
 		coreGenOutputPath = self.host.directories["PoCNetList"] / deviceString
 		if not (coreGenOutputPath).exists():
 			self.printVerbose("    Creating output directory for core generator files.")
-			self.printDebug("    Output directory: %s" % str(coreGenOutputPath))
+			self.printDebug("    Output directory: {0}.".format(coreGenOutputPath))
 			coreGenOutputPath.mkdir(parents=True)
 			
 		# add the key Device to section SPECIAL at runtime to change interpolation results
@@ -95,7 +95,7 @@ class Compiler(PoCCompiler):
 		
 		if not self.host.netListConfig.has_section(str(pocEntity)):
 			from configparser import NoSectionError
-			raise CompilerException("IP-Core '" + str(pocEntity) + "' not found.") from NoSectionError(str(pocEntity))
+			raise CompilerException("IP-Core '{0}' not found.".format(str(pocEntity))) from NoSectionError(str(pocEntity))
 		
 		# read copy tasks
 		copyFileList = self.host.netListConfig[str(pocEntity)]['Copy']
@@ -118,7 +118,6 @@ class Compiler(PoCCompiler):
 		cgcFilePath =					tempCoreGenPath / "coregen.cgc"
 		xcoFilePath =					tempCoreGenPath / xcoInputFilePath.name
 
-
 		# report the next steps in execution
 #		if (self.getVerbose()):
 #			print("  Commands to be run:")
@@ -130,6 +129,10 @@ class Compiler(PoCCompiler):
 #			print("  6. Copy resulting files into output directory.")
 #			print("  ----------------------------------------")
 		
+		if (self.host.platform == "Windows"):
+			WorkingDirectory = ".\\temp\\"
+		else:
+			WorkingDirectory = "./temp/"
 		
 		# write CoreGenerator project file
 		cgProjectFileContent = textwrap.dedent('''\
@@ -138,55 +141,55 @@ class Compiler(PoCCompiler):
 			SET busformat = BusFormatAngleBracketNotRipped
 			SET createndf = false
 			SET designentry = VHDL
-			SET device = %s
-			SET devicefamily = %s
+			SET device = {Device}
+			SET devicefamily = {DeviceFamily}
 			SET flowvendor = Other
 			SET formalverification = false
 			SET foundationsym = false
 			SET implementationfiletype = Ngc
-			SET package = %s
+			SET package = {Package}
 			SET removerpms = false
 			SET simulationfiles = Behavioral
-			SET speedgrade = %i
+			SET speedgrade = {SpeedGrade}
 			SET verilogsim = false
 			SET vhdlsim = true
-			SET workingdirectory = %s
-			''' % (
-				device.shortName(),
-				(str(device.family) + str(device.generation)),
-				(str(device.package) + str(device.pinCount)),
-				device.speedGrade,
-				(".\\temp\\" if self.host.platform == "Windows" else "./temp/")
+			SET workingdirectory = {WorkingDirectory}
+			'''.format(
+				Device=device.shortName(),
+				DeviceFamily=device.familyName(),
+				Package=(str(device.package) + str(device.pinCount)),
+				SpeedGrade=device.speedGrade,
+				WorkingDirectory=WorkingDirectory
 			))
 
-		self.printDebug("Writing CoreGen project file to '%s'" % str(cgpFilePath))
+		self.printDebug("Writing CoreGen project file to '{0}'.".format(cgpFilePath))
 		with cgpFilePath.open('w') as cgpFileHandle:
 			cgpFileHandle.write(cgProjectFileContent)
 
 		# write CoreGenerator content? file
-		self.printDebug("Reading CoreGen content file to '%s'" % str(cgcTemplateFilePath))
+		self.printDebug("Reading CoreGen content file to '{0}'.".format(cgcTemplateFilePath))
 		with cgcTemplateFilePath.open('r') as cgcFileHandle:
 			cgContentFileContent = cgcFileHandle.read()
 			
-		cgContentFileContent = cgContentFileContent.format(**{
-			'name' : "lcd_ChipScopeVIO",
-			'device' : device.shortName(),
-			'devicefamily' : (str(device.family) + str(device.generation)),
-			'package' : (str(device.package) + str(device.pinCount)),
-			'speedgrade' : device.speedGrade,
-		})
+		cgContentFileContent = cgContentFileContent.format(
+			name="lcd_ChipScopeVIO",
+			device=device.shortName(),
+			devicefamily=device.familyName(),
+			package=(str(device.package) + str(device.pinCount)),
+			speedgrade=device.speedGrade
+		)
 
-		self.printDebug("Writing CoreGen content file to '%s'" % str(cgcFilePath))
+		self.printDebug("Writing CoreGen content file to '{0}'.".format(cgcFilePath))
 		with cgcFilePath.open('w') as cgcFileHandle:
 			cgcFileHandle.write(cgContentFileContent)
 		
 		# copy xco file into temporary directory
-		self.printDebug("Copy CoreGen xco file to '%s'" % str(xcoFilePath))
-		self.printVerbose('    cp "%s" "%s"' % (str(xcoInputFilePath), str(tempCoreGenPath)))
+		self.printDebug("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
+		self.printVerbose("    cp {0} {1}".format(str(xcoInputFilePath), str(tempCoreGenPath)))
 		shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
 		
 		# change working directory to temporary CoreGen path
-		self.printVerbose('    cd "%s"' % str(tempCoreGenPath))
+		self.printVerbose('    cd {0}'.format(str(tempCoreGenPath)))
 		os.chdir(str(tempCoreGenPath))
 		
 		# running CoreGen
@@ -199,8 +202,8 @@ class Compiler(PoCCompiler):
 			'-b', str(xcoFilePath),
 			'-p', '.'
 		]
-		self.printDebug("call coreGen: %s" % str(parameterList))
-		self.printVerbose('    %s -r -b "%s" -p .' % (str(coreGenExecutablePath), str(xcoFilePath)))
+		self.printDebug("call coreGen: {0}.".format(parameterList))
+		self.printVerbose('    {0} -r -b "{1}" -p .'.format(str(coreGenExecutablePath), str(xcoFilePath)))
 		if (self.dryRun == False):
 			coreGenLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, universal_newlines=True)
 		
@@ -214,12 +217,12 @@ class Compiler(PoCCompiler):
 		self.printNonQuiet('  copy result files into output directory...')
 		for task in copyTasks:
 			(fromPath, toPath) = task
-			if not fromPath.exists(): raise CompilerException("Can not copy '" + str(fromPath) + "' to destination.") from FileNotFoundError(str(fromPath))
+			if not fromPath.exists(): raise CompilerException("Can not copy '{0}' to destination.".format(str(fromPath))) from FileNotFoundError(str(fromPath))
 			
 			toDirectoryPath = toPath.parent
 			if not toDirectoryPath.exists():
 				toDirectoryPath.mkdir(parents=True)
 		
-			self.printVerbose("  copying '%s'" % str(fromPath))
+			self.printVerbose("  copying '{0}'.".format(fromPath))
 			shutil.copy(str(fromPath), str(toPath))
 		

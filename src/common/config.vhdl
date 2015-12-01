@@ -163,25 +163,25 @@ package body config_private is
 			FPGADevice => 		conf("XC3S200FT256"),									-- XC2S200FT256
 			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount => 0
+			EthernetCount =>	0
 		),(
 			BoardName =>			conf("S3SK1000"),
 			FPGADevice =>			conf("XC3S1000FT256"),								-- XC2S200FT256
 			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount => 0
+			EthernetCount =>	0
 		),(
 			BoardName =>			conf("S3ESK500"),
 			FPGADevice =>			conf("XC3S500EFT256"),								-- XC2S200FT256
 			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount => 0
+			EthernetCount =>	0
 		),(
 			BoardName =>			conf("S3ESK1600"),
 			FPGADevice =>			conf("XC3S1600EFT256"),								-- XC2S200FT256
 			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount => 0
+			EthernetCount =>	0
 		),(
 			BoardName =>			conf("ATLYS"),
 			FPGADevice =>			conf("XC6SLX45-3CSG324"),							-- XC6SLX45-3CSG324
@@ -189,7 +189,13 @@ package body config_private is
 			Ethernet =>	(
 				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
-			EthernetCount => 1
+			EthernetCount =>	1
+		),(
+			BoardName =>			conf("ZC706"),
+			FPGADevice =>			conf("XC7Z045-2FFG900"),						-- XC7K325T-2FFG900C
+			UART =>						C_BOARD_UART_DTE_921600_NONE,
+			Ethernet =>				C_BOARD_ETH_NONE,
+			EthernetCount =>	0
 		),(
 			BoardName =>			conf("KC705"),
 			FPGADevice =>			conf("XC7K325T-2FFG900C"),						-- XC7K325T-2FFG900C
@@ -197,7 +203,7 @@ package body config_private is
 			Ethernet => (
 				0 =>			C_BOARD_ETH_SOFT_GMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
-			EthernetCount => 1
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("ML505"),
 			FPGADevice =>			conf("XC5VLX50T-1FF1136"),						-- XC5VLX50T-1FF1136
@@ -205,7 +211,7 @@ package body config_private is
 			Ethernet => (
 				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
-			EthernetCount => 1
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("ML506"),
 			FPGADevice =>			conf("XC5VSX50T-1FFG1136"),						-- XC5VSX50T-1FFG1136
@@ -213,7 +219,7 @@ package body config_private is
 			Ethernet => (
 				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
-			EthernetCount => 1
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("ML507"),
 			FPGADevice =>			conf("XC5VFX70T-1FFG1136"),						-- XC5VFX70T-1FFG1136
@@ -221,7 +227,7 @@ package body config_private is
 			Ethernet => (
 				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
-			EthernetCount => 1
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("XUPV5"),
 			FPGADevice =>			conf("XC5VLX110T-1FF1136"),						-- XC5VLX110T-1FF1136
@@ -229,7 +235,7 @@ package body config_private is
 			Ethernet => (
 				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
-			EthernetCount => 1
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("ML605"),
 			FPGADevice =>			conf("XC6VLX240T-1FF1156"),						-- XC6VLX240T-1FF1156
@@ -237,7 +243,7 @@ package body config_private is
 			Ethernet => (
 				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
-			EthernetCount => 1
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("VC707"),
 			FPGADevice =>			conf("XC7VX485T-2FFG1761C"),					-- XC7VX485T-2FFG1761C
@@ -245,7 +251,7 @@ package body config_private is
 			Ethernet => (
 				0 =>			C_BOARD_ETH_SOFT_SGMII_88E1111,
 				others =>	C_BOARD_ETH_EMPTY),
-			EthernetCount => 1
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("VC709"),
 			FPGADevice =>			conf("XC7VX690T-2FFG1761C"),					-- XC7VX690T-2FFG1761C
@@ -284,7 +290,7 @@ package body config_private is
 				3 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"03", "RGMII", "MDIO"),
 				others => C_BOARD_ETH_EMPTY
 			),
-			EthernetCount => 4
+			EthernetCount =>	4
 		),(
 			BoardName =>			conf("DE5"),
 			FPGADevice =>			conf("EP5SGXEA7N2F45C2"),							-- EP5SGXEA7N2F45C2
@@ -299,7 +305,7 @@ package body config_private is
 			FPGADevice =>			conf("Device is unknown for a custom board"),
 			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount => 0
+			EthernetCount =>	0
 		)
 	);
 end package body;
@@ -825,8 +831,11 @@ package body config is
 				elsif	((DEV_SUB_STR(1) = 'H') and (		str_find(MY_DEV(6 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_HT;
 				else	report "Unknown Virtex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
-
-			when others => report "Transceiver type is unknown for the given device." severity failure;
+			
+			when DEVICE_ZYNQ7 =>
+				return DEVICE_SUBTYPE_NONE;
+			
+			when others => report "Device sub-type is unknown for the given device." severity failure;
 									-- return statement is explicitly missing otherwise XST won't stop
 		end case;
 
@@ -902,7 +911,13 @@ package body config is
 					when DEVICE_SUBTYPE_HT =>			return TRANSCEIVER_GTHE2;
 					when others =>								report "Unknown Virtex-7 subtype: " & t_device_subtype'image(DEV_SUB) severity failure;
 				end case;
-				
+			when DEVICE_ZYNQ7 =>
+				case DEV_NUM is
+					when 10 | 20 =>								return TRANSCEIVER_NONE;
+					when 15 =>										return TRANSCEIVER_GTPE2;
+					when others =>								return TRANSCEIVER_GTXE2;
+				end case;
+			
 			when DEVICE_STRATIX2 => return TRANSCEIVER_GXB;
 			when DEVICE_STRATIX4 => return TRANSCEIVER_GXB;
 				

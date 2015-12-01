@@ -65,11 +65,12 @@ PACKAGE components IS
 	function downcounter_equal(cnt : SIGNED; value : INTEGER) return STD_LOGIC;
 	function downcounter_neg(cnt : SIGNED) return STD_LOGIC;
 
-	-- shift/rotate registers
-	function sr_left(q : STD_LOGIC_VECTOR; i : STD_LOGIC) return STD_LOGIC_VECTOR;
-	function sr_right(q : STD_LOGIC_VECTOR; i : STD_LOGIC) return STD_LOGIC_VECTOR;
-	function rr_left(q : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;
-	function rr_right(q : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;
+	-- shiftregisters
+	function shreg_left(q : STD_LOGIC_VECTOR; i : STD_LOGIC; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;
+	function shreg_right(q : STD_LOGIC_VECTOR; i : STD_LOGIC; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;
+	-- rotate registers
+	function rreg_left(q : STD_LOGIC_VECTOR; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;
+	function rreg_right(q : STD_LOGIC_VECTOR; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;
 
 	-- compare
 	function comp(value1 : STD_LOGIC_VECTOR; value2 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;
@@ -204,24 +205,24 @@ package body components is
 	end function;	
 	
 	-- shift/rotate registers
-	function sr_left(q : STD_LOGIC_VECTOR; i : std_logic) return STD_LOGIC_VECTOR is
+	function shreg_left(q : STD_LOGIC_VECTOR; i : std_logic; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
 	begin
-		return q(q'left - 1 downto q'right) & i;
+		return mux(en, q, q(q'left - 1 downto q'right) & i);
 	end function;
 	
-	function sr_right(q : STD_LOGIC_VECTOR; i : std_logic) return STD_LOGIC_VECTOR is
+	function shreg_right(q : STD_LOGIC_VECTOR; i : std_logic; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
 	begin
-		return i & q(q'left downto q'right - 1);
+		return mux(en, q, i & q(q'left downto q'right - 1));
 	end function;
 	
-	function rr_left(q : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
+	function rreg_left(q : STD_LOGIC_VECTOR; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
 	begin
-		return q(q'left - 1 downto q'right) & q(q'left);
+		return mux(en, q, q(q'left - 1 downto q'right) & q(q'left));
 	end function;
 	
-	function rr_right(q : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
+	function rreg_right(q : STD_LOGIC_VECTOR; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
 	begin
-		return q(q'right) & q(q'left downto q'right - 1);
+		return mux(en, q, q(q'right) & q(q'left downto q'right - 1));
 	end function;
 	
 	-- compare functions

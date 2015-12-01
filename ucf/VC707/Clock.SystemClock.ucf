@@ -10,8 +10,8 @@
 ##			Vendor:				SiTime
 ##			Device:				SiT9102 - 1 to 220 MHz High Performance Oscillator
 ##			Frequency:		200 MHz, 50ppm
-NET "VC707_SystemClock_200MHz_n"				LOC = "E18";				## U51.5
 NET "VC707_SystemClock_200MHz_p"				LOC = "E19";				## U51.4
+NET "VC707_SystemClock_200MHz_n"				LOC = "E18";				## U51.5
 NET "VC707_SystemClock_200MHz_?"				IOSTANDARD = LVDS;
 NET "VC707_SystemClock_200MHz_p"				TNM_NET = "NET_SystemClock_200MHz";
 

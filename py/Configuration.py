@@ -42,7 +42,7 @@ from collections import OrderedDict
 class Configuration(CommandLineProgram):
 	headLine = "The PoC-Library - Repository Service Tool"
 	
-	__privateSections = ["PoC", "Xilinx", "Xilinx-ISE", "Xilinx-LabTools", "Xilinx-Vivado", "Xilinx-HardwareServer", "Altera-QuartusII", "Altera-ModelSim", "Questa-SIM", "GHDL", "GTKWave", "Solutions"]
+	__privateSections = ["PoC", "Xilinx", "Xilinx-ISE", "Xilinx-LabTools", "Xilinx-Vivado", "Xilinx-HardwareServer", "Altera", "Altera-QuartusII", "Altera-ModelSim", "Questa-SIM", "GHDL", "GTKWave", "Solutions"]
 	
 	def __init__(self, debug, verbose, quiet):
 		try:
@@ -66,6 +66,7 @@ class Configuration(CommandLineProgram):
 			self.pocConfig['Xilinx-LabTools'] =				OrderedDict()
 			self.pocConfig['Xilinx-Vivado'] =					OrderedDict()
 			self.pocConfig['Xilinx-HardwareServer'] =	OrderedDict()
+			self.pocConfig['Altera'] =								OrderedDict()
 			self.pocConfig['Altera-QuartusII'] =			OrderedDict()
 			self.pocConfig['Altera-ModelSim'] =				OrderedDict()
 			self.pocConfig['Questa-SIM'] =						OrderedDict()
@@ -90,6 +91,17 @@ class Configuration(CommandLineProgram):
 		
 		# configure Windows
 		if (self.platform == 'Windows'):
+			# configure QuartusII on Windows
+			next = False
+			while (next == False):
+				try:
+					self.manualConfigureWindowsQuartusII()
+					next = True
+				except BaseException as ex:
+					print("FAULT: %s" % ex.message)
+				except Exception as ex:
+					raise
+			
 			# configure ISE on Windows
 			next = False
 			while (next == False):
@@ -138,7 +150,7 @@ class Configuration(CommandLineProgram):
 			next = False
 			while (next == False):
 				try:
-					self.manualConfigureWindowsQuestaSIM()
+					self.manualConfigureWindowsQuestaSim()
 					next = True
 				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
@@ -169,6 +181,17 @@ class Configuration(CommandLineProgram):
 				
 		# configure Linux
 		elif (self.platform == 'Linux'):
+			# configure QuartusII on Linux
+			next = False
+			while (next == False):
+				try:
+					self.manualConfigureLinuxQuartusII()
+					next = True
+				except BaseException as ex:
+					print("FAULT: %s" % ex.message)
+				except Exception as ex:
+					raise
+			
 			# configure ISE on Linux
 			next = False
 			while (next == False):
@@ -217,7 +240,7 @@ class Configuration(CommandLineProgram):
 			next = False
 			while (next == False):
 				try:
-					self.manualConfigureLinuxQuestaSIM()
+					self.manualConfigureLinuxQuestaSim()
 					next = True
 				except BaseException as ex:
 					print("FAULT: %s" % ex.message)
@@ -273,6 +296,55 @@ class Configuration(CommandLineProgram):
 		print('Upper case means default value')
 		print()
 	
+	def manualConfigureWindowsQuartusII(self):
+		# Ask for installed Altera Quartus-II
+		isAlteraQuartusII = input('Is Altera Quartus-II installed on your system? [Y/n/p]: ')
+		isAlteraQuartusII = isAlteraQuartusII if isAlteraQuartusII != "" else "Y"
+		if (isAlteraQuartusII  in ['p', 'P']):
+			pass
+		elif (isAlteraQuartusII in ['n', 'N']):
+			self.pocConfig['Altera-QuartusII'] = OrderedDict()
+		elif (isAlteraQuartusII in ['y', 'Y']):
+			alteraDirectory =		input('Altera installation directory [C:\Altera]: ')
+			quartusIIVersion =	input('Altera QuartusII version number [15.0]: ')
+			print()
+			
+			alteraDirectory =		alteraDirectory		if alteraDirectory != ""	else "C:\Altera"
+			quartusIIVersion =	quartusIIVersion	if quartusIIVersion != ""	else "15.0"
+			
+			alteraDirectoryPath = Path(alteraDirectory)
+			quartusIIDirectoryPath = alteraDirectoryPath / quartusIIVersion / "quartus"
+			
+			if not alteraDirectoryPath.exists():		raise BaseException("Altera installation directory '%s' does not exist." % alteraDirectory)
+			if not quartusIIDirectoryPath.exists():	raise BaseException("Altera QuartusII version '%s' is not installed." % quartusIIVersion)
+			
+			self.pocConfig['Altera']['InstallationDirectory'] = alteraDirectoryPath.as_posix()
+			self.pocConfig['Altera-QuartusII']['Version'] = quartusIIVersion
+			self.pocConfig['Altera-QuartusII']['InstallationDirectory'] = '${Altera:InstallationDirectory}/${Version}'
+			self.pocConfig['Altera-QuartusII']['BinaryDirectory'] = '${InstallationDirectory}/quartus/bin64'
+			
+			# Ask for installed Altera ModelSimAltera
+			isAlteraModelSim = input('Is ModelSim - Altera Edition installed on your system? [Y/n/p]: ')
+			isAlteraModelSim = isAlteraModelSim if isAlteraModelSim != "" else "Y"
+			if (isAlteraModelSim  in ['p', 'P']):
+				pass
+			elif (isAlteraModelSim in ['n', 'N']):
+				self.pocConfig['Altera-ModelSim'] = OrderedDict()
+			elif (isAlteraModelSim in ['y', 'Y']):
+				alteraModelSimVersion =	input('ModelSim - Altera Edition version number [10.1e]: ')
+			
+				alteraModelSimDirectoryPath = alteraDirectoryPath / quartusIIVersion / "modelsim_ase"
+			
+				if not alteraModelSimDirectoryPath.exists():	raise BaseException("ModelSim - Altera Edition installation directory '%s' does not exist." % str(alteraModelSimDirectoryPath))
+				
+				self.pocConfig['Altera-ModelSim']['Version'] = alteraModelSimVersion
+				self.pocConfig['Altera-ModelSim']['InstallationDirectory'] = '${Altera:InstallationDirectory}/${Version}/modelsim_ase'
+				self.pocConfig['Altera-ModelSim']['BinaryDirectory'] = '${InstallationDirectory}/win32aloem'
+			else:
+				raise BaseException("unknown option")
+		else:
+			raise BaseException("unknown option")
+			
 	def manualConfigureWindowsISE(self):
 		# Ask for installed Xilinx ISE
 		isXilinxISE = input('Is Xilinx ISE installed on your system? [Y/n/p]: ')
@@ -280,10 +352,10 @@ class Configuration(CommandLineProgram):
 		if (isXilinxISE  in ['p', 'P']):
 			pass
 		elif (isXilinxISE in ['n', 'N']):
-			self.pocConfig['Xilinx-ISE'] = {}
+			self.pocConfig['Xilinx-ISE'] = OrderedDict()
 		elif (isXilinxISE in ['y', 'Y']):
-			xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
-			iseVersion =			input('Xilinx ISE Version Number [14.7]: ')
+			xilinxDirectory =	input('Xilinx installation directory [C:\Xilinx]: ')
+			iseVersion =			input('Xilinx ISE version number [14.7]: ')
 			print()
 			
 			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
@@ -292,7 +364,7 @@ class Configuration(CommandLineProgram):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
 			
-			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx installation directory '%s' does not exist." % xilinxDirectory)
 			if not iseDirectoryPath.exists():			raise BaseException("Xilinx ISE version '%s' is not installed." % iseVersion)
 			
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -309,10 +381,10 @@ class Configuration(CommandLineProgram):
 		if (isXilinxLabTools  in ['p', 'P']):
 			pass
 		elif (isXilinxLabTools in ['n', 'N']):
-			self.pocConfig['Xilinx-LabTools'] = {}
+			self.pocConfig['Xilinx-LabTools'] = OrderedDict()
 		elif (isXilinxLabTools in ['y', 'Y']):
-			xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
-			labToolsVersion =	input('Xilinx LabTools Version Number [14.7]: ')
+			xilinxDirectory =	input('Xilinx installation directory [C:\Xilinx]: ')
+			labToolsVersion =	input('Xilinx LabTools version number [14.7]: ')
 			print()
 			
 			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
@@ -321,7 +393,7 @@ class Configuration(CommandLineProgram):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
 			
-			if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx installation directory '%s' does not exist." % xilinxDirectory)
 			if not labToolsDirectoryPath.exists():	raise BaseException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
 			
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -338,10 +410,10 @@ class Configuration(CommandLineProgram):
 		if (isXilinxVivado  in ['p', 'P']):
 			pass
 		elif (isXilinxVivado in ['n', 'N']):
-			self.pocConfig['Xilinx-Vivado'] = {}
+			self.pocConfig['Xilinx-Vivado'] = OrderedDict()
 		elif (isXilinxVivado in ['y', 'Y']):
-			xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
-			vivadoVersion =		input('Xilinx Vivado Version Number [2015.2]: ')
+			xilinxDirectory =	input('Xilinx installation directory [C:\Xilinx]: ')
+			vivadoVersion =		input('Xilinx Vivado version number [2015.2]: ')
 			print()
 		
 			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
@@ -350,7 +422,7 @@ class Configuration(CommandLineProgram):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			vivadoDirectoryPath = xilinxDirectoryPath / "Vivado" / vivadoVersion
 		
-			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx installation directory '%s' does not exist." % xilinxDirectory)
 			if not vivadoDirectoryPath.exists():	raise BaseException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
 		
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -367,10 +439,10 @@ class Configuration(CommandLineProgram):
 		if (isXilinxHardwareServer  in ['p', 'P']):
 			pass
 		elif (isXilinxHardwareServer in ['n', 'N']):
-			self.pocConfig['Xilinx-HardwareServer'] = {}
+			self.pocConfig['Xilinx-HardwareServer'] = OrderedDict()
 		elif (isXilinxHardwareServer in ['y', 'Y']):
-			xilinxDirectory =	input('Xilinx Installation Directory [C:\Xilinx]: ')
-			hardwareServerVersion =		input('Xilinx HardwareServer Version Number [2015.2]: ')
+			xilinxDirectory =	input('Xilinx installation directory [C:\Xilinx]: ')
+			hardwareServerVersion =		input('Xilinx HardwareServer version number [2015.2]: ')
 			print()
 		
 			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
@@ -379,7 +451,7 @@ class Configuration(CommandLineProgram):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			hardwareServerDirectoryPath = xilinxDirectoryPath / "HardwareServer" / hardwareServerVersion
 		
-			if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx installation directory '%s' does not exist." % xilinxDirectory)
 			if not hardwareServerDirectoryPath.exists():	raise BaseException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
 		
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -389,30 +461,30 @@ class Configuration(CommandLineProgram):
 		else:
 			raise BaseException("unknown option")
 
-	def manualConfigureWindowsQuestaSIM(self):
+	def manualConfigureWindowsQuestaSim(self):
 		# Ask for installed Questa-SIM
-		isQuestaSIM = input('Is Questa-SIM installed on your system? [Y/n/p]: ')
-		isQuestaSIM = isQuestaSIM if isQuestaSIM != "" else "Y"
-		if (isQuestaSIM  in ['p', 'P']):
+		isQuestaSim = input('Is Questa-SIM installed on your system? [Y/n/p]: ')
+		isQuestaSim = isQuestaSim if isQuestaSim != "" else "Y"
+		if (isQuestaSim  in ['p', 'P']):
 			pass
-		elif (isQuestaSIM in ['n', 'N']):
-			self.pocConfig['Questa-SIM'] = {}
-		elif (isQuestaSIM in ['y', 'Y']):
-			questaSIMDirectory =	input('Questa-SIM Installation Directory [C:\Mentor\QuestaSim64\\10.2c]: ')
-			questaSIMVersion =		input('Questa-SIM Version Number [10.2c]: ')
+		elif (isQuestaSim in ['n', 'N']):
+			self.pocConfig['Questa-SIM'] = OrderedDict()
+		elif (isQuestaSim in ['y', 'Y']):
+			QuestaSimDirectory =	input('Questa-SIM installation directory [C:\Mentor\QuestaSim64\\10.2c]: ')
+			QuestaSimVersion =		input('Questa-SIM version number [10.2c]: ')
 			print()
 		
-			questaSIMDirectory =	questaSIMDirectory	if questaSIMDirectory != ""	else "C:\Mentor\QuestaSim64\\10.2c"
-			questaSIMVersion =		questaSIMVersion		if questaSIMVersion != ""		else "10.2c"
+			QuestaSimDirectory =	QuestaSimDirectory	if QuestaSimDirectory != ""	else "C:\Mentor\QuestaSim64\\10.2c"
+			QuestaSimVersion =		QuestaSimVersion		if QuestaSimVersion != ""		else "10.2c"
 		
-			questaSIMDirectoryPath =	Path(questaSIMDirectory)
-			questaSIMExecutablePath = questaSIMDirectoryPath / "win64" / "vsim.exe"
+			QuestaSimDirectoryPath =	Path(QuestaSimDirectory)
+			QuestaSimExecutablePath = QuestaSimDirectoryPath / "win64" / "vsim.exe"
 		
-			if not questaSIMDirectoryPath.exists():		raise BaseException("Questa-SIM Installation Directory '%s' does not exist." % questaSIMDirectory)
-			if not questaSIMExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
+			if not QuestaSimDirectoryPath.exists():		raise BaseException("Questa-SIM installation directory '%s' does not exist." % QuestaSimDirectory)
+			if not QuestaSimExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
 		
-			self.pocConfig['Questa-SIM']['Version'] =								questaSIMVersion
-			self.pocConfig['Questa-SIM']['InstallationDirectory'] =	questaSIMDirectoryPath.as_posix()
+			self.pocConfig['Questa-SIM']['Version'] =								QuestaSimVersion
+			self.pocConfig['Questa-SIM']['InstallationDirectory'] =	QuestaSimDirectoryPath.as_posix()
 			self.pocConfig['Questa-SIM']['BinaryDirectory'] =				'${InstallationDirectory}/win64'
 		else:
 			raise BaseException("unknown option")
@@ -424,10 +496,10 @@ class Configuration(CommandLineProgram):
 		if (isGHDL  in ['p', 'P']):
 			pass
 		elif (isGHDL in ['n', 'N']):
-			self.pocConfig['GHDL'] = {}
+			self.pocConfig['GHDL'] = OrderedDict()
 		elif (isGHDL in ['y', 'Y']):
-			ghdlDirectory =	input('GHDL Installation Directory [C:\Program Files (x86)\GHDL]: ')
-			ghdlVersion =		input('GHDL Version Number [0.31]: ')
+			ghdlDirectory =	input('GHDL installation directory [C:\Program Files (x86)\GHDL]: ')
+			ghdlVersion =		input('GHDL version number [0.31]: ')
 			print()
 		
 			ghdlDirectory = ghdlDirectory if ghdlDirectory != "" else "C:\Program Files (x86)\GHDL"
@@ -436,7 +508,7 @@ class Configuration(CommandLineProgram):
 			ghdlDirectoryPath = Path(ghdlDirectory)
 			ghdlExecutablePath = ghdlDirectoryPath / "bin" / "ghdl.exe"
 		
-			if not ghdlDirectoryPath.exists():	raise BaseException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
+			if not ghdlDirectoryPath.exists():	raise BaseException("GHDL installation directory '%s' does not exist." % ghdlDirectory)
 			if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
 		
 			self.pocConfig['GHDL']['Version'] = ghdlVersion
@@ -452,10 +524,10 @@ class Configuration(CommandLineProgram):
 		if (isGTKW  in ['p', 'P']):
 			pass
 		elif (isGTKW in ['n', 'N']):
-			self.pocConfig['GTKWave'] = {}
+			self.pocConfig['GTKWave'] = OrderedDict()
 		elif (isGTKW in ['y', 'Y']):
-			gtkwDirectory =	input('GTKWave Installation Directory [C:\Program Files (x86)\GTKWave]: ')
-			gtkwVersion =		input('GTKWave Version Number [3.3.61]: ')
+			gtkwDirectory =	input('GTKWave installation directory [C:\Program Files (x86)\GTKWave]: ')
+			gtkwVersion =		input('GTKWave version number [3.3.61]: ')
 			print()
 		
 			gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "C:\Program Files (x86)\GTKWave"
@@ -464,7 +536,7 @@ class Configuration(CommandLineProgram):
 			gtkwDirectoryPath = Path(gtkwDirectory)
 			gtkwExecutablePath = gtkwDirectoryPath / "bin" / "gtkwave.exe"
 		
-			if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave Installation Directory '%s' does not exist." % gtkwDirectory)
+			if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave installation directory '%s' does not exist." % gtkwDirectory)
 			if not gtkwExecutablePath.exists():	raise BaseException("GTKWave is not installed.")
 		
 			self.pocConfig['GTKWave']['Version'] = gtkwVersion
@@ -473,6 +545,55 @@ class Configuration(CommandLineProgram):
 		else:
 			raise BaseException("unknown option")
 	
+	def manualConfigureLinuxQuartusII(self):
+		# Ask for installed Altera Quartus-II
+		isAlteraQuartusII = input('Is Altera Quartus-II installed on your system? [Y/n/p]: ')
+		isAlteraQuartusII = isAlteraQuartusII if isAlteraQuartusII != "" else "Y"
+		if (isAlteraQuartusII  in ['p', 'P']):
+			pass
+		elif (isAlteraQuartusII in ['n', 'N']):
+			self.pocConfig['Altera-QuartusII'] = OrderedDict()
+		elif (isAlteraQuartusII in ['y', 'Y']):
+			alteraDirectory =		input('Altera installation directory [/opt/Altera]: ')
+			quartusIIVersion =	input('Altera QuartusII version number [15.0]: ')
+			print()
+			
+			alteraDirectory =		alteraDirectory		if alteraDirectory != ""	else "/opt/Altera"
+			quartusIIVersion =	quartusIIVersion	if quartusIIVersion != ""	else "15.0"
+			
+			alteraDirectoryPath = Path(alteraDirectory)
+			quartusIIDirectoryPath = alteraDirectoryPath / quartusIIVersion / "quartus"
+			
+			if not alteraDirectoryPath.exists():		raise BaseException("Altera installation directory '%s' does not exist." % alteraDirectory)
+			if not quartusIIDirectoryPath.exists():	raise BaseException("Altera QuartusII version '%s' is not installed." % quartusIIVersion)
+			
+			self.pocConfig['Altera']['InstallationDirectory'] = alteraDirectoryPath.as_posix()
+			self.pocConfig['Altera-QuartusII']['Version'] = quartusIIVersion
+			self.pocConfig['Altera-QuartusII']['InstallationDirectory'] = '${Altera:InstallationDirectory}/${Version}'
+			self.pocConfig['Altera-QuartusII']['BinaryDirectory'] = '${InstallationDirectory}/quartus/bin'
+			
+			# Ask for installed Altera ModelSimAltera
+			isAlteraModelSim = input('Is ModelSim - Altera Edition installed on your system? [Y/n/p]: ')
+			isAlteraModelSim = isAlteraModelSim if isAlteraModelSim != "" else "Y"
+			if (isAlteraModelSim  in ['p', 'P']):
+				pass
+			elif (isAlteraModelSim in ['n', 'N']):
+				self.pocConfig['Altera-ModelSim'] = OrderedDict()
+			elif (isAlteraModelSim in ['y', 'Y']):
+				alteraModelSimVersion =	input('ModelSim - Altera Edition version number [10.1e]: ')
+			
+				alteraModelSimDirectoryPath = alteraDirectoryPath / quartusIIVersion / "modelsim_ase"
+			
+				if not alteraModelSimDirectoryPath.exists():	raise BaseException("ModelSim - Altera Edition installation directory '%s' does not exist." % str(alteraModelSimDirectoryPath))
+				
+				self.pocConfig['Altera-ModelSim']['Version'] = alteraModelSimVersion
+				self.pocConfig['Altera-ModelSim']['InstallationDirectory'] = '${Altera:InstallationDirectory}/${Version}/modelsim_ase'
+				self.pocConfig['Altera-ModelSim']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+			else:
+				raise BaseException("unknown option")
+		else:
+			raise BaseException("unknown option")
+			
 	def manualConfigureLinuxISE(self):
 		# Ask for installed Xilinx ISE
 		isXilinxISE = input('Is Xilinx ISE installed on your system? [Y/n/p]: ')
@@ -480,10 +601,10 @@ class Configuration(CommandLineProgram):
 		if (isXilinxISE  in ['p', 'P']):
 			pass
 		elif (isXilinxISE in ['n', 'N']):
-			self.pocConfig['Xilinx-ISE'] = {}
+			self.pocConfig['Xilinx-ISE'] = OrderedDict()
 		elif (isXilinxISE in ['y', 'Y']):
-			xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
-			iseVersion =			input('Xilinx ISE Version Number [14.7]: ')
+			xilinxDirectory =	input('Xilinx installation directory [/opt/Xilinx]: ')
+			iseVersion =			input('Xilinx ISE version number [14.7]: ')
 			print()
 		
 			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
@@ -492,7 +613,7 @@ class Configuration(CommandLineProgram):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
 		
-			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx installation directory '%s' does not exist." % xilinxDirectory)
 			if not iseDirectoryPath.exists():			raise BaseException("Xilinx ISE version '%s' is not installed." % iseVersion)
 		
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -509,10 +630,10 @@ class Configuration(CommandLineProgram):
 		if (isXilinxLabTools  in ['p', 'P']):
 			pass
 		elif (isXilinxLabTools in ['n', 'N']):
-			self.pocConfig['Xilinx-LabTools'] = {}
+			self.pocConfig['Xilinx-LabTools'] = OrderedDict()
 		elif (isXilinxLabTools in ['y', 'Y']):
-			xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
-			labToolsVersion =	input('Xilinx LabTools Version Number [14.7]: ')
+			xilinxDirectory =	input('Xilinx installation directory [/opt/Xilinx]: ')
+			labToolsVersion =	input('Xilinx LabTools version number [14.7]: ')
 			print()
 		
 			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
@@ -521,7 +642,7 @@ class Configuration(CommandLineProgram):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
 		
-			if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not xilinxDirectoryPath.exists():		raise BaseException("Xilinx installation directory '%s' does not exist." % xilinxDirectory)
 			if not labToolsDirectoryPath.exists():	raise BaseException("Xilinx LabTools version '%s' is not installed." % labToolsVersion)
 		
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -538,10 +659,10 @@ class Configuration(CommandLineProgram):
 		if (isXilinxVivado  in ['p', 'P']):
 			pass
 		elif (isXilinxVivado in ['n', 'N']):
-			self.pocConfig['Xilinx-Vivado'] = {}
+			self.pocConfig['Xilinx-Vivado'] = OrderedDict()
 		elif (isXilinxVivado in ['y', 'Y']):
-			xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
-			vivadoVersion =		input('Xilinx Vivado Version Number [2015.2]: ')
+			xilinxDirectory =	input('Xilinx installation directory [/opt/Xilinx]: ')
+			vivadoVersion =		input('Xilinx Vivado version number [2015.2]: ')
 			print()
 		
 			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
@@ -550,7 +671,7 @@ class Configuration(CommandLineProgram):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			vivadoDirectoryPath = xilinxDirectoryPath / "Vivado" / vivadoVersion
 		
-			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not xilinxDirectoryPath.exists():	raise BaseException("Xilinx installation directory '%s' does not exist." % xilinxDirectory)
 			if not vivadoDirectoryPath.exists():	raise BaseException("Xilinx Vivado version '%s' is not installed." % vivadoVersion)
 		
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -567,10 +688,10 @@ class Configuration(CommandLineProgram):
 		if (isXilinxHardwareServer  in ['p', 'P']):
 			pass
 		elif (isXilinxHardwareServer in ['n', 'N']):
-			self.pocConfig['Xilinx-HardwareServer'] = {}
+			self.pocConfig['Xilinx-HardwareServer'] = OrderedDict()
 		elif (isXilinxHardwareServer in ['y', 'Y']):
-			xilinxDirectory =	input('Xilinx Installation Directory [/opt/Xilinx]: ')
-			hardwareServerVersion =		input('Xilinx HardwareServer Version Number [2015.2]: ')
+			xilinxDirectory =	input('Xilinx installation directory [/opt/Xilinx]: ')
+			hardwareServerVersion =		input('Xilinx HardwareServer version number [2015.2]: ')
 			print()
 		
 			xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
@@ -579,7 +700,7 @@ class Configuration(CommandLineProgram):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			hardwareServerDirectoryPath = xilinxDirectoryPath / "HardwareServer" / hardwareServerVersion
 		
-			if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx Installation Directory '%s' does not exist." % xilinxDirectory)
+			if not xilinxDirectoryPath.exists():					raise BaseException("Xilinx installation directory '%s' does not exist." % xilinxDirectory)
 			if not hardwareServerDirectoryPath.exists():	raise BaseException("Xilinx HardwareServer version '%s' is not installed." % hardwareServerVersion)
 		
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -589,30 +710,30 @@ class Configuration(CommandLineProgram):
 		else:
 			raise BaseException("unknown option")
 			
-	def manualConfigureLinuxQuestaSIM(self):
+	def manualConfigureLinuxQuestaSim(self):
 		# Ask for installed Questa-SIM
-		isQuestaSIM = input('Is Questa-SIM installed on your system? [Y/n/p]: ')
-		isQuestaSIM = isQuestaSIM if isQuestaSIM != "" else "Y"
-		if (isQuestaSIM  in ['p', 'P']):
+		isQuestaSim = input('Is Questa-SIM installed on your system? [Y/n/p]: ')
+		isQuestaSim = isQuestaSim if isQuestaSim != "" else "Y"
+		if (isQuestaSim  in ['p', 'P']):
 			pass
-		elif (isQuestaSIM in ['n', 'N']):
-			self.pocConfig['Questa-SIM'] = {}
-		elif (isQuestaSIM in ['y', 'Y']):
-			questaSIMDirectory =	input('Questa-SIM Installation Directory [/opt/QuestaSim/10.2c]: ')
-			questaSIMVersion =		input('Questa-SIM Version Number [10.2c]: ')
+		elif (isQuestaSim in ['n', 'N']):
+			self.pocConfig['Questa-SIM'] = OrderedDict()
+		elif (isQuestaSim in ['y', 'Y']):
+			QuestaSimDirectory =	input('Questa-SIM installation directory [/opt/QuestaSim/10.2c]: ')
+			QuestaSimVersion =		input('Questa-SIM version number [10.2c]: ')
 			print()
 		
-			questaSIMDirectory =	questaSIMDirectory	if questaSIMDirectory != ""	else "/opt/QuestaSim/10.2c"
-			questaSIMVersion =		questaSIMVersion		if questaSIMVersion != ""		else "10.2c"
+			QuestaSimDirectory =	QuestaSimDirectory	if QuestaSimDirectory != ""	else "/opt/QuestaSim/10.2c"
+			QuestaSimVersion =		QuestaSimVersion		if QuestaSimVersion != ""		else "10.2c"
 		
-			questaSIMDirectoryPath = Path(questaSIMDirectory)
-			questaSIMExecutablePath = questaSIMDirectoryPath / "bin" / "vsim"
+			QuestaSimDirectoryPath = Path(QuestaSimDirectory)
+			QuestaSimExecutablePath = QuestaSimDirectoryPath / "bin" / "vsim"
 		
-			if not questaSIMDirectoryPath.exists():		raise BaseException("Questa-SIM Installation Directory '%s' does not exist." % questaSIMDirectory)
-			if not questaSIMExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
+			if not QuestaSimDirectoryPath.exists():		raise BaseException("Questa-SIM installation directory '%s' does not exist." % QuestaSimDirectory)
+			if not QuestaSimExecutablePath.exists():	raise BaseException("Questa-SIM is not installed.")
 		
-			self.pocConfig['Questa-SIM']['Version'] =								questaSIMVersion
-			self.pocConfig['Questa-SIM']['InstallationDirectory'] =	questaSIMDirectoryPath.as_posix()
+			self.pocConfig['Questa-SIM']['Version'] =								QuestaSimVersion
+			self.pocConfig['Questa-SIM']['InstallationDirectory'] =	QuestaSimDirectoryPath.as_posix()
 			self.pocConfig['Questa-SIM']['BinaryDirectory'] =				'${InstallationDirectory}/bin'
 		else:
 			raise BaseException("unknown option")
@@ -624,10 +745,10 @@ class Configuration(CommandLineProgram):
 		if (isGHDL  in ['p', 'P']):
 			pass
 		elif (isGHDL in ['n', 'N']):
-			self.pocConfig['GHDL'] = {}
+			self.pocConfig['GHDL'] = OrderedDict()
 		elif (isGHDL in ['y', 'Y']):
-			ghdlDirectory =	input('GHDL Installation Directory [/usr/bin]: ')
-			ghdlVersion =		input('GHDL Version Number [0.31]: ')
+			ghdlDirectory =	input('GHDL installation directory [/usr/bin]: ')
+			ghdlVersion =		input('GHDL version number [0.31]: ')
 			print()
 		
 			ghdlDirectory = ghdlDirectory if ghdlDirectory != "" else "/usr/bin"
@@ -636,7 +757,7 @@ class Configuration(CommandLineProgram):
 			ghdlDirectoryPath = Path(ghdlDirectory)
 			ghdlExecutablePath = ghdlDirectoryPath / "ghdl"
 		
-			if not ghdlDirectoryPath.exists():	raise BaseException("GHDL Installation Directory '%s' does not exist." % ghdlDirectory)
+			if not ghdlDirectoryPath.exists():	raise BaseException("GHDL installation directory '%s' does not exist." % ghdlDirectory)
 			if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
 		
 			self.pocConfig['GHDL']['Version'] = ghdlVersion
@@ -652,10 +773,10 @@ class Configuration(CommandLineProgram):
 		if (isGTKW  in ['p', 'P']):
 				pass
 		elif (isGTKW in ['n', 'N']):
-			self.pocConfig['GTKWave'] = {}
+			self.pocConfig['GTKWave'] = OrderedDict()
 		elif (isGTKW in ['y', 'Y']):
-			gtkwDirectory =	input('GTKWave Installation Directory [/usr/bin]: ')
-			gtkwVersion =		input('GTKWave Version Number [3.3.61]: ')
+			gtkwDirectory =	input('GTKWave installation directory [/usr/bin]: ')
+			gtkwVersion =		input('GTKWave version number [3.3.61]: ')
 			print()
 		
 			gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "/usr/bin"
@@ -664,7 +785,7 @@ class Configuration(CommandLineProgram):
 			gtkwDirectoryPath = Path(gtkwDirectory)
 			gtkwExecutablePath = gtkwDirectoryPath / "gtkwave"
 		
-			if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave Installation Directory '%s' does not exist." % gtkwDirectory)
+			if not gtkwDirectoryPath.exists():	raise BaseException("GTKWave installation directory '%s' does not exist." % gtkwDirectory)
 			if not gtkwExecutablePath.exists():	raise BaseException("GTKWave is not installed.")
 		
 			self.pocConfig['GTKWave']['Version'] = gtkwVersion

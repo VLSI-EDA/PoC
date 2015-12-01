@@ -5,18 +5,18 @@
 ##	Location:				P3
 ##		I²C-Address:	0xA0 (1010 000xb)
 NET "VC707_SFP_TX_Disable"						LOC = "AP33" | IOSTANDARD = LVCMOS18; ## ; low-active; external 4k7 pullup resistor; level shifted by Q4 (NDS331N)
-NET "VC707_SFP_LossOfSync"						LOC = "BB38" | IOSTANDARD = LVCMOS18; ## ; low-active; external 4k7 pullup resistor; level shifted by U69 (SN74AVC1T45)
+NET "VC707_SFP_LossOfSignal"						LOC = "BB38" | IOSTANDARD = LVCMOS18; ## ; low-active; external 4k7 pullup resistor; level shifted by U69 (SN74AVC1T45)
 
 ## SGMII LVDS signal-pairs
 ## --------------------------
 ##	Bank:						113
 ##	ReferenceClock
 ##		Location:			P3
-NET "VC707_SFP_TX_n"									LOC = "AM3";													## 
 NET "VC707_SFP_TX_p"									LOC = "AM4";													## 
-NET "VC707_SFP_RX_n"									LOC = "AL5";													## 
+NET "VC707_SFP_TX_n"									LOC = "AM3";													## 
 NET "VC707_SFP_RX_p"									LOC = "AL6";													## 
+NET "VC707_SFP_RX_n"									LOC = "AL5";													## 
 
 ## Ignore timings on async I/O pins
 NET "VC707_SFP_TX_Disable"						TIG;
-NET "VC707_SFP_LossOfSync"						TIG;
+NET "VC707_SFP_LossOfSignal"						TIG;

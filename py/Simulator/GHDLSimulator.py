@@ -92,6 +92,12 @@ class Simulator(PoCSimulator):
 		fileListFilePath =		self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['fileListFile']
 		vcdFilePath =					tempGHDLPath / (testbenchName + ".vcd")
 		
+		if (self.__vhdlStandard == "93"):
+			self.__vhdlStandard = "93c"
+			self.__ieeeFlavor = "synopsys"
+		elif (self.__vhdlStandard == "08"):
+			self.__ieeeFlavor = "standard"
+		
 		if (self.verbose):
 			print("  Commands to be run:")
 			print("  1. Change working directory to temporary directory")
@@ -109,9 +115,9 @@ class Simulator(PoCSimulator):
 		os.chdir(str(tempGHDLPath))
 
 		# parse project filelist
-		filesLineRegExpStr =	r"\s*(?P<Keyword>(vhdl(\-(87|93|02|08))?|xilinx))"				# Keywords: vhdl[-nn], xilinx
+		filesLineRegExpStr =	r"\s*(?P<Keyword>(vhdl(-(87|93|02|08))?|altera|xilinx))"				# Keywords: vhdl[-nn], altera, xilinx
 		filesLineRegExpStr +=	r"\s+(?P<VHDLLibrary>[_a-zA-Z0-9]+)"		#	VHDL library name
-		filesLineRegExpStr +=	r"\s+\"(?P<VHDLFile>.*?)\""						# VHDL filename without "-signs
+		filesLineRegExpStr +=	r"\s+\"(?P<VHDLFile>.*?)\""							# VHDL filename without "-signs
 		filesLineRegExp = re.compile(filesLineRegExpStr)
 
 		self.printDebug("Reading filelist '%s'" % str(fileListFilePath))
@@ -129,9 +135,16 @@ class Simulator(PoCSimulator):
 						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
 						vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
 					elif (filesLineRegExpMatch.group('Keyword')[0:5] == "vhdl-"):
-						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
+						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard[:2]):
 							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
 							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
+					elif (filesLineRegExpMatch.group('Keyword') == "altera"):
+						# check if Quartus is configured
+						if not self.host.directories.__contains__("AlteraPrimitiveSource"):
+							raise NotConfiguredException("This testbench requires some Altera Primitves. Please configure Altera Quartus II.")
+					
+						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["AlteraPrimitiveSource"] / vhdlFileName
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
 						# check if ISE or Vivado is configured
 						if not self.host.directories.__contains__("XilinxPrimitiveSource"):
@@ -139,6 +152,8 @@ class Simulator(PoCSimulator):
 						
 						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
 						vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / vhdlFileName
+					else:
+						raise SimulatorException("Unknown keyword in *files file.")
 					
 					vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
 
@@ -148,7 +163,9 @@ class Simulator(PoCSimulator):
 					# assemble fuse command as list of parameters
 					parameterList = [
 						str(ghdlExecutablePath),
-						'-a', '-P.', '--syn-binding',
+						'-a', '-fexplicit', '-frelaxed-rules', '--warn-binding', '--no-vital-checks', '--mb-comments', '--syn-binding',
+						#'-P.', '-PAltera','-PXilinx',
+						('--ieee=%s' % self.__ieeeFlavor),
 						('--std=%s' % self.__vhdlStandard),
 						('--work=%s' % vhdlLibraryName),
 						str(vhdlFilePath)
@@ -183,9 +200,9 @@ class Simulator(PoCSimulator):
 		
 			parameterList = [
 				str(ghdlExecutablePath),
-				'-r', '-P.',
+				'-r', '--syn-binding',
+				#'-P.',  '-PAltera','-PXilinx',
 				('--std=%s' % self.__vhdlStandard),
-				'--syn-binding',
 				'--work=test',
 				testbenchName
 			]
@@ -223,9 +240,10 @@ class Simulator(PoCSimulator):
 		
 			parameterList = [
 				str(ghdlExecutablePath),
-				'-e', '-P.',
+				'-e', '--syn-binding',
+				#'-P.',  '-PAltera','-PXilinx',
+				('--ieee=%s' % self.__ieeeFlavor),
 				('--std=%s' % self.__vhdlStandard),
-				'--syn-binding',
 				'--work=test',
 				testbenchName
 			]

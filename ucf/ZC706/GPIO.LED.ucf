@@ -1,0 +1,17 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## LEDs
+## -----------------------------------------------------------------------------
+##	Bank:						11, 33, 35
+##		VCCO:					2.5, 1.5, 1.5V (VADJ_FPGA, VCC1V5_FPGA, VCC1V5_FPGA)
+##	Location:				Q30, Q9, Q8, Q7
+## -----------------------------------------------------------------------------
+NET "ZC706_GPIO_LED<0>"						LOC =  "A17"	| IOSTANDARD = LVCMOS15;			## {OUT}	Q30; Bank 35; VCCO=VCC1V5_FPGA
+NET "ZC706_GPIO_LED<1>"						LOC =  "W21"	| IOSTANDARD = LVCMOS25;			## {OUT}	Q9; Bank 11; VCCO=VADJ_FPGA
+NET "ZC706_GPIO_LED<2>"						LOC =  "G2"		| IOSTANDARD = LVCMOS15;			## {OUT}	Q8; Bank 33; VCCO=VCC1V5_FPGA
+NET "ZC706_GPIO_LED<3>"						LOC =  "Y21"	| IOSTANDARD = LVCMOS25;			## {OUT}	Q7; Bank 11; VCCO=VADJ_FPGA
+
+## Ignore timings on async I/O pins
+NET "ZC706_GPIO_LED<?>"						TIG;

@@ -154,9 +154,12 @@ class Testbench(CommandLineProgram):
 		self.directories["GHDLBinary"] =				Path(self.pocConfig['GHDL']['BinaryDirectory'])
 		
 		if (len(self.pocConfig.options("Xilinx-ISE")) != 0):
-			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])			/ "ISE/vhdl/src"
+			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])				/ "ISE/vhdl/src"
 		elif (len(self.pocConfig.options("Xilinx-Vivado")) != 0):
-			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])	/ "data/vhdl/src"
+			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])		/ "data/vhdl/src"
+		
+		if (len(self.pocConfig.options("Altera-QuartusII")) != 0):
+			self.directories["AlteraPrimitiveSource"] =	Path(self.pocConfig['Altera-QuartusII']['InstallationDirectory'])	/ "eda/sim_lib"
 		
 		if (len(self.pocConfig.options("GTKWave")) != 0):		
 			self.directories["GTKWInstallation"] =	Path(self.pocConfig['GTKWave']['InstallationDirectory'])

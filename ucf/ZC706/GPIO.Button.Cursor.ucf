@@ -1,0 +1,16 @@
+## =============================================================================================================================================================
+## General Purpose I/O
+## =============================================================================================================================================================
+##
+## Cursor Buttons
+## -----------------------------------------------------------------------------
+##	Bank:						11, 35, 13
+##		VCCO:					2.5V, 1.5V, 2.5V (VADJ_FPGA, VCC1V5_FPGA, VADJ_FPGA)
+##	Location:				SW7, SW9, SW8
+## -----------------------------------------------------------------------------
+NET "ZC706_GPIO_Button_Left"						LOC =  "AK25"	| IOSTANDARD = LVCMOS25;			## {IN}		SW7; high-active; external 4k7 pulldown resistor; Bank 11; VCCO=VADJ_FPGA
+NET "ZC706_GPIO_Button_Center"					LOC =  "K15"	| IOSTANDARD = LVCMOS15;			## {IN}		SW9; high-active; external 4k7 pulldown resistor; Bank 35; VCCO=VCC1V5_FPGA
+NET "ZC706_GPIO_Button_Right"						LOC =  "R27"	| IOSTANDARD = LVCMOS25;			## {IN}		SW8; high-active; external 4k7 pulldown resistor; Bank 13; VCCO=VADJ_FPGA
+
+## Ignore timings on async I/O pins
+NET "ZC706_GPIO_Button_*"								TIG;

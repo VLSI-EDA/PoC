@@ -1,0 +1,52 @@
+##
+## I2C-MainBus
+## -----------------------------------------------------------------------------
+##	Bank:						10
+##		VCCO:					2.5V (VCC2V5_FPGA)
+##	Location:				U65 (PCA9548ARGER)
+##		Vendor:				Texas Instruments
+##		Device:				PCA9548A-RGER - 8-Channel I2C Switch with Reset
+##		I2C-Address:	0x74 (0111 010xb)
+## -----------------------------------------------------------------------------
+##	Devices:				8
+##		Channel 0:		Programmable UserClock and SFP cage
+##			Location:			U37										/ P2
+##			Vendor:				Silicon Labs
+##			Device:				Si570
+##			Address:			0xBA (1011 101xb)			/ 0xA0 (1010 000xb)
+##		Channel 1:		ADV7511 HDMI
+##			Location:			U53
+##			Address:			0x72 (0111 001xb)
+##		Channel 2:		M24C08 I2C EEPROM
+##			Location:			U9
+##			Address:			0xA8 (1010 100xb)
+##		Channel 3:		I2C Port Expander
+##			Location:			U16
+##			Vendor:				
+##			Device:				
+##			Address:			0x42 (0100 001xb)
+##			Channel 0:			DDR3 SODIMM J1
+##				Address:				0xA0, 0x30 (1010 000xb, 0011 000xb)
+##		Channel 4:		I2C Real Time Clock			/ Si5324
+##			Location:			U26										/ U60 (SI5324-C-GM)
+##			Vendor:															/ Silicon Labs
+##			Device:															/ SI5324 - Any-Frequency Precision Clock Multiplier/Jitter Attenuator
+##			Address:			0xA2 (1010 001xb)			/ 0xD0 (1101 000xb)
+##		Channel 5:		FMC HPC
+##			Location:			
+##			Vendor:				
+##			Device:				
+##			Address:			
+##		Channel 6:		FMX LPC
+##			Location:			
+##			Address:			
+##		Channel 7:		UCD90120A (PMbus)
+##			Location:			U48
+##			Address:			0xCA (1100 101xb)
+NET "ZC706_IIC_SerialClock"						LOC = "AJ14";			## {INOUT}	U65 - Pin 19 - SerialClock; level shifted by U87 (PCA9517)
+NET "ZC706_IIC_SerialData"						LOC = "AJ18";			## {INOUT}	U65 - Pin 20 - SerialData; level shifted by U87 (PCA9517)
+##NET "ZC706_IIC_Switch_Reset_n"				LOC = "F20";			## {OUT}		U65 - Pin 24 - Reset (low-active); level shifted by U25 (TXS0102)
+NET "ZC706_IIC_*"											IOSTANDARD = LVCMOS25;
+
+## Ignore timings on async I/O pins
+NET "ZC706_IIC_*"											TIG;

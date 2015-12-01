@@ -57,8 +57,8 @@ package io is
 	type T_IO_LVDS_VECTOR			is array(NATURAL range <>) of T_IO_LVDS;
 
 
-	function io_7SegmentDisplayEncoding(hex	: STD_LOGIC_VECTOR(3 downto 0); dot : STD_LOGIC := '0') return STD_LOGIC_VECTOR;
-	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : STD_LOGIC := '0') return STD_LOGIC_VECTOR;
+	function io_7SegmentDisplayEncoding(hex	: STD_LOGIC_VECTOR(3 downto 0); dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE)	return STD_LOGIC_VECTOR;
+	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE)												return STD_LOGIC_VECTOR;
 	
 	-- IICBusController
 	-- ==========================================================================================================================================================
@@ -196,34 +196,35 @@ end package;
 
 
 package body io is
-	function io_7SegmentDisplayEncoding(hex	: STD_LOGIC_VECTOR(3 downto 0); dot : STD_LOGIC := '0') return STD_LOGIC_VECTOR is
-		variable Result		: STD_LOGIC_VECTOR(7 downto 0);
+	function io_7SegmentDisplayEncoding(hex	: STD_LOGIC_VECTOR(3 downto 0); dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE) return STD_LOGIC_VECTOR is
+		constant DOT_INDEX	: POSITIVE	:= ite(WITH_DOT, 7, 6);
+		variable Result			: STD_LOGIC_VECTOR(ite(WITH_DOT, 7, 6) downto 0);
 	begin
-		Result(7)		:= dot;
-		case hex is							-- segments:			GFEDCBA
-			when x"0" =>		Result(6 downto 0)	:= "0111111";
-			when x"1" =>		Result(6 downto 0)	:= "0000110";
-			when x"2" =>		Result(6 downto 0)	:= "1011011";
-			when x"3" =>		Result(6 downto 0)	:= "1001111";
-			when x"4" =>		Result(6 downto 0)	:= "1100110";
-			when x"5" =>		Result(6 downto 0)	:= "1101101";
-			when x"6" =>		Result(6 downto 0)	:= "1111101";
-			when x"7" =>		Result(6 downto 0)	:= "0000111";
-			when x"8" =>		Result(6 downto 0)	:= "1111111";
-			when x"9" =>		Result(6 downto 0)	:= "1101111";
-			when x"A" =>		Result(6 downto 0)	:= "1110111";
-			when x"B" =>		Result(6 downto 0)	:= "1111100";
-			when x"C" =>		Result(6 downto 0)	:= "0111001";
-			when x"D" =>		Result(6 downto 0)	:= "1011110";
-			when x"E" =>		Result(6 downto 0)	:= "1111001";
-			when x"F" =>		Result(6 downto 0)	:= "1110001";
-			when others =>	Result(6 downto 0)	:= "XXXXXXX";
+		Result(DOT_INDEX)		:= dot;
+		case hex is							-- segments:			GFEDCBA			--	Segment Pos.
+			when x"0" =>		Result(6 downto 0)	:= "0111111";		--		 AAA     
+			when x"1" =>		Result(6 downto 0)	:= "0000110";		--		F   B    
+			when x"2" =>		Result(6 downto 0)	:= "1011011";		--		F   B    
+			when x"3" =>		Result(6 downto 0)	:= "1001111";		--		 GGG     
+			when x"4" =>		Result(6 downto 0)	:= "1100110";		--		E   C    
+			when x"5" =>		Result(6 downto 0)	:= "1101101";		--		E   C    
+			when x"6" =>		Result(6 downto 0)	:= "1111101";		--		 DDD  DOT
+			when x"7" =>		Result(6 downto 0)	:= "0000111";		--	
+			when x"8" =>		Result(6 downto 0)	:= "1111111";		--	Index Pos.
+			when x"9" =>		Result(6 downto 0)	:= "1101111";		--		 000   
+			when x"A" =>		Result(6 downto 0)	:= "1110111";		--		5   1  
+			when x"B" =>		Result(6 downto 0)	:= "1111100";		--		5   1  
+			when x"C" =>		Result(6 downto 0)	:= "0111001";		--		 666   
+			when x"D" =>		Result(6 downto 0)	:= "1011110";		--		4   2  
+			when x"E" =>		Result(6 downto 0)	:= "1111001";		--		4   2  
+			when x"F" =>		Result(6 downto 0)	:= "1110001";		--		 333  7
+			when others =>	Result(6 downto 0)	:= "XXXXXXX";		--	
 		end case;
 		return Result;
 	end function;
-	
-	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : STD_LOGIC := '0') return STD_LOGIC_VECTOR is
+
+	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE) return STD_LOGIC_VECTOR is
 	begin
-		return io_7SegmentDisplayEncoding(std_logic_vector(digit), dot);
+		return io_7SegmentDisplayEncoding(std_logic_vector(digit), dot, WITH_DOT);
 	end function;
 end package body;

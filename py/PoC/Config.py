@@ -46,10 +46,10 @@ from Base.Exceptions import *
 @unique
 class Vendors(Enum):
 	Unknown = 0
-	Xilinx = 1
-	Altera = 2
-	Lattice = 3
-	MicroSemi = 4
+	Altera = 1
+	Lattice = 2
+	MicroSemi = 3
+	Xilinx = 4
 
 	def __str__(self):
 		return self.name.lower()
@@ -230,11 +230,11 @@ class Device:
 	def shortName(self):
 		if (self.vendor == Vendors.Xilinx):
 			subtype = self.subtype.groups()
-			return "xc%i%s%s%i%s" % (
+			return "xc%i%s%s%s%s" % (
 				self.generation,
 				repr(self.family),
 				subtype[0],
-				self.number,
+				"{num:03d}".format(num=self.number),
 				subtype[1]
 			)
 		elif (self.vendor == Vendors.Altera):
@@ -244,11 +244,11 @@ class Device:
 	def fullName(self):
 		if (self.vendor == Vendors.Xilinx):
 			subtype = self.subtype.groups()
-			return "xc%i%s%s%i%s%i%s%i" % (
+			return "xc%i%s%s%s%s%i%s%i" % (
 				self.generation,
 				repr(self.family),
 				subtype[0],
-				self.number,
+				"{num:03d}".format(num=self.number),
 				subtype[1],
 				self.speedGrade,
 				str(self.package),
@@ -257,6 +257,12 @@ class Device:
 		elif (self.vendor == Vendors.Altera):
 			raise NotImplementedException("fullName() not implemented for vendor Altera")
 			return "ep...."
+	
+	def familyName(self):
+		if (self.family == Families.Zynq):
+			return str(self.family)
+		else:
+			return str(self.family) + str(self.generation)
 	
 	def series(self):
 		if (self.generation == 7):

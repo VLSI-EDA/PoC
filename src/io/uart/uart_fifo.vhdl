@@ -43,6 +43,7 @@ library	IEEE;
 use			IEEE.std_logic_1164.all;
 
 library PoC;
+use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.physical.all;
 use			PoC.components.all;
@@ -77,17 +78,19 @@ entity uart_fifo is
 		TX_put				: in	STD_LOGIC;
 		TX_Data				: in	STD_LOGIC_VECTOR(7 downto 0);
 		TX_Full				: out	STD_LOGIC;
-		TX_EmptyState	: out	STD_LOGIC_VECTOR(TX_ESTATE_BITS - 1 downto 0);
+		TX_EmptyState	: out	STD_LOGIC_VECTOR(imax(0, TX_ESTATE_BITS - 1) downto 0);
 		
 		RX_Valid			: out	STD_LOGIC;
 		RX_Data				: out	STD_LOGIC_VECTOR(7 downto 0);
 		RX_got				: in	STD_LOGIC;
-		RX_FullState	: out	STD_LOGIC_VECTOR(RX_FSTATE_BITS - 1 downto 0);
+		RX_FullState	: out	STD_LOGIC_VECTOR(imax(0, RX_FSTATE_BITS - 1) downto 0);
 		RX_Overflow		: out	std_logic;
 		
 		-- External pins
 		UART_TX				: out	std_logic;
-		UART_RX				: in	std_logic
+		UART_RX				: in	std_logic;
+		UART_RTS			: out	STD_LOGIC;
+		UART_CTS			: in	STD_LOGIC
 	);
 end entity;
 

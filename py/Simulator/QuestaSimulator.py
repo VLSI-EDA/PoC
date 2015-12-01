@@ -120,7 +120,7 @@ class Simulator(PoCSimulator):
 		os.chdir(str(tempvSimPath))
 
 		# parse project filelist
-		filesLineRegExpStr =	r"\s*(?P<Keyword>(vhdl(\-(87|93|02|08))?|xilinx))"				# Keywords: vhdl[-nn], xilinx
+		filesLineRegExpStr =	r"\s*(?P<Keyword>(vhdl(\-(87|93|02|08))?|altera|xilinx))"				# Keywords: vhdl[-nn], altera, xilinx
 		filesLineRegExpStr +=	r"\s+(?P<VHDLLibrary>[_a-zA-Z0-9]+)"		#	VHDL library name
 		filesLineRegExpStr +=	r"\s+\"(?P<VHDLFile>.*?)\""						# VHDL filename without "-signs
 		filesLineRegExp = re.compile(filesLineRegExpStr)
@@ -145,8 +145,14 @@ class Simulator(PoCSimulator):
 						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
 							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
 							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
+						else:
+							continue
+					elif (filesLineRegExpMatch.group('Keyword') == "altera"):
+						self.printVerbose("    skipped Altera specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
-						self.printVerbose("    skipped xilinx specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
+						self.printVerbose("    skipped Xilinx specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
+					else:
+						raise SimulatorException("Unknown keyword in *files file.")
 						
 					vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
 					

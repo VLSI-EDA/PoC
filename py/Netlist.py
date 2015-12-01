@@ -138,8 +138,9 @@ class NetList(CommandLineProgram):
 
 # main program
 def main():
-	from colorama import Fore, Back, Style, init
-	init()
+	import colorama
+	from colorama import Fore, Back, Style
+	colorama.init()
 	
 	print(Fore.MAGENTA + "=" * 80)
 	print("{: ^80s}".format("The PoC Library - NetList Service Tool"))

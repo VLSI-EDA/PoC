@@ -1,0 +1,14 @@
+## System Clock
+## -----------------------------------------------------------------------------
+##		Bank:						34
+##			VCCO:					2.5V (VCC2V5_FPGA)
+##		Location:				U64 (SIT9102)
+##			Vendor:				SiTime
+##			Device:				SIT9102AI-243N25E200.0000 - 1 to 220 MHz High Performance Oscillator
+##			Frequency:		200 MHz, 50ppm
+NET "ZC706_SystemClock_200MHz_p"				LOC = "H9";						## {IN}		U64.4
+NET "ZC706_SystemClock_200MHz_n"				LOC = "G9";						## {IN}		U64.5
+NET "ZC706_SystemClock_200MHz_?"				IOSTANDARD = LVDS;
+NET "ZC706_SystemClock_200MHz_p"				TNM_NET = "NET_SystemClock_200MHz";
+
+TIMESPEC "TS_SystemClock"	= PERIOD "NET_SystemClock_200MHz"		200 MHz	HIGH 50 %;

@@ -1,0 +1,13 @@
+## User Clock
+## -----------------------------------------------------------------------------
+##		Bank:						10
+##			VCCO:					2.5V (VADJ_FPGA)
+##		Location:				U37 (SI570)
+##			Vendor:				Silicon Labs
+##			Device:				SI570BAB0000544DG
+##			Frequency:		10 - 810 MHz, 50ppm
+##			Default Freq:	156.250 MHz
+##			I²C-Address:	
+NET "ZC706_ProgUserClock_p"				LOC = "AF14" | IOSTANDARD = LVDS_25;				## {IN}		U37.4
+NET "ZC706_ProgUserClock_n"				LOC = "AG14" | IOSTANDARD = LVDS_25;				## {IN}		U37.5
+NET "ZC706_ProgUserClock_p"				TNM_NET = "NET_ProgUserClock";
