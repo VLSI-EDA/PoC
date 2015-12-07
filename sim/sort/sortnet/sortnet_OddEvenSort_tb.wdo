@@ -1,0 +1,24 @@
+onerror {resume}
+quietly WaveActivateNextPane {} 0
+add wave -noupdate /sortnet_oddevensort_tb/Clock
+add wave -noupdate -radix unsigned -childformat {{/sortnet_oddevensort_tb/KeyInputVector(7) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(6) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5) -radix unsigned -childformat {{/sortnet_oddevensort_tb/KeyInputVector(5)(7) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(6) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(5) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(4) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(3) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(2) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(1) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(0) -radix unsigned}}} {/sortnet_oddevensort_tb/KeyInputVector(4) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(3) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(2) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(1) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(0) -radix unsigned}} -radixshowbase 0 -expand -subitemconfig {/sortnet_oddevensort_tb/KeyInputVector(7) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyInputVector(6) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyInputVector(5) {-height 15 -radix unsigned -childformat {{/sortnet_oddevensort_tb/KeyInputVector(5)(7) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(6) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(5) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(4) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(3) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(2) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(1) -radix unsigned} {/sortnet_oddevensort_tb/KeyInputVector(5)(0) -radix unsigned}} -radixshowbase 0} /sortnet_oddevensort_tb/KeyInputVector(5)(7) {-radix unsigned} /sortnet_oddevensort_tb/KeyInputVector(5)(6) {-radix unsigned} /sortnet_oddevensort_tb/KeyInputVector(5)(5) {-radix unsigned} /sortnet_oddevensort_tb/KeyInputVector(5)(4) {-radix unsigned} /sortnet_oddevensort_tb/KeyInputVector(5)(3) {-radix unsigned} /sortnet_oddevensort_tb/KeyInputVector(5)(2) {-radix unsigned} /sortnet_oddevensort_tb/KeyInputVector(5)(1) {-radix unsigned} /sortnet_oddevensort_tb/KeyInputVector(5)(0) {-radix unsigned} /sortnet_oddevensort_tb/KeyInputVector(4) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyInputVector(3) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyInputVector(2) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyInputVector(1) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyInputVector(0) {-height 15 -radix unsigned -radixshowbase 0}} /sortnet_oddevensort_tb/KeyInputVector
+add wave -noupdate -radix unsigned -childformat {{/sortnet_oddevensort_tb/KeyOutputVector(7) -radix unsigned} {/sortnet_oddevensort_tb/KeyOutputVector(6) -radix unsigned} {/sortnet_oddevensort_tb/KeyOutputVector(5) -radix unsigned} {/sortnet_oddevensort_tb/KeyOutputVector(4) -radix unsigned} {/sortnet_oddevensort_tb/KeyOutputVector(3) -radix unsigned} {/sortnet_oddevensort_tb/KeyOutputVector(2) -radix unsigned} {/sortnet_oddevensort_tb/KeyOutputVector(1) -radix unsigned} {/sortnet_oddevensort_tb/KeyOutputVector(0) -radix unsigned}} -radixshowbase 0 -expand -subitemconfig {/sortnet_oddevensort_tb/KeyOutputVector(7) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyOutputVector(6) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyOutputVector(5) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyOutputVector(4) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyOutputVector(3) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyOutputVector(2) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyOutputVector(1) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_oddevensort_tb/KeyOutputVector(0) {-height 15 -radix unsigned -radixshowbase 0}} /sortnet_oddevensort_tb/KeyOutputVector
+add wave -noupdate /sortnet_oddevensort_tb/StopSimulation
+TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 1} {709303923 fs} 0}
+quietly wave cursor active 1
+configure wave -namecolwidth 306
+configure wave -valuecolwidth 100
+configure wave -justifyvalue left
+configure wave -signalnamewidth 0
+configure wave -snapdistance 10
+configure wave -datasetprefix 0
+configure wave -rowmargin 4
+configure wave -childrowmargin 2
+configure wave -gridoffset 0
+configure wave -gridperiod 1
+configure wave -griddelta 40
+configure wave -timeline 0
+configure wave -timelineunits ns
+update
+WaveRestoreZoom {0 fs} {771750 ps}

@@ -1,0 +1,54 @@
+onerror {resume}
+quietly WaveActivateNextPane {} 0
+add wave -noupdate /sortnet_bitonicsort2_tb/Clock
+add wave -noupdate -radix unsigned -childformat {{/sortnet_bitonicsort2_tb/KeyInputVector(3) -radix unsigned} {/sortnet_bitonicsort2_tb/KeyInputVector(2) -radix unsigned} {/sortnet_bitonicsort2_tb/KeyInputVector(1) -radix unsigned} {/sortnet_bitonicsort2_tb/KeyInputVector(0) -radix unsigned}} -radixshowbase 0 -expand -subitemconfig {/sortnet_bitonicsort2_tb/KeyInputVector(3) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_bitonicsort2_tb/KeyInputVector(2) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_bitonicsort2_tb/KeyInputVector(1) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_bitonicsort2_tb/KeyInputVector(0) {-height 15 -radix unsigned -radixshowbase 0}} /sortnet_bitonicsort2_tb/KeyInputVector
+add wave -noupdate /sortnet_bitonicsort2_tb/StopSimulation
+add wave -noupdate -radix unsigned -childformat {{/sortnet_bitonicsort2_tb/KeyOutputVector(3) -radix unsigned} {/sortnet_bitonicsort2_tb/KeyOutputVector(2) -radix unsigned} {/sortnet_bitonicsort2_tb/KeyOutputVector(1) -radix unsigned} {/sortnet_bitonicsort2_tb/KeyOutputVector(0) -radix unsigned}} -radixshowbase 0 -expand -subitemconfig {/sortnet_bitonicsort2_tb/KeyOutputVector(3) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_bitonicsort2_tb/KeyOutputVector(2) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_bitonicsort2_tb/KeyOutputVector(1) {-height 15 -radix unsigned -radixshowbase 0} /sortnet_bitonicsort2_tb/KeyOutputVector(0) {-height 15 -radix unsigned -radixshowbase 0}} /sortnet_bitonicsort2_tb/KeyOutputVector
+add wave -noupdate -divider {B0 S0 G0 L0}
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(0)/genStage(0)/genGroups(0)/genLoop(0)/Greater
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(0)/genStage(0)/genGroups(0)/genLoop(0)/Switch
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(0)/genStage(0)/genGroups(0)/genLoop(0)/NewData0
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(0)/genStage(0)/genGroups(0)/genLoop(0)/NewData1
+add wave -noupdate -divider {B0 S0 G1 L0}
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(0)/genStage(0)/genGroups(1)/genLoop(0)/Greater
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(0)/genStage(0)/genGroups(1)/genLoop(0)/Switch
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(0)/genStage(0)/genGroups(1)/genLoop(0)/NewData0
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(0)/genStage(0)/genGroups(1)/genLoop(0)/NewData1
+add wave -noupdate -divider {B1 S0 G0 L0}
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(0)/genGroups(0)/genLoop(0)/Greater
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(0)/genGroups(0)/genLoop(0)/Switch
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(0)/genGroups(0)/genLoop(0)/NewData0
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(0)/genGroups(0)/genLoop(0)/NewData1
+add wave -noupdate -divider {B1 S0 G0 L1}
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(0)/genGroups(0)/genLoop(1)/Greater
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(0)/genGroups(0)/genLoop(1)/Switch
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(0)/genGroups(0)/genLoop(1)/NewData0
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(0)/genGroups(0)/genLoop(1)/NewData1
+add wave -noupdate -divider {B1 S1 G0 L0}
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(1)/genGroups(0)/genLoop(0)/Greater
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(1)/genGroups(0)/genLoop(0)/Switch
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(1)/genGroups(0)/genLoop(0)/NewData0
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(1)/genGroups(0)/genLoop(0)/NewData1
+add wave -noupdate -divider {B1 S1 G1 L0}
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(1)/genGroups(1)/genLoop(0)/Greater
+add wave -noupdate /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(1)/genGroups(1)/genLoop(0)/Switch
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(1)/genGroups(1)/genLoop(0)/NewData0
+add wave -noupdate -radix unsigned -radixshowbase 0 /sortnet_bitonicsort2_tb/sort/genBlocks(1)/genStage(1)/genGroups(1)/genLoop(0)/NewData1
+TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 1} {320000000 fs} 0}
+quietly wave cursor active 1
+configure wave -namecolwidth 525
+configure wave -valuecolwidth 100
+configure wave -justifyvalue left
+configure wave -signalnamewidth 0
+configure wave -snapdistance 10
+configure wave -datasetprefix 0
+configure wave -rowmargin 4
+configure wave -childrowmargin 2
+configure wave -gridoffset 0
+configure wave -gridperiod 1
+configure wave -griddelta 40
+configure wave -timeline 0
+configure wave -timelineunits ns
+update
+WaveRestoreZoom {0 fs} {505891225 fs}

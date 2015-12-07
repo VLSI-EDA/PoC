@@ -37,6 +37,7 @@ use     PoC.io.all;
  -  `io_FanControl`
  -  `io_FrequencyCounter`
  -  `io_GlitchFilter`
+ -  `io_keyPadScanner`
  -  `io_PulseWidthModulation`
  -  `io_TimingCounter`
 

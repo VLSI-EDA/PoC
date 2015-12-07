@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="sortnet_BitonicSort2_tb.wdb" id="1">
+         <top_modules>
+            <top_module name="components" />
+            <top_module name="config" />
+            <top_module name="config_private" />
+            <top_module name="math" />
+            <top_module name="my_config" />
+            <top_module name="my_project" />
+            <top_module name="sortnet_BitonicSort2_tb" />
+            <top_module name="strings" />
+            <top_module name="utils" />
+            <top_module name="vectors" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="5" />
+   <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyInputVector" type="array">
+      <obj_property name="ElementShortName">KeyInputVector[3:0][7:0]</obj_property>
+      <obj_property name="ObjectShortName">KeyInputVector[3:0][7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyInputVector[3]" type="array">
+         <obj_property name="ElementShortName">[3][7:0]</obj_property>
+         <obj_property name="ObjectShortName">KeyInputVector[3][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyInputVector[2]" type="array">
+         <obj_property name="ElementShortName">[2][7:0]</obj_property>
+         <obj_property name="ObjectShortName">KeyInputVector[2][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyInputVector[1]" type="array">
+         <obj_property name="ElementShortName">[1][7:0]</obj_property>
+         <obj_property name="ObjectShortName">KeyInputVector[1][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyInputVector[0]" type="array">
+         <obj_property name="ElementShortName">[0][7:0]</obj_property>
+         <obj_property name="ObjectShortName">KeyInputVector[0][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyOutputVector" type="array">
+      <obj_property name="ElementShortName">KeyOutputVector[3:0][7:0]</obj_property>
+      <obj_property name="ObjectShortName">KeyOutputVector[3:0][7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyOutputVector[3]" type="array">
+         <obj_property name="ElementShortName">[3][7:0]</obj_property>
+         <obj_property name="ObjectShortName">KeyOutputVector[3][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyOutputVector[2]" type="array">
+         <obj_property name="ElementShortName">[2][7:0]</obj_property>
+         <obj_property name="ObjectShortName">KeyOutputVector[2][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyOutputVector[1]" type="array">
+         <obj_property name="ElementShortName">[1][7:0]</obj_property>
+         <obj_property name="ObjectShortName">KeyOutputVector[1][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/KeyOutputVector[0]" type="array">
+         <obj_property name="ElementShortName">[0][7:0]</obj_property>
+         <obj_property name="ObjectShortName">KeyOutputVector[0][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group30" type="group">
+      <obj_property name="label">B0 S0 G0 L0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(0)\/\genLoop(0)\/Greater" type="logic">
+         <obj_property name="ElementShortName">Greater</obj_property>
+         <obj_property name="ObjectShortName">Greater</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(0)\/INVERSE" type="logic">
+         <obj_property name="ElementShortName">INVERSE</obj_property>
+         <obj_property name="ObjectShortName">INVERSE</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(0)\/\genLoop(0)\/Switch" type="logic">
+         <obj_property name="ElementShortName">Switch</obj_property>
+         <obj_property name="ObjectShortName">Switch</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(0)\/\genLoop(0)\/NewData0" type="array">
+         <obj_property name="ElementShortName">NewData0[7:0]</obj_property>
+         <obj_property name="ObjectShortName">NewData0[7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(0)\/\genLoop(0)\/NewData1" type="array">
+         <obj_property name="ElementShortName">NewData1[7:0]</obj_property>
+         <obj_property name="ObjectShortName">NewData1[7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/START_DISTANCE" type="other">
+         <obj_property name="ElementShortName">START_DISTANCE</obj_property>
+         <obj_property name="ObjectShortName">START_DISTANCE</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/s" type="other">
+         <obj_property name="ElementShortName">s</obj_property>
+         <obj_property name="ObjectShortName">s</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(0)\/g" type="other">
+         <obj_property name="ElementShortName">g</obj_property>
+         <obj_property name="ObjectShortName">g</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/STAGE_INDEX" type="other">
+         <obj_property name="ElementShortName">STAGE_INDEX</obj_property>
+         <obj_property name="ObjectShortName">STAGE_INDEX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/DISTANCE" type="other">
+         <obj_property name="ElementShortName">DISTANCE</obj_property>
+         <obj_property name="ObjectShortName">DISTANCE</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group41" type="group">
+      <obj_property name="label">B0 S0 G1 L0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(1)\/\genLoop(0)\/Greater" type="logic">
+         <obj_property name="ElementShortName">Greater</obj_property>
+         <obj_property name="ObjectShortName">Greater</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(1)\/INVERSE" type="logic">
+         <obj_property name="ElementShortName">INVERSE</obj_property>
+         <obj_property name="ObjectShortName">INVERSE</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(1)\/\genLoop(0)\/Switch" type="logic">
+         <obj_property name="ElementShortName">Switch</obj_property>
+         <obj_property name="ObjectShortName">Switch</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(1)\/\genLoop(0)\/NewData0" type="array">
+         <obj_property name="ElementShortName">NewData0[7:0]</obj_property>
+         <obj_property name="ObjectShortName">NewData0[7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(1)\/\genLoop(0)\/NewData1" type="array">
+         <obj_property name="ElementShortName">NewData1[7:0]</obj_property>
+         <obj_property name="ObjectShortName">NewData1[7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/START_DISTANCE" type="other">
+         <obj_property name="ElementShortName">START_DISTANCE</obj_property>
+         <obj_property name="ObjectShortName">START_DISTANCE</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/s" type="other">
+         <obj_property name="ElementShortName">s</obj_property>
+         <obj_property name="ObjectShortName">s</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/\genGroups(1)\/g" type="other">
+         <obj_property name="ElementShortName">g</obj_property>
+         <obj_property name="ObjectShortName">g</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/STAGE_INDEX" type="other">
+         <obj_property name="ElementShortName">STAGE_INDEX</obj_property>
+         <obj_property name="ObjectShortName">STAGE_INDEX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(0)\/\genStage(0)\/DISTANCE" type="other">
+         <obj_property name="ElementShortName">DISTANCE</obj_property>
+         <obj_property name="ObjectShortName">DISTANCE</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group53" type="group">
+      <obj_property name="label">B1 S0 G0 L0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/\genGroups(0)\/\genLoop(0)\/Greater" type="logic">
+         <obj_property name="ElementShortName">Greater</obj_property>
+         <obj_property name="ObjectShortName">Greater</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/\genGroups(0)\/INVERSE" type="logic">
+         <obj_property name="ElementShortName">INVERSE</obj_property>
+         <obj_property name="ObjectShortName">INVERSE</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/\genGroups(0)\/\genLoop(0)\/Switch" type="logic">
+         <obj_property name="ElementShortName">Switch</obj_property>
+         <obj_property name="ObjectShortName">Switch</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/\genGroups(0)\/\genLoop(0)\/NewData0" type="array">
+         <obj_property name="ElementShortName">NewData0[7:0]</obj_property>
+         <obj_property name="ObjectShortName">NewData0[7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/\genGroups(0)\/\genLoop(0)\/NewData1" type="array">
+         <obj_property name="ElementShortName">NewData1[7:0]</obj_property>
+         <obj_property name="ObjectShortName">NewData1[7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/START_DISTANCE" type="other">
+         <obj_property name="ElementShortName">START_DISTANCE</obj_property>
+         <obj_property name="ObjectShortName">START_DISTANCE</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/s" type="other">
+         <obj_property name="ElementShortName">s</obj_property>
+         <obj_property name="ObjectShortName">s</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/\genGroups(0)\/g" type="other">
+         <obj_property name="ElementShortName">g</obj_property>
+         <obj_property name="ObjectShortName">g</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/STAGE_INDEX" type="other">
+         <obj_property name="ElementShortName">STAGE_INDEX</obj_property>
+         <obj_property name="ObjectShortName">STAGE_INDEX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/sortnet_BitonicSort2_tb/sort/\genBlocks(1)\/\genStage(0)\/DISTANCE" type="other">
+         <obj_property name="ElementShortName">DISTANCE</obj_property>
+         <obj_property name="ObjectShortName">DISTANCE</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

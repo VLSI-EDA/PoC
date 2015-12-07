@@ -1,0 +1,22 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Mon Nov 23 19:35:57 2015
+[*]
+[dumpfile] "D:\git\PoC\temp\ghdl\sortnet_OddEvenSort_tb.vcd"
+[dumpfile_mtime] "Mon Nov 23 19:35:09 2015"
+[dumpfile_size] 116721
+[savefile] "D:\git\PoC\sim\sort\sortnet\sortnet_OddEvenSort_tb.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-28.846727 1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 197
+[signals_width] 142
+[sst_expanded] 1
+[sst_vpaned_height] 153
+@28
+clock
+@29
+stopsimulation
+[pattern_trace] 1
+[pattern_trace] 0
