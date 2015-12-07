@@ -1,11 +1,12 @@
 # Namespace `PoC.misc`
 
-The namespace `PoC.misc` offers different yet uncathegorized entities.
+The namespace `PoC.misc` offers different yet uncategorized entities.
 
 
 ## Sub-Namespace(s)
 
  -  [`PoC.misc.filter`][misc_filter] contains 1-bit filter algorithms.
+ -  [`PoC.misc.gearbox`][misc_gearbox] contains gearbox implementations.
  -  [`PoC.misc.stat`][misc_stat] contains statistic modules.
  -  [`PoC.misc.sync`][misc_sync] offers clock-domain-crossing (CDC) modules.
 
@@ -22,11 +23,16 @@ use     PoC.misc.all;
 
 ## Entities
 
-
-
- [misc.pkg]:		misc.pkg.vhdl
+ - [`misc_FrequencyMeasurement`][misc_FrequencyMeasurement] implements a module to
+    measure a signal's frequency relative to a reference clock's frequency.
+ - [`misc_bit_lz`][misc_bit_lz]
 
  [misc_filter]:		filter
+ [misc_gearbox]:	gearbox
  [misc_stat]:		stat
  [misc_sync]:		sync
 
+ [misc.pkg]:		misc.pkg.vhdl
+
+ [misc_FrequencyMeasurement]:	misc_FrequencyMeasurement.vhdl
+ [misc_bit_lz]: misc_bit_lz.vhdl
