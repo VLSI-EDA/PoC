@@ -39,6 +39,9 @@ use			PoC.utils.all;
 
 
 PACKAGE components IS
+	-- implement an optional register stage
+	function registered(signal Clock : STD_LOGIC; constant IsRegistered : BOOLEAN) return BOOLEAN;
+
 	-- FlipFlop functions
 	function ffdre(q : STD_LOGIC; d : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC;												-- D-FlipFlop with reset and enable
 	function ffdre(q : STD_LOGIC_VECTOR; d : STD_LOGIC_VECTOR; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;	-- D-FlipFlop with reset and enable
@@ -92,7 +95,13 @@ end;
 
 
 package body components is
-	-- d-flipflop with reset and enable
+	-- implement an optional register stage
+	function registered(signal Clock : STD_LOGIC; constant IsRegistered : BOOLEAN) return BOOLEAN is
+	begin
+		return ite(IsRegistered, rising_edge(Clock), TRUE);
+	end function;
+
+	-- D-flipflop with reset and enable
 	function ffdre(q : STD_LOGIC; d : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
 	begin
 		return ((d and en) or (q and not en)) and not rst;
@@ -103,31 +112,31 @@ package body components is
 		return ((d and (q'range => en)) or (q and not (q'range => en))) and not (q'range => rst);
 	end function;
 	
-	-- d-flipflop with set and enable
+	-- D-flipflop with set and enable
 	function ffdse(q : STD_LOGIC; d : STD_LOGIC; set : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
 	begin
 		return ((d and en) or (q and not en)) or set;
 	end function;
 	
-	-- t-flipflop with reset and enable
+	-- T-flipflop with reset and enable
 	function fftre(q : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
 	begin
 		return ((not q and en) or (q and not en)) and not rst;
 	end function;
 	
-	-- rs-flipflop with dominant rst
+	-- RS-flipflop with dominant rst
 	function ffrs(q : STD_LOGIC; rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC is
 	begin
 		return (q or set) and not rst;
 	end function;
 	
-	-- rs-flipflop with dominant set
+	-- RS-flipflop with dominant set
 	function ffsr(q : STD_LOGIC; rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC is
 	begin
 		return (q and not rst) or set;
 	end function;
 	
-	-- adder
+	-- Adder
 	function inc(value : STD_LOGIC_VECTOR; increment : NATURAL := 1) return STD_LOGIC_VECTOR is
 	begin
 		return std_logic_vector(inc(unsigned(value), increment));
@@ -164,7 +173,7 @@ package body components is
 		return std_logic_vector(inc(unsigned(not value)));		-- 2's complement
 	end function;
 	
-	-- counter
+	-- Counter
 	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : NATURAL := 0) return UNSIGNED is
 	begin
 		if (rst = '1') then
@@ -204,7 +213,7 @@ package body components is
 		return cnt(cnt'high);
 	end function;	
 	
-	-- shift/rotate registers
+	-- Shift/Rotate Registers
 	function shreg_left(q : STD_LOGIC_VECTOR; i : std_logic; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
 	begin
 		return mux(en, q, q(q'left - 1 downto q'right) & i);
@@ -288,7 +297,7 @@ package body components is
 	end function;
 	
 	
-	-- multiplexing
+	-- multiplexers
 	function mux(sel : STD_LOGIC; sl0 : STD_LOGIC; sl1 : STD_LOGIC) return STD_LOGIC is
 	begin
 		return (sl0 and not sel) or (sl1 and sel);

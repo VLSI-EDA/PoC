@@ -139,7 +139,7 @@ package utils is
 	function rmax(vec : T_REALVEC) return real;	       							-- Calculates: max(vec) of real vector
 
 	function isum(vec : T_NATVEC) return NATURAL;										-- Calculates: sum(vec) for a natural vector
-	function isum(vec : T_POSVEC) return natural;									-- Calculates: sum(vec) for a positive vector
+	function isum(vec : T_POSVEC) return natural;										-- Calculates: sum(vec) for a positive vector
 	function isum(vec : T_INTVEC) return integer; 									-- Calculates: sum(vec) of integer vector
 	function rsum(vec : T_REALVEC) return real;	       							-- Calculates: sum(vec) of real vector
 

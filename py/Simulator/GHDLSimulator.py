@@ -138,6 +138,8 @@ class Simulator(PoCSimulator):
 						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard[:2]):
 							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
 							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
+						else:
+							continue
 					elif (filesLineRegExpMatch.group('Keyword') == "altera"):
 						# check if Quartus is configured
 						if not self.host.directories.__contains__("AlteraPrimitiveSource"):

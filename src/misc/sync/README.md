@@ -36,7 +36,7 @@ and [`sync_Reset_Xilinx`][sync_Reset_Xilinx] respectivily.
 
 Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
 
- -  [`sync_Strobe`][sync_Strobe] synchronizer `Strobe`-signals across clock-domain-boundaries. A busy
+ -  [`sync_Strobe`][sync_Strobe] synchronizes `Strobe`-signals across clock-domain-boundaries. A busy
     signal indicates the synchronization status and can be used as a internal
     gate-signal to disallow new incoming strobes. A `Strobe`-signal is only for
     one clock period active.

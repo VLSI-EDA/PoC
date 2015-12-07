@@ -1,0 +1,31 @@
+onerror {resume}
+quietly WaveActivateNextPane {} 0
+add wave -noupdate /gearbox_up_dc_tb/StopSimulation
+add wave -noupdate -divider Inputs
+add wave -noupdate /gearbox_up_dc_tb/Clock1
+add wave -noupdate /gearbox_up_dc_tb/Align
+add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_up_dc_tb/DataIn
+add wave -noupdate -divider Outputs
+add wave -noupdate /gearbox_up_dc_tb/Clock2
+add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_up_dc_tb/DataOut
+add wave -noupdate /gearbox_up_dc_tb/Valid
+add wave -noupdate -divider Settings
+add wave -noupdate /gearbox_up_dc_tb/INPUT_ORDER
+TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 1} {282596364 fs} 0}
+quietly wave cursor active 1
+configure wave -namecolwidth 223
+configure wave -valuecolwidth 100
+configure wave -justifyvalue left
+configure wave -signalnamewidth 0
+configure wave -snapdistance 10
+configure wave -datasetprefix 0
+configure wave -rowmargin 4
+configure wave -childrowmargin 2
+configure wave -gridoffset 0
+configure wave -gridperiod 1
+configure wave -griddelta 40
+configure wave -timeline 0
+configure wave -timelineunits ns
+update
+WaveRestoreZoom {0 fs} {819 ns}

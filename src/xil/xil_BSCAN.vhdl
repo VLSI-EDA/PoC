@@ -11,8 +11,8 @@
 -- ------------------------------------
 --		This module wraps Xilinx "Boundary Scan" (JTAG) primitives in a generic module.
 --		Supported devices:
---			- Spartan-6
---			- Virtex-6
+--			- Spartan-3, Spartan-6
+--			- Virtex-5, Virtex-6
 --			- Series-7
 --		
 --

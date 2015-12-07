@@ -212,7 +212,21 @@ cd <PoCRoot>/netlist
 
 ## 6 Using PoC
 
-TODO TODO TODO
+**The PoC-Library** is structured into several sub-folders naming the purpose of the folder like [`src`][src] for sources files or [`tb`][tb] for testbench files. The structure within these folders is always the same and based on PoC's sub-namespace tree.
+
+**Main directory overview:**
+
+ - [`lib`][lib] - external libraries like OS-VVM and VUnit.
+ - [`netlist`][netlist] - configuration files and output directory for pre-configured netlist synthesis from vendor IP cores or from complex PoC controllers. 
+ - [`py`][py] - Python support scripts.
+ - [`sim`][sim] - pre-configured waveform views for selected testbenches.
+ - [`src`][src] - PoC's source files grouped into sub-folders according to the sub-namespace tree. 
+ - [`tb`][tb] - Testbench files.
+ - [`temp`][temp] - A created temporary directors for various tools used by PoC's Python scripts.
+ - [`tools`][tools] - Settings/highlighting files and helpers for supported external tools.
+ - [`ucf`][ucf] - pre-configured and equally named constraint files (*.ucf, *.xdc) for supported FPGA boards.
+ - [`xst`][xst] - configuration files to synthesize PoC modules into a netlist.
+
 
 #### 6.1 Standalone
 
@@ -249,6 +263,17 @@ TODO TODO TODO
  
 If you are using the PoC-Library, please let us know. We are grateful for
 your project's reference.
+
+ [lib]:					lib
+ [netlist]:				netlist
+ [py]:					py
+ [sim]:					sim
+ [src]:					src
+ [tb]:					tb
+ [temp]:				temp
+ [tools]:				tools
+ [ucf]:					ucf
+ [xst]:					xst
 
  [wiki:download]:		https://github.com/VLSI-EDA/PoC/wiki/Download
  [wiki:requirements]:	https://github.com/VLSI-EDA/PoC/wiki/Requirements
