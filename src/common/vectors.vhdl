@@ -118,7 +118,15 @@ package vectors is
 	function get_row(slm : T_SLM; RowIndex : NATURAL; High : NATURAL; Low : NATURAL) return STD_LOGIC_VECTOR;		-- get a sub vector of a matrix row at high:low
 
 	-- Convert to vector: to_slv
-	function to_slv(slvv : T_SLVV_8)							return STD_LOGIC_VECTOR;								-- convert vector-vector to flatten vector
+	function to_slv(slvv : T_SLVV_2)							return STD_LOGIC_VECTOR;								-- convert vector-vector to flatten vector
+	function to_slv(slvv : T_SLVV_4)							return STD_LOGIC_VECTOR;								-- ...
+	function to_slv(slvv : T_SLVV_8)							return STD_LOGIC_VECTOR;								-- ...
+	function to_slv(slvv : T_SLVV_12)							return STD_LOGIC_VECTOR;								-- ...
+	function to_slv(slvv : T_SLVV_16)							return STD_LOGIC_VECTOR;								-- ...
+	function to_slv(slvv : T_SLVV_24)							return STD_LOGIC_VECTOR;								-- ...
+	function to_slv(slvv : T_SLVV_32)							return STD_LOGIC_VECTOR;								-- ...
+	function to_slv(slvv : T_SLVV_64)							return STD_LOGIC_VECTOR;								-- ...
+	function to_slv(slvv : T_SLVV_128)						return STD_LOGIC_VECTOR;								-- ...
 	function to_slv(slm : T_SLM)									return STD_LOGIC_VECTOR;								-- convert matrix to flatten vector
 	
 	-- Convert flat vector to avector-vector: to_slvv_*
@@ -349,11 +357,83 @@ package body vectors is
 	-- Convert to vector: to_slv
 	-- ==========================================================================
 	-- convert vector-vector to flatten vector
+	function to_slv(slvv : T_SLVV_2) return STD_LOGIC_VECTOR is
+		variable slv			: STD_LOGIC_VECTOR((slvv'length * 2) - 1 downto 0);
+	begin
+		for i in slvv'range loop
+			slv((i * 2) + 1 downto (i * 2))		:= slvv(i);
+		end loop;
+		return slv;
+	end function;
+	
+	function to_slv(slvv : T_SLVV_4) return STD_LOGIC_VECTOR is
+		variable slv			: STD_LOGIC_VECTOR((slvv'length * 4) - 1 downto 0);
+	begin
+		for i in slvv'range loop
+			slv((i * 4) + 3 downto (i * 4))		:= slvv(i);
+		end loop;
+		return slv;
+	end function;
+	
 	function to_slv(slvv : T_SLVV_8) return STD_LOGIC_VECTOR is
 		variable slv			: STD_LOGIC_VECTOR((slvv'length * 8) - 1 downto 0);
 	begin
 		for i in slvv'range loop
 			slv((i * 8) + 7 downto (i * 8))		:= slvv(i);
+		end loop;
+		return slv;
+	end function;
+	
+	function to_slv(slvv : T_SLVV_12) return STD_LOGIC_VECTOR is
+		variable slv			: STD_LOGIC_VECTOR((slvv'length * 12) - 1 downto 0);
+	begin
+		for i in slvv'range loop
+			slv((i * 12) + 11 downto (i * 12))		:= slvv(i);
+		end loop;
+		return slv;
+	end function;
+	
+	function to_slv(slvv : T_SLVV_16) return STD_LOGIC_VECTOR is
+		variable slv			: STD_LOGIC_VECTOR((slvv'length * 16) - 1 downto 0);
+	begin
+		for i in slvv'range loop
+			slv((i * 16) + 15 downto (i * 16))		:= slvv(i);
+		end loop;
+		return slv;
+	end function;
+	
+	function to_slv(slvv : T_SLVV_24) return STD_LOGIC_VECTOR is
+		variable slv			: STD_LOGIC_VECTOR((slvv'length * 24) - 1 downto 0);
+	begin
+		for i in slvv'range loop
+			slv((i * 24) + 23 downto (i * 24))		:= slvv(i);
+		end loop;
+		return slv;
+	end function;
+	
+	function to_slv(slvv : T_SLVV_32) return STD_LOGIC_VECTOR is
+		variable slv			: STD_LOGIC_VECTOR((slvv'length * 32) - 1 downto 0);
+	begin
+		for i in slvv'range loop
+			slv((i * 32) + 31 downto (i * 32))		:= slvv(i);
+		end loop;
+		return slv;
+	end function;
+	
+	function to_slv(slvv : T_SLVV_64) return STD_LOGIC_VECTOR is
+		variable slv			: STD_LOGIC_VECTOR((slvv'length * 64) - 1 downto 0);
+	begin
+		for i in slvv'range loop
+			slv((i * 64) + 63 downto (i * 64))		:= slvv(i);
+		end loop;
+		return slv;
+	end function;
+	
+	function to_slv(slvv : T_SLVV_128) return STD_LOGIC_VECTOR is
+		variable slv			: STD_LOGIC_VECTOR((slvv'length * 128) - 1 downto 0);
+	begin
+		for i in slvv'range loop
+			slv((i * 128) + 127 downto (i * 128))		:= slvv(i);
 		end loop;
 		return slv;
 	end function;

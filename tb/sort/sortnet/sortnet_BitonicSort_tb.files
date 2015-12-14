@@ -19,7 +19,7 @@ vhdl-08	osvvm	"lib/osvvm/CoveragePkg.vhd"							# OSVVM
 vhdl-08	osvvm	"lib/osvvm/OsvvmContext.vhd"						# OSVVM 
 
 # board and device configuration
-vhdl		poc		"tb/common/my_config_ML505.vhdl"
+vhdl		poc		"tb/common/my_config_KC705.vhdl"
 vhdl		poc		"tb/common/my_project.vhdl"
 
 # PoC core packages

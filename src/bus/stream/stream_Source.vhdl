@@ -9,8 +9,8 @@
 --
 -- Description:
 -- ------------------------------------
---		This module implements a generic buffer (FifO) for the PoC.Stream protocol.
---		It is generic in DATA_BITS and in META_BITS as well as in FifO depths for
+--		This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
+--		It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
 --		data and meta information.
 --
 -- License:
@@ -44,7 +44,7 @@ use			PoC.stream.all;
 
 entity stream_Source is
 	generic (
-		TESTcaseS												: T_SIM_STREAM_FRAMEGROUP_VECTOR_8
+		TESTCASES												: T_SIM_STREAM_FRAMEGROUP_VECTOR_8
 	);
 	port (
 		Clock														: in	STD_LOGIC;
@@ -66,7 +66,7 @@ architecture rtl of stream_Source is
 	constant MAX_ERRORS											: NATURAL																			:=				50;
 
 	-- dummy signals for iSIM
-	signal FrameGroupNumber_us		: UNSIGNED(log2ceilnz(TESTcaseS'length) - 1 downto 0)		:= (others => '0');
+	signal FrameGroupNumber_us		: UNSIGNED(log2ceilnz(TESTCASES'length) - 1 downto 0)		:= (others => '0');
 begin
 
 	process
@@ -92,11 +92,11 @@ begin
 		wait until rising_edge(Clock);
 
 		-- for each testcase in list
-		for TestcaseIndex in 0 to TESTcaseS'length - 1 loop
+		for TestcaseIndex in 0 to TESTCASES'length - 1 loop
 			-- initialize per loop
 			Cycles	:= 0;
 			Errors	:= 0;
-			CurFG		:= TESTcaseS(TestcaseIndex);
+			CurFG		:= TESTCASES(TestcaseIndex);
 		
 			-- continue with next frame if current is disabled
 			assert FALSE report "active=" & to_string(CurFG.Active) severity WARNING;
@@ -152,6 +152,6 @@ begin
 		Out_Data					<= (others => 'U');
 		Out_SOF						<= '0';
 		Out_EOF						<= '0';
-	
 	end process;
+	
 end architecture;

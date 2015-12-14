@@ -131,15 +131,22 @@ class Testbench(CommandLineProgram):
 			# prepare some paths
 			self.directories["vSimInstallation"] =	Path(self.pocConfig['Questa-SIM']['InstallationDirectory'])
 			self.directories["vSimBinary"] =				Path(self.pocConfig['Questa-SIM']['BinaryDirectory'])
-		
 		elif (len(self.pocConfig.options("Altera-ModelSim")) != 0):
 			# prepare some paths
 			self.directories["vSimInstallation"] =	Path(self.pocConfig['Altera-ModelSim']['InstallationDirectory'])
 			self.directories["vSimBinary"] =				Path(self.pocConfig['Altera-ModelSim']['BinaryDirectory'])
-				
 		else:
 			raise NotConfiguredException("Neither Mentor Graphics Questa-SIM nor ModelSim are configured on this system.")
 
+		# prepare vendor library path for Altera
+		if (len(self.pocConfig.options("Altera-QuartusII")) != 0):
+			self.directories["AlteraPrimitiveSource"] =	Path(self.pocConfig['Altera-QuartusII']['InstallationDirectory'])	/ "eda/sim_lib"
+		# prepare vendor library path for Xilinx
+		if (len(self.pocConfig.options("Xilinx-ISE")) != 0):
+			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])				/ "ISE/vhdl/src"
+		elif (len(self.pocConfig.options("Xilinx-Vivado")) != 0):
+			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])		/ "data/vhdl/src"
+		
 		entityToSimulate = Entity(self, module)
 
 		simulator = QuestaSimulator.Simulator(self, showLogs, showReport, vhdlStandard, guiMode)
@@ -153,14 +160,16 @@ class Testbench(CommandLineProgram):
 		self.directories["GHDLInstallation"] =	Path(self.pocConfig['GHDL']['InstallationDirectory'])
 		self.directories["GHDLBinary"] =				Path(self.pocConfig['GHDL']['BinaryDirectory'])
 		
+		# prepare vendor library path for Altera
+		if (len(self.pocConfig.options("Altera-QuartusII")) != 0):
+			self.directories["AlteraPrimitiveSource"] =	Path(self.pocConfig['Altera-QuartusII']['InstallationDirectory'])	/ "eda/sim_lib"
+		# prepare vendor library path for Xilinx
 		if (len(self.pocConfig.options("Xilinx-ISE")) != 0):
 			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])				/ "ISE/vhdl/src"
 		elif (len(self.pocConfig.options("Xilinx-Vivado")) != 0):
 			self.directories["XilinxPrimitiveSource"] =	Path(self.pocConfig['Xilinx-Vivado']['InstallationDirectory'])		/ "data/vhdl/src"
 		
-		if (len(self.pocConfig.options("Altera-QuartusII")) != 0):
-			self.directories["AlteraPrimitiveSource"] =	Path(self.pocConfig['Altera-QuartusII']['InstallationDirectory'])	/ "eda/sim_lib"
-		
+		# prepare paths for GTKWave, if configured
 		if (len(self.pocConfig.options("GTKWave")) != 0):		
 			self.directories["GTKWInstallation"] =	Path(self.pocConfig['GTKWave']['InstallationDirectory'])
 			self.directories["GTKWBinary"] =				Path(self.pocConfig['GTKWave']['BinaryDirectory'])

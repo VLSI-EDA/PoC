@@ -102,7 +102,8 @@ class Exit(object):
 		print(Fore.RED + "ERROR:" + Fore.RESET + " Unsupported platform '%s'" % ex.message)
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 		exit(1)
-	
+		
+	@classmethod
 	def printEnvironmentException(cls, ex):
 		from colorama import Fore, Back, Style, init
 		init()
@@ -112,6 +113,7 @@ class Exit(object):
 		print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 		exit(1)
 	
+	@classmethod
 	def printNotConfiguredException(cls, ex):
 		from colorama import Fore, Back, Style, init
 		init()

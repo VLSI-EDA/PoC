@@ -150,7 +150,13 @@ class Simulator(PoCSimulator):
 					elif (filesLineRegExpMatch.group('Keyword') == "altera"):
 						self.printVerbose("    skipped Altera specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
-						self.printVerbose("    skipped Xilinx specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
+#						self.printVerbose("    skipped Xilinx specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
+						# check if ISE or Vivado is configured
+						if not self.host.directories.__contains__("XilinxPrimitiveSource"):
+							raise NotConfiguredException("This testbench requires some Xilinx Primitves. Please configure Xilinx ISE or Vivado.")
+						
+						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / vhdlFileName
 					else:
 						raise SimulatorException("Unknown keyword in *files file.")
 						

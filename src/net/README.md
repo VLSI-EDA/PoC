@@ -17,22 +17,31 @@ The namespace `PoC.net` offers a network stack and several network protocols.
  - [`PoC.net.udp`][net_udp] - User Datagram Protocol (UDP)
 
 
-## Package
+## Packages
 
-No files published, yet.
+[`PoC.net_comp`][net_comp]
+[`PoC.net`][net_pkg]
 
 
 ## Entities
 
-No files published, yet.
+ -  [`PoC.net.FrameChecksum`][net_FrameChecksum]
+ -  [`PoC.net.FrameLoopback`][net_FrameLoopback]
 
- [net_arp]:		arp
- [net_eth]:		eth
- [net_icmpv4]:	icmpv4
- [net_icmpv6]:	icmpv6
- [net_ipv4]:	ipv4
- [net_ipv6]:	ipv6
- [net_mac]:		mac
- [net_ndp]:		ndp
- [net_stack]:	stack
- [net_udp]:		udp
+ [net_arp]:							arp
+ [net_eth]:							eth
+ [net_icmpv4]:					icmpv4
+ [net_icmpv6]:					icmpv6
+ [net_ipv4]:						ipv4
+ [net_ipv6]:						ipv6
+ [net_mac]:							mac
+ [net_ndp]:							ndp
+ [net_stack]:						stack
+ [net_udp]:							udp
+
+ [net_pkg]:							net.pkg.vhdl
+ [net_comp]:						net.comp.vhdl
+ 
+ [net_FrameChecksum]:		net_FrameChecksum.vhdl
+ [net_FrameLoopback]:		net_FrameLoopback.vhdl
+ 

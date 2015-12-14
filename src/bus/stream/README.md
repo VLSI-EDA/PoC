@@ -2,7 +2,8 @@
 
 The namespace `PoC.bus.stream` offers different modules for the *PoC.Stream* bus.
 
-## Package(s)
+
+## Package
 
 The package [`stream`][stream.pkg] holds all component declarations for this namespace.
 
@@ -10,6 +11,7 @@ The package [`stream`][stream.pkg] holds all component declarations for this nam
 library PoC;
 use     PoC.stream.all;
 ```
+
 
 ## Entities
 

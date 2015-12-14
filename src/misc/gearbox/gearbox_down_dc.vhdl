@@ -84,6 +84,8 @@ architecture rtl OF gearbox_down_dc is
 	signal MuxSelect_us			: UNSIGNED(COUNTER_BITS - 1 downto 0);
 	
 begin
+	assert (INPUT_BITS > OUTPUT_BITS) report "OUTPUT_BITS must be less than INPUT_BITS, otherwise it's no down-sizing gearbox." severity FAILURE;
+	
 	-- input register @Clock1
 	Data_d	<= In_Data when registered(Clock1, ADD_INPUT_REGISTERS);
 

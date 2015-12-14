@@ -85,7 +85,7 @@ package body math is
 	-- greatest common divisor (gcd)
 	function greatestCommonDivisor(N1 : POSITIVE; N2 : POSITIVE) return POSITIVE is
 		variable M1				: POSITIVE;
-		variable M2				: POSITIVE;
+		variable M2				: NATURAL;
 		variable Remainer	: NATURAL;
 	begin
 		M1	:= imax(N1, N2);

@@ -9,8 +9,8 @@
 --
 -- Description:
 -- ------------------------------------
---		This module implements a generic buffer (FifO) for the PoC.Stream protocol.
---		It is generic in DATA_BITS and in META_BITS as well as in FifO depths for
+--		This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
+--		It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
 --		data and meta information.
 --
 -- License:
@@ -41,7 +41,7 @@ use			PoC.utils.all;
 use			PoC.vectors.all;
 
 
-entity Stream_DeMux is
+entity stream_DeMux is
 	generic (
 		portS											: POSITIVE									:= 2;
 		DATA_BITS									: POSITIVE									:= 8;
@@ -72,7 +72,8 @@ entity Stream_DeMux is
 	);
 end;
 
-architecture rtl of Stream_DeMux is
+
+architecture rtl of stream_DeMux is
 	attribute KEEP										: BOOLEAN;
 	attribute FSM_ENCODING						: STRING;
 	
@@ -171,11 +172,9 @@ begin
 	begin
 		if rising_edge(Clock) then
 			if ((Reset or ChannelPointer_rst) = '1') then
-				ChannelPointer_d			<= (others => '0');
-			else
-				if (ChannelPointer_en = '1') then
-					ChannelPointer_d		<= DeMuxControl;
-				end if;
+				ChannelPointer_d		<= (others => '0');
+			elsif (ChannelPointer_en = '1') then
+				ChannelPointer_d		<= DeMuxControl;
 			end if;
 		end if;
 	end process;
@@ -195,4 +194,5 @@ begin
 	
 	Out_Data		<= Out_Data_i;
 	Out_Meta		<= Out_Meta_i;
+	
 end architecture;

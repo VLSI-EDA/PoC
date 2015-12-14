@@ -38,10 +38,9 @@ use			ieee.numeric_std.all;
 library	PoC;
 use			PoC.utils.all;
 use			PoC.vectors.all;
-use			PoC.arith_prng;
 
 
-entity Stream_FrameGenerator is
+entity stream_FrameGenerator is
   generic (
     DATA_BITS							: POSITIVE														:= 8;
 		WORD_BITS							: POSITIVE														:= 16;
@@ -70,11 +69,10 @@ entity Stream_FrameGenerator is
 		Out_EOF								: out	STD_LOGIC;
 		Out_Ack								: in	STD_LOGIC
 	);
-end;
+end entity;
 
 
-architecture rtl of Stream_FrameGenerator is
-
+architecture rtl of stream_FrameGenerator is
 	type T_STATE is (
 		ST_IDLE,
 			ST_SEQUENCE_SOF,	ST_SEQUENCE_DATA,	ST_SEQUENCE_EOF,
@@ -266,10 +264,8 @@ begin
 		if rising_edge(Clock) then
 			if ((Reset or FrameLengthCounter_rst) = '1') then
 				FrameLengthCounter_us			<= (others => '0');
-			else
-				if (FrameLengthCounter_en = '1') then
-					FrameLengthCounter_us		<= FrameLengthCounter_us + 1;
-				end if;
+			elsif (FrameLengthCounter_en = '1') then
+				FrameLengthCounter_us			<= FrameLengthCounter_us + 1;
 			end if;
 		end if;
 	end process;
@@ -279,10 +275,8 @@ begin
 		if rising_edge(Clock) then
 			if ((Reset or SequencesCounter_rst) = '1') then
 				SequencesCounter_us			<= (others => '0');
-			else
-				if (SequencesCounter_en = '1') then
-					SequencesCounter_us		<= SequencesCounter_us + 1;
-				end if;
+			elsif (SequencesCounter_en = '1') then
+				SequencesCounter_us			<= SequencesCounter_us + 1;
 			end if;
 		end if;
 	end process;
@@ -292,15 +286,13 @@ begin
 		if rising_edge(Clock) then
 			if ((Reset or ContentCounter_rst) = '1') then
 				ContentCounter_us				<= (others => '0');
-			else
-				if (ContentCounter_en = '1') then
-					ContentCounter_us			<= ContentCounter_us + 1;
-				end if;
+			elsif (ContentCounter_en = '1') then
+				ContentCounter_us				<= ContentCounter_us + 1;
 			end if;
 		end if;
 	end process;
 	
-	PRNG : entity Poc.alu_prng
+	PRNG : entity PoC.arith_prng
     generic map (
       BITS		=> DATA_BITS
 		)
@@ -310,4 +302,5 @@ begin
       got			=> PRNG_got,
       val			=> PRNG_Data
      );
-end;
+	
+end architecture;

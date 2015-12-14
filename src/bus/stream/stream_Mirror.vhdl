@@ -9,8 +9,8 @@
 --
 -- Description:
 -- ------------------------------------
---		This module implements a generic buffer (FifO) for the PoC.Stream protocol.
---		It is generic in DATA_BITS and in META_BITS as well as in FifO depths for
+--		This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
+--		It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
 --		data and meta information.
 --
 -- License:
@@ -41,7 +41,7 @@ use			PoC.utils.all;
 use			PoC.vectors.all;
 
 
-entity Stream_Mirror is
+entity stream_Mirror is
 	generic (
 		portS											: POSITIVE									:= 2;
 		DATA_BITS									: POSITIVE									:= 8;
@@ -70,39 +70,39 @@ entity Stream_Mirror is
 		Out_Meta_nxt							: in	T_SLM(portS - 1 downto 0, META_BITS'length - 1 downto 0);
 		Out_Meta_Data							: out	T_SLM(portS - 1 downto 0, isum(META_BITS) - 1 downto 0)
 	);
-end;
+end entity;
 
 
-architecture rtl of Stream_Mirror is
-	attribute KEEP										: BOOLEAN;
-	attribute FSM_ENCODING						: STRING;
+architecture rtl of stream_Mirror is
+	attribute KEEP							: BOOLEAN;
+	attribute FSM_ENCODING			: STRING;
 	
-	signal FifOGlue_put								: STD_LOGIC;
-	signal FifOGlue_DataIn						: STD_LOGIC_VECTOR(DATA_BITS + 1 downto 0);
-	signal FifOGlue_Full							: STD_LOGIC;
-	signal FifOGlue_Valid							: STD_LOGIC;
-	signal FifOGlue_DataOut						: STD_LOGIC_VECTOR(DATA_BITS + 1 downto 0);
-	signal FifOGlue_got								: STD_LOGIC;
+	signal FIFOGlue_put					: STD_LOGIC;
+	signal FIFOGlue_DataIn			: STD_LOGIC_VECTOR(DATA_BITS + 1 downto 0);
+	signal FIFOGlue_Full				: STD_LOGIC;
+	signal FIFOGlue_Valid				: STD_LOGIC;
+	signal FIFOGlue_DataOut			: STD_LOGIC_VECTOR(DATA_BITS + 1 downto 0);
+	signal FIFOGlue_got					: STD_LOGIC;
 	
-	signal Ack_i											: STD_LOGIC;
-	signal Mask_r											: STD_LOGIC_VECTOR(portS - 1 downto 0)												:= (others => '1');
+	signal Ack_i								: STD_LOGIC;
+	signal Mask_r								: STD_LOGIC_VECTOR(portS - 1 downto 0)												:= (others => '1');
 	
-	signal MetaOut_rst								: STD_LOGIC_VECTOR(portS - 1 downto 0);
+	signal MetaOut_rst					: STD_LOGIC_VECTOR(portS - 1 downto 0);
 	
-	signal Out_Data_i									: T_SLM(portS - 1 downto 0, DATA_BITS - 1 downto 0)						:= (others => (others => 'Z'));
-	signal Out_Meta_Data_i						: T_SLM(portS - 1 downto 0, isum(META_BITS) - 1 downto 0)			:= (others => (others => 'Z'));
+	signal Out_Data_i						: T_SLM(portS - 1 downto 0, DATA_BITS - 1 downto 0)						:= (others => (others => 'Z'));
+	signal Out_Meta_Data_i			: T_SLM(portS - 1 downto 0, isum(META_BITS) - 1 downto 0)			:= (others => (others => 'Z'));
 begin
 	
 	-- Data path
 	-- ==========================================================================================================================================================
-	FifOGlue_put															<= In_Valid;
-	FifOGlue_DataIn(DATA_BITS - 1 downto 0)		<= In_Data;
-	FifOGlue_DataIn(DATA_BITS + 0)						<= In_SOF;
-	FifOGlue_DataIn(DATA_BITS + 1)						<= In_EOF;
+	FIFOGlue_put															<= In_Valid;
+	FIFOGlue_DataIn(DATA_BITS - 1 downto 0)		<= In_Data;
+	FIFOGlue_DataIn(DATA_BITS + 0)						<= In_SOF;
+	FIFOGlue_DataIn(DATA_BITS + 1)						<= In_EOF;
 	
-	In_Ack																		<= not FifOGlue_Full;
+	In_Ack																		<= not FIFOGlue_Full;
 	
-	FifOGlue : entity PoC.fifo_glue
+	FIFOGlue : entity PoC.fifo_glue
 		generic map (
 			D_BITS		=> DATA_BITS + 2					-- Data Width
 		)
@@ -112,27 +112,27 @@ begin
 			rst				=> Reset,									-- Synchronous Reset
 	
 			-- Input
-			put				=> FifOGlue_put,					-- Put Value
-			di				=> FifOGlue_DataIn,				-- Data Input
-			ful				=> FifOGlue_Full,					-- Full
+			put				=> FIFOGlue_put,					-- Put Value
+			di				=> FIFOGlue_DataIn,				-- Data Input
+			ful				=> FIFOGlue_Full,					-- Full
 	
 			-- Output
-			vld				=> FifOGlue_Valid,				-- Data Available
-			do				=> FifOGlue_DataOut,			-- Data Output
-			got				=> FifOGlue_got						-- Data Consumed
+			vld				=> FIFOGlue_Valid,				-- Data Available
+			do				=> FIFOGlue_DataOut,			-- Data Output
+			got				=> FIFOGlue_got						-- Data Consumed
   );
 
 	genPorts : for i in 0 to portS - 1 generate
-		assign_row(Out_Data_i, FifOGlue_DataOut(DATA_BITS - 1 downto 0), i);
+		assign_row(Out_Data_i, FIFOGlue_DataOut(DATA_BITS - 1 downto 0), i);
 	end generate;
 	
 	Ack_i					<= slv_and(Out_Ack) or slv_and(not Mask_r or Out_Ack);
-	FifOGlue_got	<= Ack_i	;
+	FIFOGlue_got	<= Ack_i	;
 
-	Out_Valid			<= (portS - 1 downto 0 => FifOGlue_Valid) and Mask_r;
+	Out_Valid			<= (portS - 1 downto 0 => FIFOGlue_Valid) and Mask_r;
 	Out_Data			<= Out_Data_i;
-	Out_SOF				<= (portS - 1 downto 0 => FifOGlue_DataOut(DATA_BITS + 0));
-	Out_EOF				<= (portS - 1 downto 0 => FifOGlue_DataOut(DATA_BITS + 1));
+	Out_SOF				<= (portS - 1 downto 0 => FIFOGlue_DataOut(DATA_BITS + 0));
+	Out_EOF				<= (portS - 1 downto 0 => FIFOGlue_DataOut(DATA_BITS + 1));
 		
 	process(Clock)
 	begin
@@ -192,7 +192,7 @@ begin
 					else
 						if ((In_Valid and In_SOF) = '1') then
 							Writer_CounterControl		<= '1';
-						ELSif (Writer_us = (META_LENGTH(i) - 1)) then
+						elsif (Writer_us = (META_LENGTH(i) - 1)) then
 							Writer_CounterControl		<= '0';
 						end if;
 					end if;
@@ -242,7 +242,7 @@ begin
 					if rising_edge(Clock) then
 						if (Reader_rst = '1') then
 							Reader_us			<= (others => '0');
-						ELSif (Reader_en = '1') then
+						elsif (Reader_en = '1') then
 							Reader_us			<= Reader_us + 1;
 						end if;
 					end if;
@@ -255,4 +255,5 @@ begin
 	end generate;		-- for each metadata stream
 	
 	Out_Meta_Data		<= Out_Meta_Data_i;
+	
 end architecture;

@@ -68,14 +68,14 @@ See the ASCII art inside the [VHDL description][ddrio_inout] for more
 details on how data to is sampled and driven at the pad.
 
 
- [my_config]:			../../common/my_config.vhdl.template
- [ddrio.pkg]:			ddrio.pkg.vhdl
- [ddrio_in]:			ddrio_in.vhdl
- [ddrio_in_altera]:		ddrio_in_altera.vhdl
- [ddrio_in_xilinx]:		ddrio_in_xilinx.vhdl
- [ddrio_inout]:			ddrio_inout.vhdl
- [ddrio_inout_altera]:		ddrio_inout_altera.vhdl
- [ddrio_inout_xilinx]:		ddrio_inout_xilinx.vhdl
- [ddrio_out]:			ddrio_out.vhdl
+ [my_config]:						../../common/my_config.vhdl.template
+ [ddrio.pkg]:						ddrio.pkg.vhdl
+ [ddrio_in]:						ddrio_in.vhdl
+ [ddrio_in_altera]:			ddrio_in_altera.vhdl
+ [ddrio_in_xilinx]:			ddrio_in_xilinx.vhdl
+ [ddrio_inout]:					ddrio_inout.vhdl
+ [ddrio_inout_altera]:	ddrio_inout_altera.vhdl
+ [ddrio_inout_xilinx]:	ddrio_inout_xilinx.vhdl
+ [ddrio_out]:						ddrio_out.vhdl
  [ddrio_out_altera]:		ddrio_out_altera.vhdl
  [ddrio_out_xilinx]:		ddrio_out_xilinx.vhdl
