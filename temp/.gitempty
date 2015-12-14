@@ -1,0 +1,26 @@
+# git files
+.gitignore
+.gitempty
+#.gitmodules
+
+# Documentation files
+AUTHORS.md
+LICENSE
+README.md
+
+# Configuration scripts
+poc.sh
+poc.ps1
+
+# folders
+lib/
+netlist/
+# DON'T PUBLISH other/ !!!
+py/
+sim/
+src/
+tb/
+temp/
+tools/
+ucf/
+xst/
