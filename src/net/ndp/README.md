@@ -4,9 +4,9 @@ The namespace `PoC.net.ndp` offers a "Neighbor Discovery Protocol" (NDP) impleme
 
 ## Package
 
-No files published, yet.
+*No files published, yet.*
 
 
 ## Entities
 
-No files published, yet.
+*No files published, yet.*

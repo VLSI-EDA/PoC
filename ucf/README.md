@@ -54,5 +54,6 @@
  [brd_ml605]:				ML605
  [brd_vc707]:				VC707
  [brd_zc706]:				ZC706
+ [brd_zedboard]:			ZedBoard
 
  [ucf_MetaStability]:	MetaStability.ucf

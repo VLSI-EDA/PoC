@@ -35,5 +35,6 @@ __pycache__
 !/other/quartus/**/*.vhdl
 
 # general whitelist
-!.publish
 !.git*
+!.publish
+!.README.md

@@ -27,5 +27,5 @@ This folder contains syntax highlighting rules for Notepad++. The following file
  -  Xilinx user constraint files (*.ucf): [`Syntax Highlighting - Xilinx UCF`][npp_ucf]
 
  [git_git-alias]:		git/git-alias.setup.ps1
- [npp_ucf]:					Notepad++/Syntax Highlighting - Xilinx UCF.xml
+ [npp_ucf]:					Notepad%2B%2B%2FSyntax%20Highlighting%20-%20Xilinx%20UCF.xml
  

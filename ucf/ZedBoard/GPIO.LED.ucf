@@ -1,0 +1,18 @@
+## =============================================================================
+## General Purpose IO
+## =============================================================================
+## LEDs
+## -----------------------------------------------------------------------------
+##	Bank:						33
+##		VCCO:					3.3V (VCC3V3)
+##	Location:				LD0, LD1, LD2, LD3, LD4, LD5, LD6, LD7
+## -----------------------------------------------------------------------------
+NET "ZED_GPIO_LED<0>"					LOC = "T22";						## {OUT}	LD0
+NET "ZED_GPIO_LED<1>"					LOC = "T21";						## {OUT}	LD1
+NET "ZED_GPIO_LED<2>"					LOC = "U22";						## {OUT}	LD2
+NET "ZED_GPIO_LED<3>"					LOC = "U21";						## {OUT}	LD3
+NET "ZED_GPIO_LED<4>"					LOC = "V22";						## {OUT}	LD4
+NET "ZED_GPIO_LED<5>"					LOC = "W22";						## {OUT}	LD5
+NET "ZED_GPIO_LED<6>"					LOC = "U19";						## {OUT}	LD6
+NET "ZED_GPIO_LED<7>"					LOC = "U14";						## {OUT}	LD7
+NET "ZED_GPIO_LED<?>"					IOSTANDARD = LVCMOS33;	## {OUT}	LD7

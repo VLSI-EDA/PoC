@@ -1,0 +1,18 @@
+## =============================================================================
+## General Purpose IO
+## =============================================================================
+## DIP-Switches
+## -----------------------------------------------------------------------------
+##	Bank:						34, 35
+##		VCCO:					2.5V (VADJ)
+##	Location:				SW0, SW1, SW2, SW3, SW4, SW5, SW6, SW7
+## -----------------------------------------------------------------------------
+NET "ZED_GPIO_Switches<0>"						LOC = "F22";						## {IN}		SW0
+NET "ZED_GPIO_Switches<1>"						LOC = "G22";						## {IN}		SW1
+NET "ZED_GPIO_Switches<2>"						LOC = "H22";						## {IN}		SW2
+NET "ZED_GPIO_Switches<3>"						LOC = "F21";						## {IN}		SW3
+NET "ZED_GPIO_Switches<4>"						LOC = "H19";						## {IN}		SW4
+NET "ZED_GPIO_Switches<5>"						LOC = "H18";						## {IN}		SW5
+NET "ZED_GPIO_Switches<6>"						LOC = "H17";						## {IN}		SW6
+NET "ZED_GPIO_Switches<7>"						LOC = "M15";						## {IN}		SW7
+NET "ZED_GPIO_Switches<?>"						IOSTANDARD = LVCMOS25;	##

@@ -4,10 +4,27 @@ The PoC-Library is shiped with different third party libraries, which
 are located in the `<PoCRoot>/lib/` folder. This document lists all these
 libraries, their websites and licenses.
 
+### Initializing and Updating Embedded Git Submodules
+
+The third party libraries are embedded as git submodules. So if the PoC-Library
+was not cloned with option `--recursive` it's rerquired to run sub module
+initialization manually.
+
+```PowerShell
+cd <PoCRoot>\lib\
+git submodule init
+git submodule update
+cd osvvm\
+git remote rename origin github
+cd ..\vunit\
+git remote rename origin github
+cd ..
+```  
+
 
 ## Open Source VHDL Verification Methodology (OS-VVM)
 
-**Folder:**		`<PoCRoot>/lib/osvvm/`  
+**Folder:**		`<PoCRoot>\lib\osvvm\`  
 **Copyright:**	Copyright © 2012-2015 by [SynthWorks Design Inc.](http://www.synthworks.com/)  
 **License:**	[Artistic License 2.0][PAL2.0]
 
@@ -20,7 +37,7 @@ Source: [http://osvvm.org/about-os-vvm](http://osvvm.org/about-os-vvm)
 
 ## VUnit
 
-**Folder:**		`<PoCRoot>/lib/vunit/`  
+**Folder:**		`<PoCRoot>\lib\vunit\`  
 **Copyright:**	Copyright © 2014-2015, Lars Asplund [lars.anders.asplund@gmail.com](mailto://lars.anders.asplund@gmail.com)  
 **License:**	[Mozilla Public License, Version 2.0][MPL2.0]
 

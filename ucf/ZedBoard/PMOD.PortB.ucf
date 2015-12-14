@@ -1,0 +1,18 @@
+## =============================================================================
+## Peripheral Modules (Pmods)
+## =============================================================================
+## Pmod Port B (2x6 pins)
+## -----------------------------------------------------------------------------
+##	Bank:						13
+##		VCCO:					3.3V (VCC3V3)
+##	Location:				JB1
+## -----------------------------------------------------------------------------
+NET "ZED_PMOD_PortB<0>"					LOC =  "W12";						## {IN}		JB1.1
+NET "ZED_PMOD_PortB<1>"					LOC =  "W11";						## {IN}		JB1.2
+NET "ZED_PMOD_PortB<2>"					LOC =  "V10";						## {IN}		JB1.3
+NET "ZED_PMOD_PortB<3>"					LOC =   "W8";						## {IN}		JB1.4
+NET "ZED_PMOD_PortB<4>"					LOC =  "V12";						## {IN}		JB1.7
+NET "ZED_PMOD_PortB<5>"					LOC =  "W10";						## {IN}		JB1.8
+NET "ZED_PMOD_PortB<6>"					LOC =   "V9";						## {IN}		JB1.9
+NET "ZED_PMOD_PortB<7>"					LOC =   "V8";						## {IN}		JB1.10
+NET "ZED_PMOD_PortB<?>"					IOSTANDARD = LVCMOS33;	##

@@ -4,9 +4,9 @@ The namespace `PoC.net.eth` offers an Ethernet (CSMA/CD; IEEE 802.3) implementat
 
 ## Package
 
-No files published, yet.
+*No files published, yet.*
 
 
 ## Entities
 
-No files published, yet.
+*No files published, yet.*

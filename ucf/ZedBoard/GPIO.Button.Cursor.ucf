@@ -1,0 +1,14 @@
+## =============================================================================
+## General Purpose IO
+## =============================================================================
+## Cursor Buttons
+## -----------------------------------------------------------------------------
+##	Bank:						34
+##		VCCO:					2.5V (VADJ)
+##	Location:				BTNU, BTNL, BTNC, BTNR, BTND
+## -----------------------------------------------------------------------------
+NET "ZED_GPIO_Button_North"						LOC =  "T18"	| IOSTANDARD = LVCMOS25;			## {IN}		BTNU; high-active; external 10k pulldown resistor
+NET "ZED_GPIO_Button_West"						LOC =  "N15"	| IOSTANDARD = LVCMOS25;			## {IN}		BTNL; high-active; external 10k pulldown resistor
+NET "ZED_GPIO_Button_Center"					LOC =  "P16"	| IOSTANDARD = LVCMOS25;			## {IN}		BTNC; high-active; external 10k pulldown resistor
+NET "ZED_GPIO_Button_East"						LOC =  "R18"	| IOSTANDARD = LVCMOS25;			## {IN}		BTNR; high-active; external 10k pulldown resistor
+NET "ZED_GPIO_Button_South"						LOC =  "R16"	| IOSTANDARD = LVCMOS25;			## {IN}		BTND; high-active; external 10k pulldown resistor
