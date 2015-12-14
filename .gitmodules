@@ -1,0 +1,3 @@
+[submodule "lib/vunit"]
+	path = lib/vunit
+	url = git@github.com:VLSI-EDA/vunit.git
