@@ -68,6 +68,7 @@ architecture rtl of ocrom_sp is
 	constant DEPTH				: positive := 2**A_BITS;
 
 begin
+	assert (str_length(FileName) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
 
 	gInfer: if VENDOR = VENDOR_XILINX generate
 		-- RAM can be inferred correctly
@@ -75,15 +76,13 @@ begin
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		rom_t		is array(0 to DEPTH - 1) of word_t;
 		
-	begin
-		genLoadFile : if (str_length(FileName) /= 0) generate
-			-- Read a *.mem or *.hex file
-			impure function ocram_ReadMemFile(FileName : STRING) return rom_t is
-				file FileHandle				: TEXT open READ_MODE is FileName;
-				variable CurrentLine	: LINE;
-				variable TempWord			: STD_LOGIC_VECTOR((div_ceil(word_t'length, 4) * 4) - 1 downto 0);
-				variable Result				: rom_t		:= (others => (others => '0'));
-				
+		-- Compute the initialization of a ROM array, if specified, from the passed file.
+    impure function ocrom_InitMemory(FileName : string) return rom_t is
+			-- Read the specified file name into the ROM array.
+			procedure ReadMemFile(FileName : in string; variable mem : inout rom_t) is
+				file FileHandle      : TEXT open READ_MODE is FileName;
+				variable CurrentLine : LINE;
+				variable TempWord    : STD_LOGIC_VECTOR((div_ceil(word_t'length, 4) * 4) - 1 downto 0);
 			begin
 				-- discard the first line of a mem file
 				if (str_toLower(FileName(FileName'length - 3 to FileName'length)) = ".mem") then
@@ -95,29 +94,33 @@ begin
 
 					readline(FileHandle, CurrentLine);
 					hread(CurrentLine, TempWord);
-					Result(i)		:= resize(TempWord, word_t'length);
+					mem(i) := TempWord(word_t'range);
 				end loop;
+			end procedure;
 
-				return Result;
-			end function;
-
-			constant rom	: rom_t		:= ocram_ReadMemFile(FILENAME);
-			signal a_reg	: unsigned(A_BITS-1 downto 0);
+			variable res : rom_t;
 		begin
-			process (clk)
-			begin
-				if rising_edge(clk) then
-					if ce = '1' then
-						a_reg <= a;
-					end if;
-				end if;
-			end process;
+			res		:= (others => (others => 'U'));
+			
+			if str_length(FileName) > 0 then
+				ReadMemFile(FileName, res);
+			end if;
+			return  res;
+		end function;
 
-			q <= rom(to_integer(a_reg));					-- gets new data
-		end generate;
-		genNoLoadFile : if (str_length(FileName) = 0) generate
-			assert FALSE report "Do you really want to generate a block of zeros?" severity FAILURE;
-		end generate;
+		constant rom	: rom_t		:= ocrom_InitMemory(FILENAME);
+		signal a_reg	: unsigned(A_BITS-1 downto 0);
+	begin
+		process (clk)
+		begin
+			if rising_edge(clk) then
+				if ce = '1' then
+					a_reg <= a;
+				end if;
+			end if;
+		end process;
+
+		q <= rom(to_integer(a_reg));					-- gets new data
 	end generate gInfer;
 
 	gAltera: if VENDOR = VENDOR_ALTERA generate
@@ -156,6 +159,6 @@ begin
 	end generate gAltera;
 	
 	assert VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA
-		report "Device not yet supported."
+		report "Vendor not yet supported."
 		severity failure;
-end rtl;
+end architecture;

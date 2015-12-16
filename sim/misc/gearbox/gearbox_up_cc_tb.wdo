@@ -1,0 +1,35 @@
+onerror {resume}
+quietly WaveActivateNextPane {} 0
+add wave -noupdate /gearbox_down_cc_tb/StopSimulation
+add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_down_cc_tb/Clock
+add wave -noupdate /gearbox_down_cc_tb/gear/Busy
+add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_down_cc_tb/DataIn
+add wave -noupdate /gearbox_down_cc_tb/ValidIn
+add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_down_cc_tb/DataOut
+add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_down_cc_tb/gear/MuxSelect_en
+add wave -noupdate -radix unsigned -radixshowbase 0 /gearbox_down_cc_tb/gear/MuxSelect_us
+add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_down_cc_tb/gear/MuxSelect_ov
+add wave -noupdate -radix hexadecimal -childformat {{/gearbox_down_cc_tb/gear/GearBoxInput(4) -radix hexadecimal} {/gearbox_down_cc_tb/gear/GearBoxInput(3) -radix hexadecimal} {/gearbox_down_cc_tb/gear/GearBoxInput(2) -radix hexadecimal} {/gearbox_down_cc_tb/gear/GearBoxInput(1) -radix hexadecimal} {/gearbox_down_cc_tb/gear/GearBoxInput(0) -radix hexadecimal}} -radixshowbase 0 -expand -subitemconfig {/gearbox_down_cc_tb/gear/GearBoxInput(4) {-radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/GearBoxInput(3) {-radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/GearBoxInput(2) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/GearBoxInput(1) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/GearBoxInput(0) {-height 15 -radix hexadecimal -radixshowbase 0}} /gearbox_down_cc_tb/gear/GearBoxInput
+add wave -noupdate /gearbox_down_cc_tb/gear/GearBoxBuffer_en
+add wave -noupdate -radix hexadecimal -childformat {{/gearbox_down_cc_tb/gear/GearBoxBuffer(4) -radix hexadecimal}} -radixshowbase 0 -expand -subitemconfig {/gearbox_down_cc_tb/gear/GearBoxBuffer(4) {-radix hexadecimal -radixshowbase 0}} /gearbox_down_cc_tb/gear/GearBoxBuffer
+add wave -noupdate -radix hexadecimal -childformat {{/gearbox_down_cc_tb/gear/genMux(0)/MuxInput(4) -radix hexadecimal} {/gearbox_down_cc_tb/gear/genMux(0)/MuxInput(3) -radix hexadecimal} {/gearbox_down_cc_tb/gear/genMux(0)/MuxInput(2) -radix hexadecimal} {/gearbox_down_cc_tb/gear/genMux(0)/MuxInput(1) -radix hexadecimal} {/gearbox_down_cc_tb/gear/genMux(0)/MuxInput(0) -radix hexadecimal}} -radixshowbase 0 -expand -subitemconfig {/gearbox_down_cc_tb/gear/genMux(0)/MuxInput(4) {-radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/genMux(0)/MuxInput(3) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/genMux(0)/MuxInput(2) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/genMux(0)/MuxInput(1) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/genMux(0)/MuxInput(0) {-height 15 -radix hexadecimal -radixshowbase 0}} /gearbox_down_cc_tb/gear/genMux(0)/MuxInput
+add wave -noupdate -radix hexadecimal -childformat {{/gearbox_down_cc_tb/gear/genMux(1)/MuxInput(4) -radix hexadecimal} {/gearbox_down_cc_tb/gear/genMux(1)/MuxInput(3) -radix hexadecimal} {/gearbox_down_cc_tb/gear/genMux(1)/MuxInput(2) -radix hexadecimal} {/gearbox_down_cc_tb/gear/genMux(1)/MuxInput(1) -radix hexadecimal} {/gearbox_down_cc_tb/gear/genMux(1)/MuxInput(0) -radix hexadecimal}} -radixshowbase 0 -expand -subitemconfig {/gearbox_down_cc_tb/gear/genMux(1)/MuxInput(4) {-radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/genMux(1)/MuxInput(3) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/genMux(1)/MuxInput(2) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/genMux(1)/MuxInput(1) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/genMux(1)/MuxInput(0) {-height 15 -radix hexadecimal -radixshowbase 0}} /gearbox_down_cc_tb/gear/genMux(1)/MuxInput
+add wave -noupdate -radix hexadecimal -childformat {{/gearbox_down_cc_tb/gear/GearBoxOutput(1) -radix hexadecimal} {/gearbox_down_cc_tb/gear/GearBoxOutput(0) -radix hexadecimal}} -radixshowbase 0 -expand -subitemconfig {/gearbox_down_cc_tb/gear/GearBoxOutput(1) {-height 15 -radix hexadecimal -radixshowbase 0} /gearbox_down_cc_tb/gear/GearBoxOutput(0) {-height 15 -radix hexadecimal -radixshowbase 0}} /gearbox_down_cc_tb/gear/GearBoxOutput
+TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 1} {35381868 fs} 0}
+quietly wave cursor active 1
+configure wave -namecolwidth 297
+configure wave -valuecolwidth 100
+configure wave -justifyvalue left
+configure wave -signalnamewidth 0
+configure wave -snapdistance 10
+configure wave -datasetprefix 0
+configure wave -rowmargin 4
+configure wave -childrowmargin 2
+configure wave -gridoffset 0
+configure wave -gridperiod 1
+configure wave -griddelta 40
+configure wave -timeline 0
+configure wave -timelineunits ns
+update
+WaveRestoreZoom {0 fs} {777 ns}

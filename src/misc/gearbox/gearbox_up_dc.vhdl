@@ -103,6 +103,8 @@ architecture rtl OF gearbox_up_dc is
 	signal Valid_r						: STD_LOGIC																		:= '0';
 	signal Valid_d						: STD_LOGIC																		:= '0';
 begin
+	assert (INPUT_BITS < OUTPUT_BITS) report "INPUT_BITS must be less than OUTPUT_BITS, otherwise it's no up-sizing gearbox." severity FAILURE;
+	
 	-- input register @Clock1
 	In_Data_d	<= In_Data when registered(Clock1, ADD_INPUT_REGISTERS);
 

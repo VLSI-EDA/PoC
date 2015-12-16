@@ -97,27 +97,25 @@ entity ocram_tdp is
 		q1	 : out std_logic_vector(D_BITS-1 downto 0);
 		q2	 : out std_logic_vector(D_BITS-1 downto 0)
 	);
-end ocram_tdp;
+end entity;
 
 
 architecture rtl of ocram_tdp is
 	constant DEPTH : positive := 2**A_BITS;
 
 begin
-	gXilinx: if VENDOR = VENDOR_XILINX generate
+	gInfer: if VENDOR = VENDOR_XILINX generate
 		-- RAM can be inferred correctly only if '-use_new_parser yes' is enabled in XST options
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		ram_t		is array(0 to DEPTH - 1) of word_t;
 		
-	begin
-		genLoadFile : if (str_length(FileName) /= 0) generate
-			-- Read a *.mem or *.hex file
-			impure function ocram_ReadMemFile(FileName : STRING) return ram_t is
-				file FileHandle				: TEXT open READ_MODE is FileName;
-				variable CurrentLine	: LINE;
-				variable TempWord			: STD_LOGIC_VECTOR((div_ceil(word_t'length, 4) * 4) - 1 downto 0);
-				variable Result				: ram_t		:= (others => (others => '0'));
-				
+		-- Compute the initialization of a RAM array, if specified, from the passed file.
+    impure function ocram_InitMemory(FileName : string) return ram_t is
+			-- Read the specified file name into the RAM array.
+			procedure ReadMemFile(FileName : in string; variable mem : inout ram_t) is
+				file FileHandle      : TEXT open READ_MODE is FileName;
+				variable CurrentLine : LINE;
+				variable TempWord    : STD_LOGIC_VECTOR((div_ceil(word_t'length, 4) * 4) - 1 downto 0);
 			begin
 				-- discard the first line of a mem file
 				if (str_toLower(FileName(FileName'length - 3 to FileName'length)) = ".mem") then
@@ -129,75 +127,51 @@ begin
 
 					readline(FileHandle, CurrentLine);
 					hread(CurrentLine, TempWord);
-					Result(i)		:= resize(TempWord, word_t'length);
+					mem(i) := TempWord(word_t'range);
 				end loop;
+			end procedure;
 
-				return Result;
-			end function;
-
-			signal ram			: ram_t		:= ocram_ReadMemFile(FILENAME);
-			signal a1_reg		: unsigned(A_BITS-1 downto 0);
-			signal a2_reg		: unsigned(A_BITS-1 downto 0);
-			
+			variable res : ram_t;
 		begin
-			process (clk1, clk2)
-			begin	-- process
-				if rising_edge(clk1) then
-					if ce1 = '1' then
-						if we1 = '1' then
-							ram(to_integer(a1)) <= d1;
-						end if;
-
-						a1_reg <= a1;
-					end if;
-				end if;
-
-				if rising_edge(clk2) then
-					if ce2 = '1' then
-						if we2 = '1' then
-							ram(to_integer(a2)) <= d2;
-						end if;
-
-						a2_reg <= a2;
-					end if;
-				end if;
-			end process;
+			res		:= (others => (others => 'U'));
 			
-			q1 <= ram(to_integer(a1_reg));		-- returns new data
-			q2 <= ram(to_integer(a2_reg));		-- returns new data
-		end generate;
-		genNoLoadFile : if (str_length(FileName) = 0) generate
-			signal ram			: ram_t;
-			signal a1_reg		: unsigned(A_BITS-1 downto 0);
-			signal a2_reg		: unsigned(A_BITS-1 downto 0);
-		begin
-			process (clk1, clk2)
-			begin	-- process
-				if rising_edge(clk1) then
-					if ce1 = '1' then
-						if we1 = '1' then
-							ram(to_integer(a1)) <= d1;
-						end if;
+			if str_length(FileName) > 0 then
+				ReadMemFile(FileName, res);
+			end if;
+			return  res;
+		end function;
 
-						a1_reg <= a1;
+		signal ram			: ram_t		:= ocram_InitMemory(FILENAME);
+		signal a1_reg		: unsigned(A_BITS-1 downto 0);
+		signal a2_reg		: unsigned(A_BITS-1 downto 0);
+		
+	begin
+		process (clk1, clk2)
+		begin	-- process
+			if rising_edge(clk1) then
+				if ce1 = '1' then
+					if we1 = '1' then
+						ram(to_integer(a1)) <= d1;
 					end if;
+
+					a1_reg <= a1;
 				end if;
+			end if;
 
-				if rising_edge(clk2) then
-					if ce2 = '1' then
-						if we2 = '1' then
-							ram(to_integer(a2)) <= d2;
-						end if;
-
-						a2_reg <= a2;
+			if rising_edge(clk2) then
+				if ce2 = '1' then
+					if we2 = '1' then
+						ram(to_integer(a2)) <= d2;
 					end if;
+
+					a2_reg <= a2;
 				end if;
-			end process;
-			
-			q1 <= ram(to_integer(a1_reg));		-- returns new data
-			q2 <= ram(to_integer(a2_reg));		-- returns new data
-		end generate;
-	end generate gXilinx;
+			end if;
+		end process;
+		
+		q1 <= ram(to_integer(a1_reg));		-- returns new data
+		q2 <= ram(to_integer(a2_reg));		-- returns new data
+	end generate gInfer;
 	
 	gAltera: if VENDOR = VENDOR_ALTERA generate
 		component ocram_tdp_altera
@@ -249,6 +223,6 @@ begin
 	end generate gAltera;
 	
 	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_XILINX))
-		report "Device not yet supported."
+		report "Vendor not yet supported."
 		severity failure;
-end rtl;
+end architecture;

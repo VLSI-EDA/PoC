@@ -78,11 +78,11 @@ begin
 		);
 	
 	-- 
-	DigitCounter_rst	<= counter_eq(DigitCounter_us, DIGITS - 1) and DigitCounter_en;
-	DigitCounter_us		<= counter_inc(DigitCounter_us, DigitCounter_rst, DigitCounter_en) when rising_edge(Clock);
+	DigitCounter_rst	<= upcounter_equal(DigitCounter_us, DIGITS - 1) and DigitCounter_en;
+	DigitCounter_us		<= upcounter_next(DigitCounter_us, DigitCounter_rst, DigitCounter_en) when rising_edge(Clock);
 	DigitControl			<= resize(bin2onehot(std_logic_vector(DigitCounter_us)), DigitControl'length);
 
-	process(BCDDigits, BCDDots, DigitCounter_us)
+	process(HexDigits, HexDots, DigitCounter_us)
 		variable HexDigit : T_SLV_4;
 		variable HexDot 	: STD_LOGIC;
 	begin

@@ -681,7 +681,7 @@ package body net is
 	function to_net_eth_RSDataInterface(str : STRING) return T_NET_ETH_RS_DATA_INTERFACE is
 	begin
 		for i in T_NET_ETH_RS_DATA_INTERFACE'pos(T_NET_ETH_RS_DATA_INTERFACE'low) to T_NET_ETH_RS_DATA_INTERFACE'pos(T_NET_ETH_RS_DATA_INTERFACE'high) loop
-			if str_match(str_to_upper(str), str_to_upper(T_NET_ETH_RS_DATA_INTERFACE'image(T_NET_ETH_RS_DATA_INTERFACE'val(I)))) then
+			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_RS_DATA_INTERFACE'image(T_NET_ETH_RS_DATA_INTERFACE'val(I)))) then
 				return T_NET_ETH_RS_DATA_INTERFACE'val(I);
 			end if;
 		end loop;
@@ -691,7 +691,7 @@ package body net is
 	function to_net_eth_PHYDataInterface(str : STRING) return T_NET_ETH_PHY_DATA_INTERFACE is
 	begin
 		for i in T_NET_ETH_PHY_DATA_INTERFACE'pos(T_NET_ETH_PHY_DATA_INTERFACE'low) to T_NET_ETH_PHY_DATA_INTERFACE'pos(T_NET_ETH_PHY_DATA_INTERFACE'high) loop
-			if str_match(str_to_upper(str), str_to_upper(T_NET_ETH_PHY_DATA_INTERFACE'image(T_NET_ETH_PHY_DATA_INTERFACE'val(I)))) then
+			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_DATA_INTERFACE'image(T_NET_ETH_PHY_DATA_INTERFACE'val(I)))) then
 				return T_NET_ETH_PHY_DATA_INTERFACE'val(I);
 			end if;
 		end loop;
@@ -701,7 +701,7 @@ package body net is
 	function to_net_eth_PHYManagementInterface(str : STRING) return T_NET_ETH_PHY_MANAGEMENT_INTERFACE is
 	begin
 		for i in T_NET_ETH_PHY_MANAGEMENT_INTERFACE'pos(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'low) to T_NET_ETH_PHY_MANAGEMENT_INTERFACE'pos(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'high) loop
-			if str_match(str_to_upper(str), str_to_upper(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'image(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'val(I)))) then
+			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'image(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'val(I)))) then
 				return T_NET_ETH_PHY_MANAGEMENT_INTERFACE'val(I);
 			end if;
 		end loop;
@@ -711,7 +711,7 @@ package body net is
 	function to_net_eth_PHYDevice(str : STRING) return T_NET_ETH_PHY_DEVICE is
 	begin
 		for i in T_NET_ETH_PHY_DEVICE'pos(T_NET_ETH_PHY_DEVICE'low) to T_NET_ETH_PHY_DEVICE'pos(T_NET_ETH_PHY_DEVICE'high) loop
-			if str_match(str_to_upper(str), str_to_upper(T_NET_ETH_PHY_DEVICE'image(T_NET_ETH_PHY_DEVICE'val(I)))) then
+			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_DEVICE'image(T_NET_ETH_PHY_DEVICE'val(I)))) then
 				return T_NET_ETH_PHY_DEVICE'val(I);
 			end if;
 		end loop;
@@ -759,7 +759,7 @@ package body net is
 	type		MAC_ADDRESS_SEGMENT_VECTOR	is array (NATURAL range <>) of MAC_ADDRESS_SEGMENT;
 	
 	function mac_split(str : STRING) return MAC_ADDRESS_SEGMENT_VECTOR is
-		variable input								: STRING(str'range)											:= str_to_upper(str);
+		variable input								: STRING(str'range)											:= str_toUpper(str);
 		variable Segments							: MAC_ADDRESS_SEGMENT_VECTOR(0 to 5)		:= (others => (others => '0'));
 		variable SegmentPointer				: NATURAL																:= 0;
 		variable CharPointer					: NATURAL																:= 2;
@@ -885,7 +885,7 @@ package body net is
 	type		IPV4_ADDRESS_SEGMENT_VECTOR		is array (NATURAL range <>) of IPV4_ADDRESS_SEGMENT;
 	
 	function ipv4_split(str : STRING) return IPV4_ADDRESS_SEGMENT_VECTOR is
-		variable input								: STRING(str'range)											:= str_to_upper(str);
+		variable input								: STRING(str'range)											:= str_toUpper(str);
 		variable Segments							: IPV4_ADDRESS_SEGMENT_VECTOR(0 to 3)		:= (others => (others => '0'));
 		variable SegmentPointer				: NATURAL																:= 0;
 		variable CharPointer					: NATURAL																:= 3;
@@ -1004,7 +1004,7 @@ package body net is
 	type		IPV6_ADDRESS_SEGMENT_VECTOR		is array (NATURAL range <>) of IPV6_ADDRESS_SEGMENT;
 	
 	function ipv6_split(str : STRING) return IPV6_ADDRESS_SEGMENT_VECTOR is
-		variable input								: STRING(str'range)											:= str_to_upper(str);
+		variable input								: STRING(str'range)											:= str_toUpper(str);
 		variable Segments							: IPV6_ADDRESS_SEGMENT_VECTOR(0 to 7)		:= (others => (others => '0'));
 		variable DelimiterPointer			: NATURAL																:= 0;
 		variable SegmentPointer				: NATURAL																:= 0;

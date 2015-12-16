@@ -11,7 +11,7 @@
 --
 -- Description:
 -- ------------------------------------
---		On-Chip RAMs and ROMs for FPGAs.
+--		On-Chip RAMs (Random-Access-Memory/Read-Write-Memory - RWM) for FPGAs.
 --
 --		A detailed documentation is included in each module.
 --
@@ -39,8 +39,6 @@ use			IEEE.numeric_std.all;
 
 
 package ocram is
-	-- RAMs (RWMs)
-	-- ===========================================================================
 	-- Single-Port
   component ocram_sp
     generic (
@@ -116,67 +114,5 @@ package ocram is
       d2   : in  std_logic_vector(D_BITS-1 downto 0);
       q1   : out std_logic_vector(D_BITS-1 downto 0);
       q2   : out std_logic_vector(D_BITS-1 downto 0));
-  end component;
-
-	-- ROMs
-	-- ===========================================================================
-	-- Single-Port
-	component ocrom_sp is
-		generic (
-			A_BITS		: positive;
-			D_BITS		: positive;
-			FILENAME	: STRING		:= ""
-		);
-		port (
-			clk	: in	std_logic;
-			ce	: in	std_logic;
-			a		: in	unsigned(A_BITS-1 downto 0);
-			q		: out	std_logic_vector(D_BITS-1 downto 0)
-		);
-	end component;
-	
-	-- Dual-Port
-	component ocrom_dp is
-		generic (
-			A_BITS		: positive;
-			D_BITS		: positive;
-			FILENAME	: STRING		:= ""
-		);
-		port (
-			clk1 : in	std_logic;
-			clk2 : in	std_logic;
-			ce1	: in	std_logic;
-			ce2	: in	std_logic;
-			a1	 : in	unsigned(A_BITS-1 downto 0);
-			a2	 : in	unsigned(A_BITS-1 downto 0);
-			q1	 : out std_logic_vector(D_BITS-1 downto 0);
-			q2	 : out std_logic_vector(D_BITS-1 downto 0)
-		);
-	end component;
-	
-	-- Wishbone Adapter
-	-- ===========================================================================
-  component ocram_wb
-    generic (
-      A_BITS      : positive;
-      D_BITS      : positive;
-      PIPE_STAGES : integer range 1 to 2);
-    port (
-      clk      : in  std_logic;
-      rst      : in  std_logic;
-      wb_cyc_i : in  std_logic;
-      wb_stb_i : in  std_logic;
-      wb_cti_i : in  std_logic_vector(2 downto 0);
-      wb_bte_i : in  std_logic_vector(1 downto 0);
-      wb_we_i  : in  std_logic;
-      wb_adr_i : in  std_logic_vector(A_BITS-1 downto 0);
-      wb_dat_i : in  std_logic_vector(D_BITS-1 downto 0);
-      wb_ack_o : out std_logic;
-      wb_dat_o : out std_logic_vector(D_BITS-1 downto 0);
-      ram_ce   : out std_logic;
-      ram_we   : out std_logic;
-      ram_a    : out unsigned(A_BITS-1 downto 0);
-      ram_d    : out std_logic_vector(D_BITS-1 downto 0);
-      ram_q    : in  std_logic_vector(D_BITS-1 downto 0));
   end component;
 end package;

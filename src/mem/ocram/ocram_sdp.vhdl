@@ -55,9 +55,19 @@
 -- limitations under the License.
 -- ============================================================================
 
+library std;
+use			std.TextIO.all;
+
 library	IEEE;
 use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
+use			IEEE.std_logic_textio.all;
+
+library PoC;
+use			PoC.config.all;
+use			PoC.utils.all;
+use			PoC.strings.all;
+
 
 entity ocram_sdp is
 	generic (
@@ -66,31 +76,20 @@ entity ocram_sdp is
 		FILENAME	: STRING		:= ""
 	);
 	port (
-		rclk : in	std_logic;														 -- read clock
-		rce	: in	std_logic;														 -- read clock-enable
-		wclk : in	std_logic;														 -- write clock
-		wce	: in	std_logic;														 -- write clock-enable
-		we	 : in	std_logic;														 -- write enable
-		ra	 : in	unsigned(A_BITS-1 downto 0);					 -- read address
-		wa	 : in	unsigned(A_BITS-1 downto 0);					 -- write address
-		d		: in	std_logic_vector(D_BITS-1 downto 0);	 -- data in
-		q		: out std_logic_vector(D_BITS-1 downto 0));	-- data out
+		rclk	: in	std_logic;														-- read clock
+		rce		: in	std_logic;														-- read clock-enable
+		wclk	: in	std_logic;														-- write clock
+		wce		: in	std_logic;														-- write clock-enable
+		we		: in	std_logic;														-- write enable
+		ra		: in	unsigned(A_BITS-1 downto 0);					-- read address
+		wa		: in	unsigned(A_BITS-1 downto 0);					-- write address
+		d			: in	std_logic_vector(D_BITS-1 downto 0);	-- data in
+		q			: out std_logic_vector(D_BITS-1 downto 0)		-- data out
+	);
 end entity;
 
 
-library std;
-use			std.TextIO.all;
-
-library	IEEE;
-use			IEEE.std_logic_textio.all;
-
-library PoC;
-use			PoC.config.all;
-use			PoC.utils.all;
-use			PoC.strings.all;
-
 architecture rtl of ocram_sdp is
-
   constant DEPTH : positive := 2**A_BITS;
 
 begin
@@ -106,13 +105,14 @@ begin
 		--	 This is the expected behaviour.
 		--	 With two different clocks, synthesis complains about an undefined
 		--	 read-write behaviour, that can be ignored.
+		
+    attribute ramstyle : string;
+		
     subtype word_t is std_logic_vector(D_BITS - 1 downto 0);
     type ram_t is array(0 to DEPTH - 1) of word_t;
-    attribute ramstyle : string;
 
 		-- Compute the initialization of a RAM array, if specified, from the passed file.
     impure function ocram_InitMemory(FileName : string) return ram_t is
-
 			-- Read the specified file name into the RAM array.
 			procedure ReadMemFile(FileName : in string; variable mem : inout ram_t) is
 				file FileHandle      : TEXT open READ_MODE is FileName;
@@ -131,15 +131,17 @@ begin
 					hread(CurrentLine, TempWord);
 					mem(i) := TempWord(word_t'range);
 				end loop;
-			end;
+			end procedure;
 
-			variable res : ram_t := (others => (others => 'U'));
+			variable res : ram_t;
 		begin
+			res		:= (others => (others => 'U'));
+			
 			if str_length(FileName) > 0 then
 				ReadMemFile(FileName, res);
 			end if;
 			return  res;
-		end ocram_InitMemory;
+		end function;
 
     signal ram : ram_t := ocram_InitMemory(FILENAME);
     attribute ramstyle of ram : signal is "no_rw_check";
@@ -192,6 +194,6 @@ begin
 	end generate gInfer;
 
 	assert VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA
-		report "Device not yet supported."
+		report "Vendor not yet supported."
 		severity failure;
-end rtl;
+end architecture;

@@ -44,7 +44,7 @@ entity stream_FrameGenerator is
   generic (
     DATA_BITS							: POSITIVE														:= 8;
 		WORD_BITS							: POSITIVE														:= 16;
-		APPend								: T_FRAMEGEN_APPend										:= FRAMEGEN_APP_NONE;
+		APPEND								: T_FRAMEGEN_APPEND										:= FRAMEGEN_APP_NONE;
 		FRAMEGROUPS						: T_FRAMEGEN_FRAMEGROUP_VECTOR_8			:= (0 => C_FRAMEGEN_FRAMEGROUP_EMPTY)
   );
 	port (
