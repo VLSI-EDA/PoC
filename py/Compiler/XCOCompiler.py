@@ -98,14 +98,50 @@ class Compiler(PoCCompiler):
 			raise CompilerException("IP-Core '{0}' not found.".format(str(pocEntity))) from NoSectionError(str(pocEntity))
 		
 		# read copy tasks
-		copyFileList = self.host.netListConfig[str(pocEntity)]['Copy']
-		self.printDebug("CopyTasks: \n  " + ("\n  ".join(copyFileList.split("\n"))))
 		copyTasks = []
-		for item in copyFileList.split("\n"):
-			list1 = re.split("\s+->\s+", item)
-			if (len(list1) != 2): raise CompilerException("Expected 2 arguments for every copy task!")
+		copyFileList = self.host.netListConfig[str(pocEntity)]['Copy']
+		if (len(copyFileList) != 0):
+			self.printDebug("CopyTasks: \n  " + ("\n  ".join(copyFileList.split("\n"))))
 			
-			copyTasks.append((Path(list1[0]), Path(list1[1])))
+			copyRegExpStr	 = r"^\s*(?P<SourceFilename>.*?)"			# Source filename
+			copyRegExpStr += r"\s->\s"													#	Delimiter signs
+			copyRegExpStr += r"(?P<DestFilename>.*?)$"					#	Destination filename
+			copyRegExp = re.compile(copyRegExpStr)
+			
+			for item in copyFileList.split("\n"):
+				copyRegExpMatch = copyRegExp.match(item)
+				if (copyRegExpMatch is not None):
+					copyTasks.append((
+						Path(copyRegExpMatch.group('SourceFilename')),
+						Path(copyRegExpMatch.group('DestFilename'))
+					))
+				else:
+					raise CompilerException("Error in copy rule '{0}'".format(item))
+		
+		# read replacement tasks
+		replaceTasks = []
+		replaceFileList = self.host.netListConfig[str(pocEntity)]['Replace']
+		if (len(replaceFileList) != 0):
+			self.printDebug("ReplacementTasks: \n  " + ("\n  ".join(replaceFileList.split("\n"))))
+
+			replaceRegExpStr =	r"^\s*(?P<Filename>.*?)\s+:"			# Filename
+			replaceRegExpStr += r"(?P<Options>[im]{0,2}):\s+"			#	RegExp options
+			replaceRegExpStr += r"\"(?P<Search>.*?)\"\s+->\s+"		#	Search regexp
+			replaceRegExpStr += r"\"(?P<Replace>.*?)\"$"					# Replace regexp
+			replaceRegExp = re.compile(replaceRegExpStr)
+
+			for item in replaceFileList.split("\n"):
+				replaceRegExpMatch = replaceRegExp.match(item)
+				
+				if (replaceRegExpMatch is not None):
+					replaceTasks.append((
+						Path(replaceRegExpMatch.group('Filename')),
+						replaceRegExpMatch.group('Options'),
+						replaceRegExpMatch.group('Search'),
+						replaceRegExpMatch.group('Replace')
+					))
+				else:
+					raise CompilerException("Error in replace rule '{0}'.".format(item))
 		
 		# setup all needed paths to execute coreGen
 		coreGenExecutablePath =		self.host.directories["ISEBinary"] / self.__executables['CoreGen']
@@ -225,4 +261,28 @@ class Compiler(PoCCompiler):
 		
 			self.printVerbose("  copying '{0}'.".format(fromPath))
 			shutil.copy(str(fromPath), str(toPath))
+		
+		# replace in resulting files
+		self.printNonQuiet('  replace in result files...')
+		for task in replaceTasks:
+			(fromPath, options, search, replace) = task
+			if not fromPath.exists(): raise CompilerException("Can not replace in file '{0}' to destination.".format(str(fromPath))) from FileNotFoundError(str(fromPath))
+			
+			self.printVerbose("  replace in file '{0}': search for '{1}' -> replace by '{2}'.".format(str(fromPath), search, replace))
+			
+			regExpFlags	 = re.DOTALL
+			if ('i' in options):
+				regExpFlags |= re.IGNORECASE
+			if ('m' in options):
+				regExpFlags |= re.MULTILINE
+			
+			regExp = re.compile(search, regExpFlags)
+			
+			with fromPath.open('r') as fileHandle:
+				FileContent = fileHandle.read()
+			
+			NewContent = re.sub(regExp, replace, FileContent)
+			
+			with fromPath.open('w') as fileHandle:
+				fileHandle.write(NewContent)
 		

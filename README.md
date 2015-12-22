@@ -12,8 +12,8 @@ Table of Content:
  2. [Download](#2-download)
  3. [Requirements](#3-requirements)
  4. [Dependencies](#4-dependencies)
- 5. [Configure PoC on a Local System](#5-configure-poc-on-a-local-system-stand-alone)
- 6. [Integrating PoC into projects](#6-integrating-poc-into-projects)
+ 5. [Configuring PoC on a Local System (Stand Alone)](#5-configuring-poc-on-a-local-system-stand-alone)
+ 6. [Integrating PoC into Projects](#6-integrating-poc-into-projects)
  7. [Using PoC](#7-using-poc)
  8. [Updating PoC](#8-updating-poc)
  9. [References](#9-references)
@@ -62,6 +62,8 @@ linked [git submodules][git_submod]. An additional `git submodule init` and
 
  [download]: https://github.com/VLSI-EDA/PoC/archive/master.zip
  [git_submod]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
+
+**Note:** The created folder `<GitRoot>\PoC` is used as `<PoCRoot>` in later instructions. 
 
 
 ## 3 Requirements
@@ -118,12 +120,12 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  - [**VUnit**][vunit] - Unit testing framework for VHDL.
 
 Both dependencies are available as GitHub repositories and are linked to
-PoC as git submodules into the [`lib\`][lib] directory.
+PoC as git submodules into the [`<PoCRoot>\lib\`][lib] directory.
 
  [osvvm]:	http://osvvm.org/
  [vunit]:	https://github.com/LarsAsplund/vunit
 
-## 5 Configure PoC on a Local System (Stand Alone)
+## 5 Configuring PoC on a Local System (Stand Alone)
 
 To explore PoC's full potential, it's required to configure some paths and
 synthesis or simulation tool chains. The following commands start a guided
@@ -144,6 +146,10 @@ Run the following command line instructions to configure PoC on your local syste
 cd <PoCRoot>
 .\poc.ps1 --configure
 ```
+
+**Note:** The configuration process can be re-run at every time to add, remove
+or update choices made.
+
 
 ## 6 Integrating PoC into Projects
 
@@ -172,7 +178,9 @@ git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
 
  [git_submod]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
 
-#### 6.2 Configuring PoC on a Local System
+#### 6.2 Configuring PoC
+
+**The PoC-Library** needs to be configured.
 
 ```PowerShell
 cd <ProjectRoot>
@@ -228,7 +236,7 @@ cd <PoCRoot>/netlist
 **The PoC-Library** is structured into several sub-folders naming the purpose of
 the folder like [`src`][src] for sources files or [`tb`][tb] for testbench files.
 The structure within these folders is always the same and based on PoC's
-sub-namespace tree.
+[sub-namespace tree][wiki:subnamespacetree].
 
 **Main directory overview:**
 
@@ -244,18 +252,61 @@ sub-namespace tree.
  -  [`ucf`][ucf] - Pre-configured constraint files (\*.ucf, \*.xdc, \*.sdc) for supported FPGA boards.
  -  [`xst`][xst] - Configuration files to synthesize PoC modules with Xilinx XST into a netlist.
 
+#### 7.1 Common Notes
 
-#### 7.1 Standalone
+All VHDL source files should be compiled into the VHDL library `PoC`.
+If not indicated otherwise, all source files can be compiled using the
+VHDL-93 or VHDL-2008 language version. Incompatible files are named
+`*.v93.vhdl` and `*.v08.vhdl` to denote the highest supported language
+version. 
 
-#### 7.2 In Altera Quartus II
+#### 7.2 Standalone
 
-#### 7.3 In GHDL
+#### 7.3 In Altera Quartus II
 
-#### 7.4 In ModelSim/QuestaSim
+#### 7.4 In GHDL
 
-#### 7.5 In Xilinx ISE (XST and iSim)
+#### 7.5 In ModelSim/QuestaSim
 
-#### 7.6 In Xilinx Vivado (Synth and xSim)
+
+#### 7.6 In Xilinx ISE (XST and iSim)
+
+**The PoC-Library** was originally designed for the Xilinx ISE
+design flow. The latest version (14.7) is supported and required to
+explore PoC's full potential. Don't forget to activate the new
+XST parser in new projects and to append the IP core search
+directory if generated netlists are used.
+
+ 1. **Activating the New Parser in XST**  
+    PoC requires XST to use the *new* source file parser, introduced
+    with the Virtex-6 FPGA family. It is backward compatible.
+
+    **->** Open the *XST Process Property* window and add `-use_new_parser yes`
+    to the option `Other XST Command Line Options`.
+
+ 2. **Setting the IP Core Search Directory for Generated Netlists**  
+    PoC can generate netlists for bundled source files or for
+    pre-configured IP cores. These netlists are copied into the
+    `<PoCRoot>\netlist\<DEVICE>` folder. This folder and its subfolders
+    need to be added to the IP core search directory.
+    
+    **->** Open the *XST Process Property* window and append the directory to the `-sd` option.
+    **->** Open *Translate Process Property* and append the paths here, too.
+    
+        D:\git\PoC\netlist\XC7VX485T-2FFG1761|      ↩
+        D:\git\PoC\netlist\XC7VX485T-2FFG1761\xil|  ↩
+        D:\git\PoC\netlist\XC7VX485T-2FFG1761\sata
+
+    **Note:** The IP core search directory value is a `|` seperated list of directories. A recursive search is not performed, so sub-folders need to be named individually.
+
+#### 7.7 In Xilinx Vivado (Synth and xSim)
+
+**The PoC-Library** has no full Vivado support, because of the incomplete
+VHDL-87 support in Vivados Synthesis tool. Especially the incorrect implementation of
+physical types causes errors in PoC's I/O modules.
+
+Vivado's simulator xSim is not affected.
+
 
 ## 8 Updating PoC
 

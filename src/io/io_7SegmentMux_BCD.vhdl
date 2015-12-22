@@ -90,7 +90,7 @@ begin
 		BCDDot		:= BCDDots(to_index(DigitCounter_us, BCDDigits'length));
 	
 		if (BCDDigit < C_BCD_MINUS) then
-			SegmentControl	<= io_7SegmentDisplayEncoding(BCDDigit, BCDDot);
+			SegmentControl	<= io_7SegmentDisplayEncoding(BCDDigit, BCDDot, WITH_DOT => TRUE);
 		elsif (BCDDigit = C_BCD_MINUS) then
 			SegmentControl	<= BCDDot & "1000000";
 		else

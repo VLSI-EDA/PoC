@@ -67,8 +67,9 @@ end;
 
 
 architecture rtl of xil_BSCAN is
+	constant DEV_INFO		: T_DEVICE_INFO	:= DEVICE_INFO;
 begin
-	genSpartan3 : if (DEVICE = DEVICE_SPARTAN3) generate
+	genSpartan3 : if (DEV_INFO.Device = DEVICE_SPARTAN3) generate
 		signal drck_i		: STD_LOGIC_VECTOR(1 downto 0);
 		signal sel_i		: STD_LOGIC_VECTOR(1 downto 0);
 		signal tdo_i		: STD_LOGIC_VECTOR(1 downto 0);
@@ -93,7 +94,7 @@ begin
 			);
 	end generate;
 	
-	genSpartan6 : if (DEVICE = DEVICE_SPARTAN6) generate
+	genSpartan6 : if (DEV_INFO.Device = DEVICE_SPARTAN6) generate
 	begin
 		bscan : BSCAN_SPARTAN6
 			generic map (
@@ -114,7 +115,7 @@ begin
 			);
 	end generate;
 	
-	genVirtex5 : if (DEVICE = DEVICE_VIRTEX5) generate
+	genVirtex5 : if (DEV_INFO.Device = DEVICE_VIRTEX5) generate
 	begin
 		bscan : BSCAN_VIRTEX5
 			generic map (
@@ -132,7 +133,7 @@ begin
 			);
 	end generate;
 	
-	genVirtex6 : if (DEVICE = DEVICE_VIRTEX6) generate
+	genVirtex6 : if (DEV_INFO.Device = DEVICE_VIRTEX6) generate
 	begin
 		bscan : BSCAN_VIRTEX6
 			generic map (
@@ -154,7 +155,7 @@ begin
 			);
 	end generate;
 	
-	genSeries7 : if (DEVICE_SERIES = 7) generate
+	genSeries7 : if (DEV_INFO.DevSeries = DEVICE_SERIES_7_SERIES) generate
 	begin
 		bscan : BSCANE2
 			generic map (

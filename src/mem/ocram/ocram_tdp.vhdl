@@ -63,18 +63,16 @@
 -- ============================================================================
 
 
-library STD;
-use			STD.TextIO.all;
-
 library	IEEE;
 use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
-use			IEEE.std_logic_textio.all;
 
 library PoC;
 use			PoC.config.all;
 use			PoC.utils.all;
 use			PoC.strings.all;
+use			PoC.vectors.all;
+use			PoC.mem.all;
 
 
 entity ocram_tdp is
@@ -104,40 +102,29 @@ architecture rtl of ocram_tdp is
 	constant DEPTH : positive := 2**A_BITS;
 
 begin
-	gInfer: if VENDOR = VENDOR_XILINX generate
+	gInfer : if ((VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly only if '-use_new_parser yes' is enabled in XST options
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		ram_t		is array(0 to DEPTH - 1) of word_t;
 		
 		-- Compute the initialization of a RAM array, if specified, from the passed file.
-    impure function ocram_InitMemory(FileName : string) return ram_t is
-			-- Read the specified file name into the RAM array.
-			procedure ReadMemFile(FileName : in string; variable mem : inout ram_t) is
-				file FileHandle      : TEXT open READ_MODE is FileName;
-				variable CurrentLine : LINE;
-				variable TempWord    : STD_LOGIC_VECTOR((div_ceil(word_t'length, 4) * 4) - 1 downto 0);
-			begin
-				-- discard the first line of a mem file
-				if (str_toLower(FileName(FileName'length - 3 to FileName'length)) = ".mem") then
-					readline(FileHandle, CurrentLine);
-				end if;
-
-				for i in 0 to DEPTH - 1 loop
-					exit when endfile(FileHandle);
-
-					readline(FileHandle, CurrentLine);
-					hread(CurrentLine, TempWord);
-					mem(i) := TempWord(word_t'range);
-				end loop;
-			end procedure;
-
-			variable res : ram_t;
+		impure function ocram_InitMemory(FilePath : string) return ram_t is
+			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
+			variable res			: ram_t;
 		begin
-			res		:= (others => (others => 'U'));
-			
-			if str_length(FileName) > 0 then
-				ReadMemFile(FileName, res);
+			if (str_length(FilePath) = 0) then
+				Memory	:= (others => (others => ite(SIMULATION, 'U', '0')));
+			elsif (mem_FileExtension(FilePath) = "mem") then
+				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
+			else
+				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_INTEL_HEX, MEM_CONTENT_HEX);
 			end if;
+
+			for i in Memory'range(1) loop
+				for j in word_t'range loop
+					res(i)(j)		:= Memory(i, j);
+				end loop;
+			end loop;
 			return  res;
 		end function;
 
@@ -146,6 +133,7 @@ begin
 		signal a2_reg		: unsigned(A_BITS-1 downto 0);
 		
 	begin
+		
 		process (clk1, clk2)
 		begin	-- process
 			if rising_edge(clk1) then
@@ -222,7 +210,7 @@ begin
 			);
 	end generate gAltera;
 	
-	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_XILINX))
-		report "Vendor not yet supported."
+	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
+		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;
 end architecture;

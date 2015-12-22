@@ -14,17 +14,21 @@ implementations.
  - [`PoC.mem.sdram`][mem_sdram] - SDRAM controllers
 
 
-## Package(s)
+## Package
+
+The package [`mem`][mem.pkg] holds all component declarations for this namespace.
+
+```VHDL
+library PoC;
+use     PoC.mem.all;
+```
 
 
-## Entities
-
- -  `mem_memtest_fsm`
-
-
+ [mem.pkg]:				mem.pkg.vhdl
+ 
  [mem_is61lv]:		is61lv
  [mem_is61nlp]:		is61nlp
- [mem_lut]:			lut
- [mem_ocram]:		ocram
- [mem_ocrom]:		ocrom
- [mem_sdram]:		sdram
+ [mem_lut]:				lut
+ [mem_ocram]:			ocram
+ [mem_ocrom]:			ocrom
+ [mem_sdram]:			sdram

@@ -142,6 +142,7 @@ class CommandLineProgram(object):
 		self.directories["iSimTemp"] =			self.directories["PoCTemp"] / self.pocConfig['PoC.DirectoryNames']['ISESimulatorFiles']
 		self.directories["xSimTemp"] =			self.directories["PoCTemp"] / self.pocConfig['PoC.DirectoryNames']['VivadoSimulatorFiles']
 		self.directories["vSimTemp"] =			self.directories["PoCTemp"] / self.pocConfig['PoC.DirectoryNames']['ModelSimSimulatorFiles']
+		self.directories["aSimTemp"] =			self.directories["PoCTemp"] / self.pocConfig['PoC.DirectoryNames']['AldecSimulatorFiles']
 		self.directories["GHDLTemp"] =			self.directories["PoCTemp"] / self.pocConfig['PoC.DirectoryNames']['GHDLSimulatorFiles']
 
 		self.directories["CoreGenTemp"] =		self.directories["PoCTemp"] / self.pocConfig['PoC.DirectoryNames']['ISECoreGeneratorFiles']

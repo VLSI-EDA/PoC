@@ -79,11 +79,11 @@ class NetList(CommandLineProgram):
 
 	def coreGenCompilation(self, entity, showLogs, showReport, deviceString=None, boardString=None):
 		# check if ISE is configure
-		if (len(self.pocConfig.options("Xilinx-ISE")) == 0):	raise NotConfiguredException("Xilinx ISE is not configured on this system.")
+		if (len(self.pocConfig.options("Xilinx.ISE")) == 0):	raise NotConfiguredException("Xilinx ISE is not configured on this system.")
 		
 		# prepare some paths
-		self.directories["ISEInstallation"] = Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])
-		self.directories["ISEBinary"] =				Path(self.pocConfig['Xilinx-ISE']['BinaryDirectory'])
+		self.directories["ISEInstallation"] = Path(self.pocConfig['Xilinx.ISE']['InstallationDirectory'])
+		self.directories["ISEBinary"] =				Path(self.pocConfig['Xilinx.ISE']['BinaryDirectory'])
 	
 		# check if the appropriate environment is loaded
 		from os import environ
@@ -107,12 +107,12 @@ class NetList(CommandLineProgram):
 		
 	def xstCompilation(self, entity, showLogs, showReport, deviceString=None, boardString=None):
 		# check if ISE is configure
-		if (len(self.pocConfig.options("Xilinx-ISE")) == 0):
+		if (len(self.pocConfig.options("Xilinx.ISE")) == 0):
 			raise NotConfiguredException("Xilinx ISE is not configured on this system.")
 		
 		# prepare some paths
-		self.directories["ISEInstallation"] = Path(self.pocConfig['Xilinx-ISE']['InstallationDirectory'])
-		self.directories["ISEBinary"] =				Path(self.pocConfig['Xilinx-ISE']['BinaryDirectory'])
+		self.directories["ISEInstallation"] = Path(self.pocConfig['Xilinx.ISE']['InstallationDirectory'])
+		self.directories["ISEBinary"] =				Path(self.pocConfig['Xilinx.ISE']['BinaryDirectory'])
 	
 		# check if the appropriate environment is loaded
 		from os import environ

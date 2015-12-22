@@ -42,4 +42,5 @@ else:
 import Simulator.ISESimulator
 import Simulator.VivadoSimulator
 import Simulator.QuestaSimulator
+import Simulator.AldecSimulator
 import Simulator.GHDLSimulator

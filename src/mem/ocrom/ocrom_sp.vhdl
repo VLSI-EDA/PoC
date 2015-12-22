@@ -47,6 +47,8 @@ library	PoC;
 use			PoC.config.all;
 use			PoC.utils.all;
 use			PoC.strings.all;
+use			PoC.vectors.all;
+use			PoC.mem.all;
 
 
 entity ocrom_sp is
@@ -76,35 +78,24 @@ begin
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		rom_t		is array(0 to DEPTH - 1) of word_t;
 		
-		-- Compute the initialization of a ROM array, if specified, from the passed file.
-    impure function ocrom_InitMemory(FileName : string) return rom_t is
-			-- Read the specified file name into the ROM array.
-			procedure ReadMemFile(FileName : in string; variable mem : inout rom_t) is
-				file FileHandle      : TEXT open READ_MODE is FileName;
-				variable CurrentLine : LINE;
-				variable TempWord    : STD_LOGIC_VECTOR((div_ceil(word_t'length, 4) * 4) - 1 downto 0);
-			begin
-				-- discard the first line of a mem file
-				if (str_toLower(FileName(FileName'length - 3 to FileName'length)) = ".mem") then
-					readline(FileHandle, CurrentLine);
-				end if;
-
-				for i in 0 to DEPTH - 1 loop
-					exit when endfile(FileHandle);
-
-					readline(FileHandle, CurrentLine);
-					hread(CurrentLine, TempWord);
-					mem(i) := TempWord(word_t'range);
-				end loop;
-			end procedure;
-
-			variable res : rom_t;
+		-- Compute the initialization of a RAM array, if specified, from the passed file.
+		impure function ocrom_InitMemory(FilePath : string) return ram_t is
+			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
+			variable res			: ram_t;
 		begin
-			res		:= (others => (others => 'U'));
-			
-			if str_length(FileName) > 0 then
-				ReadMemFile(FileName, res);
+			if (str_length(FilePath) = 0) then
+				Memory	:= (others => (others => ite(SIMULATION, 'U', '0')));
+			elsif (mem_FileExtension(FilePath) = "mem") then
+				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
+			else
+				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_INTEL_HEX, MEM_CONTENT_HEX);
 			end if;
+
+			for i in Memory'range(1) loop
+				for j in word_t'range loop
+					res(i)(j)		:= Memory(i, j);
+				end loop;
+			end loop;
 			return  res;
 		end function;
 

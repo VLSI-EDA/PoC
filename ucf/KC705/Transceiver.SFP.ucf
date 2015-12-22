@@ -10,8 +10,8 @@
 ##			SFP:				Quad117.Channel2 (GTXE2_CHANNEL_X0Y10)
 ##		Location:			P5
 #$	##		I²C-Address:	0xA0 (1010 000xb)
-NET "KC705_SFP_TX_Disable"		LOC = "Y20" | IOSTANDARD = LVCMOS25; ## #$	; low-active; external 4k7 pullup resistor; level shifted by Q4 (NDS331N)
-NET "KC705_SFP_LossOfSignal"		LOC = "P19" | IOSTANDARD = LVCMOS25; ## #$	; low-active; external 4k7 pullup resistor; level shifted by U69 (SN74AVC1T45)
+NET "KC705_SFP_TX_Disable_n"		LOC = "Y20" | IOSTANDARD = LVCMOS25; ## #$	; low-active; external 4k7 pullup resistor; level shifted by Q4 (NDS331N)
+NET "KC705_SFP_LossOfSignal"		LOC = "P19" | IOSTANDARD = LVCMOS25; ## #$	; high-active; external 4k7 pullup resistor; level shifted by U69 (SN74AVC1T45)
 ##
 ## --------------------------
 ## SFP+ LVDS signal-pairs
@@ -21,6 +21,6 @@ NET "KC705_SFP_RX_n"					LOC = "G3";													## {IN}
 NET "KC705_SFP_RX_p"					LOC = "G4";													## {IN}		
 
 # Ignore timings on async I/O pins
-NET "KC705_SFP_TX_Disable"		TIG;
+NET "KC705_SFP_TX_Disable_n"		TIG;
 NET "KC705_SFP_LossOfSignal"		TIG;
 

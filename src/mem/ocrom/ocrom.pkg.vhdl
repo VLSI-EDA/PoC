@@ -38,7 +38,7 @@ use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
 
 
-package ocram is
+package ocrom is
 	-- Single-Port
 	component ocrom_sp is
 		generic (

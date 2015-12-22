@@ -183,6 +183,7 @@ package vectors is
 
 	-- to_string
 	function to_string(slvv : T_SLVV_8; sep : CHARACTER := ':') return STRING;
+	function to_string(slm : T_SLM; groups : POSITIVE := 4; format : CHARACTER := 'b') return STRING;
 end package vectors;
 
 
@@ -919,5 +920,41 @@ package body vectors is
 			pos											:= pos + ite((sep = C_POC_NUL), 2, 3);
 		end loop;
 		return Result;
+	end function;
+	
+	function to_string_bin(slm : T_SLM; groups : POSITIVE := 4; format : CHARACTER := 'h') return STRING is
+		variable PerLineOverheader	: POSITIVE	:= div_ceil(slm'length(2), groups);
+		variable Result							: STRING(1 to (slm'length(1) * (slm'length(2) + PerLineOverheader)) + 10);
+		variable Writer							: POSITIVE;
+		variable GroupCounter				: NATURAL;
+	begin
+		Result				:= (others => C_POC_NUL);
+		Result(1)			:= LF;
+		Writer				:= 2;
+		GroupCounter	:= 0;
+		for i in slm'low(1) to slm'high(1) loop
+			for j in slm'high(2) downto slm'low(2) loop
+				Result(Writer)		:= to_char(slm(i, j));
+				Writer						:= Writer + 1;
+				GroupCounter			:= GroupCounter + 1;
+				if (GroupCounter = groups) then
+					Result(Writer)	:= ' ';
+					Writer					:= Writer + 1;
+					GroupCounter		:= 0;
+				end if;
+			end loop;
+			Result(Writer - 1)	:= LF;
+			GroupCounter				:= 0;
+		end loop;
+		return str_trim(Result);
+	end function;
+	
+	function to_string(slm : T_SLM; groups : POSITIVE := 4; format : CHARACTER := 'b') return STRING is
+	begin
+		if (format = 'b') then
+			return to_string_bin(slm, groups);
+		else
+			return "Format not supported.";
+		end if;
 	end function;
 end package body;

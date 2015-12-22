@@ -89,6 +89,6 @@ begin
 		HexDigit	:= HexDigits(to_index(DigitCounter_us, HexDigits'length));
 		HexDot		:= HexDots(to_index(DigitCounter_us, HexDigits'length));
 
-		SegmentControl	<= io_7SegmentDisplayEncoding(HexDigit, HexDot);
+		SegmentControl	<= io_7SegmentDisplayEncoding(HexDigit, HexDot, WITH_DOT => TRUE);
 	end process;
 end;

@@ -156,6 +156,48 @@ package body config_private is
 	-- Board Descriptions
 	-- ===========================================================================
 	CONSTANT C_BOARD_INFO_LIST		: T_BOARD_INFO_VECTOR		:= (
+		-- Altera boards
+		-- =========================================================================
+		(
+			BoardName =>			conf("DE0"),
+			FPGADevice =>			conf("EP3C16F484"),										-- EP3C16F484
+			UART =>						C_BOARD_UART_EMPTY,
+			Ethernet =>				C_BOARD_ETH_NONE,
+			EthernetCount =>	0
+		),(
+			BoardName =>			conf("S2GXAV"),
+			FPGADevice =>			conf("EP2SGX90FF1508C3"),							-- EP2SGX90FF1508C3
+			UART =>						C_BOARD_UART_EMPTY,
+			Ethernet =>				C_BOARD_ETH_NONE,
+			EthernetCount =>	0
+		),(
+			BoardName =>			conf("DE4"),
+			FPGADevice =>			conf("EP4SGX230KF40C2"),							-- EP4SGX230KF40C2
+			UART =>						C_BOARD_UART_DCE_460800_NONE,
+			Ethernet => (
+				0 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"00", "RGMII", "MDIO"),
+				1 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"01", "RGMII", "MDIO"),
+				2 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"02", "RGMII", "MDIO"),
+				3 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"03", "RGMII", "MDIO"),
+				others => C_BOARD_ETH_EMPTY
+			),
+			EthernetCount =>	4
+		),(
+			BoardName =>			conf("DE5"),
+			FPGADevice =>			conf("EP5SGXEA7N2F45C2"),							-- EP5SGXEA7N2F45C2
+			UART =>						C_BOARD_UART_EMPTY,
+			Ethernet =>				C_BOARD_ETH_NONE,
+			EthernetCount =>	0
+		),
+		-- Lattice boards
+		-- =========================================================================
+		(
+			BoardName =>			conf("ECP5 Versa"),
+			FPGADevice => 		conf("LFE5UM-45F-6BG381C"),						-- LFE5UM-45F-6BG381C
+			UART =>						C_BOARD_UART_EMPTY,
+			Ethernet =>				C_BOARD_ETH_NONE,
+			EthernetCount =>	0
+		),
 		-- Xilinx boards
 		-- =========================================================================
 		(
@@ -265,39 +307,6 @@ package body config_private is
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),
-		-- Altera boards
-		-- =========================================================================
-		(
-			BoardName =>			conf("DE0"),
-			FPGADevice =>			conf("EP3C16F484"),										-- EP3C16F484
-			UART =>						C_BOARD_UART_EMPTY,
-			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount =>	0
-		),(
-			BoardName =>			conf("S2GXAV"),
-			FPGADevice =>			conf("EP2SGX90FF1508C3"),							-- EP2SGX90FF1508C3
-			UART =>						C_BOARD_UART_EMPTY,
-			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount =>	0
-		),(
-			BoardName =>			conf("DE4"),
-			FPGADevice =>			conf("EP4SGX230KF40C2"),							-- EP4SGX230KF40C2
-			UART =>						C_BOARD_UART_DCE_460800_NONE,
-			Ethernet => (
-				0 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"00", "RGMII", "MDIO"),
-				1 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"01", "RGMII", "MDIO"),
-				2 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"02", "RGMII", "MDIO"),
-				3 => brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"03", "RGMII", "MDIO"),
-				others => C_BOARD_ETH_EMPTY
-			),
-			EthernetCount =>	4
-		),(
-			BoardName =>			conf("DE5"),
-			FPGADevice =>			conf("EP5SGXEA7N2F45C2"),							-- EP5SGXEA7N2F45C2
-			UART =>						C_BOARD_UART_EMPTY,
-			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount =>	0
-		),
 		-- Custom Board (MUST BE LAST ONE)
 		-- =========================================================================
 		(
@@ -329,6 +338,7 @@ package config is
 	-- List of known FPGA / Chip vendors
 	-- ---------------------------------------------------------------------------
 	type T_VENDOR is (
+		VENDOR_UNKNOWN,
 		VENDOR_ALTERA,
 		VENDOR_LATTICE,
 		VENDOR_XILINX
@@ -337,7 +347,9 @@ package config is
 	-- List of known synthesis tool chains
 	-- ---------------------------------------------------------------------------
 	type T_SYNTHESIS_TOOL is (
+		SYNTHESIS_TOOL_UNKNOWN,
 		SYNTHESIS_TOOL_ALTERA_QUARTUS2,
+		SYNTHESIS_TOOL_LATTICE_LSE,
 		SYNTHESIS_TOOL_SYNOPSIS,
 		SYNTHESIS_TOOL_XILINX_XST,
 		SYNTHESIS_TOOL_XILINX_VIVADO
@@ -346,35 +358,67 @@ package config is
 	-- List of known device families
 	-- ---------------------------------------------------------------------------
 	type T_DEVICE_FAMILY is (
+		DEVICE_FAMILY_UNKNOWN,
+		-- Altera
+		DEVICE_FAMILY_ARRIA,
+		DEVICE_FAMILY_CYCLONE,
+		DEVICE_FAMILY_STRATIX,
+		-- Lattice
+		DEVICE_FAMILY_ICE,
+		DEVICE_FAMILY_MACHXO,
+		DEVICE_FAMILY_ECP,
 		-- Xilinx
 		DEVICE_FAMILY_SPARTAN,
 		DEVICE_FAMILY_ZYNQ,
 		DEVICE_FAMILY_ARTIX,
 		DEVICE_FAMILY_KINTEX,
-		DEVICE_FAMILY_VIRTEX,
-		-- Altera
-		DEVICE_FAMILY_CYCLONE,
-		DEVICE_FAMILY_STRATIX
+		DEVICE_FAMILY_VIRTEX
+	);
+	
+	type T_DEVICE_SERIES is (
+		DEVICE_SERIES_UNKNOWN,
+		-- Xilinx FPGA series
+		DEVICE_SERIES_7_SERIES,
+		DEVICE_SERIES_ULTRASCALE,
+		DEVICE_SERIES_ULTRASCALE_PLUS
 	);
 	
 	-- List of known devices
 	-- ---------------------------------------------------------------------------
 	type T_DEVICE is (
+		DEVICE_UNKNOWN,
+		-- Altera
+		DEVICE_MAX2, DEVICE_MAX10,																					-- Altera.Max
+		DEVICE_ARRIA1, DEVICE_ARRIA2, DEVICE_ARRIA5, DEVICE_ARRIA10,				-- Altera.Arria
+		DEVICE_CYCLONE1, DEVICE_CYCLONE2, DEVICE_CYCLONE3, DEVICE_CYCLONE4,	-- Altera.Cyclone
+			DEVICE_CYCLONE5,																									-- 
+		DEVICE_STRATIX1, DEVICE_STRATIX2, DEVICE_STRATIX3, DEVICE_STRATIX4,	-- Altera.Stratix
+			DEVICE_STRATIX5, DEVICE_STRATIX10,																-- 
+		-- Lattice
+		DEVICE_ICE40, DEVICE_ICE65, DEVICE_ICE5,														-- Lattice.iCE
+		DEVICE_MACHXO, DEVICE_MACHXO2,																			-- Lattice.MachXO
+		DEVICE_ECP3, DEVICE_ECP4, DEVICE_ECP5,															-- Lattice.ECP
 		-- Xilinx
 		DEVICE_SPARTAN3, DEVICE_SPARTAN6,																		-- Xilinx.Spartan
-		DEVICE_ZYNQ7,																												-- Xilinx.Zynq
+		DEVICE_ZYNQ7, DEVICE_ZYNQ_ULTRA_PLUS,																-- Xilinx.Zynq
 		DEVICE_ARTIX7,																											-- Xilinx.Artix
-		DEVICE_KINTEX7,																											-- Xilinx.Kintex
+		DEVICE_KINTEX7, DEVICE_KINTEX_ULTRA, DEVICE_KINTEX_ULTRA_PLUS,			-- Xilinx.Kintex
 		DEVICE_VIRTEX5,	DEVICE_VIRTEX6, DEVICE_VIRTEX7,											-- Xilinx.Virtex
-		-- Altera
-		DEVICE_CYCLONE1, DEVICE_CYCLONE2, DEVICE_CYCLONE3,									-- Altera.Cyclone
-		DEVICE_STRATIX1, DEVICE_STRATIX2, DEVICE_STRATIX4, DEVICE_STRATIX5	-- Altera.Stratix
+			DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS											-- 
 	);
 
 	-- List of known device subtypes
 	-- ---------------------------------------------------------------------------
 	type T_DEVICE_SUBTYPE is (
 		DEVICE_SUBTYPE_NONE,
+		-- Altera
+		DEVICE_SUBTYPE_E,
+		DEVICE_SUBTYPE_GS,
+		DEVICE_SUBTYPE_GX,
+		DEVICE_SUBTYPE_GT,
+		-- Lattice
+		DEVICE_SUBTYPE_U,
+		DEVICE_SUBTYPE_UM,
 		-- Xilinx
 		DEVICE_SUBTYPE_X,
 		DEVICE_SUBTYPE_T,
@@ -386,26 +430,24 @@ package config is
 		DEVICE_SUBTYPE_TXT,
 		DEVICE_SUBTYPE_FXT,
 		DEVICE_SUBTYPE_CXT,
-		DEVICE_SUBTYPE_HXT,
-		-- Altera
-		DEVICE_SUBTYPE_E,
-		DEVICE_SUBTYPE_GS,
-		DEVICE_SUBTYPE_GX,
-		DEVICE_SUBTYPE_GT
+		DEVICE_SUBTYPE_HXT
 	);
 
 	-- List of known transceiver (sub-)types
 	-- ---------------------------------------------------------------------------
 	type T_TRANSCEIVER is (
 		TRANSCEIVER_NONE,
+		-- TODO: add more? Altera transceivers
+		-- Altera transceivers
+		TRANSCEIVER_GXB,																										-- Altera GXB transceiver
+		--Lattice transceivers
+		TRANSCEIVER_MGT,																										-- Lattice transceiver
 		-- Xilinx transceivers
 		TRANSCEIVER_GTP_DUAL,	TRANSCEIVER_GTPE1, TRANSCEIVER_GTPE2,					-- Xilinx GTP transceivers
 		TRANSCEIVER_GTX,			TRANSCEIVER_GTXE1, TRANSCEIVER_GTXE2,					-- Xilinx GTX transceivers
 		TRANSCEIVER_GTH,			TRANSCEIVER_GTHE1, TRANSCEIVER_GTHE2,					-- Xilinx GTH transceivers
 		TRANSCEIVER_GTZ,																										-- Xilinx GTZ transceivers
-
-		-- TODO: add Altera transceivers
-		TRANSCEIVER_GXB																											-- Altera GXB transceiver
+		TRANSCEIVER_GTY																											-- Xilinx GTY transceivers
 	);
 
 	-- Properties of an FPGA architecture
@@ -416,7 +458,7 @@ package config is
 		DevFamily					: T_DEVICE_FAMILY;
 		DevNumber					: natural;
 		DevSubType				: T_DEVICE_SUBTYPE;
-		DevSeries					: natural;
+		DevSeries					: T_DEVICE_SERIES;
 		
 		TransceiverType		: T_TRANSCEIVER;
 		LUT_FanIn					: positive;
@@ -440,7 +482,7 @@ package config is
 	function DEVICE_FAMILY(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_DEVICE_FAMILY;
 	function DEVICE_NUMBER(DeviceString : string := C_DEVICE_STRING_EMPTY)		return natural;
 	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_DEVICE_SUBTYPE;
-	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY)		return natural;
+	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_DEVICE_SERIES;
 
 	function TRANSCEIVER_TYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)	return T_TRANSCEIVER;
 	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY)				return positive;
@@ -453,9 +495,12 @@ end package;
 
 
 package body config is
-	-- private functions required by board description
-	-- ModelSim requires that this functions is defined before it is used below.
+	-- inlined function from PoC.utils, to break dependency
 	-- ===========================================================================
+	function ite(cond : BOOLEAN; value1 : STRING; value2 : STRING) return STRING is begin
+		if cond then	return value1;	else	return value2;	end if;
+	end function;
+		
 	-- chr_is* function
 	function chr_isDigit(chr : CHARACTER) return boolean is
 	begin
@@ -534,8 +579,8 @@ package body config is
 		return FALSE;
 	end function;
 
-
-	-- helper function to create configuration strings
+	-- private functions required by board description
+	-- ModelSim requires that this functions is defined before it is used below.
 	-- ===========================================================================	
 	function getLocalDeviceString(DeviceString : STRING) return STRING is
 		constant ConstNUL				: STRING(1 to 1)				:= (others => C_POC_NUL);
@@ -560,8 +605,6 @@ package body config is
 		return Result;
 	end function;
 
-	-- helper function to create configuration strings
-	-- ===========================================================================
 	function extractFirstNumber(str : STRING) return NATURAL is
 		variable low			: integer;
 		variable high			: integer;
@@ -603,17 +646,10 @@ package body config is
 	-- ===========================================================================
 	-- TODO: comment
 	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY) return NATURAL is
-		-- inlined function from PoC.utils, to break dependency
-		function ite(cond : BOOLEAN; value1 : STRING; value2 : STRING) return STRING is begin
-			if cond then	return value1;	else	return value2;	end if;
-		end function;
-	
 		constant MY_BRD			: T_BOARD_CONFIG_STRING	:= ite((BoardConfig /= C_BOARD_STRING_EMPTY), conf(BoardConfig), conf(MY_BOARD));
 		constant BOARD_NAME	: STRING								:= str_trim(MY_BRD);
 	begin
-		if (POC_VERBOSE = TRUE) then
-			report "PoC configuration: Used board is '" & BOARD_NAME & "'" severity NOTE;
-		end if;
+		if (POC_VERBOSE = TRUE) then	report "PoC configuration: Used board is '" & BOARD_NAME & "'" severity NOTE;		end if;
 		for i in C_BOARD_INFO_LIST'range loop
 			if str_imatch(BOARD_NAME, C_BOARD_INFO_LIST(i).BoardName) then
 				return  i;
@@ -653,11 +689,18 @@ package body config is
 	-- purpose: extract vendor from MY_DEVICE
 	function VENDOR(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_VENDOR is
 		constant MY_DEV		: string(1 to 32)	:= getLocalDeviceString(DeviceString);
-		constant VEN_STR	: string(1 to 2)  := MY_DEV(1 to 2);
+		constant VEN_STR2	: string(1 to 2)  := MY_DEV(1 to 2);
+		constant VEN_STR3	: string(1 to 3)  := MY_DEV(1 to 3);
 	begin
-		case VEN_STR is
-			when "XC" =>		return VENDOR_XILINX;
+		case VEN_STR2 is
 			when "EP" =>		return VENDOR_ALTERA;
+			when "XC" =>		return VENDOR_XILINX;
+			when others =>	null;
+		end case;
+		case VEN_STR3 is
+			when "iCE" =>		return VENDOR_LATTICE;		-- iCE devices
+			when "LCM" =>		return VENDOR_LATTICE;		-- MachXO device
+			when "LFE" =>		return VENDOR_LATTICE;		-- ECP devices
 			when others =>	report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
@@ -670,13 +713,16 @@ package body config is
 			when VENDOR_ALTERA =>
 				return SYNTHESIS_TOOL_ALTERA_QUARTUS2;
 			when VENDOR_LATTICE =>
-				return SYNTHESIS_TOOL_SYNOPSIS;
+				return SYNTHESIS_TOOL_LATTICE_LSE;
+				--return SYNTHESIS_TOOL_SYNOPSIS;
 			when VENDOR_XILINX =>
 				if (1 fs /= 1 us) then
 					return SYNTHESIS_TOOL_XILINX_XST;
 				else
 					return SYNTHESIS_TOOL_XILINX_VIVADO;
 				end if;
+			when others =>
+				return SYNTHESIS_TOOL_UNKNOWN;
 		end case;
 	end function;
 
@@ -699,15 +745,29 @@ package body config is
 					when others => report "Unknown Altera device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 
+			when VENDOR_LATTICE =>
+				if		(MY_DEV(1 to 6) = "LCMX02") then	return DEVICE_MACHXO2;
+				elsif	(MY_DEV(1 to 5) = "LCMX0") then		return DEVICE_MACHXO;
+				elsif	(MY_DEV(1 to 5) = "iCE40") then		return DEVICE_ICE40;
+				elsif	(MY_DEV(1 to 5) = "iCE65") then		return DEVICE_ICE65;
+				elsif	(MY_DEV(1 to 4) = "iCE5") then		return DEVICE_ICE5;
+				elsif	(MY_DEV(1 to 4) = "LFE3") then		return DEVICE_ECP3;
+				elsif	(MY_DEV(1 to 4) = "LFE4") then		return DEVICE_ECP4;
+				elsif	(MY_DEV(1 to 4) = "LFE5") then		return DEVICE_ECP5;
+				else	report "Unknown Lattice device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
+				end if;
+
 			when VENDOR_XILINX =>
 				case DEV_STR is
 					when "7A"	 => return DEVICE_ARTIX7;
 					when "7K"	 => return DEVICE_KINTEX7;
+					when "KU"	 => return DEVICE_KINTEX_ULTRA;
 					when "3S"	 => return DEVICE_SPARTAN3;
 					when "6S"	 => return DEVICE_SPARTAN6;
 					when "5V"	 => return DEVICE_VIRTEX5;
 					when "6V"	 => return DEVICE_VIRTEX6;
 					when "7V"	 => return DEVICE_VIRTEX7;
+					when "VU"	 => return DEVICE_VIRTEX_ULTRA;
 					when "7Z"	 => return DEVICE_ZYNQ7;
 					when others => report "Unknown Xilinx device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
@@ -730,7 +790,14 @@ package body config is
 					when 'S' =>		return DEVICE_FAMILY_STRATIX;
 					when others =>	report "Unknown Altera device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
-
+				
+			when VENDOR_LATTICE =>
+				case FAM_CHAR is
+					--when 'M' =>		return DEVICE_FAMILY_MACHXO;
+					when 'E' =>		return DEVICE_FAMILY_ECP;
+					when others =>	report "Unknown Lattice device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
+				end case;
+			
 			when VENDOR_XILINX =>
 				case FAM_CHAR is
 					when 'A' =>		return DEVICE_FAMILY_ARTIX;
@@ -746,13 +813,23 @@ package body config is
 		end case;
 	end function;
 
-	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY) return natural is
+	-- some devices share some common features: e.g. XADC, BlockRAM, ...
+	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_DEVICE_SERIES is
 		constant MY_DEV	: string(1 to 32)	:= getLocalDeviceString(DeviceString);
 		constant DEV		: T_DEVICE				:= DEVICE(DeviceString);
 	begin
 		case DEV is
-			when DEVICE_ARTIX7 | DEVICE_KINTEX7 | DEVICE_VIRTEX7 | DEVICE_ZYNQ7 =>	return 7;		-- all Xilinx ****7 devices share some common features: e.g. XADC
-			when others =>																													return 0;
+			-- all Xilinx ****7 devices
+			when DEVICE_ARTIX7 | DEVICE_KINTEX7 | DEVICE_VIRTEX7 | DEVICE_ZYNQ7 =>
+				return DEVICE_SERIES_7_SERIES;
+			-- all Xilinx ****UltraScale devices
+			when DEVICE_KINTEX_ULTRA | DEVICE_VIRTEX_ULTRA =>
+				return DEVICE_SERIES_ULTRASCALE;
+			-- all Xilinx ****UltraScale+ devices
+			when DEVICE_KINTEX_ULTRA_PLUS | DEVICE_VIRTEX_ULTRA_PLUS | DEVICE_ZYNQ_ULTRA_PLUS =>
+				return DEVICE_SERIES_ULTRASCALE_PLUS;
+			when others =>
+				return DEVICE_SERIES_UNKNOWN;
 		end case;
 	end function;
 
@@ -762,6 +839,7 @@ package body config is
 	begin
 		case VEN is
 			when VENDOR_ALTERA =>		return extractFirstNumber(MY_DEV(5 to MY_DEV'high));
+			when VENDOR_LATTICE =>	return extractFirstNumber(MY_DEV(6 to MY_DEV'high));
 			when VENDOR_XILINX =>		return extractFirstNumber(MY_DEV(5 to MY_DEV'high));
 			when others =>					report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 															-- return statement is explicitly missing otherwise XST won't stop
@@ -774,7 +852,25 @@ package body config is
 		constant DEV_SUB_STR	: string(1 to 2)	:= MY_DEV(5 to 6);																-- work around for GHDL
 	begin
 		case DEV is
-			when DEVICE_CYCLONE1 | DEVICE_CYCLONE2 | DEVICE_CYCLONE3 =>				return DEVICE_SUBTYPE_NONE;		-- Altera Cyclon I, II, III devices have no subtype
+			-- TODO: extract Arria GX subtype
+			when DEVICE_ARRIA1 =>
+				report "TODO: parse Arria device subtype." severity failure;
+				return DEVICE_SUBTYPE_NONE;
+			-- TODO: extract ArriaII GX,GZ subtype
+			when DEVICE_ARRIA2 =>
+				report "TODO: parse ArriaII device subtype." severity failure;
+				return DEVICE_SUBTYPE_NONE;
+			-- TODO: extract ArriaV GX, GT, SX, GZ subtype
+			when DEVICE_ARRIA5 =>
+				report "TODO: parse ArriaV device subtype." severity failure;
+				return DEVICE_SUBTYPE_NONE;
+			-- TODO: extract Arria10 GX, GT, SX subtype
+			when DEVICE_ARRIA10 =>
+				report "TODO: parse Arria10 device subtype." severity failure;
+				return DEVICE_SUBTYPE_NONE;
+			-- Altera Cyclon I, II, III, IV, V devices have no subtype
+			when DEVICE_CYCLONE1 | DEVICE_CYCLONE2 | DEVICE_CYCLONE3 | DEVICE_CYCLONE4 |
+					 DEVICE_CYCLONE5 =>																															return DEVICE_SUBTYPE_NONE;
 
 			when DEVICE_STRATIX2 =>
 				if		chr_isDigit(DEV_SUB_STR(1)) then																						return DEVICE_SUBTYPE_NONE;
@@ -786,10 +882,23 @@ package body config is
 				if		(DEV_SUB_STR(1) = 'E') then																									return DEVICE_SUBTYPE_E;
 				elsif	(DEV_SUB_STR = "GX") then																										return DEVICE_SUBTYPE_GX;
 --				elsif	(DEV_SUB_STR = "GT") then																										return DEVICE_SUBTYPE_GT;
-				else	report "Unknown Stratix II subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
+				else	report "Unknown Stratix IV subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
-			when DEVICE_SPARTAN3 => report "TODO: parse Spartan3 / Spartan3E / Spartan3AN device subtype." severity failure;
+			-- TODO: extract StratixV subtype
+			when DEVICE_STRATIX5 =>
+				report "TODO: parse Stratix V device subtype." severity failure;
+				return DEVICE_SUBTYPE_NONE;
+
+			when DEVICE_ECP5 =>
+				if		(DEV_SUB_STR(1) = 'U') then																									return DEVICE_SUBTYPE_U;
+				elsif	(DEV_SUB_STR = "UM") then																										return DEVICE_SUBTYPE_UM;
+				else	report "Unknown Lattice ECP5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
+				end if;
+
+			when DEVICE_SPARTAN3 =>
+				report "TODO: parse Spartan3 / Spartan3E / Spartan3AN device subtype." severity failure;
+				return DEVICE_SUBTYPE_NONE;
 
 			when DEVICE_SPARTAN6 =>
 				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
@@ -824,7 +933,10 @@ package body config is
 				if		(													(			str_find(MY_DEV(5 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
 				else	report "Unknown Kintex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
-				
+			
+			when DEVICE_KINTEX_ULTRA =>																															return DEVICE_SUBTYPE_NONE;
+			when DEVICE_KINTEX_ULTRA_PLUS =>																												return DEVICE_SUBTYPE_NONE;
+			
 			when DEVICE_VIRTEX7 =>
 				if		(														(		str_find(MY_DEV(5 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
 				elsif	((DEV_SUB_STR(1) = 'X') and (		str_find(MY_DEV(6 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_XT;
@@ -832,8 +944,11 @@ package body config is
 				else	report "Unknown Virtex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 			
-			when DEVICE_ZYNQ7 =>
-				return DEVICE_SUBTYPE_NONE;
+			when DEVICE_VIRTEX_ULTRA =>																															return DEVICE_SUBTYPE_NONE;
+			when DEVICE_VIRTEX_ULTRA_PLUS =>																												return DEVICE_SUBTYPE_NONE;
+			
+			when DEVICE_ZYNQ7 =>																																		return DEVICE_SUBTYPE_NONE;
+			when DEVICE_ZYNQ_ULTRA_PLUS =>																													return DEVICE_SUBTYPE_NONE;
 			
 			when others => report "Device sub-type is unknown for the given device." severity failure;
 									-- return statement is explicitly missing otherwise XST won't stop
@@ -844,18 +959,23 @@ package body config is
 	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY) return positive is
 		constant MY_DEV	: string(1 to 32)	:= getLocalDeviceString(DeviceString);
 		constant DEV		: T_DEVICE				:= DEVICE(DeviceString);
+		constant SERIES	: T_DEVICE_SERIES	:= DEVICE_SERIES(DeviceString);
 	begin
+		case SERIES is
+			when DEVICE_SERIES_7_SERIES | DEVICE_SERIES_ULTRASCALE |
+					 DEVICE_SERIES_ULTRASCALE_PLUS =>														return 6;
+			when others => null;
+		end case;
 		case DEV is
-			when DEVICE_CYCLONE1 | DEVICE_CYCLONE2 | DEVICE_CYCLONE3 =>			return 4;
-			when DEVICE_STRATIX1 | DEVICE_STRATIX2 =>												return 4;
-			when DEVICE_STRATIX4 | DEVICE_STRATIX5 =>												return 6;
-
-			when DEVICE_SPARTAN3 =>																					return 4;
-			when DEVICE_SPARTAN6 =>																					return 6;
-			when DEVICE_ARTIX7 =>																						return 6;
-			when DEVICE_KINTEX7 =>																					return 6;
-			when DEVICE_VIRTEX5 | DEVICE_VIRTEX6 | DEVICE_VIRTEX7 => 				return 6;
-			when DEVICE_ZYNQ7 =>																						return 6;
+			when DEVICE_CYCLONE1 | DEVICE_CYCLONE2 | DEVICE_CYCLONE3 =>				return 4;
+			when DEVICE_STRATIX1 | DEVICE_STRATIX2 =>													return 4;
+			when DEVICE_STRATIX4 | DEVICE_STRATIX5 =>													return 6;
+			
+			when DEVICE_ECP5 =>																								return 4;
+			
+			when DEVICE_SPARTAN3 =>																						return 4;
+			when DEVICE_SPARTAN6 =>																						return 6;
+			when DEVICE_VIRTEX5 | DEVICE_VIRTEX6 =>														return 6;
 
 			when others => report "LUT fan-in is unknown for the given device." severity failure;
 									-- return statement is explicitly missing otherwise XST won't stop
@@ -869,10 +989,16 @@ package body config is
 		constant DEV_SUB	: t_device_subtype	:= DEVICE_SUBTYPE(DeviceString);
 	begin
 		case DEV is
+			when DEVICE_MAX2 | DEVICE_MAX10 =>																return TRANSCEIVER_NONE;		-- Altera MAX II, 10 devices have no transceivers
 			when DEVICE_CYCLONE1 | DEVICE_CYCLONE2 | DEVICE_CYCLONE3 =>				return TRANSCEIVER_NONE;		-- Altera Cyclon I, II, III devices have no transceivers
 
+			when DEVICE_STRATIX2 =>						return TRANSCEIVER_GXB;
+			when DEVICE_STRATIX4 =>						return TRANSCEIVER_GXB;
+			--when DEVICE_STRATIX5 =>						return TRANSCEIVER_GXB;
+			
+			when DEVICE_ECP5 =>								return TRANSCEIVER_MGT;
+			
 			when DEVICE_SPARTAN3 =>						return TRANSCEIVER_NONE;		-- Xilinx Spartan3 devices have no transceivers
-
 			when DEVICE_SPARTAN6 =>
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_LX =>			return TRANSCEIVER_NONE;
@@ -889,7 +1015,7 @@ package body config is
 					when DEVICE_SUBTYPE_FXT =>		return TRANSCEIVER_GTX;
 					when others =>								report "Unknown Virtex-5 subtype: " & t_device_subtype'image(DEV_SUB) severity failure;
 				end case;
-
+			
 			when DEVICE_VIRTEX6 =>
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_LX =>			return TRANSCEIVER_NONE;
@@ -918,9 +1044,6 @@ package body config is
 					when others =>								return TRANSCEIVER_GTXE2;
 				end case;
 			
-			when DEVICE_STRATIX2 => return TRANSCEIVER_GXB;
-			when DEVICE_STRATIX4 => return TRANSCEIVER_GXB;
-				
 			when others => report "Unknown device." severity failure;
 									-- return statement is explicitly missing otherwise XST won't stop
 		end case;
@@ -949,8 +1072,9 @@ package body config is
 			return "gray";
 		else
 			case VENDOR is
-				when VENDOR_XILINX =>		return "auto";
 				when VENDOR_ALTERA =>		return "default";
+				--when VENDOR_LATTICE =>	return "default";
+				when VENDOR_XILINX =>		return "auto";
 				when others =>					report "Unknown vendor." severity failure;
 																-- return statement is explicitly missing otherwise XST won't stop
 			end case;

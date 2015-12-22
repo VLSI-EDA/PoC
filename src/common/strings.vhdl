@@ -101,11 +101,17 @@ package strings is
 	-- to_slv
 	function to_slv(rawstring : T_RAWSTRING) return STD_LOGIC_VECTOR;
 
-	-- to_digit*
-	function to_digit_bin(chr : character) return integer;
-	function to_digit_oct(chr : character) return integer;
-	function to_digit_dec(chr : character) return integer;
-	function to_digit_hex(chr : character) return integer;
+	-- digit subtypes incl. error value (-1)
+	subtype T_DIGIT_BIN	is INTEGER range -1 to 1;
+	subtype T_DIGIT_OCT	is INTEGER range -1 to 7;
+	subtype T_DIGIT_DEC	is INTEGER range -1 to 9;
+	subtype T_DIGIT_HEX	is INTEGER range -1 to 15;
+	
+	-- to_digit*	
+	function to_digit_bin(chr : character) return T_DIGIT_BIN;
+	function to_digit_oct(chr : character) return T_DIGIT_OCT;
+	function to_digit_dec(chr : character) return T_DIGIT_DEC;
+	function to_digit_hex(chr : character) return T_DIGIT_HEX;
 	function to_digit(chr : character; base : character := 'd') return integer;
 
 	-- to_natural*
@@ -479,7 +485,7 @@ package body strings is
 	
 	-- to_*
 	-- ===========================================================================
-	function to_digit_bin(chr : character) return integer is
+	function to_digit_bin(chr : character) return T_DIGIT_BIN is
 	begin
 		case chr is
 			when '0' =>			return 0;
@@ -488,14 +494,14 @@ package body strings is
 		end case;
 	end function;
 	
-	function to_digit_oct(chr : character) return integer is
+	function to_digit_oct(chr : character) return T_DIGIT_OCT is
 		variable dec : integer;
 	begin
 		dec := to_digit_dec(chr);
 		return ite((dec < 8), dec, -1);
 	end function;
 	
-	function to_digit_dec(chr : character) return integer is
+	function to_digit_dec(chr : character) return T_DIGIT_DEC is
 	begin
 		if chr_isDigit(chr) then
 			return character'pos(chr) - character'pos('0');
@@ -504,7 +510,7 @@ package body strings is
 		end if;
 	end function;
 	
-	function to_digit_hex(chr : character) return integer is
+	function to_digit_hex(chr : character) return T_DIGIT_HEX is
 	begin
 		if chr_isDigit(chr) then						return character'pos(chr) - character'pos('0');
 		elsif chr_isLowerHexDigit(chr) then	return character'pos(chr) - character'pos('a') + 10;
