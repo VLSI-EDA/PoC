@@ -13,7 +13,7 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,8 @@ use			IEEE.NUMERIC_STD.all;
 library PoC;
 use			PoC.utils.all;
 use			PoC.vectors.all;
+use			PoC.strings.all;
+use			PoC.physical.all;
 use			PoC.simulation.ALL;
 
 library OSVVM;
@@ -47,55 +49,36 @@ end entity;
 
 
 architecture tb of sortnet_OddEvenSort_tb is
-	constant INPUTS									: POSITIVE	:= 8;
+	
+	constant TAG_BITS								: POSITIVE	:= 4;
+	
+	constant INPUTS									: POSITIVE	:= 32;
+	constant DATA_COLUMNS						: POSITIVE	:= 2;
+	
 	constant KEY_BITS								: POSITIVE	:= 8;
-	constant DATA_BITS							: POSITIVE	:= 8;
+	constant DATA_BITS							: POSITIVE	:= 32;
+	constant META_BITS							: POSITIVE	:= TAG_BITS;
 	constant PIPELINE_STAGE_AFTER		: NATURAL		:= 2;
 
-	constant LOOP_COUNT							: POSITIVE	:= 1024;
+	constant LOOP_COUNT							: POSITIVE	:= 10;	--1024;
 	
 	constant STAGES									: POSITIVE	:= INPUTS;
 	constant DELAY									: NATURAL		:= STAGES / PIPELINE_STAGE_AFTER;
-
-	subtype T_KEY					is STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0);
-	subtype T_DATA				is STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
 	
-	type T_KEY_VECTOR			is array(NATURAL range <>) of T_DATA;
+	subtype T_DATA				is STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
 	type T_DATA_VECTOR		is array(NATURAL range <>) of T_DATA;
-
-	function to_kv(slm : T_SLM) return T_KEY_VECTOR is
-		variable Result	: T_KEY_VECTOR(slm'range(1));
-	begin
-		for i in slm'high(1) downto slm'low(1) loop
-			for j in slm'high(2) downto slm'low(2) loop
-				Result(i)(j)	:= slm(i, j);
-			end loop;
-		end loop;
-		return Result;
-	end function;
 
 	function to_dv(slm : T_SLM) return T_DATA_VECTOR is
 		variable Result	: T_DATA_VECTOR(slm'range(1));
 	begin
 		for i in slm'high(1) downto slm'low(1) loop
-			for j in slm'high(2) downto slm'low(2) loop
+			for j in T_DATA'range loop
 				Result(i)(j)	:= slm(i, j);
 			end loop;
 		end loop;
 		return Result;
 	end function;
-	
-	function to_slm(kv : T_KEY_VECTOR) return T_SLM is
-		variable Result	: T_SLM(kv'range, T_KEY'range);
-	begin
-		for i in kv'range loop
-			for j in T_KEY'range loop
-				Result(i, j)	:= kv(i)(j);
-			end loop;
-		end loop;
-		return Result;
-	end function;
-	
+
 	function to_slm(dv : T_DATA_VECTOR) return T_SLM is
 		variable Result	: T_SLM(dv'range, T_DATA'range);
 	begin
@@ -107,88 +90,133 @@ architecture tb of sortnet_OddEvenSort_tb is
 		return Result;
 	end function;
 	
-	constant CLOCK_PERIOD			: TIME				:= 10 ns;
+	constant CLOCK_FREQ				: FREQ				:= 100 MHz;
 	signal Clock							: STD_LOGIC		:= '1';
 	
-	signal KeyInputVector			: T_KEY_VECTOR(INPUTS - 1 downto 0)		:= (others => (others => '0'));
-	signal DataInputVector		: T_DATA_VECTOR(INPUTS - 1 downto 0)	:= (others => (others => '0'));
+	signal Generator_Valid		: STD_LOGIC;
+	signal Generator_IsKey		: STD_LOGIC;
+	signal Generator_Data			: T_DATA_VECTOR(INPUTS - 1 downto 0);
+	signal Generator_Meta			: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+	
+	signal Sort_Valid					: STD_LOGIC;
+	signal Sort_IsKey					: STD_LOGIC;
+	signal Sort_Data					: T_DATA_VECTOR(INPUTS - 1 downto 0);
+	signal Sort_Meta					: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
 	
 	signal DataInputMatrix		: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
 	signal DataOutputMatrix		: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
 	
-	signal KeyOutputVector		: T_KEY_VECTOR(INPUTS - 1 downto 0);
-	signal DataOutputVector		: T_DATA_VECTOR(INPUTS - 1 downto 0);
-	
-	signal StopSimulation			: STD_LOGIC		:= '0';
 begin
+	-- initialize global simulation status
+	globalSimulationStatus.initialize;
+	
+	globalSimulationStatus.writeMessage("SETTINGS");
+	globalSimulationStatus.writeMessage("  INPUTS:    " & INTEGER'image(INPUTS));
+	globalSimulationStatus.writeMessage("  KEY_BITS:  " & INTEGER'image(KEY_BITS));
+	globalSimulationStatus.writeMessage("  DATA_BITS: " & INTEGER'image(DATA_BITS));
+	globalSimulationStatus.writeMessage("  REG AFTER: " & INTEGER'image(PIPELINE_STAGE_AFTER));
+	
+	simGenerateClock(Clock, CLOCK_FREQ);
 
-	Clock	<= Clock xnor StopSimulation after CLOCK_PERIOD;
+	procGenerator : process
+		variable simProcessID	: T_SIM_PROCESS_ID;			-- from Simulation
+		variable RandomVar		: RandomPType;					-- protected type from RandomPkg
 
-	process
-		variable RandomVar : RandomPType;								-- protected type from RandomPkg
+		variable KeyInput		: STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0);
+		variable DataInput	: STD_LOGIC_VECTOR(DATA_BITS - KEY_BITS - 1 downto 0);
+		variable TagInput		: STD_LOGIC_VECTOR(TAG_BITS - 1 downto 0);
+		
 	begin
+		simProcessID := globalSimulationStatus.registerProcess("Generator");	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
+		
 		RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
 		
+		Generator_Valid		<= '0';
+		Generator_IsKey		<= '0';
+		Generator_Data		<= (others => (others => '0'));
+		Generator_Meta		<= (others => '0');
 		wait until rising_edge(Clock);
 		
+		Generator_Valid		<= '1';
 		for i in 0 to LOOP_COUNT - 1 loop
-			wait until rising_edge(Clock);
+			Generator_IsKey			<= to_sl(i mod DATA_COLUMNS = 0);
 			for j in 0 to INPUTS - 1 loop
-				KeyInputVector(j)	<= to_slv(RandomVar.RandInt(0, 255), KEY_BITS);
+				KeyInput					:= RandomVar.RandSlv(KEY_BITS);
+				DataInput					:= RandomVar.RandSlv(DATA_BITS - KEY_BITS);
+				TagInput					:= RandomVar.RandSlv(TAG_BITS);
+			
+				Generator_Data(j)	<= DataInput & KeyInput;
+				Generator_Meta		<= resize(TagInput, META_BITS);
 			end loop;
-		end loop;
-		
-		for i in 0 to DELAY + 7 loop
 			wait until rising_edge(Clock);
 		end loop;
 		
-		StopSimulation		<= '1';
-		wait;
+		Generator_Valid				<= '0';
+		wait until rising_edge(Clock);
+		
+		-- This process is finished
+		globalSimulationStatus.deactivateProcess(simProcessID);
+		wait;		-- forever
 	end process;
 	
-	DataInputMatrix		<= to_slm(KeyInputVector);
+	DataInputMatrix		<= to_slm(Generator_Data);
 
 	sort : entity PoC.sortnet_OddEvenSort
 		generic map (
 			INPUTS								=> INPUTS,
 			KEY_BITS							=> KEY_BITS,
 			DATA_BITS							=> DATA_BITS,
-			PIPELINE_STAGE_AFTER	=> 2,
-			ADD_OUTPUT_REGISTERS	=> TRUE
+			META_BITS							=> META_BITS,
+			PIPELINE_STAGE_AFTER	=> PIPELINE_STAGE_AFTER
 		)
 		port map (
 			Clock				=> Clock,
 			Reset				=> '0',
 			
-			DataInputs	=> DataInputMatrix,
-			DataOutputs	=> DataOutputMatrix
+			In_Valid		=> Generator_Valid,
+			In_IsKey		=> Generator_IsKey,
+			In_Data			=> DataInputMatrix,
+			In_Meta			=> Generator_Meta,
+			
+			Out_Valid		=> sort_Valid,
+			Out_IsKey		=> sort_IsKey,
+			Out_Data		=> DataOutputMatrix,
+			Out_Meta		=> sort_Meta
 		);
 	
-	KeyOutputVector	<= to_kv(DataOutputMatrix);
+	Sort_Data	<= to_dv(DataOutputMatrix);
 	
-	process
-		variable	Check		: BOOLEAN;
+	procTester : process
+		variable simProcessID	: T_SIM_PROCESS_ID;
+		variable Check				: BOOLEAN;
+		variable CurValue			: UNSIGNED(KEY_BITS - 1 downto 0);
+		variable LastValue		: UNSIGNED(KEY_BITS - 1 downto 0);
 	begin
-		report "Delay=" & INTEGER'image(DELAY) severity NOTE;
-	
-		for i in 0 to DELAY - 1 loop
-			wait until rising_edge(Clock);
-		end loop;
+		simProcessID := globalSimulationStatus.registerProcess("Tester");
+		
+		wait until rising_edge(sort_Valid);
 		
 		for i in 0 to LOOP_COUNT - 1 loop
-			wait until rising_edge(Clock);
+			wait until falling_edge(Clock);
+			
 			Check		:= TRUE;
-			for j in 0 to INPUTS - 2 loop
-				Check	:= Check and (KeyOutputVector(j) <= KeyOutputVector(j + 1));
+			LastValue	:= (others => '0');
+			for j in 0 to INPUTS - 1 loop
+				CurValue	:= unsigned(Sort_Data(j)(KEY_BITS - 1 downto 0));
+				Check			:= Check and (LastValue <= CurValue);
+				LastValue	:= CurValue;
 			end loop;
-			tbAssert(Check, "Result is not monotonic.");
+			globalSimulationStatus.assertion(Check, "Result is not monotonic." & raw_format_slv_hex(std_logic_vector(LastValue)));
 		end loop;
 
-		report "Patrick" severity Note;
+		for i in 0 to 15 loop
+			wait until rising_edge(Clock);
+		end loop;
 		
+		-- This process is finished
+		globalSimulationStatus.deactivateProcess(simProcessID);
 		-- Report overall result
-		tbPrintResult;
-
-    wait;  -- forever
+		globalSimulationStatus.finalize;
+		wait;  -- forever
 	end process;
 end architecture;

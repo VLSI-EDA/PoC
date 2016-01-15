@@ -16,7 +16,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +47,7 @@ class Configuration(CommandLineProgram):
 		"Aldec", "Aldec.ActiveHDL", "Aldec.RivieraPRO",
 		"Altera", "Altera.QuartusII", "Altera.ModelSim",
 		"GHDL", "GTKWave",
+		"Lattice", "Lattice.Diamond", "Lattice.ActiveHDL", "Lattice.Symplify",
 		"Mentor", "Mentor.QuestaSIM",
 		"Xilinx", "Xilinx.ISE", "Xilinx.LabTools", "Xilinx.Vivado", "Xilinx.HardwareServer",
 		"Solutions"
@@ -76,6 +77,10 @@ class Configuration(CommandLineProgram):
 			self.pocConfig['Altera'] =								OrderedDict()
 			self.pocConfig['Altera.QuartusII'] =			OrderedDict()
 			self.pocConfig['Altera.ModelSim'] =				OrderedDict()
+			self.pocConfig['Lattice'] =								OrderedDict()
+			self.pocConfig['Lattice.Diamond'] =				OrderedDict()
+			self.pocConfig['Lattice.ActiveHDL'] =			OrderedDict()
+			self.pocConfig['Lattice.Symplify'] =			OrderedDict()
 			self.pocConfig['GHDL'] =									OrderedDict()
 			self.pocConfig['GTKWave'] =								OrderedDict()
 			self.pocConfig['Mentor'] =								OrderedDict()
@@ -540,6 +545,7 @@ class Configuration(CommandLineProgram):
 			self.pocConfig['GHDL']['Version'] = ghdlVersion
 			self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
 			self.pocConfig['GHDL']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+			self.pocConfig['GHDL']['Backend'] = 'mcode'
 		else:
 			raise BaseException("unknown option")
 	
@@ -789,6 +795,7 @@ class Configuration(CommandLineProgram):
 			self.pocConfig['GHDL']['Version'] = ghdlVersion
 			self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
 			self.pocConfig['GHDL']['BinaryDirectory'] = '${InstallationDirectory}'
+			self.pocConfig['GHDL']['Backend'] = 'llvm'
 		else:
 			raise BaseException("unknown option")
 
@@ -886,6 +893,25 @@ class Configuration(CommandLineProgram):
 		with self.files['PoCPrivateConfig'].open('w') as configFileHandle:
 			self.pocConfig.write(configFileHandle)
 	
+	def getPoCInstallationDir(self):
+		if (len(self.pocConfig.options("PoC")) != 0):
+			pocInstallationDirectoryPath = Path(self.pocConfig['PoC']['InstallationDirectory'])
+			
+			return str(pocInstallationDirectoryPath)
+		else:
+			raise NotConfiguredException("ERROR: PoC is not configured on this system.")
+			
+	def getModelSimInstallationDir(self):
+		if (len(self.pocConfig.options("Mentor.QuestaSim")) != 0):
+			modelSimInstallationDirectoryPath = Path(self.pocConfig['Mentor.QuestaSim']['InstallationDirectory'])
+			
+		elif (len(self.pocConfig.options("Altera.ModelSim")) != 0):
+			modelSimInstallationDirectoryPath = Path(self.pocConfig['Altera.ModelSim']['InstallationDirectory'])
+			
+		else:
+			raise NotConfiguredException("ERROR: ModelSim is not configured on this system.")
+		return str(modelSimInstallationDirectoryPath)
+			
 	def getISESettingsFile(self):
 		if (len(self.pocConfig.options("Xilinx.ISE")) != 0):
 			iseInstallationDirectoryPath = Path(self.pocConfig['Xilinx.ISE']['InstallationDirectory'])
@@ -948,6 +974,8 @@ def main():
 		group21.add_argument('--configure',												dest="configurePoC",				help='configure PoC Library',								action='store_const', const=True, default=False)
 		group21.add_argument('--new-solution',	metavar="<Name>",	dest="newSolution",					help='create a new solution')
 		group21.add_argument('--add-solution',	metavar="<Name>",	dest="addSolution",					help='add an existing solution')
+		group21.add_argument('--poc-installdir',									dest="pocInstallationDir",			help='return PoC installation directory',			action='store_const', const=True, default=False)
+		group21.add_argument('--modelsim-installdir',								dest="modelSimInstallationDir",			help='return ModelSim installation directory',			action='store_const', const=True, default=False)
 		group21.add_argument('--ise-settingsfile',								dest="iseSettingsFile",			help='return Xilinx ISE settings file',			action='store_const', const=True, default=False)
 		group21.add_argument('--vivado-settingsfile',							dest="vivadoSettingsFile",	help='return Xilinx Vivado settings file',	action='store_const', const=True, default=False)
 
@@ -999,6 +1027,12 @@ def main():
 			config.addSolution(args.addSolution)
 			exit(0)
 			
+		elif args.pocInstallationDir:
+			print(config.getPoCInstallationDir())
+			exit(0)
+		elif args.modelSimInstallationDir:
+			print(config.getModelSimInstallationDir())
+			exit(0)
 		elif args.iseSettingsFile:
 			print(config.getISESettingsFile())
 			exit(0)

@@ -43,28 +43,33 @@ PACKAGE components IS
 	function registered(signal Clock : STD_LOGIC; constant IsRegistered : BOOLEAN) return BOOLEAN;
 
 	-- FlipFlop functions
-	function ffdre(q : STD_LOGIC; d : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC;												-- D-FlipFlop with reset and enable
-	function ffdre(q : STD_LOGIC_VECTOR; d : STD_LOGIC_VECTOR; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;	-- D-FlipFlop with reset and enable
-	function ffdse(q : STD_LOGIC; d : STD_LOGIC; set : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC;												-- D-FlipFlop with set and enable
-	function fftre(q : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC;																			-- T-FlipFlop with reset and enable
-	function ffrs(q : STD_LOGIC; rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC;																			-- RS-FlipFlop with dominant rst
-	function ffsr(q : STD_LOGIC; rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC;																			-- RS-FlipFlop with dominant set
-
+	-- ===========================================================================
+	-- RS-FlipFlops
+	function ffrs(q : STD_LOGIC;	rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC;				-- RS-FlipFlop with dominant rst
+	function ffsr(q : STD_LOGIC;	rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC;				-- RS-FlipFlop with dominant set
+	-- D-FlipFlops (Delay)
+	function ffdre(q : STD_LOGIC;					d : STD_LOGIC;				rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0')												return STD_LOGIC;					-- D-FlipFlop with reset and enable
+	function ffdre(q : STD_LOGIC_VECTOR;	d : STD_LOGIC_VECTOR;	rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC_VECTOR := (7 downto 0 => '0'))	return STD_LOGIC_VECTOR;	-- D-FlipFlop with reset and enable
+	function ffdse(q : STD_LOGIC;					d : STD_LOGIC;				set : STD_LOGIC := '0'; en : STD_LOGIC := '1')																													return STD_LOGIC;					-- D-FlipFlop with set and enable
+	-- T-FlipFlops (Toggle)
+	function fftre(q : STD_LOGIC;					t : STD_LOGIC;				rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0')												return STD_LOGIC;					-- T-FlipFlop with reset and enable
+	function fftse(q : STD_LOGIC;					t : STD_LOGIC;				set : STD_LOGIC := '0'; en : STD_LOGIC := '1')																													return STD_LOGIC;					-- T-FlipFlop with set and enable
+	
 	-- adder
-	function inc(value : STD_LOGIC_VECTOR;	increment : NATURAL := 1) return STD_LOGIC_VECTOR;
-	function inc(value : UNSIGNED;					increment : NATURAL := 1) return UNSIGNED;
-	function inc(value : SIGNED;						increment : NATURAL := 1) return SIGNED;
-	function dec(value : STD_LOGIC_VECTOR;	decrement : NATURAL := 1) return STD_LOGIC_VECTOR;
-	function dec(value : UNSIGNED;					decrement : NATURAL := 1) return UNSIGNED;
-	function dec(value : SIGNED;						decrement : NATURAL := 1) return SIGNED;
+	function inc(value : STD_LOGIC_VECTOR;	constant increment : NATURAL := 1) return STD_LOGIC_VECTOR;
+	function inc(value : UNSIGNED;					constant increment : NATURAL := 1) return UNSIGNED;
+	function inc(value : SIGNED;						constant increment : NATURAL := 1) return SIGNED;
+	function dec(value : STD_LOGIC_VECTOR;	constant decrement : NATURAL := 1) return STD_LOGIC_VECTOR;
+	function dec(value : UNSIGNED;					constant decrement : NATURAL := 1) return UNSIGNED;
+	function dec(value : SIGNED;						constant decrement : NATURAL := 1) return SIGNED;
 
 	-- negate
 	function neg(value : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;		-- calculate 2's complement
 	
 	-- counter
-	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : NATURAL := 0) return UNSIGNED;
+	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; constant INIT : NATURAL := 0) return UNSIGNED;
 	function upcounter_equal(cnt : UNSIGNED; value : NATURAL) return STD_LOGIC;
-	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : INTEGER := 0) return SIGNED;
+	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; constant INIT : INTEGER := 0) return SIGNED;
 	function downcounter_equal(cnt : SIGNED; value : INTEGER) return STD_LOGIC;
 	function downcounter_neg(cnt : SIGNED) return STD_LOGIC;
 
@@ -96,32 +101,70 @@ end;
 
 package body components is
 	-- implement an optional register stage
+	-- ===========================================================================
 	function registered(signal Clock : STD_LOGIC; constant IsRegistered : BOOLEAN) return BOOLEAN is
 	begin
 		return ite(IsRegistered, rising_edge(Clock), TRUE);
 	end function;
 
+	-- FlipFlops
+	-- ===========================================================================
 	-- D-flipflop with reset and enable
-	function ffdre(q : STD_LOGIC; d : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
+	function ffdre(q : STD_LOGIC; d : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0') return STD_LOGIC is
 	begin
-		return ((d and en) or (q and not en)) and not rst;
+		if (SIMULATION = FALSE) then
+			if (INIT = '0') then
+				return ((d and en) or (q and not en)) and not rst;
+			elsif (INIT = '1') then
+				return ((d and en) or (q and not en)) or rst;
+			else
+				report "Unsupported INIT value for synthesis." severity FAILURE;
+			end if;
+		elsif (rst = '1') then
+			return INIT;
+		else
+			return ((d and en) or (q and not en));
+		end if;
 	end function;
 	
-	function ffdre(q : STD_LOGIC_VECTOR; d : STD_LOGIC_VECTOR; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
+	function ffdre(q : STD_LOGIC_VECTOR; d : STD_LOGIC_VECTOR; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC_VECTOR := (7 downto 0 => '0')) return STD_LOGIC_VECTOR is
+		constant INIT_I		: STD_LOGIC_VECTOR(q'range)		:= resize(INIT, q'length);
+		variable Result		: STD_LOGIC_VECTOR(q'range);
 	begin
-		return ((d and (q'range => en)) or (q and not (q'range => en))) and not (q'range => rst);
+		for i in q'range loop
+			Result(i)		:= ffdre(q => q(i), d => d(i), rst => rst, en => en, INIT => INIT_I(i));
+		end loop;
+		return Result;
 	end function;
 	
 	-- D-flipflop with set and enable
 	function ffdse(q : STD_LOGIC; d : STD_LOGIC; set : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
 	begin
-		return ((d and en) or (q and not en)) or set;
+		return ffdre(q => q, d => d, rst => set, en => en, INIT => '1');
 	end function;
 	
 	-- T-flipflop with reset and enable
-	function fftre(q : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
+	function fftre(q : STD_LOGIC; t : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0') return STD_LOGIC is
 	begin
-		return ((not q and en) or (q and not en)) and not rst;
+		if (SIMULATION = FALSE) then
+			if (INIT = '0') then
+				return ((not q and (t and en)) or (q and not (t and en))) and not rst;
+			elsif (INIT = '1') then
+				return ((not q and (t and en)) or (q and not (t and en))) or rst;
+			else
+				report "Unsupported INIT value for synthesis." severity FAILURE;
+			end if;
+		elsif (rst = '1') then
+			return INIT;
+		else
+			return ((not q and (t and en)) or (q and not (t and en)));
+		end if;
+	end function;
+	
+	-- T-flipflop with set and enable
+	function fftse(q : STD_LOGIC; t : STD_LOGIC; set : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
+	begin
+		return fftre(q => q, t => t, rst => set, en => en, INIT => '1');
 	end function;
 	
 	-- RS-flipflop with dominant rst
@@ -137,32 +180,35 @@ package body components is
 	end function;
 	
 	-- Adder
-	function inc(value : STD_LOGIC_VECTOR; increment : NATURAL := 1) return STD_LOGIC_VECTOR is
+	-- ===========================================================================
+	function inc(value : STD_LOGIC_VECTOR; constant increment : NATURAL := 1) return STD_LOGIC_VECTOR is
 	begin
+		report "Incrementing a STD_LOGIC_VECTOR - implicit conversion to UNSIGNED" severity WARNING;
 		return std_logic_vector(inc(unsigned(value), increment));
 	end function;
 	
-	function inc(value : UNSIGNED; increment : NATURAL := 1) return UNSIGNED is
+	function inc(value : UNSIGNED; constant increment : NATURAL := 1) return UNSIGNED is
 	begin
 		return value + increment;
 	end function;
 
-	function inc(value : SIGNED; increment : NATURAL := 1) return SIGNED is
+	function inc(value : SIGNED; constant increment : NATURAL := 1) return SIGNED is
 	begin
 		return value + increment;
 	end function;
 	
-	function dec(value : STD_LOGIC_VECTOR; decrement : NATURAL := 1) return STD_LOGIC_VECTOR is
+	function dec(value : STD_LOGIC_VECTOR; constant decrement : NATURAL := 1) return STD_LOGIC_VECTOR is
 	begin
+		report "Decrementing a STD_LOGIC_VECTOR - implicit conversion to UNSIGNED" severity WARNING;
 		return std_logic_vector(dec(unsigned(value), decrement));
 	end function;
 	
-	function dec(value : UNSIGNED; decrement : NATURAL := 1) return UNSIGNED is
+	function dec(value : UNSIGNED; constant decrement : NATURAL := 1) return UNSIGNED is
 	begin
 		return value + decrement;
 	end function;
 
-	function dec(value : SIGNED; decrement : NATURAL := 1) return SIGNED is
+	function dec(value : SIGNED; constant decrement : NATURAL := 1) return SIGNED is
 	begin
 		return value + decrement;
 	end function;
@@ -173,8 +219,10 @@ package body components is
 		return std_logic_vector(inc(unsigned(not value)));		-- 2's complement
 	end function;
 	
-	-- Counter
-	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : NATURAL := 0) return UNSIGNED is
+	-- Counters
+	-- ===========================================================================
+	-- up-counter
+	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; constant INIT : NATURAL := 0) return UNSIGNED is
 	begin
 		if (rst = '1') then
 			return to_unsigned(init, cnt'length);
@@ -191,7 +239,8 @@ package body components is
 		return to_sl((cnt and to_unsigned(value, cnt'length)) = value);
 	end function;
 	
-	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; init : INTEGER := 0) return SIGNED is
+	-- down-counter
+	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC; en : STD_LOGIC := '1'; constant INIT : INTEGER := 0) return SIGNED is
 	begin
 		if (rst = '1') then
 			return to_signed(init, cnt'length);
@@ -214,6 +263,7 @@ package body components is
 	end function;	
 	
 	-- Shift/Rotate Registers
+	-- ===========================================================================
 	function shreg_left(q : STD_LOGIC_VECTOR; i : std_logic; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
 	begin
 		return mux(en, q, q(q'left - 1 downto q'right) & i);
@@ -235,9 +285,11 @@ package body components is
 	end function;
 	
 	-- compare functions
-	-- return value 1- => value1 < value2 (difference is negative)
-	-- return value 00 => value1 = value2 (difference is zero)
-	-- return value -1 => value1 > value2 (difference is positive)
+	-- ===========================================================================
+	-- Returns, when
+	--	1-		=> value1 < value2 (difference is negative)
+	--	00		=> value1 = value2 (difference is zero)
+	--	-1		=> value1 > value2 (difference is positive)
 	function comp(value1 : STD_LOGIC_VECTOR; value2 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
 	begin
 		report "Comparing two STD_LOGIC_VECTORs - implicit conversion to UNSIGNED" severity WARNING;

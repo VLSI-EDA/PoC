@@ -9,17 +9,11 @@
 -- 
 -- Description:
 -- ------------------------------------
---		This is a clock-domain-crossing circuit for reset signals optimized for
---		Xilinx FPGAs. It utilizes two 'FDP' instances from UniSim.vComponents. If
---		you need a platform independent version of this synchronizer, please use
---		'PoC.misc.sync.sync_Reset', which internally instantiates this module if
---		a Xilinx FPGA is detected.
+--    This is the Xilinx specific implementation of the entity
+--    'PoC.misc.sync.sync_Reset'. See the description there on how to use this.
 --		
---		ATTENTION:
---			Use this synchronizer only for reset signals.
---
 --		CONSTRAINTS:
---			This relative placement of the internal sites is constrained by RLOCs.
+--			The relative placement of the internal sites is constrained by RLOCs.
 --		
 --			Xilinx ISE UCF or XCF file:
 --				NET "*_async"		TIG;

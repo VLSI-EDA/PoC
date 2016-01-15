@@ -1,22 +1,25 @@
 [*]
-[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
-[*] Mon Nov 23 19:35:57 2015
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Tue Jan 05 01:32:44 2016
 [*]
-[dumpfile] "D:\git\PoC\temp\ghdl\sortnet_OddEvenSort_tb.vcd"
-[dumpfile_mtime] "Mon Nov 23 19:35:09 2015"
-[dumpfile_size] 116721
-[savefile] "D:\git\PoC\sim\sort\sortnet\sortnet_OddEvenSort_tb.gtkw"
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\sortnet_OddEvenSort_tb.ghw"
+[dumpfile_mtime] "Tue Jan 05 01:32:03 2016"
+[dumpfile_size] 1236657
+[savefile] "H:\Austausch\PoC\sim\sort\sortnet\sortnet_OddEvenSort_tb.gtkw"
 [timestart] 0
-[size] 1000 600
-[pos] -1 -1
-*-28.846727 1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 1680 997
+[pos] -35 -35
+*-26.000563 54000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
 [sst_width] 197
-[signals_width] 142
+[signals_width] 150
 [sst_expanded] 1
-[sst_vpaned_height] 153
+[sst_vpaned_height] 293
 @28
-clock
-@29
-stopsimulation
+top.sortnet_oddevensort_tb.clock
+top.sortnet_oddevensort_tb.generator_valid
+top.sortnet_oddevensort_tb.generator_iskey
+top.sortnet_oddevensort_tb.sort_valid
+top.sortnet_oddevensort_tb.sort_iskey
 [pattern_trace] 1
 [pattern_trace] 0

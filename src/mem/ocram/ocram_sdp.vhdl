@@ -91,6 +91,8 @@ architecture rtl of ocram_sdp is
   constant DEPTH : positive := 2**A_BITS;
 
 begin
+	-- psl default clock is rising_edge(rclk);
+	
 	gInfer : if ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly
 		-- Xilinx notes:
@@ -114,7 +116,8 @@ begin
 			variable res			: ram_t;
 		begin
 			if (str_length(FilePath) = 0) then
-				Memory	:= (others => (others => ite(SIMULATION, 'U', '0')));
+        -- shortcut required by Vivado
+				return (others => (others => ite(SIMULATION, 'U', '0')));
 			elsif (mem_FileExtension(FilePath) = "mem") then
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
 			else

@@ -23,4 +23,3 @@ vhdl		poc		"src/arith/arith_prng.vhdl"					# Unit Under Test
 
 # Testbench file(s)
 vhdl		test	"tb/arith/arith_prng_tb.vhdl"				# Testbench
-

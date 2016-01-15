@@ -1,58 +1,176 @@
 [*]
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Fri Dec 11 21:36:52 2015
+[*] Mon Jan 04 04:51:29 2016
 [*]
-[dumpfile] "H:\vhdl\PoC\temp\ghdl\gearbox_down_cc_tb.vcd"
-[dumpfile_mtime] "Fri Dec 11 21:35:20 2015"
-[dumpfile_size] 6829
-[savefile] "H:\vhdl\PoC\sim\misc\gearbox\gearbox_down_cc_tb.gtkw"
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\gearbox_down_cc_tb.ghw"
+[dumpfile_mtime] "Mon Jan 04 04:48:18 2016"
+[dumpfile_size] 429974
+[savefile] "H:\Austausch\PoC\sim\misc\gearbox\gearbox_down_cc_tb.gtkw"
 [timestart] 0
-[size] 1680 996
+[size] 1676 996
 [pos] -1 -1
-*-26.801884 191200000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-[treeopen] gear.
-[treeopen] gear.(0).
-[treeopen] gear.(1).
+*-27.660517 44400000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.gearbox_down_cc_tb.
+[treeopen] top.gearbox_down_cc_tb.[4].
 [sst_width] 197
-[signals_width] 209
+[signals_width] 228
 [sst_expanded] 1
 [sst_vpaned_height] 292
 @28
-stopsimulation
-clock
-@200
--Inputs
+top.gearbox_down_cc_tb.clock
+@800200
+-Example 1 (32:8)
 @28
-syncin
-nxt
+top.gearbox_down_cc_tb[0].syncin
+top.gearbox_down_cc_tb[0].validin
 @22
-datain[35:0]
+#{top.gearbox_down_cc_tb[0].datain[31:0]} top.gearbox_down_cc_tb[0].datain[31] top.gearbox_down_cc_tb[0].datain[30] top.gearbox_down_cc_tb[0].datain[29] top.gearbox_down_cc_tb[0].datain[28] top.gearbox_down_cc_tb[0].datain[27] top.gearbox_down_cc_tb[0].datain[26] top.gearbox_down_cc_tb[0].datain[25] top.gearbox_down_cc_tb[0].datain[24] top.gearbox_down_cc_tb[0].datain[23] top.gearbox_down_cc_tb[0].datain[22] top.gearbox_down_cc_tb[0].datain[21] top.gearbox_down_cc_tb[0].datain[20] top.gearbox_down_cc_tb[0].datain[19] top.gearbox_down_cc_tb[0].datain[18] top.gearbox_down_cc_tb[0].datain[17] top.gearbox_down_cc_tb[0].datain[16] top.gearbox_down_cc_tb[0].datain[15] top.gearbox_down_cc_tb[0].datain[14] top.gearbox_down_cc_tb[0].datain[13] top.gearbox_down_cc_tb[0].datain[12] top.gearbox_down_cc_tb[0].datain[11] top.gearbox_down_cc_tb[0].datain[10] top.gearbox_down_cc_tb[0].datain[9] top.gearbox_down_cc_tb[0].datain[8] top.gearbox_down_cc_tb[0].datain[7] top.gearbox_down_cc_tb[0].datain[6] top.gearbox_down_cc_tb[0].datain[5] top.gearbox_down_cc_tb[0].datain[4] top.gearbox_down_cc_tb[0].datain[3] top.gearbox_down_cc_tb[0].datain[2] top.gearbox_down_cc_tb[0].datain[1] top.gearbox_down_cc_tb[0].datain[0]
 @28
-validin
-@200
--Outputs
-@c00023
-dataout[7:0]
+top.gearbox_down_cc_tb[0].syncout
+top.gearbox_down_cc_tb[0].validout
+@22
+#{top.gearbox_down_cc_tb[0].dataout[7:0]} top.gearbox_down_cc_tb[0].dataout[7] top.gearbox_down_cc_tb[0].dataout[6] top.gearbox_down_cc_tb[0].dataout[5] top.gearbox_down_cc_tb[0].dataout[4] top.gearbox_down_cc_tb[0].dataout[3] top.gearbox_down_cc_tb[0].dataout[2] top.gearbox_down_cc_tb[0].dataout[1] top.gearbox_down_cc_tb[0].dataout[0]
 @28
-(0)dataout[7:0]
-(1)dataout[7:0]
-(2)dataout[7:0]
-(3)dataout[7:0]
-(4)dataout[7:0]
-(5)dataout[7:0]
-(6)dataout[7:0]
-(7)dataout[7:0]
-@1401201
+top.gearbox_down_cc_tb[0].firstout
+top.gearbox_down_cc_tb[0].lastout
+@1000200
+-Example 1 (32:8)
+@800200
+-Example 2 (20:8)
+@28
+top.gearbox_down_cc_tb[1].syncin
+top.gearbox_down_cc_tb[1].validin
+@22
+#{top.gearbox_down_cc_tb[1].datain[19:0]} top.gearbox_down_cc_tb[1].datain[19] top.gearbox_down_cc_tb[1].datain[18] top.gearbox_down_cc_tb[1].datain[17] top.gearbox_down_cc_tb[1].datain[16] top.gearbox_down_cc_tb[1].datain[15] top.gearbox_down_cc_tb[1].datain[14] top.gearbox_down_cc_tb[1].datain[13] top.gearbox_down_cc_tb[1].datain[12] top.gearbox_down_cc_tb[1].datain[11] top.gearbox_down_cc_tb[1].datain[10] top.gearbox_down_cc_tb[1].datain[9] top.gearbox_down_cc_tb[1].datain[8] top.gearbox_down_cc_tb[1].datain[7] top.gearbox_down_cc_tb[1].datain[6] top.gearbox_down_cc_tb[1].datain[5] top.gearbox_down_cc_tb[1].datain[4] top.gearbox_down_cc_tb[1].datain[3] top.gearbox_down_cc_tb[1].datain[2] top.gearbox_down_cc_tb[1].datain[1] top.gearbox_down_cc_tb[1].datain[0]
+@28
+top.gearbox_down_cc_tb[1].syncout
+top.gearbox_down_cc_tb[1].validout
+@22
+#{top.gearbox_down_cc_tb[1].dataout[7:0]} top.gearbox_down_cc_tb[1].dataout[7] top.gearbox_down_cc_tb[1].dataout[6] top.gearbox_down_cc_tb[1].dataout[5] top.gearbox_down_cc_tb[1].dataout[4] top.gearbox_down_cc_tb[1].dataout[3] top.gearbox_down_cc_tb[1].dataout[2] top.gearbox_down_cc_tb[1].dataout[1] top.gearbox_down_cc_tb[1].dataout[0]
+@28
+top.gearbox_down_cc_tb[1].firstout
+top.gearbox_down_cc_tb[1].lastout
+@1000200
+-Example 2 (20:8)
+@800200
+-Example 3 (36:8)
+@28
+top.gearbox_down_cc_tb[2].syncin
+top.gearbox_down_cc_tb[2].validin
+@22
+#{top.gearbox_down_cc_tb[2].datain[35:0]} top.gearbox_down_cc_tb[2].datain[35] top.gearbox_down_cc_tb[2].datain[34] top.gearbox_down_cc_tb[2].datain[33] top.gearbox_down_cc_tb[2].datain[32] top.gearbox_down_cc_tb[2].datain[31] top.gearbox_down_cc_tb[2].datain[30] top.gearbox_down_cc_tb[2].datain[29] top.gearbox_down_cc_tb[2].datain[28] top.gearbox_down_cc_tb[2].datain[27] top.gearbox_down_cc_tb[2].datain[26] top.gearbox_down_cc_tb[2].datain[25] top.gearbox_down_cc_tb[2].datain[24] top.gearbox_down_cc_tb[2].datain[23] top.gearbox_down_cc_tb[2].datain[22] top.gearbox_down_cc_tb[2].datain[21] top.gearbox_down_cc_tb[2].datain[20] top.gearbox_down_cc_tb[2].datain[19] top.gearbox_down_cc_tb[2].datain[18] top.gearbox_down_cc_tb[2].datain[17] top.gearbox_down_cc_tb[2].datain[16] top.gearbox_down_cc_tb[2].datain[15] top.gearbox_down_cc_tb[2].datain[14] top.gearbox_down_cc_tb[2].datain[13] top.gearbox_down_cc_tb[2].datain[12] top.gearbox_down_cc_tb[2].datain[11] top.gearbox_down_cc_tb[2].datain[10] top.gearbox_down_cc_tb[2].datain[9] top.gearbox_down_cc_tb[2].datain[8] top.gearbox_down_cc_tb[2].datain[7] top.gearbox_down_cc_tb[2].datain[6] top.gearbox_down_cc_tb[2].datain[5] top.gearbox_down_cc_tb[2].datain[4] top.gearbox_down_cc_tb[2].datain[3] top.gearbox_down_cc_tb[2].datain[2] top.gearbox_down_cc_tb[2].datain[1] top.gearbox_down_cc_tb[2].datain[0]
+@28
+top.gearbox_down_cc_tb[2].syncout
+@29
+top.gearbox_down_cc_tb[2].validout
+@22
+#{top.gearbox_down_cc_tb[2].dataout[7:0]} top.gearbox_down_cc_tb[2].dataout[7] top.gearbox_down_cc_tb[2].dataout[6] top.gearbox_down_cc_tb[2].dataout[5] top.gearbox_down_cc_tb[2].dataout[4] top.gearbox_down_cc_tb[2].dataout[3] top.gearbox_down_cc_tb[2].dataout[2] top.gearbox_down_cc_tb[2].dataout[1] top.gearbox_down_cc_tb[2].dataout[0]
+@28
+top.gearbox_down_cc_tb[2].firstout
+top.gearbox_down_cc_tb[2].lastout
+@1000200
+-Example 3 (36:8)
+@800200
+-Example 4 (66:64)
+@28
+top.gearbox_down_cc_tb[3].syncin
+top.gearbox_down_cc_tb[3].validin
+@22
+#{top.gearbox_down_cc_tb[3].datain[65:0]} top.gearbox_down_cc_tb[3].datain[65] top.gearbox_down_cc_tb[3].datain[64] top.gearbox_down_cc_tb[3].datain[63] top.gearbox_down_cc_tb[3].datain[62] top.gearbox_down_cc_tb[3].datain[61] top.gearbox_down_cc_tb[3].datain[60] top.gearbox_down_cc_tb[3].datain[59] top.gearbox_down_cc_tb[3].datain[58] top.gearbox_down_cc_tb[3].datain[57] top.gearbox_down_cc_tb[3].datain[56] top.gearbox_down_cc_tb[3].datain[55] top.gearbox_down_cc_tb[3].datain[54] top.gearbox_down_cc_tb[3].datain[53] top.gearbox_down_cc_tb[3].datain[52] top.gearbox_down_cc_tb[3].datain[51] top.gearbox_down_cc_tb[3].datain[50] top.gearbox_down_cc_tb[3].datain[49] top.gearbox_down_cc_tb[3].datain[48] top.gearbox_down_cc_tb[3].datain[47] top.gearbox_down_cc_tb[3].datain[46] top.gearbox_down_cc_tb[3].datain[45] top.gearbox_down_cc_tb[3].datain[44] top.gearbox_down_cc_tb[3].datain[43] top.gearbox_down_cc_tb[3].datain[42] top.gearbox_down_cc_tb[3].datain[41] top.gearbox_down_cc_tb[3].datain[40] top.gearbox_down_cc_tb[3].datain[39] top.gearbox_down_cc_tb[3].datain[38] top.gearbox_down_cc_tb[3].datain[37] top.gearbox_down_cc_tb[3].datain[36] top.gearbox_down_cc_tb[3].datain[35] top.gearbox_down_cc_tb[3].datain[34] top.gearbox_down_cc_tb[3].datain[33] top.gearbox_down_cc_tb[3].datain[32] top.gearbox_down_cc_tb[3].datain[31] top.gearbox_down_cc_tb[3].datain[30] top.gearbox_down_cc_tb[3].datain[29] top.gearbox_down_cc_tb[3].datain[28] top.gearbox_down_cc_tb[3].datain[27] top.gearbox_down_cc_tb[3].datain[26] top.gearbox_down_cc_tb[3].datain[25] top.gearbox_down_cc_tb[3].datain[24] top.gearbox_down_cc_tb[3].datain[23] top.gearbox_down_cc_tb[3].datain[22] top.gearbox_down_cc_tb[3].datain[21] top.gearbox_down_cc_tb[3].datain[20] top.gearbox_down_cc_tb[3].datain[19] top.gearbox_down_cc_tb[3].datain[18] top.gearbox_down_cc_tb[3].datain[17] top.gearbox_down_cc_tb[3].datain[16] top.gearbox_down_cc_tb[3].datain[15] top.gearbox_down_cc_tb[3].datain[14] top.gearbox_down_cc_tb[3].datain[13] top.gearbox_down_cc_tb[3].datain[12] top.gearbox_down_cc_tb[3].datain[11] top.gearbox_down_cc_tb[3].datain[10] top.gearbox_down_cc_tb[3].datain[9] top.gearbox_down_cc_tb[3].datain[8] top.gearbox_down_cc_tb[3].datain[7] top.gearbox_down_cc_tb[3].datain[6] top.gearbox_down_cc_tb[3].datain[5] top.gearbox_down_cc_tb[3].datain[4] top.gearbox_down_cc_tb[3].datain[3] top.gearbox_down_cc_tb[3].datain[2] top.gearbox_down_cc_tb[3].datain[1] top.gearbox_down_cc_tb[3].datain[0]
+@28
+top.gearbox_down_cc_tb[3].syncout
+top.gearbox_down_cc_tb[3].validout
+@c00022
+#{top.gearbox_down_cc_tb[3].dataout[63:0]} top.gearbox_down_cc_tb[3].dataout[63] top.gearbox_down_cc_tb[3].dataout[62] top.gearbox_down_cc_tb[3].dataout[61] top.gearbox_down_cc_tb[3].dataout[60] top.gearbox_down_cc_tb[3].dataout[59] top.gearbox_down_cc_tb[3].dataout[58] top.gearbox_down_cc_tb[3].dataout[57] top.gearbox_down_cc_tb[3].dataout[56] top.gearbox_down_cc_tb[3].dataout[55] top.gearbox_down_cc_tb[3].dataout[54] top.gearbox_down_cc_tb[3].dataout[53] top.gearbox_down_cc_tb[3].dataout[52] top.gearbox_down_cc_tb[3].dataout[51] top.gearbox_down_cc_tb[3].dataout[50] top.gearbox_down_cc_tb[3].dataout[49] top.gearbox_down_cc_tb[3].dataout[48] top.gearbox_down_cc_tb[3].dataout[47] top.gearbox_down_cc_tb[3].dataout[46] top.gearbox_down_cc_tb[3].dataout[45] top.gearbox_down_cc_tb[3].dataout[44] top.gearbox_down_cc_tb[3].dataout[43] top.gearbox_down_cc_tb[3].dataout[42] top.gearbox_down_cc_tb[3].dataout[41] top.gearbox_down_cc_tb[3].dataout[40] top.gearbox_down_cc_tb[3].dataout[39] top.gearbox_down_cc_tb[3].dataout[38] top.gearbox_down_cc_tb[3].dataout[37] top.gearbox_down_cc_tb[3].dataout[36] top.gearbox_down_cc_tb[3].dataout[35] top.gearbox_down_cc_tb[3].dataout[34] top.gearbox_down_cc_tb[3].dataout[33] top.gearbox_down_cc_tb[3].dataout[32] top.gearbox_down_cc_tb[3].dataout[31] top.gearbox_down_cc_tb[3].dataout[30] top.gearbox_down_cc_tb[3].dataout[29] top.gearbox_down_cc_tb[3].dataout[28] top.gearbox_down_cc_tb[3].dataout[27] top.gearbox_down_cc_tb[3].dataout[26] top.gearbox_down_cc_tb[3].dataout[25] top.gearbox_down_cc_tb[3].dataout[24] top.gearbox_down_cc_tb[3].dataout[23] top.gearbox_down_cc_tb[3].dataout[22] top.gearbox_down_cc_tb[3].dataout[21] top.gearbox_down_cc_tb[3].dataout[20] top.gearbox_down_cc_tb[3].dataout[19] top.gearbox_down_cc_tb[3].dataout[18] top.gearbox_down_cc_tb[3].dataout[17] top.gearbox_down_cc_tb[3].dataout[16] top.gearbox_down_cc_tb[3].dataout[15] top.gearbox_down_cc_tb[3].dataout[14] top.gearbox_down_cc_tb[3].dataout[13] top.gearbox_down_cc_tb[3].dataout[12] top.gearbox_down_cc_tb[3].dataout[11] top.gearbox_down_cc_tb[3].dataout[10] top.gearbox_down_cc_tb[3].dataout[9] top.gearbox_down_cc_tb[3].dataout[8] top.gearbox_down_cc_tb[3].dataout[7] top.gearbox_down_cc_tb[3].dataout[6] top.gearbox_down_cc_tb[3].dataout[5] top.gearbox_down_cc_tb[3].dataout[4] top.gearbox_down_cc_tb[3].dataout[3] top.gearbox_down_cc_tb[3].dataout[2] top.gearbox_down_cc_tb[3].dataout[1] top.gearbox_down_cc_tb[3].dataout[0]
+@28
+top.gearbox_down_cc_tb[3].dataout[63]
+top.gearbox_down_cc_tb[3].dataout[62]
+top.gearbox_down_cc_tb[3].dataout[61]
+top.gearbox_down_cc_tb[3].dataout[60]
+top.gearbox_down_cc_tb[3].dataout[59]
+top.gearbox_down_cc_tb[3].dataout[58]
+top.gearbox_down_cc_tb[3].dataout[57]
+top.gearbox_down_cc_tb[3].dataout[56]
+top.gearbox_down_cc_tb[3].dataout[55]
+top.gearbox_down_cc_tb[3].dataout[54]
+top.gearbox_down_cc_tb[3].dataout[53]
+top.gearbox_down_cc_tb[3].dataout[52]
+top.gearbox_down_cc_tb[3].dataout[51]
+top.gearbox_down_cc_tb[3].dataout[50]
+top.gearbox_down_cc_tb[3].dataout[49]
+top.gearbox_down_cc_tb[3].dataout[48]
+top.gearbox_down_cc_tb[3].dataout[47]
+top.gearbox_down_cc_tb[3].dataout[46]
+top.gearbox_down_cc_tb[3].dataout[45]
+top.gearbox_down_cc_tb[3].dataout[44]
+top.gearbox_down_cc_tb[3].dataout[43]
+top.gearbox_down_cc_tb[3].dataout[42]
+top.gearbox_down_cc_tb[3].dataout[41]
+top.gearbox_down_cc_tb[3].dataout[40]
+top.gearbox_down_cc_tb[3].dataout[39]
+top.gearbox_down_cc_tb[3].dataout[38]
+top.gearbox_down_cc_tb[3].dataout[37]
+top.gearbox_down_cc_tb[3].dataout[36]
+top.gearbox_down_cc_tb[3].dataout[35]
+top.gearbox_down_cc_tb[3].dataout[34]
+top.gearbox_down_cc_tb[3].dataout[33]
+top.gearbox_down_cc_tb[3].dataout[32]
+top.gearbox_down_cc_tb[3].dataout[31]
+top.gearbox_down_cc_tb[3].dataout[30]
+top.gearbox_down_cc_tb[3].dataout[29]
+top.gearbox_down_cc_tb[3].dataout[28]
+top.gearbox_down_cc_tb[3].dataout[27]
+top.gearbox_down_cc_tb[3].dataout[26]
+top.gearbox_down_cc_tb[3].dataout[25]
+top.gearbox_down_cc_tb[3].dataout[24]
+top.gearbox_down_cc_tb[3].dataout[23]
+top.gearbox_down_cc_tb[3].dataout[22]
+top.gearbox_down_cc_tb[3].dataout[21]
+top.gearbox_down_cc_tb[3].dataout[20]
+top.gearbox_down_cc_tb[3].dataout[19]
+top.gearbox_down_cc_tb[3].dataout[18]
+top.gearbox_down_cc_tb[3].dataout[17]
+top.gearbox_down_cc_tb[3].dataout[16]
+top.gearbox_down_cc_tb[3].dataout[15]
+top.gearbox_down_cc_tb[3].dataout[14]
+top.gearbox_down_cc_tb[3].dataout[13]
+top.gearbox_down_cc_tb[3].dataout[12]
+top.gearbox_down_cc_tb[3].dataout[11]
+top.gearbox_down_cc_tb[3].dataout[10]
+top.gearbox_down_cc_tb[3].dataout[9]
+top.gearbox_down_cc_tb[3].dataout[8]
+top.gearbox_down_cc_tb[3].dataout[7]
+top.gearbox_down_cc_tb[3].dataout[6]
+top.gearbox_down_cc_tb[3].dataout[5]
+top.gearbox_down_cc_tb[3].dataout[4]
+top.gearbox_down_cc_tb[3].dataout[3]
+top.gearbox_down_cc_tb[3].dataout[2]
+top.gearbox_down_cc_tb[3].dataout[1]
+top.gearbox_down_cc_tb[3].dataout[0]
+@1401200
 -group_end
 @28
-validout
-@200
--Internal
+top.gearbox_down_cc_tb[3].firstout
+top.gearbox_down_cc_tb[3].lastout
+@1000200
+-Example 4 (66:64)
+@800200
+-Example 5 (128:12)
 @28
-gear.muxselect_en
+top.gearbox_down_cc_tb[4].syncin
+top.gearbox_down_cc_tb[4].validin
 @22
-gear.muxselect_us[3:0]
+#{top.gearbox_down_cc_tb[4].datain[127:0]} top.gearbox_down_cc_tb[4].datain[127] top.gearbox_down_cc_tb[4].datain[126] top.gearbox_down_cc_tb[4].datain[125] top.gearbox_down_cc_tb[4].datain[124] top.gearbox_down_cc_tb[4].datain[123] top.gearbox_down_cc_tb[4].datain[122] top.gearbox_down_cc_tb[4].datain[121] top.gearbox_down_cc_tb[4].datain[120] top.gearbox_down_cc_tb[4].datain[119] top.gearbox_down_cc_tb[4].datain[118] top.gearbox_down_cc_tb[4].datain[117] top.gearbox_down_cc_tb[4].datain[116] top.gearbox_down_cc_tb[4].datain[115] top.gearbox_down_cc_tb[4].datain[114] top.gearbox_down_cc_tb[4].datain[113] top.gearbox_down_cc_tb[4].datain[112] top.gearbox_down_cc_tb[4].datain[111] top.gearbox_down_cc_tb[4].datain[110] top.gearbox_down_cc_tb[4].datain[109] top.gearbox_down_cc_tb[4].datain[108] top.gearbox_down_cc_tb[4].datain[107] top.gearbox_down_cc_tb[4].datain[106] top.gearbox_down_cc_tb[4].datain[105] top.gearbox_down_cc_tb[4].datain[104] top.gearbox_down_cc_tb[4].datain[103] top.gearbox_down_cc_tb[4].datain[102] top.gearbox_down_cc_tb[4].datain[101] top.gearbox_down_cc_tb[4].datain[100] top.gearbox_down_cc_tb[4].datain[99] top.gearbox_down_cc_tb[4].datain[98] top.gearbox_down_cc_tb[4].datain[97] top.gearbox_down_cc_tb[4].datain[96] top.gearbox_down_cc_tb[4].datain[95] top.gearbox_down_cc_tb[4].datain[94] top.gearbox_down_cc_tb[4].datain[93] top.gearbox_down_cc_tb[4].datain[92] top.gearbox_down_cc_tb[4].datain[91] top.gearbox_down_cc_tb[4].datain[90] top.gearbox_down_cc_tb[4].datain[89] top.gearbox_down_cc_tb[4].datain[88] top.gearbox_down_cc_tb[4].datain[87] top.gearbox_down_cc_tb[4].datain[86] top.gearbox_down_cc_tb[4].datain[85] top.gearbox_down_cc_tb[4].datain[84] top.gearbox_down_cc_tb[4].datain[83] top.gearbox_down_cc_tb[4].datain[82] top.gearbox_down_cc_tb[4].datain[81] top.gearbox_down_cc_tb[4].datain[80] top.gearbox_down_cc_tb[4].datain[79] top.gearbox_down_cc_tb[4].datain[78] top.gearbox_down_cc_tb[4].datain[77] top.gearbox_down_cc_tb[4].datain[76] top.gearbox_down_cc_tb[4].datain[75] top.gearbox_down_cc_tb[4].datain[74] top.gearbox_down_cc_tb[4].datain[73] top.gearbox_down_cc_tb[4].datain[72] top.gearbox_down_cc_tb[4].datain[71] top.gearbox_down_cc_tb[4].datain[70] top.gearbox_down_cc_tb[4].datain[69] top.gearbox_down_cc_tb[4].datain[68] top.gearbox_down_cc_tb[4].datain[67] top.gearbox_down_cc_tb[4].datain[66] top.gearbox_down_cc_tb[4].datain[65] top.gearbox_down_cc_tb[4].datain[64] top.gearbox_down_cc_tb[4].datain[63] top.gearbox_down_cc_tb[4].datain[62] top.gearbox_down_cc_tb[4].datain[61] top.gearbox_down_cc_tb[4].datain[60] top.gearbox_down_cc_tb[4].datain[59] top.gearbox_down_cc_tb[4].datain[58] top.gearbox_down_cc_tb[4].datain[57] top.gearbox_down_cc_tb[4].datain[56] top.gearbox_down_cc_tb[4].datain[55] top.gearbox_down_cc_tb[4].datain[54] top.gearbox_down_cc_tb[4].datain[53] top.gearbox_down_cc_tb[4].datain[52] top.gearbox_down_cc_tb[4].datain[51] top.gearbox_down_cc_tb[4].datain[50] top.gearbox_down_cc_tb[4].datain[49] top.gearbox_down_cc_tb[4].datain[48] top.gearbox_down_cc_tb[4].datain[47] top.gearbox_down_cc_tb[4].datain[46] top.gearbox_down_cc_tb[4].datain[45] top.gearbox_down_cc_tb[4].datain[44] top.gearbox_down_cc_tb[4].datain[43] top.gearbox_down_cc_tb[4].datain[42] top.gearbox_down_cc_tb[4].datain[41] top.gearbox_down_cc_tb[4].datain[40] top.gearbox_down_cc_tb[4].datain[39] top.gearbox_down_cc_tb[4].datain[38] top.gearbox_down_cc_tb[4].datain[37] top.gearbox_down_cc_tb[4].datain[36] top.gearbox_down_cc_tb[4].datain[35] top.gearbox_down_cc_tb[4].datain[34] top.gearbox_down_cc_tb[4].datain[33] top.gearbox_down_cc_tb[4].datain[32] top.gearbox_down_cc_tb[4].datain[31] top.gearbox_down_cc_tb[4].datain[30] top.gearbox_down_cc_tb[4].datain[29] top.gearbox_down_cc_tb[4].datain[28] top.gearbox_down_cc_tb[4].datain[27] top.gearbox_down_cc_tb[4].datain[26] top.gearbox_down_cc_tb[4].datain[25] top.gearbox_down_cc_tb[4].datain[24] top.gearbox_down_cc_tb[4].datain[23] top.gearbox_down_cc_tb[4].datain[22] top.gearbox_down_cc_tb[4].datain[21] top.gearbox_down_cc_tb[4].datain[20] top.gearbox_down_cc_tb[4].datain[19] top.gearbox_down_cc_tb[4].datain[18] top.gearbox_down_cc_tb[4].datain[17] top.gearbox_down_cc_tb[4].datain[16] top.gearbox_down_cc_tb[4].datain[15] top.gearbox_down_cc_tb[4].datain[14] top.gearbox_down_cc_tb[4].datain[13] top.gearbox_down_cc_tb[4].datain[12] top.gearbox_down_cc_tb[4].datain[11] top.gearbox_down_cc_tb[4].datain[10] top.gearbox_down_cc_tb[4].datain[9] top.gearbox_down_cc_tb[4].datain[8] top.gearbox_down_cc_tb[4].datain[7] top.gearbox_down_cc_tb[4].datain[6] top.gearbox_down_cc_tb[4].datain[5] top.gearbox_down_cc_tb[4].datain[4] top.gearbox_down_cc_tb[4].datain[3] top.gearbox_down_cc_tb[4].datain[2] top.gearbox_down_cc_tb[4].datain[1] top.gearbox_down_cc_tb[4].datain[0]
 @28
-gear.muxselect_ov
+top.gearbox_down_cc_tb[4].syncout
+top.gearbox_down_cc_tb[4].validout
+@22
+#{top.gearbox_down_cc_tb[4].dataout[11:0]} top.gearbox_down_cc_tb[4].dataout[11] top.gearbox_down_cc_tb[4].dataout[10] top.gearbox_down_cc_tb[4].dataout[9] top.gearbox_down_cc_tb[4].dataout[8] top.gearbox_down_cc_tb[4].dataout[7] top.gearbox_down_cc_tb[4].dataout[6] top.gearbox_down_cc_tb[4].dataout[5] top.gearbox_down_cc_tb[4].dataout[4] top.gearbox_down_cc_tb[4].dataout[3] top.gearbox_down_cc_tb[4].dataout[2] top.gearbox_down_cc_tb[4].dataout[1] top.gearbox_down_cc_tb[4].dataout[0]
+@28
+top.gearbox_down_cc_tb[4].firstout
+top.gearbox_down_cc_tb[4].lastout
+@1000200
+-Example 5 (128:12)
 [pattern_trace] 1
 [pattern_trace] 0

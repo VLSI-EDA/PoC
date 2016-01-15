@@ -80,14 +80,16 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 	- [Python 3][python] (&ge; 3.4):
 	     - [colorama][colorama]
  - Synthesis tool chains:
+     - Altera Quartus-II &ge; 13.0 or
+     - Lattice Diamond or
      - Xilinx ISE 14.7 or
-     - Xilinx Vivado &ge; 2014.1 or
-     - Altera Quartus-II &ge; 13.0
+     - Xilinx Vivado (restricted, see [section 7.7](#7.7-in-xilinx-vivado-synth-and-xsim))
  - Simulation tool chains:
-     - Xilinx ISE Simulator 14.7 or
-     - Xilinx Vivado Simulator &ge; 2014.1 or
+     - Aldec Active-HDL or
      - Mentor Graphics ModelSim Altera Edition or
      - Mentor Graphics QuestaSim or
+     - Xilinx ISE Simulator 14.7 or
+     - Xilinx Vivado Simulator &ge; 2014.1 or
      - [GHDL][ghdl] and [GTKWave][gtkwave]
 
  [python]:		https://www.python.org/downloads/
@@ -112,6 +114,7 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  [execpol]: https://technet.microsoft.com/en-us/library/hh849812.aspx
  [pscx]:    http://pscx.codeplex.com/
 
+
 ## 4 Dependencies
 
 **The PoC-Library** depends on:
@@ -122,8 +125,9 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 Both dependencies are available as GitHub repositories and are linked to
 PoC as git submodules into the [`<PoCRoot>\lib\`][lib] directory.
 
- [osvvm]:	http://osvvm.org/
+ [osvvm]:	https://github.com/JimLewis/OSVVM
  [vunit]:	https://github.com/LarsAsplund/vunit
+
 
 ## 5 Configuring PoC on a Local System (Stand Alone)
 
@@ -302,7 +306,7 @@ directory if generated netlists are used.
 #### 7.7 In Xilinx Vivado (Synth and xSim)
 
 **The PoC-Library** has no full Vivado support, because of the incomplete
-VHDL-87 support in Vivados Synthesis tool. Especially the incorrect implementation of
+VHDL-87 support in Vivado's synthesis tool. Especially the incorrect implementation of
 physical types causes errors in PoC's I/O modules.
 
 Vivado's simulator xSim is not affected.
@@ -320,10 +324,10 @@ Vivado's simulator xSim is not affected.
  -  [PicoBlaze-Library][pb_lib]:  
     The PicoBlaze-Library offers several PicoBlaze devices and code routines
     to extend a common PicoBlaze environment to a little System on a Chip (SoC
-		or SoFPGA).
+    or SoFPGA).
  -  [PicoBlaze-Examples][pb_ex]:  
     A SoFPGA reference implementation, based on the PoC-Library and the
-		PicoBlaze-Library.
+    PicoBlaze-Library.
 
  [poc_ex]:  https://github.com/VLSI-EDA/PoC-Examples
  [q27]:			https://github.com/preusser/q27

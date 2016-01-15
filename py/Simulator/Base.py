@@ -101,6 +101,8 @@ class PoCSimulator(object):
 				return True
 			elif (simulatorOutput[matchPos + 20: matchPos + 26] == "FAILED"):
 				return False
+			elif (simulatorOutput[matchPos + 20: matchPos + 35] == "NOT IMPLEMENTED"):
+				return None
 			else:
 				raise SimulatorException()
 		else:

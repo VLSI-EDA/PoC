@@ -1,22 +1,38 @@
 [*]
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Mon Apr 27 21:49:26 2015
+[*] Tue Jan 05 21:43:43 2016
 [*]
-[dumpfile] "D:\git\SATAController\lib\PoC\gtkwave\arith\arith_prng_tb.vcd"
-[savefile] "D:\git\SATAController\lib\PoC\gtkwave\arith\arith_prng.gtkw"
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\arith_prng_tb.ghw"
+[dumpfile_mtime] "Tue Jan 05 21:43:01 2016"
+[dumpfile_size] 8715
+[savefile] "H:\Austausch\PoC\sim\arith\arith_prng_tb.gtkw"
 [timestart] 0
-[size] 1920 996
-[pos] -34 -34
+[size] 1676 996
+[pos] -1 -1
 *-28.403215 1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.arith_prng_tb.
 [sst_width] 197
 [signals_width] 209
 [sst_expanded] 1
 [sst_vpaned_height] 292
 @28
-prng.clk
-prng.got
-prng.rst
-@22
-prng.val[7:0]
+top.arith_prng_tb.clock
+top.arith_prng_tb.reset
+@c00022
+#{top.arith_prng_tb.prng_value[7:0]} top.arith_prng_tb.prng_value[7] top.arith_prng_tb.prng_value[6] top.arith_prng_tb.prng_value[5] top.arith_prng_tb.prng_value[4] top.arith_prng_tb.prng_value[3] top.arith_prng_tb.prng_value[2] top.arith_prng_tb.prng_value[1] top.arith_prng_tb.prng_value[0]
+@28
+top.arith_prng_tb.prng_value[7]
+top.arith_prng_tb.prng_value[6]
+top.arith_prng_tb.prng_value[5]
+top.arith_prng_tb.prng_value[4]
+top.arith_prng_tb.prng_value[3]
+top.arith_prng_tb.prng_value[2]
+top.arith_prng_tb.prng_value[1]
+top.arith_prng_tb.prng_value[0]
+@1401200
+-group_end
+@29
+top.arith_prng_tb.test_got
 [pattern_trace] 1
 [pattern_trace] 0

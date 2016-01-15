@@ -1,0 +1,27 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Tue Jan 05 01:33:25 2016
+[*]
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\sortnet_OddEvenMergeSort_tb.ghw"
+[dumpfile_mtime] "Tue Jan 05 01:32:55 2016"
+[dumpfile_size] 586882
+[savefile] "H:\Austausch\PoC\sim\sort\sortnet\sortnet_OddEvenMergeSort_tb.gtkw"
+[timestart] 0
+[size] 1676 997
+[pos] -1 -1
+*-25.708094 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[sst_width] 197
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 293
+@28
+top.sortnet_oddevenmergesort_tb.clock
+top.sortnet_oddevenmergesort_tb.generator_valid
+top.sortnet_oddevenmergesort_tb.generator_iskey
+@29
+top.sortnet_oddevenmergesort_tb.sort_valid
+@28
+top.sortnet_oddevenmergesort_tb.sort_iskey
+[pattern_trace] 1
+[pattern_trace] 0

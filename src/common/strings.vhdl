@@ -151,6 +151,7 @@ package strings is
 	function str_ltrim(str : STRING; char : CHARACTER := ' ')	return STRING;
 	function str_rtrim(str : STRING; char : CHARACTER := ' ')	return STRING;
 	function str_trim(str : STRING)														return STRING;
+	function str_ralign(str : STRING; length : NATURAL; FillChar : CHARACTER := ' ') return STRING;
 	function str_toLower(str : STRING)												return STRING;
 	function str_toUpper(str : STRING)												return STRING;
 
@@ -384,8 +385,11 @@ package body strings is
 		constant val			: REAL		:= value * s;
 		constant int			: INTEGER	:= integer(floor(val));
 		constant frac			: INTEGER	:= integer(round((val - real(int)) * 10.0**precision));
-		constant frac_str	: STRING	:= INTEGER'image(frac);
-		constant res			: STRING	:= INTEGER'image(int) & "." & (2 to (precision - frac_str'length + 1) => '0') & frac_str;
+		constant overflow : boolean := frac >= 10**precision;
+		constant int2     : INTEGER := ite(overflow, int+1, int);
+		constant frac2    : INTEGER := ite(overflow, frac-10**precision, frac);
+		constant frac_str	: STRING	:= INTEGER'image(frac2);
+		constant res			: STRING	:= INTEGER'image(int2) & "." & (2 to (precision - frac_str'length + 1) => '0') & frac_str;
 	begin
 		return ite ((s < 0.0), "-" & res, res);
 	end function;
@@ -882,6 +886,14 @@ package body strings is
 	function str_trim(str : STRING) return STRING is
 	begin
 		return str(str'low to str'low + str_length(str) - 1);
+	end function;
+	
+	function str_ralign(str : STRING; length : NATURAL; FillChar : CHARACTER := ' ') return STRING is
+		variable Result		: STRING(1 to length);
+	begin
+		Result		:= (others => FillChar);
+		Result(length - str'length + 1 to length)	:= str;
+		return Result;
 	end function;
 	
 	function str_toLower(str : STRING) return STRING is

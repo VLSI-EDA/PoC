@@ -3,9 +3,9 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- =============================================================================
--- Testbench:				Pseudo-Random Number Generator (PRNG).
--- 
 -- Authors:					Patrick Lehmann
+-- 
+-- Testbench:				Pseudo-Random Number Generator (PRNG).
 -- 
 -- Description:
 -- ------------------------------------
@@ -15,7 +15,7 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,25 +31,26 @@
 -- limitations under the License.
 -- =============================================================================
 
-LIBRARY IEEE;
-USE			IEEE.STD_LOGIC_1164.ALL;
-USE			IEEE.NUMERIC_STD.ALL;
+library IEEE;
+use			IEEE.STD_LOGIC_1164.all;
+use			IEEE.NUMERIC_STD.all;
 
-LIBRARY PoC;
-USE			PoC.utils.ALL;
-USE			PoC.vectors.ALL;
-USE			PoC.strings.ALL;
-USE			PoC.simulation.ALL;
-
-
-ENTITY arith_prng_tb IS
-END;
+library PoC;
+use			PoC.utils.all;
+use			PoC.vectors.all;
+use			PoC.strings.all;
+use			PoC.physical.all;
+use			PoC.simulation.all;
 
 
-ARCHITECTURE test OF arith_prng_tb IS
-	CONSTANT CLOCK_PERIOD_100MHZ			: TIME															:= 10 ns;
+entity arith_prng_tb is
+end;
 
-	CONSTANT COMPARE_LIST_8_BITS			: T_SLVV_8(0 TO 255)								:= (
+
+architecture test of arith_prng_tb is
+	constant CLOCK_FREQ							: FREQ					:= 100 MHz;
+
+	constant COMPARE_LIST_8_BITS		: T_SLVV_8			:= (
 		x"12", x"24", x"48", x"90", x"21", x"42", x"85", x"0A", x"14", x"28", x"51", x"A2", x"45", x"8B", x"17", x"2E",
 		x"5D", x"BB", x"77", x"EF", x"DE", x"BC", x"79", x"F2", x"E4", x"C9", x"93", x"27", x"4E", x"9C", x"38", x"70",
 		x"E1", x"C3", x"86", x"0C", x"18", x"31", x"63", x"C6", x"8C", x"19", x"33", x"67", x"CE", x"9D", x"3A", x"74",
@@ -68,38 +69,18 @@ ARCHITECTURE test OF arith_prng_tb IS
 		x"9A", x"34", x"69", x"D3", x"A7", x"4F", x"9E", x"3C", x"78", x"F0", x"E0", x"C1", x"82", x"04", x"09", x"12"
 	);
 
-	SIGNAL SimStop			: std_logic := '0';
-
-	SIGNAL Clock				: STD_LOGIC			:= '1';
-	SIGNAL Reset				: STD_LOGIC			:= '0';
-	SIGNAL Test_got			: STD_LOGIC			:= '0';
-	SIGNAL PRNG_Value		: T_SLV_8;
+	signal Clock				: STD_LOGIC;
+	signal Reset				: STD_LOGIC;
+	signal Test_got			: STD_LOGIC;
+	signal PRNG_Value		: T_SLV_8;
 	
 BEGIN
-
-	Clock <= Clock xnor SimStop after CLOCK_PERIOD_100MHZ / 2.0;
-
-	PROCESS
-	BEGIN
-		WAIT UNTIL rising_edge(Clock);
-		
-		Reset						<= '1';
-		WAIT UNTIL rising_edge(Clock);
+	-- initialize global simulation status
+	globalSimulationStatus.initialize;
 	
-		Reset						<= '0';
-		WAIT UNTIL rising_edge(Clock);
-
-		FOR I IN 0 TO 255 LOOP
-			Test_got				<= '1';
-			WAIT UNTIL rising_edge(Clock);
-			tbAssert((PRNG_Value = COMPARE_LIST_8_BITS(I)), "I=" & integer'image(I) &	" Value=" & raw_format_slv_hex(PRNG_Value) & " Expected=" & raw_format_slv_hex(COMPARE_LIST_8_BITS(I)));
-		END LOOP;
-		
-		-- Report overall simulation result
-		tbPrintResult;
-		SimStop	<= '1';
-		WAIT;
-	END PROCESS;
+	-- generate global testbench clock
+	simGenerateClock(Clock, CLOCK_FREQ);
+	simGenerateWaveform(Reset, simGenerateWaveform_Reset(Pause => 15 ns, ResetPulse => 10 ns));
 
 	prng : entity PoC.arith_prng
 		generic map (
@@ -113,4 +94,36 @@ BEGIN
 			val			=> PRNG_Value				-- the pseudo-random number
 		);
 
-END;
+	procTester : process
+		variable simProcessID	: T_SIM_PROCESS_ID;			-- from Simulation
+	begin
+		simProcessID := globalSimulationStatus.registerProcess("Generator");	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
+		
+		Test_got						<= '0';
+		
+		wait until falling_edge(Reset);
+		wait until rising_edge(Clock);
+
+		for i in COMPARE_LIST_8_BITS'range loop
+			Test_got			<= '1';
+			
+			wait until rising_edge(Clock);
+			globalSimulationStatus.assertion((PRNG_Value = COMPARE_LIST_8_BITS(I)),
+				str_ralign(INTEGER'image(I), log10ceil(COMPARE_LIST_8_BITS'high)) &
+				": Value=" &		raw_format_slv_hex(PRNG_Value) &
+				" Expected=" &	raw_format_slv_hex(COMPARE_LIST_8_BITS(I))
+			);
+		end loop;
+		
+		Test_got				<= '0';
+		for i in 0 to 3 loop
+			wait until rising_edge(Clock);
+		end loop;
+		
+		-- This process is finished
+		globalSimulationStatus.deactivateProcess(simProcessID);
+		-- Report overall result
+		globalSimulationStatus.finalize;
+		wait;  -- forever
+	end process;
+end architecture;

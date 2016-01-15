@@ -203,13 +203,13 @@ begin
 			put									=> DataFIFO_put,
 			din									=> DataFIFO_DataIn,
 			full								=> DataFIFO_Full,
-			estate_wr						=> OPEN,
+			estate_wr						=> open,
 
 			-- Reading Interface
 			got									=> DataFIFO_got,
 			dout								=> DataFIFO_DataOut,
 			valid								=> DataFIFO_Valid,
-			fstate_rd						=> OPEN
+			fstate_rd						=> open
 		);
 	
 	FrameCommit		<= DataFIFO_Valid AND DataFIFO_DataOut(EOF_BIT) AND Out_Ack;
@@ -306,13 +306,13 @@ begin
 					put									=> MetaFIFO_put,
 					din									=> MetaFIFO_DataIn,
 					full								=> MetaFIFO_Full,
-					estate_wr						=> OPEN,
+					estate_wr						=> open,
 
 					-- Reading Interface
 					got									=> MetaFIFO_got,
 					dout								=> MetaFIFO_DataOut,
 					valid								=> MetaFIFO_Valid,
-					fstate_rd						=> OPEN,
+					fstate_rd						=> open,
 
 					commit							=> MetaFIFO_Commit,
 					rollback						=> MetaFIFO_Rollback

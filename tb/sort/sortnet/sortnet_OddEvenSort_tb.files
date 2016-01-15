@@ -4,19 +4,9 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 
-# OSVVM
-vhdl-08	osvvm	"lib/osvvm/NamePkg.vhd"									# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/OsvvmGlobalPkg.vhd"					# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/TextUtilPkg.vhd"							# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/TranscriptPkg.vhd"						# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/AlertLogPkg.vhd"							# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/MemoryPkg.vhd"								# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/MessagePkg.vhd"							# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/SortListPkg_int.vhd"					# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/RandomBasePkg.vhd"						# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/RandomPkg.vhd"								# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/CoveragePkg.vhd"							# OSVVM 
-vhdl-08	osvvm	"lib/osvvm/OsvvmContext.vhd"						# OSVVM 
+# Load external vendor libraries
+@library osvvm "osvvm"						# Open Source VHDL Verification Methodology (OS-VVM)
+
 
 # board and device configuration
 vhdl		poc		"tb/common/my_config_KC705.vhdl"

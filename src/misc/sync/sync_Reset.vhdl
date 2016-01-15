@@ -9,13 +9,15 @@
 --
 -- Description:
 -- ------------------------------------
---		This module synchronizes one reset signal from clock-domain 'Clock1' to
---		clock-domain 'Clock'. The clock-domain boundary crossing is done by two
---		synchronizer D-FFs. If a known vendor like Altera or Xilinx are
---		recognized, a vendor specific implementation is choosen.
+--    This module synchronizes an asynchronous reset signal to the clock
+--    'Clock'. The 'Input' can be asserted and de-asserted at any time.
+--    The 'Output' is asserted asynchronously and de-asserted synchronously
+--    to the clock.
 -- 
 --		ATTENTION:
---			Use this synchronizer only for reset signals.
+--			Use this synchronizer only to asynchronously reset your design.
+--      The 'Output' should be feed by global buffer to the destination FFs, so
+--      that, it reaches their reset inputs within one clock cycle.
 --
 --		CONSTRAINTS:
 --			General:

@@ -26,20 +26,15 @@ the current fill-state.
 The prefixes `cc_` (common clock), `dc_` (dependent clock) and `ic_` (independent
 clock) refer to the write- and read-side clock relationship.
 
- -  [`fifo_cc_got`][fifo_cc_got] implements a regular FIFO (one common clock,
-    got-interface)
- -  [`fifo_cc_got_tempgot`][fifo_cc_got_tempgot] implements a regular FIFO (one common
-    clock, got-interface), extended by a transactional `tempgot`-interface
-    (read-side). 
- -  [`fifo_cc_got_tempput`][fifo_cc_got_tempput] implements a regular FIFO (one common
-    clock, got-interface), extended by a transactional `tempput`-interface
-    (write-side). 
- -  [`fifo_dc_got`][fifo_dc_got] implements a cross-clock FIFO (two related clocks,
-    got-interface)
- -  [`fifo_ic_got`][fifo_ic_got] implements a cross-clock FIFO (two independent clocks,
-    got-interface)
- -  [`fifo_glue`][fifo_glue] implements a two-stage FIFO (one common clock,
-    got-interface)
+ -  [`fifo_cc_got`][fifo_cc_got] implements a regular FIFO (one common clock, got-interface)
+ -  [`fifo_cc_got_tempgot`][fifo_cc_got_tempgot] implements a regular FIFO (one common clock, got-interface), extended by a transactional `tempgot`-interface (read-side). 
+ -  [`fifo_cc_got_tempput`][fifo_cc_got_tempput] implements a regular FIFO (one common clock, got-interface), extended by a transactional `tempput`-interface (write-side). 
+ -  [`fifo_dc_got`][fifo_dc_got] implements a cross-clock FIFO (two related clocks, got-interface)
+ -  [`fifo_ic_got`][fifo_ic_got] implements a cross-clock FIFO (two independent clocks, got-interface)
+
+    This FIFO needs to be constrained, so static timing analysis will report the correct results. See the [constraint folder][const_fifo] for applieable constraint files for your synthesis tool.
+
+ -  [`fifo_glue`][fifo_glue] implements a two-stage FIFO (one common clock, got-interface)
  -  [`fifo_shift`][fifo_shift] implements a regular FIFO (one common clock,
     got-interface, optimized for FPGAs with shifter primitives)
 
@@ -53,3 +48,6 @@ clock) refer to the write- and read-side clock relationship.
  [fifo_ic_got]:			fifo_id_got.vhdl
  [fifo_glue]:			fifo_glue.vhdl
  [fifo_shift]:			fifo_shift.vhdl
+
+
+ [const_fifo]:			../../../ucf/fifo

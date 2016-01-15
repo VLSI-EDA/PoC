@@ -9,18 +9,9 @@
 -- 
 -- Description:
 -- ------------------------------------
---		This is a clock-domain-crossing circuit for reset signals optimized for
---		Altera FPGAs. It infers 2 flip flops with asynchronous preset and notifies
---		Quartus II, that these flip flops are synchronizer flip flops. If you need
---		a platform independent version of this synchronizer, please use
---		'PoC.misc.sync.sync_Reset', which internally instantiates this module if
---		a Altera FPGA is detected.
+--    This is the Altera specific implementation of the entity
+--    'PoC.misc.sync.sync_Reset'. See the description there on how to use this.
 --		
---		ATTENTION:
---			Use this synchronizer only for reset signals.
---
---		CONSTRAINTS:
---
 -- License:
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany

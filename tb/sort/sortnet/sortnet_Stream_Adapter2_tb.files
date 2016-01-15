@@ -1,0 +1,52 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+
+# Load external vendor libraries
+@library unisim "xilinx"					# Xilinx primitives
+@library osvvm "osvvm"						# Open Source VHDL Verification Methodology (OS-VVM)
+
+
+# board and device configuration
+vhdl		poc		"tb/common/my_config_KC705.vhdl"
+vhdl		poc		"tb/common/my_project.vhdl"
+
+# PoC core packages
+vhdl		poc		"src/common/utils.vhdl"									# PoC utility collection
+vhdl		poc		"src/common/config.vhdl"								# PoC device configuration mechanism
+vhdl		poc		"src/common/math.vhdl"									# PoC math extensions
+vhdl		poc		"src/common/strings.vhdl"								# PoC string package
+vhdl		poc		"src/common/vectors.vhdl"								# PoC vector package
+vhdl		poc		"src/common/physical.vhdl"							# PoC physical types package
+vhdl		poc		"src/common/components.vhdl"						# PoC components
+vhdl-93	poc		"tb/common/simulation.v93.vhdl"					# PoC simulation helper
+vhdl-08	poc		"tb/common/simulation.v08.vhdl"					# PoC simulation helper
+
+# PoC.mem
+vhdl		poc		"src/mem/mem.pkg.vhdl"									#
+
+# PoC.mem.ocram
+vhdl		poc		"src/mem/ocram/ocram.pkg.vhdl"					# 
+vhdl		poc		"src/mem/ocram/ocram_sdp.vhdl"					# 
+
+# PoC.fifo
+vhdl		poc		"src/fifo/fifo.pkg.vhdl"								# 
+vhdl		poc		"src/fifo/fifo_cc_got.vhdl"							# 
+
+# PoC.misc.gearbox
+vhdl		poc		"src/misc/gearbox/gearbox_down_cc.vhdl"	# 
+vhdl		poc		"src/misc/gearbox/gearbox_up_cc.vhdl"		# 
+
+# PoC.sort.sortnet
+vhdl		poc		"src/sort/sortnet/sortnet.pkg.vhdl"									# 
+vhdl		poc		"src/sort/sortnet/sortnet_BitonicSort.vhdl"					# 
+vhdl		poc		"src/sort/sortnet/sortnet_MergeSort_Streamed.vhdl"	# 
+vhdl		poc		"src/sort/sortnet/sortnet_OddEvenSort.vhdl"					# 
+vhdl		poc		"src/sort/sortnet/sortnet_OddEvenMergeSort.vhdl"		# 
+vhdl		poc		"src/sort/sortnet/sortnet_Transform.vhdl"						# 
+vhdl		poc		"src/sort/sortnet/sortnet_Stream_Adapter2.vhdl"			# UUT (Unit Under Test)
+
+# Testbench file(s)
+vhdl		test	"tb/sort/sortnet/sortnet_Stream_Adapter2_tb.vhdl"		# Testbench

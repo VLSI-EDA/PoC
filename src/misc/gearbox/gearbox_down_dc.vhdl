@@ -109,5 +109,5 @@ begin
 		
 	-- add output register @Clock2
 	DataOut_d		<= MuxOutput when registered(Clock2, ADD_OUTPUT_REGISTERS);
-	Out_Data	<= DataOut_d;
+	Out_Data		<= DataOut_d;
 end architecture;

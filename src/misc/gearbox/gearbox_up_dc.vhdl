@@ -148,7 +148,7 @@ begin
 	
 	-- add output register @Clock2
 	DataOut_d	<= Collected_d	when rising_edge(Clock2);
-	Out_Data	<= DataOut_d;
 	Valid_d		<= Valid_r			when rising_edge(Clock2);
+	Out_Data	<= DataOut_d;
 	Out_Valid	<= Valid_d;
 end architecture;
