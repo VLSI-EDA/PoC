@@ -48,7 +48,7 @@ entity arp_Wrapper is
 		INTERFACE_MACADDRESS								: T_NET_MAC_ADDRESS											:= C_NET_MAC_ADDRESS_EMPTY;
 		INITIAL_IPV4ADDRESSES								: T_NET_IPV4_ADDRESS_VECTOR							:= (0 => C_NET_IPV4_ADDRESS_EMPTY);
 		INITIAL_ARPCACHE_CONTENT						: T_NET_ARP_ARPCACHE_VECTOR							:= (0 => (Tag => C_NET_IPV4_ADDRESS_EMPTY, MAC => C_NET_MAC_ADDRESS_EMPTY));
-		APR_REQUEST_TIMEOUT									: TIME																	:= 100 ms
+		APR_REQUEST_TIMEOUT									: T_TIME																:= 100.0e-3
 	);
 	port (
 		Clock																: in	STD_LOGIC;

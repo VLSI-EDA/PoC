@@ -154,7 +154,7 @@ architecture rtl of arp_Cache is
 	signal TU_TagHit							: STD_LOGIC;
 	signal TU_TagMiss							: STD_LOGIC;
 
-	constant TICKCOUNTER_RES			: TIME																																			:= 10 ms;
+	constant TICKCOUNTER_RES			: T_TIME																																		:= 10.0e-3;
 	constant TICKCOUNTER_MAX			: POSITIVE																																	:= TimingToCycles(TICKCOUNTER_RES, CLOCK_FREQ);
 	constant TICKCOUNTER_BITS			: POSITIVE																																	:= log2ceilnz(TICKCOUNTER_MAX);
 	

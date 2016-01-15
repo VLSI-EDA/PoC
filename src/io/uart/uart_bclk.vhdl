@@ -64,7 +64,7 @@ end entity;
 
 architecture rtl of uart_bclk is
 	constant UART_OVERSAMPLING_RATE		: POSITIVE					:= 8;
-	constant TIME_UNIT_INTERVAL				: TIME							:= 1 sec / (to_real(BAUDRATE, 1 Bd) * real(UART_OVERSAMPLING_RATE));
+	constant TIME_UNIT_INTERVAL				: T_TIME						:= 1.0 / (to_real(BAUDRATE, 1 Bd) * real(UART_OVERSAMPLING_RATE));
 	constant BAUDRATE_COUNTER_MAX			: POSITIVE					:= TimingToCycles(TIME_UNIT_INTERVAL, CLOCK_FREQ);
 	constant BAUDRATE_COUNTER_BITS		: POSITIVE					:= log2ceilnz(BAUDRATE_COUNTER_MAX + 1);
 

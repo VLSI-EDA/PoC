@@ -59,7 +59,7 @@ end entity;
 
 
 architecture rtl of misc_FrequencyMeasurement is 
-	constant TIMEBASE_COUNTER_MAX			: POSITIVE																:= TimingToCycles(ite(SIMULATION, 10 us, 1 sec), REFERENCE_CLOCK_FREQ);
+	constant TIMEBASE_COUNTER_MAX			: POSITIVE																:= TimingToCycles(ite(SIMULATION, 10.0e-6, 1.0), REFERENCE_CLOCK_FREQ);
 	constant TIMEBASE_COUNTER_BITS		: POSITIVE																:= log2ceilnz(TIMEBASE_COUNTER_MAX);
 
 	signal TimeBase_Counter_rst				: STD_LOGIC;

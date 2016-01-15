@@ -40,6 +40,9 @@ use			PoC.physical.all;
 
 
 package simulation is
+	-- mimic definition of VHDL-2008
+	type TIME_VECTOR is array(natural range<>) of TIME;
+	
 	-- predefined constants to ease testvector concatenation
 	constant U8								: T_SLV_8							:= (others => 'U');
 	constant U16							: T_SLV_16						:= (others => 'U');
@@ -122,8 +125,8 @@ package simulation is
 	type T_SIM_WAVEFORM_SLV_48	is array(NATURAL range <>) of T_SIM_WAVEFORM_TUPLE_SLV_48;
 	type T_SIM_WAVEFORM_SLV_64	is array(NATURAL range <>) of T_SIM_WAVEFORM_TUPLE_SLV_64;
 	
-	procedure simGenerateWaveform(signal Wave : out BOOLEAN;		Waveform: T_TIMEVEC;							InitialValue : BOOLEAN);
-	procedure simGenerateWaveform(signal Wave : out STD_LOGIC;	Waveform: T_TIMEVEC;							InitialValue : STD_LOGIC := '0');
+	procedure simGenerateWaveform(signal Wave : out BOOLEAN;		Waveform: TIME_VECTOR;						InitialValue : BOOLEAN);
+	procedure simGenerateWaveform(signal Wave : out STD_LOGIC;	Waveform: TIME_VECTOR;						InitialValue : STD_LOGIC := '0');
 	procedure simGenerateWaveform(signal Wave : out STD_LOGIC;	Waveform: T_SIM_WAVEFORM_SL;			InitialValue : STD_LOGIC := '0');
 	procedure simGenerateWaveform(signal Wave : out T_SLV_8;		Waveform: T_SIM_WAVEFORM_SLV_8;		InitialValue : T_SLV_8);
 	procedure simGenerateWaveform(signal Wave : out T_SLV_16;		Waveform: T_SIM_WAVEFORM_SLV_16;	InitialValue : T_SLV_16);
@@ -132,7 +135,7 @@ package simulation is
 	procedure simGenerateWaveform(signal Wave : out T_SLV_48;		Waveform: T_SIM_WAVEFORM_SLV_48;	InitialValue : T_SLV_48);
 	procedure simGenerateWaveform(signal Wave : out T_SLV_64;		Waveform: T_SIM_WAVEFORM_SLV_64;	InitialValue : T_SLV_64);
 	
-	function simGenerateWaveform_Reset(constant Pause : TIME := 0 ns; ResetPulse : TIME := 10 ns) return T_TIMEVEC;
+	function simGenerateWaveform_Reset(constant Pause : TIME := 0 ns; ResetPulse : TIME := 10 ns) return TIME_VECTOR;
 	
 	-- TODO: integrate VCD simulation functions and procedures from sim_value_change_dump.vhdl here
 	
@@ -212,7 +215,7 @@ package body simulation is
 	end procedure;
 	
 	-- waveform generation
-	procedure simGenerateWaveform(signal Wave : out BOOLEAN; Waveform : T_TIMEVEC; InitialValue : BOOLEAN) is
+	procedure simGenerateWaveform(signal Wave : out BOOLEAN; Waveform : TIME_VECTOR; InitialValue : BOOLEAN) is
 		variable State : BOOLEAN := InitialValue;
 	begin
 		Wave <= State;
@@ -223,7 +226,7 @@ package body simulation is
 		end loop;
 	end procedure;
 	
-	procedure simGenerateWaveform(signal Wave : out STD_LOGIC; Waveform: T_TIMEVEC; InitialValue : STD_LOGIC := '0') is
+	procedure simGenerateWaveform(signal Wave : out STD_LOGIC; Waveform: TIME_VECTOR; InitialValue : STD_LOGIC := '0') is
 		variable State : STD_LOGIC := InitialValue;
 	begin
 		Wave <= State;
@@ -297,7 +300,7 @@ package body simulation is
 		end loop;
 	end procedure;
 	
-	function simGenerateWaveform_Reset(constant Pause : TIME := 0 ns; ResetPulse : TIME := 10 ns) return T_TIMEVEC is
+	function simGenerateWaveform_Reset(constant Pause : TIME := 0 ns; ResetPulse : TIME := 10 ns) return TIME_VECTOR is
 	begin
 		return (0 => Pause, 1 => ResetPulse);
 	end function;

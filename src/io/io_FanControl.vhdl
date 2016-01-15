@@ -81,9 +81,7 @@ end;
 
 
 architecture rtl of io_FanControl is
-	-- constant TIME_STARTUP			: TIME																					:= 500 ms;		-- StartUp time
-	-- Use frequencies only to make Vivado work.
-	constant TIME_STARTUP_INVERSE : FREQ																					:= 2 Hz;		-- StartUp time
+	constant TIME_STARTUP			: T_TIME																						:= 500.0e-3;		-- StartUp time
 	constant PWM_RESOLUTION		: POSITIVE																					:= 4;					-- 4 Bit resolution => 0 to 15 steps
 	constant PWM_FREQ					: FREQ																							:= 10 Hz;			--
 
@@ -146,7 +144,7 @@ begin
 		-- ==========================================================================================================================================================
 		TC : entity PoC.io_TimingCounter
 			generic map (
-				TIMING_TABLE				=> (0 => CLOCK_FREQ/TIME_STARTUP_INVERSE)	-- timing table
+				TIMING_TABLE				=> (0 => TimingToCycles(TIME_STARTUP, CLOCK_FREQ))	-- timing table
 			)
 			port map (
 				Clock								=> Clock,				-- clock
@@ -187,7 +185,7 @@ begin
 		-- ==========================================================================================================================================================
 		TC : entity PoC.io_TimingCounter
 			generic map (
-				TIMING_TABLE				=> (0 => CLOCK_FREQ/TIME_STARTUP_INVERSE)	-- timing table
+				TIMING_TABLE				=> (0 => TimingToCycles(TIME_STARTUP, CLOCK_FREQ))	-- timing table
 			)
 			port map (
 				Clock								=> Clock,				-- clock
@@ -252,7 +250,7 @@ begin
 		Tacho : entity PoC.io_FrequencyCounter
 			generic map (
 				CLOCK_FREQ					=> CLOCK_FREQ,					--
-				TIMEBASE						=> (60 sec / 64),				-- ca. 1 second
+				TIMEBASE						=> (60.0 / 64.0),				-- ca. 1 second
 				RESOLUTION					=> 8										-- max. ca. 256 RPS -> max. ca. 16k RPM
 			)
 			port map (

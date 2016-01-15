@@ -41,7 +41,7 @@ use			PoC.physical.all;
 entity io_FrequencyCounter is
 	generic (
 		CLOCK_FREQ								: FREQ									:= 100 MHz;
-		TIMEBASE									: TIME									:= 1 sec;
+		TIMEBASE									: T_TIME								:= 1.0;
 		RESOLUTION								: POSITIVE							:= 8
 	);
 	port (

@@ -53,7 +53,7 @@ use			PoC.physical.all;
 entity io_Debounce is
   generic (
     CLOCK_FREQ 							: freq;
-    BOUNCE_TIME							: time;
+    BOUNCE_TIME							: t_time;
     BITS                    : positive := 1;
     ADD_INPUT_SYNCHRONIZERS : boolean  := true;
     COMMON_LOCK             : boolean  := false

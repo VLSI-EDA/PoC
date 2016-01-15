@@ -116,7 +116,7 @@ begin
 			variable res			: ram_t;
 		begin
 			if (str_length(FilePath) = 0) then
-        -- shortcut required by Vivado
+				-- shortcut required by Vivado
 				return (others => (others => ite(SIMULATION, 'U', '0')));
 			elsif (mem_FileExtension(FilePath) = "mem") then
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
