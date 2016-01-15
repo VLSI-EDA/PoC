@@ -3,4 +3,4 @@
 	url = git@github.com:VLSI-EDA/vunit.git
 [submodule "lib/osvvm"]
 	path = lib/osvvm
-	url = git@github.com:UnofficialRepos/OSVVM.git
+	url = git@github.com:VLSI-EDA/OSVVM.git
