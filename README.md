@@ -306,13 +306,27 @@ directory if generated netlists are used.
 #### 7.7 In Xilinx Vivado (Synth and xSim)
 
 **The PoC-Library** has no full Vivado support, because of the incomplete
-VHDL-87 support in Vivado's synthesis tool. Especially the incorrect implementation of
+VHDL-93 support in Vivado's synthesis tool. Especially the incorrect implementation of
 physical types causes errors in PoC's I/O modules.
 
 Vivado's simulator xSim is not affected.
 
+**Experimental [`Vivado`](tree/Vivado) Branch:**
+We provide a `vivado` branch, which can be used for Vivado synthesis. This branch contains workarounds to let Vivado synthesize our modules. As an effect some interfaces (mostly generics have changed).
+
 
 ## 8 Updating PoC
+
+**The PoC-Library** can be updated by using `git fetch`:
+
+```PowerShell
+cd <GitRoot>\PoC
+git fetch
+# review the commit tree and messages, using the 'treea' alias
+git tree --all
+# if all changes are OK, do a fast-forward merge
+git merge
+```
 
 
 ## 9 References

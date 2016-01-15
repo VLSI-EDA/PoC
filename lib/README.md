@@ -25,7 +25,7 @@ cd ..
 ## Open Source VHDL Verification Methodology (OS-VVM)
 
 **Folder:**		`<PoCRoot>\lib\osvvm\`  
-**Copyright:**	Copyright © 2012-2015 by [SynthWorks Design Inc.](http://www.synthworks.com/)  
+**Copyright:**	Copyright © 2012-2016 by [SynthWorks Design Inc.](http://www.synthworks.com/)  
 **License:**	[Artistic License 2.0][PAL2.0]
 
 [**Open Source VHDL Verification Methodology (OS-VVM)**][11] is an intelligent
@@ -36,9 +36,11 @@ needed. With OSVVM you can add advanced verification methodologies to your
 current testbench without having to learn a new language or throw out your
 existing testbench or testbench models.
 
-Source: [http://osvvm.org/about-os-vvm](http://osvvm.org/about-os-vvm)
+Website: [http://osvvm.org/][10]
+Source:  [https://github.com/JimLewis/OSVVM][21]
 
- [11]: http://osvvm.org/
+ [10]: http://osvvm.org/
+ [11]: https://github.com/JimLewis/OSVVM
 
 
 ## VUnit
