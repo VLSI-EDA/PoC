@@ -1,11 +1,10 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-use IEEE.math_real.all;
 
-package datastructures is
+package dstructs is
 
-component stack is
+component dstructs_stack is
     generic(
     D_BITS  : positive := 8; -- Data Width
     MIN_DEPTH : positive := 16 -- Minimum Stack Depth
@@ -25,9 +24,9 @@ component stack is
     valid : out std_logic
 
     );
-end component stack;
+end component dstructs_stack;
 
-  component deque is
+  component dstructs_deque is
       generic(
       D_BITS  : positive := 8; -- Data Width
       MIN_DEPTH : positive := 16 -- Minimum Deque Depth
@@ -52,7 +51,7 @@ end component stack;
       validB : out std_logic;
       fullB : out std_logic
       );
-  end component deque;
+  end component dstructs_deque;
 
 
 end package;

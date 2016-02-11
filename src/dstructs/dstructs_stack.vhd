@@ -1,14 +1,13 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-use IEEE.math_real.all;
 
 library PoC;
 use PoC.config.all;
 use PoC.utils.all;
 use PoC.ocram.all;
 
-entity stack is
+entity dstructs_stack is
     generic(
     D_BITS  : positive := 8; -- Data Width
     MIN_DEPTH : positive := 16 -- Minimum Stack Depth
@@ -28,12 +27,12 @@ entity stack is
     valid : out std_logic
 
     );
-end stack;
+end dstructs_stack;
 
-architecture rtl of stack is
+architecture rtl of dstructs_stack is
 
     -- Constants
-    constant A_BITS : natural := INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
+    constant A_BITS : natural := log2ceil(MIN_DEPTH); --INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
 
     -- Signals
     signal stackpointer : unsigned(A_BITS-1 downto 0) := (others => '0');

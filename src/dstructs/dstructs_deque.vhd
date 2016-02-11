@@ -1,14 +1,13 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-use IEEE.math_real.all;
 
 library PoC;
 use PoC.config.all;
 use PoC.utils.all;
 use PoC.ocram.all;
 
-entity deque is
+entity dstructs_deque is
     generic(
     D_BITS  : positive := 8; -- Data Width
     MIN_DEPTH : positive := 16 -- Minimum Deque Depth
@@ -33,11 +32,11 @@ entity deque is
     validB : out std_logic;
     fullB : out std_logic
     );
-end deque;
+end dstructs_deque;
 
-architecture rtl of deque is
+architecture rtl of dstructs_deque is
     -- Constants
-    constant A_BITS : natural := INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
+    constant A_BITS : natural := log2ceil(MIN_DEPTH);--INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
 
     -- MEMORY variable
     type memory_t is array ((2**A_BITS)-1 downto 0) of std_logic_vector(D_BITS-1 downto 0);

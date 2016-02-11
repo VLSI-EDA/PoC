@@ -1,20 +1,17 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-use IEEE.math_real.all;
 
 library PoC;
 
-entity stack_tb is
+entity dstructs_stack_tb is
 end entity;
 
-architecture tb of stack_tb is
+architecture tb of dstructs_stack_tb is
 
   -- component generics
   constant MIN_DEPTH      : positive := 128;
   constant D_BITS         : positive := 16;
-  constant A_BITS         : natural := INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
-
 
   -- Clock Control
   signal rst  : std_logic;
@@ -42,7 +39,7 @@ begin
   clk <= not clk after clk_period/2 when done /= '1' else '0';
 
   -- component initialisation
-  DUT : entity PoC.stack
+  DUT : entity PoC.dstructs_stack
   generic map (
     D_BITS => D_BITS,
     MIN_DEPTH => MIN_DEPTH
