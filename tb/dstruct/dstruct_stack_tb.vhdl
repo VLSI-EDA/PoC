@@ -37,26 +37,30 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 library PoC;
+use PoC.physical.all;
 use PoC.dstruct.all;
+-- simulation only packages
+use	PoC.sim_types.all;
+use	PoC.simulation.all;
+use	PoC.waveform.all;
 
 architecture tb of dstruct_stack_tb is
 
   -- component generics
-  constant MIN_DEPTH      : positive := 128;
-  constant D_BITS         : positive := 16;
+  constant MIN_DEPTH : positive :=  8;
+  constant D_BITS    : positive := 16;
 
   -- Clock Control
+	constant CLK_FREQ : FREQ := 50 MHz;
+
+	signal clk  : std_logic;
   signal rst  : std_logic;
-  signal clk  : std_logic := '1';
-  signal done : std_logic := '0';
-  constant clk_period : time := 20 ns;
 
-  -- local Signals
-
+	-- DUT Connectivity
   -- inputs
-  signal din : std_logic_vector(D_BITS-1 downto 0) := (others => '0');
-  signal put : std_logic := '0';
-  signal got : std_logic := '0';
+  signal din : std_logic_vector(D_BITS-1 downto 0);
+  signal put : std_logic;
+  signal got : std_logic;
 
   -- outputs
   signal dout : std_logic_vector(D_BITS-1 downto 0);
@@ -64,199 +68,130 @@ architecture tb of dstruct_stack_tb is
   signal valid : std_logic;
   signal empty : std_logic;
 
-
 begin
 
-  -- clk generation
-  clk <= not clk after clk_period/2 when done /= '1' else '0';
+	-- Simulation Setup
+	simInitialize;
+	simGenerateClock(clk, CLK_FREQ);
 
-  -- component initialisation
+  -- DUT
   DUT : dstruct_stack
-  generic map (
-    D_BITS => D_BITS,
-    MIN_DEPTH => MIN_DEPTH
-  )
-  port map(
-    clk => clk,
-    rst => rst,
-    din => din,
-    put => put,
-    full => full,
-    got => got,
-    dout => dout,
-    valid => valid
-  );
+    generic map (
+      D_BITS    => D_BITS,
+      MIN_DEPTH => MIN_DEPTH
+    )
+    port map(
+      clk   => clk,
+      rst   => rst,
+      din   => din,
+      put   => put,
+      full  => full,
+      got   => got,
+      dout  => dout,
+      valid => valid
+    );
 
--- Stimuli
-process begin
-  rst <= '1';
-  wait for clk_period*3;
-  rst <= '0';
-  wait for clk_period;
-  assert valid = '0' report "valid != 0!" severity error;
-  assert full = '0' report "full != 0!" severity error;
+  -- Stimuli
+  process
+    procedure checkTOS(constant EXPECT : in integer) is
+		begin
+			simAssertion(to_integer(unsigned(dout)) = EXPECT, "Wrong top of stack: "&
+									 integer'image(to_integer(unsigned(dout)))&
+									 " instead of "&integer'image(EXPECT));
+		end procedure checkTOS;
 
+    constant PID  : T_SIM_PROCESS_ID := simRegisterProcess("main");
+    variable high : integer;
+  begin
 
-  -- fill stack with data
-  report "test: fill whole stack";
-  for i in 0 to MIN_DEPTH-1 loop
-    din <= std_logic_vector(to_unsigned(i, D_BITS));
-    put <= '1';
-    wait for clk_period;
-  end loop;
-  wait for clk_period;
-  assert valid = '1' report "valid != 1!" severity error;
-  assert full = '1' report "full != 1!" severity error;
+		-- Reset Sequence
+		rst <= '1';
+		wait until rising_edge(clk);
+		rst <= '0';
+		put <= '0';
+		got <= '0';
+		wait until falling_edge(clk);
+		simAssertion(valid = '0', "valid != 0!");
+		simAssertion(full = '0', "full != 0!");
 
-  -- IDLE
-  put <= '0';
-  wait for clk_period*3;
+		-- Fill stack with data
+		put <= '1';
+		din <= (others => '0');
+		while full = '0' loop
+			wait until falling_edge(clk);
+			simAssertion(valid = '1', "valid != 1!");
+			din <= std_logic_vector(unsigned(din)+1);
+		end loop;
+		high := to_integer(unsigned(din))-1;
 
-  -- Test push to full stack
-  report "test: push to full stack";
-  put <= '1';
-  din <= (others => '1');
-  wait for clk_period;
-  assert full = '1' report "full != 1" severity error;
-  assert valid = '1' report "valid != 1" severity error;
+		-- One more, which should not be accepted!
+		din <= (others => 'X');
+    wait until falling_edge(clk);
+		put <= '0';
+    simAssertion(valid = '1', "valid != 1!");
+    simAssertion(full = '1', "full != 1!");
 
-  -- IDLE
-  put <= '0';
-  din <= (others => '0');
-  wait for clk_period*3;
+		-- Idle
+    wait until falling_edge(clk);
+		checkTOS(high);
 
-  -- TEST pop
-  report "test: 1. pop";
-  got <= '1';
-  wait for clk_period;
-  got <= '0';
-  assert dout = std_logic_vector(to_unsigned(MIN_DEPTH-1,D_BITS)) report "pop doesnt work! dout != 0x1F; dout = " &integer'image(to_integer(unsigned(dout)));
-  wait for clk_period;
-  assert full = '0' report "full != 0" severity error;
-  assert valid = '1' report "valid != 1" severity error;
-  wait for clk_period*4;
-  got <= '1';
-  wait for clk_period;
-  got <= '0';
-  assert full = '0' report "full != 0" severity error;
-  if(MIN_DEPTH <= 2) then
-    assert valid = '0' report "valid != 0" severity error;
-  else
-    assert valid = '1' report "valid != 1" severity error;
-  end if;
-  assert dout = std_logic_vector(to_unsigned(MIN_DEPTH-2,D_BITS)) report "pop doesnt work! dout != 0x1E; dout = " &integer'image(to_integer(unsigned(dout)));
+		-- Pop two (2) elements
+		got <= '1';
 
-  -- Test push again
-  report "test: 1. push";
-  put <= '1';
-  din <= std_logic_vector(to_unsigned(364,D_BITS));
-  wait for clk_period;
-  put <='0';
-  wait for clk_period;
-  put <= '1';
-  assert full = '0' report "full != 0" severity error;
-  assert valid = '1' report "valid != 1" severity error;
-  din <= std_logic_vector(to_unsigned(363,D_BITS));
-  wait for clk_period;
-  put <='0';
-  wait for clk_period;
-  assert full = '1' report "full != 1" severity error;
-  assert valid = '1' report "valid != 1" severity error;
+    wait until falling_edge(clk);
+		high := high - 1;
+		simAssertion(full = '0', "full != 0");
+		simAssertion(valid = '1', "valid != 1");
+		checkTOS(high);
 
-  -- TEST pop
-  report "test: 2. pop";
-  wait for clk_period*4;
-  got <= '1';
-  wait for clk_period;
-  got <= '0';
-  assert dout = std_logic_vector(to_unsigned(363,D_BITS)) report "pop doesnt work! dout != 0xCD; dout = " &integer'image(to_integer(unsigned(dout)));
-  wait for clk_period;
-  assert full = '0' report "full != 0" severity error;
-  assert valid = '1' report "valid != 1" severity error;
-  wait for clk_period*3;
-  got <= '1';
-  wait for clk_period;
-  got <= '0';
-  assert full = '0' report "full != 0" severity error;
-  if(MIN_DEPTH <= 2) then
-    assert valid = '0' report "valid != 0" severity error;
-  else
-    assert valid = '1' report "valid != 1" severity error;
-  end if;
-  assert dout = std_logic_vector(to_unsigned(364,D_BITS)) report "pop doesnt work! dout != 0xAB; dout = " &integer'image(to_integer(unsigned(dout)));
+    wait until falling_edge(clk);
+		high := high - 1;
+		simAssertion(full = '0', "full != 0");
+		simAssertion(valid = '1', "valid != 1");
+		checkTOS(high);
 
-  -- Test push again
-  report "test: 2. push";
-  put <= '1';
-  din <= std_logic_vector(to_unsigned(MIN_DEPTH-2,D_BITS));
-  wait for clk_period;
-  put <= '1';
-  assert full = '0' report "full != 0" severity error;
-  assert valid = '1' report "valid != 1" severity error;
-  din <= std_logic_vector(to_unsigned(MIN_DEPTH-1,D_BITS));
-  wait for clk_period;
-  put <='0';
-  wait for clk_period;
-  assert full = '1' report "full != 1" severity error;
-  assert valid = '1' report "valid != 1" severity error;
+		got <= '0';
 
-  -- pop whole stack
-  report "test: pop whole stack!";
-  for j in MIN_DEPTH-1 downto 0 loop
-    got <= '1';
-    wait for clk_period;
-    got <= '0';
-  end loop;
-  wait for clk_period;
-  assert full = '0' report "full != 0!" severity error;
-  assert valid = '0' report "valid != 0!" severity error;
-  wait for clk_period;
+		-- Push two (2) zeroes
+		din <= (others => '0');
+		put <= '1';
+    wait until falling_edge(clk);
+		simAssertion(full = '0', "full != 0");
+		simAssertion(valid = '1', "valid != 1");
+    wait until falling_edge(clk);
+		simAssertion(full = '1', "full != 1");
+		simAssertion(valid = '1', "valid != 1");
 
-  -- Test push and pop again
-  report "test: 3. push/pop";
-  put <= '1';
-  din <= std_logic_vector(to_unsigned(MIN_DEPTH-2,D_BITS));
-  wait for clk_period;
-  put <= '0';
-  wait for clk_period;
-  assert full = '0' report "full != 0" severity error;
-  assert valid = '1' report "valid != 1" severity error;
-  wait for clk_period*4;
-  got <= '1';
-  wait for clk_period;
-  got <= '0';
-  assert dout = std_logic_vector(to_unsigned(MIN_DEPTH-2,D_BITS)) report "pop doesnt work! dout != MIN_DEPTH - 2; dout = " &integer'image(to_integer(unsigned(dout)));
-  wait for clk_period;
-  assert full = '0' report "full != 0" severity error;
-  assert valid = '0' report "valid != 0" severity error;
-  wait for clk_period;
+		-- One more, which should not be accepted!
+		din <= (others => 'X');
+    wait until falling_edge(clk);
+		put <= '0';
 
-  -- test push, push and pop parallel
-  report "test: push and pop parallel";
-  put <= '1';
-  din <= std_logic_vector(to_unsigned(MIN_DEPTH-2,D_BITS));
-  wait for clk_period;
-  put <= '0';
-  wait for clk_period;
-  assert full = '0' report "full != 0" severity error;
-  assert valid = '1' report "valid != 1" severity error;
-  wait for clk_period;
-  put <= '1';
-  din <= std_logic_vector(to_unsigned(MIN_DEPTH-1,D_BITS));
-  got <= '1';
-  wait for clk_period;
-  got <= '0';
-  assert dout = std_logic_vector(to_unsigned(MIN_DEPTH-2,D_BITS)) report "pop doesnt work! dout != MIN_DEPTH - 2; dout = " &integer'image(to_integer(unsigned(dout)));
-  wait for clk_period;
-  assert full = '0' report "full != 0" severity error;
-  assert valid = '1' report "valid != 1" severity error;
+		-- Pop two (2) zeroes
+		got <= '1';
 
+    simAssertion(valid = '1', "valid != 1!");
+    simAssertion(full = '1', "full != 1!");
+		checkTOS(0);
+    wait until falling_edge(clk);
 
-  -- finished
-  wait for clk_period*5;
-  report "TB finished!" severity note;
-  done <= '1';
-  wait;
-end process;
+		simAssertion(valid = '1', "valid != 1");
+		simAssertion(full = '0', "full != 0");
+		checkTOS(0);
+    wait until falling_edge(clk);
 
-end architecture;
+		-- Drain whole stack
+		while valid = '1' loop
+			simAssertion(full = '0', "full != 0");
+			checkTOS(high);
+			wait until falling_edge(clk);
+			high := high - 1;
+		end loop;
+		simAssertion(high = -1, "Failed to drain stack.");
+		got <= '0';
+
+		simDeactivateProcess(PID);
+		wait;	-- forever
+	end process;
+
+end tb;
