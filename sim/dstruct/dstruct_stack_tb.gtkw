@@ -1,0 +1,61 @@
+[*]
+[*] GTKWave Analyzer v3.3.68 (w)1999-2016 BSI
+[*] Thu Feb 11 13:35:37 2016
+[*]
+[dumpfile] "/Users/jens/Uni/studienarbeit/vivado_project/Datastructures/dstructs_stack_tb.vcd"
+[dumpfile_mtime] "Thu Feb 11 13:26:50 2016"
+[dumpfile_size] 66204
+[savefile] "/Users/jens/Uni/studienarbeit/vivado_project/Datastructures/dstructs_stack_tb.gtkw"
+[timestart] 0
+[size] 1680 1050
+[pos] -1 -24
+*-29.910084 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] dut.
+[sst_width] 193
+[signals_width] 194
+[sst_expanded] 1
+[sst_vpaned_height] 326
+@200
+-Stack
+@22
+dut.adr[6:0]
+@28
+dut.clk
+@22
+dut.din[15:0]
+dut.dout[15:0]
+@28
+dut.full
+dut.got
+@22
+dut.last_value[15:0]
+@28
+dut.put
+dut.re
+dut.reg_re
+dut.reg_we
+dut.rst
+@22
+dut.s_adr[6:0]
+dut.s_dout[15:0]
+@28
+dut.s_valid
+@22
+dut.stackpointer[6:0]
+@28
+dut.valid
+dut.we
+@200
+-RAM
+@22
+dut.ram.a[6:0]
+@28
+dut.ram.ce
+dut.ram.clk
+@22
+dut.ram.d[15:0]
+dut.ram.q[15:0]
+@28
+dut.ram.we
+[pattern_trace] 1
+[pattern_trace] 0
