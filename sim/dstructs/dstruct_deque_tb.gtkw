@@ -1,0 +1,75 @@
+[*]
+[*] GTKWave Analyzer v3.3.68 (w)1999-2016 BSI
+[*] Thu Feb 11 13:38:02 2016
+[*]
+[dumpfile] "/Users/jens/Uni/studienarbeit/vivado_project/Datastructures/dstruct_deque_tb.vcd"
+[dumpfile_mtime] "Thu Feb 11 13:26:13 2016"
+[dumpfile_size] 567316
+[savefile] "/Users/jens/Uni/studienarbeit/vivado_project/Datastructures/dstruct_deque_tb.gtkw"
+[timestart] 0
+[size] 1680 1050
+[pos] -1 -24
+*-32.757900 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] dut.
+[sst_width] 193
+[signals_width] 214
+[sst_expanded] 1
+[sst_vpaned_height] 326
+@200
+-Deque
+@22
+dut.adra[6:0]
+dut.adrb[6:0]
+@28
+dut.clk
+@22
+dut.combined[3:0]
+@28
+dut.ctrl[1:0]
+@22
+dut.dina[15:0]
+dut.dinb[15:0]
+dut.douta[15:0]
+dut.doutb[15:0]
+@28
+dut.fulla
+dut.fullb
+dut.gota
+dut.gotb
+dut.last_operation
+dut.puta
+dut.putb
+dut.rea
+dut.reb
+dut.rst
+dut.s_valida
+dut.s_validb
+@22
+dut.stackpointera[6:0]
+dut.stackpointerb[6:0]
+dut.sub[6:0]
+@28
+dut.valida
+dut.validb
+dut.wea
+dut.web
+@200
+-RAM
+@22
+dut.ram.a1[6:0]
+dut.ram.a2[6:0]
+@28
+dut.ram.ce1
+dut.ram.ce2
+dut.ram.clk1
+dut.ram.clk2
+@22
+dut.ram.d1[15:0]
+dut.ram.d2[15:0]
+dut.ram.q1[15:0]
+dut.ram.q2[15:0]
+@28
+dut.ram.we1
+dut.ram.we2
+[pattern_trace] 1
+[pattern_trace] 0
