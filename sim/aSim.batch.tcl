@@ -1,0 +1,3 @@
+run -all
+endsim
+quit

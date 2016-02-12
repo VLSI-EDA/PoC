@@ -36,8 +36,12 @@ use			IEEE.NUMERIC_STD.all;
 library PoC;
 use			PoC.utils.all;
 use			PoC.vectors.all;
-use			PoC.simulation.ALL;
+use			PoC.physical.all;
 use			PoC.sortnet.ALL;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
 
 library OSVVM;
 use			OSVVM.RandomPkg.all;
@@ -61,7 +65,7 @@ architecture tb of sortnet_Stream_Adapter_tb is
 	constant STAGES									: POSITIVE	:= SORTNET_SIZE;
 	constant DELAY									: NATURAL		:= 50;	--STAGES / PIPELINE_STAGE_AFTER;
 
-	constant CLOCK_PERIOD						: TIME				:= 10 ns;
+	constant CLOCK_FREQ							: FREQ				:= 100 MHz;
 	signal Clock										: STD_LOGIC		:= '1';
 	
 	constant TAG_BITS								: POSITIVE		:= 2;
@@ -78,10 +82,14 @@ architecture tb of sortnet_Stream_Adapter_tb is
 	
 	signal StopSimulation						: STD_LOGIC		:= '0';
 begin
+	-- initialize global simulation status
+	simInitialize;
+	
+	-- generate global testbench clock
+	simGenerateClock(Clock, CLOCK_FREQ);
 
-	Clock	<= Clock xnor StopSimulation after CLOCK_PERIOD;
-
-	process
+	procGenerator : process
+		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Generator");
 		variable RandomVar	: RandomPType;								-- protected type from RandomPkg
 
 		variable KeyInput		: STD_LOGIC_VECTOR(SORTNET_KEY_BITS - 1 downto 0);
@@ -115,12 +123,11 @@ begin
 		
 		Generator_Valid				<= '0';
 		
-		for i in 0 to DELAY + 7 loop
-			wait until rising_edge(Clock);
-		end loop;
+		simWaitUntilRisingEdge(Clock, 8);
 		
-		StopSimulation		<= '1';
-		wait;
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;		-- forever
 	end process;
 	
 	sort : entity PoC.sortnet_Stream_Adapter
@@ -151,7 +158,9 @@ begin
 			Out_Ack			=> Tester_Ack
 		);
 	
-	process
+	procChecker : process
+		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Checker");
+		
 		variable Check			: BOOLEAN;
 		variable CurValue		: UNSIGNED(SORTNET_KEY_BITS - 1 downto 0);
 		variable LastValue	: UNSIGNED(SORTNET_KEY_BITS - 1 downto 0);
@@ -160,9 +169,7 @@ begin
 	
 		Tester_Ack		<= '0';
 	
-		for i in 0 to 7 loop	--DELAY - 1 loop
-			wait until rising_edge(Clock);
-		end loop;
+		simWaitUntilRisingEdge(Clock, 8);
 		
 		wait until (Sort_Out_Data /= (STREAM_DATA_BITS - 1 downto 0 => '0'));
 		
@@ -179,13 +186,12 @@ begin
 					LastValue	:= CurValue;
 				end if;
 			end loop;
-			tbAssert(Check, "Result is not monotonic.");
+			simAssertion(Check, "Result is not monotonic.");
 		end loop;
 
-		-- Report overall result
-		tbPrintResult;
-
-    wait;  -- forever
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
 	end process;
 	
 end architecture;

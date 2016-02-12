@@ -14,7 +14,7 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,55 +29,67 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -- =============================================================================
-
-entity arith_prefix_and_tb is
-end arith_prefix_and_tb;
-
 library	IEEE;
 use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
 
 library PoC;
-use			PoC.simulation.ALL;
+use			PoC.physical.all;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
+
+
+entity arith_prefix_and_tb is
+end entity;
 
 
 architecture tb of arith_prefix_and_tb is
-  -- component generics
-  constant N : positive := 8;
+	constant CLOCK_FREQ	: FREQ						:= 100 MHz;
+	
+  constant BITS				: POSITIVE				:= 8;
+	constant simTestID	: T_SIM_TEST_ID		:= simCreateTest("Test setup for BITS=" & INTEGER'image(BITS));
 
-  -- component ports
-  signal x : std_logic_vector(N-1 downto 0);
-  signal y : std_logic_vector(N-1 downto 0);
+	signal Clock				: STD_LOGIC;
+	
+  signal x	: std_logic_vector(BITS - 1 downto 0);
+  signal y	: std_logic_vector(BITS - 1 downto 0);
 
-begin  -- tb
+begin
+	-- initialize global simulation status
+	simInitialize;
+	-- generate global testbench clock and reset
+	simGenerateClock(simTestID, Clock, CLOCK_FREQ);
 
   -- component instantiation
-  DUT: entity PoC.arith_prefix_and
+  UUT : entity PoC.arith_prefix_and
     generic map (
-      N => N
+      N => BITS
     )
     port map (
       x => x,
       y => y
     );
 
-  -- Stimuli
-  process
-  begin
+	procChecker : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & INTEGER'image(BITS) & " bits");
+	begin
+		x		<= (others => '0');
+		wait until rising_edge(Clock);
+		
 		-- Exhaustive Testing
-    for i in NATURAL range 0 to 2**N-1 loop
-      x <= std_logic_vector(to_unsigned(i, N));
-      wait for 10 ns;
-      for j in 0 to N-1 loop
-				tbAssert((y(j) = '1') = (x(j downto 0) = (j downto 0 => '1')),
-								 "Wrong result for "&integer'image(i)&" / "&integer'image(j));
+    for i in NATURAL range 0 to 2**BITS - 1 loop
+      x <= std_logic_vector(to_unsigned(i, BITS));
+      wait until rising_edge(Clock);
+      for j in 0 to BITS - 1 loop
+				simAssertion((y(j) = '1') = (x(j downto 0) = (j downto 0 => '1')), "Wrong result for " & integer'image(i) & " / " & integer'image(j));
 			end loop;
     end loop;
 
-		-- Report overall result
-		tbPrintResult;
-
-    wait;  -- forever
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
   end process;
 
-end tb;
+end architecture;

@@ -46,7 +46,7 @@ Source:  [https://github.com/JimLewis/OSVVM][21]
 ## VUnit
 
 **Folder:**		`<PoCRoot>\lib\vunit\`  
-**Copyright:**	Copyright © 2014-2015, Lars Asplund [lars.anders.asplund@gmail.com](mailto://lars.anders.asplund@gmail.com)  
+**Copyright:**	Copyright © 2014-2016, Lars Asplund [lars.anders.asplund@gmail.com](mailto://lars.anders.asplund@gmail.com)  
 **License:**	[Mozilla Public License, Version 2.0][MPL2.0]
 
 [VUnit][21] is an open source unit testing framework for VHDL released under the
@@ -55,9 +55,11 @@ needed to realize continuous and automated testing of your VHDL code. VUnit
 doesn't replace but rather complements traditional testing methodologies by
 supporting a "test early and often" approach through automation.
 
-Source: [https://github.com/LarsAsplund/vunit][21]
+Website: [https://vunit.github.io/][20]
+Source: [https://github.com/VUnit/vunit][21]
 
- [21]: https://github.com/LarsAsplund/vunit
+ [20]: https://vunit.github.io/
+ [21]: https://github.com/VUnit/vunit
 
 
  [PAL2.0]:	http://www.perlfoundation.org/artistic_license_2_0

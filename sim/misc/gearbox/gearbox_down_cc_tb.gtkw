@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Mon Jan 04 04:51:29 2016
+[*] Mon Feb 08 01:00:49 2016
 [*]
 [dumpfile] "H:\Austausch\PoC\temp\ghdl\gearbox_down_cc_tb.ghw"
-[dumpfile_mtime] "Mon Jan 04 04:48:18 2016"
-[dumpfile_size] 429974
+[dumpfile_mtime] "Mon Feb 08 01:00:05 2016"
+[dumpfile_size] 430817
 [savefile] "H:\Austausch\PoC\sim\misc\gearbox\gearbox_down_cc_tb.gtkw"
 [timestart] 0
 [size] 1676 996
 [pos] -1 -1
-*-27.660517 44400000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-27.898556 44400000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.gearbox_down_cc_tb.
 [treeopen] top.gearbox_down_cc_tb.[4].
@@ -20,7 +20,7 @@
 @28
 top.gearbox_down_cc_tb.clock
 @800200
--Example 1 (32:8)
+-Example 0 (32->8)
 @28
 top.gearbox_down_cc_tb[0].syncin
 top.gearbox_down_cc_tb[0].validin
@@ -35,9 +35,9 @@ top.gearbox_down_cc_tb[0].validout
 top.gearbox_down_cc_tb[0].firstout
 top.gearbox_down_cc_tb[0].lastout
 @1000200
--Example 1 (32:8)
+-Example 0 (32->8)
 @800200
--Example 2 (20:8)
+-Example 1 (20->8)
 @28
 top.gearbox_down_cc_tb[1].syncin
 top.gearbox_down_cc_tb[1].validin
@@ -52,9 +52,9 @@ top.gearbox_down_cc_tb[1].validout
 top.gearbox_down_cc_tb[1].firstout
 top.gearbox_down_cc_tb[1].lastout
 @1000200
--Example 2 (20:8)
+-Example 1 (20->8)
 @800200
--Example 3 (36:8)
+-Example 2 (36->8)
 @28
 top.gearbox_down_cc_tb[2].syncin
 top.gearbox_down_cc_tb[2].validin
@@ -70,9 +70,9 @@ top.gearbox_down_cc_tb[2].validout
 top.gearbox_down_cc_tb[2].firstout
 top.gearbox_down_cc_tb[2].lastout
 @1000200
--Example 3 (36:8)
+-Example 2 (36->8)
 @800200
--Example 4 (66:64)
+-Example 3 (66->64)
 @28
 top.gearbox_down_cc_tb[3].syncin
 top.gearbox_down_cc_tb[3].validin
@@ -154,9 +154,9 @@ top.gearbox_down_cc_tb[3].dataout[0]
 top.gearbox_down_cc_tb[3].firstout
 top.gearbox_down_cc_tb[3].lastout
 @1000200
--Example 4 (66:64)
+-Example 3 (66->64)
 @800200
--Example 5 (128:12)
+-Example 4 (128->12)
 @28
 top.gearbox_down_cc_tb[4].syncin
 top.gearbox_down_cc_tb[4].validin
@@ -171,6 +171,6 @@ top.gearbox_down_cc_tb[4].validout
 top.gearbox_down_cc_tb[4].firstout
 top.gearbox_down_cc_tb[4].lastout
 @1000200
--Example 5 (128:12)
+-Example 4 (128->12)
 [pattern_trace] 1
 [pattern_trace] 0

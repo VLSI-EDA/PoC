@@ -14,7 +14,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,7 @@ use			IEEE.NUMERIC_STD.all;
 
 library PoC;
 use			PoC.utils.all;
-use			PoC.io.all;
+-- use			PoC.io.all;
 
 
 entity io_GlitchFilter is
@@ -49,7 +49,7 @@ entity io_GlitchFilter is
 		Input		: in	STD_LOGIC;
 		Output	: out STD_LOGIC
 	);
-end;
+end entity;
 
 
 architecture rtl of io_GlitchFilter is
@@ -139,4 +139,4 @@ begin
 		);	
 
 	Output <= State;
-end;
+end architecture;

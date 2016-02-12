@@ -195,7 +195,7 @@ package physical is
 	function to_string(f : FREQ; precision : NATURAL)			return STRING;
 	function to_string(br : BAUD; precision : NATURAL)		return STRING;
 	function to_string(mem : MEMORY; precision : NATURAL)	return STRING;
-end physical;
+end package;
 
 
 package body physical is

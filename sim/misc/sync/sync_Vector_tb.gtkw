@@ -1,0 +1,36 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Mon Feb 08 14:48:43 2016
+[*]
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\sync_Vector_tb.ghw"
+[dumpfile_mtime] "Mon Feb 08 14:47:38 2016"
+[dumpfile_size] 3320
+[savefile] "H:\Austausch\PoC\sim\misc\sync\sync_Vector_tb.gtkw"
+[timestart] 0
+[size] 1680 997
+[pos] -217 -217
+*-26.227663 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.sync_vector_tb.
+[sst_width] 197
+[signals_width] 189
+[sst_expanded] 1
+[sst_vpaned_height] 293
+@28
+top.sync_vector_tb.clock1
+top.sync_vector_tb.clock2
+@29
+top.sync_vector_tb.sync_busy
+@28
+#{top.sync_vector_tb.sync_in[1:0]} top.sync_vector_tb.sync_in[1] top.sync_vector_tb.sync_in[0]
+@c00028
+#{top.sync_vector_tb.sync_out[1:0]} top.sync_vector_tb.sync_out[1] top.sync_vector_tb.sync_out[0]
+@28
+top.sync_vector_tb.sync_out[1]
+top.sync_vector_tb.sync_out[0]
+@1401200
+-group_end
+@28
+top.sync_vector_tb.sync_changed
+[pattern_trace] 1
+[pattern_trace] 0

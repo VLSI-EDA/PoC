@@ -1,16 +1,15 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /gearbox_down_dc_tb/StopSimulation
-add wave -noupdate -divider Inputs
-add wave -noupdate /gearbox_down_dc_tb/Clock1
-add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_down_dc_tb/DataIn
-add wave -noupdate -divider Outputs
-add wave -noupdate /gearbox_down_dc_tb/Clock2
-add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_down_dc_tb/DataOut
-add wave -noupdate -divider Settings
-add wave -noupdate /gearbox_down_dc_tb/OUTPUT_ORDER
+add wave -noupdate -expand -group {Example 1 (32 -> 8)} -radix hexadecimal -radixshowbase 0 /gearbox_down_dc_tb/genInstances(0)/DataOut
+add wave -noupdate -expand -group {Example 1 (32 -> 8)} -radix hexadecimal -radixshowbase 0 /gearbox_down_dc_tb/genInstances(0)/DataIn
+add wave -noupdate -expand -group {Example 1 (32 -> 8)} /gearbox_down_dc_tb/genInstances(0)/Clock2
+add wave -noupdate -expand -group {Example 1 (32 -> 8)} /gearbox_down_dc_tb/genInstances(0)/Clock1
+add wave -noupdate -expand -group {Example 2 (128 -> 8)} -radix hexadecimal -radixshowbase 0 /gearbox_down_dc_tb/genInstances(1)/DataOut
+add wave -noupdate -expand -group {Example 2 (128 -> 8)} -radix hexadecimal -radixshowbase 0 /gearbox_down_dc_tb/genInstances(1)/DataIn
+add wave -noupdate -expand -group {Example 2 (128 -> 8)} /gearbox_down_dc_tb/genInstances(1)/Clock2
+add wave -noupdate -expand -group {Example 2 (128 -> 8)} /gearbox_down_dc_tb/genInstances(1)/Clock1
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {113629091 fs} 0}
+WaveRestoreCursors {{Cursor 1} {200000000 fs} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 223
 configure wave -valuecolwidth 100
@@ -26,4 +25,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 fs} {1134 ns}
+WaveRestoreZoom {274285714 fs} {446171429 fs}

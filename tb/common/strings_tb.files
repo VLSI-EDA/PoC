@@ -10,14 +10,18 @@ vhdl		poc		"tb/common/my_project.vhdl"
 
 # PoC core packages
 vhdl		poc		"src/common/utils.vhdl"									# PoC utility collection
-vhdl		poc		"src/common/fileio.vhdl"								# PoC File-I/O
 vhdl		poc		"src/common/config.vhdl"								# PoC device configuration mechanism
 vhdl		poc		"src/common/strings.vhdl"								# PoC string package
 vhdl		poc		"src/common/vectors.vhdl"								# PoC vector package
 vhdl		poc		"src/common/physical.vhdl"							# PoC physical types package
-vhdl		poc		"src/common/components.vhdl"						# PoC components
-vhdl-93	poc		"tb/common/simulation.v93.vhdl"					# PoC simulation helper
-vhdl-08	poc		"tb/common/simulation.v08.vhdl"					# PoC simulation helper
+
+vhdl		poc		"src/sim/sim_types.vhdl"								# PoC simulation helper
+vhdl-93	poc		"src/sim/sim_global.v93.vhdl"						# PoC simulation helper
+vhdl-93	poc		"src/sim/sim_unprotected.v93.vhdl"			# PoC simulation helper
+vhdl-93	poc		"src/sim/sim_simulation.v93.vhdl"				# PoC simulation helper
+vhdl-08	poc		"src/sim/sim_protected.v08.vhdl"				# PoC simulation helper
+vhdl-08	poc		"src/sim/sim_global.v08.vhdl"						# PoC simulation helper
+vhdl-08	poc		"src/sim/sim_simulation.v08.vhdl"				# PoC simulation helper
 
 # Testbench file(s)
 vhdl		test	"tb/common/strings_tb.vhdl"							# Testbench

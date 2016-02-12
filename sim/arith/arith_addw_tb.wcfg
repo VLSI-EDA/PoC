@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="./isim.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="arith" />
+            <top_module name="arith_addw_tb" />
+            <top_module name="config" />
+            <top_module name="config_private" />
+            <top_module name="math_real" />
+            <top_module name="my_config" />
+            <top_module name="my_project" />
+            <top_module name="numeric_std" />
+            <top_module name="physical" />
+            <top_module name="sim_global" />
+            <top_module name="sim_types" />
+            <top_module name="sim_unprotected" />
+            <top_module name="simulation" />
+            <top_module name="std_logic_1164" />
+            <top_module name="strings" />
+            <top_module name="textio" />
+            <top_module name="utils" />
+            <top_module name="vectors" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="6" />
+   <wvobject fp_name="/arith_addw_tb/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_addw_tb/a" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">a[8:0]</obj_property>
+      <obj_property name="ObjectShortName">a[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_addw_tb/b" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b[8:0]</obj_property>
+      <obj_property name="ObjectShortName">b[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_addw_tb/cin" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">cin</obj_property>
+      <obj_property name="ObjectShortName">cin</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_addw_tb/s" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">s[0:3]</obj_property>
+      <obj_property name="ObjectShortName">s[0:3]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/arith_addw_tb/cout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cout[0:3]</obj_property>
+      <obj_property name="ObjectShortName">cout[0:3]</obj_property>
+   </wvobject>
+</wave_config>

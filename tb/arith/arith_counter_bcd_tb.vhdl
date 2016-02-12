@@ -3,18 +3,18 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- ============================================================================
--- Module:				 	arith_counter_bcd_tb
---
 -- Authors:				 	Martin Zabel
 --									Thomas B. Preusser
 -- 
+-- Module:				 	arith_counter_bcd_tb
+--
 -- Description:
 -- ------------------------------------
 -- Testbench for arith_counter_bcd
 -- 
 -- License:
 -- ============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,109 +34,127 @@ library	ieee;
 use			ieee.std_logic_1164.all;
 use			ieee.numeric_std.all;
 
-library poc;
-use poc.utils.all;
-use poc.simulation.all;
+library	PoC;
+use			PoC.utils.all;
+use			PoC.strings.all;
+use			PoC.physical.all;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
+
 
 entity arith_counter_bcd_tb is
-end arith_counter_bcd_tb;
+end entity;
 
 
 architecture rtl of arith_counter_bcd_tb is
-	constant DIGITS : positive := 4;
-	signal clk : std_logic;
-	signal rst : std_logic;
-	signal inc : std_logic;
-	signal val : T_BCD_VECTOR(DIGITS-1 downto 0);
-
-	constant clk_period : time := 10 ns;
+	constant CLOCK_FREQ				: FREQ			:= 100 MHz;
+	constant TEST_PARAMETERS	: T_INTVEC	:= (3, 4);
+	
+	signal Clock							: STD_LOGIC;
+	
 begin
-	DUT: entity poc.arith_counter_bcd
-		generic map (
-			DIGITS => DIGITS)
-		port map (
-			clk => clk,
-			rst => rst,
-			inc => inc,
-			val => val);
-
-	process
-		procedure cycle is -- inspired by Thomas B. Preusser
-		begin
-			clk <= '0';
-			wait for clk_period/2;
-			clk <= '1';
-			wait for clk_period/2;
-		end cycle;
+	-- initialize global simulation status
+	simInitialize(MaxAssertFailures => 20);
+	-- generate global testbench clock and reset
+	simGenerateClock(Clock, CLOCK_FREQ);
+	
+	genTests : for i in TEST_PARAMETERS'range generate
+		constant DIGITS			: POSITIVE				:= TEST_PARAMETERS(i);
+		constant simTestID	: T_SIM_TEST_ID		:= simCreateTest("Test setup for DIGITS=" & INTEGER'image(DIGITS));
 		
+		signal Reset				: STD_LOGIC;
+		signal inc					: STD_LOGIC;
+		signal Value				: T_BCD_VECTOR(DIGITS - 1 downto 0);
 	begin
-		-- initial half cycle so that rising edges are at multiples of clk_period
-		clk <= '1'; wait for clk_period/2;
+		-- simGenerateWaveform(simTestID,	Reset, simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
 		
-		rst <= '1';
-		inc <= '0';
-		cycle;
-		tbAssert(val = (x"0", x"0", x"0", x"0"), "Wrong initial state.");
-		
-		rst <= '1';
-		inc <= '1';
-		cycle;
-		tbAssert(val = (x"0", x"0", x"0", x"0"), "Wrong initial state.");
+		procGenerator : process
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator for " & INTEGER'image(DIGITS) & " digits");
+		begin
+			Reset		<= '0';
+			inc			<= '0';
+			
+			wait until falling_edge(Clock);
+			Reset		<= '1';
+			inc			<= '0';
+			
+			wait until falling_edge(Clock);
+			Reset		<= '1';
+			inc			<= '1';
+			
+			wait until falling_edge(Clock);
+			Reset		<= '0';
+			inc			<= '0';
+			
+			for i in 0 to 10**DIGITS - 1 loop
+				wait until falling_edge(Clock);
+				inc			<= '1';
 
-		-- d3..d0 denote the new counter state after increment
-		rst <= '0';
-		for d3 in 0 to 9 loop
-			for d2 in 0 to 9 loop
-				for d1 in 0 to 9 loop
-					for d0 in 0 to 9 loop
-						if d3 /= 0 or d2 /= 0 or d1 /= 0 or d0 /= 0 then
-							--increment
-							inc <= '1';
-							cycle;
-							tbAssert(val = (t_BCD(to_unsigned(d3,4)),
-															t_BCD(to_unsigned(d2,4)),
-															t_BCD(to_unsigned(d1,4)),
-															t_BCD(to_unsigned(d0,4))),
-											 "Must be incremented to state "&
-											 integer'image(d3)&
-											 integer'image(d2)&
-											 integer'image(d1)&
-											 integer'image(d0)&".");
-						end if;
-		
-						-- keep state
-						inc <= '0';
-						cycle;
-						tbAssert(val = (t_BCD(to_unsigned(d3,4)),
-														t_BCD(to_unsigned(d2,4)),
-														t_BCD(to_unsigned(d1,4)),
-														t_BCD(to_unsigned(d0,4))),
-										 "Must keep in state "&
-										 integer'image(d3)&
-										 integer'image(d2)&
-										 integer'image(d1)&
-										 integer'image(d0)&".");
-					end loop;
-				end loop;
+				wait until falling_edge(Clock);
+				inc			<= '0';
 			end loop;
-		end loop;
-
-		inc <= '1';
-		cycle;
-		tbAssert(val = (x"0", x"0", x"0", x"0"), "Should be wrapped to 0000.");
+			
+			wait until falling_edge(Clock);
+			inc			<= '1';
+			
+			simWaitUntilFallingEdge(Clock, 4);
+			Reset		<= '1';
+			inc			<= '0';
+			
+			wait until falling_edge(Clock);
+			Reset		<= '0';
+			inc			<= '0';
+			
+			-- This process is finished
+			simDeactivateProcess(simProcessID);
+			wait;  -- forever
+		end process;
 		
-		inc <= '1';
-		cycle;
-		inc <= '1';
-		cycle;
-		inc <= '1';
-		cycle;
-		inc <= '1';
-		rst <= '1';
-		cycle;
-		tbAssert(val = (x"0", x"0", x"0", x"0"), "Should be resetted again.");
+		UUT: entity poc.arith_counter_bcd
+			generic map (
+				DIGITS => DIGITS
+			)
+			port map (
+				clk => Clock,
+				rst => Reset,
+				inc => inc,
+				val => Value
+			);
 
-		tbPrintResult;
-		wait;
-	end process;
-end rtl;
+		procChecker : process
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & INTEGER'image(DIGITS) & " digits");
+			variable Expected			: T_BCD_VECTOR(DIGITS - 1 downto 0);
+		begin
+			wait until rising_edge(Clock);
+			wait until rising_edge(Clock);
+			Expected	:= to_BCD_Vector(0, DIGITS);
+			simAssertion((Value = Expected), "Test " & INTEGER'image(simTestID) & ": Wrong initial state. Value=" & to_string(Value) & "  Expected=" & to_string(Expected));
+			
+			wait until rising_edge(Clock);
+			simAssertion((Value = Expected), "Test " & INTEGER'image(simTestID) & ": Wrong initial state. Value=" & to_string(Value) & "  Expected=" & to_string(Expected));
+
+			wait until rising_edge(Clock);
+			for i in 1 to 10**DIGITS - 1 loop
+				Expected	:= to_BCD_Vector(i, DIGITS);
+				wait until rising_edge(Clock);
+				simAssertion((Value = Expected), "Test " & INTEGER'image(simTestID) & ": Must be incremented to state " & to_string(Expected) & "  Value=" & to_string(Value));
+				wait until rising_edge(Clock);
+				simAssertion((Value = Expected), "Test " & INTEGER'image(simTestID) & ": Must keep the state " & to_string(Expected) & "  Value=" & to_string(Value));
+			end loop;
+
+			wait until rising_edge(Clock);
+			simAssertion(Value = (DIGITS - 1 downto 0 => x"0"), "Test " & INTEGER'image(simTestID) & ": Should be wrapped to 0000.");
+			
+			simWaitUntilRisingEdge(Clock, 5);
+			
+			wait until rising_edge(Clock);
+			simAssertion(Value = (DIGITS - 1 downto 0 => x"0"), "Test " & INTEGER'image(simTestID) & ": Should be resetted again.");
+
+			-- This process is finished
+			simDeactivateProcess(simProcessID);
+			wait;  -- forever
+		end process;
+	end generate;
+end architecture;

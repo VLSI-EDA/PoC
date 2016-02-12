@@ -3,10 +3,10 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- =============================================================================
--- Testbench:				Tests global constants, functions and settings
---
 -- Authors:					Thomas B. Preusser
 --									Patrick Lehmann
+--
+-- Testbench:				Tests global constants, functions and settings
 --
 -- Description:
 -- ------------------------------------
@@ -14,7 +14,7 @@
 -- 
 -- License:
 -- =============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,47 +30,52 @@
 -- limitations under the License.
 -- =============================================================================
 
-entity config_tb is
-end config_tb;
-
-
 library	PoC;
 use			PoC.config.all;
 use			PoC.utils.all;
+-- simulation only packages
+use			PoC.sim_types.all;
 use			PoC.simulation.all;
+
+
+entity config_tb is
+end config_tb;
 
 
 architecture tb of config_tb is
 	signal SimQuiet		: BOOLEAN		:= true;
 begin
-	process
+
+	procChecker : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker");
 	begin
 		if (SimQuiet = FALSE) then
-			report "is simulation?: " & boolean'image(SIMULATION)								severity note;
-			report "Vendor:         " & T_VENDOR'image(VENDOR)									severity note;
-			report "Device:         " & T_DEVICE'image(DEVICE)									severity note;
-			report "Device Number:  " & integer'image(DEVICE_NUMBER)						severity note;
-			report "Device Subtype: " & T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)	severity note;
-			report "Device Series:  " & integer'image(DEVICE_SERIES)						severity note;
-			report "--------------------------------------------------"					severity note;
-			report "LUT fan-in:     " & integer'image(LUT_FANIN)								severity note;
-			report "Transceiver:    " & T_TRANSCEIVER'image(TRANSCEIVER_TYPE)		severity note;
+			report "is simulation?:    " & BOOLEAN'image(SIMULATION)							severity note;
+			report "Vendor:            " & T_VENDOR'image(VENDOR)									severity note;
+			report "Device:            " & T_DEVICE'image(DEVICE)									severity note;
+			report "Device Family:     " & T_DEVICE_FAMILY'image(DEVICE_FAMILY)		severity note;
+			report "Device Subtype:    " & T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)	severity note;
+			report "Device Series:     " & T_DEVICE_SERIES'image(DEVICE_SERIES)		severity note;
+			report "Device Generation: " & INTEGER'image(DEVICE_GENERATION)				severity note;
+			report "Device Number:     " & INTEGER'image(DEVICE_NUMBER)						severity note;
+			report "--------------------------------------------------"						severity note;
+			report "LUT fan-in:        " & INTEGER'image(LUT_FANIN)								severity note;
+			report "Transceiver:       " & T_TRANSCEIVER'image(TRANSCEIVER_TYPE)	severity note;
 		end if;
 
-		tbAssert((SIMULATION = TRUE),											"SIMULATION="				& BOOLEAN'image(SIMULATION)											&	"    Expected=TRUE");
-		tbAssert((VENDOR = VENDOR_XILINX),								"VENDOR= "					& T_VENDOR'image(VENDOR)												&	"    Expected=VENDOR_XILINX");
-		tbAssert((DEVICE = DEVICE_KINTEX7),								"DEVICE="						& T_DEVICE'image(DEVICE)												&	"    Expected=DEVICE_KINTEX7");
-		tbAssert((DEVICE_FAMILY = DEVICE_FAMILY_KINTEX),	"DEVICE_FAMILY="		& T_DEVICE_FAMILY'image(DEVICE_FAMILY)					&	"    Expected=DEVICE_FAMILY_KINTEX");
-		tbAssert((DEVICE_NUMBER = 325),										"DEVICE_NUMBER="		& INTEGER'image(DEVICE_NUMBER)									&	"    Expected=325");
-		tbAssert((DEVICE_SUBTYPE = DEVICE_SUBTYPE_T),			"DEVICE_SUBTYPE="		& T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)				&	"    Expected=DEVICE_SUBTYPE_T");
-		tbAssert((DEVICE_SERIES = 7),											"DEVICE_SERIES="		& INTEGER'image(DEVICE_SERIES)									&	"    Expected=7");
-		tbAssert((LUT_FANIN = 6),													"LUT_FANIN="				& INTEGER'image(LUT_FANIN)											&	"    Expected=6");
-		tbAssert((TRANSCEIVER_TYPE = TRANSCEIVER_GTXE2),	"TRANSCEIVER_TYPE="	& T_TRANSCEIVER'image(TRANSCEIVER_TYPE)					&	"    Expected=TRANSCEIVER_GTXE2");
+		simAssertion((SIMULATION = TRUE),												"SIMULATION="					& BOOLEAN'image(SIMULATION)											&	"    Expected=TRUE");
+		simAssertion((VENDOR = VENDOR_XILINX),									"VENDOR= "						& T_VENDOR'image(VENDOR)												&	"    Expected=VENDOR_XILINX");
+		simAssertion((DEVICE = DEVICE_KINTEX7),									"DEVICE="							& T_DEVICE'image(DEVICE)												&	"    Expected=DEVICE_KINTEX7");
+		simAssertion((DEVICE_FAMILY = DEVICE_FAMILY_KINTEX),		"DEVICE_FAMILY="			& T_DEVICE_FAMILY'image(DEVICE_FAMILY)					&	"    Expected=DEVICE_FAMILY_KINTEX");
+		simAssertion((DEVICE_NUMBER = 325),											"DEVICE_NUMBER="			& INTEGER'image(DEVICE_NUMBER)									&	"    Expected=325");
+		simAssertion((DEVICE_SUBTYPE = DEVICE_SUBTYPE_T),				"DEVICE_SUBTYPE="			& T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)				&	"    Expected=DEVICE_SUBTYPE_T");
+		simAssertion((DEVICE_GENERATION = 7),										"DEVICE_GENERATION="	& INTEGER'image(DEVICE_GENERATION)							&	"    Expected=7");
+		simAssertion((DEVICE_SERIES = DEVICE_SERIES_7_SERIES),	"DEVICE_SERIES="			& T_DEVICE_SERIES'image(DEVICE_SERIES)					&	"    Expected=DEVICE_SERIES_7_SERIES");
+		simAssertion((LUT_FANIN = 6),														"LUT_FANIN="					& INTEGER'image(LUT_FANIN)											&	"    Expected=6");
+		simAssertion((TRANSCEIVER_TYPE = TRANSCEIVER_GTXE2),		"TRANSCEIVER_TYPE="		& T_TRANSCEIVER'image(TRANSCEIVER_TYPE)					&	"    Expected=TRANSCEIVER_GTXE2");
 		
-		-- simulation completed
-		
-		-- Report overall simulation result
-		tbPrintResult;
-		wait;
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
 	end process;
-end;
+end architecture;

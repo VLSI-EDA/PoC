@@ -56,6 +56,8 @@ package io is
 	type T_IO_TRISTATE_VECTOR	is array(NATURAL range <>) of T_IO_TRISTATE;
 	type T_IO_LVDS_VECTOR			is array(NATURAL range <>) of T_IO_LVDS;
 
+	type T_IO_DATARATE is (IO_DATARATE_SDR, IO_DATARATE_DDR, IO_DATARATE_QDR);
+	
 	type T_IO_7SEGMENT_CHAR is (
 		IO_7SEGMENT_CHAR_0, IO_7SEGMENT_CHAR_1, IO_7SEGMENT_CHAR_2, IO_7SEGMENT_CHAR_3,
 		IO_7SEGMENT_CHAR_4, IO_7SEGMENT_CHAR_5, IO_7SEGMENT_CHAR_6, IO_7SEGMENT_CHAR_7,
@@ -91,79 +93,6 @@ package io is
 
 	function io_7SegmentDisplayEncoding(hex	: STD_LOGIC_VECTOR(3 downto 0); dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE)	return STD_LOGIC_VECTOR;
 	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE)												return STD_LOGIC_VECTOR;
-	
-	-- IICBusController
-	-- ==========================================================================================================================================================
-	type T_IO_IIC_BUSMODE is (
-		IO_IIC_BUSMODE_SMBUS,							--   100 kHz; additional timing restrictions
-		IO_IIC_BUSMODE_STANDARDMODE,			--   100 kHz
-		IO_IIC_BUSMODE_FASTMODE,					--   400 kHz
-		IO_IIC_BUSMODE_FASTMODEPLUS,			-- 1.000 kHz
-		IO_IIC_BUSMODE_HIGHSPEEDMODE,			-- 3.400 kHz
-		IO_IIC_BUSMODE_ULTRAFASTMODE			-- 5.000 kHz; unidirectional
-	);
-
-	type T_IO_IICBUS_COMMAND is (
-		IO_IICBUS_CMD_NONE,
-		IO_IICBUS_CMD_SEND_START_CONDITION,
-		IO_IICBUS_CMD_SEND_RESTART_CONDITION,
-		IO_IICBUS_CMD_SEND_STOP_CONDITION,
-		IO_IICBUS_CMD_SEND_LOW,
-		IO_IICBUS_CMD_SEND_HIGH,
-		IO_IICBUS_CMD_RECEIVE
-	);
-	
-	type T_IO_IICBUS_STATUS is (
-		IO_IICBUS_STATUS_RESETING,
-		IO_IICBUS_STATUS_IDLE,
-		IO_IICBUS_STATUS_SENDING,
-		IO_IICBUS_STATUS_SEND_COMPLETE,
-		IO_IICBUS_STATUS_RECEIVING,
-		IO_IICBUS_STATUS_RECEIVED_START_CONDITION,
-		IO_IICBUS_STATUS_RECEIVED_STOP_CONDITION,
-		IO_IICBUS_STATUS_RECEIVED_LOW,
-		IO_IICBUS_STATUS_RECEIVED_HIGH,
-		IO_IICBUS_STATUS_ERROR,
-		IO_IICBUS_STATUS_BUS_ERROR
-	);
-	
-	-- IICController
-	-- ==========================================================================================================================================================
-	type T_IO_IIC_COMMAND is (
-		IO_IIC_CMD_NONE,
-		IO_IIC_CMD_QUICKCOMMAND_READ,	-- use this to check for an device address
-		IO_IIC_CMD_QUICKCOMMAND_WRITE,
-		IO_IIC_CMD_SEND_BYTES,
-		IO_IIC_CMD_RECEIVE_BYTES,
-		IO_IIC_CMD_PROCESS_CALL
-	);
-	
-	type T_IO_IIC_STATUS is (
-		IO_IIC_STATUS_IDLE,
-		IO_IIC_STATUS_EXECUTING,
-		IO_IIC_STATUS_EXECUTE_OK,
-		IO_IIC_STATUS_EXECUTE_FAILED,
-		IO_IIC_STATUS_SENDING,
-		IO_IIC_STATUS_SEND_COMPLETE,
-		IO_IIC_STATUS_RECEIVING,
-		IO_IIC_STATUS_RECEIVE_COMPLETE,
-		IO_IIC_STATUS_CALLING,
-		IO_IIC_STATUS_CALL_COMPLETE,
-		IO_IIC_STATUS_ERROR
-	);
-
-	type T_IO_IIC_ERROR is (
-		IO_IIC_ERROR_NONE,
-		IO_IIC_ERROR_ADDRESS_ERROR,
-		IO_IIC_ERROR_ACK_ERROR,
-		IO_IIC_ERROR_BUS_ERROR,
-		IO_IIC_ERROR_FSM
-	);
-	
-	type T_IO_IIC_COMMAND_VECTOR	is array(NATURAL range <>) of T_IO_IIC_COMMAND;
-	type T_IO_IIC_STATUS_VECTOR		is array(NATURAL range <>) of T_IO_IIC_STATUS;
-	type T_IO_IIC_ERROR_VECTOR		is array(NATURAL range <>) of T_IO_IIC_ERROR;
-	
 	
 	
 	-- MDIOController
