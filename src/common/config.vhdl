@@ -456,12 +456,13 @@ package config is
 		Vendor						: T_VENDOR;
 		Device						: T_DEVICE;
 		DevFamily					: T_DEVICE_FAMILY;
-		DevNumber					: natural;
+		DevGeneration			: NATURAL;
+		DevNumber					: NATURAL;
 		DevSubType				: T_DEVICE_SUBTYPE;
 		DevSeries					: T_DEVICE_SERIES;
 		
 		TransceiverType		: T_TRANSCEIVER;
-		LUT_FanIn					: positive;
+		LUT_FanIn					: POSITIVE;
 	end record;
 
 	-- Functions extracting board and PCB properties from "MY_BOARD"
@@ -476,18 +477,19 @@ package config is
 	-- Functions extracting device and architecture properties from "MY_DEVICE"
 	-- which is declared in package "my_config".
 	-- ===========================================================================
-	function VENDOR(DeviceString : string := C_DEVICE_STRING_EMPTY)						return T_VENDOR;
-	function SYNTHESIS_TOOL(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_SYNTHESIS_TOOL;
-	function DEVICE(DeviceString : string := C_DEVICE_STRING_EMPTY)						return T_DEVICE;
-	function DEVICE_FAMILY(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_DEVICE_FAMILY;
-	function DEVICE_NUMBER(DeviceString : string := C_DEVICE_STRING_EMPTY)		return natural;
-	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_DEVICE_SUBTYPE;
-	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_DEVICE_SERIES;
+	function VENDOR(DeviceString : string := C_DEVICE_STRING_EMPTY)							return T_VENDOR;
+	function SYNTHESIS_TOOL(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_SYNTHESIS_TOOL;
+	function DEVICE(DeviceString : string := C_DEVICE_STRING_EMPTY)							return T_DEVICE;
+	function DEVICE_FAMILY(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_FAMILY;
+	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_SUBTYPE;
+	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_SERIES;
+	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY)	return NATURAL;
+	function DEVICE_NUMBER(DeviceString : string := C_DEVICE_STRING_EMPTY)			return NATURAL;
 
-	function TRANSCEIVER_TYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)	return T_TRANSCEIVER;
-	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY)				return positive;
+	function TRANSCEIVER_TYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_TRANSCEIVER;
+	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY)					return POSITIVE;
 
-	function DEVICE_INFO(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_INFO;
+	function DEVICE_INFO(DeviceString : string := C_DEVICE_STRING_EMPTY)				return T_DEVICE_INFO;
 
 	-- force FSM to predefined encoding in debug mode
 	function getFSMEncoding_gray(debug : BOOLEAN) return STRING;
@@ -812,7 +814,7 @@ package body config is
 										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
 	end function;
-
+	
 	-- some devices share some common features: e.g. XADC, BlockRAM, ...
 	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_DEVICE_SERIES is
 		constant MY_DEV	: string(1 to 32)	:= getLocalDeviceString(DeviceString);
@@ -831,6 +833,16 @@ package body config is
 			when others =>
 				return DEVICE_SERIES_UNKNOWN;
 		end case;
+	end function;
+
+	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY) return NATURAL is
+		constant SERIES		: T_DEVICE_SERIES		:= DEVICE_SERIES(DeviceString);
+	begin
+		if (SERIES = DEVICE_SERIES_7_SERIES) then
+			return 7;
+		else
+			return 0;
+		end if;
 	end function;
 
 	function DEVICE_NUMBER(DeviceString : string := C_DEVICE_STRING_EMPTY) return natural is
@@ -963,7 +975,7 @@ package body config is
 	begin
 		case SERIES is
 			when DEVICE_SERIES_7_SERIES | DEVICE_SERIES_ULTRASCALE |
-					 DEVICE_SERIES_ULTRASCALE_PLUS =>														return 6;
+					 DEVICE_SERIES_ULTRASCALE_PLUS =>															return 6;
 			when others => null;
 		end case;
 		case DEV is
@@ -1056,9 +1068,10 @@ package body config is
 		Result.Vendor						:= VENDOR(DeviceString);
 		Result.Device						:= DEVICE(DeviceString);
 		Result.DevFamily				:= DEVICE_FAMILY(DeviceString);
-		Result.DevNumber				:= DEVICE_NUMBER(DeviceString);
 		Result.DevSubType				:= DEVICE_SUBTYPE(DeviceString);
 		Result.DevSeries				:= DEVICE_SERIES(DeviceString);
+		Result.DevGeneration		:= DEVICE_GENERATION(DeviceString);
+		Result.DevNumber				:= DEVICE_NUMBER(DeviceString);
 		Result.TransceiverType	:= TRANSCEIVER_TYPE(DeviceString);
 		Result.LUT_FanIn				:= LUT_FANIN(DeviceString);
 		

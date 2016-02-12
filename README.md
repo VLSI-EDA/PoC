@@ -126,7 +126,7 @@ Both dependencies are available as GitHub repositories and are linked to
 PoC as git submodules into the [`<PoCRoot>\lib\`][lib] directory.
 
  [osvvm]:	https://github.com/JimLewis/OSVVM
- [vunit]:	https://github.com/LarsAsplund/vunit
+ [vunit]:	https://github.com/VUnit/vunit
 
 
 ## 5 Configuring PoC on a Local System (Stand Alone)

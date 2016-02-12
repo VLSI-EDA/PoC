@@ -13,7 +13,7 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,17 +29,24 @@
 -- limitations under the License.
 -- =============================================================================
 
-entity fifo_ic_got_tb is
-end entity;
-
 library	IEEE;
 use			IEEE.std_logic_1164.all;
 
 library	PoC;
 use			PoC.utils.all;
+use			PoC.physical.all;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
+
+
+entity fifo_ic_got_tb is
+end entity;
 
 
 architecture tb of fifo_ic_got_tb is
+	constant CLOCK_FREQ			: FREQ					:= 100 MHz;
 
   -- FIFO Parameters
   constant D_BITS         : positive := 9;
@@ -53,10 +60,10 @@ architecture tb of fifo_ic_got_tb is
   constant ORG : std_logic_vector :=  "00000001";
   
   -- Clock Generation and Reset
-  signal rst  : std_logic := '1';
-  signal clk0 : std_logic := '0';
-  signal clk1 : std_logic := '0';
-  signal clk2 : std_logic := '0';
+  signal rst  : std_logic;
+  signal clk0 : std_logic;
+  signal clk1 : std_logic;
+  signal clk2 : std_logic;
   signal done : std_logic := '0';
 
   -- clk0 -> clk1 Transfer
@@ -80,18 +87,13 @@ architecture tb of fifo_ic_got_tb is
   signal dat2 : std_logic_vector(D_BITS-1 downto 0);
   
 begin
-
-  -----------------------------------------------------------------------------
-  -- Clock Generation and Reset
-  clk0 <= clk0 xnor done after  7 ns;
-  clk1 <= clk1 xnor done after 12 ns;
-  clk2 <= clk2 xnor done after  5 ns;
-  process
-  begin
-    wait for 16 ns;
-    rst <= '0';
-    wait;
-  end process;
+	-- initialize global simulation status
+	simInitialize(MaxSimulationRuntime => 1 us);
+	-- generate global testbench clock
+	simGenerateClock(clk0, 14 ns);
+	simGenerateClock(clk1, 24 ns);
+	simGenerateClock(clk2, 10 ns);
+	simGenerateWaveform(rst,	simGenerateWaveform_Reset(Pause => 0 ns, ResetPulse => 16 ns));
 
   -----------------------------------------------------------------------------
   -- Initial Generator
@@ -107,7 +109,11 @@ begin
       step => put0,
       mask => di0
     );
-  process
+	
+  -- Writer
+	procWriter : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Writer");
+		
     variable cnt : natural := 0;
   begin
     put0 <= '0';
@@ -138,9 +144,10 @@ begin
     -- Let it drain
     wait until falling_edge(clk0);
     put0 <= '0';
-    report "Sending Complete." severity note;
-    wait;
-
+		
+    -- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
   end process;
   
   fifo0_1 : entity PoC.fifo_ic_got
@@ -184,14 +191,15 @@ begin
   got1 <= vld1 and not ful1;
   put1 <= got1;
 
-  process
+	-- Pass-thru checker
+	procChecker : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Pass-thru checker");
+    
     variable cnt : natural := 0;
   begin
     -- Pass-thru Checking
     wait until rising_edge(clk1);
-    assert rst = '1' or put1 = '0' or do1 = di1
-      report "Mismatch in clk1."
-      severity error;
+		simAssertion(((rst = '1') or (put1 = '0') or (do1 = di1)), "Mismatch in clk1.");
     if put1 = '1' then
       cnt := cnt + 1;
     end if;
@@ -236,7 +244,10 @@ begin
       mask => dat2
     );
 
-  process
+	-- Reader
+	procReader : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Reader");
+		
     variable cnt : natural := 0;
     variable del : natural := 0;
   begin
@@ -247,18 +258,17 @@ begin
       del := del + 1;
       if del = 3 then
         got2 <= '1';
-        assert dat2 = do2
-          report "Mismatch in clk2."
-          severity error;
+				simAssertion((dat2 = do2), "Mismatch in clk2.");
         cnt := cnt + 1;
         del := 0;
       end if;
     end if;
     --port "Count: "&integer'image(cnt) severity note;
-    if cnt = 4*MIN_DEPTH then
-      done <= '1';
-      report "Test Complete." severity note;
-    end if;
+    wait until (cnt = 4 * MIN_DEPTH);
+		
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
   end process;
   
-end tb;
+end architecture;

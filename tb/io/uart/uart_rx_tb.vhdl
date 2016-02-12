@@ -3,17 +3,17 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- ============================================================================
--- Module:					uart_rx_tb
---
 -- Authors:					Patrick Lehmann
 -- 
+-- Testbench:				For PoC.io.uart.rx
+--
 -- Description:
 -- ------------------------------------
--- Testbench for arith_counter_bcd
+--	TODO
 -- 
 -- License:
 -- ============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,8 +38,11 @@ use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.strings.all;
 use			PoC.physical.all;
-use			PoC.simulation.all;
 use			PoC.uart.all;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
 
 
 entity uart_rx_tb is
@@ -111,19 +114,20 @@ begin
 			stb				=> RX_Strobe
 		);
 
-	process
+	procChecker : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker");
 	begin
 		for i in DATA_STREAM'range loop
 			wait until rising_edge(Clock) and (RX_Strobe = '1');
-			report TIME'image(NOW) severity NOTE;
-			tbAssert((RX_Data = DATA_STREAM(i)), "Data Byte " & INTEGER'image(i) & " received: " & to_string(RX_Data, 'h') & " expected: " & to_string(DATA_STREAM(i), 'h'));
+			-- report TIME'image(NOW) severity NOTE;
+			simAssertion((RX_Data = DATA_STREAM(i)), "Data Byte " & INTEGER'image(i) & " received: " & to_string(RX_Data, 'h') & " expected: " & to_string(DATA_STREAM(i), 'h'));
 		end loop;
 		
 		wait for 1 us;
-		simStop;
 		
-		tbPrintResult;
-		wait;
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
 	end process;
 	
 end architecture;

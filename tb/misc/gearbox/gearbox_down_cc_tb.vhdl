@@ -38,7 +38,10 @@ use			PoC.math.all;
 use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.physical.all;
-use			PoC.simulation.ALL;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
 
 library OSVVM;
 use			OSVVM.RandomPkg.all;
@@ -57,20 +60,18 @@ architecture tb of gearbox_down_cc_tb is
 	type T_TUPLE_VECTOR is array(NATURAL range <>) of T_TUPLE;
 	
 	constant TB_GENERATOR_LIST			: T_TUPLE_VECTOR		:= ((32, 8), (20, 8), (36, 8), (66, 64), (128, 12));
-	constant TB_GENERATOR_LIST_LOW	: NATURAL						:= TB_GENERATOR_LIST'low;
-	constant TB_GENERATOR_LIST_HIGH	: NATURAL						:= TB_GENERATOR_LIST'high;
 
 	constant CLOCK_FREQ							: FREQ				:= 100 MHz;
 	signal Clock										: STD_LOGIC		:= '1';
 
 begin
 	-- initialize global simulation status
-	globalSimulationStatus.initialize;
+	simInitialize;
 	
 	simGenerateClock(Clock, CLOCK_FREQ);
 	
 
-	genInstances : for i in TB_GENERATOR_LIST_LOW to TB_GENERATOR_LIST_HIGH generate
+	genInstances : for i in TB_GENERATOR_LIST'range generate
 		constant INPUT_BITS						: POSITIVE		:= TB_GENERATOR_LIST(i).InputBits;
 		constant OUTPUT_BITS					: POSITIVE		:= TB_GENERATOR_LIST(i).OutputBits;
 		constant OUTPUT_ORDER					: T_BIT_ORDER	:= MSB_FIRST;
@@ -106,13 +107,14 @@ begin
 		signal FirstOut								: STD_LOGIC;
 		signal LastOut								: STD_LOGIC;
 		
-		constant simTestID : T_SIM_TEST_ID		:= globalSimulationStatus.createTest("Test setup for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
-	
+		constant simTestID : T_SIM_TEST_ID		:= simCreateTest("Test setup for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
 		
 	begin
 		procGenerator : process
-			variable simProcessID	: T_SIM_PROCESS_ID;			-- from Simulation
-			variable RandomVar		: RandomPType;					-- protected type from RandomPkg
+			-- from Simulation
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
+			-- protected type from RandomPkg
+			variable RandomVar		: RandomPType;
 		
 			impure function genChunkedRandomValue return STD_LOGIC_VECTOR is
 				variable Temp			: T_CHUNK_VECTOR(INPUT_CHUNKS - 1 downto 0);
@@ -122,9 +124,8 @@ begin
 				end loop;
 				return to_slv(Temp);
 			end function;
+			
 		begin
-			simProcessID := globalSimulationStatus.registerProcess("Generator " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
-		
 			RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
 
 			SyncIn		<= '0';
@@ -166,7 +167,7 @@ begin
 			ValidIn		<= '0';
 			
 			-- This process is finished
-			globalSimulationStatus.deactivateProcess(simProcessID);
+			simDeactivateProcess(simProcessID);
 			wait;		-- forever
 		end process;
 		
@@ -195,22 +196,20 @@ begin
 				Out_Last		=> LastOut
 			);
 		
-		procTester : process
-			variable simProcessID	: T_SIM_PROCESS_ID;
+		procChecker : process
+			constant simProcessID	: T_SIM_PROCESS_ID	:= simRegisterProcess(simTestID, "Checker " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
 			variable Check				: BOOLEAN;
 		begin
-			simProcessID := globalSimulationStatus.registerProcess("Tester " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
-		
 			Check		:= TRUE;
 			
 			for i in 0 to LOOP_COUNT - 1 loop
 				wait until rising_edge(Clock);
-				-- globalSimulationStatus.assertion(Check, "TODO: ");
+				-- simAssertion(Check, "TODO: ");
 			end loop;
 			
 			for i in 0 to LOOP_COUNT - 1 loop
 				wait until rising_edge(Clock);
-				-- globalSimulationStatus.assertion(Check, "TODO: ");
+				-- simAssertion(Check, "TODO: ");
 			end loop;
 		
 			for i in 0 to DELAY - 1 loop
@@ -218,9 +217,7 @@ begin
 			end loop;
 			
 			-- This process is finished
-			globalSimulationStatus.deactivateProcess(simProcessID);
-			-- Report overall result
-			globalSimulationStatus.finalize;
+			simDeactivateProcess(simProcessID);
 			wait;		-- forever
 		end process;
 	end generate;

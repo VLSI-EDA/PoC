@@ -3,9 +3,9 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- =============================================================================
--- Testbench:				Converter Binary to BCD.
--- 
 -- Authors:					Patrick Lehmann
+-- 
+-- Testbench:				Converter Binary to BCD.
 -- 
 -- Description:
 -- ------------------------------------
@@ -13,7 +13,7 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,11 +38,14 @@ use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.strings.all;
 use			PoC.physical.all;
+-- simulation only packages
+use			PoC.sim_global.all;
+use			PoC.sim_types.all;
 use			PoC.simulation.all;
 
 
 entity arith_convert_bin2bcd_tb is
-end;
+end entity;
 
 
 architecture test of arith_convert_bin2bcd_tb is
@@ -128,10 +131,11 @@ begin
 		wait until rising_edge(Clock);
 		wait until rising_edge(Clock);
 		
-		-- Report overall simulation result
-		tbPrintResult;
-		SimStop	<= '1';
-		wait;
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		-- Report overall result
+		globalSimulationStatus.finalize;
+		wait;  -- forever
 	end process;
 
 	conv1 : entity PoC.arith_convert_bin2bcd
@@ -171,4 +175,4 @@ begin
 			BCDDigits			=> Conv2_BCDDigits,
 			Sign					=> Conv2_Sign
 		);
-end;
+end architecture;

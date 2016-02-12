@@ -463,7 +463,7 @@ class Simulator(PoCSimulator):
 					print("Testbench '{0}': FAILED".format(testbenchName))
 					
 			except SimulatorException as ex:
-				raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED|NOT IMPLEMENTED]' not found in simulator output.") from ex
+				raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED|NO ASSERTS]' not found in simulator output.") from ex
 		
 		else:	# guiMode
 			# run GTKWave GUI

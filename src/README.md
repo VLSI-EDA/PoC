@@ -18,6 +18,7 @@ subdirectory.
  -  [`PoC.mem`][mem] - contains memory abstractions and controllers.
  -  [`PoC.misc`][misc] - contains yet uncategorized components.
  -  [`PoC.net`][net] - contains a network stack.
+ -  [`PoC.sim`][sim] - contains simulation helper packages.
  -  [`PoC.sort`][sort] - contains sorting algorithms.
  -  [`PoC.xil`][xil] - contains Xilinx specific implementations.
 
@@ -27,11 +28,12 @@ subdirectory.
  [bus]:				bus
  [cache]:			cache
  [comm]:			comm
- [common]:			common
+ [common]:		common
  [fifo]:			fifo
  [io]:				io
  [mem]:				mem
  [misc]:			misc
  [net]:				net
+ [sim]:				sim
  [sort]:			sort
  [xil]:				xil

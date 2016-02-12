@@ -1,0 +1,48 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Sat Feb 06 00:35:00 2016
+[*]
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\arith_prefix_and_tb.ghw"
+[dumpfile_mtime] "Sat Feb 06 00:31:35 2016"
+[dumpfile_size] 9001
+[savefile] "H:\Austausch\PoC\sim\arith\arith_prefix_and_tb.gtkw"
+[timestart] 0
+[size] 1680 997
+[pos] -113 -113
+*-28.571043 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.arith_prefix_and_tb.
+[sst_width] 197
+[signals_width] 112
+[sst_expanded] 1
+[sst_vpaned_height] 293
+@28
+top.arith_prefix_and_tb.clock
+@c00023
+#{top.arith_prefix_and_tb.x[7:0]} top.arith_prefix_and_tb.x[7] top.arith_prefix_and_tb.x[6] top.arith_prefix_and_tb.x[5] top.arith_prefix_and_tb.x[4] top.arith_prefix_and_tb.x[3] top.arith_prefix_and_tb.x[2] top.arith_prefix_and_tb.x[1] top.arith_prefix_and_tb.x[0]
+@28
+top.arith_prefix_and_tb.x[7]
+top.arith_prefix_and_tb.x[6]
+top.arith_prefix_and_tb.x[5]
+top.arith_prefix_and_tb.x[4]
+top.arith_prefix_and_tb.x[3]
+top.arith_prefix_and_tb.x[2]
+top.arith_prefix_and_tb.x[1]
+top.arith_prefix_and_tb.x[0]
+@1401201
+-group_end
+@800022
+#{top.arith_prefix_and_tb.y[7:0]} top.arith_prefix_and_tb.y[7] top.arith_prefix_and_tb.y[6] top.arith_prefix_and_tb.y[5] top.arith_prefix_and_tb.y[4] top.arith_prefix_and_tb.y[3] top.arith_prefix_and_tb.y[2] top.arith_prefix_and_tb.y[1] top.arith_prefix_and_tb.y[0]
+@28
+top.arith_prefix_and_tb.y[7]
+top.arith_prefix_and_tb.y[6]
+top.arith_prefix_and_tb.y[5]
+top.arith_prefix_and_tb.y[4]
+top.arith_prefix_and_tb.y[3]
+top.arith_prefix_and_tb.y[2]
+top.arith_prefix_and_tb.y[1]
+top.arith_prefix_and_tb.y[0]
+@1001200
+-group_end
+[pattern_trace] 1
+[pattern_trace] 0

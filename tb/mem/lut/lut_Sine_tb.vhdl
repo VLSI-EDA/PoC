@@ -13,7 +13,7 @@
 -- 
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,16 +36,21 @@ use			IEEE.NUMERIC_STD.all;
 library PoC;
 use			PoC.utils.all;
 use			PoC.strings.all;
+use			PoC.physical.all;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
 
 
 entity lut_Sine_tb is
-end;
+end entity;
 
 
 architecture test of lut_Sine_tb is 
-	constant CLOCK_1_PERIOD		: TIME								:= 10 ns;
+	constant CLOCK_FREQ							: FREQ					:= 100 MHz;
 	
-	signal Clock1							: STD_LOGIC						:= '1';
+	signal Clock							: STD_LOGIC						:= '1';
 	signal sim_Stop						: STD_LOGIC						:= '0';
 	
 	signal lut_in							: STD_LOGIC_VECTOR(7 downto 0)	:= (others => '0');
@@ -59,25 +64,27 @@ architecture test of lut_Sine_tb is
 	signal lut_Q4_out					: STD_LOGIC_VECTOR(7 downto 0);
 	
 begin
+	-- initialize global simulation status
+	simInitialize;
+	-- generate global testbench clock
+	simGenerateClock(Clock, CLOCK_FREQ);
 
-	ClockProcess1 : process(Clock1)
-  begin
-		Clock1 <= (Clock1 xnor sim_Stop) after CLOCK_1_PERIOD / 2;
-  end process;
 	
-	process
+	procGenerator : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Generator");
 	begin
-		wait for 4 * CLOCK_1_PERIOD;
+		simWaitUntilRisingEdge(Clock, 4);
 		
-		for i in 0 to 1024 loop
+		for i in 0 to 1023 loop
 			lut_in	<= to_slv(i, lut_in'length);
-			wait for CLOCK_1_PERIOD;
+			wait until rising_edge(Clock);
 		end loop;
 		
-		wait for 4 * CLOCK_1_PERIOD;
-		sim_Stop	<= '1';
+		simWaitUntilRisingEdge(Clock, 4);
 		
-		wait;
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
 	end process;
 	
 	lut_Q1_in	<= lut_in;
@@ -94,7 +101,7 @@ begin
 			QUARTERS				=> 1
 		)                             
 		port map (                    
-			Clock			=> Clock1,			-- 
+			Clock			=> Clock,			-- 
 			Input			=> lut_Q1_in,		-- 
 			Output		=> lut_Q1_out		-- 
 		);
@@ -108,7 +115,7 @@ begin
 			QUARTERS				=> 2
 		)                             
 		port map (                    
-			Clock			=> Clock1,			-- 
+			Clock			=> Clock,			-- 
 			Input			=> lut_Q2_in,		-- 
 			Output		=> lut_Q2_out		-- 
 		);
@@ -122,7 +129,7 @@ begin
 			QUARTERS				=> 4
 		)                             
 		port map (                    
-			Clock			=> Clock1,			-- 
+			Clock			=> Clock,			-- 
 			Input			=> lut_Q3_in,		-- 
 			Output		=> lut_Q3_out		-- 
 		);
@@ -136,8 +143,8 @@ begin
 			QUARTERS				=> 4
 		)                             
 		port map (                    
-			Clock			=> Clock1,			-- 
+			Clock			=> Clock,			-- 
 			Input			=> lut_Q4_in,		-- 
 			Output		=> lut_Q4_out		-- 
 		);
-end;
+end architecture;

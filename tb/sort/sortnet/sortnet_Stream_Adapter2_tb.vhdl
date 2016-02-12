@@ -37,8 +37,11 @@ library PoC;
 use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.physical.all;
-use			PoC.simulation.ALL;
 use			PoC.sortnet.ALL;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
 
 library OSVVM;
 use			OSVVM.RandomPkg.all;
@@ -89,16 +92,17 @@ architecture tb of sortnet_Stream_Adapter2_tb is
 	
 begin
 	-- initialize global simulation status
-	globalSimulationStatus.initialize;
+	simInitialize;
 	
-	globalSimulationStatus.writeMessage("SETTINGS");
-	globalSimulationStatus.writeMessage("  SORTNET_BLOCK_COUNT: " & INTEGER'image(SORTNET_BLOCK_COUNT));
-	globalSimulationStatus.writeMessage("  BYTES TRANSFERED:    " & INTEGER'image(SORTNET_BLOCK_COUNT * SORTNET_SIZE * SORTNET_DATA_BITS / 8));
+	simWriteMessage("SETTINGS");
+	simWriteMessage("  SORTNET_BLOCK_COUNT: " & INTEGER'image(SORTNET_BLOCK_COUNT));
+	simWriteMessage("  BYTES TRANSFERED:    " & INTEGER'image(SORTNET_BLOCK_COUNT * SORTNET_SIZE * SORTNET_DATA_BITS / 8));
 	
+	-- generate global testbench clock
 	simGenerateClock(Clock, CLOCK_FREQ);
 
 	procGenerator : process
-		variable simProcessID	: T_SIM_PROCESS_ID;			-- from Simulation
+		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Generator");
 		variable RandomVar		: RandomPType;					-- protected type from RandomPkg
 
 		variable KeyInput		: STD_LOGIC_VECTOR(SORTNET_KEY_BITS - 1 downto 0);
@@ -106,8 +110,6 @@ begin
 		variable TagInput		: STD_LOGIC_VECTOR(TAG_BITS - 1 downto 0);
 		
 	begin
-		simProcessID := globalSimulationStatus.registerProcess("Generator");	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
-		
 		RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
 		
 		Generator_Valid			<= '0';
@@ -142,7 +144,7 @@ begin
 		Generator_Valid				<= '0';
 		
 		-- This process is finished
-		globalSimulationStatus.deactivateProcess(simProcessID);
+		simDeactivateProcess(simProcessID);
 		wait;		-- forever
 	end process;
 	
@@ -182,19 +184,16 @@ begin
 			Out_Ack			=> Tester_Ack
 		);
 	
-	procTester : process
-		variable simProcessID	: T_SIM_PROCESS_ID;
+	procChecker : process
+		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Checker");
+		
 		variable Check				: BOOLEAN;
 		variable CurValue			: UNSIGNED(SORTNET_KEY_BITS - 1 downto 0);
 		variable LastValue		: UNSIGNED(SORTNET_KEY_BITS - 1 downto 0);
 	begin
-		simProcessID := globalSimulationStatus.registerProcess("Tester");
-		
 		Tester_Ack		<= '0';
 	
-		for i in 0 to 7 loop	--DELAY - 1 loop
-			wait until rising_edge(Clock);
-		end loop;
+		simWaitUntilRisingEdge(Clock, 8);
 		
 		wait until (Sort_Out_Data /= (STREAM_DATA_BITS - 1 downto 0 => '0'));
 		
@@ -211,17 +210,13 @@ begin
 					LastValue	:= CurValue;
 				end if;
 			end loop;
-			globalSimulationStatus.assertion(Check, "Result is not monotonic.");
+			simAssertion(Check, "Result is not monotonic.");
 		end loop;
 
-		for i in 0 to 511 loop
-			wait until rising_edge(Clock);
-		end loop;
+		simWaitUntilRisingEdge(Clock, 512);
 		
 		-- This process is finished
-		globalSimulationStatus.deactivateProcess(simProcessID);
-		-- Report overall result
-		globalSimulationStatus.finalize;
+		simDeactivateProcess(simProcessID);
 		wait;  -- forever
 	end process;
 	

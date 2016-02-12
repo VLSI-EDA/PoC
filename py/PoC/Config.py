@@ -68,9 +68,12 @@ class Families(Enum):
 	Stratix = 12
 
 	def __str__(self):
-		return self.name.lower()
+		return self.name
 	
 	def __repr__(self):
+		return str(self.name).lower()
+	
+	def Token(self):
 		if	 (self == Families.Spartan):	return "s"
 		elif (self == Families.Artix):		return "a"
 		elif (self == Families.Kintex):		return "k"
@@ -167,11 +170,11 @@ class Device:
 			self.generation = int(deviceString[2:3])
 
 			temp = deviceString[3:4].lower()
-			if	 (temp == repr(Families.Artix)):		self.family = Families.Artix
-			elif (temp == repr(Families.Kintex)):		self.family = Families.Kintex
-			elif (temp == repr(Families.Spartan)):	self.family = Families.Spartan
-			elif (temp == repr(Families.Virtex)):		self.family = Families.Virtex
-			elif (temp == repr(Families.Zynq)):			self.family = Families.Zynq
+			if	 (temp == Families.Artix.Token()):		self.family = Families.Artix
+			elif (temp == Families.Kintex.Token()):		self.family = Families.Kintex
+			elif (temp == Families.Spartan.Token()):	self.family = Families.Spartan
+			elif (temp == Families.Virtex.Token()):		self.family = Families.Virtex
+			elif (temp == Families.Zynq.Token()):			self.family = Families.Zynq
 			else: raise Exception("Unknown device family.")
 
 			deviceRegExpStr =  r"(?P<st1>[a-z]{0,2})"				# device subtype - part 1
@@ -211,8 +214,8 @@ class Device:
 			self.generation = int(deviceString[2:3])
 
 			temp = deviceString[3:4].lower()
-			if	 (temp == repr(Families.Cyclon)):		self.family = Families.Cyclon
-			elif (temp == repr(Families.Stratix)):	self.family = Families.Stratix
+			if	 (temp == Families.Cyclon.Token()):		self.family = Families.Cyclon
+			elif (temp == Families.Stratix.Token()):	self.family = Families.Stratix
 
 #			deviceRegExpStr =  r"(?P<st1>[cfhlstx]{0,2})"			# device subtype - part 1
 #			deviceRegExpStr += r"(?P<no>\d{1,4})"							# device number
@@ -230,11 +233,15 @@ class Device:
 	def shortName(self):
 		if (self.vendor == Vendors.Xilinx):
 			subtype = self.subtype.groups()
+			if (self.family == Families.Zynq):
+				number_format = "{num:03d}"
+			else:
+				number_format = "{num}"
 			return "xc%i%s%s%s%s" % (
 				self.generation,
-				repr(self.family),
+				self.family.Token(),
 				subtype[0],
-				"{num:03d}".format(num=self.number),
+				number_format.format(num=self.number),
 				subtype[1]
 			)
 		elif (self.vendor == Vendors.Altera):
@@ -244,11 +251,15 @@ class Device:
 	def fullName(self):
 		if (self.vendor == Vendors.Xilinx):
 			subtype = self.subtype.groups()
+			if (self.family == Families.Zynq):
+				number_format = "{num:03d}"
+			else:
+				number_format = "{num}"
 			return "xc%i%s%s%s%s%i%s%i" % (
 				self.generation,
-				repr(self.family),
+				self.family.Token(),
 				subtype[0],
-				"{num:03d}".format(num=self.number),
+				number_format.format(num=self.number),
 				subtype[1],
 				self.speedGrade,
 				str(self.package),
@@ -269,7 +280,6 @@ class Device:
 			if self.family in [Families.Artix, Families.Kintex, Families.Virtex, Families.Zynq]:
 				return "Series-7"
 		else:
-			print("here")
 			return "%s-%i" % (
 				str(self.family),
 				self.generation

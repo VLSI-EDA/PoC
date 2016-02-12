@@ -89,7 +89,7 @@ begin
 		type		rom_t		is array(0 to DEPTH - 1) of word_t;
 		
 		-- Compute the initialization of a RAM array, if specified, from the passed file.
-		impure function ocrom_InitMemory(FilePath : string) return ram_t is
+		impure function ocrom_InitMemory(FilePath : string) return rom_t is
 			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
 			variable res			: ram_t;
 		begin

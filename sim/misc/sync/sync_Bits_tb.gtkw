@@ -1,0 +1,25 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Mon Feb 08 14:46:01 2016
+[*]
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\sync_Bits_tb.ghw"
+[dumpfile_mtime] "Mon Feb 08 14:44:10 2016"
+[dumpfile_size] 2628
+[savefile] "H:\Austausch\PoC\sim\misc\sync\sync_Bits_tb.gtkw"
+[timestart] 0
+[size] 1680 997
+[pos] -191 -191
+*-26.288326 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.sync_bits_tb.
+[sst_width] 197
+[signals_width] 118
+[sst_expanded] 1
+[sst_vpaned_height] 293
+@28
+top.sync_bits_tb.clock1
+top.sync_bits_tb.clock2
+top.sync_bits_tb.sync_in[0]
+top.sync_bits_tb.sync_out[0]
+[pattern_trace] 1
+[pattern_trace] 0

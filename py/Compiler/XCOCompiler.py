@@ -97,7 +97,28 @@ class Compiler(PoCCompiler):
 			from configparser import NoSectionError
 			raise CompilerException("IP-Core '{0}' not found.".format(str(pocEntity))) from NoSectionError(str(pocEntity))
 		
-		# read copy tasks
+		# read pre-copy tasks
+		preCopyTasks = []
+		preCopyFileList = self.host.netListConfig[str(pocEntity)]['PreCopy']
+		if (len(preCopyFileList) != 0):
+			self.printDebug("PreCopyTasks: \n  " + ("\n  ".join(preCopyFileList.split("\n"))))
+			
+			preCopyRegExpStr	 = r"^\s*(?P<SourceFilename>.*?)"			# Source filename
+			preCopyRegExpStr += r"\s->\s"													#	Delimiter signs
+			preCopyRegExpStr += r"(?P<DestFilename>.*?)$"					#	Destination filename
+			preCopyRegExp = re.compile(preCopyRegExpStr)
+			
+			for item in preCopyFileList.split("\n"):
+				preCopyRegExpMatch = preCopyRegExp.match(item)
+				if (preCopyRegExpMatch is not None):
+					preCopyTasks.append((
+						Path(preCopyRegExpMatch.group('SourceFilename')),
+						Path(preCopyRegExpMatch.group('DestFilename'))
+					))
+				else:
+					raise CompilerException("Error in pre-copy rule '{0}'".format(item))
+		
+		# read (post) copy tasks
 		copyTasks = []
 		copyFileList = self.host.netListConfig[str(pocEntity)]['Copy']
 		if (len(copyFileList) != 0):
@@ -125,7 +146,7 @@ class Compiler(PoCCompiler):
 			self.printDebug("ReplacementTasks: \n  " + ("\n  ".join(replaceFileList.split("\n"))))
 
 			replaceRegExpStr =	r"^\s*(?P<Filename>.*?)\s+:"			# Filename
-			replaceRegExpStr += r"(?P<Options>[im]{0,2}):\s+"			#	RegExp options
+			replaceRegExpStr += r"(?P<Options>[dim]{0,3}):\s+"			#	RegExp options
 			replaceRegExpStr += r"\"(?P<Search>.*?)\"\s+->\s+"		#	Search regexp
 			replaceRegExpStr += r"\"(?P<Replace>.*?)\"$"					# Replace regexp
 			replaceRegExp = re.compile(replaceRegExpStr)
@@ -142,6 +163,19 @@ class Compiler(PoCCompiler):
 					))
 				else:
 					raise CompilerException("Error in replace rule '{0}'.".format(item))
+		
+		# run pre-copy tasks
+		self.printNonQuiet('  copy further input files into output directory...')
+		for task in preCopyTasks:
+			(fromPath, toPath) = task
+			if not fromPath.exists(): raise CompilerException("Can not pre-copy '{0}' to destination.".format(str(fromPath))) from FileNotFoundError(str(fromPath))
+			
+			toDirectoryPath = toPath.parent
+			if not toDirectoryPath.exists():
+				toDirectoryPath.mkdir(parents=True)
+		
+			self.printVerbose("  pre-copying '{0}'.".format(fromPath))
+			shutil.copy(str(fromPath), str(toPath))
 		
 		# setup all needed paths to execute coreGen
 		coreGenExecutablePath =		self.host.directories["ISEBinary"] / self.__executables['CoreGen']
@@ -270,11 +304,13 @@ class Compiler(PoCCompiler):
 			
 			self.printVerbose("  replace in file '{0}': search for '{1}' -> replace by '{2}'.".format(str(fromPath), search, replace))
 			
-			regExpFlags	 = re.DOTALL
+			regExpFlags	 = 0
 			if ('i' in options):
 				regExpFlags |= re.IGNORECASE
 			if ('m' in options):
 				regExpFlags |= re.MULTILINE
+			if ('d' in options):
+				regExpFlags |= re.DOTALL
 			
 			regExp = re.compile(search, regExpFlags)
 			

@@ -14,7 +14,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,17 +30,24 @@
 -- limitations under the License.
 -- ============================================================================
 
-entity fifo_cc_got_tempgot_tb is
-end entity;
-
 library	IEEE;
 use			IEEE.std_logic_1164.all;
 
 library	PoC;
 use			PoC.utils.all;
+use			PoC.physical.all;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
+
+
+entity fifo_cc_got_tempgot_tb is
+end entity;
 
 
 architecture tb of fifo_cc_got_tempgot_tb is
+	constant CLOCK_FREQ			: FREQ					:= 100 MHz;
 
   -- component generics
   constant D_BITS         : positive := 8;
@@ -57,17 +64,20 @@ architecture tb of fifo_cc_got_tempgot_tb is
   
   -- Clock Control
   signal rst  : std_logic;
-  signal clk  : std_logic                := '0';
-  signal done : std_logic_vector(0 to 7) := (others => '0');
+  signal clk  : std_logic;
   
 begin
-
-  clk <= not clk after 5 ns when done /= (done'range => '1') else '0';
+	-- initialize global simulation status
+	simInitialize(MaxSimulationRuntime => 1 us);
+	-- generate global testbench clock
+	simGenerateClock(clk, CLOCK_FREQ);
 
   genTests: for c in 0 to 7 generate
 		constant DATA_REG   : boolean :=  c mod 2 > 0;
 		constant STATE_REG  : boolean :=  c mod 4 > 1;
 		constant OUTPUT_REG : boolean :=  c mod 8 > 3;
+		
+		constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
 
     signal put  : std_logic;
     signal putx : std_logic;
@@ -99,11 +109,11 @@ begin
         mask => di
       );
 
-    process
+		-- Writer
+    procWriter : process
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Writer for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
     begin
-      rst <= '1';
       wait until rising_edge(clk);
-      rst <= '0';
 
       for i in ISPEC'range loop
         put      <= '0';
@@ -141,7 +151,10 @@ begin
       end loop;
       put    <= '0';
       commit <= '0';
-      wait;
+		
+			-- This process is finished
+			simDeactivateProcess(simProcessID);
+			wait;  -- forever
     end process;
 
     DUT : entity PoC.fifo_cc_got_tempgot
@@ -171,7 +184,9 @@ begin
         fstate_rd => open
       );
 
-    process
+		-- Reader
+		procReader : process
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Reader for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
     begin
       for i in OSPEC'range loop
         case OSPEC(i) is
@@ -182,21 +197,21 @@ begin
           when 'g' =>
             got <= '1';
             wait until rising_edge(clk) and vld = '1';
-            assert do = dox report "Test #"&integer'image(c)&": Output Mismatch." severity error;
+						simAssertion((do = dox), "Test #" & INTEGER'image(c) & ": Output Mismatch.");
 
           when 'G' =>
             got <= '1';
             wait until rising_edge(clk) and vld = '1';
-            assert do /= dox report "Output Mismatch." severity error;
+						simAssertion((do /= dox), "Output Mismatch.");
 
           when others =>
             report "Illegal ISPEC." severity failure;
         end case;
       end loop;
 
-      done(c) <= '1';
-      report "Test #"&integer'image(c)&" completed." severity note;
-      wait;
+			-- This process is finished
+			simDeactivateProcess(simProcessID);
+			wait;  -- forever
     end process;
 
     gotx <= got and vld;
@@ -214,4 +229,4 @@ begin
       );
 
   end generate;
-end tb;
+end architecture;

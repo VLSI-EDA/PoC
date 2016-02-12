@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Mon Jan 04 01:41:31 2016
+[*] Mon Feb 08 01:01:09 2016
 [*]
 [dumpfile] "H:\Austausch\PoC\temp\ghdl\gearbox_up_cc_tb.ghw"
-[dumpfile_mtime] "Mon Jan 04 01:37:10 2016"
-[dumpfile_size] 255030
+[dumpfile_mtime] "Mon Feb 08 00:54:13 2016"
+[dumpfile_size] 255233
 [savefile] "H:\Austausch\PoC\sim\misc\gearbox\gearbox_up_cc_tb.gtkw"
-[timestart] 28900000
+[timestart] 0
 [size] 1676 996
 [pos] -1 -1
-*-26.126020 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-27.962523 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.gearbox_up_cc_tb.
 [treeopen] top.gearbox_up_cc_tb.[0].
@@ -26,7 +26,7 @@
 @28
 top.gearbox_up_cc_tb.clock
 @800200
--Example 1
+-Example 0 (8->32)
 @200
 -Inputs
 @28
@@ -45,9 +45,9 @@ top.gearbox_up_cc_tb[0].validout
 top.gearbox_up_cc_tb[0].firstout
 top.gearbox_up_cc_tb[0].lastout
 @1000200
--Example 1
+-Example 0 (8->32)
 @800200
--Example 2
+-Example 1 (8->20)
 @200
 -Inputs
 @28
@@ -74,9 +74,9 @@ top.gearbox_up_cc_tb[1].firstout
 [color] 3
 top.gearbox_up_cc_tb[1].lastout
 @1000200
--Example 2
+-Example 1 (8->20)
 @800200
--Example 3
+-Example 2 (8->36)
 @200
 -Inputs
 @28
@@ -103,9 +103,9 @@ top.gearbox_up_cc_tb[2].firstout
 [color] 2
 top.gearbox_up_cc_tb[2].lastout
 @1000200
--Example 3
+-Example 2 (8->36)
 @800200
--Example 4
+-Example 3 (64->66)
 @200
 -Inputs
 @28
@@ -131,9 +131,9 @@ top.gearbox_up_cc_tb[3].lastout
 [color] 1
 #{top.gearbox_up_cc_tb[3].dataout[65:0]} top.gearbox_up_cc_tb[3].dataout[65] top.gearbox_up_cc_tb[3].dataout[64] top.gearbox_up_cc_tb[3].dataout[63] top.gearbox_up_cc_tb[3].dataout[62] top.gearbox_up_cc_tb[3].dataout[61] top.gearbox_up_cc_tb[3].dataout[60] top.gearbox_up_cc_tb[3].dataout[59] top.gearbox_up_cc_tb[3].dataout[58] top.gearbox_up_cc_tb[3].dataout[57] top.gearbox_up_cc_tb[3].dataout[56] top.gearbox_up_cc_tb[3].dataout[55] top.gearbox_up_cc_tb[3].dataout[54] top.gearbox_up_cc_tb[3].dataout[53] top.gearbox_up_cc_tb[3].dataout[52] top.gearbox_up_cc_tb[3].dataout[51] top.gearbox_up_cc_tb[3].dataout[50] top.gearbox_up_cc_tb[3].dataout[49] top.gearbox_up_cc_tb[3].dataout[48] top.gearbox_up_cc_tb[3].dataout[47] top.gearbox_up_cc_tb[3].dataout[46] top.gearbox_up_cc_tb[3].dataout[45] top.gearbox_up_cc_tb[3].dataout[44] top.gearbox_up_cc_tb[3].dataout[43] top.gearbox_up_cc_tb[3].dataout[42] top.gearbox_up_cc_tb[3].dataout[41] top.gearbox_up_cc_tb[3].dataout[40] top.gearbox_up_cc_tb[3].dataout[39] top.gearbox_up_cc_tb[3].dataout[38] top.gearbox_up_cc_tb[3].dataout[37] top.gearbox_up_cc_tb[3].dataout[36] top.gearbox_up_cc_tb[3].dataout[35] top.gearbox_up_cc_tb[3].dataout[34] top.gearbox_up_cc_tb[3].dataout[33] top.gearbox_up_cc_tb[3].dataout[32] top.gearbox_up_cc_tb[3].dataout[31] top.gearbox_up_cc_tb[3].dataout[30] top.gearbox_up_cc_tb[3].dataout[29] top.gearbox_up_cc_tb[3].dataout[28] top.gearbox_up_cc_tb[3].dataout[27] top.gearbox_up_cc_tb[3].dataout[26] top.gearbox_up_cc_tb[3].dataout[25] top.gearbox_up_cc_tb[3].dataout[24] top.gearbox_up_cc_tb[3].dataout[23] top.gearbox_up_cc_tb[3].dataout[22] top.gearbox_up_cc_tb[3].dataout[21] top.gearbox_up_cc_tb[3].dataout[20] top.gearbox_up_cc_tb[3].dataout[19] top.gearbox_up_cc_tb[3].dataout[18] top.gearbox_up_cc_tb[3].dataout[17] top.gearbox_up_cc_tb[3].dataout[16] top.gearbox_up_cc_tb[3].dataout[15] top.gearbox_up_cc_tb[3].dataout[14] top.gearbox_up_cc_tb[3].dataout[13] top.gearbox_up_cc_tb[3].dataout[12] top.gearbox_up_cc_tb[3].dataout[11] top.gearbox_up_cc_tb[3].dataout[10] top.gearbox_up_cc_tb[3].dataout[9] top.gearbox_up_cc_tb[3].dataout[8] top.gearbox_up_cc_tb[3].dataout[7] top.gearbox_up_cc_tb[3].dataout[6] top.gearbox_up_cc_tb[3].dataout[5] top.gearbox_up_cc_tb[3].dataout[4] top.gearbox_up_cc_tb[3].dataout[3] top.gearbox_up_cc_tb[3].dataout[2] top.gearbox_up_cc_tb[3].dataout[1] top.gearbox_up_cc_tb[3].dataout[0]
 @1000200
--Example 4
+-Example 3 (64->66)
 @800200
--Example 5
+-Example 4 (12->128)
 @200
 -Inputs
 @28
@@ -183,6 +183,6 @@ top.gearbox_up_cc_tb[4].gear.stageselect_en
 [color] 6
 top.gearbox_up_cc_tb[4].gear.stageselect_ov
 @1000200
--Example 5
+-Example 4 (12->128)
 [pattern_trace] 1
 [pattern_trace] 0

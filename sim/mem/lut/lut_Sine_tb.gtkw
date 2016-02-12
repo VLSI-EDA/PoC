@@ -1,41 +1,45 @@
 [*]
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Mon Jun 08 11:48:28 2015
+[*] Mon Feb 08 22:21:35 2016
 [*]
-[dumpfile] "D:\git\SATAController\lib\PoC\temp\ghdl\lut_Sine_tb.vcd"
-[dumpfile_mtime] "Mon Jun 08 11:45:39 2015"
-[dumpfile_size] 353327
-[savefile] "D:\git\SATAController\lib\PoC\sim\mem\lut\lut_Sine_tb.gtkw"
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\lut_Sine_tb.ghw"
+[dumpfile_mtime] "Mon Feb 08 22:17:35 2016"
+[dumpfile_size] 77559
+[savefile] "H:\Austausch\PoC\sim\mem\lut\lut_Sine_tb.gtkw"
 [timestart] 0
-[size] 1920 996
+[size] 1676 996
 [pos] -1 -1
-*-32.340569 23100000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-30.598400 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.lut_sine_tb.
 [sst_width] 197
 [signals_width] 150
 [sst_expanded] 1
 [sst_vpaned_height] 292
+@28
+top.lut_sine_tb.clock
 @22
-lut_in[7:0]
-@8022
-lut_q1_out[7:0]
-@20000
--
--
--
-@8022
-lut_q2_out[7:0]
-@20000
--
--
--
+#{top.lut_sine_tb.lut_in[7:0]} top.lut_sine_tb.lut_in[7] top.lut_sine_tb.lut_in[6] top.lut_sine_tb.lut_in[5] top.lut_sine_tb.lut_in[4] top.lut_sine_tb.lut_in[3] top.lut_sine_tb.lut_in[2] top.lut_sine_tb.lut_in[1] top.lut_sine_tb.lut_in[0]
 @8420
-lut_q3_out[7:0]
+#{top.lut_sine_tb.lut_q1_out[7:0]} top.lut_sine_tb.lut_q1_out[7] top.lut_sine_tb.lut_q1_out[6] top.lut_sine_tb.lut_q1_out[5] top.lut_sine_tb.lut_q1_out[4] top.lut_sine_tb.lut_q1_out[3] top.lut_sine_tb.lut_q1_out[2] top.lut_sine_tb.lut_q1_out[1] top.lut_sine_tb.lut_q1_out[0]
 @20000
 -
 -
 -
-@8420
-lut_q4_out[7:0]
+@10023
+#{top.lut_sine_tb.lut_q2_out[7:0]} top.lut_sine_tb.lut_q2_out[7] top.lut_sine_tb.lut_q2_out[6] top.lut_sine_tb.lut_q2_out[5] top.lut_sine_tb.lut_q2_out[4] top.lut_sine_tb.lut_q2_out[3] top.lut_sine_tb.lut_q2_out[2] top.lut_sine_tb.lut_q2_out[1] top.lut_sine_tb.lut_q2_out[0]
+@20000
+-
+-
+-
+@10420
+#{top.lut_sine_tb.lut_q3_out[7:0]} top.lut_sine_tb.lut_q3_out[7] top.lut_sine_tb.lut_q3_out[6] top.lut_sine_tb.lut_q3_out[5] top.lut_sine_tb.lut_q3_out[4] top.lut_sine_tb.lut_q3_out[3] top.lut_sine_tb.lut_q3_out[2] top.lut_sine_tb.lut_q3_out[1] top.lut_sine_tb.lut_q3_out[0]
+@20000
+-
+-
+-
+@10420
+#{top.lut_sine_tb.lut_q4_out[7:0]} top.lut_sine_tb.lut_q4_out[7] top.lut_sine_tb.lut_q4_out[6] top.lut_sine_tb.lut_q4_out[5] top.lut_sine_tb.lut_q4_out[4] top.lut_sine_tb.lut_q4_out[3] top.lut_sine_tb.lut_q4_out[2] top.lut_sine_tb.lut_q4_out[1] top.lut_sine_tb.lut_q4_out[0]
 @20000
 -
 -
