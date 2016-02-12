@@ -4,10 +4,10 @@ use IEEE.numeric_std.all;
 
 library PoC;
 
-entity dstructs_stack_tb is
+entity dstruct_stack_tb is
 end entity;
 
-architecture tb of dstructs_stack_tb is
+architecture tb of dstruct_stack_tb is
 
   -- component generics
   constant MIN_DEPTH      : positive := 128;
@@ -39,7 +39,7 @@ begin
   clk <= not clk after clk_period/2 when done /= '1' else '0';
 
   -- component initialisation
-  DUT : entity PoC.dstructs_stack
+  DUT : entity PoC.dstruct_stack
   generic map (
     D_BITS => D_BITS,
     MIN_DEPTH => MIN_DEPTH

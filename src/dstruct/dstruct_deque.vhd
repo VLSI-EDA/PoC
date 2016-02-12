@@ -7,7 +7,7 @@ use PoC.config.all;
 use PoC.utils.all;
 use PoC.ocram.all;
 
-entity dstructs_deque is
+entity dstruct_deque is
     generic(
     D_BITS  : positive := 8; -- Data Width
     MIN_DEPTH : positive := 16 -- Minimum Deque Depth
@@ -32,9 +32,9 @@ entity dstructs_deque is
     validB : out std_logic;
     fullB : out std_logic
     );
-end dstructs_deque;
+end dstruct_deque;
 
-architecture rtl of dstructs_deque is
+architecture rtl of dstruct_deque is
     -- Constants
     constant A_BITS : natural := log2ceil(MIN_DEPTH);--INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
 

@@ -7,7 +7,7 @@ use PoC.config.all;
 use PoC.utils.all;
 use PoC.ocram.all;
 
-entity dstructs_stack is
+entity dstruct_stack is
     generic(
     D_BITS  : positive := 8; -- Data Width
     MIN_DEPTH : positive := 16 -- Minimum Stack Depth
@@ -27,9 +27,9 @@ entity dstructs_stack is
     valid : out std_logic
 
     );
-end dstructs_stack;
+end dstruct_stack;
 
-architecture rtl of dstructs_stack is
+architecture rtl of dstruct_stack is
 
     -- Constants
     constant A_BITS : natural := log2ceil(MIN_DEPTH); --INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
