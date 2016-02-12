@@ -1,5 +1,68 @@
+-- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
+-- vim: tabstop=2:shiftwidth=2:noexpandtab
+-- kate: tab-width 2; replace-tabs off; indent-width 2;
+-- ============================================================================
+-- Entity:      dstruct_deque
+--
+-- Authors:     Jens Voss <jens.voss@mailbox.tu-dresden.de>
+--
+-- Description:
+-- ------------
+--   Implements a deque, i.e. a double-ended queue. This datastructures
+--   allows two acting entities to queue data elements for the consumption
+--   by the other while still being able to unqueue untaken ones in
+--   LIFO fashion.
+--
+-- License:
+-- ============================================================================
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
+--                     Chair for VLSI-Design, Diagnostics and Architecture
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--              http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+-- ============================================================================
+
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.all;
+
+entity dstruct_deque is
+  generic (
+    D_BITS    : positive;               -- Data Width
+    MIN_DEPTH : positive                -- Minimum Deque Depth
+  );
+  port (
+    -- Shared Ports
+    clk, rst : in std_logic;
+
+    -- Port A
+    dinA   : in  std_logic_vector(D_BITS-1 downto 0);  -- DataA Input
+    putA   : in  std_logic;
+    gotA   : in  std_logic;
+    doutA  : out std_logic_vector(D_BITS-1 downto 0);  -- DataA Output
+    validA : out std_logic;
+    fullA  : out std_logic;
+
+    -- Port B
+    dinB   : in  std_logic_vector(D_BITS-1 downto 0);  -- DataB Input
+    putB   : in  std_logic;
+    gotB   : in  std_logic;
+    doutB  : out std_logic_vector(D_BITS-1 downto 0);
+    validB : out std_logic;
+    fullB  : out std_logic
+  );
+end dstruct_deque;
+
+
+library IEEE;
 use IEEE.numeric_std.all;
 
 library PoC;
@@ -7,34 +70,7 @@ use PoC.config.all;
 use PoC.utils.all;
 use PoC.ocram.all;
 
-entity dstructs_deque is
-    generic(
-    D_BITS  : positive := 8; -- Data Width
-    MIN_DEPTH : positive := 16 -- Minimum Deque Depth
-    );
-    port(
-    -- Shared Ports
-    clk, rst : in std_logic;
-
-    -- Port A
-    dinA : in std_logic_vector(D_BITS-1 downto 0); -- DataA Input
-    putA : in std_logic;
-    gotA : in std_logic;
-    doutA : out std_logic_vector(D_BITS-1 downto 0); -- DataA Output
-    validA : out std_logic;
-    fullA : out std_logic;
-
-    -- Port B
-    dinB : in std_logic_vector(D_BITS-1 downto 0); -- DataB Input
-    putB: in std_logic;
-    gotB : in std_logic;
-    doutB : out std_logic_vector(D_BITS-1 downto 0);
-    validB : out std_logic;
-    fullB : out std_logic
-    );
-end dstructs_deque;
-
-architecture rtl of dstructs_deque is
+architecture rtl of dstruct_deque is
     -- Constants
     constant A_BITS : natural := log2ceil(MIN_DEPTH);--INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
 
@@ -77,7 +113,7 @@ architecture rtl of dstructs_deque is
 
 begin
 
-    ram : entity poc.ocram_tdp
+    ram : ocram_tdp
 	generic map(
 		A_BITS => A_BITS,
 		D_BITS => D_BITS,

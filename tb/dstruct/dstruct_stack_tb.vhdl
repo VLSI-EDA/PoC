@@ -1,13 +1,45 @@
+-- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
+-- vim: tabstop=2:shiftwidth=2:noexpandtab
+-- kate: tab-width 2; replace-tabs off; indent-width 2;
+-- ============================================================================
+-- Entity:      dstruct_stack_tb
+--
+-- Authors:     Jens Voss <jens.voss@mailbox.tu-dresden.de>
+--
+-- Description:
+-- ------------
+--   Testbench for dstruct_stack.
+--
+-- License:
+-- ============================================================================
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
+--                     Chair for VLSI-Design, Diagnostics and Architecture
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--              http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+-- ============================================================================
+
+entity dstruct_stack_tb is
+end entity;
+
+
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 library PoC;
+use PoC.dstruct.all;
 
-entity dstructs_stack_tb is
-end entity;
-
-architecture tb of dstructs_stack_tb is
+architecture tb of dstruct_stack_tb is
 
   -- component generics
   constant MIN_DEPTH      : positive := 128;
@@ -39,7 +71,7 @@ begin
   clk <= not clk after clk_period/2 when done /= '1' else '0';
 
   -- component initialisation
-  DUT : entity PoC.dstructs_stack
+  DUT : dstruct_stack
   generic map (
     D_BITS => D_BITS,
     MIN_DEPTH => MIN_DEPTH
