@@ -122,7 +122,7 @@ begin
 			simAssertion(valid = '1', "valid != 1!");
 			din <= std_logic_vector(unsigned(din)+1);
 		end loop;
-		high := to_integer(unsigned(din))-1;
+		high := to_integer(unsigned(din));
 
 		-- One more, which should not be accepted!
 		din <= (others => 'X');
