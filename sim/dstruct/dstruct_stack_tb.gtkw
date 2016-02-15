@@ -1,61 +1,43 @@
 [*]
-[*] GTKWave Analyzer v3.3.68 (w)1999-2016 BSI
-[*] Thu Feb 11 13:35:37 2016
+[*] GTKWave Analyzer v3.3.62 (w)1999-2014 BSI
 [*]
-[dumpfile] "/Users/jens/Uni/studienarbeit/vivado_project/Datastructures/dstructs_stack_tb.vcd"
-[dumpfile_mtime] "Thu Feb 11 13:26:50 2016"
-[dumpfile_size] 66204
-[savefile] "/Users/jens/Uni/studienarbeit/vivado_project/Datastructures/dstructs_stack_tb.gtkw"
 [timestart] 0
 [size] 1680 1050
-[pos] -1 -24
+[pos] -1 -1
 *-29.910084 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-[treeopen] dut.
-[sst_width] 193
+[treeopen] top.
+[treeopen] top.dstruct_stack_tb.
+[treeopen] top.dstruct_stack_tb.dut.
+[sst_width] 222
 [signals_width] 194
 [sst_expanded] 1
 [sst_vpaned_height] 326
+@28
+top.dstruct_stack_tb.clk
+top.dstruct_stack_tb.rst
 @200
 -Stack
+@29
+top.dstruct_stack_tb.dut.current_state
 @22
-dut.adr[6:0]
+#{top.dstruct_stack_tb.din[15:0]} top.dstruct_stack_tb.din[15] top.dstruct_stack_tb.din[14] top.dstruct_stack_tb.din[13] top.dstruct_stack_tb.din[12] top.dstruct_stack_tb.din[11] top.dstruct_stack_tb.din[10] top.dstruct_stack_tb.din[9] top.dstruct_stack_tb.din[8] top.dstruct_stack_tb.din[7] top.dstruct_stack_tb.din[6] top.dstruct_stack_tb.din[5] top.dstruct_stack_tb.din[4] top.dstruct_stack_tb.din[3] top.dstruct_stack_tb.din[2] top.dstruct_stack_tb.din[1] top.dstruct_stack_tb.din[0]
 @28
-dut.clk
+top.dstruct_stack_tb.full
+top.dstruct_stack_tb.put
 @22
-dut.din[15:0]
-dut.dout[15:0]
+#{top.dstruct_stack_tb.dout[15:0]} top.dstruct_stack_tb.dout[15] top.dstruct_stack_tb.dout[14] top.dstruct_stack_tb.dout[13] top.dstruct_stack_tb.dout[12] top.dstruct_stack_tb.dout[11] top.dstruct_stack_tb.dout[10] top.dstruct_stack_tb.dout[9] top.dstruct_stack_tb.dout[8] top.dstruct_stack_tb.dout[7] top.dstruct_stack_tb.dout[6] top.dstruct_stack_tb.dout[5] top.dstruct_stack_tb.dout[4] top.dstruct_stack_tb.dout[3] top.dstruct_stack_tb.dout[2] top.dstruct_stack_tb.dout[1] top.dstruct_stack_tb.dout[0]
 @28
-dut.full
-dut.got
-@22
-dut.last_value[15:0]
-@28
-dut.put
-dut.re
-dut.reg_re
-dut.reg_we
-dut.rst
-@22
-dut.s_adr[6:0]
-dut.s_dout[15:0]
-@28
-dut.s_valid
-@22
-dut.stackpointer[6:0]
-@28
-dut.valid
-dut.we
+top.dstruct_stack_tb.valid
+top.dstruct_stack_tb.got
 @200
 -RAM
-@22
-dut.ram.a[6:0]
 @28
-dut.ram.ce
-dut.ram.clk
+#{top.dstruct_stack_tb.dut.s_adr[2:0]} top.dstruct_stack_tb.dut.s_adr[2] top.dstruct_stack_tb.dut.s_adr[1] top.dstruct_stack_tb.dut.s_adr[0]
 @22
-dut.ram.d[15:0]
-dut.ram.q[15:0]
+#{top.dstruct_stack_tb.dut.s_dout[15:0]} top.dstruct_stack_tb.dut.s_dout[15] top.dstruct_stack_tb.dut.s_dout[14] top.dstruct_stack_tb.dut.s_dout[13] top.dstruct_stack_tb.dut.s_dout[12] top.dstruct_stack_tb.dut.s_dout[11] top.dstruct_stack_tb.dut.s_dout[10] top.dstruct_stack_tb.dut.s_dout[9] top.dstruct_stack_tb.dut.s_dout[8] top.dstruct_stack_tb.dut.s_dout[7] top.dstruct_stack_tb.dut.s_dout[6] top.dstruct_stack_tb.dut.s_dout[5] top.dstruct_stack_tb.dut.s_dout[4] top.dstruct_stack_tb.dut.s_dout[3] top.dstruct_stack_tb.dut.s_dout[2] top.dstruct_stack_tb.dut.s_dout[1] top.dstruct_stack_tb.dut.s_dout[0]
 @28
-dut.ram.we
+top.dstruct_stack_tb.dut.ram.we
+@22
+#{top.dstruct_stack_tb.dut.s_din[15:0]} top.dstruct_stack_tb.dut.s_din[15] top.dstruct_stack_tb.dut.s_din[14] top.dstruct_stack_tb.dut.s_din[13] top.dstruct_stack_tb.dut.s_din[12] top.dstruct_stack_tb.dut.s_din[11] top.dstruct_stack_tb.dut.s_din[10] top.dstruct_stack_tb.dut.s_din[9] top.dstruct_stack_tb.dut.s_din[8] top.dstruct_stack_tb.dut.s_din[7] top.dstruct_stack_tb.dut.s_din[6] top.dstruct_stack_tb.dut.s_din[5] top.dstruct_stack_tb.dut.s_din[4] top.dstruct_stack_tb.dut.s_din[3] top.dstruct_stack_tb.dut.s_din[2] top.dstruct_stack_tb.dut.s_din[1] top.dstruct_stack_tb.dut.s_din[0]
 [pattern_trace] 1
 [pattern_trace] 0
