@@ -266,10 +266,11 @@ process begin
   wait for clk_period;
   assert doutB = std_logic_vector(to_unsigned(7, D_BITS)) report "doutB !=x07" severity error;
   assert fullA = '0' report "fullA != 0!" severity error;
-  assert validA = '1' report "validA != 1!" severity error;
+  assert validA = '0' report "validA != 1!" severity error;
   assert fullB = '0' report "fullB != 0!" severity error;
   assert validB = '0' report "validB != 0!" severity error;
   wait for clk_period;
+  assert validA = '1' report "validA != 1!" severity error;
   gotA <= '1';
   gotB <= '1';
   wait for clk_period;
@@ -625,10 +626,12 @@ process begin
   assert fullB = '0' report "fullB != 0!" severity error;
   wait for clk_period;
   assert fullA = '0' report "fullA != 0!" severity error;
-  assert validA = '1' report "validA != 1!" severity error;
+  assert validA = '0' report "validA != 1!" severity error;
   assert validB = '0' report "validB != 0!" severity error;
   assert fullB = '0' report "fullB != 0!" severity error;
   assert doutB = std_logic_vector(to_unsigned(MIN_DEPTH-2, D_BITS)) report "doutB != MIN_DEPTH-2" severity error;
+  wait for clk_period;
+  assert validA = '1' report "validA != 1!" severity error;
 
   report "test: 2. writeB and gotB";
   putB <= '1';
@@ -858,11 +861,13 @@ process begin
   assert fullB = '0' report "fullB != 0!" severity error;
   wait for clk_period;
   assert fullA = '0' report "fullA != 0!" severity error;
-  assert validA = '1' report "validA != 1!" severity error;
+  assert validA = '0' report "validA != 1!" severity error;
   assert validB = '0' report "validB != 0!" severity error;
   assert fullB = '0' report "fullB != 0!" severity error;
   assert doutB = std_logic_vector(to_unsigned(MIN_DEPTH-2, D_BITS)) report "doutB != MIN_DEPTH-2" severity error;
   assert doutA = std_logic_vector(to_unsigned(MIN_DEPTH-2, D_BITS)) report "doutA != MIN_DEPTH-2" severity error;
+  wait for clk_period;
+  assert validA = '1' report "validA != 1!" severity error;
 
   report "test: 2. writeB and gotA";
   putB <= '1';
@@ -880,11 +885,13 @@ process begin
   assert fullB = '0' report "fullB != 0!" severity error;
   wait for clk_period;
   assert fullA = '0' report "fullA != 0!" severity error;
-  assert validA = '1' report "validA != 1!" severity error;
+  assert validA = '0' report "validA != 1!" severity error;
   assert validB = '0' report "validB != 0!" severity error;
   assert fullB = '0' report "fullB != 0!" severity error;
   assert doutB = std_logic_vector(to_unsigned(152, D_BITS)) report "doutB != 0x98" severity error;
   assert doutA = std_logic_vector(to_unsigned(152, D_BITS)) report "doutA != 0x98" severity error;
+  wait for clk_period;
+  assert validA = '1' report "validA != 1!" severity error;
 
   report "test: 2. writeB and gotA, pop last element";
   wait for clk_period;
@@ -1065,7 +1072,7 @@ process begin
   if (MIN_DEPTH > 4) then
     assert doutA = std_logic_vector(to_unsigned(MIN_DEPTH-6, D_BITS)) report "doutA != MIN_DEPTH-6" severity error;
   else
-    assert doutA = std_logic_vector(to_unsigned(1, D_BITS)); report "doutA != 0x01" severity error;
+    assert doutA = std_logic_vector(to_unsigned(1, D_BITS)) report "doutA != 0x01" severity error;
   end if;
 
   -- reset deque
@@ -1336,11 +1343,13 @@ process begin
   assert fullB = '0' report "fullB != 0!" severity error;
   wait for clk_period;
   assert fullA = '0' report "fullA != 0!" severity error;
-  assert validA = '1' report "validA != 1!" severity error;
+  assert validA = '0' report "validA != 1!" severity error;
   assert validB = '0' report "validB != 0!" severity error;
   assert fullB = '0' report "fullB != 0!" severity error;
   assert doutB = std_logic_vector(to_unsigned(MIN_DEPTH-2, D_BITS)) report "doutB != MIN_DEPTH-2" severity error;
   assert doutA = std_logic_vector(to_unsigned(MIN_DEPTH-2, D_BITS)) report "doutA != MIN_DEPTH-2" severity error;
+  wait for clk_period;
+  assert validA = '1' report "validA != 1!" severity error;
 
   report "test: 2. writeB and gotB and gotA";
   putB <= '1';
@@ -1360,11 +1369,13 @@ process begin
   assert fullB = '0' report "fullB != 0!" severity error;
   wait for clk_period;
   assert fullA = '0' report "fullA != 0!" severity error;
-  assert validA = '1' report "validA != 1!" severity error;
+  assert validA = '0' report "validA != 1!" severity error;
   assert validB = '0' report "validB != 0!" severity error;
   assert fullB = '0' report "fullB != 0!" severity error;
   assert doutB = std_logic_vector(to_unsigned(152, D_BITS)) report "doutB != 0x98" severity error;
   assert doutA = std_logic_vector(to_unsigned(152, D_BITS)) report "doutA != 0x98" severity error;
+  wait for clk_period;
+  assert validA = '1' report "validA != 1!" severity error;
 
 
   report "test: 2. writeB and gotB and gotA, pop last element";
@@ -1810,7 +1821,7 @@ process begin
   if (MIN_DEPTH > 4) then
     assert doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)) report "doutB != MIN_DEPTH-5" severity error;
   else
-    assert doutB = std_logic_vector(to_unsigned(222, D_BITS)) report "doutB != 0x00" severity error;
+    assert doutB = std_logic_vector(to_unsigned(0, D_BITS)) report "doutB != 0x00" severity error;
   end if;
 
   -- reset deque
@@ -2498,7 +2509,7 @@ process begin
   if (MIN_DEPTH > 4) then
     assert doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)) report "doutB != MIN_DEPTH-5" severity error;
   else
-    assert doutB = std_logic_vector(to_unsigned(0, D_BITS)); report "doutB != 0x00" severity error;
+    assert doutB = std_logic_vector(to_unsigned(0, D_BITS)) report "doutB != 0x00" severity error;
   end if;
 
   -- reset deque

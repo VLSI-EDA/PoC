@@ -71,7 +71,7 @@ use PoC.utils.all;
 use PoC.ocram.all;
 
 architecture rtl of dstruct_deque is
-    -- Constants
+  -- Constants
     constant A_BITS : natural := log2ceil(MIN_DEPTH);--INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
 
     -- MEMORY variable
@@ -88,6 +88,8 @@ architecture rtl of dstruct_deque is
     type last_op_ctrl_t is (IDLE, SET, UNSET);
     signal last_op_ctrl : last_op_ctrl_t := IDLE;
 
+    signal delayed_valid : std_logic := '0';
+    signal delay : std_logic := '0';
     signal s_validA : std_logic := '0';
     signal s_validB : std_logic := '0';
 
@@ -113,26 +115,26 @@ architecture rtl of dstruct_deque is
 
 begin
 
-    ram : ocram_tdp
-	generic map(
-		A_BITS => A_BITS,
-		D_BITS => D_BITS,
-		FILENAME =>  ""
-	)
-	port map(
-		clk1 => clk,
-		clk2 => clk,
-		ce1	=> '1',
-		ce2	=> '1',
-		we1	=> weA,
-		we2	=> weB,
-		a1	=> adrA,
-		a2	=> adrB,
-		d1	=> dinA,
-		d2	=> dinB,
-		q1	=> doutA,
-		q2	=> doutB
-	);
+    ram : entity poc.ocram_tdp
+  generic map(
+    A_BITS => A_BITS,
+    D_BITS => D_BITS,
+    FILENAME =>  ""
+  )
+  port map(
+    clk1 => clk,
+    clk2 => clk,
+    ce1	=> '1',
+    ce2	=> '1',
+    we1	=> weA,
+    we2	=> weB,
+    a1	=> adrA,
+    a2	=> adrB,
+    d1	=> dinA,
+    d2	=> dinB,
+    q1	=> doutA,
+    q2	=> doutB
+  );
 
     sub <= stackpointerB - StackpointerA;
 
@@ -149,6 +151,7 @@ begin
         weA <= '0';
         weB <= '0';
         last_op_ctrl <= IDLE;
+        delay <= '0';
         case(combined) is
             when x"0" =>    --nothing
                 -- nothing happend/happens
@@ -190,6 +193,10 @@ begin
                         ctrlB <= IDLE;
                         weB <= '0';
                         adrB <= stackpointerB - 1;
+                    else
+                        --> deque is empty!
+                        --> delay validA signal for one clk cycle
+                        delay <= '1';
                     end if;
                 elsif (ctrl = "00") then
                     --> only one spot left
@@ -217,10 +224,12 @@ begin
                     else
                         --> deque is empty!
                         -- B couldn't read a valid value, but new value can be written!
+                        -- delay validA signal one clk cycle
                         ctrlB <= PUSH;
                         weB <= '1';
                         adrB <= stackpointerB;
                         last_op_ctrl <= SET;
+                        delay <= '1';
                     end if;
                 elsif (ctrl = "10") then
                     --> only one element left
@@ -300,10 +309,17 @@ begin
                     else
                         --> deque is empty!
                         -- A couldnt read a valid value, but B can push!
+                        -- delay validA signal one clk cycle
                         ctrlA <= IDLE;
                         adrA <= stackpointerA + 1;
                         last_op_ctrl <= SET;
+                        delay <= '1';
                     end if;
+                elsif (ctrl = "10") then
+                    --> only one element in deque
+                    --> A read valid value and B can write new value
+                    --> But validA has to be delayed!
+                    delay <= '1';
                 elsif (ctrl = "00") then
                     --> only one spot left
                     -- A read valid value, but B isnt allowed to write last value
@@ -333,12 +349,14 @@ begin
                     else
                         --> deque is empty!
                         -- A and B couldnt have read a valid value, but B can push!
+                        -- delay validA signal one clk cycle
                         adrA <= stackpointerA + 1;
                         ctrlA <= IDLE;
                         ctrlB <= PUSH;
                         weB <= '1';
                         adrB <= stackpointerB;
                         last_op_ctrl <= SET;
+                        delay <= '1';
                     end if;
                 elsif (ctrl = "00") then
                     --> only one spot left
@@ -351,10 +369,12 @@ begin
                 elsif (ctrl = "10") then
                     --> only one element in deque
                     -- only A read a valid value, but B can write a new value
+                    --> validA has to be delayed!
                     ctrlB <= PUSH;
                     weB <= '1';
                     adrB <= stackpointerB;
                     last_op_ctrl <= SET;
+                    delay <= '1';
                 end if;
             when x"8" =>   --writeA
                 -- A writes a new value
@@ -696,13 +716,33 @@ begin
         end if;
     end process;
 
+    -- delayed_valid register
+    process(clk)
+    begin
+        if (rising_edge(clk)) then
+            if(rst = '1') then
+                delayed_valid <= '0';
+            else
+                if (delay = '1') then
+                    delayed_valid <= '1';
+                else
+                    delayed_valid <= '0';
+                end if;
+            end if;
+        end if;
+    end process;
+
     -- sub of B and A
-    process(sub, last_operation)
+    process(sub, last_operation, delayed_valid)
     begin
         fullA <= '0';
         fullB <= '0';
-        validA <= '1';
         validB <= '1';
+        if(delayed_valid = '1') then
+            validA <= '0';
+        else
+            validA <= '1';
+        end if;
         case(to_integer(sub)) is
             when 0 =>
                 ctrl <= "00"; -- let a or b write?
