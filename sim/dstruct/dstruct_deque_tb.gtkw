@@ -1,75 +1,58 @@
 [*]
-[*] GTKWave Analyzer v3.3.68 (w)1999-2016 BSI
-[*] Thu Feb 11 13:38:02 2016
+[*] GTKWave Analyzer v3.3.62 (w)1999-2014 BSI
+[*] Tue Feb 16 19:54:18 2016
 [*]
-[dumpfile] "/Users/jens/Uni/studienarbeit/vivado_project/Datastructures/dstructs_deque_tb.vcd"
-[dumpfile_mtime] "Thu Feb 11 13:26:13 2016"
-[dumpfile_size] 567316
-[savefile] "/Users/jens/Uni/studienarbeit/vivado_project/Datastructures/dstructs_deque_tb.gtkw"
 [timestart] 0
 [size] 1680 1050
-[pos] -1 -24
+[pos] -1 -1
 *-32.757900 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-[treeopen] dut.
-[sst_width] 193
+[treeopen] top.
+[treeopen] top.dstruct_deque_tb.
+[treeopen] top.dstruct_deque_tb.dut.
+[treeopen] top.dstruct_deque_tb.dut.ram.
+[sst_width] 210
 [signals_width] 214
 [sst_expanded] 1
 [sst_vpaned_height] 326
+@28
+top.dstruct_deque_tb.clk
+top.dstruct_deque_tb.rst
 @200
 -Deque
 @22
-dut.adra[6:0]
-dut.adrb[6:0]
+#{top.dstruct_deque_tb.dina[15:0]} top.dstruct_deque_tb.dina[15] top.dstruct_deque_tb.dina[14] top.dstruct_deque_tb.dina[13] top.dstruct_deque_tb.dina[12] top.dstruct_deque_tb.dina[11] top.dstruct_deque_tb.dina[10] top.dstruct_deque_tb.dina[9] top.dstruct_deque_tb.dina[8] top.dstruct_deque_tb.dina[7] top.dstruct_deque_tb.dina[6] top.dstruct_deque_tb.dina[5] top.dstruct_deque_tb.dina[4] top.dstruct_deque_tb.dina[3] top.dstruct_deque_tb.dina[2] top.dstruct_deque_tb.dina[1] top.dstruct_deque_tb.dina[0]
 @28
-dut.clk
+top.dstruct_deque_tb.fulla
+top.dstruct_deque_tb.puta
 @22
-dut.combined[3:0]
+#{top.dstruct_deque_tb.douta[15:0]} top.dstruct_deque_tb.douta[15] top.dstruct_deque_tb.douta[14] top.dstruct_deque_tb.douta[13] top.dstruct_deque_tb.douta[12] top.dstruct_deque_tb.douta[11] top.dstruct_deque_tb.douta[10] top.dstruct_deque_tb.douta[9] top.dstruct_deque_tb.douta[8] top.dstruct_deque_tb.douta[7] top.dstruct_deque_tb.douta[6] top.dstruct_deque_tb.douta[5] top.dstruct_deque_tb.douta[4] top.dstruct_deque_tb.douta[3] top.dstruct_deque_tb.douta[2] top.dstruct_deque_tb.douta[1] top.dstruct_deque_tb.douta[0]
 @28
-dut.ctrl[1:0]
+top.dstruct_deque_tb.valida
+top.dstruct_deque_tb.gota
 @22
-dut.dina[15:0]
-dut.dinb[15:0]
-dut.douta[15:0]
-dut.doutb[15:0]
+#{top.dstruct_deque_tb.dinb[15:0]} top.dstruct_deque_tb.dinb[15] top.dstruct_deque_tb.dinb[14] top.dstruct_deque_tb.dinb[13] top.dstruct_deque_tb.dinb[12] top.dstruct_deque_tb.dinb[11] top.dstruct_deque_tb.dinb[10] top.dstruct_deque_tb.dinb[9] top.dstruct_deque_tb.dinb[8] top.dstruct_deque_tb.dinb[7] top.dstruct_deque_tb.dinb[6] top.dstruct_deque_tb.dinb[5] top.dstruct_deque_tb.dinb[4] top.dstruct_deque_tb.dinb[3] top.dstruct_deque_tb.dinb[2] top.dstruct_deque_tb.dinb[1] top.dstruct_deque_tb.dinb[0]
 @28
-dut.fulla
-dut.fullb
-dut.gota
-dut.gotb
-dut.last_operation
-dut.puta
-dut.putb
-dut.rea
-dut.reb
-dut.rst
-dut.s_valida
-dut.s_validb
+top.dstruct_deque_tb.fullb
+top.dstruct_deque_tb.putb
 @22
-dut.stackpointera[6:0]
-dut.stackpointerb[6:0]
-dut.sub[6:0]
+#{top.dstruct_deque_tb.doutb[15:0]} top.dstruct_deque_tb.doutb[15] top.dstruct_deque_tb.doutb[14] top.dstruct_deque_tb.doutb[13] top.dstruct_deque_tb.doutb[12] top.dstruct_deque_tb.doutb[11] top.dstruct_deque_tb.doutb[10] top.dstruct_deque_tb.doutb[9] top.dstruct_deque_tb.doutb[8] top.dstruct_deque_tb.doutb[7] top.dstruct_deque_tb.doutb[6] top.dstruct_deque_tb.doutb[5] top.dstruct_deque_tb.doutb[4] top.dstruct_deque_tb.doutb[3] top.dstruct_deque_tb.doutb[2] top.dstruct_deque_tb.doutb[1] top.dstruct_deque_tb.doutb[0]
 @28
-dut.valida
-dut.validb
-dut.wea
-dut.web
+top.dstruct_deque_tb.validb
+top.dstruct_deque_tb.gotb
 @200
 -RAM
-@22
-dut.ram.a1[6:0]
-dut.ram.a2[6:0]
 @28
-dut.ram.ce1
-dut.ram.ce2
-dut.ram.clk1
-dut.ram.clk2
+top.dstruct_deque_tb.dut.ram.we1
 @22
-dut.ram.d1[15:0]
-dut.ram.d2[15:0]
-dut.ram.q1[15:0]
-dut.ram.q2[15:0]
+#{top.dstruct_deque_tb.dut.ram.a1[6:0]} top.dstruct_deque_tb.dut.ram.a1[6] top.dstruct_deque_tb.dut.ram.a1[5] top.dstruct_deque_tb.dut.ram.a1[4] top.dstruct_deque_tb.dut.ram.a1[3] top.dstruct_deque_tb.dut.ram.a1[2] top.dstruct_deque_tb.dut.ram.a1[1] top.dstruct_deque_tb.dut.ram.a1[0]
+#{top.dstruct_deque_tb.dut.ram.d1[15:0]} top.dstruct_deque_tb.dut.ram.d1[15] top.dstruct_deque_tb.dut.ram.d1[14] top.dstruct_deque_tb.dut.ram.d1[13] top.dstruct_deque_tb.dut.ram.d1[12] top.dstruct_deque_tb.dut.ram.d1[11] top.dstruct_deque_tb.dut.ram.d1[10] top.dstruct_deque_tb.dut.ram.d1[9] top.dstruct_deque_tb.dut.ram.d1[8] top.dstruct_deque_tb.dut.ram.d1[7] top.dstruct_deque_tb.dut.ram.d1[6] top.dstruct_deque_tb.dut.ram.d1[5] top.dstruct_deque_tb.dut.ram.d1[4] top.dstruct_deque_tb.dut.ram.d1[3] top.dstruct_deque_tb.dut.ram.d1[2] top.dstruct_deque_tb.dut.ram.d1[1] top.dstruct_deque_tb.dut.ram.d1[0]
+#{top.dstruct_deque_tb.dut.ram.q1[15:0]} top.dstruct_deque_tb.dut.ram.q1[15] top.dstruct_deque_tb.dut.ram.q1[14] top.dstruct_deque_tb.dut.ram.q1[13] top.dstruct_deque_tb.dut.ram.q1[12] top.dstruct_deque_tb.dut.ram.q1[11] top.dstruct_deque_tb.dut.ram.q1[10] top.dstruct_deque_tb.dut.ram.q1[9] top.dstruct_deque_tb.dut.ram.q1[8] top.dstruct_deque_tb.dut.ram.q1[7] top.dstruct_deque_tb.dut.ram.q1[6] top.dstruct_deque_tb.dut.ram.q1[5] top.dstruct_deque_tb.dut.ram.q1[4] top.dstruct_deque_tb.dut.ram.q1[3] top.dstruct_deque_tb.dut.ram.q1[2] top.dstruct_deque_tb.dut.ram.q1[1] top.dstruct_deque_tb.dut.ram.q1[0]
 @28
-dut.ram.we1
-dut.ram.we2
+top.dstruct_deque_tb.dut.ram.we2
+@22
+#{top.dstruct_deque_tb.dut.ram.a2[6:0]} top.dstruct_deque_tb.dut.ram.a2[6] top.dstruct_deque_tb.dut.ram.a2[5] top.dstruct_deque_tb.dut.ram.a2[4] top.dstruct_deque_tb.dut.ram.a2[3] top.dstruct_deque_tb.dut.ram.a2[2] top.dstruct_deque_tb.dut.ram.a2[1] top.dstruct_deque_tb.dut.ram.a2[0]
+#{top.dstruct_deque_tb.dut.ram.d2[15:0]} top.dstruct_deque_tb.dut.ram.d2[15] top.dstruct_deque_tb.dut.ram.d2[14] top.dstruct_deque_tb.dut.ram.d2[13] top.dstruct_deque_tb.dut.ram.d2[12] top.dstruct_deque_tb.dut.ram.d2[11] top.dstruct_deque_tb.dut.ram.d2[10] top.dstruct_deque_tb.dut.ram.d2[9] top.dstruct_deque_tb.dut.ram.d2[8] top.dstruct_deque_tb.dut.ram.d2[7] top.dstruct_deque_tb.dut.ram.d2[6] top.dstruct_deque_tb.dut.ram.d2[5] top.dstruct_deque_tb.dut.ram.d2[4] top.dstruct_deque_tb.dut.ram.d2[3] top.dstruct_deque_tb.dut.ram.d2[2] top.dstruct_deque_tb.dut.ram.d2[1] top.dstruct_deque_tb.dut.ram.d2[0]
+@23
+#{top.dstruct_deque_tb.dut.ram.q2[15:0]} top.dstruct_deque_tb.dut.ram.q2[15] top.dstruct_deque_tb.dut.ram.q2[14] top.dstruct_deque_tb.dut.ram.q2[13] top.dstruct_deque_tb.dut.ram.q2[12] top.dstruct_deque_tb.dut.ram.q2[11] top.dstruct_deque_tb.dut.ram.q2[10] top.dstruct_deque_tb.dut.ram.q2[9] top.dstruct_deque_tb.dut.ram.q2[8] top.dstruct_deque_tb.dut.ram.q2[7] top.dstruct_deque_tb.dut.ram.q2[6] top.dstruct_deque_tb.dut.ram.q2[5] top.dstruct_deque_tb.dut.ram.q2[4] top.dstruct_deque_tb.dut.ram.q2[3] top.dstruct_deque_tb.dut.ram.q2[2] top.dstruct_deque_tb.dut.ram.q2[1] top.dstruct_deque_tb.dut.ram.q2[0]
 [pattern_trace] 1
 [pattern_trace] 0
