@@ -30,6 +30,7 @@
 -- =============================================================================
 
 library PoC;
+use			PoC.fileio.all;
 use			PoC.sim_protected.all;
 
 
@@ -37,4 +38,6 @@ package sim_global is
 	-- The default global status objects.
 	-- ===========================================================================
 	shared variable globalSimulationStatus		: T_SIM_STATUS;
+	shared variable	globalLogFile							: T_LOGFILE;
+	shared variable	globalStdOut							: T_STDOUT;
 end package;

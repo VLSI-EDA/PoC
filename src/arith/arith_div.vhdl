@@ -1,14 +1,26 @@
--- EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+-- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
--- ============================================================================================================================================================
--- Description:			Implementation of a Non-Performing restoring divider with a configurable radix.
---									For detailed documentation see below.
--- 
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
--- ============================================================================================================================================================
--- Copyright 2007-2014 Technische Universität Dresden - Germany, Chair for VLSI-Design, Diagnostics and Architecture
+-- 
+-- Module:					Multi-cycle Non-Performing Restoring Divider
+-- 
+-- Description:
+-- ------------------------------------
+--	Implementation of a Non-Performing restoring divider with a configurable radix.
+--	The multi-cycle division is controlled by 'start' / 'rdy'. A new division is
+--	started by asserting 'start'. The result Q = A/D is available when 'rdy'
+--  returns to '1'.
+--  The generic DETECT_DIVISION_BY_ZERO enables circuitry to detect a divisor
+--  of zero (0) right upon start. It is signalled by the corresponding output
+--  'Z' together with an immediate 'rdy' indication. If this generic flag is
+--  not enabled, the output 'Z' will never be asserted. The computation, in
+--  fact, also terminates but with undefined results.
+-- =============================================================================
+-- Copyright 2007-2016 Technische Universität Dresden - Germany,
+--										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -21,223 +33,170 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================================================================================================
+-- =============================================================================
 
-library	ieee;
-use			ieee.std_logic_1164.all;
-use			ieee.numeric_std.all;
-
-library	poc;
-USE			PoC.utils.ALL;
-
+library IEEE;
+use IEEE.std_logic_1164.all;
 
 entity arith_div is
-	generic (
-		N					: positive;-- := 32;				-- Operand /Result Bit Widths
-		RAPOW			: positive;-- := 1;				 -- Power of Radix used (2**RAPOW)
-		REGISTERED : boolean	-- := false			-- Output is registered
-	);
+  generic (
+    A_BITS             : positive;  		    -- Dividend Width
+    D_BITS             : positive;  		    -- Divisor Width
+    DETECT_DIV_BY_ZERO : boolean;  			    -- Detect Division by Zero
+    RAPOW              : positive := 1;     -- Power of Compute Radix (2**RAPOW)
+    PIPELINED          : boolean  := false  -- Computation Pipeline
+  );
+  port (
+    -- Global Reset/Clock
+    clk : in std_logic;
+    rst : in std_logic;
 
-	port (
-		-- Global Reset/Clock
-		clk : in std_logic;
-		rst : in std_logic;
+    -- Ready / Start
+    start : in  std_logic;
+    ready : out std_logic;
 
-		-- Ready / Start
-		start : in	std_logic;
-		rdy	 : out std_logic;
-
-		-- Arguments / Result (2's complement)
-		arg1, arg2 : in	std_logic_vector(N-1 downto 0);
-		res				: out std_logic_vector(N-1 downto 0)
-	);
+    -- Arguments / Result (2's complement)
+    A : in  std_logic_vector(A_BITS-1 downto 0);  -- Dividend
+    D : in  std_logic_vector(D_BITS-1 downto 0);  -- Divisor
+    Q : out std_logic_vector(A_BITS-1 downto 0);  -- Quotient
+    R : out std_logic_vector(D_BITS-1 downto 0);  -- Remainder
+    Z : out std_logic  -- Division by Zero
+  );
 end arith_div;
 
--------------------------------------------------------------------------------
--- Implementation of a Non-Performing Restoring Divider
---
--- Multi-Cycle division controlled by 'start' / 'rdy'. A new division can be
--- started, if 'rdy' = '1'. The result is available if 'rdy' is '1' again.
---
--- Note that the registered version is no slower than the unregistered one
--- as the conversion to a negative result is performed on-the-fly. It is,
--- however, somewhat more expensive as illustrated below.
---
--- Synthesis Costs of the differing feasible configurations:
---
---	 Baseline values of Radix-2 unregistered configuration per 2009-12-08.
---	 XST: Optimization Goal AREA
---
---				Radix	 2			 4			 8
---	 Registered
---
---		no				 134		 -2			-2			 Flip Flops
---							 244		+95		+189			 LUT4
---
---		yes				+30		+26		 +24			 Flip Flops
---								+1		+97		+189			 LUT4
---
--- 
--------------------------------------------------------------------------------
 
+library IEEE;
+use IEEE.numeric_std.all;
 
-architecture div_npr of arith_div is
+library PoC;
+use PoC.utils.all;
 
-	-- Constants
-	constant STEPS : positive := (N+RAPOW-1)/RAPOW;	-- Number of Iteration Steps
+architecture rtl of arith_div is
 
-	-- State
-	signal Exec : std_logic;							-- Operation is being executed
+  -- Constants
+  constant STEPS       : positive := (A_BITS+RAPOW-1)/RAPOW;   -- Number of Iteration Steps
+  constant DEPTH       : natural  := ite(PIPELINED, STEPS, 0); -- Physical Depth
+  constant TRUNK_BITS  : natural  := (STEPS-1)*RAPOW;
+  constant ACTIVE_BITS : positive := D_BITS + RAPOW;
 
-	-- Argument/Result Registers
-	signal A : unsigned(N								-1 downto 0);	-- Dividend
-	signal B : unsigned(N+RAPOW*(STEPS-1)-1 downto 0);	-- Divisor
-	signal S : std_logic;															 -- Quotient Sign
+  -- Private Types
+	subtype residue is unsigned(ACTIVE_BITS+TRUNK_BITS-1 downto 0);
+	subtype divisor is unsigned(D_BITS-1 downto 0);
+	type residue_vector is array(natural range<>) of residue;
+	type divisor_vector is array(natural range<>) of divisor;
 
-	signal An : unsigned(N		-1 downto 0);	-- Next Residue Value
-	signal dn : unsigned(RAPOW-1 downto 0);	-- Next Quotient Digit
+  function div_step(av : residue; dv : divisor) return residue is
+    variable res : residue;
+    variable win : unsigned(D_BITS-1 downto 0);
+    variable dif : unsigned(D_BITS downto 0);
+  begin
+    win := av(av'left downto TRUNK_BITS + RAPOW);
+    for i in RAPOW-1 downto 0 loop
+      dif := (win & av(TRUNK_BITS+i)) - dv;
+      if dif(dif'left) = '0' then
+        win := dif(D_BITS-1 downto 0);
+      else
+        win := win(D_BITS-2 downto 0) & av(TRUNK_BITS+i);
+      end if;
+      res(i) := not dif(dif'left);
+    end loop;
+    res(res'left downto RAPOW) := win & av(TRUNK_BITS-1 downto 0);
+    return res;
+  end function div_step;
 
-	-- Iteration Counter
-	signal Cnt		: unsigned(1 to log2ceil(STEPS));
-	signal CntDD	: unsigned(1 to log2ceil(STEPS));	-- Cnt - 1
-	signal CntEx0 : std_logic;											 -- Cnt = 0
+	-- Data Registers
+  signal AR : residue_vector(0 to DEPTH) := (others => (others => '-'));
+  signal DR : divisor_vector(0 to DEPTH) := (others => (others => '-'));
+  signal ZR : std_logic := '-';  -- Zero Detection only in last pipeline stage
 
-begin	-- div_npr
+	signal exec : std_logic;
 
-	-- Registers
-	process(clk)
-	begin
-		if clk'event and clk = '1' then
-			-- Reset
-			if rst = '1' then
-				Exec <= '0';
+begin
 
-			-- Iteration Step
-			elsif Exec = '1' then
-				Cnt <= CntDD;
-				A	 <= An;
-				B	 <= (1 to RAPOW => '0') & B(B'LEFT downto RAPOW);
-			
-				if CntEx0 = '1' then
-					Exec <= '0';
-				end if;
-				
+  -- Control
+  genPipeN : if not PIPELINED generate
+    constant EXEC_BITS : positive                     := log2ceil(STEPS)+1;
+    constant EXEC_IDLE : signed(EXEC_BITS-1 downto 0) := '0' & (1 to EXEC_BITS-1 => '-');
+    signal CntExec     : signed(EXEC_BITS-1 downto 0) := EXEC_IDLE;
+  begin
+    process(clk)
+    begin
+      if rising_edge(clk) then
+        if rst = '1' then
+          CntExec <= EXEC_IDLE;
+          ZR      <= '-';
+        elsif start = '1' then
+          if DETECT_DIV_BY_ZERO and D = (D'range => '0') then
+            CntExec <= EXEC_IDLE;
+            ZR      <= '1';
+          else
+            CntExec <= to_signed(-STEPS, CntExec'length);
+            ZR      <= '0';
+          end if;
+        elsif CntExec(CntExec'left) = '1' then
+          CntExec <= CntExec + 1;
+        end if;
+      end if;
+    end process;
+    exec  <= CntExec(CntExec'left);
+    ready <= not exec;
+  end generate genPipeN;
+
+  genPipeY : if PIPELINED generate
+    signal Vld : std_logic_vector(0 to STEPS) := (others => '0');
+  begin
+    process(clk)
+    begin
+      if rising_edge(clk) then
+        if rst = '1' then
+          Vld <= (others => '0');
+          ZR  <= '-';
+        else
+          Vld <= start & Vld(0 to STEPS-1);
+					if Is_X(std_logic_vector(DR(STEPS-1))) then
+						ZR <= 'X';
+					elsif DR(STEPS-1) = 0 then
+						ZR <= '1';
+					else
+						ZR <= '0';
+					end if;
+        end if;
+      end if;
+    end process;
+    ready <= Vld(STEPS);
+  end generate genPipeY;
+
+  -- Registers
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      -- Reset
+      if rst = '1' then
+        AR <= (others => (others => '-'));
+        DR <= (others => (others => '-'));
+
 			-- Operation Initialization
-			elsif start = '1' then
-				Exec <= '1';
+			else
 
-				if arg1(N-1) = '0' then
-					A <= unsigned(arg1);
-				else
-					A <= 0 - unsigned(arg1);
+				if PIPELINED then
+					for i in 0 to STEPS-1 loop
+						AR(i+1) <= div_step(AR(i), DR(i));
+						DR(i+1) <= DR(i);
+					end loop;
+				elsif exec = '1' then
+					AR(0) <= div_step(AR(0), DR(0));
 				end if;
-				if arg2(N-1) = '0' then
-					B(B'LEFT downto (STEPS-1)*RAPOW) <= unsigned(arg2);
-				else
-					B(B'LEFT downto (STEPS-1)*RAPOW) <= 0 - unsigned(arg2);
+
+				if PIPELINED or start = '1' then
+          AR(0) <= residue'((residue'left downto A_BITS => '0') & unsigned(A));
+          DR(0) <= divisor'(unsigned(D));
 				end if;
-				B((STEPS-1)*RAPOW-1 downto 0) <= (others => '0');
-				
-				S	 <= arg1(N-1) xor arg2(N-1);
-				Cnt <= to_unsigned(STEPS-1, log2ceil(STEPS));
 
-			end if;
-		end if;
-	end process;
-	rdy <= not Exec;
+      end if;
+    end if;
+  end process;
 
-	-- Counter Logic
-	CntDD	<= Cnt - 1;
-	CntEx0 <= not Cnt(Cnt'LEFT) and CntDD(CntDD'LEFT);
-
-	-- Subtractor
-	blkSub: block
-		
-		subtype tData is unsigned(N-1 downto 0);
-		subtype tDatx is unsigned(N	 downto 0);
-		type tDataArr is array (natural range<>) of tData;
-		type tDatxArr is array (natural range<>) of tDatx;
-		
-		signal rng : std_logic_vector(RAPOW-1 downto 0);	-- B beyond Range
-		signal di : tDatxArr(RAPOW-1 downto 0);
-		signal Ai : tDataArr(RAPOW	 downto 0);
-
-	begin
-		-- Calculate Ranges
-		rng(0) <= '1' when B(B'LEFT downto N) /= (B'LEFT downto N => '0') else '0';
-		lr: for i in 1 to RAPOW-1 generate
-			rng(i) <= rng(i-1) or B(N-i);
-		end generate lr;
-
-		-- Speculative Subtractions
-		Ai(RAPOW) <= A;
-		ls: for i in RAPOW-1 downto 0 generate
-			ieq0: if i = 0 generate
-				di(i) <= ('0' & Ai(i+1)) - ('0' & B(N-1 downto 0));
-			end generate ieq0;
-			ine0: if i /= 0 generate
-				di(i) <= ('0' & Ai(i+1)) - ('0' & B(N-i-1 downto 0) & (1 to i => '0'));
-			end generate ine0;
-			dn(i) <= not(rng(i) or di(i)(N));
-			Ai(i) <= di(i)(N-1 downto 0) when dn(i) = '1' else Ai(i+1);
-		end generate ls;
-		An <= Ai(0);
-
-	end block blkSub;
-
-	-- Quotient Composition
-	gNRG: if not REGISTERED generate
-		blkOut: block
-			signal Q : unsigned(N-1 downto 0);	-- Quotient
-		
-		begin
-			process(clk)
-			begin
-				if clk'event and clk = '1' then
-					if Exec = '1' then
-						Q <= Q(N-RAPOW-1 downto 0) & (dn xor (1 to RAPOW => S));
-					end if;
-				end if;
-			end process;
-		
-			res <= std_logic_vector(Q + ("0" & S));
-		
-		end block blkOut;
-	end generate gNRG;
-
-	gREG: if REGISTERED generate
-		blkOut: block
-			signal Q	 : unsigned(N			-1 downto 0);	-- Quotient
-			signal Qm1 : unsigned(N-RAPOW-1 downto 0);	-- Quotient - 1
-			signal dnx : unsigned(	RAPOW	 downto 0);	-- (not dn) + 1
-
-		begin
-			dnx <= ('0' & not dn) + 1;
-
-			process(clk)
-			begin
-				if clk'event and clk = '1' then
-					if Exec = '1' then
-						if S = '0' then
-							Q <= Q(N-RAPOW-1 downto 0) & dn;
-						else
-							if dnx(RAPOW) = '1' then
-								Q(N-1 downto RAPOW) <= Q	(N-RAPOW-1 downto 0);
-							else
-								Q(N-1 downto RAPOW) <= Qm1(N-RAPOW-1 downto 0);
-							end if;
-							Q(RAPOW-1 downto 0) <= dnx(RAPOW-1 downto 0);
-
-							Qm1 <= Qm1(N-2*RAPOW-1 downto 0) & not dn;
-						end if;
-					end if;
-				end if;
-			end process;
-
-			res <= std_logic_vector(Q);
-
-		end block blkOut;
-
-	end generate gREG;
-
-end div_npr;
+  Q   <= std_logic_vector(AR(DEPTH)(A_BITS-1 downto 0));
+  R   <= std_logic_vector(AR(DEPTH)(STEPS*RAPOW+D_BITS-1 downto STEPS*RAPOW));
+  Z   <= ZR;
+end rtl;

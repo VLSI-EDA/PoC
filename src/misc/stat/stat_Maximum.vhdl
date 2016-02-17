@@ -103,13 +103,9 @@ begin
 	end generate;
 
 	process(Clock)
-		variable NewMaximum_nxt		: STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
-		variable NewMaximum_idx 	: NATURAL;
 		variable TagHit_idx 			: NATURAL;
 	begin
-		NewMaximum_nxt	:= MaximumIndex(MaximumIndex'high - 1 downto 0) & MaximumIndex(MaximumIndex'high);	
-		NewMaximum_idx	:= to_index(onehot2bin(NewMaximum_nxt));
-		TagHit_idx			:= to_index(onehot2bin(TagHit));
+		TagHit_idx			:= to_index(onehot2bin(TagHit, 0));
 	
 		if rising_edge(Clock) then
 			if (Reset = '1') then
