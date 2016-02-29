@@ -83,7 +83,6 @@ begin
       generic map (
         A_BITS             => A_BITS,
         D_BITS             => D_BITS,
-        DETECT_DIV_BY_ZERO => true,
         RAPOW              => i
       )
       port map (
@@ -104,7 +103,6 @@ begin
       generic map (
         A_BITS             => A_BITS,
         D_BITS             => D_BITS,
-        DETECT_DIV_BY_ZERO => true,
         RAPOW              => i,
         PIPELINED          => true
       )
@@ -168,7 +166,7 @@ begin
 				simAssertion(((dval = 0) and (ZZ(i) = '1')) or
 										 ((dval /= 0) and (ZZ(i) = '0') and
 										  (to_integer(unsigned(QQ(i)))*dval + to_integer(unsigned(RR(i))) = aval)),
-										 "RAPOW="&integer'image(i)&" failed: "&integer'image(aval)&"/"&integer'image(dval)&" /= "&
+										 "INST="&integer'image(i)&" failed: "&integer'image(aval)&"/"&integer'image(dval)&" /= "&
 								     integer'image(to_integer(unsigned(QQ(i))))&" R "&integer'image(to_integer(unsigned(RR(i)))));
 			end loop;
 		end;

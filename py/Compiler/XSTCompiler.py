@@ -287,7 +287,7 @@ class Compiler(PoCCompiler):
 #			shutil.copy(str(xstOptionsFilePath), str(xstFilePath))
 		
 		# parse project filelist
-		filesLineRegExpStr =	r"\s*(?P<Keyword>(vhdl(\-(87|93|02|08))?|xilinx))"		# Keywords: vhdl[-nn], xilinx
+		filesLineRegExpStr =	r"\s*(?P<Keyword>(vhdl(\-(87|93|02|08))?|verilog|xilinx))"		# Keywords: vhdl[-nn], verilog, xilinx
 		filesLineRegExpStr += r"\s+(?P<VHDLLibrary>[_a-zA-Z0-9]+)"									#	VHDL library name
 		filesLineRegExpStr += r"\s+\"(?P<VHDLFile>.*?)\""														# VHDL filename without "-signs
 		filesLineRegExp = re.compile(filesLineRegExpStr)
@@ -297,6 +297,7 @@ class Compiler(PoCCompiler):
 		with fileListFilePath.open('r') as prjFileHandle:
 			for line in prjFileHandle:
 				filesLineRegExpMatch = filesLineRegExp.match(line)
+				xstKeyWord = "vhdl"
 				
 				if (filesLineRegExpMatch is not None):
 					if (filesLineRegExpMatch.group('Keyword') == "vhdl"):
@@ -306,12 +307,16 @@ class Compiler(PoCCompiler):
 						if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
 							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
 							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
+					elif (filesLineRegExpMatch.group('Keyword') == "verilog"):
+						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
+						vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
+						xstKeyWord = "verilog"
 					elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
 						vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
 						vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / vhdlFileName
 					
 					vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
-					xstProjectFileContent += "vhdl %s \"%s\"\n" % (vhdlLibraryName, str(vhdlFilePath))
+					xstProjectFileContent += "%s %s \"%s\"\n" % (xstKeyWord, vhdlLibraryName, str(vhdlFilePath))
 					
 					if (not vhdlFilePath.exists()):
 						raise CompilerException("Can not add '" + vhdlFileName + "' to project file.") from FileNotFoundError(str(vhdlFilePath))
