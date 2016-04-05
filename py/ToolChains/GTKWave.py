@@ -191,8 +191,7 @@ class GTKWave(Executable):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = GTKWaveFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(GTKWaveFilter(self.GetReader()))
 
 			line = next(iterator)
 			line.Indent(2)

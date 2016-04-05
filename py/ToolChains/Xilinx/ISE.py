@@ -296,8 +296,7 @@ class Fuse(Executable, ISE):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = FuseFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(FuseFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True
@@ -376,8 +375,7 @@ class ISESimulator(Executable):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = SimulatorFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(SimulatorFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True
@@ -456,8 +454,7 @@ class Xst(Executable) :
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = XstFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(XstFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True
@@ -535,8 +532,7 @@ class CoreGenerator(Executable):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = CoreGeneratorFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(CoreGeneratorFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True

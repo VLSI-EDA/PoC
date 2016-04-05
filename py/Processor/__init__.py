@@ -39,4 +39,3 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
 # load dependencies
-import Processor.XSTPostProcessor

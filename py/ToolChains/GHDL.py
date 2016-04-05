@@ -349,8 +349,7 @@ class GHDLAnalyze(GHDL):
 		self._hasWarnings =	False
 		self._hasErrors =		False
 		try:
-			filter =		GHDLAnalyzeFilter(self.GetReader())
-			iterator =	iter(filter)
+			iterator = iter(GHDLAnalyzeFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput =		True
@@ -393,8 +392,7 @@ class GHDLElaborate(GHDL):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = GHDLElaborateFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(GHDLElaborateFilter(self.GetReader()))
 
 			line = next(iterator)
 			line.Indent(2)
@@ -443,8 +441,7 @@ class GHDLRun(GHDL):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = GHDLRunFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(GHDLRunFilter(self.GetReader()))
 
 			line = next(iterator)
 			line.Indent(2)

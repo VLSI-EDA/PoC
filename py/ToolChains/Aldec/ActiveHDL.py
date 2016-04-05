@@ -40,9 +40,9 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Aldec.ActiveHDL")
 
 
-from collections				import OrderedDict
-from pathlib						import Path
-from re											import compile as re_compile
+#from collections				import OrderedDict
+#from pathlib						import Path
+#from re											import compile as re_compile
 
 from Base.Exceptions			import PlatformNotSupportedException
 from Base.ToolChain				import ToolChainException
@@ -50,7 +50,7 @@ from Base.Logging					import LogEntry, Severity
 from Base.Executable			import Executable, \
 																	ExecutableArgument, PathArgument, StringArgument, \
 																	LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
-from Base .Configuration	import Configuration as BaseConfiguration, ConfigurationException
+from Base.Configuration		import Configuration as BaseConfiguration, ConfigurationException
 
 
 class ActiveHDLException(ToolChainException):

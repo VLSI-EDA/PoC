@@ -317,7 +317,7 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandAttribute('help', help="help help")
 	@ArgumentAttribute(metavar='<Command>', dest="Command", type=str, nargs='?', help='todo help')
 	# @HandleVerbosityOptions
-	def HandleHelp(self, args):
+	def HandleHelp(self, _):
 		self.PrintHeadline()
 		if (args.Command is None):
 			self.MainParser.print_help()
@@ -336,7 +336,7 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("configure", help="Configure vendor tools for PoC.")
 	# @HandleVerbosityOptions
-	def HandleManualConfiguration(self, args):
+	def HandleManualConfiguration(self, _):
 		self.__Prepare()
 		self.PrintHeadline()
 
@@ -362,11 +362,11 @@ class PoC(ILogable, ArgParseMixin):
 			configurator = conf()
 			self._LogNormal("Configure {0} - {1}".format(configurator.Name, conf))
 
-			next = False
-			while (next == False):
+			nxt = False
+			while (nxt == False):
 				try:
 					configurator.ConfigureForWindows()
-					next = True
+					nxt = True
 				except BaseException as ex:
 					print("FAULT: {0}".format(ex.message))
 			# end while
@@ -376,11 +376,11 @@ class PoC(ILogable, ArgParseMixin):
 			configurator = conf()
 			self._LogNormal("Configure {0}".format(configurator.Name))
 
-			next = False
-			while (next == False):
+			nxt = False
+			while (nxt == False):
 				try:
 					configurator.ConfigureForLinux()
-					next = True
+					nxt = True
 				except BaseException as ex:
 					print("FAULT: {0}".format(ex.message))
 			# end while
@@ -580,9 +580,9 @@ class PoC(ILogable, ArgParseMixin):
 							raise NotConfiguredException("No GHDL compatible waveform viewer is configured on this system.")
 
 						viewer = simulator.GetViewer()
-						viewer.View(entity)
+						viewer.View()
 
-				except SimulatorException as ex:
+				except SimulatorException:
 					pass
 
 		Exit.exit()

@@ -320,7 +320,7 @@ class Simulator(BaseSimulator):
 	def GetViewer(self):
 		return self
 	
-	def View(self, pocEntity):
+	def View(self):
 		self._LogNormal("  launching GTKWave...")
 		
 		testbenchName =				self.Host.TBConfig[self._testbenchFQN]['TestbenchModule']

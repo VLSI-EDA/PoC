@@ -41,7 +41,7 @@ else:
 from enum									import Enum, EnumMeta, unique
 from re										import compile as RegExpCompile
 
-from lib.Decorators				import CachedReadOnlyProperty
+# from lib.Decorators				import CachedReadOnlyProperty
 from Base.Configuration		import ConfigurationException
 
 
@@ -350,7 +350,7 @@ class Device:
 			)
 		elif (self.__vendor is Vendors.Altera):
 			raise NotImplementedError("Device.ShortName() not implemented for vendor Altera")
-			return "ep...."
+			# FIXME: return "ep...."
 	
 	# @CachedReadOnlyProperty
 	@property
@@ -369,7 +369,7 @@ class Device:
 			)
 		elif (self.__vendor is Vendors.Altera):
 			raise NotImplementedError("Device.FullName() not implemented for vendor Altera")
-			return "ep...."
+			# FIXME: return "ep...."
 	
 	@property
 	def Name(self):

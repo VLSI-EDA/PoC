@@ -52,5 +52,10 @@ Configurations = [
 	PoC_Configuration,
 	ISE_Configuration,
 	Vivado_Configuration,
-	GHDL_Configuration
+	Quartus_Configuration,
+	Questa_Configuration,
+	Diamond_Configuration,
+	ActiveHDL_Configuration,
+	GHDL_Configuration,
+	GTKW_Configuration
 ]

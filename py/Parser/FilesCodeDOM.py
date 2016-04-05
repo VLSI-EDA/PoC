@@ -841,7 +841,6 @@ class ElseStatement(BlockStatement):
 		parser = cls.GetRepeatParser(result.AddStatement, BlockedStatement.GetParser)
 		parser.send(None)
 		
-		statementList = None
 		try:
 			while True:
 				token = yield

@@ -40,8 +40,8 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
 
-from collections				import OrderedDict
-from pathlib						import Path
+# from collections				import OrderedDict
+# from pathlib						import Path
 
 from Base.Configuration import Configuration as BaseConfiguration
 

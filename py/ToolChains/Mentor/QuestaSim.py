@@ -280,8 +280,7 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = QuestaVComFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(QuestaVComFilter(self.GetReader()))
 
 			line = next(iterator)
 			line.Indent(2)
@@ -415,8 +414,7 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = QuestaVSimFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(QuestaVSimFilter(self.GetReader()))
 
 			line = next(iterator)
 			line.Indent(2)
@@ -487,8 +485,7 @@ class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			filter = QuestaVLibFilter(self.GetReader())
-			iterator = iter(filter)
+			iterator = iter(QuestaVLibFilter(self.GetReader()))
 
 			line = next(iterator)
 			line.Indent(2)

@@ -33,7 +33,7 @@
 DEBUG =		False#True
 DEBUG2 =	False#True
 
-from enum			import Enum, unique		# EnumMeta
+from enum			import Enum
 from colorama	import Fore
 from pathlib	import Path
 
@@ -253,7 +253,7 @@ class Tokenizer:
 		# end for
 	
 class CodeDOMMeta(type):
-	def parse(mcls, string):
+	def parse(mcls):
 		result = mcls()
 		return result
 	
@@ -272,7 +272,7 @@ class CodeDOMMeta(type):
 			token = yield
 			for parser in parsers:
 				try:
-					ret = parser[1].send(token)
+					parser[1].send(token)
 				except MismatchingParserResult as ex:
 					removeList.append(parser)
 				except MatchingParserResult as ex:
@@ -298,7 +298,7 @@ class CodeDOMMeta(type):
 		while True:
 			token = yield
 			try:
-				ret = parser.send(token)
+				parser.send(token)
 			except MismatchingParserResult as ex:
 				break
 			except MatchingParserResult as ex:

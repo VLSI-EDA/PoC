@@ -40,10 +40,10 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.PoC")
 
 
-from Base.Configuration		import Configuration
+from Base.Configuration		import Configuration as BaseConfiguration
 
 
-class Configuration(Configuration):
+class Configuration(BaseConfiguration):
 	_vendor =		None
 	_shortName = "PoC"
 	_longName =	"PoC"

@@ -2,26 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1217729-6dda-4bce-a9eb-baa5346607ac" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Processor/Exceptions.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../lib/osvvm" afterPath="$PROJECT_DIR$/../lib/osvvm" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Base/Exceptions.py" afterPath="$PROJECT_DIR$/Base/Exceptions.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Parser/FilesCodeDOM.py" afterPath="$PROJECT_DIR$/Parser/FilesCodeDOM.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Parser/Parser.py" afterPath="$PROJECT_DIR$/Parser/Parser.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PoC.py" afterPath="$PROJECT_DIR$/PoC.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PoC/Entity.py" afterPath="$PROJECT_DIR$/PoC/Entity.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PoC/Project.py" afterPath="$PROJECT_DIR$/PoC/Project.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PostProcessor.py" afterPath="$PROJECT_DIR$/PostProcessor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Processor/XST/XSTErrorExtractor.py" afterPath="$PROJECT_DIR$/Processor/XST/XSTErrorExtractor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Processor/XST/XSTFSMTokenFileExtractor.py" afterPath="$PROJECT_DIR$/Processor/XST/XSTFSMTokenFileExtractor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Processor/XST/XSTWarningExtractor.py" afterPath="$PROJECT_DIR$/Processor/XST/XSTWarningExtractor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Processor/XSTPostProcessor.py" afterPath="$PROJECT_DIR$/Processor/XSTPostProcessor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py" afterPath="$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PoC/Config.py" afterPath="$PROJECT_DIR$/PoC/Config.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Processor/__init__.py" afterPath="$PROJECT_DIR$/Processor/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Simulator/GHDLSimulator.py" afterPath="$PROJECT_DIR$/Simulator/GHDLSimulator.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Simulator/ISESimulator.py" afterPath="$PROJECT_DIR$/Simulator/ISESimulator.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Simulator/QuestaSimulator.py" afterPath="$PROJECT_DIR$/Simulator/QuestaSimulator.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Simulator/VivadoSimulator.py" afterPath="$PROJECT_DIR$/Simulator/VivadoSimulator.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Simulator/__init__.py" afterPath="$PROJECT_DIR$/Simulator/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/Functions.py" afterPath="$PROJECT_DIR$/lib/Functions.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py" afterPath="$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Altera/ModelSim.py" afterPath="$PROJECT_DIR$/ToolChains/Altera/ModelSim.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Altera/QuartusII.py" afterPath="$PROJECT_DIR$/ToolChains/Altera/QuartusII.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/GHDL.py" afterPath="$PROJECT_DIR$/ToolChains/GHDL.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/GTKWave.py" afterPath="$PROJECT_DIR$/ToolChains/GTKWave.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Lattice/ActiveHDL.py" afterPath="$PROJECT_DIR$/ToolChains/Lattice/ActiveHDL.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Lattice/Diamond.py" afterPath="$PROJECT_DIR$/ToolChains/Lattice/Diamond.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Lattice/Synopsys.py" afterPath="$PROJECT_DIR$/ToolChains/Lattice/Synopsys.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py" afterPath="$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/PoC.py" afterPath="$PROJECT_DIR$/ToolChains/PoC.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py" afterPath="$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Xilinx/ISE.py" afterPath="$PROJECT_DIR$/ToolChains/Xilinx/ISE.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/Xilinx/LabTools.py" afterPath="$PROJECT_DIR$/ToolChains/Xilinx/LabTools.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChains/__init__.py" afterPath="$PROJECT_DIR$/ToolChains/__init__.py" />
     </list>
     <ignored path="py.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,136 +43,162 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GHDLSimulator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py">
+      <file leaf-file-name="QuestaSimulator.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Simulator/QuestaSimulator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
-              <folding>
-                <element signature="e#1493#1537#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="340">
+              <caret line="41" column="24" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QuestaSimulator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Simulator/QuestaSimulator.py">
+      <file leaf-file-name="QuestaSim.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="48" column="2" selection-start-line="48" selection-start-column="2" selection-end-line="48" selection-end-column="2" />
+            <state relative-caret-position="367">
+              <caret line="524" column="26" selection-start-line="524" selection-start-column="26" selection-end-line="524" selection-end-column="26" />
               <folding>
-                <element signature="e#1481#1528#0" expanded="true" />
+                <element signature="e#1495#1533#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="PoC.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PoC.py">
+        <entry file="file://$PROJECT_DIR$/ToolChains/PoC.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="43" column="59" selection-start-line="43" selection-start-column="59" selection-end-line="43" selection-end-column="59" />
+            <state relative-caret-position="425">
+              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ActiveHDLSimulator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py">
+      <file leaf-file-name="HardwareServer.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="48" column="1" selection-start-line="48" selection-start-column="1" selection-end-line="48" selection-end-column="1" />
+            <state relative-caret-position="599">
+              <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
               <folding>
-                <element signature="e#1486#1532#0" expanded="true" />
+                <element signature="e#1508#1547#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VivadoSimulator.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Simulator/VivadoSimulator.py">
+      <file leaf-file-name="LabTools.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/LabTools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="592">
-              <caret line="47" column="2" selection-start-line="47" selection-start-column="2" selection-end-line="47" selection-end-column="2" />
+            <state relative-caret-position="373">
+              <caret line="34" column="26" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
               <folding>
-                <element signature="e#1495#1540#0" expanded="true" />
+                <element signature="e#1493#1532#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ISESimulator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Simulator/ISESimulator.py">
+      <file leaf-file-name="ISE.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/ISE.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="47" column="2" selection-start-line="47" selection-start-column="2" selection-end-line="47" selection-end-column="2" />
-              <folding>
-                <element signature="e#1492#1536#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Entity.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PoC/Entity.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="587">
-              <caret line="45" column="1" selection-start-line="45" selection-start-column="1" selection-end-line="45" selection-end-column="1" />
+            <state relative-caret-position="386">
+              <caret line="608" column="4" selection-start-line="608" selection-start-column="4" selection-end-line="608" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Project.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PoC/Project.py">
+      <file leaf-file-name="ActiveHDL.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state relative-caret-position="306">
+              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+              <folding>
+                <element signature="e#1614#1673#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GHDL.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/GHDL.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="418">
+              <caret line="491" column="11" selection-start-line="491" selection-start-column="11" selection-end-line="491" selection-end-column="11" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GTKWave.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/GTKWave.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="377">
+              <caret line="201" column="0" selection-start-line="201" selection-start-column="0" selection-end-line="201" selection-end-column="0" />
+              <folding>
+                <element signature="e#1477#1517#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Simulator/__init__.py">
+        <entry file="file://$PROJECT_DIR$/ToolChains/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+            <state relative-caret-position="298">
+              <caret line="40" column="71" selection-start-line="40" selection-start-column="71" selection-end-line="40" selection-end-column="71" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Simulator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Base/Simulator.py">
+      <file leaf-file-name="ActiveHDL.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/ActiveHDL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-              <folding>
-                <element signature="e#1480#1515#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Exceptions.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Base/Exceptions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="687">
-              <caret line="62" column="38" selection-start-line="62" selection-start-column="38" selection-end-line="62" selection-end-column="38" />
+            <state relative-caret-position="451">
+              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="43" selection-end-column="37" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Logging.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Base/Logging.py">
+      <file leaf-file-name="Diamond.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/Diamond.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="748">
-              <caret line="50" column="16" selection-start-line="50" selection-start-column="16" selection-end-line="50" selection-end-column="16" />
-              <folding>
-                <element signature="e#1462#1508#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="468">
+              <caret line="43" column="37" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Synopsys.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/Synopsys.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="349">
+              <caret line="34" column="26" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModelSim.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Altera/ModelSim.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="349">
+              <caret line="36" column="6" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="QuartusII.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Altera/QuartusII.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -191,28 +218,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/PoC/Query.py" />
-        <option value="$PROJECT_DIR$/PoC/Config.py" />
-        <option value="$PROJECT_DIR$/Parser/FilesParser.py" />
-        <option value="$PROJECT_DIR$/PoC/PoCProject.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Mentor/PrecisionRTL.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Lattice/Synopsys.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Lattice/Diamond.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Lattice/ActiveHDL.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Altera/ModelSim.py" />
-        <option value="$PROJECT_DIR$/ToolChains/GHDL.py" />
-        <option value="$PROJECT_DIR$/ToolChains/GTKWave.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Xilinx/LabTools.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Altera/QuartusII.py" />
         <option value="$PROJECT_DIR$/Compiler/XCOCompiler.py" />
         <option value="$PROJECT_DIR$/Compiler/XSTCompiler.py" />
         <option value="$PROJECT_DIR$/ToolChains/Altera/QuartusProject.py" />
         <option value="$PROJECT_DIR$/ToolChains/Xilinx/VivadoProject.py" />
         <option value="$PROJECT_DIR$/ToolChains/Xilinx/ISEProject.py" />
         <option value="$PROJECT_DIR$/ToolChains/Xilinx/Vivado.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Xilinx/ISE.py" />
         <option value="$PROJECT_DIR$/Base/Configuration.py" />
         <option value="$PROJECT_DIR$/Base/Compiler.py" />
         <option value="$PROJECT_DIR$/Base/ToolChain.py" />
@@ -220,7 +231,6 @@
         <option value="$PROJECT_DIR$/Base/Solution.py" />
         <option value="$PROJECT_DIR$/Processor/Exceptions.py" />
         <option value="$PROJECT_DIR$/Base/Processor.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py" />
         <option value="$PROJECT_DIR$/Base/Executable.py" />
         <option value="$PROJECT_DIR$/Compiler/__init__.py" />
         <option value="$PROJECT_DIR$/lib/ArgParseAttributes.py" />
@@ -230,18 +240,35 @@
         <option value="$PROJECT_DIR$/Processor/XST/XSTFSMTokenFileExtractor.py" />
         <option value="$PROJECT_DIR$/Processor/XST/XSTWarningExtractor.py" />
         <option value="$PROJECT_DIR$/lib/Functions.py" />
-        <option value="$PROJECT_DIR$/Parser/FilesCodeDOM.py" />
         <option value="$PROJECT_DIR$/Simulator/__init__.py" />
         <option value="$PROJECT_DIR$/PoC/Entity.py" />
         <option value="$PROJECT_DIR$/PoC/Project.py" />
         <option value="$PROJECT_DIR$/Base/Simulator.py" />
         <option value="$PROJECT_DIR$/Base/Exceptions.py" />
-        <option value="$PROJECT_DIR$/PoC.py" />
         <option value="$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py" />
-        <option value="$PROJECT_DIR$/Simulator/GHDLSimulator.py" />
         <option value="$PROJECT_DIR$/Simulator/ISESimulator.py" />
         <option value="$PROJECT_DIR$/Simulator/QuestaSimulator.py" />
         <option value="$PROJECT_DIR$/Simulator/VivadoSimulator.py" />
+        <option value="$PROJECT_DIR$/Parser/FilesCodeDOM.py" />
+        <option value="$PROJECT_DIR$/Parser/Parser.py" />
+        <option value="$PROJECT_DIR$/PoC/Config.py" />
+        <option value="$PROJECT_DIR$/Processor/__init__.py" />
+        <option value="$PROJECT_DIR$/Simulator/GHDLSimulator.py" />
+        <option value="$PROJECT_DIR$/PoC.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Altera/ModelSim.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Altera/QuartusII.py" />
+        <option value="$PROJECT_DIR$/ToolChains/GHDL.py" />
+        <option value="$PROJECT_DIR$/ToolChains/GTKWave.py" />
+        <option value="$PROJECT_DIR$/ToolChains/__init__.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Lattice/ActiveHDL.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Lattice/Diamond.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Lattice/Synopsys.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py" />
+        <option value="$PROJECT_DIR$/ToolChains/PoC.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/LabTools.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/ISE.py" />
       </list>
     </option>
   </component>
@@ -337,7 +364,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Simulator" />
+              <option name="myItemId" value="ToolChains" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -351,7 +378,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="PoC" />
+              <option name="myItemId" value="ToolChains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Xilinx" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -365,7 +396,47 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Base" />
+              <option name="myItemId" value="ToolChains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Mentor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ToolChains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lattice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ToolChains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Altera" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -639,120 +710,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Base/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PoC/Config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="44" column="30" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Parser/FilesParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="33" column="74" selection-start-line="33" selection-start-column="74" selection-end-line="33" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Mentor/PrecisionRTL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="799">
-          <caret line="47" column="6" selection-start-line="41" selection-start-column="0" selection-end-line="47" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/Synopsys.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="6" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/Diamond.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="6" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/ActiveHDL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="6" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/GTKWave.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="43" column="39" selection-start-line="43" selection-start-column="39" selection-end-line="43" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2143">
-          <caret line="146" column="32" selection-start-line="146" selection-start-column="32" selection-end-line="146" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/LabTools.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2058">
-          <caret line="135" column="74" selection-start-line="135" selection-start-column="74" selection-end-line="135" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Altera/QuartusII.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="817">
-          <caret line="156" column="34" selection-start-line="156" selection-start-column="34" selection-end-line="156" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Altera/ModelSim.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="6" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="128" column="79" selection-start-line="128" selection-start-column="79" selection-end-line="128" selection-end-column="79" />
-          <folding>
-            <element signature="e#1495#1533#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Compiler/XCOCompiler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="50" column="35" selection-start-line="50" selection-start-column="35" selection-end-line="50" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ToolChains/Altera/QuartusProject.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
@@ -785,28 +742,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/GHDL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="190" column="26" selection-start-line="182" selection-start-column="24" selection-end-line="190" selection-end-column="26" />
-          <folding>
-            <element signature="e#1470#1510#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/Vivado.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
           <caret line="209" column="0" selection-start-line="209" selection-start-column="0" selection-end-line="209" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/ISE.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="501" column="0" selection-start-line="501" selection-start-column="0" selection-end-line="501" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -852,16 +791,6 @@
         <state relative-caret-position="551">
           <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="357" column="18" selection-start-line="357" selection-start-column="18" selection-end-line="357" selection-end-column="18" />
-          <folding>
-            <element signature="e#1494#1532#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -963,16 +892,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Parser/FilesCodeDOM.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="981" column="14" selection-start-line="981" selection-start-column="14" selection-end-line="981" selection-end-column="14" />
-          <folding>
-            <element signature="e#1281#1353#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Base/Logging.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="748">
@@ -983,26 +902,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PoC/Entity.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="587">
-          <caret line="45" column="1" selection-start-line="45" selection-start-column="1" selection-end-line="45" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PoC/Project.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Simulator/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1025,30 +928,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PoC.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="43" column="59" selection-start-line="43" selection-start-column="59" selection-end-line="43" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="48" column="1" selection-start-line="48" selection-start-column="1" selection-end-line="48" selection-end-column="1" />
           <folding>
             <element signature="e#1486#1532#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
-          <folding>
-            <element signature="e#1493#1537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1063,16 +948,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Simulator/QuestaSimulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="48" column="2" selection-start-line="48" selection-start-column="2" selection-end-line="48" selection-end-column="2" />
-          <folding>
-            <element signature="e#1481#1528#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Simulator/VivadoSimulator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="592">
@@ -1080,6 +955,210 @@
           <folding>
             <element signature="e#1495#1540#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Parser/FilesCodeDOM.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="856" column="33" selection-start-line="856" selection-start-column="33" selection-end-line="856" selection-end-column="33" />
+          <folding>
+            <element signature="e#1281#1353#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Parser/Parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="300" column="26" selection-start-line="300" selection-start-column="26" selection-end-line="300" selection-end-column="26" />
+          <folding>
+            <element signature="e#1282#1305#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC/Config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="357" column="41" selection-start-line="357" selection-start-column="41" selection-end-line="357" selection-end-column="41" />
+          <folding>
+            <element signature="e#1468#1515#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC/Entity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="43" column="45" selection-start-line="43" selection-start-column="45" selection-end-line="43" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Processor/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="322" column="8" selection-start-line="322" selection-start-column="8" selection-end-line="322" selection-end-column="8" />
+          <folding>
+            <element signature="e#1493#1537#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="585" column="14" selection-start-line="585" selection-start-column="14" selection-end-line="585" selection-end-column="14" />
+          <folding>
+            <element signature="e#1479#1535#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="24" column="2" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/QuestaSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="41" column="24" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding>
+            <element signature="e#1614#1673#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Altera/ModelSim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="36" column="6" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Altera/QuartusII.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/GHDL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="491" column="11" selection-start-line="491" selection-start-column="11" selection-end-line="491" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/GTKWave.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="201" column="0" selection-start-line="201" selection-start-column="0" selection-end-line="201" selection-end-column="0" />
+          <folding>
+            <element signature="e#1477#1517#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="40" column="71" selection-start-line="40" selection-start-column="71" selection-end-line="40" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/ActiveHDL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="43" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/Diamond.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="43" column="37" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/Synopsys.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="34" column="26" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="524" column="26" selection-start-line="524" selection-start-column="26" selection-end-line="524" selection-end-column="26" />
+          <folding>
+            <element signature="e#1495#1533#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/PoC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="599">
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <folding>
+            <element signature="e#1508#1547#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/LabTools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="34" column="26" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+          <folding>
+            <element signature="e#1493#1532#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/ISE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="608" column="4" selection-start-line="608" selection-start-column="4" selection-end-line="608" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
