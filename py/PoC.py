@@ -3,9 +3,9 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:         		 Patrick Lehmann
+# Authors:         			Patrick Lehmann
 # 
-# Python Main Module:  Entry point to the testbench tools in PoC repository.
+# Python Main Module:		Entry point to the testbench tools in PoC repository.
 # 
 # Description:
 # ------------------------------------
@@ -41,7 +41,7 @@ from sys											import argv as sys_argv
 from textwrap									import dedent
 
 from Base.Exceptions					import ExceptionBase, EnvironmentException, PlatformNotSupportedException, NotConfiguredException, \
-																		 CommonException, SimulatorException
+																			CommonException, SimulatorException
 from Base.ToolChain import ToolChainException
 from Base.Compiler						import CompilerException
 from Base.Logging							import ILogable, Logger, Severity

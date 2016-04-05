@@ -3,7 +3,7 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:				 	Patrick Lehmann
+# Authors:					Patrick Lehmann
 # 
 # Python Class:			This PoCXCOCompiler compiles xco IPCores to netlists
 # 
@@ -97,7 +97,7 @@ class Compiler(BaseCompiler):
 		if (len(preCopyFileList) != 0):
 			self._LogDebug("PreCopyTasks: \n  " + ("\n  ".join(preCopyFileList.split("\n"))))
 			
-			preCopyRegExpStr	 = r"^\s*(?P<SourceFilename>.*?)"			# Source filename
+			preCopyRegExpStr  = r"^\s*(?P<SourceFilename>.*?)"			# Source filename
 			preCopyRegExpStr += r"\s->\s"													#	Delimiter signs
 			preCopyRegExpStr += r"(?P<DestFilename>.*?)$"					#	Destination filename
 			preCopyRegExp = re.compile(preCopyRegExpStr)
@@ -118,7 +118,7 @@ class Compiler(BaseCompiler):
 		if (len(copyFileList) != 0):
 			self._LogDebug("CopyTasks: \n  " + ("\n  ".join(copyFileList.split("\n"))))
 			
-			copyRegExpStr	 = r"^\s*(?P<SourceFilename>.*?)"			# Source filename
+			copyRegExpStr  = r"^\s*(?P<SourceFilename>.*?)"			# Source filename
 			copyRegExpStr += r"\s->\s"													#	Delimiter signs
 			copyRegExpStr += r"(?P<DestFilename>.*?)$"					#	Destination filename
 			copyRegExp = re.compile(copyRegExpStr)

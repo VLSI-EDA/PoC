@@ -75,10 +75,11 @@ class Attribute:
 
 class AttributeHelperMixin:
 	def GetMethods(self):
-		return {funcname: func
-						for funcname, func in self.__class__.__dict__.items()
-						if hasattr(func, '__dict__')
-					 }.items()
+		return {
+			funcname: func
+				for funcname, func in self.__class__.__dict__.items()
+				if hasattr(func, '__dict__')
+		}.items()
 
 	def HasAttribute(self, method):
 		if (Attribute.AttributesMemberName in method.__dict__):

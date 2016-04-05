@@ -3,7 +3,7 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:				 	Patrick Lehmann
+# Authors:					Patrick Lehmann
 #
 # Python Class:			Base class for all PoC***Compilers
 #
@@ -32,9 +32,6 @@
 # ==============================================================================
 
 # entry point
-from Base.Exceptions import ExceptionBase
-
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass

@@ -3,7 +3,7 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:				 	Patrick Lehmann
+# Authors:					Patrick Lehmann
 # 
 # Python Class:			TODO
 # 
@@ -32,11 +32,11 @@
 # ==============================================================================
 #
 # entry point
-from lib.Functions import Exit
 if __name__ != "__main__":
 	pass
 	# place library initialization code here
 else:
+	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Simulator.Base")
 
 # load dependencies

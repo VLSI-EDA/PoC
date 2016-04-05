@@ -5,7 +5,7 @@
 # ==============================================================================
 # Python Class:			TODO
 # 
-# Authors:				 	Patrick Lehmann
+# Authors:					Patrick Lehmann
 # 
 # Description:
 # ------------------------------------

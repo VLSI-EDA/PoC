@@ -3,7 +3,7 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:				 	Patrick Lehmann
+# Authors:					Patrick Lehmann
 #
 # Python Class:			Aldec Active-HDL specific classes
 #
@@ -48,8 +48,8 @@ from Base.Exceptions			import PlatformNotSupportedException
 from Base.ToolChain import ToolChainException
 from Base.Logging					import LogEntry, Severity
 from Base.Executable			import Executable, \
-																 ExecutableArgument, PathArgument, StringArgument, \
-																 LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
+																	ExecutableArgument, PathArgument, StringArgument, \
+																	LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
 from Base .Configuration	import Configuration as BaseConfiguration, ConfigurationException
 
 

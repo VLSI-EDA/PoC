@@ -3,7 +3,7 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:				 	Patrick Lehmann
+# Authors:					Patrick Lehmann
 # 
 # Python Module:		TODO
 # 
@@ -33,7 +33,7 @@
 from enum								import Enum, unique
 from pathlib						import Path
 
-from Base.Exceptions		import *
+from Base.Exceptions		import CommonException
 from Base.VHDLParser		import VHDLParserMixIn
 from Parser.FilesParser	import FilesParserMixIn
 from PoC.Config					import Board, Device
@@ -251,9 +251,9 @@ class Project():
 		if (not isinstance(fileSet, FileSet)):
 			raise ValueError("Parameter 'fileSet' is not of type Base.Project.FileSet.")
 		if (fileSet in self.FileSets):
-			raise ExceptionBase("Project already contains this fileSet.")
+			raise CommonException("Project already contains this fileSet.")
 		if (fileSet.Name in self._fileSets.keys()):
-			raise ExceptionBase("Project already contains a fileset named '{0}'.".format(fileSet.Name))
+			raise CommonException("Project already contains a fileset named '{0}'.".format(fileSet.Name))
 		fileSet.Project = self
 		self._fileSets[fileSet.Name] = fileSet
 		
@@ -270,10 +270,10 @@ class Project():
 	@DefaultFileSet.setter
 	def DefaultFileSet(self, value):
 		if isinstance(value, str):
-			if (value not in self._fileSets.keys()):			raise ExceptionBase("Fileset '{0}' is not in this project.".format(value))
+			if (value not in self._fileSets.keys()):			raise CommonException("Fileset '{0}' is not in this project.".format(value))
 			self._defaultFileSet = self._fileSets[value]
 		elif isinstance(value, FileSet):
-			if (value not in self.FileSets):							raise ExceptionBase("Fileset '{0}' is not associated to this project.".format(value))
+			if (value not in self.FileSets):							raise CommonException("Fileset '{0}' is not associated to this project.".format(value))
 			self._defaultFileSet = value
 		else:																						raise ValueError("Unsupported parameter type for 'value'.")
 		
@@ -281,12 +281,12 @@ class Project():
 		# print("Project.AddFile: file={0}".format(file))
 		if (not isinstance(file, File)):								raise ValueError("Parameter 'file' is not of type Base.Project.File.")
 		if (fileSet is None):
-			if (self._defaultFileSet is None):						raise ExceptionBase("Neither the parameter 'file' set nor a default file set is given.")
+			if (self._defaultFileSet is None):						raise CommonException("Neither the parameter 'file' set nor a default file set is given.")
 			fileSet = self._defaultFileSet
 		elif isinstance(fileSet, str):
 			fileSet = self._fileSets[fileSet]
 		elif isinstance(fileSet, FileSet):
-			if (fileSet not in self.FileSets):						raise ExceptionBase("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
+			if (fileSet not in self.FileSets):						raise CommonException("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
 		else:																						raise ValueError("Unsupported parameter type for 'fileSet'.")
 		fileSet.AddFile(file)
 		return file
@@ -295,19 +295,19 @@ class Project():
 		# print("Project.AddSourceFile: file={0}".format(file))
 		if (not isinstance(file, SourceFile)):					raise ValueError("Parameter 'file' is not of type Base.Project.SourceFile.")
 		if (fileSet is None):
-			if (self._defaultFileSet is None):						raise ExceptionBase("Neither the parameter 'file' set nor a default file set is given.")
+			if (self._defaultFileSet is None):						raise CommonException("Neither the parameter 'file' set nor a default file set is given.")
 			fileSet = self._defaultFileSet
 		elif isinstance(fileSet, str):
 			fileSet = self._fileSets[fileSet]
 		elif isinstance(fileSet, FileSet):
-			if (fileSet not in self.FileSets):						raise ExceptionBase("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
+			if (fileSet not in self.FileSets):						raise CommonException("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
 		else:																						raise ValueError("Unsupported parameter type for 'fileSet'.")
 		fileSet.AddSourceFile(file)
 		return file
 	
 	def Files(self, fileType=FileTypes.Any, fileSet=None):
 		if (fileSet is None):
-			if (self._defaultFileSet is None):						raise ExceptionBase("Neither the parameter 'fileSet' set nor a default file set is given.")
+			if (self._defaultFileSet is None):						raise CommonException("Neither the parameter 'fileSet' set nor a default file set is given.")
 			fileSet = self._defaultFileSet
 		# print("init Project.Files generator")
 		for file in fileSet.Files:
@@ -503,7 +503,7 @@ class File():
 		try:
 			self._handle = self._file.open('r')
 		except Exception as ex:
-			raise ExceptionBase("Error while opening file '{0}'.".format(str(self._file))) from ex
+			raise CommonException("Error while opening file '{0}'.".format(str(self._file))) from ex
 	
 	def ReadFile(self):
 		if self._handle is None:
@@ -511,7 +511,7 @@ class File():
 		try:
 			self._content = self._handle.read()
 		except Exception as ex:
-			raise ExceptionBase("Error while reading file '{0}'.".format(str(self._file))) from ex
+			raise CommonException("Error while reading file '{0}'.".format(str(self._file))) from ex
 	
 	# interface method for FilesParserMixIn
 	def _ReadContent(self):
@@ -545,9 +545,9 @@ class FileListFile(File, FilesParserMixIn):
 	
 	def Parse(self):
 		# print("FileListFile.Parse:")
-		if (self._fileSet is None):											raise ExceptionBase("File '{0}' is not associated to a fileset.".format(str(self._file)))
-		if (self._project is None):											raise ExceptionBase("File '{0}' is not associated to a project.".format(str(self._file)))
-		if (self._project.RootDirectory is None):				raise ExceptionBase("No RootDirectory configured for this project.")
+		if (self._fileSet is None):											raise CommonException("File '{0}' is not associated to a fileset.".format(str(self._file)))
+		if (self._project is None):											raise CommonException("File '{0}' is not associated to a project.".format(str(self._file)))
+		if (self._project.RootDirectory is None):				raise CommonException("No RootDirectory configured for this project.")
 			
 		# prepare FilesParserMixIn environment
 		self._rootDirectory = self.Project.RootDirectory

@@ -3,7 +3,7 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:				 		Patrick Lehmann
+# Authors:						Patrick Lehmann
 # 
 # Python functions:		Auxillary functions to exit a program and report an error message.
 # 

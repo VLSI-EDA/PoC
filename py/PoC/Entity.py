@@ -3,7 +3,7 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:				 	Patrick Lehmann
+# Authors:					Patrick Lehmann
 # 
 # Python Class:			TODO
 # 
@@ -55,7 +55,7 @@ class EntityTypes(Enum):
 	NetList = 3
 
 	def __str__(self):
-		if	 (self is EntityTypes.Unknown):		return "??"
+		if   (self is EntityTypes.Unknown):		return "??"
 		elif (self is EntityTypes.Source):		return "src"
 		elif (self is EntityTypes.Testbench):	return "tb"
 		elif (self is EntityTypes.NetList):		return "nl"

@@ -3,7 +3,7 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:				 	Patrick Lehmann
+# Authors:					Patrick Lehmann
 #
 # Python Class:			GHDL specific classes
 #
@@ -47,8 +47,8 @@ from Base.Exceptions				import PlatformNotSupportedException
 from Base.ToolChain import ToolChainException
 from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
 from Base.Executable				import Executable, \
-																	 ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument, \
-																	 ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
+																		ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument, \
+																		ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
 from Base.Logging						import LogEntry, Severity
 from Base.Simulator					import SimulatorException
 
