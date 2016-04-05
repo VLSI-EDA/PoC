@@ -45,7 +45,7 @@ from pathlib						import Path
 from re											import compile as re_compile
 
 from Base.Exceptions			import PlatformNotSupportedException
-from Base.ToolChain import ToolChainException
+from Base.ToolChain				import ToolChainException
 from Base.Logging					import LogEntry, Severity
 from Base.Executable			import Executable, \
 																	ExecutableArgument, PathArgument, StringArgument, \

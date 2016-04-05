@@ -42,15 +42,7 @@ else:
 # load dependencies
 from Base.Exceptions import *
 
-class ProcessorException(ExceptionBase):
-	def __init__(self, message=""):
-		super().__init__(message)
-		self.message = message
-		
-class PostProcessorException(ProcessorException):
-	def __init__(self, message=""):
-		super().__init__(message)
-		self.message = message
+
 
 #class EndOfReportException(ProcessorException):
 #	pass

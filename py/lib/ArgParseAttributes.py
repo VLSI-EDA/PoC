@@ -130,15 +130,15 @@ class ArgParseMixin(AttributeHelperMixin):
 		self.__mainParser = argparse.ArgumentParser(**kwargs)
 		self.__subParser = self.__mainParser.add_subparsers(help='sub-command help')
 		
-		for funcname,func in CommonArgumentAttribute.GetMethods(self):
+		for _,func in CommonArgumentAttribute.GetMethods(self):
 			for comAttribute in CommonArgumentAttribute.GetAttributes(func):
 				self.__mainParser.add_argument(*(comAttribute.Args), **(comAttribute.KWArgs))
 				
-		for funcname,func in CommonSwitchArgumentAttribute.GetMethods(self):
+		for _,func in CommonSwitchArgumentAttribute.GetMethods(self):
 			for comAttribute in CommonSwitchArgumentAttribute.GetAttributes(func):
 				self.__mainParser.add_argument(*(comAttribute.Args), **(comAttribute.KWArgs))
 		
-		for funcname,func in self.GetMethods():
+		for _,func in self.GetMethods():
 			defAttributes = DefaultAttribute.GetAttributes(func)
 			if (len(defAttributes) != 0):
 				defAttribute = defAttributes[0]

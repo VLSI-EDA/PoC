@@ -54,14 +54,14 @@ class FileTypes(Enum):
 	VerilogSourceFile =		11
 
 	def Extension(self):
-		if   (self == FileTypes.Any):									raise ExceptionBase("Generic file type.")
+		if   (self == FileTypes.Any):									raise CommonException("Generic file type.")
 		elif (self == FileTypes.Text):								return "txt"
 		elif (self == FileTypes.FileListFile):				return "files"
-		elif (self == FileTypes.ConstraintFile):			raise ExceptionBase("Generic file type.")
-		elif (self == FileTypes.SourceFile):					raise ExceptionBase("Generic file type.")
+		elif (self == FileTypes.ConstraintFile):			raise CommonException("Generic file type.")
+		elif (self == FileTypes.SourceFile):					raise CommonException("Generic file type.")
 		elif (self == FileTypes.VHDLSourceFile):			return "vhdl"
 		elif (self == FileTypes.VerilogSourceFile):		return "v"
-		else:																					raise ExceptionBase("This is not an enum member.")
+		else:																					raise CommonException("This is not an enum member.")
 		
 	def __str__(self):
 		return self.name

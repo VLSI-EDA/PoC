@@ -39,5 +39,3 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
 # load dependencies
-import Compiler.XCOCompiler
-import Compiler.XSTCompiler

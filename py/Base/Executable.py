@@ -40,8 +40,7 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Base.Executable")
 
 # load dependencies
-from enum										import Enum, unique
-from colorama								import Fore as Foreground
+# from enum										import Enum, unique
 from pathlib								import Path
 from subprocess							import Popen				as Subprocess_Popen
 from subprocess							import PIPE					as Subprocess_Pipe
@@ -299,9 +298,6 @@ class CommandLineArgumentList(list):
 			else:												raise TypeError()
 		return result
 
-import asyncio
-import locale
-from asyncio.subprocess import PIPE, STDOUT
 
 class Executable(ILogable):
 	def __init__(self, platform, executablePath, logger=None):
