@@ -794,7 +794,7 @@ class ElseIfStatement(ConditionalBlockStatement):
 		_indent = "  " * indent
 		buffer = _indent + "ElseIfStatement" + self._expression.__str__()
 		for stmt in self._statements:
-			buffer += "\n{1}".format(_indent, stmt.__str__(indent + 1))
+			buffer += "\n{0}{1}".format(_indent, stmt.__str__(indent + 1))
 		return buffer
 		
 class ElseStatement(BlockStatement):
@@ -860,7 +860,7 @@ class ElseStatement(BlockStatement):
 		_indent = "  " * indent
 		buffer = _indent + "ElseStatement"
 		for stmt in self._statements:
-			buffer += "\n{1}".format(_indent, stmt.__str__(indent + 1))
+			buffer += "\n{0}{1}".format(_indent, stmt.__str__(indent + 1))
 		return buffer
 		
 class IfElseIfElseStatement(Statement):

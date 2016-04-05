@@ -45,8 +45,10 @@ from os											import chdir
 
 from colorama								import Fore as Foreground
 
+from Base.Exceptions					import SimulatorException
 from Base.Simulator					import Simulator as BaseSimulator, VHDLTestbenchLibraryName
-from PoC.PoCProject					import *
+from Base.Project						import FileTypes, VHDLVersion
+from PoC.PoCProject					import Project as PoCProject
 from ToolChains.Xilinx.ISE	import ISE, ISESimulator
 
 

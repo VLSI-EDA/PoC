@@ -1,8 +1,8 @@
 
 from Base.Exceptions	import *
-from Base.Project			import Project	#, ProjectFile
+from Base.Project			import Project as BaseProject	#, ProjectFile
 
-class PoCProject(Project):
+class Project(BaseProject):
 	def __init__(self, name):
 		Project.__init__(self, name)
 

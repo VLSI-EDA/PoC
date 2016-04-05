@@ -31,7 +31,7 @@
 #
 
 from Parser.Parser				import ParserException
-from Parser.Parser				import StringLiteral, IntegerLiteral
+from Parser.Parser				import StringLiteral, IntegerLiteral, Identifier
 from Parser.Parser				import AndExpression, OrExpression, XorExpression, NotExpression, InExpression
 from Parser.Parser				import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
 from Parser.Parser				import ExistsFunction, ListConstructorExpression

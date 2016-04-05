@@ -39,9 +39,10 @@ from platform									import system as platform_system
 from sys											import argv as sys_argv
 from textwrap									import dedent
 
-from Base.Exceptions					import EnvironmentException
+from Base.Exceptions					import EnvironmentException, PlatformNotSupportedException, CompilerException, SimulatorException, NotConfiguredException, ToolChainException
 from Base.Logging							import ILogable, Logger, Severity
 from Base.Project							import VHDLVersion
+from Base.Configuration				import ConfigurationException
 from Compiler.XCOCompiler						import Compiler as XCOCompiler
 from Compiler.XSTCompiler						import Compiler as XSTCompiler
 from Parser.Parser						import ParserException
@@ -54,7 +55,7 @@ from Simulator.ISESimulator					import Simulator as ISESimulator
 from Simulator.QuestaSimulator			import Simulator as QuestaSimulator
 from Simulator.VivadoSimulator			import Simulator as VivadoSimulator
 from ToolChains								import Configurations
-from lib.ArgParseAttributes		import *
+from lib.ArgParseAttributes		import ArgParseMixin, CommandAttribute, CommonSwitchArgumentAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
 from lib.Functions						import Init, Exit
 
 

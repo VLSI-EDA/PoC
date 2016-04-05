@@ -47,13 +47,14 @@ from configparser						import NoSectionError
 from os											import chdir
 from pathlib								import Path
 
-from Base.Exceptions				import *
-from Base.Compiler					import Compiler
-from PoC.PoCProject					import *
+from Base.Exceptions				import CompilerException, NotConfiguredException, PlatformNotSupportedException
+from Base.Project						import FileTypes, VHDLVersion
+from Base.Compiler					import Compiler as BaseCompiler
+from PoC.PoCProject					import Project as PoCProject
 from ToolChains.Xilinx.ISE	import ISE
 
 
-class Compiler(Compiler):
+class Compiler(BaseCompiler):
 	def __init__(self, host, showLogs, showReport):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 

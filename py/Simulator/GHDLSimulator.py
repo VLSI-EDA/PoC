@@ -45,9 +45,11 @@ from os											import chdir
 
 from colorama								import Fore as Foreground
 
+from Base.Exceptions				import SimulatorException
+from Base.Project						import FileTypes, VHDLVersion
 from Base.Simulator					import Simulator as BaseSimulator, VHDLTestbenchLibraryName
 from Parser.Parser					import ParserException
-from PoC.PoCProject					import *
+from PoC.PoCProject					import Project as PoCProject
 from ToolChains.GHDL				import GHDL, GHDLException
 from ToolChains.GTKWave			import GTKWave
 
