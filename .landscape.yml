@@ -1,0 +1,3 @@
+max-line-length: 180
+python-targets:
+    - 3
