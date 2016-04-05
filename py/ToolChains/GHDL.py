@@ -47,7 +47,7 @@ from Base.Exceptions				import BaseException, ToolChainException
 from Base.Configuration			import Configuration as BaseConfiguration
 from Base.Executable				import Executable, \
 																	 ExecutableArgument, PathArgument, StringArgument, \
-																	 LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
+																	 ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
 from Base.Logging						import LogEntry, Severity
 from Base.Simulator					import SimulatorException
 

@@ -38,10 +38,10 @@ else :
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.VivadoProject")
 
 
-from Base.Project			import *
+from Base.Project			import Project as BaseProject, ProjectFile, ConstraintFile
 
 
-class VivadoProject(Project):
+class VivadoProject(BaseProject):
 	def __init__(self, name):
 		super().__init__(name)
 

@@ -44,12 +44,15 @@ from collections					import OrderedDict
 from pathlib							import Path
 from os										import environ
 
-from Base.Exceptions			import PlatformNotSupportedException
+from Base.Exceptions			import PlatformNotSupportedException, ToolChainException
 from Base.Executable							import Executable
-from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument
+from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
 from Base.Logging					import LogEntry, Severity
 from Base.Configuration 	import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
 
+
+class VivadoException(ToolChainException):
+	pass
 
 class Configuration(BaseConfiguration):
 	_vendor =		"Xilinx"
@@ -210,22 +213,43 @@ class XVhComp(Executable, VivadoSimMixIn):
 		super().__init__(platform, executablePath, logger=logger)
 
 
-
-	def Compile(self, vhdlFile):
+	def Compile(self):
 		parameterList = self.Parameters.ToArgumentList()
-
 		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
 
-		_indent = "    "
-		print(_indent + "xvhcomp messages for '{0}.{1}'".format("??????"))  # self.VHDLLibrary, topLevel))
-		print(_indent + "-" * 80)
 		try:
 			self.StartProcess(parameterList)
-			for line in self.GetReader():
-				print(_indent + line)
 		except Exception as ex:
-			raise ex  # SimulatorException() from ex
-		print(_indent + "-" * 80)
+			raise VivadoException("Failed to launch xvhcomp.") from ex
+
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+		try:
+			iterator = iter(VHDLCompilerFilter(self.GetReader()))
+
+			line = next(iterator)
+			self._hasOutput = True
+			self._LogNormal("    xvhcomp messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
+			self._LogNormal("    " + ("-" * 76))
+
+			while True:
+				self._hasWarnings |= (line.Severity is Severity.Warning)
+				self._hasErrors |= (line.Severity is Severity.Error)
+
+				line.Indent(2)
+				self._Log(line)
+				line = next(iterator)
+
+		except StopIteration as ex:
+			pass
+		except VivadoException:
+			raise
+		# except Exception as ex:
+		#	raise GHDLException("Error while executing GHDL.") from ex
+		finally:
+			if self._hasOutput:
+				self._LogNormal("    " + ("-" * 76))
 
 
 class XElab(Executable, VivadoSimMixIn):
@@ -301,19 +325,41 @@ class XElab(Executable, VivadoSimMixIn):
 
 	def Link(self):
 		parameterList = self.Parameters.ToArgumentList()
-
 		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
 
-		_indent = "    "
-		print(_indent + "xelab messages for '{0}'".format(self.Parameters[self.ArgTopLevel]))
-		print(_indent + "-" * 80)
 		try:
 			self.StartProcess(parameterList)
-			for line in self.GetReader():
-				print(_indent + line)
 		except Exception as ex:
-			raise ex  # SimulatorException() from ex
-		print(_indent + "-" * 80)
+			raise VivadoException("Failed to launch xelab.") from ex
+
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+		try:
+			iterator = iter(ElaborationFilter(self.GetReader()))
+
+			line = next(iterator)
+			self._hasOutput = True
+			self._LogNormal("    xelab messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
+			self._LogNormal("    " + ("-" * 76))
+
+			while True:
+				self._hasWarnings |= (line.Severity is Severity.Warning)
+				self._hasErrors |= (line.Severity is Severity.Error)
+
+				line.Indent(2)
+				self._Log(line)
+				line = next(iterator)
+
+		except StopIteration as ex:
+			pass
+		except VivadoException:
+			raise
+		# except Exception as ex:
+		#	raise GHDLException("Error while executing GHDL.") from ex
+		finally:
+			if self._hasOutput:
+				self._LogNormal("    " + ("-" * 76))
 
 
 class XSim(Executable, VivadoSimMixIn):
@@ -360,17 +406,51 @@ class XSim(Executable, VivadoSimMixIn):
 
 	def Simulate(self):
 		parameterList = self.Parameters.ToArgumentList()
-
 		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
 
-		_indent = "    "
-		print(_indent + "xsim messages for '{0}'".format(self.Parameters[self.SwitchSnapshot]))
-		print(_indent + "-" * 80)
 		try:
 			self.StartProcess(parameterList)
-			for line in self.GetReader():
-				print(_indent + line)
 		except Exception as ex:
-			raise ex  # SimulatorException() from ex
-		print(_indent + "-" * 80)
+			raise VivadoException("Failed to launch xsim.") from ex
 
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+		try:
+			iterator = iter(SimulatorFilter(self.GetReader()))
+
+			line = next(iterator)
+			self._hasOutput = True
+			self._LogNormal("    xsim messages for '{0}'".format(self.Parameters[self.SwitchSnapshot]))
+			self._LogNormal("    " + ("-" * 76))
+
+			while True:
+				self._hasWarnings |= (line.Severity is Severity.Warning)
+				self._hasErrors |= (line.Severity is Severity.Error)
+
+				line.Indent(2)
+				self._Log(line)
+				line = next(iterator)
+
+		except StopIteration as ex:
+			pass
+		except VivadoException:
+			raise
+		# except Exception as ex:
+		#	raise GHDLException("Error while executing GHDL.") from ex
+		finally:
+			if self._hasOutput:
+				self._LogNormal("    " + ("-" * 76))
+
+
+def VHDLCompilerFilter(gen):
+	for line in gen:
+		yield LogEntry(line, Severity.Normal)
+
+def SimulatorFilter(gen):
+	for line in gen:
+		yield LogEntry(line, Severity.Normal)
+
+def SimulatorFilter(gen):
+	for line in gen:
+		yield LogEntry(line, Severity.Normal)

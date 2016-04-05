@@ -43,7 +43,7 @@ else:
 from collections						import OrderedDict
 from pathlib								import Path
 
-from Base.Exceptions				import BaseException, ToolChainException
+from Base.Exceptions				import BaseException, ToolChainException, PlatformNotSupportedException, NotConfiguredException
 from Base.Configuration			import Configuration as BaseConfiguration
 from Base.Executable				import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
 from Base.Logging						import LogEntry, Severity
@@ -98,9 +98,9 @@ class Configuration(BaseConfiguration):
 			gtkwDirectoryPath = Path(gtkwDirectory)
 			gtkwExecutablePath = gtkwDirectoryPath / "bin" / "gtkwave.exe"
 
-			if not gtkwDirectoryPath.exists() :  raise BaseException(
+			if not gtkwDirectoryPath.exists() :  raise NotConfiguredException(
 				"GTKWave installation directory '%s' does not exist." % gtkwDirectory)
-			if not gtkwExecutablePath.exists() :  raise BaseException("GTKWave is not installed.")
+			if not gtkwExecutablePath.exists() :  raise NotConfiguredException("GTKWave is not installed.")
 
 			self.pocConfig['GTKWave']['Version'] = gtkwVersion
 			self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()

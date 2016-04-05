@@ -44,7 +44,7 @@ from pathlib							import Path
 from os										import environ
 
 from Base.Executable							import Executable
-from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument
+from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
 from Base.Exceptions			import PlatformNotSupportedException, ToolChainException
 from Base.Logging					import LogEntry, Severity
 from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
