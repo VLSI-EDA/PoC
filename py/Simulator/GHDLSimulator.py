@@ -49,7 +49,7 @@ from Base.Exceptions				import SimulatorException
 from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
 from Base.Simulator					import Simulator as BaseSimulator, VHDLTestbenchLibraryName
 from Parser.Parser					import ParserException
-from PoC.PoCProject					import Project as PoCProject
+from PoC.Project					import Project as PoCProject
 from ToolChains.GHDL				import GHDL, GHDLException
 from ToolChains.GTKWave			import GTKWave
 

@@ -47,11 +47,11 @@ from configparser						import NoSectionError
 from os											import chdir
 from pathlib								import Path
 
-from Base.Exceptions				import CompilerException, NotConfiguredException, PlatformNotSupportedException
+from Base.Exceptions				import NotConfiguredException, PlatformNotSupportedException
 from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
-from Base.Compiler					import Compiler as BaseCompiler
+from Base.Compiler					import Compiler as BaseCompiler, CompilerException
 from Parser.Parser					import ParserException
-from PoC.PoCProject					import Project as PoCProject
+from PoC.Project					import Project as PoCProject
 from ToolChains.Xilinx.ISE	import ISE
 
 
@@ -264,7 +264,7 @@ class Compiler(BaseCompiler):
 		xstFileContent = xstFileContent.format(**xstTemplateDictionary)
 		
 		if (self.Host.netListConfig.has_option(self._ipcoreFQN, 'XSTOption.Generics')):
-			xstFileContent += "-generics { {0} }".format(self.Host.netListConfig[self._ipcoreFQN]['XSTOption.Generics'])
+			xstFileContent += "-generics {{ {0} }}".format(self.Host.netListConfig[self._ipcoreFQN]['XSTOption.Generics'])
 
 		self._LogDebug("Writing Xilinx Compiler Tool option file to '{0}'".format(str(xstFilePath)))
 		with xstFilePath.open('w') as xstFileHandle:

@@ -26,6 +26,7 @@
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS,default
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -39,13 +40,15 @@ from platform									import system as platform_system
 from sys											import argv as sys_argv
 from textwrap									import dedent
 
-from Base.Exceptions					import EnvironmentException, PlatformNotSupportedException, NotConfiguredException, \
-																		 CommonException, CompilerException, SimulatorException, ToolChainException
+from Base.Exceptions					import ExceptionBase, EnvironmentException, PlatformNotSupportedException, NotConfiguredException, \
+																		 CommonException, SimulatorException
+from Base.ToolChain import ToolChainException
+from Base.Compiler						import CompilerException
 from Base.Logging							import ILogable, Logger, Severity
 from Base.Project							import VHDLVersion
 from Base.Configuration				import ConfigurationException
-from Compiler.XCOCompiler						import Compiler as XCOCompiler
-from Compiler.XSTCompiler						import Compiler as XSTCompiler
+from Compiler.XCOCompiler			import Compiler as XCOCompiler
+from Compiler.XSTCompiler			import Compiler as XSTCompiler
 from Parser.Parser						import ParserException
 from PoC.Config								import Device, Board
 from PoC.Entity								import Entity, FQN, EntityTypes
@@ -289,7 +292,7 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	# fallback handler if no command was recognized
 	# ----------------------------------------------------------------------------
-	#@DefaultAttribute()
+	@DefaultAttribute()
 	# @HandleVerbosityOptions
 	def HandleDefault(self, args):
 		self.PrintHeadline()
@@ -742,7 +745,7 @@ class PoC(ILogable, ArgParseMixin):
 			board = self.__SimulationDefaultBoard
 
 		if (args.VHDLVersion is None):
-			vhdlVersion = self.__SimulationDefaultVHDLVersion
+			vhdlVersion = VHDLVersion.VHDL93	# self.__SimulationDefaultVHDLVersion		# TODO: VHDL-2008 is broken in Vivado 2015.4 -> use VHDL-93 by default
 		else:
 			vhdlVersion = VHDLVersion.parse(args.VHDLVersion)
 
@@ -920,7 +923,7 @@ def main():
 		poc.Run()
 		Exit.exit()
 
-	except (CommonException, SimulatorException, CompilerException) as ex:
+	except (CommonException, ConfigurationException, SimulatorException, CompilerException) as ex:
 		print("{RED}ERROR:{RESET} {message}".format(message=ex.message, **Init.Foreground))
 		cause = ex.__cause__
 		if isinstance(cause, FileNotFoundError):
@@ -951,8 +954,8 @@ def main():
 	except EnvironmentException as ex:					Exit.printEnvironmentException(ex)
 	except NotConfiguredException as ex:				Exit.printNotConfiguredException(ex)
 	except PlatformNotSupportedException as ex:	Exit.printPlatformNotSupportedException(ex)
-	#except BaseException as ex:									Exit.printBaseException(ex)
-	#except NotImplementedError as ex:						Exit.printNotImplementedError(ex)
+	except ExceptionBase as ex:									Exit.printExceptionbase(ex)
+	except NotImplementedError as ex:						Exit.printNotImplementedError(ex)
 	except Exception as ex:											Exit.printException(ex)
 
 # entry point

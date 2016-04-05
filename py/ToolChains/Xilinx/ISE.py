@@ -32,6 +32,9 @@
 # ==============================================================================
 #
 # entry point
+from Base.Project import Project as BaseProject, ProjectFile, ConstraintFile
+
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -45,7 +48,8 @@ from os										import environ
 
 from Base.Executable							import Executable
 from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
-from Base.Exceptions			import PlatformNotSupportedException, ToolChainException
+from Base.Exceptions			import PlatformNotSupportedException
+from Base.ToolChain import ToolChainException
 from Base.Logging					import LogEntry, Severity
 from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
 
@@ -143,7 +147,7 @@ class Configuration(BaseConfiguration):
 			self.pocConfig['Xilinx.ISE']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/ISE_DS'
 			self.pocConfig['Xilinx.ISE']['BinaryDirectory'] = '${InstallationDirectory}/ISE/bin/nt64'
 		else:
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 	def ManualConfigureForLinux(self):
 		# Ask for installed Xilinx ISE
@@ -164,9 +168,9 @@ class Configuration(BaseConfiguration):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
 
-			if not xilinxDirectoryPath.exists():  raise BaseException(
+			if not xilinxDirectoryPath.exists():  raise ConfigurationException(
 				"Xilinx installation directory '%s' does not exist." % xilinxDirectory)
-			if not iseDirectoryPath.exists():      raise BaseException(
+			if not iseDirectoryPath.exists():      raise ConfigurationException(
 				"Xilinx ISE version '%s' is not installed." % iseVersion)
 
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -174,7 +178,7 @@ class Configuration(BaseConfiguration):
 			self.pocConfig['Xilinx.ISE']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/ISE_DS'
 			self.pocConfig['Xilinx.ISE']['BinaryDirectory'] = '${InstallationDirectory}/ISE/bin/lin64'
 		else:
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 
 class ISE:
@@ -235,6 +239,14 @@ class Fuse(Executable, ISE):
 		self._hasOutput = False
 		self._hasWarnings = False
 		self._hasErrors = False
+
+	@property
+	def HasWarnings(self):
+		return self._hasWarnings
+
+	@property
+	def HasErrors(self):
+		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):						pass
 
@@ -321,6 +333,14 @@ class ISESimulator(Executable):
 		self._hasWarnings = False
 		self._hasErrors = False
 
+	@property
+	def HasWarnings(self):
+		return self._hasWarnings
+
+	@property
+	def HasErrors(self):
+		return self._hasErrors
+
 	class Executable(metaclass=ExecutableArgument):			pass
 
 	class SwitchLogFile(metaclass=ShortTupleArgument):
@@ -396,6 +416,14 @@ class Xst(Executable) :
 		self._hasWarnings = False
 		self._hasErrors = False
 
+	@property
+	def HasWarnings(self):
+		return self._hasWarnings
+
+	@property
+	def HasErrors(self):
+		return self._hasErrors
+
 	class Executable(metaclass=ExecutableArgument) :
 		pass
 
@@ -467,6 +495,14 @@ class CoreGenerator(Executable):
 		self._hasOutput = False
 		self._hasWarnings = False
 		self._hasErrors = False
+
+	@property
+	def HasWarnings(self):
+		return self._hasWarnings
+
+	@property
+	def HasErrors(self):
+		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):				pass
 
@@ -582,3 +618,17 @@ def CoreGeneratorFilter(gen):
 	for line in gen:
 		yield LogEntry(line, Severity.Normal)
 
+
+class ISEProject(BaseProject):
+	def __init__(self, name):
+		super().__init__(name)
+
+
+class ISEProjectFile(ProjectFile):
+	def __init__(self, file):
+		super().__init__(file)
+
+
+class UserConstraintFile(ConstraintFile):
+	def __init__(self, file):
+		super().__init__(file)

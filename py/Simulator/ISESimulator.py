@@ -49,8 +49,8 @@ from Base.Exceptions				import SimulatorException
 from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
 from Base.Simulator					import Simulator as BaseSimulator, VHDLTestbenchLibraryName
 from Parser.Parser					import ParserException
-from PoC.PoCProject					import Project as PoCProject
-from ToolChains.Xilinx.ISE	import ISE, ISESimulator
+from PoC.Project						import Project as PoCProject
+from ToolChains.Xilinx.ISE	import ISE, ISESimulator, ISEException
 
 
 class Simulator(BaseSimulator):
@@ -200,7 +200,14 @@ class Simulator(BaseSimulator):
 		fuse.Parameters[fuse.SwitchProjectFile] =			str(prjFilePath)
 		fuse.Parameters[fuse.SwitchOutputFile] =			str(exeFilePath)
 		fuse.Parameters[fuse.ArgTopLevel] =						"{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
-		fuse.Link()
+
+		try:
+			fuse.Link()
+		except ISEException as ex:
+			raise SimulatorException("Error while analysing '{0}'.".format(str(prjFilePath))) from ex
+
+		if fuse.HasErrors:
+			raise SimulatorException("Error while analysing '{0}'.".format(str(prjFilePath)))
 	
 	def _RunSimulation(self, testbenchName):
 		self._LogNormal("  running simulation...")

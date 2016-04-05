@@ -45,8 +45,9 @@ from pathlib						import Path
 
 from Base.Executable		import Executable
 from Base.Executable		import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
-from Base.Exceptions		import PlatformNotSupportedException, ToolChainException
-from Base.Configuration import Configuration as BaseConfiguration
+from Base.Exceptions		import PlatformNotSupportedException
+from Base.ToolChain import ToolChainException
+from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
 from Base.Logging				import LogEntry, Severity
 
 
@@ -128,9 +129,9 @@ class Configuration(BaseConfiguration):
 				QuestaSimDirectoryPath = Path(QuestaSimDirectory)
 				QuestaSimExecutablePath = QuestaSimDirectoryPath / "win64" / "vsim.exe"
 
-				if not QuestaSimDirectoryPath.exists() :    raise BaseException(
+				if not QuestaSimDirectoryPath.exists() :    raise ConfigurationException(
 					"QuestaSIM installation directory '%s' does not exist." % QuestaSimDirectory)
-				if not QuestaSimExecutablePath.exists() :  raise BaseException("QuestaSIM is not installed.")
+				if not QuestaSimExecutablePath.exists() :  raise ConfigurationException("QuestaSIM is not installed.")
 
 				self.pocConfig['Mentor']['InstallationDirectory'] = MentorDirectoryPath.as_posix()
 
@@ -138,9 +139,9 @@ class Configuration(BaseConfiguration):
 				self.pocConfig['Mentor.QuestaSIM']['InstallationDirectory'] = QuestaSimDirectoryPath.as_posix()
 				self.pocConfig['Mentor.QuestaSIM']['BinaryDirectory'] = '${InstallationDirectory}/win64'
 			else :
-				raise BaseException("unknown option")
+				raise ConfigurationException("unknown option")
 		else :
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 	def manualConfigureForLinux(self) :
 		# Ask for installed Mentor QuestaSIM
@@ -161,15 +162,15 @@ class Configuration(BaseConfiguration):
 			QuestaSimDirectoryPath = Path(QuestaSimDirectory)
 			QuestaSimExecutablePath = QuestaSimDirectoryPath / "bin" / "vsim"
 
-			if not QuestaSimDirectoryPath.exists() :    raise BaseException(
+			if not QuestaSimDirectoryPath.exists() :    raise ConfigurationException(
 				"QuestaSIM installation directory '%s' does not exist." % QuestaSimDirectory)
-			if not QuestaSimExecutablePath.exists() :  raise BaseException("QuestaSIM is not installed.")
+			if not QuestaSimExecutablePath.exists() :  raise ConfigurationException("QuestaSIM is not installed.")
 
 			self.pocConfig['Mentor.QuestaSIM']['Version'] = QuestaSimVersion
 			self.pocConfig['Mentor.QuestaSIM']['InstallationDirectory'] = QuestaSimDirectoryPath.as_posix()
 			self.pocConfig['Mentor.QuestaSIM']['BinaryDirectory'] = '${InstallationDirectory}/bin'
 		else :
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 class QuestaSimMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):

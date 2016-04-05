@@ -42,14 +42,14 @@ else:
 # load dependencies
 from enum							import Enum, unique
 
-from Base.Exceptions	import *
+from Base.Exceptions	import ExceptionBase
 from Base.Logging			import ILogable
 
 
 VHDLTestbenchLibraryName = "test"
 
 
-class SimulatorException(BaseException):
+class SimulatorException(ExceptionBase):
 	pass
 
 @unique

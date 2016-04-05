@@ -49,8 +49,8 @@ from Base.Exceptions					import SimulatorException
 from Base.Project							import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
 from Base.Simulator						import Simulator as BaseSimulator#, VHDLTestbenchLibraryName
 from Parser.Parser						import ParserException
-from PoC.PoCProject						import Project as PoCProject
-from ToolChains.Xilinx.Vivado	import Vivado
+from PoC.Project							import Project as PoCProject
+from ToolChains.Xilinx.Vivado	import Vivado, VivadoException
 
 
 # Workaround for Vivado 2015.4
@@ -185,7 +185,7 @@ class Simulator(BaseSimulator):
 			else:
 				xSimProjectFileContent += "vhdl {0} \"{1}\"\n".format(file.VHDLLibraryName, str(file.Path))
 
-		# Workaround for Vivado 2015.4: last VHDL file is testbench, rewrite library name
+		# WORKAROUND: Workaround for Vivado 2015.4: last VHDL file is testbench, rewrite library name to work
 		file = vhdlFiles[-1]
 		if (not file.Path.exists()):									raise SimulatorException("Can not add '{0}' to xSim project file.".format(str(file.Path))) from FileNotFoundError(str(file.Path))
 		if (self._vhdlVersion == VHDLVersion.VHDL2008):
@@ -202,7 +202,7 @@ class Simulator(BaseSimulator):
 		# create a VivadoLinker instance
 		xelab = self._vivado.GetElaborator()
 		xelab.Parameters[xelab.SwitchTimeResolution] =	"1fs"	# set minimum time precision to 1 fs
-		xelab.Parameters[xelab.SwitchMultiThreading] =	"off"	#"4"		# enable multithreading support
+		xelab.Parameters[xelab.SwitchMultiThreading] =	"on"	#"4"		# enable multithreading support
 		xelab.Parameters[xelab.FlagRangeCheck] =				True
 
 		# xelab.Parameters[xelab.SwitchOptimization] =		"2"
@@ -213,11 +213,18 @@ class Simulator(BaseSimulator):
 		# 	xelab.Parameters[xelab.SwitchVHDL2008] =			True
 
 		# if (self.verbose):
-		xelab.Parameters[xelab.SwitchVerbose] =					"1"	#"0"
+		xelab.Parameters[xelab.SwitchVerbose] =					"0"		# set to "1" for detailed messages
 		xelab.Parameters[xelab.SwitchProjectFile] =			str(prjFilePath)
 		xelab.Parameters[xelab.SwitchLogFile] =					str(xelabLogFilePath)
 		xelab.Parameters[xelab.ArgTopLevel] =						"{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
-		xelab.Link()
+
+		try:
+			xelab.Link()
+		except VivadoException as ex:
+			raise SimulatorException("Error while analysing '{0}'.".format(str(prjFilePath))) from ex
+
+		if xelab.HasErrors:
+			raise SimulatorException("Error while analysing '{0}'.".format(str(prjFilePath)))
 
 	def _RunSimulation(self, testbenchName):
 		self._LogNormal("  running simulation...")

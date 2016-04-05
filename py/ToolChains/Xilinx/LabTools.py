@@ -45,7 +45,7 @@ from pathlib							import Path
 
 from Base.Executable							import Executable
 from Base.Executable							import ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
-from Base.Configuration import Configuration as BaseConfiguration
+from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
 
 
 class Configuration(BaseConfiguration):
@@ -100,9 +100,9 @@ class Configuration(BaseConfiguration):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
 
-			if not xilinxDirectoryPath.exists():    raise BaseException(
+			if not xilinxDirectoryPath.exists():    raise ConfigurationException(
 				"Xilinx installation directory '%s' does not exist." % xilinxDirectory)
-			if not labToolsDirectoryPath.exists():  raise BaseException(
+			if not labToolsDirectoryPath.exists():  raise ConfigurationException(
 				"Xilinx LabTools version '%s' is not installed." % labToolsVersion)
 
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -110,7 +110,7 @@ class Configuration(BaseConfiguration):
 			self.pocConfig['Xilinx.LabTools']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/LabTools'
 			self.pocConfig['Xilinx.LabTools']['BinaryDirectory'] = '${InstallationDirectory}/LabTools/bin/nt64'
 		else:
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 	def manualConfigureForLinux(self):
 		# Ask for installed Xilinx LabTools
@@ -131,9 +131,9 @@ class Configuration(BaseConfiguration):
 			xilinxDirectoryPath = Path(xilinxDirectory)
 			labToolsDirectoryPath = xilinxDirectoryPath / labToolsVersion / "LabTools/LabTools"
 
-			if not xilinxDirectoryPath.exists():    raise BaseException(
+			if not xilinxDirectoryPath.exists():    raise ConfigurationException(
 				"Xilinx installation directory '%s' does not exist." % xilinxDirectory)
-			if not labToolsDirectoryPath.exists():  raise BaseException(
+			if not labToolsDirectoryPath.exists():  raise ConfigurationException(
 				"Xilinx LabTools version '%s' is not installed." % labToolsVersion)
 
 			self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
@@ -141,4 +141,4 @@ class Configuration(BaseConfiguration):
 			self.pocConfig['Xilinx.LabTools']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/LabTools'
 			self.pocConfig['Xilinx.LabTools']['BinaryDirectory'] = '${InstallationDirectory}/LabTools/bin/lin64'
 		else:
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")

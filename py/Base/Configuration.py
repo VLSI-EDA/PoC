@@ -38,10 +38,13 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Base.Configuration")
 
 
-class ConfigurationException(BaseException):
+from Base.Exceptions			import ExceptionBase
+
+
+class ConfigurationException(ExceptionBase):
 	pass
 
-class SkipConfigurationException(BaseException):
+class SkipConfigurationException(ExceptionBase):
 	pass
 
 class RegisterSubClassesMeta(type):

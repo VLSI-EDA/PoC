@@ -43,8 +43,9 @@ else:
 from collections						import OrderedDict
 from pathlib								import Path
 
-from Base.Exceptions				import BaseException, ToolChainException, PlatformNotSupportedException, NotConfiguredException
-from Base.Configuration			import Configuration as BaseConfiguration
+from Base.Exceptions				import PlatformNotSupportedException
+from Base.ToolChain import ToolChainException
+from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
 from Base.Executable				import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
 from Base.Logging						import LogEntry, Severity
 
@@ -98,15 +99,15 @@ class Configuration(BaseConfiguration):
 			gtkwDirectoryPath = Path(gtkwDirectory)
 			gtkwExecutablePath = gtkwDirectoryPath / "bin" / "gtkwave.exe"
 
-			if not gtkwDirectoryPath.exists() :  raise NotConfiguredException(
+			if not gtkwDirectoryPath.exists() :  raise ConfigurationException(
 				"GTKWave installation directory '%s' does not exist." % gtkwDirectory)
-			if not gtkwExecutablePath.exists() :  raise NotConfiguredException("GTKWave is not installed.")
+			if not gtkwExecutablePath.exists() :  raise ConfigurationException("GTKWave is not installed.")
 
 			self.pocConfig['GTKWave']['Version'] = gtkwVersion
 			self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
 			self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}/bin'
 		else :
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 	def manualConfigureForLinux(self) :
 		# Ask for installed GTKWave
@@ -127,15 +128,15 @@ class Configuration(BaseConfiguration):
 			gtkwDirectoryPath = Path(gtkwDirectory)
 			gtkwExecutablePath = gtkwDirectoryPath / "gtkwave"
 
-			if not gtkwDirectoryPath.exists() :  raise BaseException(
+			if not gtkwDirectoryPath.exists() :  raise ConfigurationException(
 				"GTKWave installation directory '%s' does not exist." % gtkwDirectory)
-			if not gtkwExecutablePath.exists() :  raise BaseException("GTKWave is not installed.")
+			if not gtkwExecutablePath.exists() :  raise ConfigurationException("GTKWave is not installed.")
 
 			self.pocConfig['GTKWave']['Version'] = gtkwVersion
 			self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
 			self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}'
 		else :
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 
 class GTKWave(Executable):

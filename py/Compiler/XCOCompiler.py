@@ -48,10 +48,10 @@ from os											import chdir
 from pathlib								import Path
 from textwrap								import dedent
 
-from Base.Exceptions				import CompilerException, NotConfiguredException, PlatformNotSupportedException
+from Base.Exceptions				import NotConfiguredException, PlatformNotSupportedException
 from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
-from Base.Compiler					import Compiler as BaseCompiler
-from PoC.PoCProject					import Project as PoCProject
+from Base.Compiler					import Compiler as BaseCompiler, CompilerException
+from PoC.Project					import Project as PoCProject
 from ToolChains.Xilinx.ISE	import ISE
 
 

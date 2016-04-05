@@ -32,6 +32,9 @@
 # ==============================================================================
 #
 # entry point
+from Base.Project import Project as BaseProject, ProjectFile, ConstraintFile
+
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -44,7 +47,8 @@ from collections					import OrderedDict
 from pathlib							import Path
 from os										import environ
 
-from Base.Exceptions			import PlatformNotSupportedException, ToolChainException
+from Base.Exceptions			import PlatformNotSupportedException
+from Base.ToolChain import ToolChainException
 from Base.Executable							import Executable
 from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
 from Base.Logging					import LogEntry, Severity
@@ -203,6 +207,7 @@ class Vivado(VivadoSimMixIn):
 	def GetSimulator(self):
 		return XSim(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
 
+
 class XVhComp(Executable, VivadoSimMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		VivadoSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
@@ -212,6 +217,17 @@ class XVhComp(Executable, VivadoSimMixIn):
 		else:																						raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+
+	@property
+	def HasWarnings(self):
+		return self._hasWarnings
+
+	@property
+	def HasErrors(self):
+		return self._hasErrors
 
 	def Compile(self):
 		parameterList = self.Parameters.ToArgumentList()
@@ -262,6 +278,18 @@ class XElab(Executable, VivadoSimMixIn):
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
+
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+
+	@property
+	def HasWarnings(self):
+		return self._hasWarnings
+
+	@property
+	def HasErrors(self):
+		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
 		_value =	None
@@ -373,6 +401,18 @@ class XSim(Executable, VivadoSimMixIn):
 
 		self.Parameters[self.Executable] = executablePath
 
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+
+	@property
+	def HasWarnings(self):
+		return self._hasWarnings
+
+	@property
+	def HasErrors(self):
+		return self._hasErrors
+
 	class Executable(metaclass=ExecutableArgument):
 		_value =	None
 
@@ -447,10 +487,30 @@ def VHDLCompilerFilter(gen):
 	for line in gen:
 		yield LogEntry(line, Severity.Normal)
 
-def SimulatorFilter(gen):
+def ElaborationFilter(gen):
 	for line in gen:
-		yield LogEntry(line, Severity.Normal)
+		if line.startswith("ERROR: "):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("WARNING: "):
+			yield LogEntry(line, Severity.Warning)
+		else:
+			yield LogEntry(line, Severity.Normal)
 
 def SimulatorFilter(gen):
 	for line in gen:
 		yield LogEntry(line, Severity.Normal)
+
+
+class VivadoProject(BaseProject):
+	def __init__(self, name):
+		super().__init__(name)
+
+
+class VivadoProjectFile(ProjectFile):
+	def __init__(self, file):
+		super().__init__(file)
+
+
+class XilinxDesignConstraintFile(ConstraintFile):
+	def __init__(self, file):
+		super().__init__(file)

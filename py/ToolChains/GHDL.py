@@ -43,10 +43,11 @@ from collections						import OrderedDict
 from pathlib								import Path
 from re											import compile as re_compile
 
-from Base.Exceptions				import BaseException, ToolChainException
-from Base.Configuration			import Configuration as BaseConfiguration
+from Base.Exceptions				import PlatformNotSupportedException
+from Base.ToolChain import ToolChainException
+from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
 from Base.Executable				import Executable, \
-																	 ExecutableArgument, PathArgument, StringArgument, \
+																	 ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument, \
 																	 ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
 from Base.Logging						import LogEntry, Severity
 from Base.Simulator					import SimulatorException
@@ -106,15 +107,15 @@ class Configuration(BaseConfiguration):
 			ghdlDirectoryPath = Path(ghdlDirectory)
 			ghdlExecutablePath = ghdlDirectoryPath / "bin" / "ghdl.exe"
 
-			if not ghdlDirectoryPath.exists():	raise BaseException("GHDL installation directory '%s' does not exist." % ghdlDirectory)
-			if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
+			if not ghdlDirectoryPath.exists():	raise ConfigurationException("GHDL installation directory '%s' does not exist." % ghdlDirectory)
+			if not ghdlExecutablePath.exists():	raise ConfigurationException("GHDL is not installed.")
 
 			self.pocConfig['GHDL']['Version'] = ghdlVersion
 			self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
 			self.pocConfig['GHDL']['BinaryDirectory'] = '${InstallationDirectory}/bin'
 			self.pocConfig['GHDL']['Backend'] = 'mcode'
 		else:
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 	def manualConfigureForLinux(self):
 		# Ask for installed GHDL
@@ -135,15 +136,15 @@ class Configuration(BaseConfiguration):
 			ghdlDirectoryPath = Path(ghdlDirectory)
 			ghdlExecutablePath = ghdlDirectoryPath / "ghdl"
 
-			if not ghdlDirectoryPath.exists():	raise BaseException("GHDL installation directory '%s' does not exist." % ghdlDirectory)
-			if not ghdlExecutablePath.exists():	raise BaseException("GHDL is not installed.")
+			if not ghdlDirectoryPath.exists():	raise ConfigurationException("GHDL installation directory '%s' does not exist." % ghdlDirectory)
+			if not ghdlExecutablePath.exists():	raise ConfigurationException("GHDL is not installed.")
 
 			self.pocConfig['GHDL']['Version'] = ghdlVersion
 			self.pocConfig['GHDL']['InstallationDirectory'] = ghdlDirectoryPath.as_posix()
 			self.pocConfig['GHDL']['BinaryDirectory'] = '${InstallationDirectory}'
 			self.pocConfig['GHDL']['Backend'] = 'llvm'
 		else:
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 
 class GHDL(Executable):

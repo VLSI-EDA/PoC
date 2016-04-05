@@ -126,7 +126,7 @@ class Exit:
 		Exit.exit(1)
 
 	@classmethod
-	def printBaseException(cls, ex):
+	def printExceptionbase(cls, ex):
 		Init.init()
 		print("{RED}ERROR:{RESET} {message}".format(message=ex.message, **Init.Foreground))
 		Exit.exit(1)

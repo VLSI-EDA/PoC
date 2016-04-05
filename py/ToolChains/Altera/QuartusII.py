@@ -32,6 +32,9 @@
 # ==============================================================================
 #
 # entry point
+from Base.Project import Project as BaseProject, ProjectFile, ConstraintFile
+
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -45,7 +48,7 @@ from pathlib											import Path
 
 from Base.Executable							import Executable
 from Base.Executable							import ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
-from Base.Configuration						import Configuration as BaseConfiguration
+from Base.Configuration						import Configuration as BaseConfiguration, ConfigurationException
 
 
 class Configuration(BaseConfiguration):
@@ -69,9 +72,9 @@ class Configuration(BaseConfiguration):
 			alteraDirectoryPath = Path(alteraDirectory)
 			quartusIIDirectoryPath = alteraDirectoryPath / quartusIIVersion / "quartus"
 
-			if not alteraDirectoryPath.exists() :    raise BaseException(
+			if not alteraDirectoryPath.exists() :    raise ConfigurationException(
 				"Altera installation directory '%s' does not exist." % alteraDirectory)
-			if not quartusIIDirectoryPath.exists() :  raise BaseException(
+			if not quartusIIDirectoryPath.exists() :  raise ConfigurationException(
 				"Altera QuartusII version '%s' is not installed." % quartusIIVersion)
 
 			self.pocConfig['Altera']['InstallationDirectory'] = alteraDirectoryPath.as_posix()
@@ -99,9 +102,9 @@ class Configuration(BaseConfiguration):
 					'InstallationDirectory'] = '${Altera:InstallationDirectory}/${Altera.QuartusII:Version}/modelsim_ase'
 				self.pocConfig['Altera.ModelSim']['BinaryDirectory'] = '${InstallationDirectory}/win32aloem'
 			else :
-				raise BaseException("unknown option")
+				raise ConfigurationException("unknown option")
 		else :
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
 
 	def manualConfigureForLinux(self) :
 		# Ask for installed Altera Quartus-II
@@ -122,9 +125,9 @@ class Configuration(BaseConfiguration):
 			alteraDirectoryPath = Path(alteraDirectory)
 			quartusIIDirectoryPath = alteraDirectoryPath / quartusIIVersion / "quartus"
 
-			if not alteraDirectoryPath.exists() :    raise BaseException(
+			if not alteraDirectoryPath.exists() :    raise ConfigurationException(
 				"Altera installation directory '%s' does not exist." % alteraDirectory)
-			if not quartusIIDirectoryPath.exists() :  raise BaseException(
+			if not quartusIIDirectoryPath.exists() :  raise ConfigurationException(
 				"Altera QuartusII version '%s' is not installed." % quartusIIVersion)
 
 			self.pocConfig['Altera']['InstallationDirectory'] = alteraDirectoryPath.as_posix()
@@ -152,6 +155,21 @@ class Configuration(BaseConfiguration):
 					'InstallationDirectory'] = '${Altera:InstallationDirectory}/${Altera.QuartusII:Version}/modelsim_ase'
 				self.pocConfig['Altera.ModelSim']['BinaryDirectory'] = '${InstallationDirectory}/bin'
 			else :
-				raise BaseException("unknown option")
+				raise ConfigurationException("unknown option")
 		else :
-			raise BaseException("unknown option")
+			raise ConfigurationException("unknown option")
+
+
+class QuartusProject(BaseProject):
+	def __init__(self, name):
+		super().__init__(name)
+
+
+class QuartusProjectFile(ProjectFile):
+	def __init__(self, file):
+		super().__init__(file)
+
+
+class SynopsysDesignConstraintFile(ConstraintFile):
+	def __init__(self, file):
+		super().__init__(file)

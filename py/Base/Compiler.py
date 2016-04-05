@@ -32,6 +32,9 @@
 # ==============================================================================
 
 # entry point
+from Base.Exceptions import ExceptionBase
+
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -41,9 +44,12 @@ else:
 
 
 # load dependencies
-from Base.Exceptions		import *
+from Base.Exceptions		import ExceptionBase
 from Base.Logging				import ILogable
 
+
+class CompilerException(ExceptionBase):
+	pass
 
 class Compiler(ILogable):
 	def __init__(self, host, showLogs, showReport):
@@ -81,3 +87,4 @@ class Compiler(ILogable):
 	def printNonQuiet(self, message):
 		if (not self.quiet):
 			print(message)
+
