@@ -32,7 +32,11 @@
 DEBUG =		False#True
 DEBUG2 =	False#True
 
-from Parser.Parser		import *
+from Parser.Parser		import MismatchingParserResult, MatchingParserResult
+from Parser.Parser		import CodeDOMObject
+from Parser.Parser		import SpaceToken, CharacterToken, StringToken, NumberToken
+from Parser.Parser		import Statement, BlockStatement, ConditionalBlockStatement, Expressions
+
 
 class EmptyLine(CodeDOMObject):
 	def __init__(self):

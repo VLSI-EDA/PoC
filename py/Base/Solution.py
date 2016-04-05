@@ -41,7 +41,8 @@ else:
 
 # load dependencies
 from pathlib import Path
-from Base.Exceptions import *
+
+from Base.Exceptions import NotConfiguredException
 
 
 class CommandLineProgram(object):

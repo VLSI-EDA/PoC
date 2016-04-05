@@ -45,14 +45,15 @@ import shutil
 from colorama								import Fore as Foreground
 from configparser						import NoSectionError
 from os											import chdir
+from pathlib								import Path
 
 from Base.Exceptions				import *
-from Base.Compiler					import PoCCompiler
+from Base.Compiler					import Compiler
 from PoC.PoCProject					import *
 from ToolChains.Xilinx.ISE	import ISE
 
 
-class Compiler(PoCCompiler):
+class Compiler(Compiler):
 	def __init__(self, host, showLogs, showReport):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 

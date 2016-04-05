@@ -48,12 +48,12 @@ from os											import chdir
 from pathlib								import Path
 from textwrap								import dedent
 
-from Base.Exceptions				import *
-from Base.Compiler					import PoCCompiler
+from Base.Exceptions				import CompilerException, NotConfiguredException, PlatformNotSupportedException
+from Base.Compiler					import Compiler as BaseCompiler
 from ToolChains.Xilinx.ISE	import ISE
 
 
-class Compiler(PoCCompiler):
+class Compiler(BaseCompiler):
 	def __init__(self, host, showLogs, showReport):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 

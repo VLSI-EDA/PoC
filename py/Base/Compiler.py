@@ -45,7 +45,7 @@ from Base.Exceptions		import *
 from Base.Logging				import ILogable
 
 
-class PoCCompiler(ILogable):
+class Compiler(ILogable):
 	def __init__(self, host, showLogs, showReport):
 		if isinstance(host, ILogable):
 			ILogable.__init__(self, host.Logger)

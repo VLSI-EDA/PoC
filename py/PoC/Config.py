@@ -42,7 +42,6 @@ from enum									import Enum, EnumMeta, unique
 from re										import compile as RegExpCompile
 
 from lib.Decorators				import CachedReadOnlyProperty
-from Base.Exceptions			import *
 from Base.Configuration		import ConfigurationException
 
 
@@ -350,7 +349,7 @@ class Device:
 				subtype[1]
 			)
 		elif (self.__vendor is Vendors.Altera):
-			raise NotImplementedException("Device.ShortName() not implemented for vendor Altera")
+			raise NotImplementedError("Device.ShortName() not implemented for vendor Altera")
 			return "ep...."
 	
 	# @CachedReadOnlyProperty
@@ -369,7 +368,7 @@ class Device:
 				self.__pinCount
 			)
 		elif (self.__vendor is Vendors.Altera):
-			raise NotImplementedException("Device.FullName() not implemented for vendor Altera")
+			raise NotImplementedError("Device.FullName() not implemented for vendor Altera")
 			return "ep...."
 	
 	@property

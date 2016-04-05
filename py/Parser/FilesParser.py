@@ -29,12 +29,14 @@
 # limitations under the License.
 # ==============================================================================
 #
-from colorama							import Fore
-from pathlib							import Path
-from time									import time
 
-from Parser.Parser				import *
-from Parser.FilesCodeDOM	import Document, VHDLStatement, VerilogStatement, IncludeStatement, LibraryStatement, IfElseIfElseStatement, ReportStatement
+from Parser.Parser				import ParserException
+from Parser.Parser				import StringLiteral, IntegerLiteral
+from Parser.Parser				import AndExpression, OrExpression, XorExpression, NotExpression, InExpression
+from Parser.Parser				import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
+from Parser.Parser				import ExistsFunction, ListConstructorExpression
+from Parser.FilesCodeDOM	import Document
+from Parser.FilesCodeDOM	import VHDLStatement, VerilogStatement, IncludeStatement, LibraryStatement, IfElseIfElseStatement, ReportStatement
 
 class VHDLSourceFile:
 	def __init__(self, library, file):

@@ -1,6 +1,6 @@
 
 from Base.Exceptions	import *
-from Base.Project			import *
+from Base.Project			import Project	#, ProjectFile
 
 class PoCProject(Project):
 	def __init__(self, name):
