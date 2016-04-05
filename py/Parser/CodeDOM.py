@@ -1,5 +1,5 @@
 
-class CodeObject:
+class CodeDOMObject:
 	def __init__(self):
 		self._parent =	None
 	

@@ -49,6 +49,9 @@ from Base.Logging			import ILogable
 VHDLTestbenchLibraryName = "test"
 
 
+class SimulatorException(BaseException):
+	pass
+
 @unique
 class SimulationResult(Enum):
 	Failed = 0

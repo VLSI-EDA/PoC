@@ -253,7 +253,7 @@ class Project():
 		if (fileSet in self.FileSets):
 			raise BaseException("Project already contains this fileSet.")
 		if (fileSet.Name in self._fileSets.keys()):
-			raise BaseException("Project already contains a fileset named ''.".format(fileSet.Name))
+			raise BaseException("Project already contains a fileset named '{0}'.".format(fileSet.Name))
 		fileSet.Project = self
 		self._fileSets[fileSet.Name] = fileSet
 		
@@ -286,7 +286,7 @@ class Project():
 		elif isinstance(fileSet, str):
 			fileSet = self._fileSets[fileSet]
 		elif isinstance(fileSet, FileSet):
-			if (fileSet not in self.FileSets):						raise BaseException("Fileset '{0}' is not associated to this project.".format(value))
+			if (fileSet not in self.FileSets):						raise BaseException("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
 		else:																						raise ValueError("Unsupported parameter type for 'fileSet'.")
 		fileSet.AddFile(file)
 		return file
@@ -300,7 +300,7 @@ class Project():
 		elif isinstance(fileSet, str):
 			fileSet = self._fileSets[fileSet]
 		elif isinstance(fileSet, FileSet):
-			if (fileSet not in self.FileSets):						raise BaseException("Fileset '{0}' is not associated to this project.".format(value))
+			if (fileSet not in self.FileSets):						raise BaseException("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
 		else:																						raise ValueError("Unsupported parameter type for 'fileSet'.")
 		fileSet.AddSourceFile(file)
 		return file

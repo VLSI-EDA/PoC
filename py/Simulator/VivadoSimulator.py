@@ -40,14 +40,15 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.VivadoSimulator")
 
 # load dependencies
-from colorama									import Fore as Foreground
 from configparser							import NoSectionError
 from os												import chdir
 
-from Base.Exceptions					import *
+from colorama									import Fore as Foreground
+
 from Base.Simulator						import Simulator as BaseSimulator#, VHDLTestbenchLibraryName
 from PoC.PoCProject						import *
 from ToolChains.Xilinx.Vivado	import Vivado
+
 
 # Workaround for Vivado 2015.4
 VHDLTestbenchLibraryName = "work"

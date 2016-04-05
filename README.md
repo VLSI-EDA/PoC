@@ -20,6 +20,8 @@ Table of Content:
 
 --------------------------------------------------------------------------------
 
+[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/master/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/master)
+
 ## 1 Overview
 
 PoC - "Pile of Cores" provides implementations for often required hardware

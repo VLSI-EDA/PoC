@@ -227,7 +227,7 @@ class ValuedFlagListArgument(CommandLineArgument):
 	def Value(self, value):
 		if (value is None):										self._value = None
 		elif isinstance(value, (tuple,list)):	self._value = value
-		else:																	raise ValueError("Parameter 'value' is not of type tuple or list.") from ex
+		else:																	raise ValueError("Parameter 'value' is not of type tuple or list.")
 
 	def __str__(self):
 		if (self._value is None):			return ""

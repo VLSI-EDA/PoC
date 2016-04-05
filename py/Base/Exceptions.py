@@ -32,6 +32,9 @@
 # ==============================================================================
 
 # entry point
+from Base.Simulator import SimulatorException
+
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -68,9 +71,6 @@ class NotConfiguredException(BaseException):
 	pass
 
 class CommonException(BaseException):
-	pass
-
-class SimulatorException(BaseException):
 	pass
 
 class TestbenchException(SimulatorException):

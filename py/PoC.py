@@ -32,7 +32,6 @@
 # ==============================================================================
 
 from argparse									import RawDescriptionHelpFormatter
-from colorama									import Fore as Foreground
 from configparser							import Error as ConfigParser_Error, NoOptionError, ConfigParser, ExtendedInterpolation
 from os												import environ
 from pathlib									import Path
@@ -40,24 +39,22 @@ from platform									import system as platform_system
 from sys											import argv as sys_argv
 from textwrap									import dedent
 
-import ToolChains.Aldec.ActiveHDL
-from lib.Functions						import Init, Exit
-from lib.ArgParseAttributes		import *
-from Base.Exceptions					import *
 from Base.Logging							import ILogable, Logger, Severity
 from Base.Project							import VHDLVersion
+from Compiler.XCOCompiler						import Compiler as XCOCompiler
+from Compiler.XSTCompiler						import Compiler as XSTCompiler
 from Parser.Parser						import ParserException
-from PoC.Entity								import *
 from PoC.Config								import Device, Board
+from PoC.Entity								import *
 from PoC.Query								import Query
-from ToolChains								import Configurations
 from Simulator.ActiveHDLSimulator		import Simulator as ActiveHDLSimulator
 from Simulator.GHDLSimulator				import Simulator as GHDLSimulator
 from Simulator.ISESimulator					import Simulator as ISESimulator
 from Simulator.QuestaSimulator			import Simulator as QuestaSimulator
 from Simulator.VivadoSimulator			import Simulator as VivadoSimulator
-from Compiler.XCOCompiler						import Compiler as XCOCompiler
-from Compiler.XSTCompiler						import Compiler as XSTCompiler
+from ToolChains								import Configurations
+from lib.ArgParseAttributes		import *
+from lib.Functions						import Init
 
 
 # def HandleVerbosityOptions(func):
@@ -95,8 +92,8 @@ class PoC(ILogable, ArgParseMixin):
 		# Do some basic checks
 		# --------------------------------------------------------------------------
 		if (self.Platform not in ["Windows", "Linux"]):		raise PlatformNotSupportedException(self.Platform)
-		if (environ.get('PoCRootDirectory') == None):			raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
-		if (environ.get('PoCScriptDirectory') == None):		raise EnvironmentException("Shell environment does not provide 'PoCScriptDirectory' variable.")
+		if (environ.get('PoCRootDirectory') is None):			raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
+		if (environ.get('PoCScriptDirectory') is None):		raise EnvironmentException("Shell environment does not provide 'PoCScriptDirectory' variable.")
 
 		# Call the constructor of the ArgParseMixin
 		# --------------------------------------------------------------------------

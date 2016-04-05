@@ -73,8 +73,8 @@ class CommandLineProgram(object):
 		self.__quiet =		quiet
 		
 		# check for environment variables
-		if (environ.get('PoCRootDirectory') == None):			raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
-		if (environ.get('PoCScriptDirectory') == None):		raise EnvironmentException("Shell environment does not provide 'PoCScriptDirectory' variable.")
+		if (environ.get('PoCRootDirectory') is None):			raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
+		if (environ.get('PoCScriptDirectory') is None):		raise EnvironmentException("Shell environment does not provide 'PoCScriptDirectory' variable.")
 		
 		self.directories['Working'] =			Path.cwd()
 		self.directories['PoCRoot'] =			Path(environ.get('PoCRootDirectory'))
