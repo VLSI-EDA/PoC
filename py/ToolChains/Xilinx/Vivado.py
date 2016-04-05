@@ -41,13 +41,14 @@ else:
 
 
 from collections					import OrderedDict
+from pathlib							import Path
 from os										import environ
 
 from Base.Exceptions			import PlatformNotSupportedException
 from Base.Executable							import Executable
 from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument
 from Base.Logging					import LogEntry, Severity
-from Base.Configuration 	import ConfigurationBase as BaseConfiguration, ConfigurationException, SkipConfigurationException
+from Base.Configuration 	import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
 
 
 class Configuration(BaseConfiguration):

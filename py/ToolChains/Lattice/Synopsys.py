@@ -40,5 +40,10 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Synopsys")
 
 
-class Configuration:
+from collections				import OrderedDict
+from pathlib						import Path
+
+from Base.Configuration import Configuration as BaseConfiguration
+
+class Configuration(BaseConfiguration):
 	pass

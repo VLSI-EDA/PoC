@@ -39,7 +39,8 @@ from platform									import system as platform_system
 from sys											import argv as sys_argv
 from textwrap									import dedent
 
-from Base.Exceptions					import EnvironmentException, PlatformNotSupportedException, CompilerException, SimulatorException, NotConfiguredException, ToolChainException
+from Base.Exceptions					import EnvironmentException, PlatformNotSupportedException, NotConfiguredException, \
+																		 CommonException, CompilerException, SimulatorException, ToolChainException
 from Base.Logging							import ILogable, Logger, Severity
 from Base.Project							import VHDLVersion
 from Base.Configuration				import ConfigurationException
@@ -47,7 +48,7 @@ from Compiler.XCOCompiler						import Compiler as XCOCompiler
 from Compiler.XSTCompiler						import Compiler as XSTCompiler
 from Parser.Parser						import ParserException
 from PoC.Config								import Device, Board
-from PoC.Entity								import Entity, FQN
+from PoC.Entity								import Entity, FQN, EntityTypes
 from PoC.Query								import Query
 from Simulator.ActiveHDLSimulator		import Simulator as ActiveHDLSimulator
 from Simulator.GHDLSimulator				import Simulator as GHDLSimulator

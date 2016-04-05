@@ -40,10 +40,13 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
 
 
+from collections				import OrderedDict
+from pathlib						import Path
+
 from Base.Executable		import Executable
-from Base.Executable		import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
+from Base.Executable		import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
 from Base.Exceptions		import PlatformNotSupportedException, ToolChainException
-from Base.Configuration import ConfigurationBase as BaseConfiguration
+from Base.Configuration import Configuration as BaseConfiguration
 from Base.Logging				import LogEntry, Severity
 
 

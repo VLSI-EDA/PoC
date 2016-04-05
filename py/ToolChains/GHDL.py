@@ -39,11 +39,15 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GHDL")
 
+from collections						import OrderedDict
+from pathlib								import Path
 from re											import compile as re_compile
 
 from Base.Exceptions				import BaseException, ToolChainException
-from Base.Configuration			import ConfigurationBase
-from Base.Executable				import *
+from Base.Configuration			import Configuration as BaseConfiguration
+from Base.Executable				import Executable, \
+																	 ExecutableArgument, PathArgument, StringArgument, \
+																	 LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
 from Base.Logging						import LogEntry, Severity
 from Base.Simulator					import SimulatorException
 
@@ -54,7 +58,7 @@ class GHDLException(ToolChainException):
 class GHDLReanalyzeException(GHDLException):
 	pass
 
-class Configuration(ConfigurationBase):
+class Configuration(BaseConfiguration):
 	_vendor =		None
 	_shortName = "GTKWave"
 	_longName =	"GTKWave"

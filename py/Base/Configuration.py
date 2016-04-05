@@ -69,7 +69,7 @@ class ISubClassRegistration(metaclass=RegisterSubClassesMeta):
 	def SubClasses(self):
 		return self._subclasses
 
-class ConfigurationBase:		#(ISubClassRegistration):
+class Configuration:		#(ISubClassRegistration):
 	_privateConfiguration =	{}
 	_vendor =								"Unknown"
 	_longName =							"Unknown"

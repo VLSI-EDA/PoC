@@ -40,9 +40,12 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.LabTools")
 
 
+from collections					import OrderedDict
+from pathlib							import Path
+
 from Base.Executable							import Executable
 from Base.Executable							import ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
-from Base.Configuration import ConfigurationBase as BaseConfiguration
+from Base.Configuration import Configuration as BaseConfiguration
 
 
 class Configuration(BaseConfiguration):

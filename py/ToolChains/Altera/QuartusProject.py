@@ -38,7 +38,7 @@ else :
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.QuartusProject")
 
 
-from Base.Project			import Project as BaseProject, ProjectFile
+from Base.Project			import Project as BaseProject, ProjectFile, ConstraintFile
 
 
 class QuartusProject(BaseProject):
@@ -49,6 +49,6 @@ class QuartusProjectFile(ProjectFile):
 	def __init__(self, file):
 		super().__init__(file)
 
-class SynopsysDesignConstraintFile(PoC.ConstraintFile):
+class SynopsysDesignConstraintFile(ConstraintFile):
 	def __init__(self, file):
 		super().__init__(file)

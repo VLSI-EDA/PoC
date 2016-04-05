@@ -40,15 +40,19 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GTKWave")
 
 
-from Base.Exceptions				import ToolChainException
-from Base.Executable				import *
+from collections						import OrderedDict
+from pathlib								import Path
+
+from Base.Exceptions				import BaseException, ToolChainException
+from Base.Configuration			import Configuration as BaseConfiguration
+from Base.Executable				import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
 from Base.Logging						import LogEntry, Severity
 
 
 class GTKWaveException(ToolChainException):
 	pass
 
-class Configuration:
+class Configuration(BaseConfiguration):
 	__vendor =		None
 	__shortName =	"GTKWave"
 	__LongName =	"GTKWave"
