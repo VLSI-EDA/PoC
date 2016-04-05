@@ -1,22 +1,22 @@
 [*]
-[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Tue Jan 05 01:20:40 2016
+[*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
+[*] Sun Mar 20 16:55:14 2016
 [*]
-[dumpfile] "H:\Austausch\PoC\temp\ghdl\sortnet_BitonicSort_tb.ghw"
-[dumpfile_mtime] "Tue Jan 05 01:18:59 2016"
-[dumpfile_size] 654323
-[savefile] "H:\Austausch\PoC\sim\sort\sortnet\sortnet_BitonicSort_tb.gtkw"
-[timestart] 57400000
+[dumpfile] "G:\git\PoC\temp\ghdl\sortnet_BitonicSort_tb.ghw"
+[dumpfile_mtime] "Sun Mar 20 16:54:49 2016"
+[dumpfile_size] 654474
+[savefile] "G:\git\PoC\sim\sort\sortnet\sortnet_BitonicSort_tb.gtkw"
+[timestart] 0
 [size] 1676 997
 [pos] -1 -1
-*-24.327982 96500000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-25.187967 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.sortnet_bitonicsort_tb.
 [treeopen] top.sortnet_bitonicsort_tb.sort.
 [treeopen] top.sortnet_bitonicsort_tb.sort.[1].[1].[15].
 [treeopen] top.sortnet_bitonicsort_tb.sort_data.
 [sst_width] 197
-[signals_width] 238
+[signals_width] 301
 [sst_expanded] 1
 [sst_vpaned_height] 293
 @28

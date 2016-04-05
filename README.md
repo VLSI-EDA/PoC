@@ -344,16 +344,16 @@ git merge
     PicoBlaze-Library.
 
  [poc_ex]:  https://github.com/VLSI-EDA/PoC-Examples
- [q27]:			https://github.com/preusser/q27
+ [q27]:		https://github.com/preusser/q27
  [pb_lib]:  https://github.com/Paebbels/PicoBlaze-Library
- [pb_ex]:		https://github.com/Paebbels/PicoBlaze-Examples
+ [pb_ex]:	https://github.com/Paebbels/PicoBlaze-Examples
  
  
 If you are using the PoC-Library, please let us know. We are grateful for
 your project's reference.
 
  [lib]:					lib
- [netlist]:			netlist
+ [netlist]:				netlist
  [py]:					py
  [sim]:					sim
  [src]:					src
@@ -363,9 +363,9 @@ your project's reference.
  [ucf]:					ucf
  [xst]:					xst
 
- [wiki:download]:				https://github.com/VLSI-EDA/PoC/wiki/Download
+ [wiki:download]:			https://github.com/VLSI-EDA/PoC/wiki/Download
  [wiki:requirements]:		https://github.com/VLSI-EDA/PoC/wiki/Requirements
- [wiki:configuration]:	https://github.com/VLSI-EDA/PoC/wiki/Configuration
+ [wiki:configuration]:		https://github.com/VLSI-EDA/PoC/wiki/Configuration
  [wiki:integration]:		https://github.com/VLSI-EDA/PoC/wiki/Integration
 
  [wiki:subnamespacetree]:	https://github.com/VLSI-EDA/PoC/wiki/SubnamespaceTree

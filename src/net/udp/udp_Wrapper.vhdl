@@ -263,7 +263,7 @@ architecture rtl of udp_Wrapper is
 	
 	signal StmDeMux_Out_MetaIn									: STD_LOGIC_VECTOR(isum(STMDEMUX_META_BITS) - 1 downto 0);
 	signal StmDeMux_Out_MetaIn_rev							: STD_LOGIC_VECTOR(STMDEMUX_META_REV_BITS - 1 downto 0);
-	signal StmDeMux_Out_Data										: T_SLM(UDP_SWITCH_PORTS - 1 downto 0, StmDEMUX_DATA_BITS - 1 downto 0)				:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
+	signal StmDeMux_Out_Data										: T_SLM(UDP_SWITCH_PORTS - 1 downto 0, STMDEMUX_DATA_BITS - 1 downto 0)				:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal StmDeMux_Out_MetaOut									: T_SLM(UDP_SWITCH_PORTS - 1 downto 0, isum(STMDEMUX_META_BITS) - 1 downto 0)	:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal StmDeMux_Out_MetaOut_rev							: T_SLM(UDP_SWITCH_PORTS - 1 downto 0, STMDEMUX_META_REV_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	
@@ -280,13 +280,13 @@ begin
 	genStmMuxIn : for i in 0 to UDP_SWITCH_PORTS - 1 generate
 		signal Meta			: STD_LOGIC_VECTOR(isum(STMMUX_META_BITS) - 1 downto 0);
 	begin
-		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_SRCIP)			downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_SRCIP))		<= TX_Meta_SrcIPAddress_Data(I);
-		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_DESTIP)		downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_DESTIP))		<= TX_Meta_DestIPAddress_Data(I);
-		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_SRCPORT)		downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_SRCPORT))	<= TX_Meta_SrcPort(I);
-		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_DESTPORT)	downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_DESTPORT))	<= TX_Meta_DestPort(I);
-		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_LENGTH)		downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_LENGTH))		<= TX_Meta_Length(I);
+		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_SRCIP)			downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_SRCIP))		<= TX_Meta_SrcIPAddress_Data(i);
+		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_DESTIP)		downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_DESTIP))		<= TX_Meta_DestIPAddress_Data(i);
+		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_SRCPORT)		downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_SRCPORT))	<= TX_Meta_SrcPort(i);
+		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_DESTPORT)	downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_DESTPORT))	<= TX_Meta_DestPort(i);
+		Meta(high(STMMUX_META_BITS, STMMUX_META_STREAMID_LENGTH)		downto	low(STMMUX_META_BITS, STMMUX_META_STREAMID_LENGTH))		<= TX_Meta_Length(i);
 		
-		assign_row(StmMux_In_Meta, Meta,	I);
+		assign_row(StmMux_In_Meta, Meta,	i);
 	end generate;
 	
 	TX_Meta_rst								<= get_col(StmMux_In_Meta_rev,	STMMUX_META_RST_BIT);
@@ -321,9 +321,9 @@ begin
 			Out_Ack								=> TX_FCS_Ack	
 		);
 
-	StmMux_Out_Meta_rev(StmMUX_META_RST_BIT)				<= TX_FCS_MetaIn_rst;
-	StmMux_Out_Meta_rev(StmMUX_META_SRCIP_NXT_BIT)	<= TX_FCS_MetaIn_nxt(TX_FCS_META_STREAMID_SRCIP);
-	StmMux_Out_Meta_rev(StmMUX_META_DESTIP_NXT_BIT)	<= TX_FCS_MetaIn_nxt(TX_FCS_META_STREAMID_DESTIP);
+	StmMux_Out_Meta_rev(STMMUX_META_RST_BIT)				<= TX_FCS_MetaIn_rst;
+	StmMux_Out_Meta_rev(STMMUX_META_SRCIP_NXT_BIT)	<= TX_FCS_MetaIn_nxt(TX_FCS_META_STREAMID_SRCIP);
+	StmMux_Out_Meta_rev(STMMUX_META_DESTIP_NXT_BIT)	<= TX_FCS_MetaIn_nxt(TX_FCS_META_STREAMID_DESTIP);
 
 	TX_FCS_MetaIn_Data	<= StmMux_Out_Meta;
 
@@ -460,15 +460,15 @@ begin
 		);
 
 	genStmDeMux_Control : for i in 0 to UDP_SWITCH_PORTS - 1 generate
-		StmDeMux_Control(I)		<= to_sl(UDP_RX_Meta_DestPort = PORTPAIRS(I).Ingress);
+		StmDeMux_Control(i)		<= to_sl(UDP_RX_Meta_DestPort = PORTPAIRS(i).Ingress);
 	end generate;
 	
 	-- decompress meta_rev vector to single bits
-	StmDeMux_Out_Meta_rst									<= StmDeMux_Out_MetaIn_rev(StmDEMUX_META_RST_BIT);
-	StmDeMux_Out_Meta_SrcMACAddress_nxt		<= StmDeMux_Out_MetaIn_rev(StmDEMUX_META_MACSRC_NXT_BIT);
-	StmDeMux_Out_Meta_DestMACAddress_nxt	<= StmDeMux_Out_MetaIn_rev(StmDEMUX_META_MACDEST_NXT_BIT);
-	StmDeMux_Out_Meta_SrcIPAddress_nxt		<= StmDeMux_Out_MetaIn_rev(StmDEMUX_META_IPSRC_NXT_BIT);
-	StmDeMux_Out_Meta_DestIPAddress_nxt		<= StmDeMux_Out_MetaIn_rev(StmDEMUX_META_IPDEST_NXT_BIT);
+	StmDeMux_Out_Meta_rst									<= StmDeMux_Out_MetaIn_rev(STMDEMUX_META_RST_BIT);
+	StmDeMux_Out_Meta_SrcMACAddress_nxt		<= StmDeMux_Out_MetaIn_rev(STMDEMUX_META_MACSRC_NXT_BIT);
+	StmDeMux_Out_Meta_DestMACAddress_nxt	<= StmDeMux_Out_MetaIn_rev(STMDEMUX_META_MACDEST_NXT_BIT);
+	StmDeMux_Out_Meta_SrcIPAddress_nxt		<= StmDeMux_Out_MetaIn_rev(STMDEMUX_META_IPSRC_NXT_BIT);
+	StmDeMux_Out_Meta_DestIPAddress_nxt		<= StmDeMux_Out_MetaIn_rev(STMDEMUX_META_IPDEST_NXT_BIT);
 	
 	-- compress meta data vectors to single meta data vector
 	StmDeMux_Out_MetaIn(high(STMDEMUX_META_BITS, STMDEMUX_META_STREAMID_SRCMAC)		downto	low(STMDEMUX_META_BITS, STMDEMUX_META_STREAMID_SRCMAC))		<= UDP_RX_Meta_SrcMACAddress_Data;
@@ -484,7 +484,7 @@ begin
 	RX_StmDeMux : entity PoC.stream_DeMux
 		generic map (
 			PORTS										=> UDP_SWITCH_PORTS,
-			DATA_BITS								=> StmDEMUX_DATA_BITS,
+			DATA_BITS								=> STMDEMUX_DATA_BITS,
 			META_BITS								=> isum(STMDEMUX_META_BITS),
 			META_REV_BITS						=> STMDEMUX_META_REV_BITS
 		)
@@ -511,11 +511,11 @@ begin
 			Out_Ack									=> RX_Ack	
 		);
 
-	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_rst,									StmDEMUX_META_RST_BIT);
-	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_SrcMACAddress_nxt,		StmDEMUX_META_MACSRC_NXT_BIT);
-	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_DestMACAddress_nxt,	StmDEMUX_META_MACDEST_NXT_BIT);
-	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_SrcIPAddress_nxt,		StmDEMUX_META_IPSRC_NXT_BIT);
-	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_DestIPAddress_nxt,		StmDEMUX_META_IPDEST_NXT_BIT);
+	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_rst,									STMDEMUX_META_RST_BIT);
+	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_SrcMACAddress_nxt,		STMDEMUX_META_MACSRC_NXT_BIT);
+	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_DestMACAddress_nxt,	STMDEMUX_META_MACDEST_NXT_BIT);
+	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_SrcIPAddress_nxt,		STMDEMUX_META_IPSRC_NXT_BIT);
+	assign_col(StmDeMux_Out_MetaOut_rev, RX_Meta_DestIPAddress_nxt,		STMDEMUX_META_IPDEST_NXT_BIT);
 
 	-- new slm_slice funtion to avoid generate statement for wiring => cut multiple columns over all rows and convert to slvv_*
 	RX_Data													<= to_slvv_8(StmDeMux_Out_Data);

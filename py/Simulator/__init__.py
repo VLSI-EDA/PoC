@@ -1,11 +1,11 @@
-# EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
+# EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
 # Authors:         			Patrick Lehmann
 # 
-# Python Sub Module:  	Saves The PoC-Library configuration as python source code.
+# Python Sub Module:  	TODO:
 # 
 # Description:
 # ------------------------------------
@@ -14,7 +14,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,8 +39,9 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
 # load dependencies
-import Simulator.ISESimulator
-import Simulator.VivadoSimulator
-import Simulator.QuestaSimulator
-import Simulator.AldecSimulator
+import Simulator.ActiveHDLSimulator
 import Simulator.GHDLSimulator
+import Simulator.ISESimulator
+import Simulator.QuestaSimulator
+# import Simulator.RiveraProSimulator
+import Simulator.VivadoSimulator

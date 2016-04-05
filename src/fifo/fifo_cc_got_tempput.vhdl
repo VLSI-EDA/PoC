@@ -9,6 +9,7 @@
 -- Authors:					Thomas B. Preusser
 --									Steffen Koehler
 --									Martin Zabel
+--									Patrick Lehmann
 --
 -- Description:
 -- ------------------------------------
@@ -150,63 +151,36 @@ begin
 
   -----------------------------------------------------------------------------
   -- Pointer Logic
-  genCCN: if not FORCE_XILCY generate
-    IP1 <= IP0 + 1;
-    OP1 <= OP0 + 1;
-  end generate;
-  genCCY: if FORCE_XILCY generate
-    component MUXCY
-      port (
-        O  : out std_ulogic;
-        CI : in  std_ulogic;
-        DI : in  std_ulogic;
-        S  : in  std_ulogic
-      );
-    end component;
-    component XORCY
-      port (
-        O  : out std_ulogic;
-        CI : in  std_ulogic;
-        LI : in  std_ulogic
-      );
-    end component;
+	blkPointer : block
+		signal IP0_slv		: STD_LOGIC_VECTOR(IP0'range);
+		signal IP1_slv		: STD_LOGIC_VECTOR(IP0'range);
+		signal OP0_slv		: STD_LOGIC_VECTOR(IP0'range);
+		signal OP1_slv		: STD_LOGIC_VECTOR(IP0'range);
+	begin
+		IP0_slv	<= std_logic_vector(IP0);
+		OP0_slv	<= std_logic_vector(OP0);
+		
+		incIP : entity PoC.arith_carrychain_inc
+			generic map (
+				BITS		=> A_BITS
+			)
+			port map (
+				X				=> IP0_slv,
+				Y				=> IP1_slv
+			);
 
-    signal ci, co : std_logic_vector(A_BITS downto 0);
-  begin
-    ci(0) <= '1';
-    genCCI : for i in 0 to A_BITS-1 generate
-      MUXCY_inst : MUXCY
-        port map (
-          O  => ci(i+1),
-          CI => ci(i),
-          DI => '0',
-          S  => IP0(i)
-        );
-      XORCY_inst : XORCY
-        port map (
-          O  => IP1(i),
-          CI => ci(i),
-          LI => IP0(i)
-        );
-    end generate genCCI;
-
-    co(0) <= '1';
-    genCCO: for i in 0 to A_BITS-1 generate
-      MUXCY_inst : MUXCY
-        port map (
-          O  => co(i+1),
-          CI => co(i),
-          DI => '0',
-          S  => OP0(i)
-        );
-      XORCY_inst : XORCY
-        port map (
-          O  => OP1(i),
-          CI => co(i),
-          LI => OP0(i)
-        );
-    end generate genCCO;
-  end generate;
+		incOP : entity PoC.arith_carrychain_inc
+			generic map (
+				BITS		=> A_BITS
+			)
+			port map (
+				X				=> OP0_slv,
+				Y				=> OP1_slv
+			);
+		
+		IP1			<= unsigned(IP1_slv);
+		OP1			<= unsigned(OP1_slv);
+	end block;
 
   process(clk)
   begin
@@ -337,7 +311,7 @@ begin
   begin
 
     -- Backing Memory
-    ram : ocram_sdp
+    ram : entity PoC.ocram_sdp
       generic map (
         A_BITS => A_BITS,
         D_BITS => D_BITS

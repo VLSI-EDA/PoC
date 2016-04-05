@@ -70,7 +70,7 @@ architecture rtl of ocrom_sp is
 	constant DEPTH				: positive := 2**A_BITS;
 
 begin
-	assert (str_length(FileName) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
+	assert (str_length(FILENAME) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
 
 	gInfer: if VENDOR = VENDOR_XILINX generate
 		-- RAM can be inferred correctly

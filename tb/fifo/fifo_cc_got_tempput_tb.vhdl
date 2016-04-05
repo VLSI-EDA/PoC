@@ -68,7 +68,7 @@ architecture tb of fifo_cc_got_tempput_tb is
   
 begin
 	-- initialize global simulation status
-	simInitialize(MaxSimulationRuntime => 1 us);
+	simInitialize;
 	-- generate global testbench clock
 	simGenerateClock(clk, CLOCK_FREQ);
 	simGenerateWaveform(rst,	simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));

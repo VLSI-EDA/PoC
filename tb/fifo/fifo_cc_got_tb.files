@@ -5,39 +5,23 @@
 # Note: all files are relative to PoC root directory
 #
 # Load external vendor libraries
-@library unisim "xilinx"															# Xilinx ISE primitives
+if (DeviceVendor = "Xilinx") then
+	include			"lib/Xilinx.files"													# Xilinx primitives
+end if
 
-# board and device configuration
-vhdl		poc		"tb/common/my_config_ML505.vhdl"
-vhdl		poc		"tb/common/my_project.vhdl"
+# Common PoC packages for configuration, synthesis and simulation
+include				"tb/common/my_config.files"									# board and device configuration
+include				"src/common/common.files"										# load common packages
+include				"src/sim/sim.files"													# load simulation helper packages
 
-# PoC core packages
-vhdl		poc		"src/common/utils.vhdl"									# PoC utility collection
-vhdl		poc		"src/common/config.vhdl"								# PoC device configuration mechanism
-vhdl		poc		"src/common/strings.vhdl"								# PoC string package
-vhdl		poc		"src/common/vectors.vhdl"								# PoC vector package
-vhdl		poc		"src/common/physical.vhdl"							# PoC physical types package
-
-vhdl		poc		"src/sim/sim_types.vhdl"								# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_random.v93.vhdl"						# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_global.v93.vhdl"						# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_unprotected.v93.vhdl"			# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_simulation.v93.vhdl"				# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_random.v08.vhdl"						# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_protected.v08.vhdl"				# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_global.v08.vhdl"						# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_simulation.v08.vhdl"				# PoC simulation helper
-vhdl		poc		"src/sim/sim_waveform.vhdl"							# PoC simulation helper
-
-# PoC.mem
-vhdl		poc		"src/mem/mem.pkg.vhdl"									# Memory package
+# PoC.arith
+include				"src/arith/arith_carrychain_inc.files"			# Carry-chain abstraction for increment by one operations
 
 # PoC.mem.ocram
-vhdl		poc		"src/mem/ocram/ocram.pkg.vhdl"					# On-Chip-RAM
-vhdl		poc		"src/mem/ocram/ocram_sdp.vhdl"					# Simple-Dual-Port
+include				"src/mem/ocram/ocram_sdp.files"				      # Simple Dual-Port
 
 # PoC.fifo
-vhdl		poc		"src/fifo/fifo_cc_got.vhdl"							# Unit Under Test
+vhdl		poc		"src/fifo/fifo_cc_got.vhdl"									# Unit Under Test
 
 # Testbench file(s)
-vhdl		test	"tb/fifo/fifo_cc_got_tb.vhdl"						# Testbench
+vhdl		test	"tb/fifo/fifo_cc_got_tb.vhdl"								# Testbench

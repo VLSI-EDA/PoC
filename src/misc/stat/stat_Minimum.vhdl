@@ -63,8 +63,8 @@ architecture rtl of stat_Minimum is
 	type T_COUNTER_MEMORY		is array(NATURAL range <>) of UNSIGNED(COUNTER_BITS - 1 downto 0);
 
 	-- create matrix from vector-vector
-	function to_slm(usv : T_TAG_MEMORY) return t_slm is
-		variable slm		: t_slm(usv'range, DATA_BITS - 1 downto 0);
+	function to_slm(usv : T_TAG_MEMORY) return T_SLM is
+		variable slm		: T_SLM(usv'range, DATA_BITS - 1 downto 0);
 	begin
 		for i in usv'range loop
 			for j in DATA_BITS - 1 downto 0 loop
@@ -74,8 +74,8 @@ architecture rtl of stat_Minimum is
 		return slm;
 	end function;
 	
-	function to_slm(usv : T_COUNTER_MEMORY) return t_slm is
-		variable slm		: t_slm(usv'range, COUNTER_BITS - 1 downto 0);
+	function to_slm(usv : T_COUNTER_MEMORY) return T_SLM is
+		variable slm		: T_SLM(usv'range, COUNTER_BITS - 1 downto 0);
 	begin
 		for i in usv'range loop
 			for j in COUNTER_BITS - 1 downto 0 loop

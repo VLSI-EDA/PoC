@@ -1,0 +1,1314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b1217729-6dda-4bce-a9eb-baa5346607ac" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../lib/cocotb" afterPath="$PROJECT_DIR$/../lib/cocotb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../lib/vunit" afterPath="$PROJECT_DIR$/../lib/vunit" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/py.iml" afterPath="$PROJECT_DIR$/.idea/py.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../sim/aSim.batch.tcl" afterPath="$PROJECT_DIR$/../sim/aSim.batch.tcl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../sim/aSim.gui.tcl" afterPath="$PROJECT_DIR$/../sim/aSim.gui.tcl" />
+    </list>
+    <ignored path="py.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="py" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="GHDLSimulator.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3740">
+              <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+              <folding>
+                <marker date="1459791386490" expanded="true" signature="1293:1341" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="1347:1472" placeholder="..." />
+                <marker date="1459791386490" expanded="false" signature="1494:1905" placeholder="import ..." />
+                <marker date="1459791386490" expanded="true" signature="1939:15618" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="2025:2212" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="2250:2274" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="2317:2935" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="2521:2712" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="2995:3176" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="3219:3284" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="3356:4598" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="4258:4358" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="4397:4497" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="4537:4598" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="4652:5170" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="5220:6009" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="5352:5590" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="5839:6009" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="6037:7992" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="6619:6726" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="6776:6884" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="7458:7992" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="7996:8094" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="8137:9479" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="8607:8714" placeholder="..." />
+                <marker date="1459791386490" expanded="true" signature="8764:8872" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PoC.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PoC.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="12750">
+              <caret line="777" column="0" selection-start-line="777" selection-start-column="0" selection-end-line="777" selection-end-column="0" />
+              <folding>
+                <marker date="1459791385073" expanded="true" signature="0:1402" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="1404:2740" placeholder="import ..." />
+                <marker date="1459791385073" expanded="true" signature="2743:2925" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="2962:43545" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="3488:5648" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="3491:3604" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="3868:3969" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="4366:4488" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="4512:4564" placeholder="'''...'''" />
+                <marker date="1459791385073" expanded="true" signature="4727:4823" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="5651:5749" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="5781:5806" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="5837:5860" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="5896:5924" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="5954:5976" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="6010:6036" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="6069:6094" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="6127:6152" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="6156:6260" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="6295:7935" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="7311:7416" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="7552:7653" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="7939:8692" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="8733:9340" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="9222:9338" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="9343:9449" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="9489:10115" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="9997:10113" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="10154:10660" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="10697:10981" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="10700:10769" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="11020:11052" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="11088:11559" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="11594:12060" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="12064:12364" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="12776:12802" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="12829:13153" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="13156:13363" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="13444:14085" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="13471:14039" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="14088:14294" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="14491:14727" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="14543:14590" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="14730:15047" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="15240:15859" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="15903:16232" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="15933:16232" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="16075:16232" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="16084:16141" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="16274:16589" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="16304:16589" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="16434:16589" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="16443:16498" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="16592:16799" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="17080:17215" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="17219:17400" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="17440:18083" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="18087:18303" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="18578:18913" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="18844:18898" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="18916:19122" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="20007:23401" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="20162:20869" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="20933:21646" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="21649:22009" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="22017:22283" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="23200:23386" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="23236:23335" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="23340:23386" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="23405:23611" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="24410:24447" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="24486:26982" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="26274:26967" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="26310:26967" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="26319:26919" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="26440:26919" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="26545:26739" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="26985:27191" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="27826:27863" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="27901:29941" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="29817:29926" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="29853:29926" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="29945:30151" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="30986:31023" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="31064:33903" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="31218:31950" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="32012:32741" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="33739:33888" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="33789:33888" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="33907:34113" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="34943:34980" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="35021:37286" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="37122:37271" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="37172:37271" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="37290:37606" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="37872:38204" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="38135:38189" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="38207:38416" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="39027:39193" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="39293:40827" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="40095:40523" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="40198:40291" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="40830:41039" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="41640:41799" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="41895:43545" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="42815:43240" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="42918:43011" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="43574:45807" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="43735:43851" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="43924:45364" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="44365:44641" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="44687:45182" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="44861:45020" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="45029:45182" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="45214:45349" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="45609:45748" placeholder="..." />
+                <marker date="1459791385073" expanded="true" signature="45849:45885" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="QuestaSim.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="366">
+              <caret line="196" column="55" selection-start-line="196" selection-start-column="55" selection-end-line="196" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ActiveHDL.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="388">
+              <caret line="397" column="0" selection-start-line="397" selection-start-column="0" selection-end-line="397" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GHDL.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/GHDL.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2992">
+              <caret line="176" column="20" selection-start-line="176" selection-start-column="20" selection-end-line="176" selection-end-column="20" />
+              <folding>
+                <marker date="1459791386626" expanded="true" signature="1302:1350" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="1356:1469" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="1471:1766" placeholder="import ..." />
+                <marker date="1459791386626" expanded="true" signature="1809:1815" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="1861:1867" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="1908:4911" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="1999:2381" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="2014:2191" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="2027:2187" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="2206:2378" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="2219:2374" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="2417:2424" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="2457:2466" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="2505:3717" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="2781:3668" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="3754:4911" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="4030:4862" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="4937:5855" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="5020:5852" placeholder="..." />
+                <marker date="1459791386626" expanded="true" signature="12765:14060" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ISE.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/ISE.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="7361">
+              <caret line="581" column="0" selection-start-line="581" selection-start-column="0" selection-end-line="581" selection-end-column="0" />
+              <folding>
+                <element signature="e#1483#1522#0" expanded="true" />
+                <marker date="1459791386726" expanded="true" signature="1308:1356" placeholder="..." />
+                <marker date="1459791386726" expanded="true" signature="1362:1481" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Vivado.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/Vivado.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="799">
+              <caret line="47" column="26" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
+              <folding>
+                <marker date="1459791387876" expanded="true" signature="1311:1359" placeholder="..." />
+                <marker date="1459791387876" expanded="true" signature="1365:1487" placeholder="..." />
+                <marker date="1459791387876" expanded="true" signature="1490:1585" placeholder="import ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Xilinx/Vivado.py" />
+        <option value="$PROJECT_DIR$/Mentor/QuestaSim.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Altera/QuartusII.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Altera/ModelSim.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Cadence/PrecisionRTL.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Mentor/PrecisionRTL.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Lattice/ActiveHDL.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Lattice/Diamond.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Lattice/Synopsys.py" />
+        <option value="$PROJECT_DIR$/Configuration.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/LabTools.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py" />
+        <option value="$PROJECT_DIR$/_Configuration.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/ISEProject.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/VivadoProject.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Altera/QuartusProject.py" />
+        <option value="$PROJECT_DIR$/Simulator/__init__.py" />
+        <option value="$PROJECT_DIR$/Parser/__init__.py" />
+        <option value="$PROJECT_DIR$/Compiler/__init__.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/__init__.py" />
+        <option value="$PROJECT_DIR$/ToolChains/PoC.py" />
+        <option value="$PROJECT_DIR$/Simulator/Exceptions.py" />
+        <option value="$PROJECT_DIR$/Compiler/Exceptions.py" />
+        <option value="$PROJECT_DIR$/Base/Compiler.py" />
+        <option value="$PROJECT_DIR$/Compiler/XCOCompiler.py" />
+        <option value="$PROJECT_DIR$/Compiler/XSTCompiler.py" />
+        <option value="$PROJECT_DIR$/ToolChains/__init__.py" />
+        <option value="$PROJECT_DIR$/Base/Exceptions.py" />
+        <option value="$PROJECT_DIR$/Simulator/StandaloneSimulator.py" />
+        <option value="$PROJECT_DIR$/Base/Simulator.py" />
+        <option value="$PROJECT_DIR$/Base/Executable.py" />
+        <option value="$PROJECT_DIR$/Base/Project.py" />
+        <option value="$PROJECT_DIR$/Base/Logging.py" />
+        <option value="$PROJECT_DIR$/Parser/Parser.py" />
+        <option value="$PROJECT_DIR$/lib/Functions.py" />
+        <option value="$PROJECT_DIR$/Base/Configuration.py" />
+        <option value="$PROJECT_DIR$/PoC/Query.py" />
+        <option value="$PROJECT_DIR$/PoC/Config.py" />
+        <option value="$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py" />
+        <option value="$PROJECT_DIR$/Simulator/VivadoSimulator.py" />
+        <option value="$PROJECT_DIR$/ToolChains/GTKWave.py" />
+        <option value="$PROJECT_DIR$/PoC/Entity.py" />
+        <option value="$PROJECT_DIR$/PoC.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py" />
+        <option value="$PROJECT_DIR$/Simulator/ISESimulator.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/Vivado.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Xilinx/ISE.py" />
+        <option value="$PROJECT_DIR$/Simulator/GHDLSimulator.py" />
+        <option value="$PROJECT_DIR$/Simulator/QuestaSimulator.py" />
+        <option value="$PROJECT_DIR$/ToolChains/GHDL.py" />
+        <option value="$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1696" />
+    <option name="height" value="1036" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Python</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>PyRedundantParenthesesInspection</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches">
+        <subPane />
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ToolChains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ToolChains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Xilinx" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ToolChains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Mentor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ToolChains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Aldec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Simulator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Problems" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="py">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\git\PoC\py\Base" />
+      <recent name="G:\git\PoC\py\PoC" />
+      <recent name="G:\git\PoC\py\ToolChains\Xilinx" />
+      <recent name="G:\git\PoC\py\ToolChains\Altera" />
+      <recent name="G:\git\PoC\py\ToolChains\Mentor" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\git\PoC\py\ToolChains\Aldec" />
+      <recent name="G:\git\PoC\py\ToolChains\Altera" />
+      <recent name="G:\git\PoC\py\ToolChains\Lattice" />
+      <recent name="G:\git\PoC\py\ToolChains\Mentor" />
+      <recent name="G:\git\PoC\py\ToolChains\Xilinx" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.args">
+    <configuration default="false" name="args" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/args.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <method />
+    </configuration>
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="Python.args" />
+    </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Python.args" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b1217729-6dda-4bce-a9eb-baa5346607ac" name="Default" comment="" />
+      <created>1458584314941</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1458584314941</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1696" height="1036" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12062726" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="778" y="490" width="124" height="40" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890365" sideWeight="0.49758744" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.50632244" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890365" sideWeight="0.49276236" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890365" sideWeight="0.49758744" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15560916" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="803" y="490" width="74" height="40" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890365" sideWeight="0.49758744" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890365" sideWeight="0.49758744" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22505543" sideWeight="0.49367756" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/ToolChains/GHDL.py</url>
+          <line>41</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="3" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/ISEProject.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="49" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Altera/QuartusProject.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="569">
+          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py.orig" />
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/HardwareServer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1777">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/VivadoProject.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="43" column="29" selection-start-line="43" selection-start-column="29" selection-end-line="43" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Python 3.5/Lib/traceback.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="331" column="29" selection-start-line="329" selection-start-column="12" selection-end-line="331" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Mentor/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Lattice/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Parser/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Compiler/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="85" selection-start-line="0" selection-start-column="85" selection-end-line="0" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/PoC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="501">
+          <caret line="51" column="14" selection-start-line="51" selection-start-column="14" selection-end-line="51" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Compiler/Exceptions.py" />
+    <entry file="file://$PROJECT_DIR$/Simulator/Exceptions.py" />
+    <entry file="file://$PROJECT_DIR$/Compiler/XCOCompiler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Base/Compiler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Compiler/XSTCompiler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="150" column="47" selection-start-line="150" selection-start-column="12" selection-end-line="150" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="671">
+          <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Base/Exceptions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="739">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2016.1/system/python_stubs/-1911679379/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="3999" column="8" selection-start-line="3999" selection-start-column="8" selection-end-line="3999" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Python 3.5/Lib/subprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="1014" column="39" selection-start-line="1014" selection-start-column="39" selection-end-line="1014" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons/subprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="90" column="13" selection-start-line="90" selection-start-column="13" selection-end-line="90" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2016.1/system/python_stubs/-1911679379/_io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2514">
+          <caret line="47" column="4" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Base/Simulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="59">
+          <caret line="51" column="7" selection-start-line="51" selection-start-column="7" selection-end-line="51" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="41" column="35" selection-start-line="41" selection-start-column="17" selection-end-line="41" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Base/Executable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="325" column="161" selection-start-line="325" selection-start-column="161" selection-end-line="325" selection-end-column="161" />
+          <folding>
+            <element signature="e#1482#1520#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Python 3.5/Lib/queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC/PoCConfig.py" />
+    <entry file="file://$PROJECT_DIR$/Base/Project.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="492">
+          <caret line="44" column="7" selection-start-line="44" selection-start-column="7" selection-end-line="44" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Parser/Parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="340" column="13" selection-start-line="340" selection-start-column="13" selection-end-line="340" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Base/Logging.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="47" column="16" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
+          <folding>
+            <element signature="e#1463#1509#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC/Query.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2125">
+          <caret line="125" column="59" selection-start-line="125" selection-start-column="59" selection-end-line="125" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/Functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Base/Configuration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="41" column="6" selection-start-line="41" selection-start-column="6" selection-end-line="41" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC/Config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1079">
+          <caret line="347" column="19" selection-start-line="347" selection-start-column="19" selection-end-line="347" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="614">
+          <caret line="130" column="34" selection-start-line="130" selection-start-column="34" selection-end-line="130" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/VivadoSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="114" column="38" selection-start-line="114" selection-start-column="38" selection-end-line="114" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/GTKWave.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="501">
+          <caret line="205" column="0" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Python 3.5/Lib/types.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="119" column="8" selection-start-line="119" selection-start-column="8" selection-end-line="119" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Python 3.5/Lib/enum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7956">
+          <caret line="550" column="10" selection-start-line="550" selection-start-column="10" selection-end-line="550" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons/__builtin__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13617">
+          <caret line="1548" column="8" selection-start-line="1548" selection-start-column="8" selection-end-line="1548" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC/Entity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2941">
+          <caret line="176" column="20" selection-start-line="176" selection-start-column="20" selection-end-line="176" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12750">
+          <caret line="777" column="0" selection-start-line="777" selection-start-column="0" selection-end-line="777" selection-end-column="0" />
+          <folding>
+            <marker date="1459791385073" expanded="true" signature="0:1402" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="1404:2740" placeholder="import ..." />
+            <marker date="1459791385073" expanded="true" signature="2743:2925" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="2962:43545" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="3488:5648" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="3491:3604" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="3868:3969" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="4366:4488" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="4512:4564" placeholder="'''...'''" />
+            <marker date="1459791385073" expanded="true" signature="4727:4823" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="5651:5749" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="5781:5806" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="5837:5860" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="5896:5924" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="5954:5976" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="6010:6036" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="6069:6094" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="6127:6152" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="6156:6260" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="6295:7935" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="7311:7416" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="7552:7653" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="7939:8692" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="8733:9340" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="9222:9338" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="9343:9449" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="9489:10115" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="9997:10113" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="10154:10660" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="10697:10981" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="10700:10769" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="11020:11052" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="11088:11559" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="11594:12060" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="12064:12364" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="12776:12802" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="12829:13153" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="13156:13363" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="13444:14085" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="13471:14039" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="14088:14294" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="14491:14727" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="14543:14590" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="14730:15047" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="15240:15859" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="15903:16232" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="15933:16232" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="16075:16232" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="16084:16141" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="16274:16589" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="16304:16589" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="16434:16589" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="16443:16498" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="16592:16799" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="17080:17215" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="17219:17400" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="17440:18083" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="18087:18303" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="18578:18913" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="18844:18898" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="18916:19122" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="20007:23401" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="20162:20869" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="20933:21646" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="21649:22009" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="22017:22283" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="23200:23386" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="23236:23335" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="23340:23386" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="23405:23611" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="24410:24447" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="24486:26982" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="26274:26967" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="26310:26967" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="26319:26919" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="26440:26919" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="26545:26739" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="26985:27191" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="27826:27863" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="27901:29941" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="29817:29926" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="29853:29926" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="29945:30151" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="30986:31023" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="31064:33903" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="31218:31950" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="32012:32741" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="33739:33888" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="33789:33888" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="33907:34113" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="34943:34980" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="35021:37286" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="37122:37271" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="37172:37271" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="37290:37606" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="37872:38204" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="38135:38189" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="38207:38416" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="39027:39193" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="39293:40827" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="40095:40523" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="40198:40291" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="40830:41039" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="41640:41799" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="41895:43545" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="42815:43240" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="42918:43011" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="43574:45807" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="43735:43851" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="43924:45364" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="44365:44641" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="44687:45182" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="44861:45020" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="45029:45182" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="45214:45349" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="45609:45748" placeholder="..." />
+            <marker date="1459791385073" expanded="true" signature="45849:45885" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/Vivado.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="799">
+          <caret line="47" column="26" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
+          <folding>
+            <marker date="1459791387876" expanded="true" signature="1311:1359" placeholder="..." />
+            <marker date="1459791387876" expanded="true" signature="1365:1487" placeholder="..." />
+            <marker date="1459791387876" expanded="true" signature="1490:1585" placeholder="import ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/ISESimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Xilinx/ISE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7361">
+          <caret line="581" column="0" selection-start-line="581" selection-start-column="0" selection-end-line="581" selection-end-column="0" />
+          <folding>
+            <element signature="e#1483#1522#0" expanded="true" />
+            <marker date="1459791386726" expanded="true" signature="1308:1356" placeholder="..." />
+            <marker date="1459791386726" expanded="true" signature="1362:1481" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3740">
+          <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+          <folding>
+            <marker date="1459791386490" expanded="true" signature="1293:1341" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="1347:1472" placeholder="..." />
+            <marker date="1459791386490" expanded="false" signature="1494:1905" placeholder="import ..." />
+            <marker date="1459791386490" expanded="true" signature="1939:15618" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="2025:2212" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="2250:2274" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="2317:2935" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="2521:2712" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="2995:3176" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="3219:3284" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="3356:4598" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="4258:4358" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="4397:4497" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="4537:4598" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="4652:5170" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="5220:6009" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="5352:5590" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="5839:6009" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="6037:7992" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="6619:6726" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="6776:6884" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="7458:7992" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="7996:8094" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="8137:9479" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="8607:8714" placeholder="..." />
+            <marker date="1459791386490" expanded="true" signature="8764:8872" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/GHDL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2992">
+          <caret line="176" column="20" selection-start-line="176" selection-start-column="20" selection-end-line="176" selection-end-column="20" />
+          <folding>
+            <marker date="1459791386626" expanded="true" signature="1302:1350" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="1356:1469" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="1471:1766" placeholder="import ..." />
+            <marker date="1459791386626" expanded="true" signature="1809:1815" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="1861:1867" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="1908:4911" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="1999:2381" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="2014:2191" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="2027:2187" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="2206:2378" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="2219:2374" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="2417:2424" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="2457:2466" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="2505:3717" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="2781:3668" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="3754:4911" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="4030:4862" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="4937:5855" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="5020:5852" placeholder="..." />
+            <marker date="1459791386626" expanded="true" signature="12765:14060" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/QuestaSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3179">
+          <caret line="194" column="54" selection-start-line="194" selection-start-column="54" selection-end-line="194" selection-end-column="54" />
+          <folding>
+            <element signature="e#1482#1531#0" expanded="true" />
+            <marker date="1459791386564" expanded="true" signature="0:1254" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Mentor/QuestaSim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="196" column="55" selection-start-line="196" selection-start-column="55" selection-end-line="196" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChains/Aldec/ActiveHDL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="388">
+          <caret line="397" column="0" selection-start-line="397" selection-start-column="0" selection-end-line="397" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

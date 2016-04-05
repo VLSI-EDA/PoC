@@ -385,6 +385,7 @@ package body sim_protected is
 				return Proc.ID;
 			else
 				report "TestID (" & T_SIM_TEST_ID'image(TestID) & ") is unknown." severity FAILURE;
+				return T_SIM_PROCESS_ID'high;
 			end if;
 		end function;
 		

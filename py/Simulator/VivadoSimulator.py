@@ -1,4 +1,4 @@
-# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
@@ -15,7 +15,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,272 +40,219 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.VivadoSimulator")
 
 # load dependencies
-from pathlib import Path
+from colorama									import Fore as Foreground
+from configparser							import NoSectionError
+from os												import chdir
 
-from Base.Exceptions import *
-from Simulator.Base import PoCSimulator 
-from Simulator.Exceptions import *
+from Base.Exceptions					import *
+from Base.Simulator						import Simulator as BaseSimulator#, VHDLTestbenchLibraryName
+from PoC.PoCProject						import *
+from ToolChains.Xilinx.Vivado	import Vivado
 
+# Workaround for Vivado 2015.4
+VHDLTestbenchLibraryName = "work"
 
-class Simulator(PoCSimulator):
-
-	__executables =			{}
-	__vhdlStandard =		"93"
+class Simulator(BaseSimulator):
 	__guiMode =					False
 
 	def __init__(self, host, showLogs, showReport, guiMode):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 
-		self.__guiMode =					guiMode
+		self._guiMode =				guiMode
+		self._vivado =				None
 
-		if (host.platform == "Windows"):
-			self.__executables['xElab'] =		"xelab.bat"
-			self.__executables['xSim'] =		"xsim.bat"
-		elif (host.platform == "Linux"):
-			self.__executables['xElab'] =		"xelab"
-			self.__executables['xSim'] =		"xsim"
-		else:
-			raise PlatformNotSupportedException(self.platform)
-		
-	def run(self, pocEntity):
-		import os
-		import re
-		import subprocess
-	
-		self.printNonQuiet(str(pocEntity))
-		self.printNonQuiet("  preparing simulation environment...")
-		
-		
-		# create temporary directory for xSim if not existent
-		tempXSimPath = self.host.directories["xSimTemp"]
-		if not (tempXSimPath).exists():
-			self.printVerbose("Creating temporary directory for simulator files.")
-			self.printDebug("Temporary directors: %s" % str(tempXSimPath))
-			tempXSimPath.mkdir(parents=True)
+		self._LogNormal("preparing simulation environment...")
+		self._PrepareSimulationEnvironment()
 
-		# setup all needed paths to execute elab
-		#vhpcompExecutablePath =	self.host.directories["VivadoBinary"] / self.__executables['vhpcomp']
-		xelabExecutablePath =		self.host.directories["VivadoBinary"] / self.__executables['xElab']
-		xSimExecutablePath =		self.host.directories["VivadoBinary"] / self.__executables['xSim']
-		
-		if not self.host.tbConfig.has_section(str(pocEntity)):
-			from configparser import NoSectionError
-			raise SimulatorException("Testbench '" + str(pocEntity) + "' not found.") from NoSectionError(str(pocEntity))
-		
-		testbenchName =			self.host.tbConfig[str(pocEntity)]['TestbenchModule']
-		fileListFilePath =	self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['fileListFile']
-		tclBatchFilePath =	self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['xSimBatchScript']
-		tclGUIFilePath =		self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['xSimGUIScript']
-		wcfgFilePath =			self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['xSimWaveformConfigFile']
-		prjFilePath =				tempXSimPath / (testbenchName + ".prj")
-		xelabLogFilePath =	tempXSimPath / (testbenchName + ".xelab.log")
-		xSimLogFilePath =		tempXSimPath / (testbenchName + ".xsim.log")
-		snapshotName =			testbenchName
+	@property
+	def TemporaryPath(self):
+		return self._tempPath
 
-		# report the next steps in execution
-#		if (self.getVerbose()):
-#			print("  Commands to be run:")
-#			print("  1. Change working directory to temporary directory.")
-#			print("  2. Parse filelist and write xSim project file.")
-#			print("  3. Compile and Link source files to an executable simulation file.")
-#			print("  4. Simulate in tcl batch mode.")
-#			print("  ----------------------------------------")
+	def _PrepareSimulationEnvironment(self):
+		self._LogNormal("  preparing simulation environment...")
 		
+		# create temporary directory for ghdl if not existent
+		self._tempPath = self.Host.Directories["xSimTemp"]
+		if (not (self._tempPath).exists()):
+			self._LogVerbose("  Creating temporary directory for simulator files.")
+			self._LogDebug("    Temporary directors: {0}".format(str(self._tempPath)))
+			self._tempPath.mkdir(parents=True)
+			
 		# change working directory to temporary xSim path
-		self.printVerbose('  cd "%s"' % str(tempXSimPath))
-		os.chdir(str(tempXSimPath))
+		self._LogVerbose("  Changing working directory to temporary directory.")
+		self._LogDebug("    cd \"{0}\"".format(str(self._tempPath)))
+		chdir(str(self._tempPath))
 
-		# parse project filelist
-		filesLineRegExpStr =	r"^"																						#	start of line
-		filesLineRegExpStr =	r"(?:"																					#	open line type: empty, directive, keyword
-		filesLineRegExpStr +=		r"(?P<EmptyLine>)|"														#		empty line
-		filesLineRegExpStr +=		r"(?P<Directive>"															#		open directives:
-		filesLineRegExpStr +=			r"(?P<DirInclude>@include)|"								#			 @include
-		filesLineRegExpStr +=			r"(?P<DirLibrary>@library)"									#			 @library
-		filesLineRegExpStr +=		r")|"																					#		close directives
-		filesLineRegExpStr +=		r"(?P<Keyword>"																#		open keywords:
-		filesLineRegExpStr +=			r"(?P<KwAltera>altera)|"										#			altera
-		filesLineRegExpStr +=			r"(?P<KwXilinx>xilinx)|"										#			xilinx
-		filesLineRegExpStr +=			r"(?P<KwVHDL>vhdl"													#			vhdl[-nn]
-		filesLineRegExpStr +=				r"(?:-(?P<VHDLStandard>87|93|02|08))?)"		#				VHDL Standard Year: [-nn]
-		filesLineRegExpStr +=		r")"																					#		close keywords
-		filesLineRegExpStr +=	r")"																						#	close line type
-		filesLineRegExpStr +=	r"(?(Directive)\s+(?:"													#	open directive parameters
-		filesLineRegExpStr +=		r"(?(DirInclude)"															#		open @include directive
-		filesLineRegExpStr +=			r"\"(?P<IncludeFile>.*?\.files)\""					#			*.files filename without enclosing "-signs
-		filesLineRegExpStr +=		r")|"																					#		close @include directive
-		filesLineRegExpStr +=		r"(?(DirLibrary)"															#		open @include directive
-		filesLineRegExpStr +=			r"(?P<LibraryName>[_a-zA-Z0-9]+)"						#			VHDL library name
-		filesLineRegExpStr +=			r"\s+"																			#			delimiter
-		filesLineRegExpStr +=			r"\"(?P<LibraryPath>.*?)\""									#			VHDL library path without enclosing "-signs
-		filesLineRegExpStr +=		r")"																					#		close @library directive
-		filesLineRegExpStr +=	r"))"																						#	close directive parameters
-		filesLineRegExpStr +=	r"(?(Keyword)\s+(?:"														#	open keyword parameters
-		filesLineRegExpStr +=		r"(?P<VHDLLibrary>[_a-zA-Z0-9]+)"							#		VHDL library name
-		filesLineRegExpStr +=		r"\s+"																				#		delimiter
-		filesLineRegExpStr +=		r"\"(?P<VHDLFile>.*?\.vhdl?)\""								#		*.vhdl? filename without enclosing "-signs
-		filesLineRegExpStr +=	r"))"																						#	close keyword parameters
-		filesLineRegExpStr +=	r"\s*(?P<Comment>#.*)?"													#	optional comment until line end
-		filesLineRegExpStr +=	r"$"																						#	end of line
-		filesLineRegExp = re.compile(filesLineRegExpStr)
+	def PrepareSimulator(self, binaryPath, version):
+		# create the GHDL executable factory
+		self._LogVerbose("  Preparing GHDL simulator.")
+		self._vivado = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-		self.printDebug("Reading filelist '%s'" % str(fileListFilePath))
+	def RunAll(self, pocEntities, **kwargs):
+		for pocEntity in pocEntities:
+			self.Run(pocEntity, **kwargs)
+		
+	def Run(self, entity, board, vhdlVersion="93", vhdlGenerics=None):
+		self._entity =				entity
+		self._testbenchFQN =	str(entity)										# TODO: implement FQN method on PoCEntity
+		self._vhdlVersion =		vhdlVersion
+		self._vhdlGenerics =	vhdlGenerics
+
+		# check testbench database for the given testbench		
+		self._LogQuiet("Testbench: {0}{1}{2}".format(Foreground.YELLOW, self._testbenchFQN, Foreground.RESET))
+		if (not self.Host.TBConfig.has_section(self._testbenchFQN)):
+			raise SimulatorException("Testbench '{0}' not found.".format(self._testbenchFQN)) from NoSectionError(self._testbenchFQN)
+			
+		# setup all needed paths to execute fuse
+		testbenchName =				self.Host.TBConfig[self._testbenchFQN]['TestbenchModule']
+		fileListFilePath =		self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['fileListFile']
+
+		self._CreatePoCProject(testbenchName, board)
+		self._AddFileListFile(fileListFilePath)
+		
+		# self._RunCompile(testbenchName)
+		self._RunLink(testbenchName)
+		self._RunSimulation(testbenchName)
+		
+	def _CreatePoCProject(self, testbenchName, board):
+		# create a PoCProject and read all needed files
+		self._LogDebug("    Create a PoC project '{0}'".format(str(testbenchName)))
+		pocProject =									PoCProject(testbenchName)
+		
+		# configure the project
+		pocProject.RootDirectory =		self.Host.Directories["PoCRoot"]
+		pocProject.Environment =			Environment.Simulation
+		pocProject.ToolChain =				ToolChain.Xilinx_Vivado
+		pocProject.Tool =							Tool.Xilinx_xSim
+		pocProject.VHDLVersion =			self._vhdlVersion
+		pocProject.Board =						board
+
+		self._pocProject =						pocProject
+		
+	def _AddFileListFile(self, fileListFilePath):
+		self._LogDebug("    Reading filelist '{0}'".format(str(fileListFilePath)))
+		# add the *.files file, parse and evaluate it
+		try:
+			fileListFile = self._pocProject.AddFile(FileListFile(fileListFilePath))
+			fileListFile.Parse()
+			fileListFile.CopyFilesToFileSet()
+			fileListFile.CopyExternalLibraries()
+			self._pocProject.ExtractVHDLLibrariesFromVHDLSourceFiles()
+		except ParserException as ex:										raise SimulatorException("Error while parsing '{0}'.".format(str(fileListFilePath))) from ex
+		
+		self._LogDebug(self._pocProject.pprint(2))
+		self._LogDebug("=" * 160)
+		if (len(fileListFile.Warnings) > 0):
+			for warn in fileListFile.Warnings:
+				self._LogWarning(warn)
+			raise SimulatorException("Found critical warnings while parsing '{0}'".format(str(fileListFilePath)))
+		
+	def _RunCompile(self, testbenchName):
+		self._LogNormal("  compiling source files...")
+		
+		# create one VHDL line for each VHDL file
 		xSimProjectFileContent = ""
-		externalLibraries = []
-		with fileListFilePath.open('r') as prjFileHandle:
-			for line in prjFileHandle:
-				filesLineRegExpMatch = filesLineRegExp.match(line)
-		
-				if (filesLineRegExpMatch is not None):
-					if (filesLineRegExpMatch.group('Directive') is not None):
-						if (filesLineRegExpMatch.group('DirInclude') is not None):
-							includeFile = filesLineRegExpMatch.group('IncludeFile')
-							self.printVerbose("    referencing another file: {0}".format(includeFile))
-						elif (filesLineRegExpMatch.group('DirLibrary') is not None):
-							externalLibraryName = filesLineRegExpMatch.group('LibraryName')
-							externalLibraryPath = filesLineRegExpMatch.group('LibraryPath')
-							
-							self.printVerbose("    referencing precompiled VHDL library: {0}".format(externalLibraryName))
-							externalLibraries.append(externalLibraryPath)
-						else:
-							raise SimulatorException("Unknown directive in *.files file.")
+		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
+			if (not file.Path.exists()):									raise SimulatorException("Can not add '{0}' to xSim project file.".format(str(file.Path))) from FileNotFoundError(str(file.Path))
+			xSimProjectFileContent += "vhdl {0} \"{1}\"\n".format(file.VHDLLibraryName, str(file.Path))
 						
-						continue
-						
-					elif (filesLineRegExpMatch.group('Keyword') is not None):
-						if (filesLineRegExpMatch.group('Keyword') == "vhdl"):
-							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
-							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
-						elif (filesLineRegExpMatch.group('Keyword')[0:5] == "vhdl-"):
-							if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
-								vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
-								vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
-							else:
-								continue
-						elif (filesLineRegExpMatch.group('Keyword') == "altera"):
-							self.printVerbose("    skipped Altera specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
-							# vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
-							# vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / vhdlFileName
-						elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
-							self.printVerbose("    skipped Xilinx specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
-							# vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
-							# vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / vhdlFileName
-						else:
-							raise SimulatorException("Unknown keyword in *files file.")
-					
-						vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
-						xSimProjectFileContent += "vhdl %s \"%s\"\n" % (vhdlLibraryName, str(vhdlFilePath))
-						
-						if (not vhdlFilePath.exists()):
-							raise SimulatorException("Can not add '" + vhdlFileName + "' to project file.") from FileNotFoundError(str(vhdlFilePath))
-		
 		# write xSim project file
-		self.printDebug("Writing xSim project file to '%s'" % str(prjFilePath))
+		prjFilePath = self._tempPath / (testbenchName + ".prj")
+		self._LogDebug("Writing xSim project file to '{0}'".format(str(prjFilePath)))
 		with prjFilePath.open('w') as prjFileHandle:
 			prjFileHandle.write(xSimProjectFileContent)
-
-
-		# running elab
-		# ==========================================================================
-		self.printNonQuiet("  running xelab...")
-		# assemble xelab command as list of parameters
-		parameterList = [
-			str(xelabExecutablePath),
-			'--prj',	str(prjFilePath),
-			'--log',	str(xelabLogFilePath),
-			'--timeprecision_vhdl', '1fs',			# set minimum time precision to 1 fs
-			'--mt', '4',												# enable multithread support
-			'--O2',
-			'--debug', 'typical',
-			'--snapshot',	snapshotName,
-			'--rangecheck'
-		]
 		
-		# append debug options
-		if (self.verbose):
-			parameterList += [
-				'--verbose', '0']
-
-		# append testbench name
-		parameterList += [('test.%s' % testbenchName)]
+		# create a VivadoVHDLCompiler instance
+		xvhcomp = self._vivado.GetVHDLCompiler()
+		xvhcomp.Compile(str(prjFilePath))
 		
-		command = " ".join(parameterList)
+	def _RunLink(self, testbenchName):
+		self._LogNormal("  running xelab...")
 		
-		self.printDebug("call xelab: %s" % str(parameterList))
-		self.printVerbose("    command: %s" % command)
-		
-		try:
-			linkerLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, universal_newlines=True)
-		except subprocess.CalledProcessError as ex:
-			print("ERROR while executing xelab: %s" % str(vhdlFilePath))
-			print("Return Code: %i" % ex.returncode)
-			print("-" * 80)
-			print(ex.output)
-			print("-" * 80)
-			
-			return
-		
-		if self.showLogs:
-			print("xelab log (xelab)")
-			print("--------------------------------------------------------------------------------")
-			print(linkerLog)
-			print()
-		
-		# running simulation
-		self.printNonQuiet("  running simulation...")
-		parameterList = [
-			str(xSimExecutablePath),
-			'--log', str(xSimLogFilePath)
-		]
-		
-		if (not self.__guiMode):
-			parameterList += ['-tclbatch', str(tclBatchFilePath)]
-		else:
-			parameterList += [
-				'-tclbatch', str(tclGUIFilePath),
-				'-gui'
-			]
-			# if waveform configuration file exists, load it's settings
-			if wcfgFilePath.exists():
-				parameterList += ['--view', str(wcfgFilePath)]
-		
-		# append testbench name
-		parameterList += [
-			snapshotName
-		]
-		
-		command = " ".join(parameterList)
-		
-		self.printDebug("call simulation: %s" % str(parameterList))
-		self.printVerbose("    command: %s" % command)
-		
-		try:
-			simulatorLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, universal_newlines=True)
-		except subprocess.CalledProcessError as ex:
-			print("ERROR while executing xSim: %s" % str(vhdlFilePath))
-			print("Return Code: %i" % ex.returncode)
-			print("-" * 80)
-			print(ex.output)
-			print("-" * 80)
-			
-			return
-		
-		if self.showLogs:
-			print("simulator log")
-			print("--------------------------------------------------------------------------------")
-			print(simulatorLog)
-			print("--------------------------------------------------------------------------------")		
+		xelabLogFilePath =	self._tempPath / (testbenchName + ".xelab.log")
 	
-		print()
-		if (not self.__guiMode):
-			try:
-				result = self.checkSimulatorOutput(simulatorLog)
-				
-				if (result == True):
-					print("Testbench '%s': PASSED" % testbenchName)
-				else:
-					print("Testbench '%s': FAILED" % testbenchName)
-					
-			except SimulatorException as ex:
-				raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED]' not found in simulator output.") from ex
+		# create one VHDL line for each VHDL file
+		xSimProjectFileContent = ""
+		vhdlFiles = [item for item in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile)]
+		for file in vhdlFiles[:-1]:
+			if (not file.Path.exists()):									raise SimulatorException("Can not add '{0}' to xSim project file.".format(str(file.Path))) from FileNotFoundError(str(file.Path))
+			if (self._vhdlVersion == VHDLVersion.VHDL2008):
+				xSimProjectFileContent += "vhdl2008 {0} \"{1}\"\n".format(file.VHDLLibraryName, str(file.Path))
+			else:
+				xSimProjectFileContent += "vhdl {0} \"{1}\"\n".format(file.VHDLLibraryName, str(file.Path))
+
+		# Workaround for Vivado 2015.4: last VHDL file is testbench, rewrite library name
+		file = vhdlFiles[-1]
+		if (not file.Path.exists()):									raise SimulatorException("Can not add '{0}' to xSim project file.".format(str(file.Path))) from FileNotFoundError(str(file.Path))
+		if (self._vhdlVersion == VHDLVersion.VHDL2008):
+			xSimProjectFileContent += "vhdl2008 {0} \"{1}\"\n".format(VHDLTestbenchLibraryName, str(file.Path))
+		else:
+			xSimProjectFileContent += "vhdl {0} \"{1}\"\n".format(VHDLTestbenchLibraryName, str(file.Path))
+
+		# write xSim project file
+		prjFilePath = self._tempPath / (testbenchName + ".prj")
+		self._LogDebug("Writing xSim project file to '{0}'".format(str(prjFilePath)))
+		with prjFilePath.open('w') as prjFileHandle:
+			prjFileHandle.write(xSimProjectFileContent)
+	
+		# create a VivadoLinker instance
+		xelab = self._vivado.GetElaborator()
+		xelab.Parameters[xelab.SwitchTimeResolution] =	"1fs"	# set minimum time precision to 1 fs
+		xelab.Parameters[xelab.SwitchMultiThreading] =	"off"	#"4"		# enable multithreading support
+		xelab.Parameters[xelab.FlagRangeCheck] =				True
+
+		# xelab.Parameters[xelab.SwitchOptimization] =		"2"
+		xelab.Parameters[xelab.SwitchDebug] =						"typical"
+		xelab.Parameters[xelab.SwitchSnapshot] =				testbenchName
+
+		# if (self._vhdlVersion == VHDLVersion.VHDL2008):
+		# 	xelab.Parameters[xelab.SwitchVHDL2008] =			True
+
+		# if (self.verbose):
+		xelab.Parameters[xelab.SwitchVerbose] =					"1"	#"0"
+		xelab.Parameters[xelab.SwitchProjectFile] =			str(prjFilePath)
+		xelab.Parameters[xelab.SwitchLogFile] =					str(xelabLogFilePath)
+		xelab.Parameters[xelab.ArgTopLevel] =						"{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
+		xelab.Link()
+
+	def _RunSimulation(self, testbenchName):
+		self._LogNormal("  running simulation...")
 		
+		xSimLogFilePath =		self._tempPath / (testbenchName + ".xSim.log")
+		tclBatchFilePath =	self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['xSimBatchScript']
+		tclGUIFilePath =		self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['xSimGUIScript']
+		wcfgFilePath =			self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['xSimWaveformConfigFile']
+
+		# create a VivadoSimulator instance
+		xSim = self._vivado.GetSimulator()
+		xSim.Parameters[xSim.SwitchLogFile] =					str(xSimLogFilePath)
+
+		if (not self._guiMode):
+			xSim.Parameters[xSim.SwitchTclBatchFile] =	str(tclBatchFilePath)
+		else:
+			xSim.Parameters[xSim.SwitchTclBatchFile] =	str(tclGUIFilePath)
+			xSim.Parameters[xSim.FlagGuiMode] =					True
+
+			# if xSim save file exists, load it's settings
+			if wcfgFilePath.exists():
+				self._LogDebug("    Found waveform config file: '{0}'".format(str(wcfgFilePath)))
+				xSim.Parameters[xSim.SwitchWaveformFile] =	str(wcfgFilePath)
+			else:
+				self._LogDebug("    Didn't find waveform config file: '{0}'".format(str(wcfgFilePath)))
+
+		xSim.Parameters[xSim.SwitchSnapshot] = "{0}.{1}#{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
+		xSim.Simulate()
+
+		# print()
+		# if (not self.__guiMode):
+			# try:
+				# result = self.checkSimulatorOutput(simulatorLog)
+				
+				# if (result == True):
+					# print("Testbench '%s': PASSED" % testbenchName)
+				# else:
+					# print("Testbench '%s': FAILED" % testbenchName)
+					
+			# except SimulatorException as ex:
+				# raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED]' not found in simulator output.") from ex
+	

@@ -73,10 +73,10 @@ end package;
 
 
 package body mem is
-	function mem_FileExtension(Filename : STRING) return STRING is
+	function mem_FileExtension(FileName : STRING) return STRING is
 	begin
-		for i in Filename'high downto Filename'low loop
-			if (Filename(i) = '.') then
+		for i in FileName'high downto FileName'low loop
+			if (FileName(i) = '.') then
 				return str_toLower(FileName(i + 1 to FileName'high));
 			end if;
 		end loop;
@@ -89,25 +89,25 @@ package body mem is
 		variable Digit			: T_DIGIT_HEX;
 		constant DigitCount	: POSITIVE			:= div_ceil(Value'length, 4);
 		variable slv				: STD_LOGIC_VECTOR((DigitCount * 4) - 1 downto 0);
-		variable swapped		: STD_LOGIC_VECTOR((DigitCount * 4) - 1 downto 0);
+		variable Swapped		: STD_LOGIC_VECTOR((DigitCount * 4) - 1 downto 0);
 	begin
 		Good		:= TRUE;
 		for i in 0 to DigitCount - 1 loop
 			read(L, Char, ok);
 			if (ok = FALSE) then
-				swapped	:= swap(slv, 4);
-				Value		:= swapped(Value'length - 1 downto 0);
+				Swapped	:= swap(slv, 4);
+				Value		:= Swapped(Value'length - 1 downto 0);
 				return;
 			end if;
 			Digit := to_digit_hex(Char);
 			if (Digit = -1) then
-				good := FALSE;
+				Good := FALSE;
 				return;
 			end if;
 			slv(i * 4 + 3 downto i * 4)	:= to_slv(Digit, 4);
 		end loop;
-		swapped	:= swap(slv, 4);
-		Value		:= swapped(Value'length - 1 downto 0);
+		Swapped	:= swap(slv, 4);
+		Value		:= Swapped(Value'length - 1 downto 0);
 	end procedure; 
 	
 	-- Reads a memory file and returns a 2D std_logic matrix

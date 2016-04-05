@@ -77,7 +77,7 @@ architecture rtl of arp_IPPool is
 		variable slvv		: T_SLVV_32(CACHE_LINES - 1 downto 0)	:= (others => (others => '0'));
 	begin
 		for i in CacheContent'range loop
-			slvv(I)	:= to_slv(CacheContent(I));
+			slvv(i)	:= to_slv(CacheContent(i));
 		end loop;
 		return to_slm(slvv);
 	end function;
@@ -127,11 +127,11 @@ begin
 	IPv4Address_rst			<= TU_Tag_rst;
 	IPv4Address_nxt			<= TU_Tag_nxt;
 
-	PoolResult					<= to_cache_result(CacheHit, CacheMiss);
+	PoolResult					<= to_Cache_Result(CacheHit, CacheMiss);
 
 	-- Cache TagUnit
 --	TU : entity L_Global.Cache_TagUnit_seq
-	TU : entity PoC.Cache_TagUnit_seq
+	TU : entity PoC.cache_TagUnit_seq
 		generic map (
 			REPLACEMENT_POLICY				=> "LRU",
 			CACHE_LINES								=> CACHE_LINES,

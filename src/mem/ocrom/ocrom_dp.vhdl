@@ -81,7 +81,7 @@ architecture rtl of ocrom_dp is
 	constant DEPTH				: positive := 2**A_BITS;
 
 begin
-	assert (str_length(FileName) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
+	assert (str_length(FILENAME) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
 
 	gInfer: if VENDOR = VENDOR_XILINX generate
 		-- RAM can be inferred correctly only for newer FPGAs!
@@ -91,7 +91,7 @@ begin
 		-- Compute the initialization of a RAM array, if specified, from the passed file.
 		impure function ocrom_InitMemory(FilePath : string) return rom_t is
 			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
-			variable res			: ram_t;
+			variable res			: rom_t;
 		begin
 			if (str_length(FilePath) = 0) then
         -- shortcut required by Vivado (assert above is ignored)

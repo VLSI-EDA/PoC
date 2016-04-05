@@ -14,11 +14,11 @@ initialization manually:
 cd <PoCRoot>\lib\
 git submodule init
 git submodule update
-cd osvvm\
-git remote rename origin github
-cd ..\vunit\
-git remote rename origin github
-cd ..
+foreach($dir in (dir -Directory)) {
+  cd $dir
+  git remote rename origin github
+  cd ..
+}
 ```  
 
 
@@ -49,7 +49,7 @@ Source:  [https://github.com/JimLewis/OSVVM][11]
 **Copyright:**	Copyright © 2014-2016, Lars Asplund [lars.anders.asplund@gmail.com](mailto://lars.anders.asplund@gmail.com)  
 **License:**	[Mozilla Public License, Version 2.0][MPL2.0]
 
-[VUnit][21] is an open source unit testing framework for VHDL released under the
+[VUnit][31] is an open source unit testing framework for VHDL released under the
 terms of [Mozilla Public License, v. 2.0][MPL2.0]. It features the functionality
 needed to realize continuous and automated testing of your VHDL code. VUnit
 doesn't replace but rather complements traditional testing methodologies by
@@ -60,6 +60,20 @@ Source: [https://github.com/VUnit/vunit][31]
 
  [30]: https://vunit.github.io/
  [31]: https://github.com/VUnit/vunit
+
+## Cocotb
+
+**Folder:**		`<PoCRoot>\lib\cocotb\`  
+**Copyright:**	Copyright © 2013, [Potential Ventures Ltd.](http://potential.ventures/), SolarFlare Communications Inc.  
+**License:**	Revised BSD License, see [local copy](Cocotb BSD License.md)
+
+[Cocotb][40] is a coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
+
+Documentation: [http://cocotb.readthedocs.org/en/latest/index.html][40]
+Source: [https://github.com/potentialventures/cocotb][41]
+
+ [40]: http://cocotb.readthedocs.org/en/latest/index.html
+ [41]: https://github.com/potentialventures/cocotb
 
 
  [PAL2.0]:	http://www.perlfoundation.org/artistic_license_2_0

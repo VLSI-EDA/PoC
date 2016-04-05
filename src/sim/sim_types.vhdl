@@ -46,7 +46,7 @@ package sim_types is
 	attribute pocIsSimulation		: BOOLEAN;
 	attribute pocIsSimulation of sim_types			: package is TRUE;
 
-	constant C_SIM_VERBOSE					: BOOLEAN		:= TRUE;		-- POC_VERBOSE
+	constant C_SIM_VERBOSE					: BOOLEAN		:= FALSE;		-- POC_VERBOSE
 
 	-- ===========================================================================
   -- Simulation Task and Status Management
@@ -152,7 +152,6 @@ package sim_types is
 	subtype T_PHASE is T_DEGREE range	-360 deg to 360 deg;
 	
 	function ite(cond : BOOLEAN; value1 : T_DEGREE; value2 : T_DEGREE) return T_DEGREE;
-	
 end package;
 
 

@@ -272,7 +272,7 @@ begin
 					New_Valid_i						<= In_Valid;
 					New_SOF_i							<= '1';
 				
-					if (IS_DataFlow = '1') then
+					if (Is_DataFlow = '1') then
 						if (Is_EOF = '0') then
 							NextState					<= ST_PAYLOAD_N;
 						else
@@ -285,14 +285,14 @@ begin
 				In_Ack_i								<= Out_Ack_i;
 				New_Valid_i							<= In_Valid;
 			
-				if ((IS_DataFlow and Is_EOF) = '1') then
+				if ((Is_DataFlow and Is_EOF) = '1') then
 					NextState							<= ST_IDLE;
 				end if;
 				
 			when ST_DISCARD_FRAME =>
 				In_Ack_i								<= '1';
 			
-				if ((IS_DataFlow and Is_EOF) = '1') then
+				if ((Is_DataFlow and Is_EOF) = '1') then
 					NextState							<= ST_IDLE;
 				end if;
 				
@@ -303,19 +303,19 @@ begin
 	gen0 : for i in 0 to PATTERN_COUNT - 1 generate
 		signal Hit								: STD_LOGIC;
 	begin
-		Hit <= to_sl((In_Data and MAC_ADDRESSE_MASKS_I(I)(MAC_ByteIndex)) = (MAC_ADDRESSES_I(I)(MAC_ByteIndex) and MAC_ADDRESSE_MASKS_I(I)(MAC_ByteIndex)));
+		Hit <= to_sl((In_Data and MAC_ADDRESSE_MASKS_I(i)(MAC_ByteIndex)) = (MAC_ADDRESSES_I(i)(MAC_ByteIndex) and MAC_ADDRESSE_MASKS_I(i)(MAC_ByteIndex)));
 		
 		process(Clock)
 		begin
 			if rising_edge(Clock) then
 				if ((Reset OR CompareRegister_rst) = '1') then
-					CompareRegister_d(I)			<= '0';
+					CompareRegister_d(i)			<= '0';
 				elsif (CompareRegister_init	= '1') then
-					CompareRegister_d(I)			<= Hit;
+					CompareRegister_d(i)			<= Hit;
 				elsif (CompareRegister_clear	= '1') then
-					CompareRegister_d(I)			<= '0';
+					CompareRegister_d(i)			<= '0';
 				elsif (CompareRegister_en  = '1') then
-					CompareRegister_d(I)			<= CompareRegister_d(I) and Hit;
+					CompareRegister_d(i)			<= CompareRegister_d(i) and Hit;
 				end if;
 			end if;
 		end process;

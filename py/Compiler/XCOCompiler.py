@@ -1,4 +1,4 @@
-# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
@@ -15,7 +15,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,74 +40,99 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Class Compiler(PoCCompiler)")
 
 # load dependencies
-from pathlib import Path
+import re								# used for output filtering
+import shutil
+from colorama								import Fore as Foreground
+from configparser						import NoSectionError
+from os											import chdir
+from pathlib								import Path
+from textwrap								import dedent
 
-from Base.Exceptions import *
-from Compiler.Base import PoCCompiler 
-from Compiler.Exceptions import *
+from Base.Exceptions				import *
+from Base.Compiler					import PoCCompiler
+from ToolChains.Xilinx.ISE	import ISE
+
 
 class Compiler(PoCCompiler):
-
-	__executables = {}
-
 	def __init__(self, host, showLogs, showReport):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 
-		if (host.platform == "Windows"):
-			self.__executables['CoreGen'] =	"coregen.exe"
-		elif (host.platform == "Linux"):
-			self.__executables['CoreGen'] =	"coregen"
-		else:
-			raise PlatformNotSupportedException(self.platform)
-		
-	def run(self, pocEntity, device):
-		import os
-		import re
-		import shutil
-		import subprocess
-		import textwrap
-	
-		self.printNonQuiet(str(pocEntity))
-		self.printNonQuiet("  preparing compiler environment...")
+		self._pocEntity =			None
+		self._netlistFQN =		""
+		self._device =				None
+		self._tempPath =			None
+		self._outputPath =		None
+		self._ise =						None
 
-		# TODO: improve / resolve board to device
-		deviceString = str(device).upper()
-		deviceSection = "Device." + deviceString
-		
+		self._PrepareCompilerEnvironment()
+
+	@property
+	def TemporaryPath(self):
+		return self._tempPath
+
+	def _PrepareCompilerEnvironment(self):
+		self._LogNormal("preparing compiler environment...")
 		# create temporary directory for CoreGen if not existent
-		tempCoreGenPath = self.host.directories["CoreGenTemp"]
-		if not (tempCoreGenPath).exists():
-			self.printVerbose("    Creating temporary directory for core generator files.")
-			self.printDebug("    Temporary directory: {0}.".format(tempCoreGenPath))
-			tempCoreGenPath.mkdir(parents=True)
+		self._tempPath = self.Host.Directories["CoreGenTemp"]
+		if (not (self._tempPath).exists()):
+			self._LogVerbose("  Creating temporary directory for compiler files.")
+			self._LogDebug("    Temporary directory: {0}".format(str(self._tempPath)))
+			self._tempPath.mkdir(parents=True)
+
+		# change working directory to temporary iSim path
+		self._LogVerbose("  Changing working directory to temporary directory.")
+		self._LogDebug("    cd \"{0}\"".format(str(self._tempPath)))
+		chdir(str(self._tempPath))
+
+	def RunAll(self, pocEntities, **kwargs):
+		for pocEntity in pocEntities:
+			self.Run(pocEntity, **kwargs)
+		
+	def Run(self, pocEntity, device):
+		self._pocEntity =			pocEntity
+		self._netlistFQN =		str(pocEntity)  # TODO: implement FQN method on PoCEntity
+		self._device =				device
+		
+		# check testbench database for the given testbench		
+		self._LogQuiet("IP-core: {0}{1}{2}".format(Foreground.YELLOW, self._netlistFQN, Foreground.RESET))
+		if (not self.Host.netListConfig.has_section(self._netlistFQN)):
+			raise CompilerException("IP-core '{0}' not found.".format(self._netlistFQN)) from NoSectionError(self._netlistFQN)
+
+		self._LogNormal(self._netlistFQN)
 
 		# create output directory for CoreGen if not existent
-		coreGenOutputPath = self.host.directories["PoCNetList"] / deviceString
-		if not (coreGenOutputPath).exists():
-			self.printVerbose("    Creating output directory for core generator files.")
-			self.printDebug("    Output directory: {0}.".format(coreGenOutputPath))
-			coreGenOutputPath.mkdir(parents=True)
-			
+		self._outputPath = self.Host.Directories["PoCNetList"] / str(device)
+		if not (self._outputPath).exists():
+			self._LogVerbose("  Creating output directory for core generator files.")
+			self._LogDebug("    Output directory: {0}.".format(str(self._outputPath)))
+			self._outputPath.mkdir(parents=True)
+
+		self._RunPrepareCompile()
+		self._RunPreCopy()
+		self._RunCompile()
+		self._RunPostCopy()
+		self._RunPostReplace()
+
+	def _RunPrepareCompile(self):
+		self._LogNormal("  preparing compiler environment for IP-core '????' ...")
+
 		# add the key Device to section SPECIAL at runtime to change interpolation results
-		self.host.netListConfig['SPECIAL'] = {}
-		self.host.netListConfig['SPECIAL']['Device'] = deviceString
-		self.host.netListConfig['SPECIAL']['OutputDir'] = tempCoreGenPath.as_posix()
-		
-		if not self.host.netListConfig.has_section(str(pocEntity)):
-			from configparser import NoSectionError
-			raise CompilerException("IP-Core '{0}' not found.".format(str(pocEntity))) from NoSectionError(str(pocEntity))
-		
+		self.Host.netListConfig['SPECIAL'] =							{}
+		self.Host.netListConfig['SPECIAL']['Device'] =		str(self._device)
+		self.Host.netListConfig['SPECIAL']['OutputDir'] =	self._tempPath.as_posix()
+
+	def _RunPreCopy(self):
 		# read pre-copy tasks
 		preCopyTasks = []
-		preCopyFileList = self.host.netListConfig[str(pocEntity)]['PreCopy']
+		preCopyFileList = self.Host.netListConfig[self._netlistFQN]['PreCopy.Rule']
 		if (len(preCopyFileList) != 0):
-			self.printDebug("PreCopyTasks: \n  " + ("\n  ".join(preCopyFileList.split("\n"))))
-			
+			self._LogDebug("PreCopyTasks: \n  " + ("\n  ".join(preCopyFileList.split("\n"))))
+
 			preCopyRegExpStr	 = r"^\s*(?P<SourceFilename>.*?)"			# Source filename
 			preCopyRegExpStr += r"\s->\s"													#	Delimiter signs
 			preCopyRegExpStr += r"(?P<DestFilename>.*?)$"					#	Destination filename
 			preCopyRegExp = re.compile(preCopyRegExpStr)
-			
+
 			for item in preCopyFileList.split("\n"):
 				preCopyRegExpMatch = preCopyRegExp.match(item)
 				if (preCopyRegExpMatch is not None):
@@ -117,95 +142,36 @@ class Compiler(PoCCompiler):
 					))
 				else:
 					raise CompilerException("Error in pre-copy rule '{0}'".format(item))
-		
-		# read (post) copy tasks
-		copyTasks = []
-		copyFileList = self.host.netListConfig[str(pocEntity)]['Copy']
-		if (len(copyFileList) != 0):
-			self.printDebug("CopyTasks: \n  " + ("\n  ".join(copyFileList.split("\n"))))
-			
-			copyRegExpStr	 = r"^\s*(?P<SourceFilename>.*?)"			# Source filename
-			copyRegExpStr += r"\s->\s"													#	Delimiter signs
-			copyRegExpStr += r"(?P<DestFilename>.*?)$"					#	Destination filename
-			copyRegExp = re.compile(copyRegExpStr)
-			
-			for item in copyFileList.split("\n"):
-				copyRegExpMatch = copyRegExp.match(item)
-				if (copyRegExpMatch is not None):
-					copyTasks.append((
-						Path(copyRegExpMatch.group('SourceFilename')),
-						Path(copyRegExpMatch.group('DestFilename'))
-					))
-				else:
-					raise CompilerException("Error in copy rule '{0}'".format(item))
-		
-		# read replacement tasks
-		replaceTasks = []
-		replaceFileList = self.host.netListConfig[str(pocEntity)]['Replace']
-		if (len(replaceFileList) != 0):
-			self.printDebug("ReplacementTasks: \n  " + ("\n  ".join(replaceFileList.split("\n"))))
 
-			replaceRegExpStr =	r"^\s*(?P<Filename>.*?)\s+:"			# Filename
-			replaceRegExpStr += r"(?P<Options>[dim]{0,3}):\s+"			#	RegExp options
-			replaceRegExpStr += r"\"(?P<Search>.*?)\"\s+->\s+"		#	Search regexp
-			replaceRegExpStr += r"\"(?P<Replace>.*?)\"$"					# Replace regexp
-			replaceRegExp = re.compile(replaceRegExpStr)
-
-			for item in replaceFileList.split("\n"):
-				replaceRegExpMatch = replaceRegExp.match(item)
-				
-				if (replaceRegExpMatch is not None):
-					replaceTasks.append((
-						Path(replaceRegExpMatch.group('Filename')),
-						replaceRegExpMatch.group('Options'),
-						replaceRegExpMatch.group('Search'),
-						replaceRegExpMatch.group('Replace')
-					))
-				else:
-					raise CompilerException("Error in replace rule '{0}'.".format(item))
-		
 		# run pre-copy tasks
-		self.printNonQuiet('  copy further input files into output directory...')
+		self._LogNormal('  copy further input files into output directory...')
 		for task in preCopyTasks:
 			(fromPath, toPath) = task
 			if not fromPath.exists(): raise CompilerException("Can not pre-copy '{0}' to destination.".format(str(fromPath))) from FileNotFoundError(str(fromPath))
-			
+
 			toDirectoryPath = toPath.parent
 			if not toDirectoryPath.exists():
 				toDirectoryPath.mkdir(parents=True)
-		
-			self.printVerbose("  pre-copying '{0}'.".format(fromPath))
-			shutil.copy(str(fromPath), str(toPath))
-		
-		# setup all needed paths to execute coreGen
-		coreGenExecutablePath =		self.host.directories["ISEBinary"] / self.__executables['CoreGen']
-		
-		# read netlist settings from configuration file
-		ipCoreName =					self.host.netListConfig[str(pocEntity)]['IPCoreName']
-		xcoInputFilePath =		self.host.directories["PoCRoot"] / self.host.netListConfig[str(pocEntity)]['CoreGeneratorFile']
-		cgcTemplateFilePath =	self.host.directories["PoCNetList"] / "template.cgc"
-		cgpFilePath =					tempCoreGenPath / "coregen.cgp"
-		cgcFilePath =					tempCoreGenPath / "coregen.cgc"
-		xcoFilePath =					tempCoreGenPath / xcoInputFilePath.name
 
-		# report the next steps in execution
-#		if (self.getVerbose()):
-#			print("  Commands to be run:")
-#			print("  1. Write CoreGen project file into temporary directory.")
-#			print("  2. Write CoreGen content file into temporary directory.")
-#			print("  3. Copy IPCore's *.xco file into temporary directory.")
-#			print("  4. Change working directory to temporary directory.")
-#			print("  5. Run Xilinx Core Generator (coregen).")
-#			print("  6. Copy resulting files into output directory.")
-#			print("  ----------------------------------------")
-		
-		if (self.host.platform == "Windows"):
+			self._LogVerbose("  pre-copying '{0}'.".format(fromPath))
+			shutil.copy(str(fromPath), str(toPath))
+
+	def _RunCompile(self):
+		# read netlist settings from configuration file
+		ipCoreName = self.Host.netListConfig[self._netlistFQN]['IPCoreName']
+		xcoInputFilePath = self.Host.Directories["PoCRoot"] / self.Host.netListConfig[self._netlistFQN]['CoreGeneratorFile']
+		cgcTemplateFilePath = self.Host.Directories["PoCNetList"] / "template.cgc"
+		cgpFilePath = self._tempPath / "coregen.cgp"
+		cgcFilePath = self._tempPath / "coregen.cgc"
+		xcoFilePath = self._tempPath / xcoInputFilePath.name
+
+		if (self.Host.Platform == "Windows"):
 			WorkingDirectory = ".\\temp\\"
 		else:
 			WorkingDirectory = "./temp/"
-		
+
 		# write CoreGenerator project file
-		cgProjectFileContent = textwrap.dedent('''\
+		cgProjectFileContent = dedent('''\
 			SET addpads = false
 			SET asysymbol = false
 			SET busformat = BusFormatAngleBracketNotRipped
@@ -225,92 +191,128 @@ class Compiler(PoCCompiler):
 			SET vhdlsim = true
 			SET workingdirectory = {WorkingDirectory}
 			'''.format(
-				Device=device.shortName(),
-				DeviceFamily=device.familyName(),
-				Package=(str(device.package) + str(device.pinCount)),
-				SpeedGrade=device.speedGrade,
-				WorkingDirectory=WorkingDirectory
-			))
+			Device=self._device.shortName(),
+			DeviceFamily=self._device.familyName(),
+			Package=(str(self._device.package) + str(self._device.pinCount)),
+			SpeedGrade=self._device.speedGrade,
+			WorkingDirectory=WorkingDirectory
+		))
 
-		self.printDebug("Writing CoreGen project file to '{0}'.".format(cgpFilePath))
+		self._LogDebug("Writing CoreGen project file to '{0}'.".format(cgpFilePath))
 		with cgpFilePath.open('w') as cgpFileHandle:
 			cgpFileHandle.write(cgProjectFileContent)
 
 		# write CoreGenerator content? file
-		self.printDebug("Reading CoreGen content file to '{0}'.".format(cgcTemplateFilePath))
+		self._LogDebug("Reading CoreGen content file to '{0}'.".format(cgcTemplateFilePath))
 		with cgcTemplateFilePath.open('r') as cgcFileHandle:
 			cgContentFileContent = cgcFileHandle.read()
-			
+
 		cgContentFileContent = cgContentFileContent.format(
 			name="lcd_ChipScopeVIO",
-			device=device.shortName(),
-			devicefamily=device.familyName(),
-			package=(str(device.package) + str(device.pinCount)),
-			speedgrade=device.speedGrade
+			device=self._device.shortName(),
+			devicefamily=self._device.familyName(),
+			package=(str(self._device.package) + str(self._device.pinCount)),
+			speedgrade=self._device.speedGrade
 		)
 
-		self.printDebug("Writing CoreGen content file to '{0}'.".format(cgcFilePath))
+		self._LogDebug("Writing CoreGen content file to '{0}'.".format(cgcFilePath))
 		with cgcFilePath.open('w') as cgcFileHandle:
 			cgcFileHandle.write(cgContentFileContent)
-		
+
 		# copy xco file into temporary directory
-		self.printDebug("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
-		self.printVerbose("    cp {0} {1}".format(str(xcoInputFilePath), str(tempCoreGenPath)))
+		self._LogDebug("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
+		self._LogVerbose("    cp {0} {1}".format(str(xcoInputFilePath), str(self._tempPath)))
 		shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
-		
+
 		# change working directory to temporary CoreGen path
-		self.printVerbose('    cd {0}'.format(str(tempCoreGenPath)))
-		os.chdir(str(tempCoreGenPath))
-		
+		self._LogVerbose('    cd {0}'.format(str(self._tempPath)))
+		chdir(str(self._tempPath))
+
 		# running CoreGen
 		# ==========================================================================
-		self.printNonQuiet("  running CoreGen...")
-		# assemble CoreGen command as list of parameters
-		parameterList = [
-			str(coreGenExecutablePath),
-			'-r',
-			'-b', str(xcoFilePath),
-			'-p', '.'
-		]
-		self.printDebug("call coreGen: {0}.".format(parameterList))
-		self.printVerbose('    {0} -r -b "{1}" -p .'.format(str(coreGenExecutablePath), str(xcoFilePath)))
-		if (self.dryRun == False):
-			coreGenLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, universal_newlines=True)
-		
-			if self.showLogs:
-				print("Core Generator log (CoreGen)")
-				print("--------------------------------------------------------------------------------")
-				print(coreGenLog)
-				print()
-		
+		self._LogNormal("  running CoreGen...")
+		binaryPath =	self.Host.Directories["ISEBinary"]
+		iseVersion =			self.Host.pocConfig['Xilinx.ISE']['Version']
+		coreGen = ISE.GetCoreGenerator(self.Host.Platform, binaryPath, iseVersion, logger=self.Logger)
+		coreGen.Parameters[coreGen.SwitchProjectFile] =	"."		# use current directory and the default project name
+		coreGen.Parameters[coreGen.SwitchBatchFile] =		str(xcoFilePath)
+		coreGen.Parameters[coreGen.FlagRegenerate] =		True
+		coreGen.Generate()
+
+	def _RunPostCopy(self):
+		# read (post) copy tasks
+		copyTasks = []
+		copyFileList = self.Host.netListConfig[self._netlistFQN]['PostCopy.Rule']
+		if (len(copyFileList) != 0):
+			self._LogDebug("CopyTasks: \n  " + ("\n  ".join(copyFileList.split("\n"))))
+
+			copyRegExpStr = r"^\s*(?P<SourceFilename>.*?)"  # Source filename
+			copyRegExpStr += r"\s->\s"  # Delimiter signs
+			copyRegExpStr += r"(?P<DestFilename>.*?)$"  # Destination filename
+			copyRegExp = re.compile(copyRegExpStr)
+
+			for item in copyFileList.split("\n"):
+				copyRegExpMatch = copyRegExp.match(item)
+				if (copyRegExpMatch is not None):
+					copyTasks.append((
+						Path(copyRegExpMatch.group('SourceFilename')),
+						Path(copyRegExpMatch.group('DestFilename'))
+					))
+				else:
+					raise CompilerException("Error in copy rule '{0}'".format(item))
+
 		# copy resulting files into PoC's netlist directory
-		self.printNonQuiet('  copy result files into output directory...')
+		self._LogNormal('  copy result files into output directory...')
 		for task in copyTasks:
 			(fromPath, toPath) = task
-			if not fromPath.exists(): raise CompilerException("Can not copy '{0}' to destination.".format(str(fromPath))) from FileNotFoundError(str(fromPath))
-			
+			if not fromPath.exists(): raise CompilerException(
+				"Can not copy '{0}' to destination.".format(str(fromPath))) from FileNotFoundError(str(fromPath))
+
 			toDirectoryPath = toPath.parent
 			if not toDirectoryPath.exists():
 				toDirectoryPath.mkdir(parents=True)
-		
-			self.printVerbose("  copying '{0}'.".format(fromPath))
+
+			self._LogVerbose("  copying '{0}'.".format(fromPath))
 			shutil.copy(str(fromPath), str(toPath))
-		
+
+	def _RunPostReplace(self):
+		# read replacement tasks
+		replaceTasks = []
+		replaceFileList = self.Host.netListConfig[self._netlistFQN]['PostReplace.Rule']
+		if (len(replaceFileList) != 0):
+			self._LogDebug("ReplacementTasks: \n  " + ("\n  ".join(replaceFileList.split("\n"))))
+
+			replaceRegExpStr = r"^\s*(?P<Filename>.*?)\s+:"  # Filename
+			replaceRegExpStr += r"(?P<Options>[dim]{0,3}):\s+"  # RegExp options
+			replaceRegExpStr += r"\"(?P<Search>.*?)\"\s+->\s+"  # Search regexp
+			replaceRegExpStr += r"\"(?P<Replace>.*?)\"$"  # Replace regexp
+			replaceRegExp = re.compile(replaceRegExpStr)
+
+			for item in replaceFileList.split("\n"):
+				replaceRegExpMatch = replaceRegExp.match(item)
+
+				if (replaceRegExpMatch is not None):
+					replaceTasks.append((
+						Path(replaceRegExpMatch.group('Filename')),
+						replaceRegExpMatch.group('Options'),
+						replaceRegExpMatch.group('Search'),
+						replaceRegExpMatch.group('Replace')
+					))
+				else:
+					raise CompilerException("Error in replace rule '{0}'.".format(item))
+
 		# replace in resulting files
-		self.printNonQuiet('  replace in result files...')
+		self._LogNormal('  replace in result files...')
 		for task in replaceTasks:
 			(fromPath, options, search, replace) = task
 			if not fromPath.exists(): raise CompilerException("Can not replace in file '{0}' to destination.".format(str(fromPath))) from FileNotFoundError(str(fromPath))
 			
-			self.printVerbose("  replace in file '{0}': search for '{1}' -> replace by '{2}'.".format(str(fromPath), search, replace))
+			self._LogVerbose("  replace in file '{0}': search for '{1}' -> replace by '{2}'.".format(str(fromPath), search, replace))
 			
-			regExpFlags	 = 0
-			if ('i' in options):
-				regExpFlags |= re.IGNORECASE
-			if ('m' in options):
-				regExpFlags |= re.MULTILINE
-			if ('d' in options):
-				regExpFlags |= re.DOTALL
+			regExpFlags = 0
+			if ('i' in options):		regExpFlags |= re.IGNORECASE
+			if ('m' in options):		regExpFlags |= re.MULTILINE
+			if ('d' in options):		regExpFlags |= re.DOTALL
 			
 			regExp = re.compile(search, regExpFlags)
 			

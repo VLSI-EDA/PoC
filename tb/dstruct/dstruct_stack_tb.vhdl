@@ -2,9 +2,9 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- ============================================================================
--- Entity:      dstruct_stack_tb
+-- Authors:     Jens Voss
 --
--- Authors:     Jens Voss <jens.voss@mailbox.tu-dresden.de>
+-- Entity:      dstruct_stack_tb
 --
 -- Description:
 -- ------------

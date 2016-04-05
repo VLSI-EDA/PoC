@@ -180,10 +180,10 @@ begin
 			In_Data			=> DataInputMatrix,
 			In_Meta			=> Generator_Meta,
 			
-			Out_Valid		=> sort_Valid,
-			Out_IsKey		=> sort_IsKey,
+			Out_Valid		=> Sort_Valid,
+			Out_IsKey		=> Sort_IsKey,
 			Out_Data		=> DataOutputMatrix,
-			Out_Meta		=> sort_Meta
+			Out_Meta		=> Sort_Meta
 		);
 	
 	Sort_Data	<= to_dv(DataOutputMatrix);
@@ -194,7 +194,7 @@ begin
 		variable CurValue			: UNSIGNED(KEY_BITS - 1 downto 0);
 		variable LastValue		: UNSIGNED(KEY_BITS - 1 downto 0);
 	begin
-		wait until rising_edge(sort_Valid);
+		wait until rising_edge(Sort_Valid);
 		
 		for i in 0 to LOOP_COUNT - 1 loop
 			

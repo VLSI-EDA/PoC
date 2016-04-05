@@ -506,8 +506,8 @@ package body utils is
 	begin
 		Result	:= INTEGER'high;
 		for i in vec'range loop
-			if (vec(I) < Result) then
-				Result	:= vec(I);
+			if (vec(i) < Result) then
+				Result	:= vec(i);
 			end if;
 		end loop;
 		return Result;
@@ -518,8 +518,8 @@ package body utils is
 	begin
 		Result	:= NATURAL'high;
 		for i in vec'range loop
-			if (vec(I) < Result) then
-				Result	:= vec(I);
+			if (vec(i) < Result) then
+				Result	:= vec(i);
 			end if;
 		end loop;
 		return Result;
@@ -530,8 +530,8 @@ package body utils is
 	begin
 		Result	:= POSITIVE'high;
 		for i in vec'range loop
-			if (vec(I) < Result) then
-				Result	:= vec(I);
+			if (vec(i) < Result) then
+				Result	:= vec(i);
 			end if;
 		end loop;
 		return Result;
@@ -566,8 +566,8 @@ package body utils is
 	begin
 		Result		:= INTEGER'low;
 		for i in vec'range loop
-			if (vec(I) > Result) then
-				Result	:= vec(I);
+			if (vec(i) > Result) then
+				Result	:= vec(i);
 			end if;
 		end loop;
 		return Result;
@@ -578,8 +578,8 @@ package body utils is
 	begin
 		Result		:= NATURAL'low;
 		for i in vec'range loop
-			if (vec(I) > Result) then
-				Result	:= vec(I);
+			if (vec(i) > Result) then
+				Result	:= vec(i);
 			end if;
 		end loop;
 		return Result;
@@ -590,8 +590,8 @@ package body utils is
 	begin
 		Result		:= POSITIVE'low;
 		for i in vec'range loop
-			if (vec(I) > Result) then
-				Result	:= vec(I);
+			if (vec(i) > Result) then
+				Result	:= vec(i);
 			end if;
 		end loop;
 		return Result;
@@ -624,7 +624,7 @@ package body utils is
 	begin
 		Result		:= 0;
 		for i in vec'range loop
-			Result	:= Result + vec(I);
+			Result	:= Result + vec(i);
 		end loop;
 		return Result;
 	end function;
@@ -634,7 +634,7 @@ package body utils is
 	begin
 		Result := 0;
 		for i in vec'range loop
-			Result := Result + vec(I);
+			Result := Result + vec(i);
 		end loop;
 		return Result;
 	end function;
@@ -841,10 +841,10 @@ package body utils is
 		variable Result : STD_LOGIC_VECTOR(slv'length - 1 DOWNTO 0);
 	begin
 		for i in 0 TO SegmentCount - 1 loop
-			FromH		:= ((I + 1) * Size) - 1;
-			FromL		:= I * Size;
-			ToH			:= ((SegmentCount - I) * Size) - 1;
-			ToL			:= (SegmentCount - I - 1) * Size;
+			FromH		:= ((i + 1) * Size) - 1;
+			FromL		:= i * Size;
+			ToH			:= ((SegmentCount - i) * Size) - 1;
+			ToL			:= (SegmentCount - i - 1) * Size;
 			Result(ToH DOWNTO ToL)	:= slv(FromH DOWNTO FromL);
 		end loop;
 		return Result;

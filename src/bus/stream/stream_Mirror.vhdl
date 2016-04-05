@@ -164,13 +164,13 @@ begin
 			begin
 				if rising_edge(Clock) then
 					if (MetaMemory_en = '1') then
-						MetaMemory		<= In_Meta_Data(high(META_BITS, I) downto low(META_BITS, I));
+						MetaMemory		<= In_Meta_Data(high(META_BITS, i) downto low(META_BITS, i));
 					end if;
 				end if;
 			end process;
 			
 			genReader : FOR J IN 0 to portS - 1 generate
-				assign_row(Out_Meta_Data_i, MetaMemory, J, high(META_BITS, I), low(META_BITS, I));
+				assign_row(Out_Meta_Data_i, MetaMemory, J, high(META_BITS, i), low(META_BITS, i));
 			end generate;
 		end generate;
 		genMem : if (META_LENGTH(i) > 1) generate
@@ -222,7 +222,7 @@ begin
 			begin
 				if rising_edge(Clock) then
 					if (MetaMemory_en = '1') then
-						MetaMemory(to_integer(Writer_us))		<= In_Meta_Data(high(META_BITS, I) downto low(META_BITS, I));
+						MetaMemory(to_integer(Writer_us))		<= In_Meta_Data(high(META_BITS, i) downto low(META_BITS, i));
 					end if;
 				end if;
 			end process;
@@ -235,7 +235,7 @@ begin
 				signal Reader_us				: UNSIGNED(log2ceilnz(META_LENGTH(i)) - 1 downto 0)		:= (others => '0');
 			begin
 				Reader_rst		<= Out_Meta_rst(j) or (In_Valid and In_SOF);
-				Reader_en			<= Out_Meta_nxt(j, I);
+				Reader_en			<= Out_Meta_nxt(j, i);
 			
 				process(Clock)
 				begin

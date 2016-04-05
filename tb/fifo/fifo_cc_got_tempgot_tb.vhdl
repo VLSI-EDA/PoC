@@ -71,6 +71,7 @@ begin
 	simInitialize(MaxSimulationRuntime => 1 us);
 	-- generate global testbench clock
 	simGenerateClock(clk, CLOCK_FREQ);
+	simGenerateWaveform(rst, simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
 
   genTests: for c in 0 to 7 generate
 		constant DATA_REG   : boolean :=  c mod 2 > 0;

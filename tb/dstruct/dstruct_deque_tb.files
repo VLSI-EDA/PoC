@@ -3,39 +3,18 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # ==============================================================================
 # Note: all files are relative to PoC root directory
-
-# board and device configuration
-vhdl		poc		"tb/common/my_config_ML505.vhdl"
-vhdl		poc		"tb/common/my_project.vhdl"
-
-# PoC core packages
-vhdl		poc		"src/common/utils.vhdl"							# PoC utility collection
-vhdl		poc		"src/common/config.vhdl"						# PoC device configuration mechanism
-vhdl		poc		"src/common/strings.vhdl"						# PoC string package
-vhdl		poc		"src/common/vectors.vhdl"						# PoC vector package
-vhdl		poc		"src/common/physical.vhdl"					# PoC physical types package
-
-vhdl		poc		"src/sim/sim_types.vhdl"						# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_random.v93.vhdl"				# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_global.v93.vhdl"				# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_unprotected.v93.vhdl"	# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_simulation.v93.vhdl"		# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_random.v08.vhdl"				# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_protected.v08.vhdl"		# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_global.v08.vhdl"				# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_simulation.v08.vhdl"		# PoC simulation helper
-vhdl		poc		"src/sim/sim_waveform.vhdl"					# PoC simulation helper
-
-# PoC.mem
-vhdl    poc   "src/mem/mem.pkg.vhdl"              # Memory package
+#
+# Common PoC packages for configuration, synthesis and simulation
+include				"tb/common/my_config.files"									# board and device configuration
+include				"src/common/common.files"										# load common packages
+include				"src/sim/sim.files"													# load simulation helper packages
 
 # PoC.mem.ocram
-vhdl    poc   "src/mem/ocram/ocram.pkg.vhdl"      # On-Chip-RAM
-vhdl    poc   "src/mem/ocram/ocram_tdp.vhdl"			# True dual-port RAM
+include				"src/mem/ocram/ocram_tdp.files"				      # True dual-port RAM
 
 # PoC.dstruct
-vhdl		poc		"src/dstruct/dstruct.pkg.vhdl"			# Package
-vhdl		poc		"src/dstruct/dstruct_deque.vhdl"		# DUT
+vhdl		poc		"src/dstruct/dstruct.pkg.vhdl"							# Package
+vhdl		poc		"src/dstruct/dstruct_deque.vhdl"						# DUT
 
 # Testbench file(s)
-vhdl		test	"tb/dstruct/dstruct_deque_tb.vhdl"	# Testbench
+vhdl		test	"tb/dstruct/dstruct_deque_tb.vhdl"					# Testbench

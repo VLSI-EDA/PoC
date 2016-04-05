@@ -93,8 +93,8 @@ begin
 	
 	-- current element
 	genElements : for i in ELEMENTS - 1 downto 0 generate
-		constant INITIAL_ELEMENT	: STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0)					:= get_row(INITIAL_ELEMENTS, I);
-		constant INITIAL_VALID		: STD_LOGIC																				:= INITIAL_VALIDS(I);
+		constant INITIAL_ELEMENT	: STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0)					:= get_row(INITIAL_ELEMENTS, i);
+		constant INITIAL_VALID		: STD_LOGIC																				:= INITIAL_VALIDS(i);
 
 		signal Element_nxt				: STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0);
 		signal Element_d					: STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0)					:= INITIAL_ELEMENT;
@@ -107,7 +107,7 @@ begin
 		
 	begin
 		-- local movements
-		Unequal				<= to_sl(Element_d(KEY_BITS - 1 downto 0) /= NewElementsUp(I)(KEY_BITS - 1 downto 0));
+		Unequal				<= to_sl(Element_d(KEY_BITS - 1 downto 0) /= NewElementsUp(i)(KEY_BITS - 1 downto 0));
 		
 		genXilinx : IF (VENDOR = VENDOR_XILINX) GENERATE
 			component MUXCY
@@ -122,43 +122,43 @@ begin
 			a : MUXCY
 				port map (
 					S		=> Unequal,
-					CI	=> MovesDown(I + 1),
+					CI	=> MovesDown(i + 1),
 					DI	=> '0',
-					O		=> MovesDown(I)
+					O		=> MovesDown(i)
 				);
 
 			b : MUXCY
 				port map (
 					S		=> Unequal,
-					CI	=> MovesUp(I),
+					CI	=> MovesUp(i),
 					DI	=> '0',
-					O		=> MovesUp(I + 1)
+					O		=> MovesUp(i + 1)
 				);
 		end generate;
 		
 		-- movements for the current element	
-		MoveDown		<= MovesDown(I + 1);
-		MoveUp			<= MovesUp(I);
+		MoveDown		<= MovesDown(i + 1);
+		MoveUp			<= MovesUp(i);
 		
 		-- passthrought all new
-		NewElementsUp(I + 1)	<= NewElementsUp(I);
+		NewElementsUp(i + 1)	<= NewElementsUp(i);
 		
-		ElementsUp(I + 1)			<= Element_d;
-		ValidsUp(I + 1)				<= Valid_d;
+		ElementsUp(i + 1)			<= Element_d;
+		ValidsUp(i + 1)				<= Valid_d;
 		
 		-- multiplexer
-		Element_nxt	<= mux(MoveDown, mux(MoveUp,	Element_d,	ElementsUp(I)),	ElementsDown(I + 1));
-		Valid_nxt		<= mux(MoveDown, mux(MoveUp,	Valid_d,		ValidsUp(I)	 ),	ValidsDown(I + 1)	 );
+		Element_nxt	<= mux(MoveDown, mux(MoveUp,	Element_d,	ElementsUp(i)),	ElementsDown(i + 1));
+		Valid_nxt		<= mux(MoveDown, mux(MoveUp,	Valid_d,		ValidsUp(i)	 ),	ValidsDown(i + 1)	 );
 		
-		Element_d		<= ffdre(q => Element_d,	d => Element_nxt,	rst => Reset)	when rising_edge(Clock);
-		Valid_d			<= ffdre(q => Valid_d,		d => Valid_nxt,		rst => Reset)	when rising_edge(Clock);
+		Element_d		<= ffdre(q => Element_d,	d => Element_nxt,	rst => Reset, INIT => INITIAL_ELEMENT)	when rising_edge(Clock);
+		Valid_d			<= ffdre(q => Valid_d,		d => Valid_nxt,		rst => Reset, INIT => INITIAL_VALID)  	when rising_edge(Clock);
 		
-		ElementsDown(I)		<= Element_d;
-		ValidsDown(I)			<= Valid_d;
+		ElementsDown(i)		<= Element_d;
+		ValidsDown(i)			<= Valid_d;
 		
-		assign_row(DBG_Elements_i, Element_d, I);
+		assign_row(DBG_Elements_i, Element_d, i);
 		
-		DBG_Valids(I)			<= Valid_d;
+		DBG_Valids(i)			<= Valid_d;
 	end generate;
 
 	-- previous element (buttom)

@@ -207,20 +207,20 @@ package body config_private is
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
-			BoardName =>			conf("S3SK1000"),
-			FPGADevice =>			conf("XC3S1000FT256"),								-- XC2S200FT256
+			BoardName =>			conf("S3ESK500"),
+			FPGADevice =>			conf("XC3S500EFT256"),								-- XC2S500FT256
 			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
-			BoardName =>			conf("S3ESK500"),
-			FPGADevice =>			conf("XC3S500EFT256"),								-- XC2S200FT256
+			BoardName =>			conf("S3SK1000"),
+			FPGADevice =>			conf("XC3S1000FT256"),								-- XC2S1000FT256
 			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
 			BoardName =>			conf("S3ESK1600"),
-			FPGADevice =>			conf("XC3S1600EFT256"),								-- XC2S200FT256
+			FPGADevice =>			conf("XC3S1600EFT256"),								-- XC2S1600FT256
 			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
@@ -858,7 +858,7 @@ package body config is
 		end case;
 	end function;
 	
-	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY) return t_device_subtype is
+	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_DEVICE_SUBTYPE is
 		constant MY_DEV				: string(1 to 32)	:= getLocalDeviceString(DeviceString);
 		constant DEV					: T_DEVICE				:= DEVICE(MY_DEV);
 		constant DEV_SUB_STR	: string(1 to 2)	:= MY_DEV(5 to 6);																-- work around for GHDL
@@ -998,7 +998,7 @@ package body config is
 		constant MY_DEV		: string(1 to 32)		:= getLocalDeviceString(DeviceString);
 		constant DEV			: T_DEVICE					:= DEVICE(DeviceString);
 		constant DEV_NUM	: natural						:= DEVICE_NUMBER(DeviceString);
-		constant DEV_SUB	: t_device_subtype	:= DEVICE_SUBTYPE(DeviceString);
+		constant DEV_SUB	: T_DEVICE_SUBTYPE	:= DEVICE_SUBTYPE(DeviceString);
 	begin
 		case DEV is
 			when DEVICE_MAX2 | DEVICE_MAX10 =>																return TRANSCEIVER_NONE;		-- Altera MAX II, 10 devices have no transceivers
@@ -1015,7 +1015,7 @@ package body config is
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_LX =>			return TRANSCEIVER_NONE;
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTPE1;
-					when others =>								report "Unknown Spartan-6 subtype: " & t_device_subtype'image(DEV_SUB) severity failure;
+					when others =>								report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
 			
 			when DEVICE_VIRTEX5 =>
@@ -1025,7 +1025,7 @@ package body config is
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTP_DUAL;
 					when DEVICE_SUBTYPE_TXT =>		return TRANSCEIVER_GTX;
 					when DEVICE_SUBTYPE_FXT =>		return TRANSCEIVER_GTX;
-					when others =>								report "Unknown Virtex-5 subtype: " & t_device_subtype'image(DEV_SUB) severity failure;
+					when others =>								report "Unknown Virtex-5 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
 			
 			when DEVICE_VIRTEX6 =>
@@ -1034,7 +1034,7 @@ package body config is
 					when DEVICE_SUBTYPE_SXT =>		return TRANSCEIVER_GTXE1;
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTXE1;
 					when DEVICE_SUBTYPE_HXT =>		return TRANSCEIVER_GTXE1;
-					when others =>								report "Unknown Virtex-6 subtype: " & t_device_subtype'image(DEV_SUB) severity failure;
+					when others =>								report "Unknown Virtex-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
 				
 			when DEVICE_ARTIX7 =>							return TRANSCEIVER_GTPE2;
@@ -1047,7 +1047,7 @@ package body config is
 						else												return TRANSCEIVER_GTHE2;
 						end if;
 					when DEVICE_SUBTYPE_HT =>			return TRANSCEIVER_GTHE2;
-					when others =>								report "Unknown Virtex-7 subtype: " & t_device_subtype'image(DEV_SUB) severity failure;
+					when others =>								report "Unknown Virtex-7 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
 			when DEVICE_ZYNQ7 =>
 				case DEV_NUM is

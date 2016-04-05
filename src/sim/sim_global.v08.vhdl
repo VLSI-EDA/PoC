@@ -30,7 +30,7 @@
 -- =============================================================================
 
 library PoC;
-use			PoC.fileio.all;
+use			PoC.FileIO.all;
 use			PoC.sim_protected.all;
 
 

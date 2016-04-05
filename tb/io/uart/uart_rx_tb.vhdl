@@ -80,7 +80,7 @@ architecture tb of uart_rx_tb is
 		variable Result : T_SIM_WAVEFORM_SL(0 to (Data'length * 10) - 1);
 	begin
 		for i in Data'range loop
-			Result(i * 10 to ((i + 1) * 10) - 1)	:= simGenerateWaveform_UART_Word(Data(i), BAUDRATE);
+			Result(i * 10 to ((i + 1) * 10) - 1)	:= simGenerateWaveform_UART_Word(Data(i), Baudrate);
 		end loop;
 		return Result;
 	end function;

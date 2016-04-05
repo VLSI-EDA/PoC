@@ -4,20 +4,19 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-#	Bash Script:			Wrapper Script to execute <PoC-Root>/py/Configuration.py
-# 
 #	Authors:				 	Patrick Lehmann
+# 
+#	Bash Script:			Wrapper Script to execute <PoC-Root>/py/PoC.py
 # 
 # Description:
 # ------------------------------------
 #	This is a bash wrapper script (executable) which:
 #		- saves the current working directory as an environment variable
 #		- delegates the call to <PoC-Root>/py/wrapper.sh
-#		-
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2014 Technische Universitaet Dresden - Germany
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +34,7 @@
 
 # configure wrapper here
 PyWrapper_BashScriptDir="py"
-PyWrapper_Script=Configuration.py
+PyWrapper_Script=PoC.py
 PyWrapper_MinVersion=3.4.0
 
 # resolve script directory
@@ -49,21 +48,11 @@ done
 SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # save parameters and script directory
-PyWrapper_Paramters=$@
+PyWrapper_Parameters=$@
 PyWrapper_ScriptDir=$SCRIPT_DIR
 PyWrapper_WorkingDir=$(pwd)
 PoC_RootDir_RelPath="$SCRIPT_DIR/."
 PoC_RootDir_AbsPath=$(cd $PoC_RootDir_RelPath && pwd)
-
-# set default values
-PyWrapper_Debug=0
-PyWrapper_LoadEnv_ISE=0
-PyWrapper_LoadEnv_Vivado=0
-
-# search for special parameters
-for param in "$@"; do
-	if [ "$param" = "-D" ]; then PyWrapper_Debug=1; fi
-done
 
 # invoke main wrapper
 source "$PoC_RootDir_AbsPath/$PyWrapper_BashScriptDir/wrapper.sh"
