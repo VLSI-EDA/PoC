@@ -48,8 +48,9 @@ from os											import chdir
 from pathlib								import Path
 
 from Base.Exceptions				import CompilerException, NotConfiguredException, PlatformNotSupportedException
-from Base.Project						import FileTypes, VHDLVersion
+from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
 from Base.Compiler					import Compiler as BaseCompiler
+from Parser.Parser					import ParserException
 from PoC.PoCProject					import Project as PoCProject
 from ToolChains.Xilinx.ISE	import ISE
 

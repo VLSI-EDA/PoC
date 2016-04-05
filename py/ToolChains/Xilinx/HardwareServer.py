@@ -39,8 +39,13 @@ else :
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.HardwareServer")
 
+from Base.Configuration import ConfigurationBase as BaseConfiguration
+from Base.Executable import Executable
+from Base.Executable import ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, \
+	PathArgument
 
-class Configuration:
+
+class Configuration(BaseConfiguration):
 	__vendor =		"Xilinx"
 	__shortName =	"HardwareServer"
 	__LongName =	"Xilinx HardwareServer"

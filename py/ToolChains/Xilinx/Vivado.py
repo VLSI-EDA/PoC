@@ -44,12 +44,13 @@ from collections					import OrderedDict
 from os										import environ
 
 from Base.Exceptions			import PlatformNotSupportedException
-from Base.Executable			import *
+from Base.Executable							import Executable
+from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument
 from Base.Logging					import LogEntry, Severity
-from Base.Configuration 	import ConfigurationBase, ConfigurationException, SkipConfigurationException
+from Base.Configuration 	import ConfigurationBase as BaseConfiguration, ConfigurationException, SkipConfigurationException
 
 
-class Configuration(ConfigurationBase):
+class Configuration(BaseConfiguration):
 	_vendor =		"Xilinx"
 	_shortName =	"Vivado"
 	_longName =	"Xilinx Vivado"

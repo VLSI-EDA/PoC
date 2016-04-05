@@ -38,10 +38,10 @@ else :
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.QuartusProject")
 
 
-from Base.Project			import *
+from Base.Project			import Project as BaseProject, ProjectFile
 
 
-class QuartusProject(Project):
+class QuartusProject(BaseProject):
 	def __init__(self, name):
 		super().__init__(name)
 

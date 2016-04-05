@@ -44,7 +44,8 @@ from re											import compile as re_compile
 
 from Base.Exceptions							import ToolChainException, PlatformNotSupportedException
 from Base.Logging									import LogEntry, Severity
-from Base.Executable							import *
+from Base.Executable							import Executable
+from Base.Executable							import ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
 
 
 class ActiveHDLException(ToolChainException):

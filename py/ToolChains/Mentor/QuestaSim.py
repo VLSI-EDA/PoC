@@ -40,15 +40,17 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
 
 
-from Base.Executable		import *
+from Base.Executable		import Executable
+from Base.Executable		import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
 from Base.Exceptions		import PlatformNotSupportedException, ToolChainException
+from Base.Configuration import ConfigurationBase as BaseConfiguration
 from Base.Logging				import LogEntry, Severity
 
 
 class QuestaException(ToolChainException):
 	pass
 
-class Configuration:
+class Configuration(BaseConfiguration):
 	__vendor =		"Mentor"
 	__shortName =	"QuestaSim"
 	__LongName =	"Mentor QuestaSim"

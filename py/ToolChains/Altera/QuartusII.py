@@ -40,7 +40,12 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.QuartusII")
 
 
-class Configuration:
+from Base.Executable							import Executable
+from Base.Executable							import ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
+from Base.Configuration						import ConfigurationBase as BaseConfiguration
+
+
+class Configuration(BaseConfiguration):
 	def manualConfigureForWindows(self) :
 		# Ask for installed Altera Quartus-II
 		isAlteraQuartusII = input('Is Altera Quartus-II installed on your system? [Y/n/p]: ')
@@ -53,6 +58,7 @@ class Configuration:
 			alteraDirectory = input('Altera installation directory [C:\Altera]: ')
 			quartusIIVersion = input('Altera QuartusII version number [15.0]: ')
 			print()
+
 
 			alteraDirectory = alteraDirectory if alteraDirectory != ""  else "C:\Altera"
 			quartusIIVersion = quartusIIVersion if quartusIIVersion != ""  else "15.0"

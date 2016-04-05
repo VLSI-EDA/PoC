@@ -39,7 +39,13 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.LabTools")
 
-class Configuration:
+
+from Base.Executable							import Executable
+from Base.Executable							import ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
+from Base.Configuration import ConfigurationBase as BaseConfiguration
+
+
+class Configuration(BaseConfiguration):
 	__vendor =		"Xilinx"
 	__shortName = "LabTools"
 	__LongName =	"Xilinx LabTools"

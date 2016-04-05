@@ -38,10 +38,10 @@ else :
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.ISEProject")
 
 
-from Base.Project			import *
+from Base.Project			import Project as BaseProject, ProjectFile, ConstraintFile
 
 
-class ISEProject(Project):
+class ISEProject(BaseProject):
 	def __init__(self, name):
 		super().__init__(name)
 
