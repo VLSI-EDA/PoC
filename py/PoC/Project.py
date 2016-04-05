@@ -1,5 +1,5 @@
 
-from Base.Exceptions	import *
+#from Base.Exceptions	import CommonException
 from Base.Project			import Project as BaseProject	#, ProjectFile
 
 class Project(BaseProject):

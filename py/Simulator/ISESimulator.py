@@ -45,9 +45,9 @@ from os											import chdir
 
 from colorama								import Fore as Foreground
 
-from Base.Exceptions				import SimulatorException
+# from Base.Exceptions				import PlatformNotSupportedException, NotConfiguredException
 from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
-from Base.Simulator					import Simulator as BaseSimulator, VHDLTestbenchLibraryName
+from Base.Simulator					import SimulatorException, Simulator as BaseSimulator, VHDLTestbenchLibraryName
 from Parser.Parser					import ParserException
 from PoC.Project						import Project as PoCProject
 from ToolChains.Xilinx.ISE	import ISE, ISESimulator, ISEException

@@ -41,9 +41,9 @@ else:
 
 
 # load dependencies
-from enum import Enum, EnumMeta, unique
+from enum									import Enum, unique
 
-from Base.Exceptions			import *
+#from Base.Exceptions			import CommonException
 from Base.Configuration		import ConfigurationException
 
 

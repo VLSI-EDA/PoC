@@ -32,9 +32,6 @@
 # ==============================================================================
 
 # entry point
-from Base.Simulator import SimulatorException
-
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -63,7 +60,7 @@ class NotConfiguredException(ExceptionBase):
 class CommonException(ExceptionBase):
 	pass
 
-class TestbenchException(SimulatorException):
+class TestbenchException(ExceptionBase):
 	def __init__(self, pocEntity, testbench, message):
 		super().__init__(message)
 		self.pocEntity = pocEntity

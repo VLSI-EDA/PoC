@@ -690,7 +690,6 @@ class IfStatement(ConditionalBlockStatement):
 				token = yield
 				parser.send(token)
 		except MatchingParserResult as ex:
-			pass
 			if DEBUG2: print("IfStatementParser: matched {0} got {1}".format(ex.__class__.__name__, ex.value))
 			
 		if DEBUG: print("IfStatementParser: matched {0}".format(result))
@@ -778,13 +777,11 @@ class ElseIfStatement(ConditionalBlockStatement):
 		parser = cls.GetRepeatParser(result.AddStatement, BlockedStatement.GetParser)
 		parser.send(None)
 		
-		statementList = None
 		try:
 			while True:
 				token = yield
 				parser.send(token)
 		except MatchingParserResult as ex:
-			pass
 			if DEBUG2: print("ElseIfStatementParser: matched {0} got {1}".format(ex.__class__.__name__, ex.value))
 		
 		if DEBUG: print("ElseIfStatementParser: matched {0}".format(result))
@@ -850,7 +847,6 @@ class ElseStatement(BlockStatement):
 				token = yield
 				parser.send(token)
 		except MatchingParserResult as ex:
-			pass
 			if DEBUG2: print("ElseStatementParser: matched {0} got {1}".format(ex.__class__.__name__, ex.value))
 
 		if DEBUG: print("ElseStatementParser: matched {0}".format(result))

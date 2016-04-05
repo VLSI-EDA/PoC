@@ -119,7 +119,7 @@ class Exit:
 	def printNotImplementedError(cls, ex):
 		from traceback	import walk_tb
 		Init.init()
-		frame, sourceLine = [x for x in walk_tb(ex.__traceback__)][-1]
+		frame, _ = [x for x in walk_tb(ex.__traceback__)][-1]
 		filename = frame.f_code.co_filename
 		funcName = frame.f_code.co_name
 		print("{RED}Not implemented:{RESET} {function} in file '{filename}': {message}".format(function=funcName, filename=filename, message=str(ex), **Init.Foreground))

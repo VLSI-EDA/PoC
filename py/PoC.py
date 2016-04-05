@@ -40,13 +40,13 @@ from platform									import system as platform_system
 from sys											import argv as sys_argv
 from textwrap									import dedent
 
-from Base.Exceptions					import ExceptionBase, EnvironmentException, PlatformNotSupportedException, NotConfiguredException, \
-																			CommonException, SimulatorException
-from Base.ToolChain import ToolChainException
+from Base.Exceptions					import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
+from Base.Configuration				import ConfigurationException
+from Base.Simulator						import SimulatorException
 from Base.Compiler						import CompilerException
+from Base.ToolChain import ToolChainException
 from Base.Logging							import ILogable, Logger, Severity
 from Base.Project							import VHDLVersion
-from Base.Configuration				import ConfigurationException
 from Compiler.XCOCompiler			import Compiler as XCOCompiler
 from Compiler.XSTCompiler			import Compiler as XSTCompiler
 from Parser.Parser						import ParserException
