@@ -48,6 +48,7 @@ from colorama									import Fore as Foreground
 # from Base.Exceptions					import PlatformNotSupportedException, NotConfiguredException
 from Base.Project							import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
 from Base.Simulator						import SimulatorException, Simulator as BaseSimulator#, VHDLTestbenchLibraryName
+from Base.Logging							import Severity
 from Parser.Parser						import ParserException
 from PoC.Project							import Project as PoCProject
 from ToolChains.Xilinx.Vivado	import Vivado, VivadoException
@@ -202,7 +203,7 @@ class Simulator(BaseSimulator):
 		# create a VivadoLinker instance
 		xelab = self._vivado.GetElaborator()
 		xelab.Parameters[xelab.SwitchTimeResolution] =	"1fs"	# set minimum time precision to 1 fs
-		xelab.Parameters[xelab.SwitchMultiThreading] =	"on"	#"4"		# enable multithreading support
+		xelab.Parameters[xelab.SwitchMultiThreading] =	"off" if self.Logger.LogLevel is Severity.Debug else "auto"		# disable multithreading support in debug mode
 		xelab.Parameters[xelab.FlagRangeCheck] =				True
 
 		# xelab.Parameters[xelab.SwitchOptimization] =		"2"
@@ -213,7 +214,7 @@ class Simulator(BaseSimulator):
 		# 	xelab.Parameters[xelab.SwitchVHDL2008] =			True
 
 		# if (self.verbose):
-		xelab.Parameters[xelab.SwitchVerbose] =					"0"		# set to "1" for detailed messages
+		xelab.Parameters[xelab.SwitchVerbose] =					"1" if self.Logger.LogLevel is Severity.Debug else "0"		# set to "1" for detailed messages
 		xelab.Parameters[xelab.SwitchProjectFile] =			str(prjFilePath)
 		xelab.Parameters[xelab.SwitchLogFile] =					str(xelabLogFilePath)
 		xelab.Parameters[xelab.ArgTopLevel] =						"{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)

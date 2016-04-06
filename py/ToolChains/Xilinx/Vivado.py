@@ -489,16 +489,76 @@ def VHDLCompilerFilter(gen):
 
 def ElaborationFilter(gen):
 	for line in gen:
-		if line.startswith("ERROR: "):
+		if line.startswith("Vivado Simulator "):
+			continue
+		elif line.startswith("Copyright 1986-1999"):
+			continue
+		elif line.startswith("Running: "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("ERROR: "):
 			yield LogEntry(line, Severity.Error)
 		elif line.startswith("WARNING: "):
+			yield LogEntry(line, Severity.Warning)
+		elif line.startswith("INFO: "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("Multi-threading is "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("Determining compilation order of HDL files."):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("Determining compilation order of HDL files."):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("Starting static elaboration"):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("Completed static elaboration"):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("Starting simulation data flow analysis"):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("Completed simulation data flow analysis"):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("Time Resolution for simulation is"):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("Compiling package "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("Compiling architecture "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("Built simulation snapshot "):
+			yield LogEntry(line, Severity.Verbose)
+		elif ": warning:" in line:
 			yield LogEntry(line, Severity.Warning)
 		else:
 			yield LogEntry(line, Severity.Normal)
 
 def SimulatorFilter(gen):
+	PoCOutputFound = False
 	for line in gen:
-		yield LogEntry(line, Severity.Normal)
+		if (line == ""):
+			if (not PoCOutputFound):
+				continue
+			else:
+				yield LogEntry(line, Severity.Normal)
+		elif line.startswith("Vivado Simulator "):
+			continue
+		elif line.startswith("****** xsim "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("  **** SW Build "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("  **** IP Build "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("    ** Copyright "):
+			continue
+		elif line.startswith("INFO: [Common 17-206] Exiting xsim "):
+			continue
+		elif line.startswith("source "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("# ") or line.startswith("## "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("Time resolution is "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("========================================"):
+			PoCOutputFound = True
+			yield LogEntry(line, Severity.Normal)
+		else:
+			yield LogEntry(line, Severity.Normal)
 
 
 class VivadoProject(BaseProject):
