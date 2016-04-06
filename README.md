@@ -1,5 +1,7 @@
 # The PoC-Library
 
+[![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - 
 Faculty of Computer Science, Technische Universität Dresden, Germany  
 **http://vlsi-eda.inf.tu-dresden.de**
