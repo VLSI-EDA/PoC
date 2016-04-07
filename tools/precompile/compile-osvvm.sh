@@ -1,17 +1,20 @@
-#!/bin/bash
+#! /bin/bash
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-#	Authors:				 	Martin Zabel
+#	Bash Script:				Script to compile the OSVVM library for Questa / ModelSim
+#                     on Linux
 # 
-#	Bash Script:			Compile Xilinx's simulation libraries
+#	Authors:						Patrick Lehmann
+#                     Martin Zabel
 # 
 # Description:
 # ------------------------------------
-#	This is a bash script compiles Xilinx's simulation libraries into a local
-#	directory.
+#	This is a Bash script (executable) which:
+#		- creates a subdirectory in the current working directory
+#		- compiles all OSVVM packages 
 #
 # License:
 # ==============================================================================
@@ -32,32 +35,14 @@
 # ==============================================================================
 
 poc_sh=../../poc.sh
-Simulator=questa						# questa, ...
-Language=vhdl								# all, vhdl, verilog
-TargetArchitecture=all			# all, virtex5, virtex6, virtex7, ...
 
 # define color escape codes
 RED='\e[0;31m'			# Red
 YELLOW='\e[1;33m'		# Yellow
 NOCOLOR='\e[0m'			# No Color
 
-# if $XILINX environment variable is not set
-if [ -z "$XILINX" ]; then
-	PoC_ISE_SettingsFile=$($poc_sh --ise-settingsfile)
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${RED}ERROR: No Xilinx ISE installation found.${NOCOLOR}"
-		echo 1>&2 -e "${RED}Run 'PoC.py --configure' to configure your Xilinx ISE installation.${NOCOLOR}"
-		exit 1
-	fi
-	echo -e "${YELLOW}Loading Xilinx ISE environment '$PoC_ISE_SettingsFile'${NOCOLOR}"
-	PyWrapper_RescueArgs=$@
-	set --
-	source "$PoC_ISE_SettingsFile"
-	set -- $PyWrapper_RescueArgs
-fi
-
 # Setup command to execute
-DestDir=$($poc_sh --poc-installdir 2>/dev/null)/temp/QuestaSim	# Output directory
+DestDir=$($poc_sh --poc-installdir 2>/dev/null)/temp/vsim	# Output directory
 if [ $? -ne 0 ]; then
 	echo "${RED}ERROR: Cannot get PoC installation dir.${NOCOLOR}"
 	exit;
@@ -68,5 +53,33 @@ if [ $? -ne 0 ]; then
 	exit;
 fi 
 
+SourceDir=$($poc_sh --poc-installdir 2>/dev/null)/lib/osvvm
+Files=(
+		$SourceDir/NamePkg.vhd
+		$SourceDir/OsvvmGlobalPkg.vhd
+		$SourceDir/TextUtilPkg.vhd
+		$SourceDir/TranscriptPkg.vhd
+		$SourceDir/AlertLogPkg.vhd
+		$SourceDir/MemoryPkg.vhd
+		$SourceDir/MessagePkg.vhd
+		$SourceDir/SortListPkg_int.vhd
+		$SourceDir/RandomBasePkg.vhd
+		$SourceDir/RandomPkg.vhd
+		$SourceDir/CoveragePkg.vhd
+		$SourceDir/OsvvmContext.vhd
+)
+
+# Check if modelsim.ini exists in DestDir
+if [ ! -f "$DestDir/modelsim.ini" ]; then
+	echo "Please run compile-xilinx-ise.sh first."
+	exit 1
+fi
+
 # Execute command
-compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $SimulatorDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise
+cd $DestDir
+rm -rf osvvm
+vlib osvvm
+vmap osvvm osvvm
+for File in ${Files[@]}; do
+	vcom -2008 -work osvvm $File
+done

@@ -259,6 +259,7 @@ begin
 			TAG_BITS									=> TAG_BITS,
 			CHUNK_BITS								=> TAGCHUNK_BITS,
 			TAG_BYTE_ORDER						=> TAG_BYTE_ORDER,
+			USE_INITIAL_TAGS 					=> TRUE,
 			INITIAL_TAGS							=> INITIAL_TAGS
 		)
 		port map (

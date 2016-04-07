@@ -70,7 +70,7 @@ if (($LastExitCode -ne 0) -or ($DestDir -eq ""))
 {	Write-Host "ERROR: No PoC installation found." -ForegroundColor Red
 	exit 1
 }
-$DestDir += "\temp\QuestaSim"
+$DestDir += "\temp\vsim"
 
 # Path to the simulators bin directory
 $Command = "$PoC_RootDir\poc.ps1 --modelsim-installdir"

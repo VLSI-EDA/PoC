@@ -2,9 +2,9 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- ============================================================================
--- Entity:      dstruct_stack
+-- Authors:     Jens Voss
 --
--- Authors:     Jens Voss <jens.voss@mailbox.tu-dresden.de>
+-- Entity:      dstruct_stack
 --
 -- Description:
 -- ------------
@@ -64,7 +64,7 @@ use PoC.ocram.all;
 architecture rtl of dstruct_stack is
 
     -- Constants
-    constant A_BITS : natural := log2ceil(MIN_DEPTH); --INTEGER(CEIL(LOG2(REAL(MIN_DEPTH))));
+    constant A_BITS : natural := log2ceil(MIN_DEPTH);
 
     -- Signals
     signal stackpointer : unsigned(A_BITS-1 downto 0) := (others => '0');
@@ -138,7 +138,7 @@ begin
                     ctrl <= POP;
                     s_adr <= stackpointer - 2;
                     if stackpointer = 1 then
-                        -- last value poped from stack -> empty
+                        -- last value popped from stack -> empty
                         next_state <= SEMPTY;
                     end if;
                 elsif (got = '0' and put = '1') then
@@ -167,7 +167,7 @@ begin
                     next_state <= NOTFULL;
                     s_adr <= stackpointer-2;
                 else
-                    -- got is 0 -> do nothnig
+                    -- got is 0 -> do nothing
                     ctrl <= IDLE;
                 end if;
             when others =>

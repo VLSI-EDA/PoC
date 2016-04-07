@@ -26,10 +26,17 @@ machine [`sdram_ctrl_fsm`][sdram_ctrl_fsm] and the S3ESK specific physical layer
 MT46V32M16-6T DDR memory at a frequency of 100 MHz (DDR-200). A [usage
 example][ex_mem_sdram] is given in [PoC-Examples][PoCEx].
 
+*Note*: See [`PoC.xil.mig`][src_xil_mig] for board specific memory controller
+implementations created by Xilinx's Memory Interface Generator (MIG).
+
+ [sdram_ctrl_fsm]:        sdram_ctrl_fsm.vhdl
+ [sdram_ctrl_de0]:        sdram_ctrl_de0.vhdl
+ [sdram_ctrl_phy_de0]:    sdram_ctrl_phy_de0.vhdl
+ [sdram_ctrl_s3esk]:      sdram_ctrl_s3esk.vhdl
+ [sdram_ctrl_phy_s3esk]:  sdram_ctrl_phy_s3esk.vhdl
+
+ [src_xil_mig]:           ../../xil/mig
+
  [PoCEx]:									https://github.com/VLSI-EDA/PoC-Examples
  [ex_mem_sdram]:					https://github.com/VLSI-EDA/PoC-Examples/tree/master/src/mem/sdram
- [sdram_ctrl_fsm]:				sdram_ctrl_fsm.vhdl
- [sdram_ctrl_de0]:				sdram_ctrl_de0.vhdl
- [sdram_ctrl_phy_de0]:		sdram_ctrl_phy_de0.vhdl
- [sdram_ctrl_s3esk]:			sdram_ctrl_s3esk.vhdl
- [sdram_ctrl_phy_s3esk]:	sdram_ctrl_phy_s3esk.vhdl
+

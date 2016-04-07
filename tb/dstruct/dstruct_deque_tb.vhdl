@@ -2,9 +2,9 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- ============================================================================
--- Entity:      dstruct_deque_tb
+-- Authors:					Jens Voss
 --
--- Authors:     Jens Voss <jens.voss@mailbox.tu-dresden.de>
+-- Testbench:				dstruct_deque_tb
 --
 -- Description:
 -- ------------
@@ -37,8 +37,8 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 library PoC;
-use PoC.physical.all;
-use PoC.dstruct.all;
+use			PoC.physical.all;
+use			PoC.dstruct.all;
 -- simulation only packages
 use     PoC.sim_types.all;
 use     PoC.simulation.all;
@@ -2450,7 +2450,6 @@ begin
 
 		simDeactivateProcess(PID);
 		wait;   -- forever
-		wait;
 	end process;
 
 end architecture;
