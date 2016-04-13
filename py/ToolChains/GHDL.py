@@ -44,13 +44,12 @@ from pathlib								import Path
 from re											import compile as re_compile
 
 from Base.Exceptions				import PlatformNotSupportedException
-from Base.ToolChain import ToolChainException
-from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
-from Base.Executable				import Executable, \
-																		ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument, \
-																		ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
 from Base.Logging						import LogEntry, Severity
-from Base.Simulator					import SimulatorException
+from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
+from Base.Executable				import Executable
+from Base.Executable				import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
+from Base.Executable				import ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
+from Base.ToolChain					import ToolChainException
 
 
 class GHDLException(ToolChainException):
@@ -81,6 +80,9 @@ class Configuration(BaseConfiguration):
 			}
 		}
 	}
+
+	def __init__(self):
+		super().__init__()
 
 	def GetSections(self, Platform):
 		pass
@@ -158,9 +160,9 @@ class GHDL(Executable):
 		#self.Parameters[self.Executable] = executablePath
 
 		if (platform == "Windows"):
-			if (backend not in ["mcode"]):								raise SimulatorException("GHDL for Windows does not support backend '{0}'.".format(backend))
+			if (backend not in ["mcode"]):								raise GHDLException("GHDL for Windows does not support backend '{0}'.".format(backend))
 		elif (platform == "Linux"):
-			if (backend not in ["gcc", "llvm", "mcode"]):	raise SimulatorException("GHDL for Linux does not support backend '{0}'.".format(backend))
+			if (backend not in ["gcc", "llvm", "mcode"]):	raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
 
 		self._binaryDirectoryPath =	binaryDirectoryPath
 		self._backend =							backend

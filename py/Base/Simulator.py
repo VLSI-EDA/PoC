@@ -32,6 +32,8 @@
 # ==============================================================================
 #
 # entry point
+from lib.Parser import ParserException
+
 if __name__ != "__main__":
 	pass
 	# place library initialization code here
@@ -39,14 +41,17 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Simulator.Base")
 
+
 # load dependencies
 from enum							import Enum, unique
+from os								import chdir
 
 from Base.Exceptions	import ExceptionBase
 from Base.Logging			import ILogable
+from Base.Project			import Environment, ToolChain, Tool, VHDLVersion
+from PoC.Project			import Project as PoCProject, FileListFile
 
-
-VHDLTestbenchLibraryName = "test"
+VHDL_TESTBENCH_LIBRARY_NAME = "test"
 
 
 class SimulatorException(ExceptionBase):
@@ -60,6 +65,9 @@ class SimulationResult(Enum):
 
 
 class Simulator(ILogable):
+	_TOOL_CHAIN =	ToolChain.Any
+	_TOOL =				Tool.Any
+
 	def __init__(self, host, showLogs, showReport):
 		if isinstance(host, ILogable):
 			ILogable.__init__(self, host.Logger)
@@ -70,19 +78,82 @@ class Simulator(ILogable):
 		self.__showLogs =		showLogs
 		self.__showReport =	showReport
 
+		self._vhdlVersion =	VHDLVersion.VHDL2008
+		self._pocProject =	None
+
+		self._tempPath =		None
+
 	# class properties
 	# ============================================================================
 	@property
-	def Host(self):
-		return self.__host
-
+	def Host(self):						return self.__host
 	@property
-	def ShowLogs(self):
-		return self.__showLogs
-
+	def ShowLogs(self):				return self.__showLogs
 	@property
-	def ShowReport(self):
-		return self.__showReport
+	def ShowReport(self):			return self.__showReport
+	@property
+	def TemporaryPath(self):	return self._tempPath
+
+
+	def _PrepareSimulationEnvironment(self):
+		# create temporary directory if not existent
+		if (not (self._tempPath).exists()):
+			self._LogVerbose("  Creating temporary directory for simulator files.")
+			self._LogDebug("    Temporary directory: {0!s}".format(self._tempPath))
+			self._tempPath.mkdir(parents=True)
+
+		# change working directory to temporary path
+		self._LogVerbose("  Changing working directory to temporary directory.")
+		self._LogDebug("    cd \"{0!s}\"".format(self._tempPath))
+		chdir(str(self._tempPath))
+
+	def _CreatePoCProject(self, testbench, board):
+		# create a PoCProject and read all needed files
+		self._LogDebug("    Create a PoC project '{0}'".format(testbench.ModuleName))
+		pocProject = PoCProject(testbench.ModuleName)
+
+		# configure the project
+		pocProject.RootDirectory = self.Host.Directories["PoCRoot"]
+		pocProject.Environment = Environment.Simulation
+		pocProject.ToolChain = self._TOOL_CHAIN
+		pocProject.Tool = self._TOOL
+		pocProject.VHDLVersion = self._vhdlVersion
+		pocProject.Board = board
+
+		self._pocProject = pocProject
+
+	def _AddFileListFile(self, fileListFilePath):
+		self._LogDebug("    Reading filelist '{0!s}'".format(fileListFilePath))
+		# add the *.files file, parse and evaluate it
+		# if (not fileListFilePath.exists()):		raise SimulatorException("Files file '{0!s}' not found.".format(fileListFilePath)) from FileNotFoundError(str(fileListFilePath))
+
+		try:
+			fileListFile = self._pocProject.AddFile(FileListFile(fileListFilePath))
+			fileListFile.Parse()
+			fileListFile.CopyFilesToFileSet()
+			fileListFile.CopyExternalLibraries()
+			self._pocProject.ExtractVHDLLibrariesFromVHDLSourceFiles()
+		except ParserException as ex:
+			raise SimulatorException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
+
+		self._LogDebug(self._pocProject.pprint(2))
+		self._LogDebug("=" * 160)
+		if (len(fileListFile.Warnings) > 0):
+			for warn in fileListFile.Warnings:
+				self._LogWarning(warn)
+			raise SimulatorException("Found critical warnings while parsing '{0!s}'".format(fileListFilePath))
+
+	def RunAll(self, fqnList, *args, **kwargs):
+		for fqn in fqnList:
+			entity = fqn.Entity
+			# for entity in fqn.GetEntities():
+			# try:
+			self.Run(entity, *args, **kwargs)
+			# except SimulatorException:
+			# 	pass
+
+	def Run(self, entity, board, vhdlVersion="93c", vhdlGenerics=None, **kwargs):
+		raise NotImplementedError("This method is abstract.")
 
 	def CheckSimulatorOutput(self, simulatorOutput):
 		matchPos = simulatorOutput.find("SIMULATION RESULT = ")

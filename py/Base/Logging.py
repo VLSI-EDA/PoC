@@ -109,7 +109,7 @@ class Logger:
 			if self._printToStdOut:
 				if (entry.Severity is Severity.Fatal):			print("{0}{1}{2}".format(Foreground.RED, entry.Message, Foreground.RESET))
 				elif (entry.Severity is Severity.Error):		print("{0}{1}{2}".format(Foreground.LIGHTRED_EX, entry.Message, Foreground.RESET))
-				elif (entry.Severity is Severity.Quiet):		print(entry.Message + "......")
+				elif (entry.Severity is Severity.Quiet):		print("{0}{1}{2}".format(Foreground.LIGHTCYAN_EX, entry.Message, Foreground.RESET))
 				elif (entry.Severity is Severity.Warning):	print("{0}{1}{2}".format(Foreground.LIGHTYELLOW_EX, entry.Message, Foreground.RESET))
 				elif (entry.Severity is Severity.Info):			print("{0}{1}{2}".format(Foreground.CYAN, entry.Message, Foreground.RESET))
 				elif (entry.Severity is Severity.Normal):		print(entry.Message)

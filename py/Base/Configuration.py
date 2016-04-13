@@ -48,10 +48,10 @@ class SkipConfigurationException(ExceptionBase):
 	pass
 
 class RegisterSubClassesMeta(type):
-	def __new__(mcls, name, bases, members):
+	def __new__(mcs, name, bases, members):
 		#print("RegisterSubClassesMeta.new: {0} - ".format(name, members))
 		#print()
-		inst = super().__new__(mcls, name, bases, members)
+		inst = super().__new__(mcs, name, bases, members)
 		if (len(bases) > 0):
 			baseClass = bases[0]
 			print(baseClass)

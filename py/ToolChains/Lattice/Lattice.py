@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:					Patrick Lehmann
 #
-# Python Class:			Lattice Active-HDL specific classes
+# Python Class:			Lattice Diamond specific classes
 #
 # Description:
 # ------------------------------------
@@ -37,14 +37,25 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.ActiveHDL")
+	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
 
 # from collections				import OrderedDict
 # from pathlib						import Path
 
-from Base.Configuration import Configuration as BaseConfiguration
+from Base.Configuration		import Configuration as BaseConfiguration
+from Base.Project					import ConstraintFile, FileTypes
+
 
 class Configuration(BaseConfiguration):
 	def __init__(self):
 		super().__init__()
+
+
+class LatticeDesignConstraintFile(ConstraintFile):
+	_FileType = FileTypes.UcfConstraintFile
+
+	def __str__(self):
+		return "UCF file: '{0!s}".format(self._file)
+
+

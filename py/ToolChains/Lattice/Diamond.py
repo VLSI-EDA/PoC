@@ -43,7 +43,181 @@ else:
 # from collections				import OrderedDict
 # from pathlib						import Path
 
-from Base.Configuration import Configuration as BaseConfiguration
+from Base.Exceptions			import PlatformNotSupportedException
+from Base.Logging					import Severity, LogEntry
+from Base.Configuration		import Configuration as BaseConfiguration
+from Base.Executable			import Executable, CommandLineArgumentList, ExecutableArgument
+from Base.Project					import File, FileTypes
+from Base.ToolChain				import ToolChainException
+
+
+class DiamondException(ToolChainException):
+	pass
 
 class Configuration(BaseConfiguration):
-	pass
+	def __init__(self):
+		super().__init__()
+
+
+class DiamondMixIn:
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		self._platform = platform
+		self._binaryDirectoryPath = binaryDirectoryPath
+		self._version = version
+		self._logger = logger
+
+
+class Diamond(DiamondMixIn):
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		DiamondMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+
+	def GetTclShell(self):
+		return TclShell(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+
+class TclShell(Executable, DiamondMixIn):
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		DiamondMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+
+		if (platform == "Windows"):		executablePath = binaryDirectoryPath / "pnmainc.exe"
+		# elif (platform == "Linux"):		executablePath = binaryDirectoryPath / "pnmainc"
+		else:													raise PlatformNotSupportedException(platform)
+		Executable.__init__(self, platform, executablePath, logger=logger)
+
+		self.Parameters[self.Executable] = executablePath
+
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+
+	@property
+	def HasWarnings(self):	return self._hasWarnings
+	@property
+	def HasErrors(self):		return self._hasErrors
+
+	class Executable(metaclass=ExecutableArgument):
+		pass
+
+	Parameters = CommandLineArgumentList(
+		Executable
+	)
+
+	def Run(self):
+		parameterList = self.Parameters.ToArgumentList()
+		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+
+		try:
+			self.StartProcess(parameterList)
+			self.SendBoundary()
+		except Exception as ex:
+			raise DiamondException("Failed to launch pnmainc.") from ex
+
+		iterator = iter(MapFilter(self.GetReader()))
+
+		for line in iterator:
+			print(line)
+			if (line == self._POC_BOUNDARY):
+				break
+
+		print("pnmainc is ready")
+
+		self.Send("synthesis -f arith_prng.prj\n")
+		self.SendBoundary()
+
+		for line in iterator:
+			print(line)
+			if (line == self._POC_BOUNDARY):
+				break
+
+		print("pnmainc is ready")
+
+		self.Send("exit\n")
+		self.SendBoundary()
+
+		for line in iterator:
+			print(line)
+			if (line == self._POC_BOUNDARY):
+				break
+
+		print("pnmainc finished")
+		return
+
+		# self._hasOutput = False
+		# self._hasWarnings = False
+		# self._hasErrors = False
+		# try:
+		# 	iterator = iter(MapFilter(self.GetReader()))
+		#
+		# 	line = next(iterator)
+		# 	self._hasOutput = True
+		# 	self._LogNormal("    pnmainc messages for '{0}'".format(self.Parameters[self.SwitchArgumentFile]))
+		# 	self._LogNormal("    " + ("-" * 76))
+		#
+		# 	while True:
+		# 		self._hasWarnings |= (line.Severity is Severity.Warning)
+		# 		self._hasErrors |= (line.Severity is Severity.Error)
+		#
+		# 		line.Indent(2)
+		# 		self._Log(line)
+		# 		line = next(iterator)
+		#
+		# except StopIteration as ex:
+		# 	pass
+		# except DiamondException:
+		# 	raise
+		# # except Exception as ex:
+		# #	raise GHDLException("Error while executing GHDL.") from ex
+		# finally:
+		# 	if self._hasOutput:
+		# 		self._LogNormal("    " + ("-" * 76))
+
+
+def MapFilter(gen):
+	for line in gen:
+		yield LogEntry(line, Severity.Normal)
+
+
+class SynthesisArgumentFile(File):
+	def __init__(self, file):
+		super().__init__(file)
+
+		self._architecture =	None
+		self._topLevel =			None
+		self._logfile =				None
+
+	@property
+	def Architecture(self):
+		return self._architecture
+	@Architecture.setter
+	def Architecture(self, value):
+		self._architecture = value
+
+	@property
+	def TopLevel(self):
+		return self._topLevel
+	@TopLevel.setter
+	def TopLevel(self, value):
+		self._topLevel = value
+
+	@property
+	def LogFile(self):
+		return self._logfile
+	@LogFile.setter
+	def LogFile(self, value):
+		self._logfile = value
+
+	def Write(self, project):
+		if (self._file is None):    raise DiamondException("No file path for SynthesisArgumentFile provided.")
+
+		buffer = ""
+		if (self._architecture is None):	raise DiamondException("Argument 'Architecture' (-a) is not set.")
+		buffer += "-a {0}\n".format(self._architecture)
+		if (self._topLevel is None):			raise DiamondException("Argument 'TopLevel' (-top) is not set.")
+		buffer += "-top {0}\n".format(self._topLevel)
+		if (self._logfile is not None):
+			buffer += "-logfile {0}\n".format(self._logfile)
+
+		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
+			buffer += "-lib {library}\n-vhd {file}\n".format(file=file.Path.as_posix(), library=file.LibraryName)
+
+		with self._file.open('w') as fileHandle:
+			fileHandle.write(buffer)

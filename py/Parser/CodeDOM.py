@@ -1,216 +1,107 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+#
+# ==============================================================================
+# Authors:					Patrick Lehmann
+#                   Martin Zabel
+#
+# Python Module:		TODO
+#
+# Description:
+# ------------------------------------
+#		TODO:
+#
+# License:
+# ==============================================================================
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+#											Chair for VLSI-Design, Diagnostics and Architecture
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#		http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+#
+from lib.Parser import CodeDOMObject, SpaceToken, CharacterToken, MismatchingParserResult, MatchingParserResult, Statement
 
-class CodeDOMObject:
+
+# ==============================================================================
+# Empty and comment lines
+# ==============================================================================
+class EmptyLine(CodeDOMObject):
 	def __init__(self):
-		self._parent =	None
-	
+		super().__init__()
+
+	@classmethod
+	def GetParser(cls):
+		# match for optional whitespace
+		token = yield
+		if isinstance(token, SpaceToken):						token = yield
+
+		# match for delimiter sign: \n
+		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult()
+		if (token.Value.lower() != "\n"):						raise MismatchingParserResult()
+
+		# construct result
+		result = cls()
+		raise MatchingParserResult(result)
+
+	def __str__(self, indent=0):
+		return "  " * indent + "<empty>"
+
+
+class CommentLine(CodeDOMObject):
+	def __init__(self, commentText):
+		super().__init__()
+		self._commentText = commentText
+
 	@property
-	def Parent(self):
-		return self._parent
-	
-class Statement(CodeDOMObject):
-	pass
-
-class BlockStatement(Statement):
-	pass
-
-class Expression(CodeDOMObject):
-	pass
-
-class Operator(Expression):
-	pass
-
-class UnaryOperator(Operator):
-	pass
-
-class PreUnaryOperator(UnaryOperator):
-	pass
-
-class ComplementOperator(PreUnaryOperator):
-	pass
-
-class NotOperator(PreUnaryOperator):
-	pass
-
-class NegativeOperator(PreUnaryOperator):
-	pass
-
-class PositiveOperator(PreUnaryOperator):
-	pass
-
-class IncrementOperator(PreUnaryOperator):
-	pass
-
-class DecrementOperator(PreUnaryOperator):
-	pass
-
-class PostUnaryOperator(UnaryOperator):
-	pass
-
-class PostIncrementOperator(PostUnaryOperator):
-	pass
-
-class PostDecrementOperator(PostUnaryOperator):
-	pass
-
-class BinaryOperator(Operator):
-	pass
-
-class Assignment(BinaryOperator):
-	pass
-
-class BinaryArithmeticOperator(BinaryOperator):
-	pass
-
-class AddOperator(BinaryArithmeticOperator):
-	pass
-
-class SubtractOperator(BinaryArithmeticOperator):
-	pass
-
-class MultiplyOperator(BinaryArithmeticOperator):
-	pass
-
-class DivideOperator(BinaryArithmeticOperator):
-	pass
-
-class IntegerDivideOperator(BinaryArithmeticOperator):
-	pass
-
-class ModuloOperator(BinaryArithmeticOperator):
-	pass
-
-class RemainerOperator(BinaryArithmeticOperator):
-	pass
-
-class PowerOperator(BinaryArithmeticOperator):
-	pass
-
-class BinaryBitwiseOperator(BinaryOperator):
-	pass
-
-class BitwiseAndOperator(BinaryBitwiseOperator):
-	pass
-
-class BitwiseNandOperator(BinaryBitwiseOperator):
-	pass
-
-class BitwiseOrOperator(BinaryBitwiseOperator):
-	pass
-
-class BitwiseNorOperator(BinaryBitwiseOperator):
-	pass
-
-class BitwiseXorOperator(BinaryBitwiseOperator):
-	pass
-
-class BitwiseXnorOperator(BinaryBitwiseOperator):
-	pass
-
-class BinaryShiftOperator(BinaryBitwiseOperator):
-	pass
-
-class ShiftLeftOperator(BinaryShiftOperator):
-	pass
-
-class ShiftRightOperator(BinaryShiftOperator):
-	pass
-
-class BinaryBooleanOperator(BinaryOperator):
-	pass
-
-class BooleanAndOperator(BinaryBooleanOperator):
-	pass
-
-class BooleanOrOperator(BinaryBooleanOperator):
-	pass
-
-class BooleanNandOperator(BinaryBooleanOperator):
-	pass
-
-class BooleanNorOperator(BinaryBooleanOperator):
-	pass
-
-class BooleanXorOperator(BinaryBooleanOperator):
-	pass
-
-class BooleanXnorOperator(BinaryBooleanOperator):
-	pass
-
-class BooleanIsOperator(BinaryBooleanOperator):
-	pass
-
-class BooleanIsNotOperator(BinaryBooleanOperator):
-	pass
-
-class RelationalOperator(BinaryBooleanOperator):
-	pass
-
-class RelationalEqualOperator(RelationalOperator):
-	pass
-
-class RelationalUnequalOperator(RelationalOperator):
-	pass
-
-class RelationalGreaterThanOperator(RelationalOperator):
-	pass
-
-class RelationalGreaterThanEqualOperator(RelationalOperator):
-	pass
-
-class RelationalLessThanOperator(RelationalOperator):
-	pass
-
-class RelationalLessThanEqualOperator(RelationalOperator):
-	pass
-
-class TernaryOperator(Operator):
-	pass
-
-class ConditionalOperator(Operator):
-	pass
-	
-class SymbolicReference(Expression):
-	pass
-
-class TypeReferenceBase(SymbolicReference):
-	pass
-
-class VariableReference(SymbolicReference):
-	pass
-
-class NamespaceReference(SymbolicReference):
-	pass
-
-class Literal(Expression):
-	pass
-
-class Namespace(CodeDOMObject):
-	pass
-
-class RootNamespace(Namespace):
-	pass
-
-class NamespaceTypeDirectory:
-	pass
-
-class NamespaceTypeGroup:
-	pass
-
-class NamedCodeObjectDirectory:
-	pass
-
-class NamedCodeObjectGroup:
-	pass
-
-class IBlock:
-	pass
-
-class INamedCodeObject:
-	pass
-
-class IParameters:
-	pass
-
-class ITypeDeclaration:
-	pass
-	
+	def Text(self):
+		return self._commentText
+
+	@classmethod
+	def GetParser(cls):
+		# match for optional whitespace
+		token = yield
+		if isinstance(token, SpaceToken):						token = yield
+
+		# match for sign: #
+		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult()
+		if (token.Value.lower() != "#"):						raise MismatchingParserResult()
+
+		# match for any until line end
+		commentText = ""
+		while True:
+			token = yield
+			if isinstance(token, CharacterToken):
+				if (token.Value == "\n"):			break
+			commentText += token.Value
+
+		# construct result
+		result = cls(commentText)
+		raise MatchingParserResult(result)
+
+	def __str__(self, indent=0):
+		return "{0}#{1}".format("  " * indent, self._commentText)
+
+# ==============================================================================
+# Blocked Statements (Forward declaration)
+# ==============================================================================
+class BlockedStatement(Statement):
+	_allowedStatements = []
+
+	@classmethod
+	def AddChoice(cls, value):
+		cls._allowedStatements.append(value)
+
+	@classmethod
+	def GetParser(cls):
+		return cls.GetChoiceParser(cls._allowedStatements)

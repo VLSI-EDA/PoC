@@ -95,25 +95,25 @@ fi
 
 # find suitable python version or abort execution
 Python_VersionTest='import sys; sys.exit(not (0x03050000 < sys.hexversion < 0x04000000))'
-python -c $Python_VersionTest 2>/dev/null
+python -c "$Python_VersionTest" 2>/dev/null
 if [ $? -eq 0 ]; then
 	Python_Interpreter=$(which python 2>/dev/null)
 	if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}PythonInterpreter: use standard interpreter: '$Python_Interpreter'${NOCOLOR}"; fi
 else
 	# standard python interpreter is not suitable, try to find a suitable version manually
-	for pyVersion in 3.9 3.8 3.7 3.6 3.5 3.4; do
+	for pyVersion in 3.9 3.8 3.7 3.6 3.5; do
 		Python_Interpreter=$(which python$pyVersion 2>/dev/null)
 		# if ExitCode = 0 => version found
 		if [ $? -eq 0 ]; then
 			# redo version test
-			$Python_Interpreter -c $Python_VersionTest 2>/dev/null
+			$Python_Interpreter -c "$Python_VersionTest" 2>/dev/null
 			if [ $? -eq 0 ]; then break; fi
 		fi
 	done
 	if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}PythonInterpreter: use this interpreter: '$Python_Interpreter'${NOCOLOR}"; fi
 fi
 # if no interpreter was found => exit
-if [ ! $Python_Interpreter ]; then
+if [ -z "$Python_Interpreter" ]; then
 	echo 1>&2 -e "${RED}No suitable Python interpreter found.${NOCOLOR}"
 	echo 1>&2 -e "${RED}The script requires Python >= $PyWrapper_MinVersion${NOCOLOR}"
 	PoC_ExitCode=1
@@ -129,7 +129,7 @@ if [ $PoC_ExitCode -eq 0 ]; then
 			PoC_ISE_SettingsFile=$($command)
 			if [ $? -eq 0 ]; then
 				if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}ISE settings file: '$PoC_ISE_SettingsFile'${NOCOLOR}"; fi
-				if [ ! $PoC_ISE_SettingsFile ]; then
+				if [ -z "$PoC_ISE_SettingsFile" ]; then
 					echo 1>&2 -e "${RED}No Xilinx ISE installation found.${NOCOLOR}"
 					echo 1>&2 -e "${RED}Run 'PoC.py --configure' to configure your Xilinx ISE installation.${NOCOLOR}"
 					PoC_ExitCode=1
@@ -152,13 +152,13 @@ fi
 if [ $PoC_ExitCode -eq 0 ]; then
 	if [ $PyWrapper_LoadEnv_Xilinx_Vivado -eq 1 ]; then
 		# if $XILINX environment variable is not set
-		if [ -z "$XILINX" ]; then
-			command="$Python_Interpreter $PoC_RootDir_AbsPath/$PoC_PythonScriptDir/PoC.py query Xilinx.ISE:SettingsFile"
+		if [ -z "$XILINX_VIVADO" ]; then
+			command="$Python_Interpreter $PoC_RootDir_AbsPath/$PoC_PythonScriptDir/PoC.py query Xilinx.Vivado:SettingsFile"
 			if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}getting Vivado settings file: command='$command'${NOCOLOR}"; fi
 			PoC_Vivado_SettingsFile=$($command)
 			if [ $? -eq 0 ]; then
 				if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}Vivado settings file: '$PoC_Vivado_SettingsFile'${NOCOLOR}"; fi
-				if [ ! $PoC_Vivado_SettingsFile ]; then
+				if [ -z "$PoC_Vivado_SettingsFile" ]; then
 					echo 1>&2 -e "${RED}No Xilinx Vivado installation found.${NOCOLOR}"
 					echo 1>&2 -e "${RED}Run 'PoC.py --configure' to configure your Xilinx Vivado installation.${NOCOLOR}"
 					PoC_ExitCode=1

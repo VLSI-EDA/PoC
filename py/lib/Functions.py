@@ -34,6 +34,8 @@ from functools	import reduce
 from operator		import or_
 from sys				import version_info
 
+from lib.ConfigParser import ExtendedSectionProxy
+
 
 def merge(*dicts):
 	return {k : reduce(lambda d,x: x.get(k, d), dicts, None) for k in reduce(or_, map(lambda x: x.keys(), dicts), set()) }

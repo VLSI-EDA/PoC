@@ -1,20 +1,25 @@
+# Change List
+----------------
 
 
- New in 0.X (DD.MM.YYYY)
+## 2016
+
+##### New in 0.X (DD.MM.2016)
+
   - Reworked Python infrastructure
-      - New command line interface "poc.sh|ps1 [common options] <command> <entity> [options]"
-      - Removed task specific wrapper scripts: testbench.sh|ps1, netlist.sh|ps1
-			- New parser for *.files files
+      - New command line interface `poc.sh|ps1 [common options] <command> <entity> [options]`
+      - Removed task specific wrapper scripts: `testbench.sh|ps1`, `netlist.sh|ps1`
+      - New parser for `*.files` files
           - conditional compiling (if-then-elseif-else)
-					- include statement - include other *.files files
-					- library statement - reference external VHDL libraries
-					- prepared for Cocotb testbenches
+          - include statement - include other `*.files` files
+          - library statement - reference external VHDL libraries
+          - prepared for Cocotb testbenches
       - Unbuffered outputs from vendor tools (realtime output to stdout from subprocess)
       - Output filtering from vendor tools
           - verbose message suppression
           - error and warning message highlighting
       - Added a new config.boards.ini file to list known boards (real and virtual ones)
-      - Run testbenches for different board or device configurations (see '--board' and '--device' command line options)
+      - Run testbenches for different board or device configurations (see `--board` and `--device` command line options)
       - Finished Aldec Active-HDL support (no GUI support)
       - GHDLSimulator can distinguish different backends 
 	- Embedded Cocotb in <PoCRoot>/lib/cocotb
@@ -23,39 +28,41 @@
       - QuestaSim supports Altera QuartusII, Xilinx ISE and Xilinx Vivado libraries
       - GHDL supports Altera QuartusII, Xilinx ISE and Xilinx Vivado libraries
 
-New in 0.21 (17.02.2016)
+##### New in 0.21 (17.02.2016)
 
-New in 0.20 (16.01.2016)
+##### New in 0.20 (16.01.2016)
 
-New in 0.19 (16.01.2016)
+##### New in 0.19 (16.01.2016)
 
-New in 0.18 (16.12.2015)
+## 2015
 
-New in 0.17 (08.12.2015)
+##### New in 0.18 (16.12.2015)
 
-New in 0.16 (01.12.2015)
+##### New in 0.17 (08.12.2015)
 
-New in 0.15 (13.11.2015)
+##### New in 0.16 (01.12.2015)
 
-New in 0.14 (28.09.2015)
+##### New in 0.15 (13.11.2015)
 
-New in 0.13 (04.09.2015)
+##### New in 0.14 (28.09.2015)
 
-New in 0.12 (25.08.2015)
+##### New in 0.13 (04.09.2015)
 
-New in 0.11 (07.08.2015)
+##### New in 0.12 (25.08.2015)
 
-New in 0.10 (23.07.2015)
+##### New in 0.11 (07.08.2015)
+
+##### New in 0.10 (23.07.2015)
 			
-New in 0.9 (21.07.2015)
+##### New in 0.9 (21.07.2015)
 
-New in 0.8 (03.07.2015)
+##### New in 0.8 (03.07.2015)
 
-New in 0.7 (27.06.2015)
+##### New in 0.7 (27.06.2015)
 
-New in 0.6 (09.06.2015)
+##### New in 0.6 (09.06.2015)
 
-New in 0.5 (27.05.2015)
+##### New in 0.5 (27.05.2015)
   - Updated Python infrastructure
   - New testbenches:
       - sync_Reset_tb
@@ -72,7 +79,7 @@ New in 0.5 (27.05.2015)
       - vectors
       - xil
 
-New in 0.4 (29.04.2015)
+##### New in 0.4 (29.04.2015)
   - New Python infrastructure
       - Added simulators for:
           - GHDL + GTKWave
@@ -104,7 +111,7 @@ New in 0.4 (29.04.2015)
       - sync_Bits
       - sync_Reset
 			
-New in 0.3 (31.03.20015)
+##### New in 0.3 (31.03.20015)
   - Added Python infrastructure
       - Added platform wrapper scripts (*.sh, *.ps1)
       - Added IP-core compiler scripts Netlist.py
@@ -154,7 +161,7 @@ New in 0.3 (31.03.20015)
   - Updated modules:
       - xil_BSCAN
 					
-New in 0.2 (09.03.2015)
+##### New in 0.2 (09.03.2015)
   - New packages:
       - xil
       - stream
@@ -185,7 +192,7 @@ New in 0.2 (09.03.2015)
       - utils
       - arith
 
-New in 0.1 (19.02.2015)
+##### New in 0.1 (19.02.2015)
   - New packages:
       - board - common development board configurations
       - config - extract configuration parameters from device names
@@ -218,5 +225,7 @@ New in 0.1 (19.02.2015)
           - ocram_tdp
           - ocram_wb
 
-New in 0.0 (16.12.2014)
+## 2014
+
+##### New in 0.0 (16.12.2014)
   - Initial commit

@@ -57,6 +57,9 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
+	def __init__(self):
+		super().__init__()
+
 	def GetSections(self, Platform):
 		pass
 

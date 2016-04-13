@@ -44,10 +44,10 @@ from collections						import OrderedDict
 from pathlib								import Path
 
 from Base.Exceptions				import PlatformNotSupportedException
-from Base.ToolChain import ToolChainException
+from Base.Logging						import LogEntry, Severity
 from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
 from Base.Executable				import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
-from Base.Logging						import LogEntry, Severity
+from Base.ToolChain					import ToolChainException
 
 
 class GTKWaveException(ToolChainException):
@@ -73,6 +73,9 @@ class Configuration(BaseConfiguration):
 			}
 		}
 	}
+
+	def __init__(self):
+		super().__init__()
 
 	def GetSections(self, Platform):
 		pass
@@ -219,22 +222,5 @@ class GTKWave(Executable):
 				self._LogNormal("    " + ("-" * 76))
 
 def GTKWaveFilter(gen):
-	# warningRegExpPattern =	r".+?:\d+:\d+:warning: (?P<Message>.*)"			# <Path>:<line>:<column>:warning: <message>
-	# errorRegExpPattern =		r".+?:\d+:\d+: (?P<Message>.*)"  						# <Path>:<line>:<column>: <message>
-
-	# warningRegExp =	re_compile(warningRegExpPattern)
-	# errorRegExp =		re_compile(errorRegExpPattern)
-
 	for line in gen:
-		#warningRegExpMatch = warningRegExp.match(line)
-		#if (warningRegExpMatch is not None):
-		#	yield LogEntry(line, Severity.Warning)
-		#else:
-		#	errorRegExpMatch = errorRegExp.match(line)
-		#	if (errorRegExpMatch is not None):
-		#		message = errorRegExpMatch.group('Message')
-		#		if message.endswith("has changed and must be reanalysed"):
-		#			raise GHDLReanalyzeException(message)
-		#		yield LogEntry(line, Severity.Error)
-		#	else:
-				yield LogEntry(line, Severity.Normal)
+		yield LogEntry(line, Severity.Normal)

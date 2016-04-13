@@ -32,8 +32,6 @@
 # ==============================================================================
 #
 # entry point
-from Base.Project import Project as BaseProject, ProjectFile, ConstraintFile
-
 
 if __name__ != "__main__":
 	# place library initialization code here
@@ -48,14 +46,15 @@ from pathlib							import Path
 from os										import environ
 
 from Base.Exceptions			import PlatformNotSupportedException
-from Base.ToolChain import ToolChainException
-from Base.Executable							import Executable
-from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
 from Base.Logging					import LogEntry, Severity
 from Base.Configuration 	import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
+from Base.Project					import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from Base.Executable			import Executable
+from Base.Executable			import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from ToolChains.Xilinx.Xilinx		import XilinxException
 
 
-class VivadoException(ToolChainException):
+class VivadoException(XilinxException):
 	pass
 
 class Configuration(BaseConfiguration):
@@ -84,6 +83,9 @@ class Configuration(BaseConfiguration):
 			}
 		}
 	}
+
+	def __init__(self):
+		super().__init__()
 
 	def GetSections(self, Platform):
 		pass
@@ -187,16 +189,16 @@ class Configuration(BaseConfiguration):
 		else :
 			raise BaseException("unknown option")
 
-class VivadoSimMixIn:
+class VivadoMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		self._platform =						platform
 		self._binaryDirectoryPath =	binaryDirectoryPath
 		self._version =							version
 		self._logger =							logger
 
-class Vivado(VivadoSimMixIn):
+class Vivado(VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		VivadoSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
 	def GetVHDLCompiler(self):
 		return XVhComp(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
@@ -208,10 +210,9 @@ class Vivado(VivadoSimMixIn):
 		return XSim(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 
-class XVhComp(Executable, VivadoSimMixIn):
+class XVhComp(Executable, VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		VivadoSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
-
+		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "xvhcomp.bat"
 		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "xvhcomp"
 		else:																						raise PlatformNotSupportedException(self._platform)
@@ -268,10 +269,9 @@ class XVhComp(Executable, VivadoSimMixIn):
 				self._LogNormal("    " + ("-" * 76))
 
 
-class XElab(Executable, VivadoSimMixIn):
+class XElab(Executable, VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		VivadoSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
-
+		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "xelab.bat"
 		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "xelab"
 		else:																						raise PlatformNotSupportedException(self._platform)
@@ -330,7 +330,8 @@ class XElab(Executable, VivadoSimMixIn):
 		_name =		"log"
 		_value =	None
 
-	class SwitchSnapshot(metaclass=StringArgument):
+	class SwitchSnapshot(metaclass=ShortTupleArgument):
+		_name =		"s"
 		_value =	None
 
 	class ArgTopLevel(metaclass=StringArgument):
@@ -390,10 +391,9 @@ class XElab(Executable, VivadoSimMixIn):
 				self._LogNormal("    " + ("-" * 76))
 
 
-class XSim(Executable, VivadoSimMixIn):
+class XSim(Executable, VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		VivadoSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
-
+		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "xsim.bat"
 		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "xsim"
 		else:																						raise PlatformNotSupportedException(self._platform)
@@ -572,5 +572,8 @@ class VivadoProjectFile(ProjectFile):
 
 
 class XilinxDesignConstraintFile(ConstraintFile):
-	def __init__(self, file):
-		super().__init__(file)
+	_FileType = FileTypes.XdcConstraintFile
+
+	def __str__(self):
+		return "XDC file: '{0!s}".format(self._file)
+

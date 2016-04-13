@@ -39,28 +39,29 @@ else:
 
 # load dependencies
 from configparser									import NoSectionError
-from os														import chdir
-
-from colorama											import Fore as Foreground
 
 # from Base.Exceptions							import PlatformNotSupportedException, NotConfiguredException
-from Base.Project									import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
-from Base.Simulator								import SimulatorException, Simulator as BaseSimulator, VHDLTestbenchLibraryName
-# from Parser.Parser								import ParserException
-from PoC.Project								import Project as PoCProject
+from Base.Project									import FileTypes, VHDLVersion, Environment, ToolChain, Tool
+from Base.Simulator								import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME
 from ToolChains.Mentor.QuestaSim	import QuestaSim, QuestaException
 
 
 class Simulator(BaseSimulator):
-	__guiMode =				False
+	_TOOL_CHAIN =						ToolChain.Mentor_QuestaSim
+	_TOOL =									Tool.Mentor_vSim
 
 	def __init__(self, host, showLogs, showReport, guiMode):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 
 		self._guiMode =				guiMode
+
+		self._entity =				None
+		self._testbenchFQN =	None
+		self._vhdlVersion =		None
+		self._vhdlGenerics =	None
+
 		self._questa =				None
 
-		self._LogNormal("preparing simulation environment...")
 		self._PrepareSimulationEnvironment()
 
 	@property
@@ -68,82 +69,38 @@ class Simulator(BaseSimulator):
 		return self._tempPath
 
 	def _PrepareSimulationEnvironment(self):
-		self._LogNormal("  preparing simulation environment...")
-		
-		# create temporary directory for ghdl if not existent
+		self._LogNormal("preparing simulation environment...")
 		self._tempPath = self.Host.Directories["vSimTemp"]
-		if (not (self._tempPath).exists()):
-			self._LogVerbose("  Creating temporary directory for simulator files.")
-			self._LogDebug("    Temporary directors: {0}".format(str(self._tempPath)))
-			self._tempPath.mkdir(parents=True)
-			
-		# change working directory to temporary iSim path
-		self._LogVerbose("  Changing working directory to temporary directory.")
-		self._LogDebug("    cd \"{0}\"".format(str(self._tempPath)))
-		chdir(str(self._tempPath))
+		super()._PrepareSimulationEnvironment()
 
 	def PrepareSimulator(self, binaryPath, version):
 		# create the GHDL executable factory
 		self._LogVerbose("  Preparing Mentor simulator.")
 		self._questa =		QuestaSim(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def RunAll(self, pocEntities, **kwargs):
-		for pocEntity in pocEntities:
-			self.Run(pocEntity, **kwargs)
-		
-	def Run(self, entity, board, vhdlVersion="93", vhdlGenerics=None):
+	def Run(self, entity, board, vhdlVersion="93", vhdlGenerics=None, guiMode=False):
 		self._entity =				entity
 		self._testbenchFQN =	str(entity)										# TODO: implement FQN method on PoCEntity
 		self._vhdlVersion =		vhdlVersion
 		self._vhdlGenerics =	vhdlGenerics
 
 		# check testbench database for the given testbench		
-		self._LogQuiet("Testbench: {0}{1}{2}".format(Foreground.YELLOW, self._testbenchFQN, Foreground.RESET))
-		if (not self.Host.TBConfig.has_section(self._testbenchFQN)):
-			raise SimulatorException("Testbench '{0}' not found.".format(self._testbenchFQN)) from NoSectionError(self._testbenchFQN)
-			
-		# setup all needed paths to execute fuse
-		testbenchName =				self.Host.TBConfig[self._testbenchFQN]['TestbenchModule']
-		fileListFilePath =		self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['fileListFile']
+		self._LogQuiet("Testbench: {0}".format(self._testbenchFQN))
 
-		self._CreatePoCProject(testbenchName, board)
-		self._AddFileListFile(fileListFilePath)
+		# setup all needed paths to execute fuse
+		testbench = entity.VHDLTestbench
+		self._CreatePoCProject(testbench, board)
+		self._AddFileListFile(testbench.FilesFile)
 		
-		self._RunCompile()
+		self._RunCompile(testbench)
 		# self._RunOptimize()
 		
 		if (not self._guiMode):
-			self._RunSimulation(testbenchName)
+			self._RunSimulation(testbench)
 		else:
-			self._RunSimulationWithGUI(testbenchName)
+			self._RunSimulationWithGUI(testbench)
 		
-	def _CreatePoCProject(self, testbenchName, board):
-		# create a PoCProject and read all needed files
-		self._LogDebug("    Create a PoC project '{0}'".format(str(testbenchName)))
-		pocProject =									PoCProject(testbenchName)
-		
-		# configure the project
-		pocProject.RootDirectory =		self.Host.Directories["PoCRoot"]
-		pocProject.Environment =			Environment.Simulation
-		pocProject.ToolChain =				ToolChain.Mentor_QuestaSim
-		pocProject.Tool =							Tool.Mentor_vSim
-		pocProject.VHDLVersion =			self._vhdlVersion
-		pocProject.Board =						board
-
-		self._pocProject =						pocProject
-		
-	def _AddFileListFile(self, fileListFilePath):
-		self._LogDebug("    Reading filelist '{0}'".format(str(fileListFilePath)))
-		# add the *.files file, parse and evaluate it
-		fileListFile = self._pocProject.AddFile(FileListFile(fileListFilePath))
-		fileListFile.Parse()
-		fileListFile.CopyFilesToFileSet()
-		fileListFile.CopyExternalLibraries()
-		self._pocProject.ExtractVHDLLibrariesFromVHDLSourceFiles()
-		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("=" * 160)
-		
-	def _RunCompile(self):
+	def _RunCompile(self, testbench):
 		self._LogNormal("  running VHDL compiler for every vhdl file...")
 
 		# create a QuestaVHDLCompiler instance
@@ -166,29 +123,29 @@ class Simulator(BaseSimulator):
 
 		# run vcom compile for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
-			if (not file.Path.exists()):								raise SimulatorException("Can not analyse '{0}'.".format(str(file.Path))) from FileNotFoundError(str(file.Path))
+			if (not file.Path.exists()):								raise SimulatorException("Can not analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
 
 			vcomLogFile = self._tempPath / (file.Path.stem + ".vcom.log")
-			vcom.Parameters[vcom.SwitchVHDLLibrary] =	file.VHDLLibraryName
+			vcom.Parameters[vcom.SwitchVHDLLibrary] =	file.LibraryName
 			vcom.Parameters[vcom.ArgLogFile] =				vcomLogFile
 			vcom.Parameters[vcom.ArgSourceFile] =			file.Path
 
 			try:
 				vcom.Compile()
 			except QuestaException as ex:
-				raise SimulatorException("Error while compiling '{0}'.".format(str(file.Path))) from ex
+				raise SimulatorException("Error while compiling '{0!s}'.".format(file.Path)) from ex
 
 			if vcom.HasErrors:
-				raise SimulatorException("Error while compiling '{0}'.".format(str(file.Path)))
+				raise SimulatorException("Error while compiling '{0!s}'.".format(file.Path))
 
 			# delete empty log files
 			if (vcomLogFile.stat().st_size == 0):
 				vcomLogFile.unlink()
 
-	def _RunSimulation(self, testbenchName):
+	def _RunSimulation(self, testbench):
 		self._LogNormal("  running simulation...")
 		
-		tclBatchFilePath =		self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['vSimBatchScript']
+		tclBatchFilePath =		self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()
@@ -197,14 +154,14 @@ class Simulator(BaseSimulator):
 		vsim.Parameters[vsim.SwitchTimeResolution] =	"1fs"
 		vsim.Parameters[vsim.FlagCommandLineMode] =		True
 		vsim.Parameters[vsim.SwitchBatchCommand] =		"do {0}".format(tclBatchFilePath.as_posix())
-		vsim.Parameters[vsim.SwitchTopLevel] =				"{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
+		vsim.Parameters[vsim.SwitchTopLevel] =				"{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 		vsim.Simulate()
 		
-	def _RunSimulationWithGUI(self, testbenchName):
+	def _RunSimulationWithGUI(self, testbench):
 		self._LogNormal("  running simulation...")
 	
-		tclGUIFilePath =			self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['vSimGUIScript']
-		tclWaveFilePath =			self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['vSimWaveScript']
+		tclGUIFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
+		tclWaveFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
 
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()
@@ -212,14 +169,14 @@ class Simulator(BaseSimulator):
 		vsim.Parameters[vsim.FlagReportAsError] =			"3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =	"1fs"
 		vsim.Parameters[vsim.FlagGuiMode] =						True
-		vsim.Parameters[vsim.SwitchTopLevel] =				"{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
+		vsim.Parameters[vsim.SwitchTopLevel] =				"{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 		# vsim.Parameters[vsim.SwitchTitle] =						testbenchName
 
 		if (tclWaveFilePath.exists()):
-			self._LogDebug("Found waveform script: '{0}'".format(str(tclWaveFilePath)))
+			self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
 			vsim.Parameters[vsim.SwitchBatchCommand] =	"do {0}; do {1}".format(tclWaveFilePath.as_posix(), tclGUIFilePath.as_posix())
 		else:
-			self._LogDebug("Didn't find waveform script: '{0}'. Loading default commands.".format(str(tclWaveFilePath)))
+			self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
 			vsim.Parameters[vsim.SwitchBatchCommand] =	"add wave *; do {0}".format(tclGUIFilePath.as_posix())
 
 		vsim.Simulate()

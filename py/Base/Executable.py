@@ -300,6 +300,8 @@ class CommandLineArgumentList(list):
 
 
 class Executable(ILogable):
+	_POC_BOUNDARY = "====== POC BOUNDARY ======"
+
 	def __init__(self, platform, executablePath, logger=None):
 		super().__init__(logger)
 		
@@ -308,7 +310,7 @@ class Executable(ILogable):
 		
 		if isinstance(executablePath, str):							executablePath = Path(executablePath)
 		elif (not isinstance(executablePath, Path)):		raise ValueError("Parameter 'executablePath' is not of type str or Path.")
-		if (not executablePath.exists()):								raise CommonException("Executable '{0}' can not be found.".format(str(executablePath))) from FileNotFoundError(str(executablePath))
+		if (not executablePath.exists()):								raise CommonException("Executable '{0!s}' can not be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
 		
 		# prepend the executable
 		self._executablePath =		executablePath
@@ -319,10 +321,16 @@ class Executable(ILogable):
 
 	def StartProcess(self, parameterList):
 		# start child process
+		# parameterList.insert(0, str(self._executablePath))
 		self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
 
 	def Send(self, line):
 		self._process.stdin.write(line)
+		self._process.stdin.flush()
+
+	def SendBoundary(self):
+		self._process.stdin.write("puts \"{0}\"\n".format(self._POC_BOUNDARY))
+		self._process.stdin.flush()
 
 	def Terminate(self):
 		self._process.terminate()

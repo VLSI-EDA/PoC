@@ -4,7 +4,8 @@
 # 
 # ==============================================================================
 # Authors:					Patrick Lehmann
-# 
+#                   Martin Zabel
+#
 # Python Module:		TODO
 # 
 # Description:
@@ -33,34 +34,49 @@
 from enum								import Enum, unique
 from pathlib						import Path
 
+from Base.Configuration import ConfigurationException
 from Base.Exceptions		import CommonException
 from Base.VHDLParser		import VHDLParserMixIn
-from Parser.FilesParser	import FilesParserMixIn
+from Parser.FilesParser	import VHDLSourceFileMixIn, VerilogSourceFileMixIn, CocotbSourceFileMixIn
 from PoC.Config					import Board, Device
 from lib.Functions			import merge
 
 
-# ToDo nested filesets
+# TODO: nested filesets
 
 @unique
 class FileTypes(Enum):
+	Unknown =							-1
 	Any =									0
 	Text =								1
 	ProjectFile =					2
 	FileListFile =				3
-	ConstraintFile =			4
-	SourceFile =					5
-	VHDLSourceFile =			10
-	VerilogSourceFile =		11
+	RulesFile =						4
+	SourceFile =					10
+	VHDLSourceFile =			11
+	VerilogSourceFile =		12
+	PythonSourceFile =		15
+	CocotbSourceFile =		16
+	ConstraintFile =			20
+	UcfConstraintFile =		21
+	XdcConstraintFile =		22
+	SdcConstraintFile =		25
+	LdcConstraintFile =		26
 
 	def Extension(self):
-		if   (self == FileTypes.Any):									raise CommonException("Generic file type.")
+		if   (self == FileTypes.Unknown):							raise CommonException("Unknown file type.")
+		elif (self == FileTypes.Any):									raise CommonException("Generic file type.")
 		elif (self == FileTypes.Text):								return "txt"
 		elif (self == FileTypes.FileListFile):				return "files"
-		elif (self == FileTypes.ConstraintFile):			raise CommonException("Generic file type.")
 		elif (self == FileTypes.SourceFile):					raise CommonException("Generic file type.")
 		elif (self == FileTypes.VHDLSourceFile):			return "vhdl"
 		elif (self == FileTypes.VerilogSourceFile):		return "v"
+		elif (self == FileTypes.CocotbSourceFile):		return "py"
+		elif (self == FileTypes.ConstraintFile):			raise CommonException("Generic file type.")
+		elif (self == FileTypes.UcfConstraintFile):		return "ucf"
+		elif (self == FileTypes.XdcConstraintFile):		return "xdc"
+		elif (self == FileTypes.SdcConstraintFile):		return "sdc"
+		elif (self == FileTypes.LdcConstraintFile):		return "ldc"
 		else:																					raise CommonException("This is not an enum member.")
 		
 	def __str__(self):
@@ -71,34 +87,39 @@ class Environment(Enum):
 	Any =					0
 	Simulation =	1
 	Synthesis =		2
-	
+
+
 @unique
 class ToolChain(Enum):
 	Any =								 0
 	Aldec_ActiveHDL =		10
 	Altera_QuartusII =	20
 	Altera_ModelSim =		21
-	Lattice_LSE =				30
+	Cocotb =					  30
 	GHDL_GTKWave =			40
-	Mentor_QuestaSim =	50
-	Xilinx_ISE =				60
-	Xilinx_PlanAhead =	61
-	Xilinx_Vivado =			62
-	
+	Lattice_Diamond =				50
+	Mentor_QuestaSim =	60
+	Xilinx_ISE =				70
+	Xilinx_PlanAhead =	71
+	Xilinx_Vivado =			72
+
+
 @unique
 class Tool(Enum):
 	Any =								 0
 	Aldec_aSim =				10
-	Altera_QuartusII =	20
-	Lattice_LSE =				30
+	Altera_QuartusII_Map =	20
+	Cocotb_QuestaSim = 	30
 	GHDL =							40
 	GTKwave =						41
-	Mentor_vSim =				50
-	Xilinx_XST =				60
-	Xilinx_CoreGen =		61
-	Xilinx_Synth =			62
+	Lattice_LSE =				50
+	Mentor_vSim =				60
 	Xilinx_iSim =				70
-	Xilinx_xSim =				71
+	Xilinx_XST =				71
+	Xilinx_CoreGen =		72
+	Xilinx_xSim =				80
+	Xilinx_Synth =			81
+
 
 class VHDLVersion(Enum):
 	Any =								 0
@@ -153,9 +174,9 @@ class VHDLVersion(Enum):
 		elif (self == VHDLVersion.VHDL02):	return "02"
 		elif (self == VHDLVersion.VHDL08):	return "08"
 
+
 class Project():
 	def __init__(self, name):
-		# print("Project.__init__: name={0}".format(name))
 		self._name =									name
 		self._rootDirectory =					None
 		self._fileSets =							{}
@@ -316,7 +337,7 @@ class Project():
 	
 	def ExtractVHDLLibrariesFromVHDLSourceFiles(self):
 		for file in self.Files(fileType=FileTypes.VHDLSourceFile):
-			libraryName = file.VHDLLibraryName.lower()
+			libraryName = file.LibraryName.lower()
 			if libraryName not in self._vhdlLibraries:
 				self._vhdlLibraries[libraryName] = library =	VHDLLibrary(libraryName)
 			else:
@@ -453,8 +474,11 @@ class VHDLLibrary:
 		
 	def __str__(self):
 		return self._name
-		
-class File():
+
+
+class File:
+	_FileType = FileTypes.Unknown
+
 	def __init__(self, file, project = None, fileSet = None):
 		self._handle =	None
 		self._content =	None
@@ -485,10 +509,10 @@ class File():
 		# print("File.FileSet(setter): value={0}".format(value))
 		self._fileSet =	value
 		self._project =	value.Project
-	
+
 	@property
 	def FileType(self):
-		return FileTypes.Unknown
+		return self._FileType
 	
 	@property
 	def FileName(self):
@@ -499,7 +523,7 @@ class File():
 		return self._file
 	
 	def Open(self):
-		if (not self._file.exists()):										raise FileNotFoundError("File '{0}' not found.".format(str(self._file)))
+		if (not self._file.exists()):		raise ConfigurationException("File '{0}' not found.".format(str(self._file))) from FileNotFoundError(str(self._file))
 		try:
 			self._handle = self._file.open('r')
 		except Exception as ex:
@@ -520,109 +544,66 @@ class File():
 	def __str__(self):
 		return str(self._file)
 
+
 class ProjectFile(File):
-	def __init__(self, file, project = None, fileSet = None):
-		File.__init__(self, file, project=project, fileSet=fileSet)
-		
-	@property
-	def FileType(self):
-		return FileTypes.ProjectFile
-	
-	def __str__(self):
-		return "Project file: '{0}".format(str(self._file))
+	_FileType = FileTypes.ProjectFile
 
-class FileListFile(File, FilesParserMixIn):
-	def __init__(self, file, project = None, fileSet = None):
-		File.__init__(self, file, project=project, fileSet=fileSet)
-		FilesParserMixIn.__init__(self)
-		
-		self._classFileListFile =		FileListFile
-		self._classVHDLSourceFile =	VHDLSourceFile
-	
-	@property
-	def FileType(self):
-		return FileTypes.FileListFile
-	
-	def Parse(self):
-		# print("FileListFile.Parse:")
-		if (self._fileSet is None):											raise CommonException("File '{0}' is not associated to a fileset.".format(str(self._file)))
-		if (self._project is None):											raise CommonException("File '{0}' is not associated to a project.".format(str(self._file)))
-		if (self._project.RootDirectory is None):				raise CommonException("No RootDirectory configured for this project.")
-			
-		# prepare FilesParserMixIn environment
-		self._rootDirectory = self.Project.RootDirectory
-		self._variables =			self.Project._GetVariables()
-		self._Parse()
-		self._Resolve()
-	
-	def CopyFilesToFileSet(self):
-		for file in self._files:
-			self._fileSet.AddFile(file)
-
-	def CopyExternalLibraries(self):
-		for lib in self._libraries:
-			self._project.AddExternalVHDLLibraries(lib)
-			
 	def __str__(self):
-		return "FileList file: '{0}".format(str(self._file))
-		
+		return "Project file: '{0!s}".format(self._file)
+
+
 class SourceFile(File):
-	def __init__(self, file, project = None, fileSet = None):
-		File.__init__(self, file, project=project, fileSet=fileSet)
-	
-	@property
-	def FileType(self):
-		return FileTypes.SourceFile
-	
+	_FileType = FileTypes.SourceFile
+
 	def __str__(self):
-		return "Source file: '{0}".format(str(self._file))
+		return "Source file: '{0!s}".format(self._file)
 
 class ConstraintFile(File):
-	def __init__(self, file, project = None, fileSet = None):
-		File.__init__(self, file, project=project, fileSet=fileSet)
-	
-	@property
-	def FileType(self):
-		return FileTypes.ConstraintFile
-	
+	_FileType = FileTypes.ConstraintFile
+
 	def __str__(self):
-		return "Constraint file: '{0}".format(str(self._file))
+		return "Constraint file: '{0!s}".format(self._file)
 
-class HDLFileMixIn():
-	def __init__(self):
-		pass
 
-class VHDLSourceFile(SourceFile, HDLFileMixIn, VHDLParserMixIn):
+class VHDLSourceFile(SourceFile, VHDLSourceFileMixIn, VHDLParserMixIn):
+	_FileType = FileTypes.VHDLSourceFile
+
 	def __init__(self, file, vhdlLibraryName, project = None, fileSet = None):
-		SourceFile.__init__(self, file, project=project, fileSet=fileSet)
-		HDLFileMixIn.__init__(self)
+		super().__init__(file, project=project, fileSet=fileSet)
+		VHDLSourceFileMixIn.__init__(self, file, vhdlLibraryName.lower())
 		VHDLParserMixIn.__init__(self)
-		
-		self._vhdlLibraryName = vhdlLibraryName.lower()
-	
-	@property
-	def FileType(self):
-		return FileTypes.VHDLSourceFile
-	
-	@property
-	def VHDLLibraryName(self):
-		return self._vhdlLibraryName
 	
 	def Parse(self):
 		self._Parse()
 	
 	def __str__(self):
-		return "VHDL file: '{0}".format(str(self._file))
+		return "VHDL file: '{0!s}".format(self._file)
 
-class VerilogSourceFile(SourceFile, HDLFileMixIn):
+class VerilogSourceFile(SourceFile, VerilogSourceFileMixIn):
+	_FileType = FileTypes.VerilogSourceFile
+
 	def __init__(self, file, project = None, fileSet = None):
-		SourceFile.__init__(self, file, project=project, fileSet=fileSet)
-		HDLFileMixIn.__init__(self)
-	
-	@property
-	def FileType(self):
-		return FileTypes.VerilogSourceFile
-	
+		super().__init__(file, project=project, fileSet=fileSet)
+		VerilogSourceFileMixIn.__init__(self, file)
+
 	def __str__(self):
-		return "Verilog file: '{0}".format(str(self._file))
+		return "Verilog file: '{0!s}".format(self._file)
+
+
+class PythonSourceFile(SourceFile):
+	_FileType = FileTypes.PythonSourceFile
+
+	def __str__(self):
+		return "Python file: '{0!s}".format(self._file)
+
+
+class CocotbSourceFile(PythonSourceFile, CocotbSourceFileMixIn):
+	_FileType = FileTypes.CocotbSourceFile
+
+	def __init__(self, file, project=None, fileSet=None):
+		super().__init__(file, project=project, fileSet=fileSet)
+		CocotbSourceFileMixIn.__init__(self, file)
+
+	def __str__(self):
+		return "Cocotb file: '{0!s}".format(self._file)
 

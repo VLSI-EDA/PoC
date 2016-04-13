@@ -32,8 +32,8 @@
 # ==============================================================================
 #
 # entry point
-from Base.Project import Project as BaseProject, ProjectFile, ConstraintFile
-
+from Base.Exceptions import PlatformNotSupportedException
+from Base.Logging import Severity, LogEntry
 
 if __name__ != "__main__":
 	# place library initialization code here
@@ -46,9 +46,15 @@ else:
 from collections									import OrderedDict
 from pathlib											import Path
 
-# from Base.Executable							import Executable, ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
+from Base.Executable							import Executable, ExecutableArgument, CommandLineArgumentList, ShortValuedFlagArgument, LongValuedFlagArgument, \
+	StringArgument
 from Base.Configuration						import Configuration as BaseConfiguration, ConfigurationException
+from Base.Project									import Project as BaseProject, ProjectFile, FileTypes
+from Base.ToolChain								import ToolChainException
 
+
+class QuartusIIException(ToolChainException):
+	pass
 
 class Configuration(BaseConfiguration):
 	def manualConfigureForWindows(self) :
@@ -159,16 +165,183 @@ class Configuration(BaseConfiguration):
 			raise ConfigurationException("unknown option")
 
 
+class QuartusIIMixIn:
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		self._platform =						platform
+		self._binaryDirectoryPath =	binaryDirectoryPath
+		self._version =							version
+		self._logger =							logger
+
+
+class QuartusII(QuartusIIMixIn):
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		QuartusIIMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+
+	def GetMap(self):
+		return Map(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+
+
+class Map(Executable, QuartusIIMixIn):
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		QuartusIIMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+
+		if (platform == "Windows") :			executablePath = binaryDirectoryPath / "quartus_map.exe"
+		elif (platform == "Linux") :			executablePath = binaryDirectoryPath / "quartus_map"
+		else :														raise PlatformNotSupportedException(platform)
+		Executable.__init__(self, platform, executablePath, logger=logger)
+
+		self.Parameters[self.Executable] = executablePath
+
+		self._hasOutput =		False
+		self._hasWarnings =	False
+		self._hasErrors =		False
+
+	@property
+	def HasWarnings(self):	return self._hasWarnings
+	@property
+	def HasErrors(self):		return self._hasErrors
+
+	class Executable(metaclass=ExecutableArgument) :
+		pass
+
+	class ArgProjectName(metaclass=StringArgument):
+		pass
+
+	class SwitchArgumentFile(metaclass=ShortValuedFlagArgument):
+		_name = "f"
+
+	class SwitchDeviceFamily(metaclass=LongValuedFlagArgument) :
+		_name = "family"
+
+	class SwitchDevicePart(metaclass=LongValuedFlagArgument) :
+		_name = "part"
+
+	Parameters = CommandLineArgumentList(
+			Executable,
+			ArgProjectName,
+			SwitchArgumentFile,
+			SwitchDeviceFamily,
+			SwitchDevicePart
+	)
+
+	def Compile(self) :
+		parameterList = self.Parameters.ToArgumentList()
+		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise QuartusIIException("Failed to launch quartus_map.") from ex
+
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+		try:
+			iterator = iter(MapFilter(self.GetReader()))
+
+			line = next(iterator)
+			self._hasOutput = True
+			self._LogNormal("    quartus_map messages for '{0}'".format(self.Parameters[self.SwitchArgumentFile]))
+			self._LogNormal("    " + ("-" * 76))
+
+			while True:
+				self._hasWarnings |= (line.Severity is Severity.Warning)
+				self._hasErrors |= (line.Severity is Severity.Error)
+
+				line.Indent(2)
+				self._Log(line)
+				line = next(iterator)
+
+		except StopIteration as ex:
+			pass
+		except QuartusIIException:
+			raise
+		# except Exception as ex:
+		#	raise GHDLException("Error while executing GHDL.") from ex
+		finally:
+			if self._hasOutput:
+				self._LogNormal("    " + ("-" * 76))
+
+def MapFilter(gen):
+	iterator = iter(gen)
+
+	for line in iterator:
+		if line.startswith("Info: Command: quartus_map"):		break
+
+	for line in iterator:
+		if line.startswith("Info ("):
+			yield LogEntry(line[5:], Severity.Verbose)
+		elif line.startswith("    Info ("):
+			yield LogEntry("    " + line[9:], Severity.Verbose)
+		elif line.startswith("Info:"):
+			yield LogEntry(line[6:], Severity.Info)
+		elif line.startswith("    Info:"):
+			yield LogEntry(line[10:], Severity.Debug)
+		else:
+			yield LogEntry(line, Severity.Normal)
+
 class QuartusProject(BaseProject):
-	def __init__(self, name):
+	def __init__(self, name, projectFile=None):
 		super().__init__(name)
 
+		self._projectFile =		projectFile
+
+		self._globalAssignments =				OrderedDict()
+		self._globalAssignmentsProxy =	GlobalAssignmentProxy(self)
+
+	@property
+	def File(self):
+		return self._projectFile
+	@File.setter
+	def File(self, value):
+		if (not isinstance(value, QuartusProjectFile)):		raise ValueError("Parameter 'value' is not of type QuartusProjectFile.")
+		self._projectFile = value
+
+	@property
+	def GlobalAssignments(self):
+		return self._globalAssignmentsProxy
+
+	def CopySourceFilesFromProject(self, project):
+		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
+			self.AddSourceFile(file)
+
+	def Write(self):
+		if (self._projectFile is None):		raise QuartusIIException("No file path for QuartusProject provided.")
+
+		buffer = ""
+		for key,value in self._globalAssignments.items():
+			buffer += "set_global_assignment -name {key} {value!s}\n".format(key=key, value=value)
+
+		buffer += "\n"
+		for file in self.Files(fileType=FileTypes.VHDLSourceFile):
+			buffer += "set_global_assignment -name VHDL_FILE {file} -library {library}\n".format(file=file.Path.as_posix(), library=file.LibraryName)
+
+		with self._projectFile.Path.open('w') as fileHandle:
+			fileHandle.write(buffer)
+
+class GlobalAssignmentProxy:
+	def __init__(self, project):
+		self._project = project
+
+	def __getitem__(self, key):
+		return self._project._globalAssignments[key]
+
+	def __setitem__(self, key, value):
+		self._project._globalAssignments[key] = value
+
+	def __delitem__(self, key):
+		del self._project._globalAssignments[key]
+
+	def __contains__(self, key):
+		return (key in self._project._globalAssignments)
+
+	def __len__(self):
+		return len(self._project._globalAssignments)
+
+	def __iter__(self):
+		return self._project._globalAssignments.__iter__()
 
 class QuartusProjectFile(ProjectFile):
 	def __init__(self, file):
 		super().__init__(file)
 
-
-class SynopsysDesignConstraintFile(ConstraintFile):
-	def __init__(self, file):
-		super().__init__(file)

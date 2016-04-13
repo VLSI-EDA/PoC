@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
 [*] Sun Mar 20 14:12:41 2016
 [*]
-[dumpfile] "G:\git\PoC\temp\ghdl\sync_Bits_tb.ghw"
 [dumpfile_mtime] "Sun Mar 20 14:12:23 2016"
 [dumpfile_size] 2602
-[savefile] "G:\git\PoC\sim\misc\sync\sync_Bits_tb.gtkw"
 [timestart] 0
 [size] 1680 997
 [pos] -1 -1

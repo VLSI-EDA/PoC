@@ -52,24 +52,24 @@ class Attribute:
 		return self.__name__
 
 	@classmethod
-	def GetMethods(self, cls):
+	def GetMethods(cls, cl):
 		methods = {}
-		for funcname,func in cls.__class__.__dict__.items():
+		for funcname,func in cl.__class__.__dict__.items():
 			if hasattr(func, '__dict__'):
 				if (Attribute.AttributesMemberName in func.__dict__):
 					attributes = func.__dict__[Attribute.AttributesMemberName]
 					if isinstance(attributes, list):
 						for attribute in attributes:
-							if isinstance(attribute, self):
+							if isinstance(attribute, cls):
 								methods[funcname] = func
 		return methods.items()
 		
 	@classmethod
-	def GetAttributes(self, method):
+	def GetAttributes(cls, method):
 		if (Attribute.AttributesMemberName in method.__dict__):
 			attributes = method.__dict__[Attribute.AttributesMemberName]
 			if isinstance(attributes, list):
-				return [attribute for attribute in attributes if isinstance(attribute, self)]
+				return [attribute for attribute in attributes if isinstance(attribute, cls)]
 		return list()
 
 

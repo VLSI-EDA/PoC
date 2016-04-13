@@ -32,8 +32,6 @@
 # ==============================================================================
 #
 # entry point
-from Base.Project import Project as BaseProject, ProjectFile, ConstraintFile
-
 
 if __name__ != "__main__":
 	# place library initialization code here
@@ -46,15 +44,16 @@ from collections					import OrderedDict
 from pathlib							import Path
 from os										import environ
 
-from Base.Executable							import Executable
-from Base.Executable							import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
-from Base.Exceptions			import PlatformNotSupportedException
-from Base.ToolChain import ToolChainException
-from Base.Logging					import LogEntry, Severity
-from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
+from Base.Exceptions						import PlatformNotSupportedException
+from Base.Logging								import LogEntry, Severity
+from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
+from Base.Project								import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from Base.Executable						import Executable
+from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from ToolChains.Xilinx.Xilinx		import XilinxException
 
 
-class ISEException(ToolChainException):
+class ISEException(XilinxException):
 	pass
 
 
@@ -84,6 +83,9 @@ class Configuration(BaseConfiguration):
 			}
 		}
 	}
+
+	def __init__(self):
+		super().__init__()
 
 	def GetSections(self, Platform):
 		pass
@@ -180,26 +182,30 @@ class Configuration(BaseConfiguration):
 		else:
 			raise ConfigurationException("unknown option")
 
-
-class ISE:
+class ISEMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		self._platform =						platform
 		self._binaryDirectoryPath =	binaryDirectoryPath
 		self._version =							version
-		self.__logger =							logger
+		self._logger =							logger
 
+
+class ISE(ISEMixIn):
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+		
 	def GetVHDLCompiler(self):
 		raise NotImplementedError("ISE.GetVHDLCompiler")
 		# return ISEVHDLCompiler(self._platform, self._binaryDirectoryPath, self._version, logger=self.__logger)
 
 	def GetFuse(self):
-		return Fuse(self._platform, self._binaryDirectoryPath, self._version, logger=self.__logger)
+		return Fuse(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 	def GetXst(self):
-		return Xst(self._platform, self._binaryDirectoryPath, self._version, logger=self.__logger)
+		return Xst(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 	def GetCoreGenerator(self):
-		return CoreGenerator(self._platform, self._binaryDirectoryPath, self._version, logger=self.__logger)
+		return CoreGenerator(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 # class ISEVHDLCompiler(Executable, ISESimulatorExecutable):
 # 	def __init__(self, platform, binaryDirectoryPath, version, defaultParameters=[], logger=None):
@@ -218,21 +224,21 @@ class ISE:
 		# _indent = "    "
 		# print(_indent + "vhcomp messages for '{0}.{1}'".format("??????"))  # self.VHDLLibrary, topLevel))
 		# print(_indent + "-" * 80)
-		# try :
+		# try:
 		# 	self.StartProcess(parameterList)
-		# 	for line in self.GetReader() :
+		# 	for line in self.GetReader():
 		# 		print(_indent + line)
-		# except Exception as ex :
+		# except Exception as ex:
 		# 	raise ex  # SimulatorException() from ex
 		# print(_indent + "-" * 80)
 
-class Fuse(Executable, ISE):
+class Fuse(Executable, ISEMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
 		if (platform == "Windows"):		executablePath = binaryDirectoryPath / "fuse.exe"
 		elif (platform == "Linux"):		executablePath = binaryDirectoryPath / "fuse"
 		else:																						raise PlatformNotSupportedException(self._platform)
-		Executable.__init__(self, platform, executablePath, logger=logger)
-		ISE.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
+		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -322,8 +328,12 @@ class Fuse(Executable, ISE):
 				self._LogNormal("    " + ("-" * 76))
 
 
-class ISESimulator(Executable):
-	def __init__(self, executablePath, logger=None):
+class ISESimulator(Executable, ISEMixIn):
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
+		if (platform == "Windows"):			executablePath = binaryDirectoryPath / "isim.exe"
+		elif (platform == "Linux"):			executablePath = binaryDirectoryPath / "isim"
+		else:														raise PlatformNotSupportedException(platform)
 		super().__init__("", executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -401,11 +411,12 @@ class ISESimulator(Executable):
 				self._LogNormal("    " + ("-" * 76))
 
 
-class Xst(Executable) :
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None) :
-		if (platform == "Windows") :			executablePath = binaryDirectoryPath / "xst.exe"
-		elif (platform == "Linux") :			executablePath = binaryDirectoryPath / "xst"
-		else :														raise PlatformNotSupportedException(platform)
+class Xst(Executable, ISEMixIn):
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
+		if (platform == "Windows"):			executablePath = binaryDirectoryPath / "xst.exe"
+		elif (platform == "Linux"):			executablePath = binaryDirectoryPath / "xst"
+		else:														raise PlatformNotSupportedException(platform)
 		Executable.__init__(self, platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -422,26 +433,26 @@ class Xst(Executable) :
 	def HasErrors(self):
 		return self._hasErrors
 
-	class Executable(metaclass=ExecutableArgument) :
+	class Executable(metaclass=ExecutableArgument):
 		pass
 
-	class SwitchIniStyle(metaclass=ShortTupleArgument):
+	class SwitchIntStyle(metaclass=ShortTupleArgument):
 		_name = "intstyle"
 
-	class SwitchXstFile(metaclass=ShortFlagArgument) :
+	class SwitchXstFile(metaclass=ShortFlagArgument):
 		_name = "ifn"
 
-	class SwitchReportFile(metaclass=ShortTupleArgument) :
+	class SwitchReportFile(metaclass=ShortTupleArgument):
 		_name = "ofn"
 
 	Parameters = CommandLineArgumentList(
 			Executable,
-			SwitchIniStyle,
+			SwitchIntStyle,
 			SwitchXstFile,
 			SwitchReportFile
 	)
 
-	def Compile(self) :
+	def Compile(self):
 		parameterList = self.Parameters.ToArgumentList()
 		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
 
@@ -480,8 +491,9 @@ class Xst(Executable) :
 				self._LogNormal("    " + ("-" * 76))
 
 
-class CoreGenerator(Executable):
+class CoreGenerator(Executable, ISEMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
 		if (platform == "Windows"):			executablePath = binaryDirectoryPath / "coregen.exe"
 		elif (platform == "Linux"):			executablePath = binaryDirectoryPath / "coregen"
 		else:														raise PlatformNotSupportedException(platform)
@@ -616,15 +628,18 @@ def CoreGeneratorFilter(gen):
 
 
 class ISEProject(BaseProject):
-	def __init__(self, name):
-		super().__init__(name)
+	def __init__(self):
+		super().__init__()
 
 
 class ISEProjectFile(ProjectFile):
-	def __init__(self, file):
-		super().__init__(file)
+	def __init__(self):
+		super().__init__()
 
 
 class UserConstraintFile(ConstraintFile):
-	def __init__(self, file):
-		super().__init__(file)
+	_FileType = FileTypes.UcfConstraintFile
+
+	def __str__(self):
+		return "UCF file: '{0!s}".format(self._file)
+

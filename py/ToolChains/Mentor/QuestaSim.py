@@ -43,12 +43,12 @@ else:
 from collections				import OrderedDict
 from pathlib						import Path
 
+from Base.Exceptions		import PlatformNotSupportedException
+from Base.Logging				import LogEntry, Severity
+from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
 from Base.Executable		import Executable
 from Base.Executable		import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
-from Base.Exceptions		import PlatformNotSupportedException
-from Base.ToolChain import ToolChainException
-from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
-from Base.Logging				import LogEntry, Severity
+from Base.ToolChain			import ToolChainException
 
 
 class QuestaException(ToolChainException):

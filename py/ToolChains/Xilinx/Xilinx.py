@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:					Patrick Lehmann
 #
-# Python Class:			Lattice Active-HDL specific classes
+# Python Class:			TODO
 #
 # Description:
 # ------------------------------------
@@ -37,14 +37,32 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.ActiveHDL")
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
 
 
-# from collections				import OrderedDict
-# from pathlib						import Path
+from Base.Project		import FileTypes, VHDLVersion
+from Base.ToolChain	import ToolChainException
 
-from Base.Configuration import Configuration as BaseConfiguration
+class XilinxException(ToolChainException):
+	pass
 
-class Configuration(BaseConfiguration):
+class XilinxProjectExportMixIn:
 	def __init__(self):
-		super().__init__()
+		pass
+
+	def _GenerateXilinxProjectFileContent(self, tool, vhdlVersion=VHDLVersion.VHDL93):
+		projectFileContent = ""
+		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
+			if (not file.Path.exists()):								raise XilinxException("Can not add '{0!s}' to {1} project file.".format(file.Path, tool)) from FileNotFoundError(str(file.Path))
+			# create one VHDL line for each VHDL file
+			if (vhdlVersion == VHDLVersion.VHDL2008):		projectFileContent += "vhdl2008 {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
+			else:																				projectFileContent += "vhdl {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
+
+		return projectFileContent
+
+	def _WriteXilinxProjectFile(self, projectFilePath, tool, vhdlVersion=VHDLVersion.VHDL93):
+		projectFileContent = self._GenerateXilinxProjectFileContent(tool, vhdlVersion)
+		self._LogDebug("  Writing {0} project file to '{1!s}'".format(tool, projectFilePath))
+		with projectFilePath.open('w') as prjFileHandle:
+			prjFileHandle.write(projectFileContent)
+

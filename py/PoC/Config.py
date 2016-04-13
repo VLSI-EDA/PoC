@@ -42,6 +42,7 @@ from enum									import Enum, EnumMeta, unique
 from re										import compile as RegExpCompile
 
 # from lib.Decorators				import CachedReadOnlyProperty
+from lib.Functions				import Init
 from Base.Configuration		import ConfigurationException
 
 
@@ -283,7 +284,7 @@ class Device:
 			# print(str(self))
 		
 		# vendor = Altera
-		if (deviceString[0:2].lower() == "ep"):
+		elif (deviceString[0:2].lower() == "ep"):
 			self.__vendor =			Vendors.Altera
 			self.__generation = int(deviceString[2:3])
 
@@ -303,39 +304,36 @@ class Device:
 #
 #			if (deviceRegExpMatch is not None):
 #				print("dev subtype: %s%s" % (deviceRegExpMatch.group('st1'), deviceRegExpMatch.group('st2')))
-	
+			print("{RED}Device.__init__(): not fully implemented for Altera devices.{RESET}".format(**Init.Foreground))
+
+		elif (deviceString[0:3].lower() == "lfe"):  # lfe - Lattice ECP series
+			self.__vendor = Vendors.Lattice
+			self.__generation = int(deviceString[3:4])
+
+			print("{RED}Device.__init__(): not fully implemented for Lattice devices.{RESET}".format(**Init.Foreground))
+		else:
+			raise ConfigurationException("Can not decode device string '{0}'".format(deviceString))
+
+
 	@property
-	def Vendor(self):
-		return str(self.__vendor)
-	
+	def Vendor(self):			return str(self.__vendor)
 	@property
-	def Family(self):
-		return str(self.__family)
-		
+	def Family(self):			return str(self.__family)
 	@property
-	def Device(self):
-		return str(self.__device)
-		
+	def Device(self):			return str(self.__device)
 	@property
-	def Generation(self):
-		return self.__generation
-	
+	def Generation(self):	return self.__generation
 	@property
-	def Number(self):
-		return self.__number
-	
+	def Number(self):			return self.__number
 	@property
-	def SpeedGrade(self):
-		return self.__speedGrade
-	
+	def SpeedGrade(self):	return self.__speedGrade
 	@property
-	def PinCount(self):
-		return self.__pinCount
-	
+	def PinCount(self):		return self.__pinCount
 	@property
-	def Package(self):
-		return self.__package
-	
+	def Package(self):		return self.__package
+	@property
+	def Name(self):				return self.FullName.upper()
+
 	# @CachedReadOnlyProperty
 	@property
 	def ShortName(self):
@@ -349,8 +347,13 @@ class Device:
 				subtype[1]
 			)
 		elif (self.__vendor is Vendors.Altera):
-			raise NotImplementedError("Device.ShortName() not implemented for vendor Altera")
-			# FIXME: return "ep...."
+			print("{YELLOW}Device.ShortName() not implemented for vendor Altera.{RESET}".format(**Init.Foreground))
+			return "EP4SGX230KF40C2"
+		elif (self.__vendor is Vendors.Lattice):
+			print("{YELLOW}Device.ShortName() not implemented for vendor Lattice.{RESET}".format(**Init.Foreground))
+			return "ECP5UM-45F"
+		else:
+			raise NotImplementedError("Device.ShortName() not implemented for vendor {0!s}".format(self.__vendor))
 	
 	# @CachedReadOnlyProperty
 	@property
@@ -368,13 +371,14 @@ class Device:
 				self.__pinCount
 			)
 		elif (self.__vendor is Vendors.Altera):
-			raise NotImplementedError("Device.FullName() not implemented for vendor Altera")
-			# FIXME: return "ep...."
-	
-	@property
-	def Name(self):
-		return self.FullName.upper()
-	
+			print("{YELLOW}Device.FullName() not implemented for vendor Altera.{RESET}".format(**Init.Foreground))
+			return "EP4SGX230KF40C2"
+		elif (self.__vendor is Vendors.Lattice):
+			print("{YELLOW}Device.FullName() not implemented for vendor Lattice.{RESET}".format(**Init.Foreground))
+			return "ECP5UM-45F"
+		else:
+			raise NotImplementedError("Device.FullName() not implemented for vendor {0!s}".format(self.__vendor))
+
 	# @CachedReadOnlyProperty
 	@property
 	def FamilyName(self):

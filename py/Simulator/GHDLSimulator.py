@@ -41,59 +41,43 @@ else:
 
 # load dependencies
 from configparser						import NoSectionError
-from os											import chdir
-
 from colorama								import Fore as Foreground
 
 # from Base.Exceptions				import NotConfiguredException, PlatformNotSupportedException
-from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool, FileListFile
-from Base.Simulator					import SimulatorException, Simulator as BaseSimulator, VHDLTestbenchLibraryName
-from Parser.Parser					import ParserException
-from PoC.Project						import Project as PoCProject
+from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool
+from Base.Simulator					import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME
 from ToolChains.GHDL				import GHDL, GHDLException
 from ToolChains.GTKWave			import GTKWave
 
 
 class Simulator(BaseSimulator):
-	_guiMode =										False
+	_TOOL_CHAIN =						ToolChain.GHDL_GTKWave
+	_TOOL =									Tool.GHDL
 
 	def __init__(self, host, showLogs, showReport, guiMode):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 
 		self._guiMode =				guiMode
-		self._tempPath =			None
+
+		self._entity =				None
+		self._testbenchFQN =	None
+		self._vhdlGenerics =	None
+
 		self._ghdl =					None
 
 		self._PrepareSimulationEnvironment()
 
-	@property
-	def TemporaryPath(self):
-		return self._tempPath
-
 	def _PrepareSimulationEnvironment(self):
 		self._LogNormal("preparing simulation environment...")
-		# create temporary directory for GHDL if not existent
 		self._tempPath = self.Host.Directories["GHDLTemp"]
-		if (not (self._tempPath).exists()):
-			self._LogVerbose("  Creating temporary directory for simulator files.")
-			self._LogDebug("    Temporary directory: {0}".format(str(self._tempPath)))
-			self._tempPath.mkdir(parents=True)
-			
-		# change working directory to temporary iSim path
-		self._LogVerbose("  Changing working directory to temporary directory.")
-		self._LogDebug("    cd \"{0}\"".format(str(self._tempPath)))
-		chdir(str(self._tempPath))
+		super()._PrepareSimulationEnvironment()
 
 	def PrepareSimulator(self, binaryPath, version, backend):
 		# create the GHDL executable factory
 		self._LogVerbose("  Preparing GHDL simulator.")
 		self._ghdl =			GHDL(self.Host.Platform, binaryPath, version, backend, logger=self.Logger)
 
-	def RunAll(self, pocEntities, **kwargs):
-		for pocEntity in pocEntities:
-			self.Run(pocEntity, **kwargs)
-		
-	def Run(self, entity, board, vhdlVersion="93c", vhdlGenerics=None):
+	def Run(self, entity, board, vhdlVersion="93c", vhdlGenerics=None, guiMode=False):
 		self._pocEntity =			entity
 		self._testbenchFQN =	str(entity)										# TODO: implement FQN method on PoCEntity
 		self._vhdlVersion =		vhdlVersion
@@ -101,60 +85,28 @@ class Simulator(BaseSimulator):
 
 		# check testbench database for the given testbench		
 		self._LogQuiet("Testbench: {0}{1}{2}".format(Foreground.YELLOW, self._testbenchFQN, Foreground.RESET))
-		if (not self.Host.TBConfig.has_section(self._testbenchFQN)):
-			raise SimulatorException("Testbench '{0}' not found.".format(self._testbenchFQN)) from NoSectionError(self._testbenchFQN)
-			
-		# setup all needed paths to execute fuse
-		testbenchName =				self.Host.TBConfig[self._testbenchFQN]['TestbenchModule']
-		fileListFilePath =		self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['fileListFile']
 
-		self._CreatePoCProject(testbenchName, board)
-		self._AddFileListFile(fileListFilePath)
+		# setup all needed paths to execute fuse
+		testbench =					entity.VHDLTestbench
+		self._CreatePoCProject(testbench, board)
+		self._AddFileListFile(testbench.FilesFile)
 		
 		if (self._ghdl.Backend == "gcc"):
 			self._RunAnalysis()
-			self._RunElaboration(testbenchName)
-			self._RunSimulation(testbenchName)
+			self._RunElaboration(testbench)
+			self._RunSimulation(testbench)
 		elif (self._ghdl.Backend == "llvm"):
 			self._RunAnalysis()
-			self._RunElaboration(testbenchName)
-			self._RunSimulation(testbenchName)
+			self._RunElaboration(testbench)
+			self._RunSimulation(testbench)
 		elif (self._ghdl.Backend == "mcode"):
 			self._RunAnalysis()
-			self._RunSimulation(testbenchName)
-	
-	def _CreatePoCProject(self, testbenchName, board):
-		# create a PoCProject and read all needed files
-		self._LogDebug("    Create a PoC project '{0}'".format(str(testbenchName)))
-		pocProject =									PoCProject(testbenchName)
+			self._RunSimulation(testbench)
 
-		# configure the project
-		pocProject.RootDirectory =		self.Host.Directories["PoCRoot"]
-		pocProject.Environment =			Environment.Simulation
-		pocProject.ToolChain =				ToolChain.GHDL_GTKWave
-		pocProject.Tool =							Tool.GHDL
-		pocProject.VHDLVersion =			self._vhdlVersion
-		pocProject.Board =						board
-
-		self._pocProject = pocProject
-		
-	def _AddFileListFile(self, fileListFilePath):
-		self._LogDebug("    Reading filelist '{0}'".format(str(fileListFilePath)))
-		# add the *.files file, parse and evaluate it
-		try:
-			fileListFile = self._pocProject.AddFile(FileListFile(fileListFilePath))
-			fileListFile.Parse()
-			fileListFile.CopyFilesToFileSet()
-			fileListFile.CopyExternalLibraries()
-			self._pocProject.ExtractVHDLLibrariesFromVHDLSourceFiles()
-		except ParserException as ex:										raise SimulatorException("Error while parsing '{0}'.".format(str(fileListFilePath))) from ex
-		
-		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("=" * 160)
-		if (len(fileListFile.Warnings) > 0):
-			for warn in fileListFile.Warnings:
-				self._LogWarning(warn)
-			raise SimulatorException("Found critical warnings while parsing '{0}'".format(str(fileListFilePath)))
+		# FIXME: a very quick implemenation
+		if (guiMode == True):
+			viewer = self.GetViewer()
+			viewer.View(entity.VHDLTestbench)
 		
 	def _RunAnalysis(self):
 		self._LogNormal("  running analysis for every vhdl file...")
@@ -189,7 +141,7 @@ class Simulator(BaseSimulator):
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
 			if (not file.Path.exists()):									raise SimulatorException("Can not analyse '{0}'.".format(str(file.Path))) from FileNotFoundError(str(file.Path))
 
-			ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			file.VHDLLibraryName
+			ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			file.LibraryName
 			ghdl.Parameters[ghdl.ArgSourceFile] =					file.Path
 			try:
 				ghdl.Analyze()
@@ -202,13 +154,13 @@ class Simulator(BaseSimulator):
 
 	# running simulation
 	# ==========================================================================
-	def _RunElaboration(self, testbenchName):
+	def _RunElaboration(self, testbench):
 		self._LogNormal("  elaborate simulation...")
 		
 		# create a GHDLElaborate instance
 		ghdl = self._ghdl.GetGHDLElaborate()
-		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			VHDLTestbenchLibraryName
-		ghdl.Parameters[ghdl.ArgTopLevel] =						testbenchName
+		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			VHDL_TESTBENCH_LIBRARY_NAME
+		ghdl.Parameters[ghdl.ArgTopLevel] =						testbench.ModuleName
 
 		# add external library references
 		ghdl.Parameters[ghdl.ArgListLibraryReferences] = [str(extLibrary.Path) for extLibrary in self._pocProject.ExternalVHDLLibraries]
@@ -228,13 +180,13 @@ class Simulator(BaseSimulator):
 		try:
 			ghdl.Elaborate()
 		except GHDLException as ex:
-			raise SimulatorException("Error while elaborating '{0}.{1}'.".format(VHDLTestbenchLibraryName, testbenchName)) from ex
+			raise SimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
 
 		if ghdl.HasErrors:
-			raise SimulatorException("Error while elaborating '{0}.{1}'.".format(VHDLTestbenchLibraryName, testbenchName))
+			raise SimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
 	
 	
-	def _RunSimulation(self, testbenchName):
+	def _RunSimulation(self, testbench):
 		self._LogNormal("  running simulation...")
 			
 		# create a GHDLRun instance
@@ -247,8 +199,8 @@ class Simulator(BaseSimulator):
 		ghdl.Parameters[ghdl.FlagMultiByteComments] =	True
 		ghdl.Parameters[ghdl.FlagSynBinding] =				True
 		ghdl.Parameters[ghdl.FlagPSL] =								True
-		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			VHDLTestbenchLibraryName
-		ghdl.Parameters[ghdl.ArgTopLevel] =						testbenchName
+		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			VHDL_TESTBENCH_LIBRARY_NAME
+		ghdl.Parameters[ghdl.ArgTopLevel] =						testbench.ModuleName
 
 		if (self._vhdlVersion == VHDLVersion.VHDL87):
 			ghdl.Parameters[ghdl.SwitchVHDLVersion] =		"87"
@@ -269,71 +221,69 @@ class Simulator(BaseSimulator):
 		ghdl.RunOptions[ghdl.SwitchIEEEAsserts] = "disable-at-0"		# enable, disable, disable-at-0
 		# set dump format to save simulation results to *.vcd file
 		if (self._guiMode):
-			waveformFileFormat =	self.Host.TBConfig[self._testbenchFQN]['ghdlWaveformFileFormat']
+			waveformFileFormat =	self.Host.PoCConfig[testbench.ConfigSectionName]['ghdlWaveformFileFormat']
 			if (waveformFileFormat == "vcd"):
-				waveformFilePath = self._tempPath / (testbenchName + ".vcd")
+				waveformFilePath = self._tempPath / (testbench.ModuleName + ".vcd")
 				ghdl.RunOptions[ghdl.SwitchVCDWaveform] =		waveformFilePath
 			elif (waveformFileFormat == "vcdgz"):
-				waveformFilePath = self._tempPath / (testbenchName + ".vcd.gz")
+				waveformFilePath = self._tempPath / (testbench.ModuleName + ".vcd.gz")
 				ghdl.RunOptions[ghdl.SwitchVCDGZWaveform] =	waveformFilePath
 			elif (waveformFileFormat == "fst"):
-				waveformFilePath = self._tempPath / (testbenchName + ".fst")
+				waveformFilePath = self._tempPath / (testbench.ModuleName + ".fst")
 				ghdl.RunOptions[ghdl.SwitchFSTWaveform] =		waveformFilePath
 			elif (waveformFileFormat == "ghw"):
-				waveformFilePath = self._tempPath / (testbenchName + ".ghw")
+				waveformFilePath = self._tempPath / (testbench.ModuleName + ".ghw")
 				ghdl.RunOptions[ghdl.SwitchGHDLWaveform] =	waveformFilePath
 			else:																						raise SimulatorException("Unknown waveform file format for GHDL.")
 		
 		ghdl.Run()
 		
-	def _ExecuteSimulation(self, testbenchName):
+	def _ExecuteSimulation(self, testbench):
 		self._LogNormal("  launching simulation...")
 			
 		# create a GHDLRun instance
 		ghdl = self._ghdl.GetGHDLRun()
 		ghdl.VHDLVersion =	self._vhdlVersion
-		ghdl.VHDLLibrary =	VHDLTestbenchLibraryName
+		ghdl.VHDLLibrary =	VHDL_TESTBENCH_LIBRARY_NAME
 		
 		# configure RUNOPTS
 		runOptions = []
 		runOptions.append('--ieee-asserts={0}'.format("disable-at-0"))		# enable, disable, disable-at-0
 		# set dump format to save simulation results to *.vcd file
 		if (self._guiMode):
-			waveformFileFormat =	self.Host.TBConfig[self._testbenchFQN]['ghdlWaveformFileFormat']
+			waveformFileFormat =	self.Host.PoCConfig[testbench.ConfigSectionName]['ghdlWaveformFileFormat']
 					
 			if (waveformFileFormat == "vcd"):
-				waveformFilePath = self._tempPath / (testbenchName + ".vcd")
+				waveformFilePath = self._tempPath / (testbench.ModuleName + ".vcd")
 				runOptions.append("--vcd={0}".format(str(waveformFilePath)))
 			elif (waveformFileFormat == "vcdgz"):
-				waveformFilePath = self._tempPath / (testbenchName + ".vcd.gz")
+				waveformFilePath = self._tempPath / (testbench.ModuleName + ".vcd.gz")
 				runOptions.append("--vcdgz={0}".format(str(waveformFilePath)))
 			elif (waveformFileFormat == "fst"):
-				waveformFilePath = self._tempPath / (testbenchName + ".fst")
+				waveformFilePath = self._tempPath / (testbench.ModuleName + ".fst")
 				runOptions.append("--fst={0}".format(str(waveformFilePath)))
 			elif (waveformFileFormat == "ghw"):
-				waveformFilePath = self._tempPath / (testbenchName + ".ghw")
+				waveformFilePath = self._tempPath / (testbench.ModuleName + ".ghw")
 				runOptions.append("--wave={0}".format(str(waveformFilePath)))
 			else:																						raise SimulatorException("Unknown waveform file format for GHDL.")
 		
-		ghdl.Run(testbenchName, runOptions)
+		ghdl.Run(testbench.ModuleName, runOptions)
 	
 	def GetViewer(self):
 		return self
 	
-	def View(self):
+	def View(self, testbench):
 		self._LogNormal("  launching GTKWave...")
 		
-		testbenchName =				self.Host.TBConfig[self._testbenchFQN]['TestbenchModule']
-		waveformFileFormat =	self.Host.TBConfig[self._testbenchFQN]['ghdlWaveformFileFormat']
-					
+		waveformFileFormat =	self.Host.PoCConfig[testbench.ConfigSectionName]['ghdlWaveformFileFormat']
 		if (waveformFileFormat == "vcd"):
-			waveformFilePath = self._tempPath / (testbenchName + ".vcd")
+			waveformFilePath = self._tempPath / (testbench.ModuleName + ".vcd")
 		elif (waveformFileFormat == "vcdgz"):
-			waveformFilePath = self._tempPath / (testbenchName + ".vcd.gz")
+			waveformFilePath = self._tempPath / (testbench.ModuleName + ".vcd.gz")
 		elif (waveformFileFormat == "fst"):
-			waveformFilePath = self._tempPath / (testbenchName + ".fst")
+			waveformFilePath = self._tempPath / (testbench.ModuleName + ".fst")
 		elif (waveformFileFormat == "ghw"):
-			waveformFilePath = self._tempPath / (testbenchName + ".ghw")
+			waveformFilePath = self._tempPath / (testbench.ModuleName + ".ghw")
 		else:																						raise SimulatorException("Unknown waveform file format for GHDL.")
 		
 		if (not waveformFilePath.exists()):							raise SimulatorException("Waveform file not found.") from FileNotFoundError(str(waveformFilePath))
@@ -344,7 +294,7 @@ class Simulator(BaseSimulator):
 		gtkw.Parameters[gtkw.SwitchDumpFile] = str(waveformFilePath)
 
 		# if GTKWave savefile exists, load it's settings
-		gtkwSaveFilePath =	self.Host.Directories["PoCRoot"] / self.Host.TBConfig[self._testbenchFQN]['gtkwSaveFile']
+		gtkwSaveFilePath =	self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['gtkwSaveFile']
 		if gtkwSaveFilePath.exists():
 			self._LogDebug("    Found waveform save file: '{0}'".format(str(gtkwSaveFilePath)))
 			gtkw.Parameters[gtkw.SwitchSaveFile] = str(gtkwSaveFilePath)

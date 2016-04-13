@@ -74,6 +74,9 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
+	def __init__(self):
+		super().__init__()
+
 	def IsSupportedPlatform(self, Platform):
 		return (Platform in self.__privateConfiguration)
 

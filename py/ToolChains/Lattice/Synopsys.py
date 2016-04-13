@@ -46,4 +46,5 @@ else:
 from Base.Configuration import Configuration as BaseConfiguration
 
 class Configuration(BaseConfiguration):
-	pass
+	def __init__(self):
+		super().__init__()
