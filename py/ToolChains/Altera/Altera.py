@@ -110,7 +110,7 @@ class Configuration(BaseConfiguration):
 				p = Path("{0}:\Altera".format(drive))
 				try:
 					if (p.exists()):	return p
-				except WindowsError:
+				except OSError:
 					pass
 		return None
 

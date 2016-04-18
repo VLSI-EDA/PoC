@@ -30,10 +30,10 @@
 # limitations under the License.
 # ==============================================================================
 #
-from lib.Parser import CodeDOMObject
-from lib.Parser import MismatchingParserResult, MatchingParserResult
-from lib.Parser import SpaceToken, CharacterToken, StringToken, NumberToken
-from lib.Parser import Statement, BlockStatement, ConditionalBlockStatement, Expressions
+
+from lib.Parser				import MismatchingParserResult, MatchingParserResult
+from lib.Parser				import SpaceToken, CharacterToken, StringToken, NumberToken
+from lib.Parser				import Statement, BlockStatement, ConditionalBlockStatement, Expressions
 from Parser.CodeDOM		import EmptyLine, CommentLine, BlockedStatement as BlockedStatementBase
 
 # ==============================================================================

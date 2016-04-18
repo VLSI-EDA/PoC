@@ -47,7 +47,7 @@ from os										import environ
 from Base.Exceptions						import PlatformNotSupportedException
 from Base.Logging								import LogEntry, Severity
 from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
-from Base.Project								import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes, FileTypes, VHDLVersion
+from Base.Project								import FileTypes, VHDLVersion
 from Base.ToolChain							import ToolChainException
 
 
@@ -111,7 +111,7 @@ class Configuration(BaseConfiguration):
 				p = Path("{0}:\Xilinx".format(drive))
 				try:
 					if (p.exists()):	return p
-				except WindowsError:
+				except OSError:
 					pass
 		return None
 

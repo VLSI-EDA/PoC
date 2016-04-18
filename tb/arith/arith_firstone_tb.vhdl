@@ -4,13 +4,12 @@
 -- 
 -- =============================================================================
 -- Authors:					Thomas B. Preusser
---									Patrick Lehmann
 -- 
--- Testbench:				Testbench for arith_prefix_and.
+-- Testbench:				Testbench for arith_firstone
 -- 
 -- Description:
 -- ------------------------------------
---		Automated testbench for PoC.arith.prefix_and
+--		Automated testbench for PoC.arith.arith_firstone
 --
 -- License:
 -- =============================================================================
@@ -29,11 +28,13 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -- =============================================================================
+
 library	IEEE;
 use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
 
-library PoC;
+library	PoC;
+use			PoC.utils.all;
 use			PoC.physical.all;
 -- simulation only packages
 use			PoC.sim_types.all;
@@ -41,55 +42,69 @@ use			PoC.simulation.all;
 use			PoC.waveform.all;
 
 
-entity arith_prefix_and_tb is
-end entity;
+entity arith_firstone_tb is
+end arith_firstone_tb;
 
 
-architecture tb of arith_prefix_and_tb is
-	constant CLOCK_FREQ	: FREQ						:= 100 MHz;
+architecture tb of arith_firstone_tb is
+	constant CLOCK_FREQ							: FREQ					:= 100 MHz;
 	
-  constant BITS				: POSITIVE				:= 8;
-	--constant simTestID	: T_SIM_TEST_ID		:= simCreateTest("Test setup for BITS=" & INTEGER'image(BITS));
+  -- component generics
+  constant N : positive := 8;
+	constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for N=" & INTEGER'image(N));
 
-	signal Clock				: STD_LOGIC;
+	signal Clock	: STD_LOGIC;
 	
-  signal x	: std_logic_vector(BITS - 1 downto 0);
-  signal y	: std_logic_vector(BITS - 1 downto 0);
+  -- component ports
+  signal tin  : std_logic;
+  signal rqst : std_logic_vector(N-1 downto 0);
+  signal grnt : std_logic_vector(N-1 downto 0);
+  signal tout : std_logic;
+  signal bin  : std_logic_vector(log2ceil(N)-1 downto 0);
 
 begin
 	-- initialize global simulation status
-	--simInitialize;
+	simInitialize;
 	-- generate global testbench clock and reset
-	simGenerateClock(Clock, CLOCK_FREQ);
+	simGenerateClock(simTestID, Clock, CLOCK_FREQ);
 
   -- component instantiation
-  UUT : entity PoC.arith_prefix_and
+  DUT : entity PoC.arith_firstone
     generic map (
-      N => BITS
+      N => N
     )
     port map (
-      x => x,
-      y => y
+      tin  => tin,
+      rqst => rqst,
+      grnt => grnt,
+      tout => tout,
+      bin  => bin
     );
 
-	procChecker : process
-		--constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & INTEGER'image(BITS) & " bits");
-	begin
-		x		<= (others => '0');
-		wait until rising_edge(Clock);
-		
+  procStimuli : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & INTEGER'image(N) & " bits");
+  begin
 		-- Exhaustive Testing
-    for i in NATURAL range 0 to 2**BITS - 1 loop
-      x <= std_logic_vector(to_unsigned(i, BITS));
-      wait until rising_edge(Clock);
-      for j in 0 to BITS - 1 loop
-				simAssertion((y(j) = '1') = (x(j downto 0) = (j downto 0 => '1')), "Wrong result for " & integer'image(i) & " / " & integer'image(j));
+    for i in natural range 0 to 2**N-1 loop
+      rqst <= std_logic_vector(to_unsigned(i, N));
+
+			tin <= '0';
+			wait until rising_edge(Clock);
+			simAssertion(grnt = (grnt'range => '0') and tout = '0',
+							 "Unexpected token output in testcase #"&integer'image(i));
+
+			tin <= '1';
+			wait until falling_edge(Clock);
+      for j in 0 to N-1 loop
+				simAssertion((grnt(j) = '1') = ((rqst(j) = '1') and (rqst(j-1 downto 0) = (j-1 downto 0 => '0'))),
+								 "Wrong grant in testcase #"&integer'image(i));
 			end loop;
     end loop;
 
 		-- This process is finished
-		--simDeactivateProcess(simProcessID);
-		simStopAllClocks;
+		simDeactivateProcess(simProcessID);
+		-- Report overall result
+		simFinalize;
 		wait;  -- forever
   end process;
 

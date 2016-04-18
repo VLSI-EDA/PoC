@@ -151,7 +151,7 @@ class Simulator(BaseSimulator):
 			cocotbMakefileContent = fileHandle.read()
 
 		cocotbMakefileContent = cocotbMakefileContent.format(PoCRootDirectory=str(self.Host.Directories["PoCRoot"]), VHDLSources=vhdlSources,
-																												 TopLevel=topLevel, CocotbModule=cocotbModule)
+																													TopLevel=topLevel, CocotbModule=cocotbModule)
 
 		cocotbMakefilePath = self.Host.Directories["CocotbTemp"] / "Makefile"
 		self._LogDebug("    Writing Cocotb Makefile to '{0!s}'".format(cocotbMakefilePath))

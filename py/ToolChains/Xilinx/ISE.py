@@ -114,7 +114,7 @@ class Configuration(BaseConfiguration):
 				p = Path(r"{0}:\Xilinx\14.7\ISE_DS".format(drive))
 				try:
 					if (p.exists()):  return p
-				except WindowsError:
+				except OSError:
 					pass
 		return None
 

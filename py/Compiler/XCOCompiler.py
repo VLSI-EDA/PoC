@@ -44,16 +44,14 @@ else:
 # load dependencies
 import re								# used for output filtering
 import shutil
-from configparser						import NoSectionError
 from os											import chdir
 from pathlib								import Path
 from textwrap								import dedent
 
 from lib.Functions					import Init
 from Base.Exceptions				import NotConfiguredException, PlatformNotSupportedException
-from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool
+from Base.Project						import ToolChain, Tool
 from Base.Compiler					import Compiler as BaseCompiler, CompilerException
-from PoC.Project						import Project as PoCProject, FileListFile
 from ToolChains.Xilinx.ISE	import ISE
 
 

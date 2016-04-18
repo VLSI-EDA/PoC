@@ -154,12 +154,12 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 	)
 
 	# -reorder                      enables automatic file ordering
-  # -O[0 | 1 | 2 | 3]             set optimization level
+	# -O[0 | 1 | 2 | 3]             set optimization level
 	# -93                                conform to VHDL 1076-1993
-  # -2002                              conform to VHDL 1076-2002 (default)
-  # -2008                              conform to VHDL 1076-2008
+	# -2002                              conform to VHDL 1076-2002 (default)
+	# -2008                              conform to VHDL 1076-2008
 	# -relax                             allow 32-bit integer literals
-  # -incr                              switching compiler to fast incremental mode
+	# -incr                              switching compiler to fast incremental mode
 
 	def Compile(self):
 		parameterList = self.Parameters.ToArgumentList()

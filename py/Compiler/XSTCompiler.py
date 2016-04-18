@@ -46,7 +46,7 @@ else:
 # load dependencies
 from lib.Functions						import Init
 from Base.Exceptions					import NotConfiguredException, PlatformNotSupportedException
-from Base.Project							import VHDLVersion, Environment, ToolChain, Tool
+from Base.Project							import ToolChain, Tool
 from Base.Compiler						import Compiler as BaseCompiler, CompilerException
 from ToolChains.Xilinx.Xilinx	import XilinxProjectExportMixIn
 from ToolChains.Xilinx.ISE		import ISE

@@ -1,6 +1,8 @@
 # The PoC-Library
 
+[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - 
 Faculty of Computer Science, Technische Universität Dresden, Germany  
@@ -21,8 +23,6 @@ Table of Content:
  9. [References](#9-references)
 
 --------------------------------------------------------------------------------
-
-[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/master/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/master)
 
 ## 1 Overview
 

@@ -1,5 +1,38 @@
-
-
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+#
+# ==============================================================================
+# Authors:					Patrick Lehmann
+#
+# Python Class:			Derived and extended configparser from Python standard library
+#
+# Description:
+# ------------------------------------
+#		- Improved interpolation algorithm
+#		- Added an interpolation cache
+#		- Added recursive interpolation (indirect addressing): ${key1.${key2:opt2}:opt1}
+#		- Added %{keyword} interpolation, to access the section name: %{parent}
+#		- Added support for multiple DEFAULT sections [CONFIG.DEFAULT] for all [CONFIG.**] sections
+#
+# License:
+# ==============================================================================
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+#											Chair for VLSI-Design, Diagnostics and Architecture
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#		http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+#
 import re
 from collections	import OrderedDict as _default_dict, ChainMap as _ChainMap
 from configparser import ConfigParser, SectionProxy, Interpolation, MAX_INTERPOLATION_DEPTH, DEFAULTSECT, _UNSET, ConverterMapping
@@ -44,7 +77,7 @@ class ExtendedInterpolation(Interpolation):
 			raise ValueError("invalid interpolation syntax in {0!r} at position {1}".format(value, tmp_value.find('$')))
 		return value
 
-	def interpolate(self, parser, section, option, value, map, depth=0):
+	def interpolate(self, parser, section, option, value, _, depth=0):
 		if depth > MAX_INTERPOLATION_DEPTH:      raise InterpolationDepthError(option, section, value)
 
 		# short cut operations if empty or a normal string
@@ -184,8 +217,8 @@ class ExtendedInterpolation(Interpolation):
 class ExtendedConfigParser(ConfigParser):
 	_DEFAULT_INTERPOLATION = ExtendedInterpolation()
 
-	def __init__(self, defaults=None, dict_type=_default_dict, allow_no_value=False, *, delimiters=('=', ':'), comment_prefixes=('#', ';'),
-							 inline_comment_prefixes=None, strict=True, empty_lines_in_values=True, default_section=DEFAULTSECT, interpolation=_UNSET, converters=_UNSET):
+	def __init__(self, defaults=None, dict_type=_default_dict, allow_no_value=False, *, delimiters=('=', ':'), comment_prefixes=('#', ';'), inline_comment_prefixes=None,
+								strict=True, empty_lines_in_values=True, default_section=DEFAULTSECT, interpolation=_UNSET, converters=_UNSET):
 		self._dict =			dict_type
 		self._defaults =	dict_type()
 		self._sections =	dict_type()
@@ -225,8 +258,8 @@ class ExtendedConfigParser(ConfigParser):
 	def Interpolation(self):
 		return self._interpolation
 
-	def _unify_values(self, section, vars):
-		"""Create a sequence of lookups with 'vars' taking priority over
+	def _unify_values(self, section, variables):
+		"""Create a sequence of lookups with 'variables' taking priority over
 		the 'section' which takes priority over the DEFAULTSECT.
 
 		"""
@@ -240,8 +273,8 @@ class ExtendedConfigParser(ConfigParser):
 
 		# Update with the entry specific variables
 		vardict = {}
-		if vars:
-			for key, value in vars.items():
+		if variables:
+			for key, value in variables.items():
 				if value is not None:
 					value = str(value)
 				vardict[self.optionxform(key)] = value

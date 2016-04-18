@@ -115,7 +115,7 @@ class Configuration(BaseConfiguration):
 				p = Path(r"{0}:\Xilinx\Vivado\2015.4".format(drive))
 				try:
 					if (p.exists()):  return p
-				except WindowsError:
+				except OSError:
 					pass
 		return None
 

@@ -29,13 +29,10 @@
 # limitations under the License.
 # ==============================================================================
 #
-from pathlib import Path
-
-from lib.Functions import Init
-from lib.Parser import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult
-from lib.Parser import SpaceToken, CharacterToken, StringToken, NumberToken
-from lib.Parser import Statement, BlockStatement
-from Parser.CodeDOM import EmptyLine, CommentLine, BlockedStatement as BlockStatementBase
+from lib.Parser			import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult
+from lib.Parser			import SpaceToken, CharacterToken, StringToken, NumberToken
+from lib.Parser			import Statement, BlockStatement
+from Parser.CodeDOM	import EmptyLine, CommentLine, BlockedStatement as BlockStatementBase
 
 
 # ==============================================================================

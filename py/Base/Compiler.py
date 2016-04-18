@@ -179,7 +179,7 @@ class Compiler(ILogable):
 					task = CopyTask(Path(sourcePath), Path(destinationPath))
 					preCopyTasks.append(task)
 		else:
-			preCopyRules = self.Host.PoCConfig[netlist._sectionName]['PreCopyRules']
+			preCopyRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PreCopyRules']
 			if (len(preCopyRules) != 0):
 				preCopyTasks = self._ParseCopyRules(preCopyRules)
 			else:
@@ -199,7 +199,7 @@ class Compiler(ILogable):
 					task = CopyTask(Path(sourcePath), Path(destinationPath))
 					postCopyTasks.append(task)
 		else:
-			postCopyRules = self.Host.PoCConfig[netlist._sectionName]['PostCopyRules']
+			postCopyRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PostCopyRules']
 			if (len(postCopyRules) != 0):
 				postCopyTasks = self._ParseCopyRules(postCopyRules)
 			else:
@@ -248,7 +248,7 @@ class Compiler(ILogable):
 					task = ReplaceTask(Path(filePath), rule.SearchPattern, rule.ReplacePattern)
 					preReplaceTasks.append(task)
 		else:
-			preReplaceRules = self.Host.PoCConfig[netlist._sectionName]['PreReplaceRules']
+			preReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PreReplaceRules']
 			if (len(preReplaceRules) != 0):
 				preReplaceTasks = self._ParseReplaceRules(preReplaceRules)
 			else:
@@ -267,7 +267,7 @@ class Compiler(ILogable):
 					task = ReplaceTask(Path(filePath), rule.SearchPattern, rule.ReplacePattern)
 					postReplaceTasks.append(task)
 		else:
-			postReplaceRules = self.Host.PoCConfig[netlist._sectionName]['PostReplaceRules']
+			postReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PostReplaceRules']
 			if (len(postReplaceRules) != 0):
 				postReplaceTasks = self._ParseReplaceRules(postReplaceRules)
 			else:

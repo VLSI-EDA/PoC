@@ -113,7 +113,7 @@ class Configuration(BaseConfiguration):
 				p = Path(r"{0}:\tools\GHDL\bin".format(drive))
 				try:
 					if (p.exists()):  return p.parent
-				except WindowsError:
+				except OSError:
 					pass
 		return None
 	
