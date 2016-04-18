@@ -38,7 +38,6 @@ $PyWrapper_MinVersion =			"3.5.0"
 
 # save parameters and current working directory
 $PyWrapper_Parameters =	$args
-$PyWrapper_ScriptDir =	$PSScriptRoot
 $PyWrapper_WorkingDir =	Get-Location
 $PoC_RootDir_AbsPath =	Convert-Path (Resolve-Path ($PSScriptRoot + "\."))
 

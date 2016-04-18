@@ -5,17 +5,10 @@
 # Note: all files are relative to PoC root directory
 #
 # Load external vendor libraries
-include				"lib/osvvm.files"														# Open Source VHDL Verification Methodology (OS-VVM)
-
-# Common PoC packages for configuration, synthesis and simulation
-include				"tb/common/my_config.files"									# board and device configuration
-include				"src/common/common.files"										# load common packages
-include				"src/sim/sim.files"													# load simulation helper packages
-
-# PoC.sort
+include				"lib/osvvm.files"																# Open Source VHDL Verification Methodology (OS-VVM)
 
 # PoC.sort.sortnet
-vhdl		poc		"src/sort/sortnet/sortnet_OddEvenSort.vhdl"			# UUT (Unit Under Test)
+include				"src/sort/sortnet/sortnet_OddEvenSort.files"		# UUT (Unit Under Test)
 
 # Testbench file(s)
 vhdl		test	"tb/sort/sortnet/sortnet_OddEvenSort_tb.vhdl"		# Testbench

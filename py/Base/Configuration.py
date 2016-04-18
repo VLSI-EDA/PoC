@@ -77,6 +77,9 @@ class Configuration:		#(ISubClassRegistration):
 	_vendor =								"Unknown"
 	_longName =							"Unknown"
 
+	def __init__(self, host):
+		self._host =	host
+
 	@property
 	def Name(self):
 		return self._longName
@@ -93,3 +96,6 @@ class Configuration:		#(ISubClassRegistration):
 
 	def ManualConfigureForLinux(self):
 		raise NotImplementedError()
+
+	def __str__(self):
+		return self._longName

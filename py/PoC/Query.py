@@ -80,24 +80,24 @@ class Query:
 		return result
 
 	def _GetPoCInstallationDirectory(self):
-		if (len(self.PoCConfig.options("PoC")) != 0):
-			return Path(self.PoCConfig['PoC']['InstallationDirectory'])
+		if (len(self.PoCConfig.options('INSTALL.PoC')) != 0):
+			return Path(self.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
 		else:
 			raise NotConfiguredException("ERROR: PoC is not configured on this system.")
 
 	def _GetModelSimInstallationDirectory(self):
-		if (len(self.PoCConfig.options("Mentor.QuestaSim")) != 0):
-			return Path(self.PoCConfig['Mentor.QuestaSim']['InstallationDirectory'])
-		elif (len(self.PoCConfig.options("Altera.ModelSim")) != 0):
-			return Path(self.PoCConfig['Altera.ModelSim']['InstallationDirectory'])
+		if (len(self.PoCConfig.options('INSTALL.Mentor.QuestaSim')) != 0):
+			return Path(self.PoCConfig['INSTALL.Mentor.QuestaSim']['InstallationDirectory'])
+		elif (len(self.PoCConfig.options('INSTALL.Altera.ModelSim')) != 0):
+			return Path(self.PoCConfig['INSTALL.Altera.ModelSim']['InstallationDirectory'])
 		else:
 			raise NotConfiguredException("ERROR: ModelSim is not configured on this system.")
 
 	def _GetXilinxISEInstallationDirectory(self):
-		if (len(self.PoCConfig.options("Xilinx.ISE")) != 0):
-			return Path(self.PoCConfig['Xilinx.ISE']['InstallationDirectory'])
-		elif (len(self.PoCConfig.options("Xilinx.LabTools")) != 0):
-			return Path(self.PoCConfig['Xilinx.LabTools']['InstallationDirectory'])
+		if (len(self.PoCConfig.options('INSTALL.Xilinx.ISE')) != 0):
+			return Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'])
+		elif (len(self.PoCConfig.options('INSTALL.Xilinx.LabTools')) != 0):
+			return Path(self.PoCConfig['INSTALL.Xilinx.LabTools']['InstallationDirectory'])
 		else:
 			raise NotConfiguredException("ERROR: Xilinx ISE or Xilinx LabTools is not configured on this system.")
 
@@ -111,10 +111,10 @@ class Query:
 			raise PlatformNotSupportedException(self.Platform)
 
 	def _GetXilinxVivadoInstallationDirectory(self):
-		if (len(self.PoCConfig.options("Xilinx.Vivado")) != 0):
-			return Path(self.PoCConfig['Xilinx.Vivado']['InstallationDirectory'])
-		elif (len(self.PoCConfig.options("Xilinx.HardwareServer")) != 0):
-			return Path(self.PoCConfig['Xilinx.HardwareServer']['InstallationDirectory'])
+		if (len(self.PoCConfig.options('INSTALL.Xilinx.Vivado')) != 0):
+			return Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory'])
+		elif (len(self.PoCConfig.options('INSTALL.Xilinx.HardwareServer')) != 0):
+			return Path(self.PoCConfig['INSTALL.Xilinx.HardwareServer']['InstallationDirectory'])
 		else:
 			raise NotConfiguredException("ERROR: Xilinx Vivado or Xilinx HardwareServer is not configured on this system.")
 

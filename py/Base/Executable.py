@@ -314,6 +314,7 @@ class Executable(ILogable):
 		
 		# prepend the executable
 		self._executablePath =		executablePath
+		self._iterator =					None
 
 	@property
 	def Path(self):
@@ -324,13 +325,12 @@ class Executable(ILogable):
 		# parameterList.insert(0, str(self._executablePath))
 		self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
 
-	def Send(self, line):
-		self._process.stdin.write(line)
+	def Send(self, line, end="\n"):
+		self._process.stdin.write(line + end)
 		self._process.stdin.flush()
 
 	def SendBoundary(self):
-		self._process.stdin.write("puts \"{0}\"\n".format(self._POC_BOUNDARY))
-		self._process.stdin.flush()
+		self.Send("puts \"{0}\"".format(self._POC_BOUNDARY))
 
 	def Terminate(self):
 		self._process.terminate()
@@ -344,3 +344,14 @@ class Executable(ILogable):
 			raise ex
 		# finally:
 			# self._process.terminate()
+
+	def ReadUntilBoundary(self, indent=0):
+		__indent = "  " * indent
+		if (self._iterator is None):
+			self._iterator = iter(self.GetReader())
+
+		for line in self._iterator:
+			print(__indent + line)
+			if (self._POC_BOUNDARY in line):
+				break
+		self._LogDebug("Quartus II is ready")

@@ -4,13 +4,8 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-# Common PoC packages for configuration, synthesis and simulation
-include				"tb/common/my_config.files"									# board and device configuration
-include				"src/common/common.files"										# load common packages
-include				"src/sim/sim.files"													# load simulation helper packages
-
 # PoC.misc.stat
-vhdl		poc		"src/misc/stat/stat_Maximum.vhdl"						# Unit Under Test
+include				"src/misc/stat/stat_Maximum.files"					# Unit Under Test
 
 # Testbench file(s)
 vhdl		test	"tb/misc/stat/stat_Maximum_tb.vhdl"					# Testbench

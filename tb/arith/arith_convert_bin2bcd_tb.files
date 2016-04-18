@@ -7,14 +7,8 @@
 # Load external vendor libraries
 include				"lib/osvvm.files"														# Open Source VHDL Verification Methodology (OS-VVM)
 
-# Common PoC packages for configuration, synthesis and simulation
-include				"tb/common/my_config.files"									# board and device configuration
-include				"src/common/common.files"										# load common packages
-include				"src/sim/sim.files"													# load simulation helper packages
-
 # PoC.arith
-vhdl		poc		"src/arith/arith.pkg.vhdl"									# Package
-vhdl		poc		"src/arith/arith_convert_bin2bcd.vhdl"			# Unit Under Test
+include				"src/arith/arith_convert_bin2bcd.files"			# Unit Under Test
 
 # Testbench file(s)
 vhdl		test	"tb/arith/arith_convert_bin2bcd_tb.vhdl"		# Testbench

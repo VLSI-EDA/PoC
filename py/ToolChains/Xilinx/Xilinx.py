@@ -40,11 +40,111 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
 
 
-from Base.Project		import FileTypes, VHDLVersion
-from Base.ToolChain	import ToolChainException
+from collections					import OrderedDict
+from pathlib							import Path
+from os										import environ
+
+from Base.Exceptions						import PlatformNotSupportedException
+from Base.Logging								import LogEntry, Severity
+from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
+from Base.Project								import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes, FileTypes, VHDLVersion
+from Base.ToolChain							import ToolChainException
+
 
 class XilinxException(ToolChainException):
 	pass
+
+class Configuration(BaseConfiguration):
+	_vendor =			"Xilinx"
+	_shortName =	""
+	_longName =		"Xilinx"
+	_privateConfiguration = {
+		"Windows": {
+			"INSTALL.Xilinx": {
+				"InstallationDirectory":	"C:/Xilinx"
+			}
+		},
+		"Linux": {
+			"INSTALL.Xilinx": {
+				"InstallationDirectory":	"/opt/Xilinx"
+			}
+		}
+	}
+
+	def __init__(self, host):
+		super().__init__(host)
+
+	def GetSections(self, Platform):
+		pass
+
+	def ConfigureForWindows(self):
+		xilinxPath = self.__GetXilinxPath()
+		if (xilinxPath is not None):
+			print("  Found a Xilinx installation directory.")
+			xilinxPath = self.__ConfirmXilinxPath(xilinxPath)
+			if (xilinxPath is None):
+				xilinxPath = self.__AskXilinxPath()
+		else:
+			if (not self.__AskXilinx()):
+				self.__ClearXilinxSections()
+			else:
+				xilinxPath = self.__AskXilinxPath()
+		if (not xilinxPath.exists()):		raise ConfigurationException("Xilinx installation directory '{0}' does not exist.".format(xilinxPath))	from NotADirectoryError(xilinxPath)
+		self.__WriteXilinxSection(xilinxPath)
+
+	def __GetXilinxPath(self):
+		xilinx = environ.get("XILINX")
+		if (xilinx is not None):
+			return Path(xilinx).parent.parent.parent
+
+		xilinx = environ.get("XILINX_VIVADO")
+		if (xilinx is not None):
+			return Path(xilinx).parent.parent
+
+		if (self._host.Platform == "Linux"):
+			p = Path("/opt/xilinx")
+			if (p.exists()):		return p
+			p = Path("/opt/Xilinx")
+			if (p.exists()):		return p
+		elif (self._host.Platform == "Windows"):
+			for drive in "CDEFGH":
+				p = Path("{0}:\Xilinx".format(drive))
+				try:
+					if (p.exists()):	return p
+				except WindowsError:
+					pass
+		return None
+
+	def __AskXilinx(self):
+		isXilinx = input("  Are Xilinx products installed on your system? [Y/n/p]: ")
+		isXilinx = isXilinx if isXilinx != "" else "Y"
+		if (isXilinx in ['p', 'P']):		raise SkipConfigurationException()
+		elif (isXilinx in ['n', 'N']):	return False
+		elif (isXilinx in ['y', 'Y']):	return True
+		else:														raise ConfigurationException("Unsupported choice '{0}'".format(isXilinx))
+
+	def __AskXilinxPath(self):
+		default = Path(self._privateConfiguration[self._host.Platform]['INSTALL.Xilinx']['InstallationDirectory'])
+		xilinxDirectory = input("  Xilinx installation directory [{0!s}]: ".format(default))
+		if (xilinxDirectory != ""):
+			return Path(xilinxDirectory)
+		else:
+			return default
+
+	def __ConfirmXilinxPath(self, xilinxPath):
+		# Ask for installed Xilinx ISE
+		isXilinxPath = input("  Is your Xilinx software installed in '{0!s}'? [Y/n/p]: ".format(xilinxPath))
+		isXilinxPath = isXilinxPath if isXilinxPath != "" else "Y"
+		if (isXilinxPath in ['p', 'P']):		raise SkipConfigurationException()
+		elif (isXilinxPath in ['n', 'N']):	return None
+		elif (isXilinxPath in ['y', 'Y']):	return xilinxPath
+
+	def __ClearXilinxSections(self):
+		self._host.PoCConfig['INSTALL.Xilinx'] = OrderedDict()
+
+	def __WriteXilinxSection(self, xilinxPath):
+		self._host.PoCConfig['INSTALL.Xilinx']['InstallationDirectory'] = xilinxPath.as_posix()
+
 
 class XilinxProjectExportMixIn:
 	def __init__(self):
@@ -65,4 +165,3 @@ class XilinxProjectExportMixIn:
 		self._LogDebug("  Writing {0} project file to '{1!s}'".format(tool, projectFilePath))
 		with projectFilePath.open('w') as prjFileHandle:
 			prjFileHandle.write(projectFileContent)
-

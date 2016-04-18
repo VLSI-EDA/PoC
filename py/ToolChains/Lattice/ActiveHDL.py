@@ -46,5 +46,5 @@ else:
 from Base.Configuration import Configuration as BaseConfiguration
 
 class Configuration(BaseConfiguration):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, host):
+		super().__init__(host)

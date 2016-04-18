@@ -44,6 +44,7 @@ from configparser						import NoSectionError
 from colorama								import Fore as Foreground
 
 # from Base.Exceptions				import NotConfiguredException, PlatformNotSupportedException
+from lib.Functions					import Init
 from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool
 from Base.Simulator					import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME
 from ToolChains.GHDL				import GHDL, GHDLException
@@ -77,17 +78,13 @@ class Simulator(BaseSimulator):
 		self._LogVerbose("  Preparing GHDL simulator.")
 		self._ghdl =			GHDL(self.Host.Platform, binaryPath, version, backend, logger=self.Logger)
 
-	def Run(self, entity, board, vhdlVersion="93c", vhdlGenerics=None, guiMode=False):
-		self._pocEntity =			entity
-		self._testbenchFQN =	str(entity)										# TODO: implement FQN method on PoCEntity
+	def Run(self, testbench, board, vhdlVersion="93c", vhdlGenerics=None, guiMode=False):
+		self._LogQuiet("Testbench: {YELLOW}{0!s}{RESET}".format(testbench.Parent, **Init.Foreground))
+
 		self._vhdlVersion =		vhdlVersion
 		self._vhdlGenerics =	vhdlGenerics
 
-		# check testbench database for the given testbench		
-		self._LogQuiet("Testbench: {0}{1}{2}".format(Foreground.YELLOW, self._testbenchFQN, Foreground.RESET))
-
 		# setup all needed paths to execute fuse
-		testbench =					entity.VHDLTestbench
 		self._CreatePoCProject(testbench, board)
 		self._AddFileListFile(testbench.FilesFile)
 		
@@ -106,7 +103,7 @@ class Simulator(BaseSimulator):
 		# FIXME: a very quick implemenation
 		if (guiMode == True):
 			viewer = self.GetViewer()
-			viewer.View(entity.VHDLTestbench)
+			viewer.View(testbench.VHDLTestbench)
 		
 	def _RunAnalysis(self):
 		self._LogNormal("  running analysis for every vhdl file...")
@@ -289,7 +286,7 @@ class Simulator(BaseSimulator):
 		if (not waveformFilePath.exists()):							raise SimulatorException("Waveform file not found.") from FileNotFoundError(str(waveformFilePath))
 		
 		gtkwBinaryPath =		self.Host.Directories["GTKWBinary"]
-		gtkwVersion =				self.Host.PoCConfig['GTKWave']['Version']
+		gtkwVersion =				self.Host.PoCConfig['INSTALL.GTKWave']['Version']
 		gtkw = GTKWave(self.Host.Platform, gtkwBinaryPath, gtkwVersion)
 		gtkw.Parameters[gtkw.SwitchDumpFile] = str(waveformFilePath)
 

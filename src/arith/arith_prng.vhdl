@@ -41,7 +41,7 @@ use			PoC.utils.all;
 
 entity arith_prng is
 	generic (
-		BITS : positive;
+		BITS : positive					:= 32;
 		SEED : std_logic_vector := "0"
 	);
 	port (

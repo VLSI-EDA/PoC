@@ -73,7 +73,6 @@ for param in $PyWrapper_Parameters; do
 done
 
 # publish PoC directories as environment variables
-export PoCScriptDirectory=$PyWrapper_ScriptDir
 export PoCRootDirectory=$PoC_RootDir_AbsPath
 export PoCWorkingDirectory=$PoC_WorkingDir
 
@@ -151,7 +150,7 @@ fi
 # load Xilinx Vivado environment
 if [ $PoC_ExitCode -eq 0 ]; then
 	if [ $PyWrapper_LoadEnv_Xilinx_Vivado -eq 1 ]; then
-		# if $XILINX environment variable is not set
+		# if $XILINX_VIVADO environment variable is not set
 		if [ -z "$XILINX_VIVADO" ]; then
 			command="$Python_Interpreter $PoC_RootDir_AbsPath/$PoC_PythonScriptDir/PoC.py query Xilinx.Vivado:SettingsFile"
 			if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}getting Vivado settings file: command='$command'${NOCOLOR}"; fi
@@ -192,6 +191,5 @@ if [ $PoC_ExitCode -eq 0 ]; then
 fi
 
 # clean up environment variables
-unset PoCScriptDirectory
 unset PoCRootDirectory
 unset PoCWorkingDirectory

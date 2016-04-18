@@ -4,13 +4,8 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-# Common PoC packages for configuration, synthesis and simulation
-include				"tb/common/my_config.files"									# board and device configuration
-include				"src/common/common.files"										# load common packages
-include				"src/sim/sim.files"													# load simulation helper packages
-
 # PoC.mem.lut
-vhdl		poc		"src/mem/lut/lut_Sine.vhdl"									# Unit Under Test
+include				"src/mem/lut/lut_Sine.files"								# Unit Under Test
 
 # Testbench file(s)
 vhdl		test	"tb/mem/lut/lut_Sine_tb.vhdl"								# Testbench

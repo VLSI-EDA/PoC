@@ -54,19 +54,19 @@ class GTKWaveException(ToolChainException):
 	pass
 
 class Configuration(BaseConfiguration):
-	__vendor =		None
-	__shortName =	"GTKWave"
-	__LongName =	"GTKWave"
-	__privateConfiguration = {
+	_vendor =			None
+	_shortName =	"GTKWave"
+	_longName =		"GTKWave"
+	_privateConfiguration = {
 		"Windows": {
-			"GTKWave": {
+			"INSTALL.GTKWave": {
 				"Version":								"3.3.70",
 				"InstallationDirectory":	None,
 				"BinaryDirectory":				"${InstallationDirectory}/bin"
 			}
 		},
 		"Linux": {
-			"GTKWave": {
+			"INSTALL.GTKWave": {
 				"Version":								"3.3.70",
 				"InstallationDirectory":	None,
 				"BinaryDirectory":				"${InstallationDirectory}"
@@ -74,8 +74,8 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	def __init__(self):
-		super().__init__()
+	def __init__(self, host):
+		super().__init__(host)
 
 	def GetSections(self, Platform):
 		pass

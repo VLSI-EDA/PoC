@@ -32,13 +32,6 @@
 # ==============================================================================
 
 # entry point
-import re
-from pathlib import Path
-
-import shutil
-
-from lib.Parser import ParserException
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -47,14 +40,19 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Class PoCCompiler")
 
 
+import re
+from pathlib import Path
+import shutil
 from os import chdir
+from lib.Parser import ParserException
 
 # load dependencies
 from Base.Exceptions		import ExceptionBase
 from Base.Logging				import ILogable
-from Base.Project				import ToolChain, Tool, VHDLVersion, Environment
+from Base.Project				import ToolChain, Tool, VHDLVersion, Environment, FileTypes
 from PoC.Project				import Project as PoCProject, FileListFile, RulesFile
-from Parser.RulesParser	import CopyRuleMixIn, ReplaceMixIn
+from Parser.RulesParser	import CopyRuleMixIn, ReplaceRuleMixIn
+
 
 class CompilerException(ExceptionBase):
 	pass
@@ -62,7 +60,7 @@ class CompilerException(ExceptionBase):
 class CopyTask(CopyRuleMixIn):
 	pass
 
-class ReplaceTask(ReplaceMixIn):
+class ReplaceTask(ReplaceRuleMixIn):
 	pass
 
 
@@ -81,7 +79,7 @@ class Compiler(ILogable):
 		self.__showReport =	showReport
 		self.__dryRun =			False
 
-		self._vhdlVersion =	VHDLVersion.VHDL2008
+		self._vhdlVersion =	VHDLVersion.VHDL93
 		self._pocProject =	None
 
 		self._tempPath =		None
@@ -171,24 +169,43 @@ class Compiler(ILogable):
 			self._LogDebug("      {0!s}".format(rule))
 
 	def _RunPreCopy(self, netlist):
-		preCopyRules = self.Host.PoCConfig[netlist._sectionName]['PreCopy.Rules']
-		if (len(preCopyRules) != 0):
-			preCopyTasks = self._ParseCopyRules(preCopyRules)
-		else:
+		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
+		if (rulesFiles):
 			preCopyTasks = []
+			for rule in rulesFiles[0].PreProcessRules:
+				if isinstance(rule, CopyRuleMixIn):
+					sourcePath =			self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.SourcePath, {})
+					destinationPath =	self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.DestinationPath, {})
+					task = CopyTask(Path(sourcePath), Path(destinationPath))
+					preCopyTasks.append(task)
+		else:
+			preCopyRules = self.Host.PoCConfig[netlist._sectionName]['PreCopyRules']
+			if (len(preCopyRules) != 0):
+				preCopyTasks = self._ParseCopyRules(preCopyRules)
+			else:
+				preCopyTasks = []
 
-		# get more tasks from rules files
-		# preCopyTasks += self.Host.PoCProject
-
+		self._LogNormal('  copy further input files into temporary directory...')
 		self._ExecuteCopyTasks(preCopyTasks, "pre")
 
 	def _RunPostCopy(self, netlist):
-		postCopyRules = self.Host.PoCConfig[netlist._sectionName]['PostCopy.Rules']
-		if (len(postCopyRules) != 0):
-			postCopyTasks = self._ParseCopyRules(postCopyRules)
-		else:
+		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
+		if (rulesFiles):
 			postCopyTasks = []
+			for rule in rulesFiles[0].PostProcessRules:
+				if isinstance(rule, CopyRuleMixIn):
+					sourcePath =			self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.SourcePath, {})
+					destinationPath =	self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.DestinationPath, {})
+					task = CopyTask(Path(sourcePath), Path(destinationPath))
+					postCopyTasks.append(task)
+		else:
+			postCopyRules = self.Host.PoCConfig[netlist._sectionName]['PostCopyRules']
+			if (len(postCopyRules) != 0):
+				postCopyTasks = self._ParseCopyRules(postCopyRules)
+			else:
+				postCopyTasks = []
 
+		self._LogNormal('  copy generated files into netlist directory...')
 		self._ExecuteCopyTasks(postCopyTasks, "post")
 
 	def _ParseCopyRules(self, rawList):
@@ -212,32 +229,51 @@ class Compiler(ILogable):
 		return copyTasks
 
 	def _ExecuteCopyTasks(self, tasks, text):
-		self._LogNormal('  copy further input files into output directory...')
 		for task in tasks:
 			if not task.SourcePath.exists(): raise CompilerException("Can not {0}-copy '{1!s}' to destination.".format(text, task.SourcePath)) from FileNotFoundError(str(task.SourcePath))
 
 			if not task.DestinationPath.parent.exists():
 				task.DestinationPath.parent.mkdir(parents=True)
 
-			self._LogVerbose("  {0}-copying '{1!s}'.".format(text, task.SourcePath))
+			self._LogVerbose("    {0}-copying '{1!s}'.".format(text, task.SourcePath))
 			shutil.copy(str(task.SourcePath), str(task.DestinationPath))
 
 	def _RunPreReplace(self, netlist):
-		preReplaceRules = self.Host.PoCConfig[netlist._sectionName]['PreReplace.Rules']
-		if (len(preReplaceRules) != 0):
-			preReplaceTasks = self._ParseReplaceRules(preReplaceRules)
-		else:
+		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
+		if (rulesFiles):
 			preReplaceTasks = []
+			for rule in rulesFiles[0].PreProcessRules:
+				if isinstance(rule, ReplaceRuleMixIn):
+					filePath =			self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
+					task = ReplaceTask(Path(filePath), rule.SearchPattern, rule.ReplacePattern)
+					preReplaceTasks.append(task)
+		else:
+			preReplaceRules = self.Host.PoCConfig[netlist._sectionName]['PreReplaceRules']
+			if (len(preReplaceRules) != 0):
+				preReplaceTasks = self._ParseReplaceRules(preReplaceRules)
+			else:
+				preReplaceTasks = []
 
+		self._LogNormal('  patching files in temporary directory...')
 		self._ExecuteReplaceTasks(preReplaceTasks, "pre")
 
 	def _RunPostReplace(self, netlist):
-		postReplaceRules = self.Host.PoCConfig[netlist._sectionName]['PostReplace.Rules']
-		if (len(postReplaceRules) != 0):
-			postReplaceTasks = self._ParseReplaceRules(postReplaceRules)
-		else:
+		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]  # FIXME: get rulefile from netlist object as a rulefile object instead of a path
+		if (rulesFiles):
 			postReplaceTasks = []
+			for rule in rulesFiles[0].PostProcessRules:
+				if isinstance(rule, ReplaceRuleMixIn):
+					filePath = self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
+					task = ReplaceTask(Path(filePath), rule.SearchPattern, rule.ReplacePattern)
+					postReplaceTasks.append(task)
+		else:
+			postReplaceRules = self.Host.PoCConfig[netlist._sectionName]['PostReplaceRules']
+			if (len(postReplaceRules) != 0):
+				postReplaceTasks = self._ParseReplaceRules(postReplaceRules)
+			else:
+				postReplaceTasks = []
 
+		self._LogNormal('  patching files in netlist directory...')
 		self._ExecuteReplaceTasks(postReplaceTasks, "post")
 
 	def _ParseReplaceRules(self, rawList):
@@ -268,7 +304,7 @@ class Compiler(ILogable):
 		self._LogNormal("  {0}-replace in files...".format(text))
 		for task in tasks:
 			if not task.FilePath.exists(): raise CompilerException("Can not {0}-replace in file '{1!s}'.".format(text, task.FilePath)) from FileNotFoundError(str(task.FilePath))
-			self._LogVerbose("  {0}-replace in file '{1!s}': search for '{2}' replace by '{3}'.".format(text, task.FilePath, task.SearchPattern, task.ReplacePattern))
+			self._LogVerbose("    {0}-replace in file '{1!s}': search for '{2}' replace by '{3}'.".format(text, task.FilePath, task.SearchPattern, task.ReplacePattern))
 
 			# FIXME: current "Search For ... Replace By ...." rules have no regexp options
 			options = "i"

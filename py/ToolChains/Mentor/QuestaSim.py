@@ -40,49 +40,46 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
 
 
-from collections				import OrderedDict
-from pathlib						import Path
+from collections								import OrderedDict
+from pathlib										import Path
 
-from Base.Exceptions		import PlatformNotSupportedException
-from Base.Logging				import LogEntry, Severity
-from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
-from Base.Executable		import Executable
-from Base.Executable		import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
-from Base.ToolChain			import ToolChainException
+from Base.Exceptions						import PlatformNotSupportedException
+from Base.Logging								import LogEntry, Severity
+from Base.Configuration 				import Configuration as BaseConfiguration, ConfigurationException
+from Base.Executable						import Executable
+from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
+from ToolChains.Mentor.Mentor		import MentorException
 
 
-class QuestaException(ToolChainException):
+class QuestaException(MentorException):
 	pass
 
 class Configuration(BaseConfiguration):
-	__vendor =		"Mentor"
-	__shortName =	"QuestaSim"
-	__LongName =	"Mentor QuestaSim"
-	__privateConfiguration = {
+	_vendor =			"Mentor"
+	_shortName =	"QuestaSim"
+	_longName =		"Mentor QuestaSim"
+	_privateConfiguration = {
 		"Windows": {
-			"Mentor": {
-				"InstallationDirectory":	"C:/Mentor"
-			},
-			"Mentor.QuestaSim": {
+			"INSTALL.Mentor.QuestaSim": {
 				"Version":								"10.4c",
-				"InstallationDirectory":	"${Mentor:InstallationDirectory}/QuestaSim/${Version}",
+				"InstallationDirectory":	"${INSTALL.Mentor:InstallationDirectory}/QuestaSim/${Version}",
 				"BinaryDirectory":				"${InstallationDirectory}/win64"
 			}
 		},
 		"Linux": {
-			"Mentor": {
-				"InstallationDirectory":	"/opt/QuestaSim"
-			},
-			"Mentor.QuestaSim": {
+			"INSTALL.Mentor.QuestaSim": {
 				"Version":								"10.4c",
-				"InstallationDirectory":	"${Mentor:InstallationDirectory}/${Version}",
+				"InstallationDirectory":	"${INSTALL.Mentor:InstallationDirectory}/${Version}",
 				"BinaryDirectory":				"${InstallationDirectory}/bin"
 			}
 		}
 	}
 
+	def __init__(self, host):
+		super().__init__(host)
+
 	def IsSupportedPlatform(self, Platform):
-		return (Platform in self.__privateConfiguration)
+		return (Platform in self._privateConfiguration)
 
 	def GetSections(self, Platform):
 		pass

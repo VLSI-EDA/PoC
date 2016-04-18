@@ -1,0 +1,17 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Load external vendor libraries
+if (DeviceVendor = "Xilinx") then
+	include			"lib/Xilinx.files"													# Xilinx primitives
+end if
+
+# Common PoC packages for configuration, synthesis and simulation
+include				"src/common/common.files"										# load common packages
+
+# PoC.arith
+vhdl		PoC		"src/arith/arith.pkg.vhdl"									# PoC.arith package
+vhdl		PoC		"src/arith/arith_addw.vhdl"									# Top-Level

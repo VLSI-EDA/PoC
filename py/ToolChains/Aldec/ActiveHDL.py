@@ -47,14 +47,38 @@ else:
 from Base.Exceptions			import PlatformNotSupportedException
 from Base.ToolChain				import ToolChainException
 from Base.Logging					import LogEntry, Severity
-from Base.Executable			import Executable, \
-																	ExecutableArgument, PathArgument, StringArgument, \
-																	LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
+from Base.Executable			import Executable
+from Base.Executable			import ExecutableArgument, PathArgument, StringArgument
+from Base.Executable			import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
 from Base.Configuration		import Configuration as BaseConfiguration, ConfigurationException
 
 
 class ActiveHDLException(ToolChainException):
-	pass
+	_vendor =			"Aldec"
+	_shortName =	"Active-HDL"
+	_longName =		"Aldec Active-HDL"
+	_privateConfiguration = {
+		"Windows": {
+			"INSTALL.Aldec": {
+				"InstallationDirectory":	"C:/Aldec"
+			},
+			"INSTALL.Aldec.ActiveHDL": {
+				"Version":								"0.0",
+				"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/Active-HDL",
+				"BinaryDirectory":				"${InstallationDirectory}/BIN"
+			}
+		}#,
+		# "Linux": {
+		# 	"INSTALL.Aldec": {
+		# 		"InstallationDirectory":	"/opt/QuestaSim"
+		# 	},
+		# 	"INSTALL.Aldec.ActiveHDL": {
+		# 		"Version":								"10.4c",
+		# 		"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/${Version}",
+		# 		"BinaryDirectory":				"${InstallationDirectory}/bin"
+		# 	}
+		# }
+	}
 
 class Configuration(BaseConfiguration):
 	pass

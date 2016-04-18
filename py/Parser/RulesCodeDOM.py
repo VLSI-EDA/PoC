@@ -32,7 +32,7 @@
 from pathlib import Path
 
 from lib.Functions import Init
-from lib.Parser import MismatchingParserResult, MatchingParserResult
+from lib.Parser import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult
 from lib.Parser import SpaceToken, CharacterToken, StringToken, NumberToken
 from lib.Parser import Statement, BlockStatement
 from Parser.CodeDOM import EmptyLine, CommentLine, BlockedStatement as BlockStatementBase
@@ -57,8 +57,8 @@ class DocumentStatements(BlockStatementBase):
 class CopyStatement(Statement):
 	def __init__(self, source, destination, commentText):
 		super().__init__()
-		self._sourcePath =			Path(source)
-		self._destinationPath =	Path(destination)
+		self._sourcePath =			source
+		self._destinationPath =	destination
 		self._commentText =			commentText
 
 	@property
@@ -68,30 +68,25 @@ class CopyStatement(Statement):
 	
 	@classmethod
 	def GetParser(cls):
-		# match for optional whitespace
+		# match for optional whitespacex
 		token = yield
 		if isinstance(token, SpaceToken):						token = yield
-
 		# match for COPY keyword
 		if (not isinstance(token, StringToken)):		raise MismatchingParserResult("CopyParser: Expected COPY keyword.")
 		if (token.Value.lower() != "copy"):					raise MismatchingParserResult("CopyParser: Expected COPY keyword.")
-
 		# match for whitespace
 		token = yield
 		if (not isinstance(token, SpaceToken)):			raise MismatchingParserResult("CopyParser: Expected whitespace before source filename.")
-
 		# match for delimiter sign: "
 		token = yield
 		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("CopyParser: Expected double quote sign before source fileName.")
 		if (token.Value.lower() != "\""):            raise MismatchingParserResult("CopyParser: Expected double quote sign before source fileName.")
-
 		# match for string: source filename
-		sourceFilename = ""
+		sourceFile = ""
 		while True:
 			token = yield
 			if (isinstance(token, CharacterToken) and (token.Value == "\"")):		break
-			sourceFilename += token.Value
-
+			sourceFile += token.Value
 		# match for whitespace
 		token = yield
 		if (not isinstance(token, SpaceToken)):			raise MismatchingParserResult("CopyParser: Expected whitespace before TO keyword.")
@@ -101,19 +96,17 @@ class CopyStatement(Statement):
 		if (token.Value.lower() != "to"):						raise MismatchingParserResult("CopyParser: Expected TO keyword.")
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):			raise MismatchingParserResult("CopyParser: Expected whitespace before destination filename.")
+		if (not isinstance(token, SpaceToken)):			raise MismatchingParserResult("CopyParser: Expected whitespace before destination directory.")
 		# match for delimiter sign: "
 		token = yield
-		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult("CopyParser: Expected double quote sign before destination filename.")
-		if (token.Value.lower() != "\""):						raise MismatchingParserResult("CopyParser: Expected double quote sign before destination filename.")
-
+		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult("CopyParser: Expected double quote sign before destination directory.")
+		if (token.Value.lower() != "\""):						raise MismatchingParserResult("CopyParser: Expected double quote sign before destination directory.")
 		# match for string: fileName
-		destinationFilename = ""
+		destinationDirectory = ""
 		while True:
 			token = yield
 			if (isinstance(token, CharacterToken) and (token.Value == "\"")):		break
-			destinationFilename += token.Value
-
+			destinationDirectory += token.Value
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):						token = yield
@@ -132,43 +125,49 @@ class CopyStatement(Statement):
 			raise MismatchingParserResult("CopyParser: Expected end of line or comment")
 		
 		# construct result
-		result = cls(sourceFilename, destinationFilename, commentText)
+		result = cls(sourceFile, destinationDirectory, commentText)
 		raise MatchingParserResult(result)
 	
 	def __str__(self, indent=0):
 		if (self._commentText != ""):
-			return "{0}Copy {1} To {2}   # {3}".format(("  " * indent), self._sourcePath, self._destinationPath, self._commentText)
+			return "{0}Copy \"{1!s}\" To \"{2!s}\"    # {3}".format(("  " * indent), self._sourcePath, self._destinationPath, self._commentText)
 		else:
-			return "{0}VHDL {1} \"{2}\"".format(("  " * indent), self._libraryName, self._fileName)
+			return "{0}Copy \"{1!s}\" To \"{2!s}\"".format(("  " * indent), self._sourcePath, self._destinationPath)
 
 
 class ReplaceStatement(Statement):
-	def __init__(self, searchPattern, replacePattern, commentText):
+	def __init__(self, searchPattern, replacePattern, caseInsensitive, multiLine, dotAll, commentText):
 		super().__init__()
 		self._searchPattern =		searchPattern
 		self._replacePattern =	replacePattern
+		self._caseInsensitive =	caseInsensitive
+		self._multiLine =				multiLine
+		self._dotAll =					dotAll
 		self._commentText =			commentText
 
 	@property
 	def SearchPattern(self):		return self._searchPattern
 	@property
 	def ReplacePattern(self):		return self._replacePattern
+	@property
+	def CaseSensitive(self):		return self._caseInsensitive
+	@property
+	def MultiLine(self):				return self._multiLine
+	@property
+	def DotAll(self):						return self._dotAll
 	
 	@classmethod
 	def GetParser(cls):
+		multiLine =				False
+		dotAll =					False
+		caseInsensitive =	False
+		
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):						token = yield
-		# match for keyword: SEARCH
-		if (not isinstance(token, StringToken)):		raise MismatchingParserResult("ReplaceParser: Expected SEARCH keyword.")
-		if (token.Value.lower() != "search"):				raise MismatchingParserResult("ReplaceParser: Expected SEARCH keyword.")
-		# match for whitespace
-		token = yield
-		if (not isinstance(token, SpaceToken)):			raise MismatchingParserResult("ReplaceParser: Expected whitespace before FOR keyword.")
-		# match for keyword: 	FOR
-		token = yield
-		if (not isinstance(token, StringToken)):    raise MismatchingParserResult("ReplaceParser: Expected FOR keyword.")
-		if (token.Value.lower() != "for"):          raise MismatchingParserResult("ReplaceParser: Expected FOR keyword.")
+		# match for keyword: REPLACE
+		if (not isinstance(token, StringToken)):		raise MismatchingParserResult("ReplaceParser: Expected REPLACE keyword.")
+		if (token.Value.lower() != "replace"):			raise MismatchingParserResult("ReplaceParser: Expected REPLACE keyword.")
 		# match for whitespace
 		token = yield
 		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("ReplaceParser: Expected whitespace before search pattern.")
@@ -178,40 +177,96 @@ class ReplaceStatement(Statement):
 		if (token.Value.lower() != "\""):						raise MismatchingParserResult("ReplaceParser: Expected double quote sign before search pattern.")
 		# match for string: searchPattern
 		searchPattern = ""
+		wasEscapeSign =	False
 		while True:
 			token = yield
-			if (isinstance(token, CharacterToken) and (token.Value == "\"")):    break
-			searchPattern += token.Value
+			if isinstance(token, CharacterToken):
+				if (token.Value == "\""):
+					if (wasEscapeSign == True):
+						wasEscapeSign =		False
+						searchPattern +=	"\""
+						continue
+					else:
+						break
+				elif (token.Value == "\\"):
+					if (wasEscapeSign == True):
+						wasEscapeSign = False
+						searchPattern += "\""
+						continue
+					else:
+						wasEscapeSign =	True
+						continue
+			searchPattern +=	token.Value
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("ReplaceParser: Expected whitespace before REPLACE keyword.")
-		# match for REPLACE keyword
+		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("ReplaceParser: Expected whitespace before WITH keyword.")
+		# match for WITH keyword
 		token = yield
-		if (not isinstance(token, StringToken)):     raise MismatchingParserResult("ReplaceParser: Expected REPLACE keyword.")
-		if (token.Value.lower() != "replace"):       raise MismatchingParserResult("ReplaceParser: Expected REPLACE keyword.")# match for whitespace
-		token = yield
-		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("ReplaceParser: Expected whitespace before BY keyword.")
-		# match for BY keyword
-		token = yield
-		if (not isinstance(token, StringToken)):     raise MismatchingParserResult("ReplaceParser: Expected BY keyword.")
-		if (token.Value.lower() != "by"):            raise MismatchingParserResult("ReplaceParser: Expected BY keyword.")
+		if (not isinstance(token, StringToken)):		raise MismatchingParserResult("ReplaceParser: Expected WITH keyword.")
+		if (token.Value.lower() != "with"):					raise MismatchingParserResult("ReplaceParser: Expected WITH keyword.")
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("ReplaceParser: Expected whitespace before destination filename.")
+		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("ReplaceParser: Expected whitespace before replace pattern.")
 		# match for delimiter sign: "
 		token = yield
-		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("ReplaceParser: Expected double quote sign before destination filename.")
-		if (token.Value.lower() != "\""):            raise MismatchingParserResult("ReplaceParser: Expected double quote sign before destination filename.")
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("ReplaceParser: Expected double quote sign before replace pattern.")
+		if (token.Value.lower() != "\""):            raise MismatchingParserResult("ReplaceParser: Expected double quote sign before replace pattern.")
 		# match for string: replacePattern
 		replacePattern = ""
+		wasEscapeSign = False
 		while True:
 			token = yield
-			if (isinstance(token, CharacterToken) and (token.Value == "\"")):    break
+			if isinstance(token, CharacterToken):
+				if (token.Value == "\""):
+					if (wasEscapeSign == True):
+						wasEscapeSign = False
+						replacePattern += "\""
+						continue
+					else:
+						break
+				elif (token.Value == "\\"):
+					if (wasEscapeSign == True):
+						wasEscapeSign = False
+						replacePattern += "\\"
+						continue
+					else:
+						wasEscapeSign = True
+						continue
 			replacePattern += token.Value
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):            token = yield
-		# match for delimiter sign: \n
+		if isinstance(token, SpaceToken):						token = yield
+		# match for line end, comment or OPTIONS keyword
+		if isinstance(token, StringToken):
+			if (token.Value.lower() == "options"):
+				# match for whitespace
+				token = yield
+				if (not isinstance(token, SpaceToken)):		raise MismatchingParserResult("ReplaceParser: Expected whitespace before MULTILINE, DOTALL or CASEINSENSITIVE keyword.")
+				for _ in range(3):
+					# match for 				MULTILINE, DOTALL or CASEINSENSITIVE keyword
+					token = yield
+					if (not isinstance(token, StringToken)):	raise MismatchingParserResult("ReplaceParser: Expected MULTILINE, DOTALL or CASEINSENSITIVE keyword.")
+					if (token.Value.lower() == "multiline"):
+						multiLine =				True
+					elif (token.Value.lower() == "dotall"):
+						dotAll =					True
+					elif (token.Value.lower() == "caseinsensitive"):
+						caseInsensitive =	True
+					else:
+						raise MismatchingParserResult("ReplaceParser: Expected MULTILINE, DOTALL or CASEINSENSITIVE keyword.")
+					# match for optional whitespace
+					token = yield
+					if isinstance(token, SpaceToken):							token = yield
+					if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult("ReplaceParser: Expected more options, end of line or comment.")
+					if (token.Value == ","):
+						# match for optional whitespace, before going into the next iteration
+						token = yield
+						if isinstance(token, SpaceToken):						token = yield
+						continue
+					else:
+						break
+					
+		# match for delimiter sign: \n or #
 		commentText = ""
 		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("ReplaceParser: Expected end of line or comment")
 		if (token.Value == "\n"):
@@ -226,19 +281,19 @@ class ReplaceStatement(Statement):
 			raise MismatchingParserResult("ReplaceParser: Expected end of line or comment")
 
 		# construct result
-		result = cls(searchPattern, replacePattern, commentText)
+		result = cls(searchPattern, replacePattern, caseInsensitive, multiLine, dotAll, commentText)
 		raise MatchingParserResult(result)
-		
+
 	def __str__(self, indent=0):
 		return "{0}Replace {1} by {2}".format("  " * indent, self._searchPattern, self._replacePattern)
 
 # ==============================================================================
 # Block Statements
 # ==============================================================================
-class InFileStatement(BlockStatement):
+class FileStatement(BlockStatement):
 	def __init__(self, file, commentText):
 		super().__init__()
-		self._filePath =		Path(file)
+		self._filePath =		file
 		self._commentText =	commentText
 
 	@property
@@ -251,35 +306,28 @@ class InFileStatement(BlockStatement):
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):						token = yield
-		# match for keyword: IN
-		if (not isinstance(token, StringToken)):		raise MismatchingParserResult("InFileParser: Expected IN keyword.")
-		if (token.Value.lower() != "in"):						raise MismatchingParserResult("InFileParser: Expected IN keyword.")
+		# match for keyword: FILE
+		if (not isinstance(token, StringToken)):		raise MismatchingParserResult("FileParser: Expected FILE keyword.")
+		if (token.Value.lower() != "file"):					raise MismatchingParserResult("FileParser: Expected FILE keyword.")
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("InFileParser: Expected whitespace before source filename.")
+		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("FileParser: Expected whitespace before filename.")
 		# match for delimiter sign: "
 		token = yield
-		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("InFileParser: Expected double quote sign before source fileName.")
-		if (token.Value.lower() != "\""):            raise MismatchingParserResult("InFileParser: Expected double quote sign before source fileName.")
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("FileParser: Expected double quote sign before fileName.")
+		if (token.Value.lower() != "\""):            raise MismatchingParserResult("FileParser: Expected double quote sign before fileName.")
 		# match for string: source filename
 		replaceFilename = ""
 		while True:
 			token = yield
 			if (isinstance(token, CharacterToken) and (token.Value == "\"")):    break
 			replaceFilename += token.Value
-		# match for whitespace
-		token = yield
-		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("InFileParser: Expected whitespace before TO keyword.")
-		# match for FILE keyword
-		token = yield
-		if (not isinstance(token, StringToken)):     raise MismatchingParserResult("InFileParser: Expected FILE keyword.")
-		if (token.Value.lower() != "file"):          raise MismatchingParserResult("InFileParser: Expected FILE keyword.")
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):            token = yield
 		# match for delimiter sign: \n
 		commentText = ""
-		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("InFileParser: Expected end of line or comment")
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("FileParser: Expected end of line or comment")
 		if (token.Value == "\n"):
 			pass
 		elif (token.Value == "#"):
@@ -289,7 +337,7 @@ class InFileStatement(BlockStatement):
 				if (isinstance(token, CharacterToken) and (token.Value == "\n")):    break
 				commentText += token.Value
 		else:
-			raise MismatchingParserResult("InFileParser: Expected end of line or comment")
+			raise MismatchingParserResult("FileParser: Expected end of line or comment")
 		
 		# match for inner statements
 		# ==========================================================================
@@ -297,11 +345,13 @@ class InFileStatement(BlockStatement):
 		result = cls(replaceFilename, commentText)
 		parser = cls.GetRepeatParser(result.AddStatement, InFileStatements.GetParser)
 		parser.send(None)
-		
+
 		try:
 			while True:
 				token = yield
 				parser.send(token)
+		except EmptyChoiseParserResult:
+			print("ERROR in *.rules file -> fix me")
 		except MatchingParserResult:
 			pass
 		
@@ -310,21 +360,20 @@ class InFileStatement(BlockStatement):
 		# match for optional whitespace
 		if isinstance(token, SpaceToken):            token = yield
 		# match for keyword: END
-		if (not isinstance(token, StringToken)):    raise MismatchingParserResult("InFileParser: Expected END keyword.")
-		if (token.Value.lower() != "end"):          raise MismatchingParserResult("InFileParser: Expected END keyword.")
+		if (not isinstance(token, StringToken)):    raise MismatchingParserResult("FileParser: Expected END keyword.")
+		if (token.Value.lower() != "end"):          raise MismatchingParserResult("FileParser: Expected END keyword.")
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("InFileParser: Expected whitespace before FILE keyword.")
-		# match for keyword: PREPROCESSRULES
+		if (not isinstance(token, SpaceToken)):      raise MismatchingParserResult("FileParser: Expected whitespace before FILE keyword.")
+		# match for keyword: FILE
 		token = yield
-		if (not isinstance(token, StringToken)):     raise MismatchingParserResult("InFileParser: Expected FILE keyword.")
-		if (token.Value.lower() != "file"):  				 raise MismatchingParserResult("InFileParser: Expected FILE keyword.")
+		if (not isinstance(token, StringToken)):     raise MismatchingParserResult("FileParser: Expected FILE keyword.")
+		if (token.Value.lower() != "file"):  				 raise MismatchingParserResult("FileParser: Expected FILE keyword.")
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):            token = yield
 		# match for delimiter sign: \n
-		# commentText = ""
-		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("InFileParser: Expected end of line or comment")
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("FileParser: Expected end of line or comment")
 		if (token.Value == "\n"):
 			pass
 		elif (token.Value == "#"):
@@ -332,15 +381,16 @@ class InFileStatement(BlockStatement):
 			while True:
 				token = yield
 				if (isinstance(token, CharacterToken) and (token.Value == "\n")):    break
-			# commentText += token.Value
 		else:
-			raise MismatchingParserResult("InFileParser: Expected end of line or comment")
-		
+			raise MismatchingParserResult("FileParser: Expected end of line or comment")
+
+		result._commentText = commentText
+
 		raise MatchingParserResult(result)
 
 	def __str__(self, indent=0):
 		_indent = "  " * indent
-		buffer = _indent + "InFileParser"
+		buffer = _indent + "FileParser"
 		for stmt in self._statements:
 			buffer += "\n{0}{1}".format(_indent, stmt.__str__(indent + 1))
 		return buffer
@@ -352,16 +402,14 @@ class PreProcessRulesStatement(BlockStatement):
 
 	@classmethod
 	def GetParser(cls):
-		# match for ELSE clause
+		# match for PREPROCESSRULES clause
 		# ==========================================================================
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):						token = yield
-
-		# match for keyword: ELSE
+		# match for keyword: PREPROCESSRULES
 		if (not isinstance(token, StringToken)):				raise MismatchingParserResult("PreProcessRulesParser: Expected PREPROCESSRULES keyword.")
 		if (token.Value.lower() != "preprocessrules"):	raise MismatchingParserResult("PreProcessRulesParser: Expected PREPROCESSRULES keyword.")
-
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):						token = yield
@@ -393,7 +441,7 @@ class PreProcessRulesStatement(BlockStatement):
 		except MatchingParserResult:
 			pass
 
-		# match for END PREPROCESSRULES clause
+		# match for END PREPROCESSRULES
 		# ==========================================================================
 		# match for optional whitespace
 		if isinstance(token, SpaceToken):						token = yield
@@ -426,13 +474,13 @@ class PreProcessRulesStatement(BlockStatement):
 
 		raise MatchingParserResult(result)
 
-
 	def __str__(self, indent=0):
 		_indent = "  " * indent
 		buffer = _indent + "PreProcessRulesParser"
 		for stmt in self._statements:
 			buffer += "\n{0}{1}".format(_indent, stmt.__str__(indent + 1))
 		return buffer
+
 
 class PostProcessStatement(BlockStatement):
 	def __init__(self, commentText):
@@ -441,16 +489,14 @@ class PostProcessStatement(BlockStatement):
 
 	@classmethod
 	def GetParser(cls):
-		# match for ELSE clause
+		# match for POSTPRECESSRULES clause
 		# ==========================================================================
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):						token = yield
-
 		# match for keyword: POSTPRECESSRULES
 		if (not isinstance(token, StringToken)):				raise MismatchingParserResult("PostProcessRulesParser: Expected POSTPRECESSRULES keyword.")
 		if (token.Value.lower() != "postprocessrules"):	raise MismatchingParserResult("PostProcessRulesParser: Expected POSTPRECESSRULES keyword.")
-
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):						token = yield
@@ -479,10 +525,12 @@ class PostProcessStatement(BlockStatement):
 			while True:
 				token = yield
 				parser.send(token)
+		except EmptyChoiseParserResult:
+			print("ERROR in *.rules file -> fix me 2")
 		except MatchingParserResult:
 			pass
 
-		# match for END POSTPROCESSRULES clause
+		# match for END POSTPROCESSRULES
 		# ==========================================================================
 		# match for optional whitespace
 		if isinstance(token, SpaceToken):            token = yield
@@ -522,6 +570,7 @@ class PostProcessStatement(BlockStatement):
 			buffer += "\n{0}{1}".format(_indent, stmt.__str__(indent + 1))
 		return buffer
 
+
 class Document(BlockStatement):
 	@classmethod
 	def GetParser(cls):
@@ -547,7 +596,7 @@ InFileStatements.AddChoice(CommentLine)
 InFileStatements.AddChoice(EmptyLine)
 
 ProcessStatements.AddChoice(CopyStatement)
-ProcessStatements.AddChoice(InFileStatement)
+ProcessStatements.AddChoice(FileStatement)
 ProcessStatements.AddChoice(CommentLine)
 ProcessStatements.AddChoice(EmptyLine)
 

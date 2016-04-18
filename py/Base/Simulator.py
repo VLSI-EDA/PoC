@@ -32,8 +32,6 @@
 # ==============================================================================
 #
 # entry point
-from lib.Parser import ParserException
-
 if __name__ != "__main__":
 	pass
 	# place library initialization code here
@@ -49,7 +47,10 @@ from os								import chdir
 from Base.Exceptions	import ExceptionBase
 from Base.Logging			import ILogable
 from Base.Project			import Environment, ToolChain, Tool, VHDLVersion
+from lib.Parser				import ParserException
 from PoC.Project			import Project as PoCProject, FileListFile
+from PoC.Entity				import WildCard
+
 
 VHDL_TESTBENCH_LIBRARY_NAME = "test"
 
@@ -146,11 +147,18 @@ class Simulator(ILogable):
 	def RunAll(self, fqnList, *args, **kwargs):
 		for fqn in fqnList:
 			entity = fqn.Entity
-			# for entity in fqn.GetEntities():
-			# try:
-			self.Run(entity, *args, **kwargs)
-			# except SimulatorException:
-			# 	pass
+			if (isinstance(entity, WildCard)):
+				for testbench in entity.GetVHDLTestbenches():
+					try:
+						self.Run(testbench, *args, **kwargs)
+					except SimulatorException:
+						pass
+			else:
+				testbench = entity.VHDLTestbench
+				try:
+					self.Run(testbench, *args, **kwargs)
+				except SimulatorException:
+					pass
 
 	def Run(self, entity, board, vhdlVersion="93c", vhdlGenerics=None, **kwargs):
 		raise NotImplementedError("This method is abstract.")

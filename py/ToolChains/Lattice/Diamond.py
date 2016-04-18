@@ -40,23 +40,23 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
 
-# from collections				import OrderedDict
-# from pathlib						import Path
+# from collections								import OrderedDict
+# from pathlib										import Path
 
-from Base.Exceptions			import PlatformNotSupportedException
-from Base.Logging					import Severity, LogEntry
-from Base.Configuration		import Configuration as BaseConfiguration
-from Base.Executable			import Executable, CommandLineArgumentList, ExecutableArgument
-from Base.Project					import File, FileTypes
-from Base.ToolChain				import ToolChainException
+from Base.Exceptions							import PlatformNotSupportedException
+from Base.Logging									import Severity, LogEntry
+from Base.Configuration						import Configuration as BaseConfiguration
+from Base.Executable							import Executable, CommandLineArgumentList, ExecutableArgument
+from Base.Project									import File, FileTypes
+from ToolChains.Lattice.Lattice		import LatticeException
 
 
-class DiamondException(ToolChainException):
+class DiamondException(LatticeException):
 	pass
 
 class Configuration(BaseConfiguration):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, host):
+		super().__init__(host)
 
 
 class DiamondMixIn:

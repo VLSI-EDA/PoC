@@ -48,8 +48,10 @@ import shutil
 from colorama								import Fore as Foreground
 
 # from Base.Exceptions				import PlatformNotSupportedException, NotConfiguredException
+from lib.Functions					import Init
 from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool
-from Base.Simulator					import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME
+from Base.Simulator					import SimulatorException, Simulator as BaseSimulator
+from PoC.Entity							import WildCard
 from ToolChains.GNU					import Make
 
 
@@ -98,15 +100,26 @@ class Simulator(BaseSimulator):
 		# create the Cocotb executable factory
 		self._LogVerbose("  Preparing Cocotb simulator.")
 
-	def Run(self, entity, board, **_):
-		self._entity =				entity
-		self._testbenchFQN =	str(entity)										# TODO: implement FQN method on PoCEntity
+	def RunAll(self, fqnList, *args, **kwargs):
+		for fqn in fqnList:
+			entity = fqn.Entity
+			if (isinstance(entity, WildCard)):
+				for testbench in entity.GetCocoTestbenches():
+					try:
+						self.Run(testbench, *args, **kwargs)
+					except SimulatorException:
+						pass
+			else:
+				testbench = entity.CocoTestbench
+				try:
+					self.Run(testbench, *args, **kwargs)
+				except SimulatorException:
+					pass
 
-		# check testbench database for the given testbench		
-		self._LogQuiet("Testbench: {0}{1}{2}".format(Foreground.YELLOW, self._testbenchFQN, Foreground.RESET))
+	def Run(self, testbench, board, **_):
+		self._LogQuiet("Testbench: {YELLOW}{0!s}{RESET}".format(testbench.Parent, **Init.Foreground))
 
 		# setup all needed paths to execute fuse
-		testbench = entity.CocoTestbench
 		self._CreatePoCProject(testbench, board)
 		self._AddFileListFile(testbench.FilesFile)
 		self._Run(testbench)

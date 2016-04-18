@@ -221,6 +221,10 @@ class ExtendedConfigParser(ConfigParser):
 		elif (interpolation is _UNSET):	self._interpolation = ExtendedInterpolation()
 		else:														self._interpolation = interpolation
 
+	@property
+	def Interpolation(self):
+		return self._interpolation
+
 	def _unify_values(self, section, vars):
 		"""Create a sequence of lookups with 'vars' taking priority over
 		the 'section' which takes priority over the DEFAULTSECT.

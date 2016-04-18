@@ -36,7 +36,6 @@ from pathlib						import Path
 
 from Base.Configuration import ConfigurationException
 from Base.Exceptions		import CommonException
-from Base.VHDLParser		import VHDLParserMixIn
 from Parser.FilesParser	import VHDLSourceFileMixIn, VerilogSourceFileMixIn, CocotbSourceFileMixIn
 from PoC.Config					import Board, Device
 from lib.Functions			import merge
@@ -62,6 +61,8 @@ class FileTypes(Enum):
 	XdcConstraintFile =		22
 	SdcConstraintFile =		25
 	LdcConstraintFile =		26
+	SettingsFile =				30
+	QuartusSettingsFile =	31
 
 	def Extension(self):
 		if   (self == FileTypes.Unknown):							raise CommonException("Unknown file type.")
@@ -77,8 +78,10 @@ class FileTypes(Enum):
 		elif (self == FileTypes.XdcConstraintFile):		return "xdc"
 		elif (self == FileTypes.SdcConstraintFile):		return "sdc"
 		elif (self == FileTypes.LdcConstraintFile):		return "ldc"
+		elif (self == FileTypes.SettingsFile):				raise CommonException("Generic file type.")
+		elif (self == FileTypes.QuartusSettingsFile):	return "qsf"
 		else:																					raise CommonException("This is not an enum member.")
-		
+
 	def __str__(self):
 		return self.name
 
@@ -332,7 +335,7 @@ class Project():
 			fileSet = self._defaultFileSet
 		# print("init Project.Files generator")
 		for file in fileSet.Files:
-			if (file.FileType == fileType):
+			if (file.FileType is fileType):
 				yield file
 	
 	def ExtractVHDLLibrariesFromVHDLSourceFiles(self):
@@ -346,17 +349,14 @@ class Project():
 			file.VHDLLibrary = library
 	
 	@property
-	def VHDLLibraries(self):
-		return self._vhdlLibraries.values()
-	
+	def VHDLLibraries(self):					return self._vhdlLibraries.values()
 	@property
-	def ExternalVHDLLibraries(self):
-		return self._externalVHDLLibraries
+	def ExternalVHDLLibraries(self):	return self._externalVHDLLibraries
 
 	def AddExternalVHDLLibraries(self, library):
 		self._externalVHDLLibraries.append(library)
 	
-	def _GetVariables(self):
+	def GetVariables(self):
 		result = {
 			"ProjectName" :			self._name,
 			"RootDirectory" :		str(self._rootDirectory),
@@ -365,7 +365,7 @@ class Project():
 			"Tool" :						self._tool.name,
 			"VHDL" :						self._vhdlVersion.value
 		}
-		return merge(result, self._board._GetVariables(), self._device._GetVariables())
+		return merge(result, self._board.GetVariables(), self._device.GetVariables())
 	
 	def pprint(self, indent=0):
 		_indent = "  " * indent
@@ -564,15 +564,20 @@ class ConstraintFile(File):
 	def __str__(self):
 		return "Constraint file: '{0!s}".format(self._file)
 
+class SettingsFile(File):
+	_FileType = FileTypes.SettingsFile
 
-class VHDLSourceFile(SourceFile, VHDLSourceFileMixIn, VHDLParserMixIn):
+	def __str__(self):
+		return "Settings file: '{0!s}".format(self._file)
+
+
+class VHDLSourceFile(SourceFile, VHDLSourceFileMixIn):
 	_FileType = FileTypes.VHDLSourceFile
 
 	def __init__(self, file, vhdlLibraryName, project = None, fileSet = None):
 		super().__init__(file, project=project, fileSet=fileSet)
 		VHDLSourceFileMixIn.__init__(self, file, vhdlLibraryName.lower())
-		VHDLParserMixIn.__init__(self)
-	
+
 	def Parse(self):
 		self._Parse()
 	

@@ -4,24 +4,11 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-# Load external vendor libraries
-if (DeviceVendor = "Xilinx") then
-	include			"lib/Xilinx.files"													# Xilinx primitives
-end if
-
-# Common PoC packages for configuration, synthesis and simulation
-include				"tb/common/my_config.files"									# board and device configuration
-include				"src/common/common.files"										# load common packages
-include				"src/sim/sim.files"													# load simulation helper packages
-
-# PoC.arith
-include				"src/arith/arith_carrychain_inc.files"			# Carry-chain abstraction for increment by one operations
-
-# PoC.mem.ocram
-include				"src/mem/ocram/ocram_sdp.files"				      # Simple-Dual-Port
+# PoC.comm
+include				"src/comm/comm_scramble.files"							# Scrambler
 
 # PoC.fifo
-vhdl		poc		"src/fifo/fifo_cc_got_tempput.vhdl"					# Unit Under Test
+include				"src/fifo/fifo_cc_got_tempput.files"				# Unit Under Test
 
 # Testbench file(s)
 vhdl		test	"tb/fifo/fifo_cc_got_tempput_tb.vhdl"				# Testbench

@@ -37,7 +37,7 @@ class FileListFile(File, FilesParserMixIn):
 
 		# prepare FilesParserMixIn environment
 		self._rootDirectory = self.Project.RootDirectory
-		self._variables =			self.Project._GetVariables()
+		self._variables =			self.Project.GetVariables()
 		self._Parse()
 		self._Resolve()
 
@@ -70,7 +70,7 @@ class RulesFile(File, RulesParserMixIn):
 
 		# prepare FilesParserMixIn environment
 		self._rootDirectory = self.Project.RootDirectory
-		self._variables =			self.Project._GetVariables()
+		self._variables =			self.Project.GetVariables()
 		self._Parse()
 		self._Resolve()
 

@@ -5,28 +5,10 @@
 # Note: all files are relative to PoC root directory
 #
 # Load external vendor libraries
-include				"lib/osvvm.files"														# Open Source VHDL Verification Methodology (OS-VVM)
-
-# Common PoC packages for configuration, synthesis and simulation
-include				"tb/common/my_config.files"									# board and device configuration
-include				"src/common/common.files"										# load common packages
-include				"src/sim/sim.files"													# load simulation helper packages
-
-# PoC.fifo
-include				"src/fifo/fifo_cc_got.files"								# 
-
-# PoC.misc.gearbox
-vhdl		poc		"src/misc/gearbox/gearbox_down_cc.vhdl"			# 
-vhdl		poc		"src/misc/gearbox/gearbox_up_cc.vhdl"				# 
+include				"lib/osvvm.files				"														# Open Source VHDL Verification Methodology (OS-VVM)
 
 # PoC.sort.sortnet
-vhdl		poc		"src/sort/sortnet/sortnet.pkg.vhdl"									# 
-vhdl		poc		"src/sort/sortnet/sortnet_BitonicSort.vhdl"					# 
-vhdl		poc		"src/sort/sortnet/sortnet_MergeSort_Streamed.vhdl"	# 
-vhdl		poc		"src/sort/sortnet/sortnet_OddEvenSort.vhdl"					# 
-vhdl		poc		"src/sort/sortnet/sortnet_OddEvenMergeSort.vhdl"		# 
-vhdl		poc		"src/sort/sortnet/sortnet_Transform.vhdl"						# 
-vhdl		poc		"src/sort/sortnet/sortnet_Stream_Adapter2.vhdl"			# UUT (Unit Under Test)
+include				"src/sort/sortnet/sortnet_Stream_Adapter2.files"		# UUT (Unit Under Test)
 
 # Testbench file(s)
 vhdl		test	"tb/sort/sortnet/sortnet_Stream_Adapter2_tb.vhdl"		# Testbench

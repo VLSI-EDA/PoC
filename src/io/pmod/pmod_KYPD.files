@@ -1,0 +1,16 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Common PoC packages for configuration, synthesis and simulation
+include				"src/common/common.files"										# load common packages
+
+# PoC.io
+include				"src/io/io_Debounce.files"									# 
+include				"src/io/io_KeyPadScanner.files"							# 
+
+# PoC.io.pmod
+vhdl		PoC		"src/io/pmod/pmod.pkg.vhdl"									# PoC.arith package
+vhdl		PoC		"src/io/pmod/pmod_KYPD.vhdl"								# Top-Level

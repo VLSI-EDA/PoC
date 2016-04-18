@@ -32,15 +32,19 @@
 # ==============================================================================
 #
 # entry point
+from PoC.Entity import WildCard
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
 	from lib.Functions import Exit
+
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
 
 
 # load dependencies
+from lib.Functions						import Init
 from Base.Exceptions					import NotConfiguredException, PlatformNotSupportedException
 from Base.Project							import VHDLVersion, Environment, ToolChain, Tool
 from Base.Compiler						import Compiler as BaseCompiler, CompilerException
@@ -63,12 +67,26 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		self._LogVerbose("  Preparing Xilinx Synthesis Tool (XST).")
 		self._ise =		ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def Run(self, entity, board, **_):
-		# self._entity =			entity 					 # TODO: find usages
-		# self._device =			board.Device
+	def RunAll(self, fqnList, *args, **kwargs):
+		for fqn in fqnList:
+			entity = fqn.Entity
+			if (isinstance(entity, WildCard)):
+				for testbench in entity.GetXSTNetlist():
+					try:
+						self.Run(testbench, *args, **kwargs)
+					except CompilerException:
+						pass
+			else:
+				testbench = entity.XSTNetlist
+				try:
+					self.Run(testbench, *args, **kwargs)
+				except CompilerException:
+					pass
+
+	def Run(self, netlist, board, **_):
+		self._LogQuiet("IP core: {YELLOW}{0!s}{RESET}".format(netlist.Parent, **Init.Foreground))
 
 		# setup all needed paths to execute fuse
-		netlist = entity.XstNetlist
 		self._PrepareCompilerEnvironment(board.Device)
 		self._WriteSpecialSectionIntoConfig(board.Device)
 
@@ -76,8 +94,6 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		self._AddFileListFile(netlist.FilesFile)
 		if (netlist.RulesFile is not None):
 			self._AddRulesFiles(netlist.RulesFile)
-
-		self._LogQuiet("IP-core: {0!s}".format(netlist.Parent))
 
 		netlist.XstFile = self._tempPath / (netlist.ModuleName + ".xst")
 		netlist.PrjFile = self._tempPath / (netlist.ModuleName + ".prj")
@@ -96,14 +112,14 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 
 	def _PrepareCompilerEnvironment(self, device):
 		self._LogNormal("preparing synthesis environment...")
-		self._tempPath =		self.Host.Directories["XstTemp"]
+		self._tempPath =		self.Host.Directories["XSTTemp"]
 		self._outputPath =	self.Host.Directories["PoCNetList"] / str(device)
 		super()._PrepareCompilerEnvironment()
 
 	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
 		self.Host.PoCConfig['SPECIAL'] = {}
-		self.Host.PoCConfig['SPECIAL']['Device'] =				device.ShortName
+		self.Host.PoCConfig['SPECIAL']['Device'] =				device.FullName
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =	device.Series
 		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self._tempPath.as_posix()
 
@@ -115,7 +131,7 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 
 		xst = self._ise.GetXst()
 		xst.Parameters[xst.SwitchIntStyle] =		"xflow"
-		xst.Parameters[xst.SwitchXstFile] =			"ipcore.xst"
+		xst.Parameters[xst.SwitchXstFile] =			netlist.ModuleName + ".xst"
 		xst.Parameters[xst.SwitchReportFile] =	str(reportFilePath)
 		xst.Compile()
 

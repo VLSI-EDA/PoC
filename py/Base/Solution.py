@@ -75,8 +75,7 @@ class CommandLineProgram(object):
 		
 		# check for environment variables
 		if (environ.get('PoCRootDirectory') is None):			raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
-		if (environ.get('PoCScriptDirectory') is None):		raise EnvironmentException("Shell environment does not provide 'PoCScriptDirectory' variable.")
-		
+
 		self.directories['Working'] =			Path.cwd()
 		self.directories['PoCRoot'] =			Path(environ.get('PoCRootDirectory'))
 		self.directories['ScriptRoot'] =	Path(environ.get('PoCRootDirectory'))

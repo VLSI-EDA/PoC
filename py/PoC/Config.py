@@ -339,13 +339,17 @@ class Device:
 	def ShortName(self):
 		if (self.__vendor is Vendors.Xilinx):
 			subtype = self.__subtype.Groups
-			return "xc%i%s%s%s%s" % (
+			if (self.__family is Families.Zynq):
+				number_format = "{num:03d}"
+			else:
+				number_format = "{num}"
+			return ("XC%i%s%s%s%s" % (
 				self.__generation,
 				self.__family.Token,
 				subtype[0],
-				"{num:03d}".format(num=self.__number),
+				number_format.format(num=self.__number),
 				subtype[1]
-			)
+			)).upper()
 		elif (self.__vendor is Vendors.Altera):
 			print("{YELLOW}Device.ShortName() not implemented for vendor Altera.{RESET}".format(**Init.Foreground))
 			return "EP4SGX230KF40C2"
@@ -360,16 +364,20 @@ class Device:
 	def FullName(self):
 		if (self.__vendor is Vendors.Xilinx):
 			subtype = self.__subtype.Groups
-			return "xc%i%s%s%s%s%i%s%i" % (
+			if (self.__family is Families.Zynq):
+				number_format = "{num:03d}"
+			else:
+				number_format = "{num}"
+			return ("XC%i%s%s%s%s%i%s%i" % (
 				self.__generation,
 				self.__family.Token,
 				subtype[0],
-				"{num:03d}".format(num=self.__number),
+				number_format.format(num=self.__number),
 				subtype[1],
 				self.__speedGrade,
 				str(self.__package),
 				self.__pinCount
-			)
+			)).upper()
 		elif (self.__vendor is Vendors.Altera):
 			print("{YELLOW}Device.FullName() not implemented for vendor Altera.{RESET}".format(**Init.Foreground))
 			return "EP4SGX230KF40C2"
@@ -396,7 +404,7 @@ class Device:
 		else:
 			return "{0}-{1}".format(str(self.__family), self.__generation)
 	
-	def _GetVariables(self):
+	def GetVariables(self):
 		result = {
 			"DeviceShortName" :		self.ShortName,
 			"DeviceFullName" :		self.FullName,
@@ -455,7 +463,7 @@ class Board:
 	def Device(self):
 		return self.__device
 	
-	def _GetVariables(self):
+	def GetVariables(self):
 		result = {
 			"BoardName" : self.__boardName
 		}

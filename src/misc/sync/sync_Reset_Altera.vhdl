@@ -14,7 +14,7 @@
 --		
 -- License:
 -- ============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,12 +33,18 @@
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
+library	PoC;
+use			PoC.sync.all;
+
 
 entity sync_Reset_Altera is
+	generic (
+		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2	-- generate SYNC_DEPTH many stages, at least 2
+	);
 	port (
-		Clock					: in	STD_LOGIC;		-- Clock to be synchronized to
-		Input					: in	STD_LOGIC;		-- Data to be synchronized
-		Output				: out	STD_LOGIC			-- synchronised data
+		Clock					: in	STD_LOGIC;						-- Clock to be synchronized to
+		Input					: in	STD_LOGIC;						-- Data to be synchronized
+		Output				: out	STD_LOGIC							-- synchronised data
 	);
 end entity;
 
@@ -48,8 +54,8 @@ architecture rtl of sync_Reset_Altera is
 	attribute preserve					: BOOLEAN;
 
 	signal Data_async				: STD_LOGIC;
-	signal Data_meta				: STD_LOGIC		:= '1';
-	signal Data_sync				: STD_LOGIC		:= '1';
+	signal Data_meta				: STD_LOGIC																	:= '1';
+	signal Data_sync				: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 0)	:= (others => '1');
 
 	-- Apply a SDC constraint to meta stable flip flop
 	--attribute altera_attribute of rtl					: architecture is "-name SDC_STATEMENT ""set_false_path -to *|sync_Reset_Altera:*|Data_meta """;
@@ -65,12 +71,12 @@ begin
 	begin
 		if (Input = '1') then
 			Data_meta <= '1';
-			Data_sync <= '1';
+			Data_sync <= (others => '1');
 		elsif rising_edge(Clock) then
 			Data_meta <= Data_async;
-			Data_sync <= Data_meta;
+			Data_sync <= Data_sync8Data_sync'high - 1 downto 0) & Data_meta;
 		end if;
 	end process;
 		
-	Output		<= Data_sync;
+	Output		<= Data_sync(Data_sync'high);
 end architecture;

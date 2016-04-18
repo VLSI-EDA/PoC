@@ -36,7 +36,7 @@ from Parser.FilesCodeDOM	import IfElseIfElseStatement, ReportStatement
 from Parser.FilesCodeDOM	import IncludeStatement, LibraryStatement
 from Parser.FilesCodeDOM	import UcfStatement, XdcStatement, SdcStatement
 from Parser.FilesCodeDOM	import VHDLStatement, VerilogStatement, CocotbStatement
-from lib.Parser import AndExpression, OrExpression, XorExpression, NotExpression, InExpression
+from lib.Parser import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression
 from lib.Parser import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
 from lib.Parser import ExistsFunction, ListConstructorExpression
 from lib.Parser import ParserException
@@ -222,6 +222,8 @@ class FilesParserMixIn:
 			return not self._Evaluate(expr.Child)
 		elif isinstance(expr, InExpression):
 			return self._Evaluate(expr.LeftChild) in self._Evaluate(expr.RightChild)
+		elif isinstance(expr, NotInExpression):
+			return self._Evaluate(expr.LeftChild) not in self._Evaluate(expr.RightChild)
 		elif isinstance(expr, AndExpression):
 			return self._Evaluate(expr.LeftChild) and self._Evaluate(expr.RightChild)
 		elif isinstance(expr, OrExpression):

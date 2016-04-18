@@ -32,19 +32,23 @@
 # ==============================================================================
 #
 # entry point
+from PoC.Entity import WildCard
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
 	from lib.Functions import Exit
+
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
 
 
 # load dependencies
+from lib.Functions						import Init
 from Base.Exceptions					import NotConfiguredException, PlatformNotSupportedException
 from Base.Project							import VHDLVersion, Environment, ToolChain, Tool
 from Base.Compiler						import Compiler as BaseCompiler, CompilerException
-from ToolChains.Altera.QuartusII	import QuartusII, QuartusProject, QuartusProjectFile
+from ToolChains.Altera.QuartusII	import QuartusII, QuartusSettingsFile, QuartusProjectFile
 
 
 class Compiler(BaseCompiler):
@@ -61,12 +65,26 @@ class Compiler(BaseCompiler):
 		self._LogVerbose("  Preparing Quartus-II Map (quartus_map).")
 		self._quartus =		QuartusII(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def Run(self, entity, board, **_):
-		# self._entity =			entity 					 # TODO: find usages
-		# self._device =			board.Device
+	def RunAll(self, fqnList, *args, **kwargs):
+		for fqn in fqnList:
+			entity = fqn.Entity
+			if (isinstance(entity, WildCard)):
+				for testbench in entity.GetQuartusNetlist():
+					try:
+						self.Run(testbench, *args, **kwargs)
+					except CompilerException:
+						pass
+			else:
+				testbench = entity.QuartusNetlist
+				try:
+					self.Run(testbench, *args, **kwargs)
+				except CompilerException:
+					pass
+
+	def Run(self, netlist, board, **_):
+		self._LogQuiet("IP core: {YELLOW}{0!s}{RESET}".format(netlist.Parent, **Init.Foreground))
 
 		# setup all needed paths to execute fuse
-		netlist = entity.QuartusNetlist
 		self._PrepareCompilerEnvironment(board.Device)
 		self._WriteSpecialSectionIntoConfig(board.Device)
 
@@ -74,8 +92,6 @@ class Compiler(BaseCompiler):
 		self._AddFileListFile(netlist.FilesFile)
 		if (netlist.RulesFile is not None):
 			self._AddRulesFiles(netlist.RulesFile)
-
-		self._LogQuiet("IP-core: {0!s}".format(netlist.Parent))
 
 		# netlist.XstFile = self._tempPath / (netlist.ModuleName + ".xst")
 		netlist.QsfFile = self._tempPath / (netlist.ModuleName + ".qsf")
@@ -107,7 +123,7 @@ class Compiler(BaseCompiler):
 	def _WriteQuartusProjectFile(self, netlist):
 		quartusProjectFile = QuartusProjectFile(netlist.QsfFile)
 
-		quartusProject = QuartusProject(netlist.ModuleName, quartusProjectFile)
+		quartusProject = QuartusSettingsFile(netlist.ModuleName, quartusProjectFile)
 		quartusProject.GlobalAssignments['FAMILY'] =							"\"Stratix IV\""
 		quartusProject.GlobalAssignments['DEVICE'] =							"EP4SGX230KF40C2"
 		quartusProject.GlobalAssignments['TOP_LEVEL_ENTITY'] =		netlist.ModuleName

@@ -62,7 +62,6 @@ foreach ($i in $PyWrapper_Parameters) {
 }
 
 # publish PoC directories as environment variables
-$env:PoCScriptDirectory =		$PyWrapper_ScriptDir
 $env:PoCRootDirectory =			$PoC_RootDir_AbsPath
 $env:PoCWorkingDirectory =	$PoC_WorkingDir
 
@@ -178,6 +177,5 @@ if ($PoC_ExitCode -eq 0) {
 }
 
 # clean up environment variables
-$env:PoCScriptDirectory =		$null
 $env:PoCRootDirectory =			$null
 $env:PoCWorkingDirectory =	$null

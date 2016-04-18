@@ -4,19 +4,8 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-# Load external vendor libraries
-if (DeviceVendor = "Xilinx") then
-	include			"lib/Xilinx.files"													# Xilinx primitives
-end if
-
-# Common PoC packages for configuration, synthesis and simulation
-include				"tb/common/my_config.files"									# board and device configuration
-include				"src/common/common.files"										# load common packages
-include				"src/sim/sim.files"													# load simulation helper packages
-
 # PoC.arith
-vhdl		poc		"src/arith/arith.pkg.vhdl"									# Package
-vhdl		poc		"src/arith/arith_addw.vhdl"									# DUT
+include				"src/arith/arith_addw.files"								# Unit Under Test
 
 # Testbench file(s)
 vhdl		test	"tb/arith/arith_addw_tb.vhdl"								# Testbench

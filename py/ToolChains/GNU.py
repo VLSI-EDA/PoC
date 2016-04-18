@@ -55,8 +55,8 @@ class GNUException(ToolChainException):
 	pass
 
 class Configuration(BaseConfiguration):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, host):
+		super().__init__(host)
 
 class Make(Executable):
 	def __init__(self, platform, logger=None):

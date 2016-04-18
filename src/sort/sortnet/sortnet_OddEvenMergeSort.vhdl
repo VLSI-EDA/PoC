@@ -42,7 +42,7 @@ use			PoC.components.all;
 
 entity sortnet_OddEvenMergeSort is
 	generic (
-		INPUTS								: POSITIVE	:= 8;
+		INPUTS								: POSITIVE	:= 128;
 		KEY_BITS							: POSITIVE	:= 32;
 		DATA_BITS							: POSITIVE	:= 32;
 		META_BITS							: NATURAL		:= 2;
@@ -149,14 +149,16 @@ begin
 				constant END_INDEX								: NATURAL		:= ((2**(b+1))-DISTANCE-START_INDEX-1) / (2 * DISTANCE);
 				constant SRC											: NATURAL		:= (g * (INPUTS / GROUPS));
 			begin
-				MetaVector(STAGE_INDEX + 1)		<= MetaVector(STAGE_INDEX) when registered(Clock, INSERT_PIPELINE_REGISTER);
-			
+				genMeta : if (g = 0) generate
+					MetaVector(STAGE_INDEX + 1)		<= MetaVector(STAGE_INDEX) when registered(Clock, INSERT_PIPELINE_REGISTER);
+				end generate;
+				
 				genJ0 : for j in 0 to START_INDEX - 1 generate
 					assert (not C_VERBOSE) report INTEGER'image(STAGE_INDEX) & " passthrough: " & INTEGER'image(SRC + j) severity NOTE;
 					DataMatrix(STAGE_INDEX + 1)(SRC + j)		<= DataMatrix(STAGE_INDEX)(SRC + j)	when registered(Clock, INSERT_PIPELINE_REGISTER);
 				end generate;
 				genJ1 : for j in 0 to END_INDEX generate
-					constant K		: POSITIVE		:= (j * 2 * DISTANCE) + START_INDEX;
+					constant K		: NATURAL			:= (j * 2 * DISTANCE) + START_INDEX;
 				begin
 					genLoop : for i in 0 to DISTANCE - 1 generate
 						constant SRC0	: NATURAL		:= SRC + K + i;

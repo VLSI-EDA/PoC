@@ -53,22 +53,16 @@ class Configuration(BaseConfiguration):
 	__LongName =	"Xilinx LabTools"
 	__privateConfiguration = {
 		"Windows": {
-			"Xilinx": {
-				"InstallationDirectory":	"C:/Xilinx"
-			},
-			"Xilinx.LabTools": {
+			"INSTALL.Xilinx.LabTools": {
 				"Version":								"14.7",
-				"InstallationDirectory":	"${Xilinx:InstallationDirectory}/${Version}/LabTools",
+				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/${Version}/LabTools",
 				"BinaryDirectory":				"${InstallationDirectory}/LabTools/bin/nt64"
 			}
 		},
 		"Linux": {
-			"Xilinx": {
-				"InstallationDirectory":	"/opt/Xilinx"
-			},
-			"Xilinx.LabTools": {
+			"INSTALL.Xilinx.LabTools": {
 				"Version":								"14.7",
-				"InstallationDirectory":	"${Xilinx:InstallationDirectory}/${Version}/LabTools",
+				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/${Version}/LabTools",
 				"BinaryDirectory":				"${InstallationDirectory}/LabTools/bin/lin64"
 			}
 		}

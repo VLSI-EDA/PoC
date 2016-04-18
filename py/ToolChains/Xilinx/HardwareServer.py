@@ -53,22 +53,16 @@ class Configuration(BaseConfiguration):
 	__LongName =	"Xilinx HardwareServer"
 	__privateConfiguration = {
 		"Windows": {
-			"Xilinx": {
-				"InstallationDirectory":	"C:/Xilinx"
-			},
-			"Xilinx.HardwareServer": {
+			"INSTALL.Xilinx.HardwareServer": {
 				"Version":								"2015.4",
-				"InstallationDirectory":	"${Xilinx:InstallationDirectory}/Vivado/${Version}",
+				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
 				"BinaryDirectory":				"${InstallationDirectory}/bin"
 			}
 		},
 		"Linux": {
-			"Xilinx": {
-				"InstallationDirectory":	"/opt/Xilinx"
-			},
-			"Xilinx.HardwareServer": {
+			"INSTALL.Xilinx.HardwareServer": {
 				"Version":								"2015.4",
-				"InstallationDirectory":	"${Xilinx:InstallationDirectory}/Vivado/${Version}",
+				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
 				"BinaryDirectory":				"${InstallationDirectory}/bin"
 			}
 		}

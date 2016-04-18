@@ -43,6 +43,7 @@ else:
 from configparser							import NoSectionError
 from colorama									import Fore as Foreground
 
+from lib.Functions						import Init
 # from Base.Exceptions					import PlatformNotSupportedException, NotConfiguredException
 from Base.Project							import FileTypes, VHDLVersion, Environment, ToolChain, Tool
 from Base.Simulator						import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME
@@ -84,17 +85,13 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._LogVerbose("  Preparing GHDL simulator.")
 		self._vivado = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def Run(self, entity, board, vhdlVersion="93", vhdlGenerics=None, guiMode=False):
-		self._entity =				entity
-		self._testbenchFQN =	str(entity)										# TODO: implement FQN method on PoCEntity
+	def Run(self, testbench, board, vhdlVersion="93", vhdlGenerics=None, guiMode=False):
+		self._LogQuiet("Testbench: {YELLOW}{0!s}{RESET}".format(testbench.Parent, **Init.Foreground))
+
 		self._vhdlVersion =		vhdlVersion
 		self._vhdlGenerics =	vhdlGenerics
 
-		# check testbench database for the given testbench		
-		self._LogQuiet("Testbench: {0}{1}{2}".format(Foreground.YELLOW, self._testbenchFQN, Foreground.RESET))
-
 		# setup all needed paths to execute fuse
-		testbench = entity.VHDLTestbench
 		self._CreatePoCProject(testbench, board)
 		self._AddFileListFile(testbench.FilesFile)
 		
@@ -106,7 +103,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._LogNormal("  compiling source files...")
 
 		prjFilePath = self._tempPath / (testbench.ModuleName + ".prj")
-		self._WriteXilinxProjectFile(prjFilePath)
+		self._WriteXilinxProjectFile(prjFilePath, "xSim", self._vhdlVersion)
 
 		# create a VivadoVHDLCompiler instance
 		xvhcomp = self._vivado.GetVHDLCompiler()
@@ -117,7 +114,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		
 		xelabLogFilePath =	self._tempPath / (testbench.ModuleName + ".xelab.log")
 		prjFilePath =				self._tempPath / (testbench.ModuleName + ".prj")
-		self._WriteXilinxProjectFile(prjFilePath)
+		self._WriteXilinxProjectFile(prjFilePath, "xSim", self._vhdlVersion)
 
 		# create a VivadoLinker instance
 		xelab = self._vivado.GetElaborator()

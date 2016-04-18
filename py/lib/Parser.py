@@ -74,13 +74,18 @@ class SourceCodePosition:
 		self._absolute = value
 
 class Token:
-	def __init__(self, value, start, end=None):
-		self._value =	value
-		self._start =	start
-		self._end =		end
+	def __init__(self, previousToken, value, start, end=None):
+		self._previousToken =	previousToken
+		self._value =			value
+		self._start =			start
+		self._end =				end
 
 	def __len__(self):
 		return self._end.Absolute - self._start.Absolute + 1
+
+	@property
+	def PreviousToken(self):
+		return self._previousToken
 		
 	@property
 	def Value(self):
@@ -99,9 +104,9 @@ class Token:
 		return len(self)
 
 class CharacterToken(Token):
-	def __init__(self, value, start):
+	def __init__(self, previousToken, value, start):
 		if (len(value) != 1):		raise ValueError()
-		super().__init__(value, start=start, end=start)
+		super().__init__(previousToken, value, start=start, end=start)
 
 	def __len__(self):
 		return 1
@@ -156,19 +161,22 @@ class Tokenizer:
 
 	@classmethod
 	def GetCharacterTokenizer(cls, iterable):
+		previousToken =	None
 		absolute =	0
 		column =		0
 		row =				1
 		for char in iterable:
 			absolute +=	1
 			column +=		1
-			yield CharacterToken(char, SourceCodePosition(row, column, absolute))
+			previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+			yield previousToken
 			if (char == "\n"):
 				column =	0
 				row +=		1
 	
 	@classmethod
 	def GetWordTokenizer(cls, iterable):
+		previousToken =	None
 		tokenKind =	cls.TokenKind.OtherChars
 		start =			SourceCodePosition(1, 1, 1)
 		end =				start
@@ -184,7 +192,8 @@ class Tokenizer:
 				if ((char == " ") or (char == "\t")):
 					buffer += char
 				else:
-					yield SpaceToken(buffer, start, end)
+					previousToken = SpaceToken(previousToken, buffer, start, end)
+					yield previousToken
 					
 					if (char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"):
 						buffer = char
@@ -194,12 +203,14 @@ class Tokenizer:
 						tokenKind = cls.TokenKind.NumberChars
 					else:
 						tokenKind = cls.TokenKind.OtherChars
-						yield CharacterToken(char, SourceCodePosition(row, column, absolute))
+						previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+						yield previousToken
 			elif (tokenKind is cls.TokenKind.AlphaChars):
 				if (char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"):
 					buffer += char
 				else:
-					yield StringToken(buffer, start, end)
+					previousToken = StringToken(previousToken, buffer, start, end)
+					yield previousToken
 				
 					if (char in " \t"):
 						buffer = char
@@ -209,12 +220,14 @@ class Tokenizer:
 						tokenKind = cls.TokenKind.NumberChars
 					else:
 						tokenKind = cls.TokenKind.OtherChars
-						yield CharacterToken(char, SourceCodePosition(row, column, absolute))
+						previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+						yield previousToken
 			elif (tokenKind is cls.TokenKind.NumberChars):
 				if (char in "0123456789"):
 					buffer += char
 				else:
-					yield NumberToken(buffer, start, end)
+					previousToken = NumberToken(previousToken, buffer, start, end)
+					yield previousToken
 				
 					if (char in " \t"):
 						buffer = char
@@ -224,7 +237,8 @@ class Tokenizer:
 						tokenKind = cls.TokenKind.AlphaChars
 					else:
 						tokenKind = cls.TokenKind.OtherChars
-						yield CharacterToken(char, SourceCodePosition(row, column, absolute))
+						previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+						yield previousToken
 			elif (tokenKind is cls.TokenKind.OtherChars):
 				if (char in " \t"):
 					buffer = char
@@ -236,7 +250,8 @@ class Tokenizer:
 					buffer = char
 					tokenKind = cls.TokenKind.NumberChars
 				else:
-					yield CharacterToken(char, SourceCodePosition(row, column, absolute))
+					previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+					yield previousToken
 			else:
 				raise ParserException("Unknown state.")
 			
@@ -1349,6 +1364,76 @@ class InExpression(LogicalExpression):
 	def __str__(self):
 		return "({0} in {1})".format(self._leftChild.__str__(), self._rightChild.__str__())
 
+class NotInExpression(LogicalExpression):
+	@classmethod
+	def GetParser(cls):
+		if DEBUG: print("init NotInExpressionParser")
+
+		# match for opening (
+		token = yield
+		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
+		if (token.Value != "("):											raise MismatchingParserResult()
+		# match for optional whitespace
+		token = yield
+		if isinstance(token, SpaceToken):							token = yield
+
+		# match for sub expression
+		# ==========================================================================
+		parser = Expressions.GetParser()
+		parser.send(None)
+		try:
+			while True:
+				parser.send(token)
+				token = yield
+		except MatchingParserResult as ex:
+			if DEBUG2: print("NotInExpressionParser: matched {0} got {1}".format(ex.__class__.__name__, ex.value))
+			leftChild = ex.value
+
+		# match for whitespace
+		token = yield
+		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		# match for NOT keyword
+		token = yield
+		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
+		if (token.Value.lower() != "not"):						raise MismatchingParserResult()
+		# match for whitespace
+		token = yield
+		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		# match for IN keyword
+		token = yield
+		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
+		if (token.Value.lower() != "in"):							raise MismatchingParserResult()
+		# match for whitespace
+		token = yield
+		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+
+		# match for sub expression
+		# ==========================================================================
+		parser = ListConstructorExpression.GetParser()
+		parser.send(None)
+		try:
+			while True:
+				token = yield
+				parser.send(token)
+		except MatchingParserResult as ex:
+			if DEBUG2: print("NotInExpressionParser: matched {0} got {1}".format(ex.__class__.__name__, ex.value))
+			rightChild = ex.value
+
+		# match for optional whitespace
+		token = yield
+		if isinstance(token, SpaceToken):							token = yield
+		# match for closing )
+		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
+		if (token.Value != ")"):											raise MismatchingParserResult()
+
+		# construct result
+		result = cls(leftChild, rightChild)
+		if DEBUG: print("NotInExpressionParser: matched {0}".format(result))
+		raise MatchingParserResult(result)
+
+	def __str__(self):
+		return "({0} not in {1})".format(self._leftChild.__str__(), self._rightChild.__str__())
+
 Expressions.AddChoice(Identifier)
 Expressions.AddChoice(StringLiteral)
 Expressions.AddChoice(IntegerLiteral)
@@ -1364,6 +1449,7 @@ Expressions.AddChoice(LessThanEqualExpression)
 Expressions.AddChoice(GreaterThanExpression)
 Expressions.AddChoice(GreaterThanEqualExpression)
 Expressions.AddChoice(InExpression)
+Expressions.AddChoice(NotInExpression)
 
 class Statement(CodeDOMObject):
 	pass

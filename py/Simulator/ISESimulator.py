@@ -37,12 +37,14 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
+
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.ISESimulator")
 
 # load dependencies
 from configparser							import NoSectionError
 from colorama									import Fore as Foreground
 
+from lib.Functions						import Init
 from Base.Project							import FileTypes, VHDLVersion, Environment, ToolChain, Tool
 from Base.Simulator						import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME
 from ToolChains.Xilinx.Xilinx	import XilinxProjectExportMixIn
@@ -77,21 +79,17 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		super()._PrepareSimulationEnvironment()
 
 	def PrepareSimulator(self, binaryPath, version):
-		# create the GHDL executable factory
+		# create the Xilinx ISE executable factory
 		self._LogVerbose("  Preparing GHDL simulator.")
 		self._ise = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def Run(self, entity, board, vhdlVersion=None, vhdlGenerics=None, guiMode=False):
-		self._entity =				entity
-		self._testbenchFQN =	str(entity)										# TODO: implement FQN method on PoCEntity
+	def Run(self, testbench, board, vhdlVersion=None, vhdlGenerics=None, guiMode=False):
+		self._LogQuiet("Testbench: {YELLOW}{0!s}{RESET}".format(testbench.Parent, **Init.Foreground))
+
 		self._vhdlVersion =		VHDLVersion.VHDL93
 		self._vhdlGenerics =	vhdlGenerics
 
-		# check testbench database for the given testbench		
-		self._LogQuiet("Testbench: {0}{1}{2}".format(Foreground.YELLOW, self._testbenchFQN, Foreground.RESET))
-
 		# setup all needed paths to execute fuse
-		testbench = entity.VHDLTestbench
 		self._CreatePoCProject(testbench, board)
 		self._AddFileListFile(testbench.FilesFile)
 		
@@ -103,7 +101,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._LogNormal("  compiling source files...")
 		
 		prjFilePath = self._tempPath / (testbench.ModuleName + ".prj")
-		self._WriteXilinxProjectFile(prjFilePath)
+		self._WriteXilinxProjectFile(prjFilePath, "iSim", self._vhdlVersion)
 
 		# create a VivadoVHDLCompiler instance
 		vhcomp = self._ise.GetVHDLCompiler()
@@ -112,19 +110,9 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	def _RunLink(self, testbench):
 		self._LogNormal("  running fuse...")
 		
-		exeFilePath =				self._tempPath / (testbench.ModuleName + ".exe")
-
-		# create one VHDL line for each VHDL file
-		iSimProjectFileContent = ""
-		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
-			if (not file.Path.exists()):									raise SimulatorException("Can not add '{0!s}' to iSim project file.".format(file.Path)) from FileNotFoundError(str(file.Path))
-			iSimProjectFileContent += "vhdl {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
-
-		# write iSim project file
+		exeFilePath =	self._tempPath / (testbench.ModuleName + ".exe")
 		prjFilePath = self._tempPath / (testbench.ModuleName + ".prj")
-		self._LogDebug("Writing iSim project file to '{0!s}'".format(prjFilePath))
-		with prjFilePath.open('w') as prjFileHandle:
-			prjFileHandle.write(iSimProjectFileContent)
+		self._WriteXilinxProjectFile(prjFilePath, "iSim")
 
 		# create a ISELinker instance
 		fuse = self._ise.GetFuse()
