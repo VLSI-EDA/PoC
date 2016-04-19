@@ -1,0 +1,82 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# project configuration file
+vhdl		poc		"tb/common/my_project.vhdl"
+
+# board and device configuration files
+#
+# Altera boards
+# ======================================
+# Cyclone III boards
+if (BoardName = "DE0") then
+	vhdl	poc	"tb/common/my_config_DE0.vhdl"
+#elseif (BoardName = "DE0nano") then
+#	vhdl	poc	"tb/common/my_config_DE0nano.vhdl"
+	
+# Stratix II boards
+elseif (BoardName = "S2GXAV") then
+	vhdl	poc	"tb/common/my_config_S2GXAV.vhdl"
+
+# Stratix IV boards
+elseif (BoardName = "DE4") then
+	vhdl	poc	"tb/common/my_config_DE4.vhdl"
+
+# Stratix V boards
+elseif (BoardName = "DE5") then
+	vhdl	poc	"tb/common/my_config_DE5.vhdl"
+
+# Lattice boards
+# ======================================
+elseif (BoardName = "ECP5Versa") then
+	vhdl	poc	"tb/common/my_config_ECP5Versa.vhdl"
+
+# Xilinx boards
+# ======================================
+# Spartan-3 boards
+elseif (BoardName = "S3SK1000") then
+	vhdl	poc	"tb/common/my_config_S3SK1000.vhdl"
+
+# Spartan-6 boards
+elseif (BoardName = "Atlys") then
+	vhdl	poc	"tb/common/my_config_Atlys.vhdl"
+
+# Zynq-7000 boards
+	
+# Artix-7 BoardNames
+
+# Kintex-7 BoardNames
+elseif (BoardName = "KC705") then
+	vhdl	poc	"tb/common/my_config_KC705.vhdl"
+
+# Virtex-5 boards
+elseif (BoardName = "ML505") then
+	vhdl	poc	"tb/common/my_config_ML505.vhdl"
+elseif (BoardName = "ML506") then
+	vhdl	poc	"tb/common/my_config_ML506.vhdl"
+elseif (BoardName = "XUPV5") then
+	vhdl	poc	"tb/common/my_config_XUPV5.vhdl"
+	
+# Virtex-6 boards
+elseif (BoardName = "ML605") then
+	vhdl	poc	"tb/common/my_config_ML605.vhdl"
+	
+# Virtex-7 boards
+elseif (BoardName = "VC707") then
+	vhdl	poc	"tb/common/my_config_VC707.vhdl"
+#elseif (BoardName = "VC709") then
+#	vhdl	poc	"tb/common/my_config_VC709.vhdl"
+
+# other boards
+else
+	if (DeviceVendor = "Altera") then
+		vhdl	poc	"tb/common/my_config_DE4.vhdl"
+	elseif (DeviceVendor = "Xilinx") then
+		vhdl	poc	"tb/common/my_config_KC705.vhdl"
+	else
+		report "Board not supported. No generic my_config.vhdl found."
+	end if
+end if
