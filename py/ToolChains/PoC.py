@@ -75,8 +75,8 @@ class Configuration(BaseConfiguration):
 
 	def ConfigureForAll(self):
 		try:
-			latestTagHast = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True)
-			latestTagName = check_output(["git", "describe", "--tags", latestTagHast[:-1]], universal_newlines=True)
+			latestTagHash = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True)
+			latestTagName = check_output(["git", "describe", "--tags", latestTagHash[:-1]], universal_newlines=True)
 			latestTagName = latestTagName[:-1]
 			self._host._LogNormal("  PoC version: {0} (found in git)".format(latestTagName))
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = latestTagName

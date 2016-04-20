@@ -78,6 +78,14 @@ class Configuration(BaseConfiguration):
 				"BinaryDirectory":				"${InstallationDirectory}",
 				"Backend":								"llvm"
 			}
+		},
+		"Darwin": {
+			"INSTALL.GHDL": {
+				"Version":								"0.34dev",
+				"InstallationDirectory":	None,
+				"BinaryDirectory":				"${InstallationDirectory}",
+				"Backend":								"llvm"
+			}
 		}
 	}
 
@@ -104,7 +112,7 @@ class Configuration(BaseConfiguration):
 		self.__WriteGHDLSection(ghdlPath)
 	
 	def __GetGHDLPath(self):
-		if (self._host.Platform == "Linux"):
+		if (self._host.Platform in ["Linux", "Darwin"]):
 			p = Path("/opt/ghdl/bin")
 			if (p.exists()):    return p.parent
 			# FIXME: search in /opt/ghdl with version number
@@ -235,6 +243,7 @@ class GHDL(Executable):
 	def __init__(self, platform, binaryDirectoryPath, version, backend, logger=None):
 		if (platform == "Windows"):			executablePath = binaryDirectoryPath/ "ghdl.exe"
 		elif (platform == "Linux"):			executablePath = binaryDirectoryPath/ "ghdl"
+		elif (platform == "Darwin"):		executablePath = binaryDirectoryPath/ "ghdl"
 		else:																						raise PlatformNotSupportedException(platform)
 		super().__init__(platform, executablePath, logger=logger)
 
@@ -245,6 +254,8 @@ class GHDL(Executable):
 			if (backend not in ["mcode"]):								raise GHDLException("GHDL for Windows does not support backend '{0}'.".format(backend))
 		elif (platform == "Linux"):
 			if (backend not in ["gcc", "llvm", "mcode"]):	raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
+		elif (platform == "Darwin"):
+			if (backend not in ["gcc", "llvm", "mcode"]):  raise GHDLException("GHDL for OS X does not support backend '{0}'.".format(backend))
 
 		self._binaryDirectoryPath =	binaryDirectoryPath
 		self._backend =							backend

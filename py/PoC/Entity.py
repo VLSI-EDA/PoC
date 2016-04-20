@@ -256,13 +256,13 @@ class Entity(PathElement):
 		return self._quartusNetlist[0]
 
 	@property
-	def XstNetlist(self):
+	def XSTNetlist(self):
 		if (len(self._xstNetlist) == 0):
 			raise NotConfiguredException("No XST netlist configured for '{0!s}'.".format(self))
 		return self._xstNetlist[0]
 
 	@property
-	def CgNetlist(self):
+	def CGNetlist(self):
 		if (len(self._cgNetlist) == 0):
 			raise NotConfiguredException("No CoreGen netlist configured for '{0!s}'.".format(self))
 		return self._cgNetlist[0]

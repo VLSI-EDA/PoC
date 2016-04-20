@@ -1,0 +1,31 @@
+sudo: required
+dist: trusty
+language: python
+python:
+- "3.5"
+#addons:
+#- apt:
+#  - packages:
+#    - libgnat-4.8
+before_install:
+- sudo apt-get install -y libgnat-4.8
+install:
+- pip3 install -r tools/travis/pip3-requirements.lst
+before_script:
+- ./tools/travis/ghdl.setup.sh
+- ./tools/travis/poc.setup.sh
+script:
+- ./tools/travis/poc.run.sh
+#after_success:
+#- 
+#after_failure:
+#- 
+#before_deploy:
+#- 
+#deploy:
+#- 
+#after_deploy:
+#- 
+#after_script:
+#- 
+

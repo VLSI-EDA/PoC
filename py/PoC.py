@@ -163,8 +163,8 @@ class PoC(ILogable, ArgParseMixin):
 	def Root(self):								return self.__root
 
 	def _CheckEnvironment(self):
-		if (self.Platform not in ["Windows", "Linux"]):    raise PlatformNotSupportedException(self.Platform)
-		if (environ.get('PoCRootDirectory') is None):      raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
+		if (self.Platform not in ["Windows", "Linux", "Darwin"]):	raise PlatformNotSupportedException(self.Platform)
+		if (environ.get('PoCRootDirectory') is None):							raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
 
 	# read PoC configuration
 	# ============================================================================
@@ -346,9 +346,9 @@ class PoC(ILogable, ArgParseMixin):
 		#print('Upper case means default value')
 		print()
 
-		if (self.Platform == 'Windows'):			self._manualConfigurationForWindows()
-		elif (self.Platform == 'Linux'):			self._manualConfigurationForLinux()
-		else:																	raise PlatformNotSupportedException(self.Platform)
+		if (self.Platform == "Windows"):							self._manualConfigurationForWindows()
+		elif (self.Platform in ["Linux", "Darwin"]):	self._manualConfigurationForLinux()
+		else:																					raise PlatformNotSupportedException(self.Platform)
 
 		# write configuration
 		self.__WritePoCConfiguration()

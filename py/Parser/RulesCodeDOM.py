@@ -188,7 +188,7 @@ class ReplaceStatement(Statement):
 				elif (token.Value == "\\"):
 					if (wasEscapeSign == True):
 						wasEscapeSign = False
-						searchPattern += "\""
+						searchPattern += "\\"
 						continue
 					else:
 						wasEscapeSign =	True

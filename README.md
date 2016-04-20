@@ -1,7 +1,7 @@
 # The PoC-Library
 
 [![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
-[![Build Status](https://travis-ci.org/Paebbels/PoC.svg?branch=release)](https://travis-ci.org/Paebbels/PoC)
+[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release)](https://travis-ci.org/VLSI-EDA/PoC)
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
