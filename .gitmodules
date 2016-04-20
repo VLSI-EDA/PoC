@@ -5,3 +5,6 @@
 	path = lib/osvvm
 	url = https://github.com/VLSI-EDA/OSVVM.git
 
+[submodule "lib/cocotb"]
+	path = lib/cocotb
+	url = https://github.com/VLSI-EDA/cocotb.git
