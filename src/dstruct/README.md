@@ -5,12 +5,7 @@ The namespace `PoC.dstruct` offers syntheziable data structures.
 
 ## Package
 
-The package [`dstruct`][dstruct.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.dstruct.all;
-```
+The package [`PoC.dstruct`][dstruct.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

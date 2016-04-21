@@ -5,12 +5,7 @@ The namespace `PoC.mem.ocrom` offers different on-chip ROM abstractions.
 
 ## Package(s)
 
-The package [`ocrom`][ocrom.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.ocrom.all;
-```
+The package [`PoC.ocrom`][ocrom.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

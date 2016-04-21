@@ -5,12 +5,7 @@ The namespace `PoC.fifo` offers different FIFO implementations.
 
 ## Package(s)
 
-The package [`fifo`][fifo.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.fifo.all;
-```
+The package [`PoC.fifo`][fifo.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

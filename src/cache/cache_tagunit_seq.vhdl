@@ -3,10 +3,10 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
 -- ============================================================================
--- Module:					TODO
---
 -- Authors:					Patrick Lehmann
 -- 
+-- Module:					Tag-unit with sequential compare of tag.
+--
 -- Description:
 -- ------------------------------------
 --		TODO

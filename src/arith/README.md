@@ -5,17 +5,14 @@ The namespace `PoC.arith` offers different arithmetic implementations.
 
 ## Package
 
-The package [`arith`][arith.pkg] holds all component declarations for this
-namespace.
+The package [`PoC.arith`][arith.pkg] holds all component declarations for this
+namespace as well as public constants and functions.
 
-```VHDL
-library PoC;
-use     PoC.arith.all;
-```
 
 ## Entities
 
  - [`arith_addw`][arith_addw]
+ - [`arith_carrychain_inc`][arith_carrychain_inc]
  - [`arith_convert_bin2bcd`][arith_convert_bin2bcd]
  - [`arith_counter_bcd`][arith_counter_bcd] - implements a BCD (Binary-Coded Decimal) counter.
  - [`arith_counter_free`][arith_counter_free]
@@ -36,6 +33,7 @@ use     PoC.arith.all;
  [arith.pkg]:				arith.pkg.vhdl
 
  [arith_addw]:				arith_addw.vhdl
+ [arith_carrychain_inc]:  arith_carrychain_inc.vhdl
  [arith_convert_bin2bcd]:	arith_convert_bin2bcd.vhdl
  [arith_counter_bcd]:		arith_counter_bcd.vhdl
  [arith_counter_free]:		arith_counter_freev

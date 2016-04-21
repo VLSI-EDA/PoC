@@ -16,12 +16,7 @@ implementations.
 
 ## Package
 
-The package [`mem`][mem.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.mem.all;
-```
+The package [`PoC.mem`][mem.pkg] holds all component declarations for this namespace.
 
 
  [mem.pkg]:				mem.pkg.vhdl

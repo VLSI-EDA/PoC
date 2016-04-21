@@ -2,7 +2,7 @@
 
 The namespace `PoC` is equal to the VHDL library name `PoC`. All implementations
 are categorized into sub-namespaces. Common packages are located in the `common`
-subdirectory.
+sub-directory, simulation packages are located in the `sim` sub-directory.
 
 
 ## Sub-Namespaces

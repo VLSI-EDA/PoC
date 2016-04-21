@@ -5,12 +5,7 @@ The namespace `PoC.comm` offers different communication modules.
 
 ## Package
 
-The package [`comm`][comm.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.comm.all;
-```
+The package [`PoC.comm`][comm.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

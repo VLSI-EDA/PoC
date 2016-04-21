@@ -20,25 +20,20 @@ as well as low-speed bus protocol controllers.
 
 ## Package(s)
 
-The package [`io`][io.pkg] holds all enum, function and component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.io.all;
-```
+The package [`PoC.io`][io.pkg] holds all enum, function and component declarations for this namespace.
 
 
 ## Entities
 
- -  `io_Debounce`
- -  `io_7SegmentMux_BCD`
- -  `io_7SegmentMux_HEX`
- -  `io_FanControl`
- -  `io_FrequencyCounter`
- -  `io_GlitchFilter`
- -  `io_KeyPadScanner`
- -  `io_PulseWidthModulation`
- -  `io_TimingCounter`
+ -  [`io_Debounce`][io_Debounce]
+ -  [`io_7SegmentMux_BCD`][io_7SegmentMux_BCD]
+ -  [`io_7SegmentMux_HEX`][io_7SegmentMux_HEX]
+ -  [`io_FanControl`][io_FanControl]
+ -  [`io_FrequencyCounter`][io_FrequencyCounter]
+ -  [`io_GlitchFilter`][io_GlitchFilter]
+ -  [`io_KeyPadScanner`][io_KeyPadScanner]
+ -  [`io_PulseWidthModulation`][io_PulseWidthModulation]
+ -  [`io_TimingCounter`][io_TimingCounter]
 
  [io.pkg]:			io.pkg.vhdl
 
@@ -52,3 +47,13 @@ use     PoC.io.all;
  [io_ps2]:			ps2
  [io_uart]:			uart
  [io_vga]:			vga
+
+ [io_Debounce]:             io_Debounce.vhdl
+ [io_7SegmentMux_BCD]:      io_7SegmentMux_BCD.vhdl
+ [io_7SegmentMux_HEX]:      io_7SegmentMux_HEX.vhdl
+ [io_FanControl]:           io_FanControl.vhdl
+ [io_FrequencyCounter]:     io_FrequencyCounter.vhdl
+ [io_GlitchFilter]:         io_GlitchFilter.vhdl
+ [io_KeyPadScanner]:        io_KeyPadScanner.vhdl
+ [io_PulseWidthModulation]: io_PulseWidthModulation.vhdl
+ [io_TimingCounter]:        io_TimingCounter.vhdl
