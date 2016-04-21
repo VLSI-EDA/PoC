@@ -103,7 +103,7 @@ class Compiler(BaseCompiler):
 		self._RunPreReplace(netlist)
 
 		self._LogNormal("Running Altera Quartus Map...")
-		self._RunCompile(netlist)
+		self._RunCompile(netlist, board.Device)
 
 		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)

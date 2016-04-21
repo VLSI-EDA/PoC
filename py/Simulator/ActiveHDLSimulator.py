@@ -175,7 +175,7 @@ class Simulator(BaseSimulator):
 	
 		if (tclWaveFilePath.exists()):
 			self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
-			aSim.BatchCommand =	"do {0!s}; do {0!s}".format(tclWaveFilePath, tclGUIFilePath)
+			aSim.BatchCommand =	"do {0!s}; do {1!s}".format(tclWaveFilePath, tclGUIFilePath)
 		else:
 			self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
 			aSim.BatchCommand =	"add wave *; do {0!s}".format(tclGUIFilePath)

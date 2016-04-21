@@ -29,7 +29,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-from lib.Functions import Init
 from lib.Parser						import ParserException
 from Parser.RulesCodeDOM	import Document, PreProcessRulesStatement, PostProcessStatement, CopyStatement, ReplaceStatement, FileStatement
 
