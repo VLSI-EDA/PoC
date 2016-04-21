@@ -283,7 +283,7 @@ class XVhComp(Executable, VivadoMixIn):
 
 	def Compile(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -305,7 +305,7 @@ class XVhComp(Executable, VivadoMixIn):
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 				line = next(iterator)
 
@@ -405,7 +405,7 @@ class XElab(Executable, VivadoMixIn):
 
 	def Link(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -427,7 +427,7 @@ class XElab(Executable, VivadoMixIn):
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 				line = next(iterator)
 
@@ -497,7 +497,7 @@ class XSim(Executable, VivadoMixIn):
 
 	def Simulate(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -519,7 +519,7 @@ class XSim(Executable, VivadoMixIn):
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 				line = next(iterator)
 

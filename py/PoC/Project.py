@@ -63,7 +63,6 @@ class RulesFile(File, RulesParserMixIn):
 		self._variables =								None
 
 	def Parse(self):
-		# print("RulesFile.Parse:")
 		if (self._fileSet is None):											raise CommonException("File '{0!s}' is not associated to a fileset.".format(self._file))
 		if (self._project is None):											raise CommonException("File '{0!s}' is not associated to a project.".format(self._file))
 		if (self._project.RootDirectory is None):				raise CommonException("No RootDirectory configured for this project.")

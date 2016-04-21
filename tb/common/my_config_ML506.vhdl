@@ -22,7 +22,7 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,10 +38,11 @@
 -- limitations under the License.
 -- ===========================================================================
 
-library PoC;
 
 package my_config is
   constant MY_BOARD   : string := "ML506";
   constant MY_DEVICE  : string := "None";
+		
+	-- For internal use only
   constant MY_VERBOSE : boolean	:= false;
 end package;

@@ -1,0 +1,34 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Notes:
+#	- all files are relative to PoCRoot directory
+#	- ${section:option} expressions refer to the section, wherein this rule file was referenced
+#
+PreProcessRules
+	# Empty
+End PreProcessRules
+
+PostProcessRules
+	Copy "${SPECIAL:OutputDir}/${TopLevel}.ngc"													To "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.ngc"
+	Copy "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}_top.vhd"	To "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.vhdl"
+	
+	File "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.vhdl"
+		Replace "(architecture arch_mig.* of ${TopLevel} is).*(end architecture arch_mig.*;)"	With "\\1\\nbegin\\n\\2" Options DotAll
+		Replace "generic.*port\\s+\\("	With "port (" Options DotAll
+		Replace "DQ_WIDTH"						With "64"
+		Replace "DQS_WIDTH"						With "8"
+		Replace "ROW_WIDTH"						With "14"
+		Replace "BANK_WIDTH"					With "3"
+		Replace "CK_WIDTH"						With "1"
+		Replace "CKE_WIDTH"						With "1"
+		Replace "CS_WIDTH"						With "1"
+		Replace "nCS_PER_RANK"				With "1"
+		Replace "DM_WIDTH"						With "8"
+		Replace "ODT_WIDTH"						With "1"
+		Replace "ADDR_WIDTH"					With "28"
+		Replace "nCK_PER_CLK"					With "4"
+		Replace "PAYLOAD_WIDTH"				With "64"
+	End File
+End PostProcessRules

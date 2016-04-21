@@ -79,8 +79,8 @@ class Simulator(BaseSimulator):
 		super()._PrepareSimulationEnvironment()
 		
 	def PrepareSimulator(self, binaryPath, version):
-		# create the GHDL executable factory
-		self._LogVerbose("  Preparing Active-HDL simulator.")
+		# create the Active-HDL executable factory
+		self._LogVerbose("Preparing Active-HDL simulator.")
 		self._activeHDL =		ActiveHDL(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion="93", vhdlGenerics=None, guiMode=False):
@@ -105,7 +105,7 @@ class Simulator(BaseSimulator):
 			# self._RunSimulationWithGUI(testbenchName)
 		
 	def _RunCompile(self, testbench):
-		self._LogNormal("  running VHDL compiler for every vhdl file...")
+		self._LogNormal("Running VHDL compiler for every vhdl file...")
 		
 		# create a ActiveHDLVHDLCompiler instance
 		alib = self._activeHDL.GetVHDLLibraryTool()
@@ -141,7 +141,7 @@ class Simulator(BaseSimulator):
 
 
 	def _RunSimulation(self, testbench):
-		self._LogNormal("  running simulation...")
+		self._LogNormal("Running simulation...")
 		
 		tclBatchFilePath =		self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimBatchScript']
 		
@@ -162,7 +162,7 @@ class Simulator(BaseSimulator):
 			raise SimulatorException("Error while simulating '{0}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
 
 	def _RunSimulationWithGUI(self, testbench):
-		self._LogNormal("  running simulation...")
+		self._LogNormal("Running simulation...")
 	
 		tclGUIFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimGUIScript']
 		tclWaveFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimWaveScript']
@@ -174,11 +174,11 @@ class Simulator(BaseSimulator):
 		aSim.Title =					testbench.ModuleName
 	
 		if (tclWaveFilePath.exists()):
-			self._LogDebug("Found waveform script: '{0}'".format(str(tclWaveFilePath)))
-			aSim.BatchCommand =	"do {0}; do {0}".format(str(tclWaveFilePath), str(tclGUIFilePath))
+			self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
+			aSim.BatchCommand =	"do {0!s}; do {0!s}".format(tclWaveFilePath, tclGUIFilePath)
 		else:
-			self._LogDebug("Didn't find waveform script: '{0}'. Loading default commands.".format(str(tclWaveFilePath)))
-			aSim.BatchCommand =	"add wave *; do {0}".format(str(tclGUIFilePath))
+			self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
+			aSim.BatchCommand =	"add wave *; do {0!s}".format(tclGUIFilePath)
 
 		aSim.TopLevel =		"{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 		aSim.Simulate()

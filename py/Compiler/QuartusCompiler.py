@@ -62,7 +62,7 @@ class Compiler(BaseCompiler):
 
 	def PrepareCompiler(self, binaryPath, version):
 		# create the GHDL executable factory
-		self._LogVerbose("  Preparing Quartus-II Map (quartus_map).")
+		self._LogVerbose("Preparing Quartus-II Map (quartus_map).")
 		self._quartus =		QuartusII(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):
@@ -98,11 +98,14 @@ class Compiler(BaseCompiler):
 
 		self._WriteQuartusProjectFile(netlist)
 
-		self._LogNormal("  running Quartus-II Map...")
-		self._RunPrepareCompile(netlist)
+		self._LogNormal("Executing pre-processing tasks...")
 		self._RunPreCopy(netlist)
 		self._RunPreReplace(netlist)
-		self._RunCompile(netlist, board.Device)
+
+		self._LogNormal("Running Altera Quartus Map...")
+		self._RunCompile(netlist)
+
+		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
 

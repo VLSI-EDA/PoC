@@ -99,18 +99,18 @@ class Simulator(ILogable):
 	def _PrepareSimulationEnvironment(self):
 		# create temporary directory if not existent
 		if (not (self._tempPath).exists()):
-			self._LogVerbose("  Creating temporary directory for simulator files.")
-			self._LogDebug("    Temporary directory: {0!s}".format(self._tempPath))
+			self._LogVerbose("Creating temporary directory for simulator files.")
+			self._LogDebug("Temporary directory: {0!s}".format(self._tempPath))
 			self._tempPath.mkdir(parents=True)
 
 		# change working directory to temporary path
-		self._LogVerbose("  Changing working directory to temporary directory.")
-		self._LogDebug("    cd \"{0!s}\"".format(self._tempPath))
+		self._LogVerbose("Changing working directory to temporary directory.")
+		self._LogDebug("cd \"{0!s}\"".format(self._tempPath))
 		chdir(str(self._tempPath))
 
 	def _CreatePoCProject(self, testbench, board):
 		# create a PoCProject and read all needed files
-		self._LogDebug("    Create a PoC project '{0}'".format(testbench.ModuleName))
+		self._LogVerbose("Creating a PoC project '{0}'".format(testbench.ModuleName))
 		pocProject = PoCProject(testbench.ModuleName)
 
 		# configure the project
@@ -124,7 +124,7 @@ class Simulator(ILogable):
 		self._pocProject = pocProject
 
 	def _AddFileListFile(self, fileListFilePath):
-		self._LogDebug("    Reading filelist '{0!s}'".format(fileListFilePath))
+		self._LogVerbose("Reading filelist '{0!s}'".format(fileListFilePath))
 		# add the *.files file, parse and evaluate it
 		# if (not fileListFilePath.exists()):		raise SimulatorException("Files file '{0!s}' not found.".format(fileListFilePath)) from FileNotFoundError(str(fileListFilePath))
 
@@ -137,8 +137,10 @@ class Simulator(ILogable):
 		except ParserException as ex:
 			raise SimulatorException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
 
+		self._LogDebug("  " + ("=" * 78))
+		self._LogDebug("  Pretty printing the PoCProject...")
 		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("=" * 160)
+		self._LogDebug("  " + ("=" * 78))
 		if (len(fileListFile.Warnings) > 0):
 			for warn in fileListFile.Warnings:
 				self._LogWarning(warn)

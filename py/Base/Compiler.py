@@ -103,24 +103,24 @@ class Compiler(ILogable):
 	def _PrepareCompilerEnvironment(self):
 		# create temporary directory for GHDL if not existent
 		if (not (self._tempPath).exists()):
-			self._LogVerbose("  Creating temporary directory for synthesizer files.")
-			self._LogDebug("    Temporary directory: {0!s}".format(self._tempPath))
+			self._LogVerbose("Creating temporary directory for synthesizer files.")
+			self._LogDebug("Temporary directory: {0!s}".format(self._tempPath))
 			self._tempPath.mkdir(parents=True)
 
 		# change working directory to temporary iSim path
-		self._LogVerbose("  Changing working directory to temporary directory.")
-		self._LogDebug("    cd \"{0!s}\"".format(self._tempPath))
+		self._LogVerbose("Changing working directory to temporary directory.")
+		self._LogDebug("cd \"{0!s}\"".format(self._tempPath))
 		chdir(str(self._tempPath))
 
 		# create output directory for CoreGen if not existent
 		if not (self._outputPath).exists() :
-			self._LogVerbose("  Creating output directory for generated files.")
-			self._LogDebug("    Output directory: {0!s}.".format(self._outputPath))
+			self._LogVerbose("Creating output directory for generated files.")
+			self._LogDebug("Output directory: {0!s}.".format(self._outputPath))
 			self._outputPath.mkdir(parents=True)
 
 	def _CreatePoCProject(self, netlist, board):
 		# create a PoCProject and read all needed files
-		self._LogVerbose("  Create a PoC project '{0}'".format(netlist.ModuleName))
+		self._LogVerbose("Creating a PoC project '{0}'".format(netlist.ModuleName))
 		pocProject = PoCProject(netlist.ModuleName)
 
 		# configure the project
@@ -134,7 +134,7 @@ class Compiler(ILogable):
 		self._pocProject =					pocProject
 
 	def _AddFileListFile(self, fileListFilePath):
-		self._LogVerbose("  Reading filelist '{0!s}'".format(fileListFilePath))
+		self._LogVerbose("Reading filelist '{0!s}'".format(fileListFilePath))
 		# add the *.files file, parse and evaluate it
 		try:
 			fileListFile = self._pocProject.AddFile(FileListFile(fileListFilePath))
@@ -145,15 +145,17 @@ class Compiler(ILogable):
 		except ParserException as ex:
 			raise CompilerException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
 
+		self._LogDebug("  " + ("=" * 78))
+		self._LogDebug("  Pretty printing the PoCProject...")
 		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("=" * 160)
+		self._LogDebug("  " + ("=" * 78))
 		if (len(fileListFile.Warnings) > 0):
 			for warn in fileListFile.Warnings:
 				self._LogWarning(warn)
 			raise CompilerException("Found critical warnings while parsing '{0!s}'".format(fileListFilePath))
 
 	def _AddRulesFiles(self, rulesFilePath):
-		self._LogVerbose("  Reading rules from '{0!s}'".format(rulesFilePath))
+		self._LogVerbose("Reading rules from '{0!s}'".format(rulesFilePath))
 		# add the *.rules file, parse and evaluate it
 		try:
 			rulesFile = self._pocProject.AddFile(RulesFile(rulesFilePath))
@@ -161,14 +163,15 @@ class Compiler(ILogable):
 		except ParserException as ex:
 			raise CompilerException("Error while parsing '{0!s}'.".format(rulesFilePath)) from ex
 
-		self._LogDebug("    Pre-process rules:")
+		self._LogDebug("Pre-process rules:")
 		for rule in rulesFile.PreProcessRules:
-			self._LogDebug("      {0!s}".format(rule))
-		self._LogDebug("    Post-process rules:")
+			self._LogDebug("  {0!s}".format(rule))
+		self._LogDebug("Post-process rules:")
 		for rule in rulesFile.PostProcessRules:
-			self._LogDebug("      {0!s}".format(rule))
+			self._LogDebug("  {0!s}".format(rule))
 
 	def _RunPreCopy(self, netlist):
+		self._LogVerbose('  copy further input files into temporary directory...')
 		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
 		if (rulesFiles):
 			preCopyTasks = []
@@ -185,10 +188,13 @@ class Compiler(ILogable):
 			else:
 				preCopyTasks = []
 
-		self._LogNormal('  copy further input files into temporary directory...')
-		self._ExecuteCopyTasks(preCopyTasks, "pre")
+		if (len(preCopyTasks) != 0):
+			self._ExecuteCopyTasks(preCopyTasks, "pre")
+		else:
+			self._LogDebug('    nothing to copy')
 
 	def _RunPostCopy(self, netlist):
+		self._LogVerbose('  copy generated files into netlist directory...')
 		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
 		if (rulesFiles):
 			postCopyTasks = []
@@ -205,15 +211,17 @@ class Compiler(ILogable):
 			else:
 				postCopyTasks = []
 
-		self._LogNormal('  copy generated files into netlist directory...')
-		self._ExecuteCopyTasks(postCopyTasks, "post")
+		if (len(postCopyTasks) != 0):
+			self._ExecuteCopyTasks(postCopyTasks, "post")
+		else:
+			self._LogDebug('    nothing to copy')
 
 	def _ParseCopyRules(self, rawList):
 		# read pre-copy tasks
 		copyTasks = []
 		if (len(rawList) != 0):
 			rawList = rawList.split("\n")
-			self._LogDebug("Copy tasks from config file:\n  " + ("\n  ".join(rawList)))
+			self._LogDebug("  Copy tasks from config file:\n  " + ("\n  ".join(rawList)))
 
 			preCopyRegExpStr = r"^\s*(?P<SourceFilename>.*?)"  # Source filename
 			preCopyRegExpStr += r"\s->\s"  # Delimiter signs
@@ -235,17 +243,20 @@ class Compiler(ILogable):
 			if not task.DestinationPath.parent.exists():
 				task.DestinationPath.parent.mkdir(parents=True)
 
-			self._LogVerbose("    {0}-copying '{1!s}'.".format(text, task.SourcePath))
+			self._LogDebug("{0}-copying '{1!s}'.".format(text, task.SourcePath))
 			shutil.copy(str(task.SourcePath), str(task.DestinationPath))
 
 	def _RunPreReplace(self, netlist):
+		self._LogVerbose('  patching files in temporary directory...')
 		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
 		if (rulesFiles):
 			preReplaceTasks = []
 			for rule in rulesFiles[0].PreProcessRules:
 				if isinstance(rule, ReplaceRuleMixIn):
-					filePath =			self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
-					task = ReplaceTask(Path(filePath), rule.SearchPattern, rule.ReplacePattern)
+					filePath =				self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
+					searchPattern =		self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.SearchPattern, {})
+					replacePattern =	self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.ReplacePattern, {})
+					task = ReplaceTask(Path(filePath), searchPattern, replacePattern, rule.RegExpOption_MultiLine, rule.RegExpOption_DotAll, rule.RegExpOption_CaseInsensitive)
 					preReplaceTasks.append(task)
 		else:
 			preReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PreReplaceRules']
@@ -254,17 +265,22 @@ class Compiler(ILogable):
 			else:
 				preReplaceTasks = []
 
-		self._LogNormal('  patching files in temporary directory...')
-		self._ExecuteReplaceTasks(preReplaceTasks, "pre")
+		if (len(preReplaceTasks) != 0):
+			self._ExecuteReplaceTasks(preReplaceTasks, "pre")
+		else:
+			self._LogDebug('    nothing to patch')
 
 	def _RunPostReplace(self, netlist):
+		self._LogVerbose('  patching files in netlist directory...')
 		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]  # FIXME: get rulefile from netlist object as a rulefile object instead of a path
 		if (rulesFiles):
 			postReplaceTasks = []
 			for rule in rulesFiles[0].PostProcessRules:
 				if isinstance(rule, ReplaceRuleMixIn):
-					filePath = self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
-					task = ReplaceTask(Path(filePath), rule.SearchPattern, rule.ReplacePattern)
+					filePath =				self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
+					searchPattern =		self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.SearchPattern, {})
+					replacePattern =	self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.ReplacePattern, {})
+					task = ReplaceTask(Path(filePath), searchPattern, replacePattern, rule.RegExpOption_MultiLine, rule.RegExpOption_DotAll, rule.RegExpOption_CaseInsensitive)
 					postReplaceTasks.append(task)
 		else:
 			postReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PostReplaceRules']
@@ -273,14 +289,17 @@ class Compiler(ILogable):
 			else:
 				postReplaceTasks = []
 
-		self._LogNormal('  patching files in netlist directory...')
-		self._ExecuteReplaceTasks(postReplaceTasks, "post")
+		if (len(postReplaceTasks) != 0):
+			self._ExecuteReplaceTasks(postReplaceTasks, "post")
+		else:
+			self._LogDebug('    nothing to patch')
 
 	def _ParseReplaceRules(self, rawList):
 		replaceTasks = []
 		rawList = rawList.split("\n")
-		self._LogDebug("Replacement tasks:\n  " + ("\n  ".join(rawList)))
+		self._LogDebug("  Replacement tasks:\n  " + ("\n  ".join(rawList)))
 
+		# FIXME: Rework inline replace rule syntax.
 		replaceRegExpStr = r"^\s*(?P<Filename>.*?)\s+:"  # Filename
 		replaceRegExpStr += r"(?P<Options>[dim]{0,3}):\s+"  # RegExp options
 		replaceRegExpStr += r"\"(?P<Search>.*?)\"\s+->\s+"  # Search regexp
@@ -293,7 +312,7 @@ class Compiler(ILogable):
 			if (replaceRegExpMatch is not None):
 				replaceTasks.append(ReplaceTask(
 					Path(replaceRegExpMatch.group('Filename')),
-					# replaceRegExpMatch.group('Options'),
+					# replaceRegExpMatch.group('Options'),					# FIXME:
 					replaceRegExpMatch.group('Search'),
 					replaceRegExpMatch.group('Replace')
 				))
@@ -301,25 +320,24 @@ class Compiler(ILogable):
 				raise CompilerException("Error in replace rule '{0}'.".format(item))
 
 	def _ExecuteReplaceTasks(self, tasks, text):
-		self._LogNormal("  {0}-replace in files...".format(text))
 		for task in tasks:
 			if not task.FilePath.exists(): raise CompilerException("Can not {0}-replace in file '{1!s}'.".format(text, task.FilePath)) from FileNotFoundError(str(task.FilePath))
-			self._LogVerbose("    {0}-replace in file '{1!s}': search for '{2}' replace by '{3}'.".format(text, task.FilePath, task.SearchPattern, task.ReplacePattern))
-
-			# FIXME: current "Search For ... Replace By ...." rules have no regexp options
-			options = "i"
+			self._LogDebug("{0}-replace in file '{1!s}': search for '{2}' replace by '{3}'.".format(text, task.FilePath, task.SearchPattern, task.ReplacePattern))
 
 			regExpFlags = 0
-			if ('i' in options):    regExpFlags |= re.IGNORECASE
-			if ('m' in options):    regExpFlags |= re.MULTILINE
-			if ('d' in options):    regExpFlags |= re.DOTALL
+			if task.RegExpOption_CaseInsensitive:	regExpFlags |= re.IGNORECASE
+			if task.RegExpOption_MultiLine:				regExpFlags |= re.MULTILINE
+			if task.RegExpOption_DotAll:					regExpFlags |= re.DOTALL
+
 			# compile regexp
 			regExp = re.compile(task.SearchPattern, regExpFlags)
 			# open file and read all lines
 			with task.FilePath.open('r') as fileHandle:
 				FileContent = fileHandle.read()
 			# replace
-			NewContent = re.sub(regExp, task.ReplacePattern, FileContent)
+			NewContent,replaceCount = re.subn(regExp, task.ReplacePattern, FileContent)
+			if (replaceCount == 0):
+				self._LogWarning("  Search pattern '{0}' not found in file '{1!s}'.".format(task.SearchPattern, task.FilePath))
 			# open file to write the replaced data
 			with task.FilePath.open('w') as fileHandle:
 				fileHandle.write(NewContent)

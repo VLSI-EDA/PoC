@@ -433,7 +433,7 @@ class GHDLAnalyze(GHDL):
 	def Analyze(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList.insert(0, self.Executable)
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -455,7 +455,7 @@ class GHDLAnalyze(GHDL):
 				self._hasWarnings |=	(line.Severity is Severity.Warning)
 				self._hasErrors |=		(line.Severity is Severity.Error)
 
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 				line = next(iterator)
 
@@ -476,7 +476,7 @@ class GHDLElaborate(GHDL):
 	def Elaborate(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList.insert(0, self.Executable)
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -490,7 +490,7 @@ class GHDLElaborate(GHDL):
 			iterator = iter(GHDLElaborateFilter(self.GetReader()))
 
 			line = next(iterator)
-			line.Indent(2)
+			line.IndentBy(2)
 			self._hasOutput = True
 			vhdlLibraryName = self.Parameters[self.SwitchVHDLLibrary]
 			topLevel = self.Parameters[self.ArgTopLevel]
@@ -503,7 +503,7 @@ class GHDLElaborate(GHDL):
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 
 		except StopIteration as ex:
@@ -525,7 +525,7 @@ class GHDLRun(GHDL):
 		parameterList += self.RunOptions.ToArgumentList()
 		parameterList.insert(0, self.Executable)
 
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -539,7 +539,7 @@ class GHDLRun(GHDL):
 			iterator = iter(GHDLRunFilter(self.GetReader()))
 
 			line = next(iterator)
-			line.Indent(2)
+			line.IndentBy(2)
 			self._hasOutput = True
 			vhdlLibraryName =	self.Parameters[self.SwitchVHDLLibrary]
 			topLevel =				self.Parameters[self.ArgTopLevel]
@@ -552,7 +552,7 @@ class GHDLRun(GHDL):
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 
 		except StopIteration as ex:

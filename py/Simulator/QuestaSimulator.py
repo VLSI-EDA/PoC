@@ -75,8 +75,8 @@ class Simulator(BaseSimulator):
 		super()._PrepareSimulationEnvironment()
 
 	def PrepareSimulator(self, binaryPath, version):
-		# create the GHDL executable factory
-		self._LogVerbose("  Preparing Mentor simulator.")
+		# create the QuestaSim executable factory
+		self._LogVerbose("Preparing Mentor simulator.")
 		self._questa =		QuestaSim(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion="93", vhdlGenerics=None, guiMode=False):
@@ -98,7 +98,7 @@ class Simulator(BaseSimulator):
 			self._RunSimulationWithGUI(testbench)
 		
 	def _RunCompile(self, testbench):
-		self._LogNormal("  running VHDL compiler for every vhdl file...")
+		self._LogNormal("Running VHDL compiler for every vhdl file...")
 
 		# create a QuestaVHDLCompiler instance
 		vlib = self._questa.GetVHDLLibraryTool()
@@ -140,7 +140,7 @@ class Simulator(BaseSimulator):
 				vcomLogFile.unlink()
 
 	def _RunSimulation(self, testbench):
-		self._LogNormal("  running simulation...")
+		self._LogNormal("Running simulation...")
 		
 		tclBatchFilePath =		self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		
@@ -155,7 +155,7 @@ class Simulator(BaseSimulator):
 		vsim.Simulate()
 		
 	def _RunSimulationWithGUI(self, testbench):
-		self._LogNormal("  running simulation...")
+		self._LogNormal("Running simulation...")
 	
 		tclGUIFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
 		tclWaveFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']

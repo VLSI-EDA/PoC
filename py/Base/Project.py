@@ -382,9 +382,9 @@ class Project():
 			buffer += _indent + "| o-{0}\n".format(lib.Name)
 			for file in lib.Files:
 				buffer += _indent + "| | o-{0}\n".format(file.Path)
-		buffer += _indent + "o-External VHDL libraries:\n"
+		buffer += _indent + "o-External VHDL libraries:"
 		for lib in self._externalVHDLLibraries:
-			buffer += _indent + "| o-{0} -> {1}\n".format(lib.Name, lib.Path)
+			buffer += "\n{0}| o-{1} -> {2}".format(_indent, lib.Name, lib.Path)
 		return buffer
 	
 	def __str__(self):

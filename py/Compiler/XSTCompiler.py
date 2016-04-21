@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:					Patrick Lehmann
 # 
-# Python Class:			This PoCXCOCompiler compiles xco IPCores to netlists
+# Python Class:			This XSTCompiler compiles VHDL source files to netlists
 # 
 # Description:
 # ------------------------------------
@@ -39,11 +39,12 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
-
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
 
 
 # load dependencies
+import re											# used for output filtering
+
 from lib.Functions						import Init
 from Base.Exceptions					import NotConfiguredException, PlatformNotSupportedException
 from Base.Project							import ToolChain, Tool
@@ -60,11 +61,14 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 		XilinxProjectExportMixIn.__init__(self)
 
-		self._ise =		None
-
+		self._device =				None
+		self._tempPath =			None
+		self._outputPath =		None
+		self._ise =						None
+		
 	def PrepareCompiler(self, binaryPath, version):
 		# create the GHDL executable factory
-		self._LogVerbose("  Preparing Xilinx Synthesis Tool (XST).")
+		self._LogVerbose("Preparing Xilinx Synthesis Tool (XST).")
 		self._ise =		ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):
@@ -85,8 +89,10 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 
 	def Run(self, netlist, board, **_):
 		self._LogQuiet("IP core: {YELLOW}{0!s}{RESET}".format(netlist.Parent, **Init.Foreground))
-
-		# setup all needed paths to execute fuse
+		
+		self._device =				board.Device
+		
+		# setup all needed paths to execute xst
 		self._PrepareCompilerEnvironment(board.Device)
 		self._WriteSpecialSectionIntoConfig(board.Device)
 
@@ -101,15 +107,17 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		self._WriteXilinxProjectFile(netlist.PrjFile, "XST")
 		self._WriteXstOptionsFile(netlist, board.Device)
 
-
-		self._LogNormal("  running XST...")
-		self._RunPrepareCompile(netlist)
+		self._LogNormal("Executing pre-processing tasks...")
 		self._RunPreCopy(netlist)
 		self._RunPreReplace(netlist)
+
+		self._LogNormal("Running Xilinx Synthesis Tool...")
 		self._RunCompile(netlist)
+
+		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
-
+		
 	def _PrepareCompilerEnvironment(self, device):
 		self._LogNormal("preparing synthesis environment...")
 		self._tempPath =		self.Host.Directories["XSTTemp"]
@@ -122,9 +130,6 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		self.Host.PoCConfig['SPECIAL']['Device'] =				device.FullName
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =	device.Series
 		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self._tempPath.as_posix()
-
-	def _RunPrepareCompile(self, netlist):
-		pass
 
 	def _RunCompile(self, netlist):
 		reportFilePath = self._tempPath / (netlist.ModuleName + ".log")
@@ -139,7 +144,7 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		self._LogVerbose("Generating XST options file.")
 
 		# read XST options file template
-		self._LogDebug("  Reading Xilinx Compiler Tool option file from '{0!s}'".format(netlist.XstTemplateFile))
+		self._LogDebug("Reading Xilinx Compiler Tool option file from '{0!s}'".format(netlist.XstTemplateFile))
 		if (not netlist.XstTemplateFile.exists()):		raise CompilerException("XST template files '{0!s}' not found.".format(netlist.XstTemplateFile)) from FileNotFoundError(str(netlist.XstTemplateFile))
 
 		with netlist.XstTemplateFile.open('r') as fileHandle:
@@ -214,6 +219,6 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		if (self.Host.PoCConfig.has_option(netlist.ConfigSectionName, 'XSTOption.Generics')):
 			xstFileContent += "-generics {{ {0} }}".format(self.Host.PoCConfig[netlist.ConfigSectionName]['XSTOption.Generics'])
 
-		self._LogDebug("  Writing Xilinx Compiler Tool option file to '{0!s}'".format(netlist.XstFile))
+		self._LogDebug("Writing Xilinx Compiler Tool option file to '{0!s}'".format(netlist.XstFile))
 		with netlist.XstFile.open('w') as fileHandle:
 			fileHandle.write(xstFileContent)

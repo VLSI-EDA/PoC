@@ -83,7 +83,7 @@ class Make(Executable):
 
 	def Run(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -97,7 +97,7 @@ class Make(Executable):
 			iterator = iter(GNUMakeFilter(self.GetReader()))
 
 			line = next(iterator)
-			line.Indent(2)
+			line.IndentBy(2)
 			self._hasOutput = True
 			self._LogNormal("    Make messages")
 			self._LogNormal("    " + ("-" * 76))
@@ -108,7 +108,7 @@ class Make(Executable):
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 
 		except StopIteration as ex:

@@ -147,7 +147,7 @@ class ReplaceStatement(Statement):
 	@property
 	def ReplacePattern(self):		return self._replacePattern
 	@property
-	def CaseSensitive(self):		return self._caseInsensitive
+	def CaseInsensitive(self):		return self._caseInsensitive
 	@property
 	def MultiLine(self):				return self._multiLine
 	@property

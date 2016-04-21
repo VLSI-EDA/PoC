@@ -32,10 +32,6 @@
 # ==============================================================================
 
 # entry point
-from pathlib import Path
-
-from Base.Exceptions import NotConfiguredException
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -45,10 +41,13 @@ else:
 
 
 # load dependencies
-from enum									import Enum, unique
 from collections					import OrderedDict
+from enum									import Enum, unique
+from pathlib							import Path
 
+from lib.Functions				import Init
 from lib.Decorators				import LazyLoadTrigger, ILazyLoadable
+from Base.Exceptions			import NotConfiguredException
 #from Base.Exceptions			import CommonException
 from Base.Configuration		import ConfigurationException
 
@@ -616,7 +615,10 @@ class FQN:
 				pe = WildCard(host, part, "----", cur)
 				self.__parts.append(pe)
 			else:
-				pe = cur[part]
+				try:
+					pe = cur[part]
+				except KeyError:
+					raise ConfigurationException("PoC entity '{GREEN}PoC.{0}.{RED}{1}{RESET}' not found.".format(".".join(parts[:pos]), ".".join(parts[pos:]), **Init.Foreground))
 				self.__parts.append(pe)
 				cur = pe
 

@@ -163,7 +163,7 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 
 	def Compile(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -186,7 +186,7 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 				line = next(iterator)
 
@@ -237,8 +237,8 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 
 	def Simulate(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
-		self._LogDebug("    tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self._LogDebug("tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
 
 		try:
 			self.StartProcess(parameterList)
@@ -260,7 +260,7 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 				self._hasWarnings |=	(line.Severity is Severity.Warning)
 				self._hasErrors |=		(line.Severity is Severity.Error)
 
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 				line = next(iterator)
 
@@ -326,8 +326,8 @@ class Simulator(Executable, ActiveHDLMixIn):
 	def Simulate(self):
 		parameterList = self.Parameters.ToArgumentList()
 
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
-		self._LogDebug("    tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self._LogDebug("tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
 
 		_indent = "    "
 		print(_indent + "vsimsa messages for '{0}.{1}'".format("??????", "??????"))  # self.VHDLLibrary, topLevel))
@@ -381,7 +381,7 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 
 	def CreateLibrary(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("    command: {0}".format(" ".join(parameterList)))
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -403,7 +403,7 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 				self._hasWarnings |=	(line.Severity is Severity.Warning)
 				self._hasErrors |=		(line.Severity is Severity.Error)
 
-				line.Indent(2)
+				line.IndentBy(2)
 				self._Log(line)
 				line = next(iterator)
 

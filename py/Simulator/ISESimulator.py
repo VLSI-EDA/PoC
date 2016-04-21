@@ -74,13 +74,13 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		return self._tempPath
 
 	def _PrepareSimulationEnvironment(self):
-		self._LogNormal("preparing simulation environment...")
+		self._LogNormal("Preparing simulation environment...")
 		self._tempPath = self.Host.Directories["iSimTemp"]
 		super()._PrepareSimulationEnvironment()
 
 	def PrepareSimulator(self, binaryPath, version):
 		# create the Xilinx ISE executable factory
-		self._LogVerbose("  Preparing GHDL simulator.")
+		self._LogVerbose("Preparing ISE simulator.")
 		self._ise = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion=None, vhdlGenerics=None, guiMode=False):
@@ -103,12 +103,12 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		prjFilePath = self._tempPath / (testbench.ModuleName + ".prj")
 		self._WriteXilinxProjectFile(prjFilePath, "iSim", self._vhdlVersion)
 
-		# create a VivadoVHDLCompiler instance
+		# create an ISEVHDLCompiler instance
 		vhcomp = self._ise.GetVHDLCompiler()
 		vhcomp.Compile(str(prjFilePath))
 
 	def _RunLink(self, testbench):
-		self._LogNormal("  running fuse...")
+		self._LogNormal("Running fuse...")
 		
 		exeFilePath =	self._tempPath / (testbench.ModuleName + ".exe")
 		prjFilePath = self._tempPath / (testbench.ModuleName + ".prj")
@@ -133,7 +133,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 			raise SimulatorException("Error while analysing '{0!s}'.".format(prjFilePath))
 	
 	def _RunSimulation(self, testbench):
-		self._LogNormal("  running simulation...")
+		self._LogNormal("Running simulation...")
 		
 		iSimLogFilePath =		self._tempPath / (testbench.ModuleName + ".iSim.log")
 		exeFilePath =				self._tempPath / (testbench.ModuleName + ".exe")
@@ -153,10 +153,10 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 			# if iSim save file exists, load it's settings
 			if wcfgFilePath.exists():
-				self._LogDebug("    Found waveform config file: '{0!s}'".format(wcfgFilePath))
+				self._LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
 				iSim.Parameters[iSim.SwitchWaveformFile] =	str(wcfgFilePath)
 			else:
-				self._LogDebug("    Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
+				self._LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
 		iSim.Simulate()
 

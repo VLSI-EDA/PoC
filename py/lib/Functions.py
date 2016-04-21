@@ -56,6 +56,8 @@ class Init:
 		"MAGENTA":	Foreground.LIGHTMAGENTA_EX,
 		"BLUE":			Foreground.LIGHTBLUE_EX,
 		"CYAN":			Foreground.LIGHTCYAN_EX,
+		"GRAY":			Foreground.WHITE,
+		"DARKGRAY":	Foreground.LIGHTBLACK_EX,
 		"RESET":		Foreground.RESET,
 
 		"HEADLINE":	Foreground.LIGHTMAGENTA_EX,

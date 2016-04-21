@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:					Patrick Lehmann
 # 
-# Python Class:			This PoCXCOCompiler compiles xco IPCores to netlists
+# Python Class:			This XCOCompiler compiles xco IPCores to netlists
 # 
 # Description:
 # ------------------------------------
@@ -39,8 +39,9 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Class Compiler(PoCCompiler)")
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XCOCompiler")
 
+	
 # load dependencies
 import re								# used for output filtering
 import shutil
@@ -62,23 +63,14 @@ class Compiler(BaseCompiler):
 	def __init__(self, host, showLogs, showReport):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 
-		self._entity =				None
 		self._device =				None
 		self._tempPath =			None
 		self._outputPath =		None
 		self._ise =						None
-
-		self._PrepareCompilerEnvironment()
-
-	def _PrepareCompilerEnvironment(self):
-		self._LogNormal("preparing synthesis environment...")
-		self._tempPath =		self.Host.Directories["CoreGenTemp"]
-		self._outputPath =	self.Host.Directories["PoCNetList"] / str(self._device)
-		super()._PrepareCompilerEnvironment()
-
+		
 	def PrepareCompiler(self, binaryPath, version):
 		# create the GHDL executable factory
-		self._LogVerbose("  Preparing Xilinx Core Generator Tool (CoreGen).")
+		self._LogVerbose("Preparing Xilinx Core Generator Tool (CoreGen).")
 		self._ise = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):
@@ -102,27 +94,39 @@ class Compiler(BaseCompiler):
 
 		self._device =				board.Device
 
-		# setup all needed paths to execute fuse
+		# setup all needed paths to execute coregen
+		self._PrepareCompilerEnvironment(board.Device)
+		self._WriteSpecialSectionIntoConfig(board.Device)
 		self._CreatePoCProject(netlist, board)
 		if (netlist.RulesFile is not None):
 			self._AddRulesFiles(netlist.RulesFile)
 
-		self._RunPrepareCompile(netlist)
+		self._LogNormal("Executing pre-processing tasks...")
 		self._RunPreCopy(netlist)
 		self._RunPreReplace(netlist)
+
+		self._LogNormal("Running Xilinx Core Generator...")
 		self._RunCompile(netlist)
+
+		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
 
-	def _RunPrepareCompile(self, netlist):
-		self._LogNormal("  preparing compiler environment for IP-core '{0}' ...".format(netlist.Parent))
+	def _PrepareCompilerEnvironment(self, device):
+		self._LogNormal("preparing synthesis environment...")
+		self._tempPath =		self.Host.Directories["CoreGenTemp"]
+		self._outputPath =	self.Host.Directories["PoCNetList"] / str(device)
+		super()._PrepareCompilerEnvironment()
 
+	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
-		self.Host.PoCConfig['SPECIAL'] =							{}
-		self.Host.PoCConfig['SPECIAL']['Device'] =		str(self._device)
-		self.Host.PoCConfig['SPECIAL']['OutputDir'] =	self._tempPath.as_posix()
+		self.Host.PoCConfig['SPECIAL'] = {}
+		self.Host.PoCConfig['SPECIAL']['Device'] =				device.FullName
+		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =	device.Series
+		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self._tempPath.as_posix()
 
 	def _RunCompile(self, netlist):
+		self._LogVerbose("Patching coregen.cgp and .cgc files...")
 		# read netlist settings from configuration file
 		xcoInputFilePath =		netlist.XcoFile
 		cgcTemplateFilePath =	self.Host.Directories["PoCNetlist"] / "template.cgc"
@@ -185,17 +189,17 @@ class Compiler(BaseCompiler):
 			cgcFileHandle.write(cgContentFileContent)
 
 		# copy xco file into temporary directory
-		self._LogDebug("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
-		self._LogVerbose("    cp {0} {1}".format(str(xcoInputFilePath), str(self._tempPath)))
+		self._LogVerbose("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
+		self._LogDebug("cp {0!s} {1!s}".format(xcoInputFilePath, self._tempPath))
 		shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
 
 		# change working directory to temporary CoreGen path
-		self._LogVerbose('    cd {0}'.format(str(self._tempPath)))
+		self._LogDebug('    cd {0!s}'.format(self._tempPath))
 		chdir(str(self._tempPath))
 
 		# running CoreGen
 		# ==========================================================================
-		self._LogNormal("  running CoreGen...")
+		self._LogVerbose("Executing CoreGen...")
 		coreGen = self._ise.GetCoreGenerator()
 		coreGen.Parameters[coreGen.SwitchProjectFile] =	"."		# use current directory and the default project name
 		coreGen.Parameters[coreGen.SwitchBatchFile] =		str(xcoFilePath)

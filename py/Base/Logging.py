@@ -63,20 +63,19 @@ class Severity(Enum):
 	
 
 class LogEntry:
-	def __init__(self, message, severity=Severity.Normal):
+	def __init__(self, message, severity=Severity.Normal, indent=0):
 		self._severity =	severity
 		self._message =		message
-		self._indent =		0
+		self._indent =		indent
 	
 	@property
-	def Severity(self):
-		return self._severity
-	
+	def Severity(self):		return self._severity
 	@property
-	def Message(self):
-		return ("  " * self._indent) + self._message
+	def Indent(self):			return self._indent
+	@property
+	def Message(self):		return ("  " * self._indent) + self._message
 
-	def Indent(self, indent):
+	def IndentBy(self, indent):
 		self._indent += indent
 	
 	def __str__(self):
@@ -138,14 +137,14 @@ class Logger:
 	def WriteQuiet(self, message):
 		return self.Write(LogEntry(message, Severity.Quiet))
 	
-	def WriteNormal(self, message):
-		return self.Write(LogEntry(message, Severity.Normal))
+	def WriteNormal(self, message, indent=0):
+		return self.Write(LogEntry(message, Severity.Normal, indent))
 	
-	def WriteVerbose(self, message):
-		return self.Write(LogEntry(message, Severity.Verbose))
+	def WriteVerbose(self, message, indent=1):
+		return self.Write(LogEntry(message, Severity.Verbose, indent))
 	
-	def WriteDebug(self, message):
-		return self.Write(LogEntry(message, Severity.Debug))
+	def WriteDebug(self, message, indent=2):
+		return self.Write(LogEntry(message, Severity.Debug, indent))
 	
 		
 class ILogable:
@@ -161,47 +160,47 @@ class ILogable:
 			return self.__logger.Write(entry)
 		return False
 
-	def _TryLog(self, entry):
+	def _TryLog(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.TryWrite(entry)
+			return self.__logger.TryWrite(*args, **kwargs)
 		return False
 
-	def _LogFatal(self, message):
+	def _LogFatal(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.WriteFatal(message)
+			return self.__logger.WriteFatal(*args, **kwargs)
 		return False
 
-	def _LogError(self, message):
+	def _LogError(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.WriteError(message)
+			return self.__logger.WriteError(*args, **kwargs)
 		return False
 	
-	def _LogWarning(self, message):
+	def _LogWarning(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.WriteWarning(message)
+			return self.__logger.WriteWarning(*args, **kwargs)
 		return False
 	
-	def _LogInfo(self, message):
+	def _LogInfo(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.WriteInfo(message)
+			return self.__logger.WriteInfo(*args, **kwargs)
 		return False
 	
-	def _LogQuiet(self, message):
+	def _LogQuiet(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.WriteQuiet(message)
+			return self.__logger.WriteQuiet(*args, **kwargs)
 		return False
 	
-	def _LogNormal(self, message):
+	def _LogNormal(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.WriteNormal(message)
+			return self.__logger.WriteNormal(*args, **kwargs)
 		return False
 	
-	def _LogVerbose(self, message):
+	def _LogVerbose(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.WriteVerbose(message)
+			return self.__logger.WriteVerbose(*args, **kwargs)
 		return False
 	
-	def _LogDebug(self, message):
+	def _LogDebug(self, *args, **kwargs):
 		if self.__logger is not None:
-			return self.__logger.WriteDebug(message)
+			return self.__logger.WriteDebug(*args, **kwargs)
 		return False

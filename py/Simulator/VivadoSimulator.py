@@ -81,8 +81,8 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		super()._PrepareSimulationEnvironment()
 
 	def PrepareSimulator(self, binaryPath, version):
-		# create the GHDL executable factory
-		self._LogVerbose("  Preparing GHDL simulator.")
+		# create the Vivado executable factory
+		self._LogVerbose("Preparing Vivado simulator.")
 		self._vivado = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion="93", vhdlGenerics=None, guiMode=False):
@@ -110,7 +110,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		xvhcomp.Compile(str(prjFilePath))
 		
 	def _RunLink(self, testbench):
-		self._LogNormal("  running xelab...")
+		self._LogNormal("Running xelab...")
 		
 		xelabLogFilePath =	self._tempPath / (testbench.ModuleName + ".xelab.log")
 		prjFilePath =				self._tempPath / (testbench.ModuleName + ".prj")
@@ -144,7 +144,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 			raise SimulatorException("Error while analysing '{0!s}'.".format(prjFilePath))
 
 	def _RunSimulation(self, testbench):
-		self._LogNormal("  running simulation...")
+		self._LogNormal("Running simulation...")
 		
 		xSimLogFilePath =		self._tempPath / (testbench.ModuleName + ".xSim.log")
 		tclBatchFilePath =	self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimBatchScript']
@@ -163,10 +163,10 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 			# if xSim save file exists, load it's settings
 			if wcfgFilePath.exists():
-				self._LogDebug("    Found waveform config file: '{0!s}'".format(wcfgFilePath))
+				self._LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
 				xSim.Parameters[xSim.SwitchWaveformFile] =	str(wcfgFilePath)
 			else:
-				self._LogDebug("    Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
+				self._LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
 		xSim.Parameters[xSim.SwitchSnapshot] = testbench.ModuleName
 		xSim.Simulate()

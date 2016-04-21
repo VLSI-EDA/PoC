@@ -180,19 +180,19 @@ class PoC(ILogable, ArgParseMixin):
 		]
 
 		# create parser instance
-		self._LogDebug("  Reading PoC configuration from:")
+		self._LogDebug("Reading PoC configuration from:")
 		self.__pocConfig = ExtendedConfigParser()
 		self.__pocConfig.optionxform = str
 
 		try:
 			# process first file (private)
 			file, name = configFiles[0]
-			self._LogDebug("    '{0!s}'".format(file))
+			self._LogDebug("  {0!s}".format(file))
 			if not file.exists():  raise NotConfiguredException("PoC's {0} configuration file '{1!s}' does not exist.".format(name, file))  from FileNotFoundError(str(file))
 			self.__pocConfig.read(str(file))
 
 			for file, name in configFiles[1:]:
-				self._LogDebug("    '{0!s}'".format(file))
+				self._LogDebug("  {0!s}".format(file))
 				if not file.exists():  raise ConfigurationException("PoC's {0} configuration file '{1!s}' does not exist.".format(name, file))  from FileNotFoundError(str(file))
 				self.__pocConfig.read(str(file))
 		except DuplicateOptionError as ex:
@@ -247,6 +247,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__ReadPoCConfiguration()
 
 	def __PrepareForSimulation(self):
+		self._LogNormal("Initializing PoC-Library Service Tool for simulations")
 		self.__ReadPoCConfiguration()
 
 		# parsing values into class fields
@@ -255,6 +256,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.Directories["PoCTemp"] =				self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
 
 	def __PrepareForSynthesis(self):
+		self._LogNormal("Initializing PoC-Library Service Tool for synthesis")
 		self.__ReadPoCConfiguration()
 
 		# parsing values into class fields

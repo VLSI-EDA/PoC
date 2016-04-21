@@ -49,22 +49,19 @@ class Query:
 		self.__host = host
 
 	@property
-	def Host(self):
-		return self.__host
-
+	def Host(self):				return self.__host
 	@property
-	def Platform(self):
-		return self.__host.Platform
-
+	def Platform(self):		return self.__host.Platform
 	@property
-	def PoCConfig(self):
-		return self.__host.PoCConfig
+	def PoCConfig(self):	return self.__host.PoCConfig
 
 	def QueryConfiguration(self, query):
-		if (query == "PoC:InstallationDirectory"):
-			result = self._GetPoCInstallationDirectory()
-		elif (query == "ModelSim:InstallationDirectory"):
+		if (query == "ModelSim:InstallationDirectory"):
 			result = self._GetModelSimInstallationDirectory()
+		elif (query == "PoC:InstallationDirectory"):
+			result = self._GetPoCInstallationDirectory()
+		elif (query == "PoC:Version"):
+			result = self._GetPoCVersion()
 		elif (query == "Xilinx.ISE:InstallationDirectory"):
 			result = self._GetXilinxISEInstallationDirectory()
 		elif (query == "Xilinx.ISE:SettingsFile"):
@@ -79,12 +76,6 @@ class Query:
 		if isinstance(result, Path):	result = str(result)
 		return result
 
-	def _GetPoCInstallationDirectory(self):
-		if (len(self.PoCConfig.options('INSTALL.PoC')) != 0):
-			return Path(self.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
-		else:
-			raise NotConfiguredException("ERROR: PoC is not configured on this system.")
-
 	def _GetModelSimInstallationDirectory(self):
 		if (len(self.PoCConfig.options('INSTALL.Mentor.QuestaSim')) != 0):
 			return Path(self.PoCConfig['INSTALL.Mentor.QuestaSim']['InstallationDirectory'])
@@ -92,6 +83,18 @@ class Query:
 			return Path(self.PoCConfig['INSTALL.Altera.ModelSim']['InstallationDirectory'])
 		else:
 			raise NotConfiguredException("ERROR: ModelSim is not configured on this system.")
+
+	def _GetPoCInstallationDirectory(self):
+		if (len(self.PoCConfig.options('INSTALL.PoC')) != 0):
+			return Path(self.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
+		else:
+			raise NotConfiguredException("ERROR: PoC is not configured on this system.")
+
+	def _GetPoCVersion(self):
+		if (len(self.PoCConfig.options('INSTALL.PoC')) != 0):
+			return self.PoCConfig['INSTALL.PoC']['Version']
+		else:
+			raise NotConfiguredException("ERROR: PoC is not configured on this system.")
 
 	def _GetXilinxISEInstallationDirectory(self):
 		if (len(self.PoCConfig.options('INSTALL.Xilinx.ISE')) != 0):
