@@ -16,7 +16,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -156,7 +156,17 @@ package body config_private is
 	-- Board Descriptions
 	-- ===========================================================================
 	CONSTANT C_BOARD_INFO_LIST		: T_BOARD_INFO_VECTOR		:= (
-		-- Altera boards
+		(
+			BoardName =>			conf("GENERIC"),
+			FPGADevice =>			conf("GENERIC"),											-- GENERIC
+			UART =>						C_BOARD_UART_DTE_921600_NONE,
+			Ethernet =>				(
+				0 => C_BOARD_ETH_HARD_GMII_88E1111,
+				others => C_BOARD_ETH_EMPTY
+			),
+			EthernetCount =>	1
+		),
+	-- Altera boards
 		-- =========================================================================
 		(
 			BoardName =>			conf("DE0"),
@@ -339,6 +349,7 @@ package config is
 	-- ---------------------------------------------------------------------------
 	type T_VENDOR is (
 		VENDOR_UNKNOWN,
+		VENDOR_GENERIC,
 		VENDOR_ALTERA,
 		VENDOR_LATTICE,
 		VENDOR_XILINX
@@ -348,6 +359,7 @@ package config is
 	-- ---------------------------------------------------------------------------
 	type T_SYNTHESIS_TOOL is (
 		SYNTHESIS_TOOL_UNKNOWN,
+		SYNTHESIS_TOOL_GENERIC,
 		SYNTHESIS_TOOL_ALTERA_QUARTUS2,
 		SYNTHESIS_TOOL_LATTICE_LSE,
 		SYNTHESIS_TOOL_SYNOPSIS,
@@ -359,6 +371,7 @@ package config is
 	-- ---------------------------------------------------------------------------
 	type T_DEVICE_FAMILY is (
 		DEVICE_FAMILY_UNKNOWN,
+		DEVICE_FAMILY_GENERIC,
 		-- Altera
 		DEVICE_FAMILY_ARRIA,
 		DEVICE_FAMILY_CYCLONE,
@@ -377,6 +390,7 @@ package config is
 	
 	type T_DEVICE_SERIES is (
 		DEVICE_SERIES_UNKNOWN,
+		DEVICE_SERIES_GENERIC,
 		-- Xilinx FPGA series
 		DEVICE_SERIES_7_SERIES,
 		DEVICE_SERIES_ULTRASCALE,
@@ -387,6 +401,7 @@ package config is
 	-- ---------------------------------------------------------------------------
 	type T_DEVICE is (
 		DEVICE_UNKNOWN,
+		DEVICE_GENERIC,
 		-- Altera
 		DEVICE_MAX2, DEVICE_MAX10,																					-- Altera.Max
 		DEVICE_ARRIA1, DEVICE_ARRIA2, DEVICE_ARRIA5, DEVICE_ARRIA10,				-- Altera.Arria
@@ -411,6 +426,7 @@ package config is
 	-- ---------------------------------------------------------------------------
 	type T_DEVICE_SUBTYPE is (
 		DEVICE_SUBTYPE_NONE,
+		DEVICE_SUBTYPE_GENERIC,
 		-- Altera
 		DEVICE_SUBTYPE_E,
 		DEVICE_SUBTYPE_GS,
@@ -437,6 +453,7 @@ package config is
 	-- ---------------------------------------------------------------------------
 	type T_TRANSCEIVER is (
 		TRANSCEIVER_NONE,
+		TRANSCEIVER_GENERIC,
 		-- TODO: add more? Altera transceivers
 		-- Altera transceivers
 		TRANSCEIVER_GXB,																										-- Altera GXB transceiver
@@ -691,10 +708,11 @@ package body config is
 	-- purpose: extract vendor from MY_DEVICE
 	function VENDOR(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_VENDOR is
 		constant MY_DEV		: string(1 to 32)	:= getLocalDeviceString(DeviceString);
-		constant VEN_STR2	: string(1 to 2)  := MY_DEV(1 to 2);
-		constant VEN_STR3	: string(1 to 3)  := MY_DEV(1 to 3);
+		constant VEN_STR2	: string(1 to 2)  := MY_DEV(1 to 2);			-- TODO: test if alias declarations also work out on all platforms
+		constant VEN_STR3	: string(1 to 3)  := MY_DEV(1 to 3);			-- TODO: test if alias declarations also work out on all platforms
 	begin
 		case VEN_STR2 is
+			when "GE" =>		return VENDOR_GENERIC;
 			when "EP" =>		return VENDOR_ALTERA;
 			when "XC" =>		return VENDOR_XILINX;
 			when others =>	null;
@@ -712,6 +730,8 @@ package body config is
 		constant VEN			: T_VENDOR				:= VENDOR(DeviceString);
 	begin
 		case VEN is
+			when VENDOR_GENERIC =>
+				return SYNTHESIS_TOOL_GENERIC;
 			when VENDOR_ALTERA =>
 				return SYNTHESIS_TOOL_ALTERA_QUARTUS2;
 			when VENDOR_LATTICE =>
@@ -732,19 +752,23 @@ package body config is
 	function DEVICE(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_DEVICE is
 		constant MY_DEV		: string(1 to 32)	:= getLocalDeviceString(DeviceString);
 		constant VEN			: T_VENDOR				:= VENDOR(DeviceString);
-		constant DEV_STR	: string(3 to  4)	:= MY_DEV(3 to 4);
+		constant DEV_STR	: string(3 to  4)	:= MY_DEV(3 to 4);			-- TODO: test if alias declarations also work out on all platforms
 	begin
 		case VEN is
+			when VENDOR_GENERIC =>
+				if		(MY_DEV(1 to 7) = "GENERIC") then	return DEVICE_GENERIC;
+				else	report "Unknown Generic device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
+				end if;
 			when VENDOR_ALTERA =>
 				case DEV_STR is
-					when "1C"	 => return DEVICE_CYCLONE1;
-					when "2C"	 => return DEVICE_CYCLONE2;
-					when "3C"	 => return DEVICE_CYCLONE3;
-					when "1S"	 => return DEVICE_STRATIX1;
-					when "2S"	 => return DEVICE_STRATIX2;
-					when "4S"	 => return DEVICE_STRATIX4;
-					when "5S"	 => return DEVICE_STRATIX5;
-					when others => report "Unknown Altera device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
+					when "1C"	 =>		return DEVICE_CYCLONE1;
+					when "2C"	 =>		return DEVICE_CYCLONE2;
+					when "3C"	 =>		return DEVICE_CYCLONE3;
+					when "1S"	 =>		return DEVICE_STRATIX1;
+					when "2S"	 =>		return DEVICE_STRATIX2;
+					when "4S"	 =>		return DEVICE_STRATIX4;
+					when "5S"	 =>		return DEVICE_STRATIX5;
+					when others =>	report "Unknown Altera device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 
 			when VENDOR_LATTICE =>
@@ -761,17 +785,17 @@ package body config is
 
 			when VENDOR_XILINX =>
 				case DEV_STR is
-					when "7A"	 => return DEVICE_ARTIX7;
-					when "7K"	 => return DEVICE_KINTEX7;
-					when "KU"	 => return DEVICE_KINTEX_ULTRA;
-					when "3S"	 => return DEVICE_SPARTAN3;
-					when "6S"	 => return DEVICE_SPARTAN6;
-					when "5V"	 => return DEVICE_VIRTEX5;
-					when "6V"	 => return DEVICE_VIRTEX6;
-					when "7V"	 => return DEVICE_VIRTEX7;
-					when "VU"	 => return DEVICE_VIRTEX_ULTRA;
-					when "7Z"	 => return DEVICE_ZYNQ7;
-					when others => report "Unknown Xilinx device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
+					when "7A"	 =>		return DEVICE_ARTIX7;
+					when "7K"	 =>		return DEVICE_KINTEX7;
+					when "KU"	 =>		return DEVICE_KINTEX_ULTRA;
+					when "3S"	 =>		return DEVICE_SPARTAN3;
+					when "6S"	 =>		return DEVICE_SPARTAN6;
+					when "5V"	 =>		return DEVICE_VIRTEX5;
+					when "6V"	 =>		return DEVICE_VIRTEX6;
+					when "7V"	 =>		return DEVICE_VIRTEX7;
+					when "VU"	 =>		return DEVICE_VIRTEX_ULTRA;
+					when "7Z"	 =>		return DEVICE_ZYNQ7;
+					when others =>	report "Unknown Xilinx device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 				
 			when others => report "Unknown vendor in MY_DEVICE = " & MY_DEV & "." severity failure;
@@ -786,28 +810,30 @@ package body config is
 		constant FAM_CHAR	: character				:= MY_DEV(4);
 	begin
 		case VEN is
+			when VENDOR_GENERIC =>
+													return DEVICE_FAMILY_GENERIC;
 			when VENDOR_ALTERA =>
 				case FAM_CHAR is
-					when 'C' =>		return DEVICE_FAMILY_CYCLONE;
-					when 'S' =>		return DEVICE_FAMILY_STRATIX;
+					when 'C' =>			return DEVICE_FAMILY_CYCLONE;
+					when 'S' =>			return DEVICE_FAMILY_STRATIX;
 					when others =>	report "Unknown Altera device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 				
 			when VENDOR_LATTICE =>
 				case FAM_CHAR is
 					--when 'M' =>		return DEVICE_FAMILY_MACHXO;
-					when 'E' =>		return DEVICE_FAMILY_ECP;
+					when 'E' =>			return DEVICE_FAMILY_ECP;
 					when others =>	report "Unknown Lattice device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 			
 			when VENDOR_XILINX =>
 				case FAM_CHAR is
-					when 'A' =>		return DEVICE_FAMILY_ARTIX;
-					when 'K' =>		return DEVICE_FAMILY_KINTEX;
-					when 'S' =>		return DEVICE_FAMILY_SPARTAN;
-					when 'V' =>		return DEVICE_FAMILY_VIRTEX;
-					when 'Z' =>		return DEVICE_FAMILY_ZYNQ;
-					when others => report "Unknown Xilinx device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
+					when 'A' =>			return DEVICE_FAMILY_ARTIX;
+					when 'K' =>			return DEVICE_FAMILY_KINTEX;
+					when 'S' =>			return DEVICE_FAMILY_SPARTAN;
+					when 'V' =>			return DEVICE_FAMILY_VIRTEX;
+					when 'Z' =>			return DEVICE_FAMILY_ZYNQ;
+					when others =>	report "Unknown Xilinx device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
 				
 			when others => report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
@@ -821,6 +847,8 @@ package body config is
 		constant DEV		: T_DEVICE				:= DEVICE(DeviceString);
 	begin
 		case DEV is
+			when DEVICE_GENERIC =>
+				return DEVICE_SERIES_GENERIC;
 			-- all Xilinx ****7 devices
 			when DEVICE_ARTIX7 | DEVICE_KINTEX7 | DEVICE_VIRTEX7 | DEVICE_ZYNQ7 =>
 				return DEVICE_SERIES_7_SERIES;
@@ -850,6 +878,7 @@ package body config is
 		constant VEN			: T_VENDOR				:= VENDOR(DeviceString);
 	begin
 		case VEN is
+			when VENDOR_GENERIC =>	return 0;
 			when VENDOR_ALTERA =>		return extractFirstNumber(MY_DEV(5 to MY_DEV'high));
 			when VENDOR_LATTICE =>	return extractFirstNumber(MY_DEV(6 to MY_DEV'high));
 			when VENDOR_XILINX =>		return extractFirstNumber(MY_DEV(5 to MY_DEV'high));
@@ -861,9 +890,10 @@ package body config is
 	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_DEVICE_SUBTYPE is
 		constant MY_DEV				: string(1 to 32)	:= getLocalDeviceString(DeviceString);
 		constant DEV					: T_DEVICE				:= DEVICE(MY_DEV);
-		constant DEV_SUB_STR	: string(1 to 2)	:= MY_DEV(5 to 6);																-- work around for GHDL
+		constant DEV_SUB_STR	: string(1 to 2)	:= MY_DEV(5 to 6);																-- WORKAROUND: for GHDL
 	begin
 		case DEV is
+			when DEVICE_GENERIC =>																															return DEVICE_SUBTYPE_GENERIC;
 			-- TODO: extract Arria GX subtype
 			when DEVICE_ARRIA1 =>
 				report "TODO: parse Arria device subtype." severity failure;
@@ -974,6 +1004,7 @@ package body config is
 		constant SERIES	: T_DEVICE_SERIES	:= DEVICE_SERIES(DeviceString);
 	begin
 		case SERIES is
+			when DEVICE_SERIES_GENERIC =>																			return 6;
 			when DEVICE_SERIES_7_SERIES | DEVICE_SERIES_ULTRASCALE |
 					 DEVICE_SERIES_ULTRASCALE_PLUS =>															return 6;
 			when others => null;
@@ -1001,6 +1032,7 @@ package body config is
 		constant DEV_SUB	: T_DEVICE_SUBTYPE	:= DEVICE_SUBTYPE(DeviceString);
 	begin
 		case DEV is
+			when DEVICE_GENERIC =>																						return TRANSCEIVER_GENERIC;
 			when DEVICE_MAX2 | DEVICE_MAX10 =>																return TRANSCEIVER_NONE;		-- Altera MAX II, 10 devices have no transceivers
 			when DEVICE_CYCLONE1 | DEVICE_CYCLONE2 | DEVICE_CYCLONE3 =>				return TRANSCEIVER_NONE;		-- Altera Cyclon I, II, III devices have no transceivers
 

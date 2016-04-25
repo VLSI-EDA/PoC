@@ -90,7 +90,7 @@ class Compiler(BaseCompiler):
 					pass
 
 	def Run(self, netlist, board, **_):
-		self._LogQuiet("IP core: {YELLOW}{0!s}{RESET}".format(netlist.Parent, **Init.Foreground))
+		self._LogQuiet("IP core: {0!s}".format(netlist.Parent, **Init.Foreground))
 
 		self._device =				board.Device
 
@@ -194,7 +194,7 @@ class Compiler(BaseCompiler):
 		shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
 
 		# change working directory to temporary CoreGen path
-		self._LogDebug('    cd {0!s}'.format(self._tempPath))
+		self._LogDebug("cd {0!s}".format(self._tempPath))
 		chdir(str(self._tempPath))
 
 		# running CoreGen

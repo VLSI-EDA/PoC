@@ -234,37 +234,26 @@ class Project():
 		self._device =	board.Device
 	
 	@property
-	def Environment(self):
-		return self._environment
-	
+	def Environment(self):				return self._environment
 	@Environment.setter
-	def Environment(self, value):
-		self._environment = value
+	def Environment(self, value):	self._environment = value
 	
 	@property
-	def ToolChain(self):
-		return self._toolChain
-	
+	def ToolChain(self):					return self._toolChain
 	@ToolChain.setter
-	def ToolChain(self, value):
-		self._toolChain = value
+	def ToolChain(self, value):		self._toolChain = value
 	
 	@property
-	def Tool(self):
-		return self._tool
-	
+	def Tool(self):								return self._tool
 	@Tool.setter
-	def Tool(self, value):
-		self._tool = value
+	def Tool(self, value):				self._tool = value
 	
 	@property
-	def VHDLVersion(self):
-		return self._vhdlVersion
-	
+	def VHDLVersion(self):				return self._vhdlVersion
 	@VHDLVersion.setter
-	def VHDLVersion(self, value):
-		self._vhdlVersion = value
-	
+	def VHDLVersion(self, value):	self._vhdlVersion = value
+
+
 	def CreateFileSet(self, name, setDefault=True):
 		fs =											FileSet(name, project=self)
 		self._fileSets[name] =		fs
@@ -369,7 +358,7 @@ class Project():
 	
 	def pprint(self, indent=0):
 		_indent = "  " * indent
-		buffer =	_indent + "Project: {0}\n".format(self.Name)
+		buffer =	"Project: {0}\n".format(self.Name)
 		buffer +=	_indent + "o-Settings:\n"
 		buffer +=	_indent + "| o-Board: {0}\n".format(self._board.Name)
 		buffer +=	_indent + "| o-Device: {0}\n".format(self._device.Name)
@@ -427,8 +416,12 @@ class FileSet:
 		elif (not isinstance(file, File)):							raise ValueError("Unsupported parameter type for 'file'.")
 		file.FileSet = self
 		file.Project = self._project
-		self._files.append(file)
-		
+
+		for f in self._files:
+			if (f.FileName == file.FileName):	break
+		else:
+			self._files.append(file)
+
 	def AddSourceFile(self, file):
 		# print("FileSet.AddSourceFile: file={0}".format(file))
 		if isinstance(file, str):
@@ -439,8 +432,12 @@ class FileSet:
 		elif (not isinstance(file, SourceFile)):				raise ValueError("Unsupported parameter type for 'file'.")
 		file.FileSet = self
 		file.Project = self._project
-		self._files.append(file)
-	
+
+		for f in self._files:
+			if (f.FileName == file.FileName):	break
+		else:
+			self._files.append(file)
+
 	def __str__(self):
 		return self._name
 
@@ -470,7 +467,11 @@ class VHDLLibrary:
 	def AddFile(self, file):
 		if (not isinstance(file, VHDLSourceFile)):			raise ValueError("Unsupported parameter type for 'file'.")
 		file.VHDLLibrary = self
-		self._files.append(file)
+
+		for f in self._files:
+			if (f.FileName == file.FileName):  break
+		else:
+			self._files.append(file)
 		
 	def __str__(self):
 		return self._name

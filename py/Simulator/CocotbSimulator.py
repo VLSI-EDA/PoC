@@ -94,7 +94,7 @@ class Simulator(BaseSimulator):
 			self._LogDebug("copy {0!s} {1!s}".format(modelsimIniPath, simBuildPath))
 			shutil.copy(str(modelsimIniPath), str(simBuildPath))
 		else:
-			self._LogDebug("  No 'modelsim.ini' in precompiled directory found. QuestaSim will use the default modelsim.ini.")
+			self._LogDebug("No 'modelsim.ini' in precompiled directory found. QuestaSim will use the default modelsim.ini.")
 
 	def PrepareSimulator(self):
 		# create the Cocotb executable factory
@@ -117,7 +117,7 @@ class Simulator(BaseSimulator):
 					pass
 
 	def Run(self, testbench, board, **_):
-		self._LogQuiet("Testbench: {YELLOW}{0!s}{RESET}".format(testbench.Parent, **Init.Foreground))
+		self._LogQuiet("Testbench: {0!s}".format(testbench.Parent, **Init.Foreground))
 
 		# setup all needed paths to execute fuse
 		self._CreatePoCProject(testbench, board)

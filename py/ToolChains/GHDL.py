@@ -39,13 +39,16 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GHDL")
 
+
 from collections						import OrderedDict
 from pathlib								import Path
 from re											import compile as re_compile
 
+from lib.Functions					import CallByRefParam
 from Base.Exceptions				import PlatformNotSupportedException
 from Base.Logging						import LogEntry, Severity
 from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
+from Base.Simulator					import PoCSimulationResultFilter, SimulationResult
 from Base.Executable				import Executable
 from Base.Executable				import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
 from Base.Executable				import ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
@@ -266,24 +269,15 @@ class GHDL(Executable):
 		self._hasErrors =						False
 
 	@property
-	def BinaryDirectoryPath(self):
-		return self._binaryDirectoryPath
-
+	def BinaryDirectoryPath(self):	return self._binaryDirectoryPath
 	@property
-	def Backend(self):
-		return self._backend
-
+	def Backend(self):							return self._backend
 	@property
-	def Version(self):
-		return self._version
-
+	def Version(self):							return self._version
 	@property
-	def HasWarnings(self):
-		return self._hasWarnings
-
+	def HasWarnings(self):					return self._hasWarnings
 	@property
-	def HasErrors(self):
-		return self._hasErrors
+	def HasErrors(self):						return self._hasErrors
 
 	def deco(Arg):
 		def getter(self):
@@ -532,11 +526,12 @@ class GHDLRun(GHDL):
 		except Exception as ex:
 			raise GHDLException("Failed to launch GHDL run.") from ex
 
-		self._hasOutput = False
-		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasOutput =		False
+		self._hasWarnings =	False
+		self._hasErrors =		False
+		simulationResult =	CallByRefParam(SimulationResult.Error)
 		try:
-			iterator = iter(GHDLRunFilter(self.GetReader()))
+			iterator = iter(PoCSimulationResultFilter(GHDLRunFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
 			line.IndentBy(2)
@@ -565,6 +560,8 @@ class GHDLRun(GHDL):
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
 
+		return simulationResult.value
+
 
 def GHDLAnalyzeFilter(gen):
 	warningRegExpPattern =	r".+?:\d+:\d+:warning: (?P<Message>.*)"			# <Path>:<line>:<column>:warning: <message>
@@ -590,12 +587,6 @@ def GHDLAnalyzeFilter(gen):
 GHDLElaborateFilter = GHDLAnalyzeFilter
 
 def GHDLRunFilter(gen):
-	#warningRegExpPattern =	".+?:\d+:\d+:warning: .*"		# <Path>:<line>:<column>:warning: <message>
-	#errorRegExpPattern =		".+?:\d+:\d+: .*"  					# <Path>:<line>:<column>: <message>
-
-	#warningRegExp =	re_compile(warningRegExpPattern)
-	#errorRegExp =		re_compile(errorRegExpPattern)
-
 	lineno = 0
 	for line in gen:
 		if (lineno < 2):
@@ -604,5 +595,7 @@ def GHDLRunFilter(gen):
 				yield LogEntry(line, Severity.Verbose)
 			elif ("Starting simulation" in line):
 				yield LogEntry(line, Severity.Verbose)
+			else:
+				yield LogEntry(line, Severity.Normal)
 		else:
 			yield LogEntry(line, Severity.Normal)

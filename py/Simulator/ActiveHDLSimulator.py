@@ -45,7 +45,7 @@ from lib.Functions							import Init
 #from Base.Exceptions						import NotConfiguredException, PlatformNotSupportedException
 #from Base.Executable						import ExecutableException
 from Base.Project								import FileTypes, VHDLVersion, Environment, ToolChain, Tool
-from Base.Simulator							import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME
+from Base.Simulator							import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult
 #from Parser.Parser							import ParserException
 from PoC.Project								import Project as PoCProject, FileListFile
 from ToolChains.Aldec.ActiveHDL	import ActiveHDL, ActiveHDLException
@@ -90,7 +90,7 @@ class Simulator(BaseSimulator):
 		self._vhdlGenerics =	vhdlGenerics
 
 		# check testbench database for the given testbench		
-		self._LogQuiet("Testbench: {YELLOW}{0!s}{RESET}".format(testbench.Parent, **Init.Foreground))
+		self._LogQuiet("Testbench: {0!s}".format(testbench.Parent, **Init.Foreground))
 
 		# setup all needed paths to execute fuse
 		self._CreatePoCProject(testbench, board)
@@ -103,6 +103,12 @@ class Simulator(BaseSimulator):
 		else:
 			raise SimulatorException("GUI mode is not supported for Active-HDL.")
 			# self._RunSimulationWithGUI(testbenchName)
+
+
+		if (testbench.Result is SimulationResult.Passed):				self._LogQuiet("  {GREEN}[PASSED]{NOCOLOR}".format(**Init.Foreground))
+		elif (testbench.Result is SimulationResult.NoAsserts):	self._LogQuiet("  {YELLOW}[NO ASSERTS]{NOCOLOR}".format(**Init.Foreground))
+		elif (testbench.Result is SimulationResult.Failed):			self._LogQuiet("  {RED}[FAILED]{NOCOLOR}".format(**Init.Foreground))
+		elif (testbench.Result is SimulationResult.Error):			self._LogQuiet("  {RED}[ERROR]{NOCOLOR}".format(**Init.Foreground))
 		
 	def _RunCompile(self, testbench):
 		self._LogNormal("Running VHDL compiler for every vhdl file...")
@@ -155,7 +161,7 @@ class Simulator(BaseSimulator):
 		# aSim.BatchCommand =			"do {0}".format(str(tclBatchFilePath))
 		# aSim.TopLevel =					"{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
 		try:
-			aSim.Simulate()
+			testbench.Result = aSim.Simulate()
 		except ActiveHDLException as ex:
 			raise SimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
 		if aSim.HasErrors:

@@ -43,9 +43,11 @@ else:
 from collections								import OrderedDict
 from pathlib										import Path
 
+from lib.Functions							import CallByRefParam
 from Base.Exceptions						import PlatformNotSupportedException
 from Base.Logging								import LogEntry, Severity
 from Base.Configuration 				import Configuration as BaseConfiguration, ConfigurationException
+from Base.Simulator							import SimulationResult, PoCSimulationResultFilter
 from Base.Executable						import Executable
 from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
 from ToolChains.Mentor.Mentor		import MentorException
@@ -410,8 +412,9 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		self._hasOutput = False
 		self._hasWarnings = False
 		self._hasErrors = False
+		simulationResult = CallByRefParam(SimulationResult.Error)
 		try:
-			iterator = iter(QuestaVSimFilter(self.GetReader()))
+			iterator = iter(PoCSimulationResultFilter(QuestaVSimFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
 			line.IndentBy(2)
@@ -437,6 +440,8 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
+
+		return simulationResult.value
 
 class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
@@ -541,6 +546,10 @@ def QuestaVSimFilter(gen):
 				yield LogEntry(line, Severity.Verbose)
 			else:
 				yield LogEntry(line[2:], Severity.Normal)
+		elif line.startswith("** Warning: "):
+			yield LogEntry(line, Severity.Warning)
+		elif line.startswith("** Error: "):
+			yield LogEntry(line, Severity.Error)
 		else:
 			yield LogEntry(line, Severity.Normal)
 

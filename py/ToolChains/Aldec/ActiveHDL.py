@@ -44,9 +44,11 @@ else:
 #from pathlib						import Path
 #from re											import compile as re_compile
 
+from lib.Functions				import CallByRefParam
 from Base.Exceptions			import PlatformNotSupportedException
 from Base.ToolChain				import ToolChainException
 from Base.Logging					import LogEntry, Severity
+from Base.Simulator				import SimulationResult, PoCSimulationResultFilter
 from Base.Executable			import Executable
 from Base.Executable			import ExecutableArgument, PathArgument, StringArgument
 from Base.Executable			import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
@@ -248,8 +250,9 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 		self._hasOutput = False
 		self._hasWarnings = False
 		self._hasErrors = False
+		simulationResult = CallByRefParam(SimulationResult.Error)
 		try:
-			iterator = iter(SimulatorFilter(self.GetReader()))
+			iterator = iter(PoCSimulationResultFilter(SimulatorFilter(self.GetReader()), simulationResult))
 			line = next(iterator)
 
 			self._hasOutput = True
@@ -273,6 +276,8 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
+
+		return simulationResult.value
 
 
 class Simulator(Executable, ActiveHDLMixIn):

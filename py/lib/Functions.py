@@ -41,6 +41,21 @@ def merge(*dicts):
 def merge_with(f, *dicts):
 	return {k : reduce(lambda x: f(*x) if (len(x) > 1) else x[0])([ d[k] for d in dicts if k in d ]) for k in reduce(or_, map(lambda x: x.keys(), dicts), set()) }
 
+class CallByRefParam:
+	def __init__(self, value=None):
+		self.value = value
+
+	def __lshift__(self, other):
+		self.value = other
+
+	def __eq__(self, other):	return self.value == other
+	def __ne__(self, other):	return self.value != other
+	def __lt__(self, other):	return self.value < other
+	def __le__(self, other):	return self.value <= other
+	def __gt__(self, other):	return self.value > other
+	def __ge__(self, other):	return self.value >= other
+	def __neg__(self):				return not self.value
+
 
 class Init:
 	@classmethod
@@ -58,7 +73,7 @@ class Init:
 		"CYAN":			Foreground.LIGHTCYAN_EX,
 		"GRAY":			Foreground.WHITE,
 		"DARKGRAY":	Foreground.LIGHTBLACK_EX,
-		"RESET":		Foreground.RESET,
+		"NOCOLOR":	Foreground.RESET,
 
 		"HEADLINE":	Foreground.LIGHTMAGENTA_EX,
 		"ERROR":		Foreground.LIGHTRED_EX,
@@ -77,7 +92,7 @@ class Exit:
 	def versionCheck(cls, version):
 		if (version_info < version):
 			Init.init()
-			print("{RED}ERROR:{RESET} Used Python interpreter is to old ({version}).".format(version=version_info, **Init.Foreground))
+			print("{RED}ERROR:{NOCOLOR} Used Python interpreter is to old ({version}).".format(version=version_info, **Init.Foreground))
 			print("  Minimal required Python version is {version}".format(version=".".join(version)))
 			cls.exit(1)
 
@@ -88,7 +103,7 @@ class Exit:
 		print("{: ^80s}".format(message))
 		print("=" * 80)
 		print()
-		print("{RED}ERROR:{RESET} This is not a executable file!".format(**Init.Foreground))
+		print("{RED}ERROR:{NOCOLOR} This is not a executable file!".format(**Init.Foreground))
 		cls.exit(1)
 
 	@classmethod
@@ -98,20 +113,20 @@ class Exit:
 		print("{: ^80s}".format(message))
 		print("=" * 80)
 		print()
-		print("{RED}ERROR:{RESET} This is not a library file!".format(**Init.Foreground))
+		print("{RED}ERROR:{NOCOLOR} This is not a library file!".format(**Init.Foreground))
 		cls.exit(1)
 
 	@classmethod
 	def printException(cls, ex):
 		from traceback	import print_tb, walk_tb
 		Init.init()
-		print("{RED}FATAL: An unknown or unhandled exception reached the topmost exception handler!{RESET}".format(message=ex.__str__(), **Init.Foreground))
-		print("{YELLOW}  Exception type:{RESET}    {type}".format(type=ex.__class__.__name__, **Init.Foreground))
-		print("{YELLOW}  Exception message:{RESET} {message}".format(message=ex.__str__(), **Init.Foreground))
+		print("{RED}FATAL: An unknown or unhandled exception reached the topmost exception handler!{NOCOLOR}".format(message=ex.__str__(), **Init.Foreground))
+		print("{YELLOW}  Exception type:{NOCOLOR}    {type}".format(type=ex.__class__.__name__, **Init.Foreground))
+		print("{YELLOW}  Exception message:{NOCOLOR} {message}".format(message=ex.__str__(), **Init.Foreground))
 		frame,sourceLine = [x for x in walk_tb(ex.__traceback__)][-1]
 		filename = frame.f_code.co_filename
 		funcName = frame.f_code.co_name
-		print("{YELLOW}  Caused by:{RESET}         {function} in file '{filename}' at line {line}".format(function=funcName, filename=filename, line=sourceLine, **Init.Foreground))
+		print("{YELLOW}  Caused by:{NOCOLOR}         {function} in file '{filename}' at line {line}".format(function=funcName, filename=filename, line=sourceLine, **Init.Foreground))
 		print("-" * 80)
 		print_tb(ex.__traceback__)
 		print("-" * 80)
@@ -124,32 +139,32 @@ class Exit:
 		frame, _ = [x for x in walk_tb(ex.__traceback__)][-1]
 		filename = frame.f_code.co_filename
 		funcName = frame.f_code.co_name
-		print("{RED}Not implemented:{RESET} {function} in file '{filename}': {message}".format(function=funcName, filename=filename, message=str(ex), **Init.Foreground))
+		print("{RED}Not implemented:{NOCOLOR} {function} in file '{filename}': {message}".format(function=funcName, filename=filename, message=str(ex), **Init.Foreground))
 		Exit.exit(1)
 
 	@classmethod
 	def printExceptionbase(cls, ex):
 		Init.init()
-		print("{RED}ERROR:{RESET} {message}".format(message=ex.message, **Init.Foreground))
+		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
 		Exit.exit(1)
 
 	@classmethod
 	def printPlatformNotSupportedException(cls, ex):
 		Init.init()
-		print("{RED}ERROR:{RESET} Unsupported platform '{message}'".format(message=ex.message, **Init.Foreground))
+		print("{RED}ERROR:{NOCOLOR} Unsupported platform '{message}'".format(message=ex.message, **Init.Foreground))
 		Exit.exit(1)
 
 	@classmethod
 	def printEnvironmentException(cls, ex):
 		Init.init()
-		print("{RED}ERROR:{RESET} {message}".format(message=ex.message, **Init.Foreground))
+		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
 		print("  Please run this script with it's provided wrapper or manually load the required environment before executing this script.")
 		Exit.exit(1)
 
 	@classmethod
 	def printNotConfiguredException(cls, ex):
 		Init.init()
-		print("{RED}ERROR:{RESET} {message}".format(message=ex.message, **Init.Foreground))
-		print("  Please run {YELLOW}'poc.[sh/cmd] configure'{RESET} in PoC root directory.".format(**Init.Foreground))
+		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
+		print("  Please run {YELLOW}'poc.[sh/cmd] configure'{NOCOLOR} in PoC root directory.".format(**Init.Foreground))
 		Exit.exit(1)
 

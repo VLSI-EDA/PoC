@@ -305,7 +305,7 @@ def MapFilter(gen):
 		elif line.startswith("Warning ("):
 			yield LogEntry(line[8:], Severity.Warning)
 		elif line.startswith("    Info ("):
-			yield LogEntry("    " + line[9:], Severity.Verbose)
+			yield LogEntry("  " + line[9:], Severity.Verbose)
 		elif line.startswith("Info:"):
 			yield LogEntry(line[6:], Severity.Info)
 		elif line.startswith("    Info:"):
@@ -349,6 +349,7 @@ class QuartusSettingsFile(SettingsFile):
 
 		self._projectFile =		settingsFile
 
+		self._sourceFiles =							[]
 		self._globalAssignments =				OrderedDict()
 		self._globalAssignmentsProxy =	GlobalAssignmentProxy(self)
 
@@ -366,7 +367,7 @@ class QuartusSettingsFile(SettingsFile):
 
 	def CopySourceFilesFromProject(self, project):
 		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
-			self.AddSourceFile(file)
+			self._sourceFiles.append(file)
 
 	def Write(self):
 		if (self._projectFile is None):		raise QuartusIIException("No file path for QuartusProject provided.")
@@ -376,7 +377,7 @@ class QuartusSettingsFile(SettingsFile):
 			buffer += "set_global_assignment -name {key} {value!s}\n".format(key=key, value=value)
 
 		buffer += "\n"
-		for file in self.Files(fileType=FileTypes.VHDLSourceFile):
+		for file in self._sourceFiles:
 			buffer += "set_global_assignment -name VHDL_FILE {file} -library {library}\n".format(file=file.Path.as_posix(), library=file.LibraryName)
 
 		with self._projectFile.Path.open('w') as fileHandle:

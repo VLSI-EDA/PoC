@@ -145,10 +145,10 @@ class Compiler(ILogable):
 		except ParserException as ex:
 			raise CompilerException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
 
-		self._LogDebug("  " + ("=" * 78))
-		self._LogDebug("  Pretty printing the PoCProject...")
+		self._LogDebug("=" * 78)
+		self._LogDebug("Pretty printing the PoCProject...")
 		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("  " + ("=" * 78))
+		self._LogDebug("=" * 78)
 		if (len(fileListFile.Warnings) > 0):
 			for warn in fileListFile.Warnings:
 				self._LogWarning(warn)
@@ -171,7 +171,7 @@ class Compiler(ILogable):
 			self._LogDebug("  {0!s}".format(rule))
 
 	def _RunPreCopy(self, netlist):
-		self._LogVerbose('  copy further input files into temporary directory...')
+		self._LogVerbose("copy further input files into temporary directory...")
 		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
 		if (rulesFiles):
 			preCopyTasks = []
@@ -191,10 +191,10 @@ class Compiler(ILogable):
 		if (len(preCopyTasks) != 0):
 			self._ExecuteCopyTasks(preCopyTasks, "pre")
 		else:
-			self._LogDebug('    nothing to copy')
+			self._LogDebug("nothing to copy")
 
 	def _RunPostCopy(self, netlist):
-		self._LogVerbose('  copy generated files into netlist directory...')
+		self._LogVerbose("copy generated files into netlist directory...")
 		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
 		if (rulesFiles):
 			postCopyTasks = []
@@ -214,14 +214,14 @@ class Compiler(ILogable):
 		if (len(postCopyTasks) != 0):
 			self._ExecuteCopyTasks(postCopyTasks, "post")
 		else:
-			self._LogDebug('    nothing to copy')
+			self._LogDebug("nothing to copy")
 
 	def _ParseCopyRules(self, rawList):
 		# read pre-copy tasks
 		copyTasks = []
 		if (len(rawList) != 0):
 			rawList = rawList.split("\n")
-			self._LogDebug("  Copy tasks from config file:\n  " + ("\n  ".join(rawList)))
+			self._LogDebug("Copy tasks from config file:\n  " + ("\n  ".join(rawList)))
 
 			preCopyRegExpStr = r"^\s*(?P<SourceFilename>.*?)"  # Source filename
 			preCopyRegExpStr += r"\s->\s"  # Delimiter signs
@@ -247,7 +247,7 @@ class Compiler(ILogable):
 			shutil.copy(str(task.SourcePath), str(task.DestinationPath))
 
 	def _RunPreReplace(self, netlist):
-		self._LogVerbose('  patching files in temporary directory...')
+		self._LogVerbose("patching files in temporary directory...")
 		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]		# FIXME: get rulefile from netlist object as a rulefile object instead of a path
 		if (rulesFiles):
 			preReplaceTasks = []
@@ -268,10 +268,10 @@ class Compiler(ILogable):
 		if (len(preReplaceTasks) != 0):
 			self._ExecuteReplaceTasks(preReplaceTasks, "pre")
 		else:
-			self._LogDebug('    nothing to patch')
+			self._LogDebug("nothing to patch")
 
 	def _RunPostReplace(self, netlist):
-		self._LogVerbose('  patching files in netlist directory...')
+		self._LogVerbose("patching files in netlist directory...")
 		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]  # FIXME: get rulefile from netlist object as a rulefile object instead of a path
 		if (rulesFiles):
 			postReplaceTasks = []
@@ -292,12 +292,12 @@ class Compiler(ILogable):
 		if (len(postReplaceTasks) != 0):
 			self._ExecuteReplaceTasks(postReplaceTasks, "post")
 		else:
-			self._LogDebug('    nothing to patch')
+			self._LogDebug("nothing to patch")
 
 	def _ParseReplaceRules(self, rawList):
 		replaceTasks = []
 		rawList = rawList.split("\n")
-		self._LogDebug("  Replacement tasks:\n  " + ("\n  ".join(rawList)))
+		self._LogDebug("Replacement tasks:\n  " + ("\n  ".join(rawList)))
 
 		# FIXME: Rework inline replace rule syntax.
 		replaceRegExpStr = r"^\s*(?P<Filename>.*?)\s+:"  # Filename

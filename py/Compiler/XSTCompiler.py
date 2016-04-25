@@ -88,7 +88,7 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 					pass
 
 	def Run(self, netlist, board, **_):
-		self._LogQuiet("IP core: {YELLOW}{0!s}{RESET}".format(netlist.Parent, **Init.Foreground))
+		self._LogQuiet("IP core: {0!s}".format(netlist.Parent, **Init.Foreground))
 		
 		self._device =				board.Device
 		

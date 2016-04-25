@@ -9,10 +9,15 @@ vhdl		poc		"tb/common/my_project.vhdl"
 
 # board and device configuration files
 #
+# Generic boards
+# ======================================
+if (BoardName = "GENERIC") then
+	vhdl	poc	"tb/common/my_config_GENERIC.vhdl"
+
 # Altera boards
 # ======================================
 # Cyclone III boards
-if (BoardName = "DE0") then
+elseif (BoardName = "DE0") then
 	vhdl	poc	"tb/common/my_config_DE0.vhdl"
 #elseif (BoardName = "DE0nano") then
 #	vhdl	poc	"tb/common/my_config_DE0nano.vhdl"

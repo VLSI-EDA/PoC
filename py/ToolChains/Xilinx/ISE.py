@@ -32,7 +32,6 @@
 # ==============================================================================
 #
 # entry point
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -44,10 +43,12 @@ from collections					import OrderedDict
 from pathlib							import Path
 from os										import environ
 
+from lib.Functions							import CallByRefParam
 from Base.Exceptions						import PlatformNotSupportedException
 from Base.Logging								import LogEntry, Severity
 from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
 from Base.Project								import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from Base.Simulator							import SimulationResult, PoCSimulationResultFilter
 from Base.Executable						import Executable
 from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
 from ToolChains.Xilinx.Xilinx		import XilinxException
@@ -431,8 +432,9 @@ class ISESimulator(Executable):
 		self._hasOutput = False
 		self._hasWarnings = False
 		self._hasErrors = False
+		simulationResult =	CallByRefParam(SimulationResult.Error)
 		try:
-			iterator = iter(SimulatorFilter(self.GetReader()))
+			iterator = iter(PoCSimulationResultFilter(SimulatorFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
 			self._hasOutput = True
@@ -456,6 +458,8 @@ class ISESimulator(Executable):
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
+
+		return simulationResult.value
 
 
 class Xst(Executable, ISEMixIn):

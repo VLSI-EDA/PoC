@@ -765,10 +765,10 @@ package body waveform is
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
 	
-	function "<" (Wave : T_SIM_WAVEFORM_SLV_8; Offset : TIME) return T_SIM_WAVEFORM_SLV_8 is
-	begin
-		report "Not implemented" severity FAILURE;
-	end function;
+	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_8; Offset : TIME) return T_SIM_WAVEFORM_SLV_8 is
+	-- begin
+		-- report "Not implemented" severity FAILURE;
+	-- end function;
 	
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_16; Times : NATURAL) return T_SIM_WAVEFORM_SLV_16 is
 		variable Result		: T_SIM_WAVEFORM_SLV_16(0 to Wave'length * Times - 1);
@@ -787,10 +787,10 @@ package body waveform is
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
 	
-	function "<" (Wave : T_SIM_WAVEFORM_SLV_16; Offset : TIME) return T_SIM_WAVEFORM_SLV_16 is
-	begin
-		report "Not implemented" severity FAILURE;
-	end function;
+	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_16; Offset : TIME) return T_SIM_WAVEFORM_SLV_16 is
+	-- begin
+		-- report "Not implemented" severity FAILURE;
+	-- end function;
 	
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_24; Times : NATURAL) return T_SIM_WAVEFORM_SLV_24 is
 		variable Result		: T_SIM_WAVEFORM_SLV_24(0 to Wave'length * Times - 1);
@@ -809,10 +809,10 @@ package body waveform is
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
 	
-	function "<" (Wave : T_SIM_WAVEFORM_SLV_24; Offset : TIME) return T_SIM_WAVEFORM_SLV_24 is
-	begin
-		report "Not implemented" severity FAILURE;
-	end function;
+	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_24; Offset : TIME) return T_SIM_WAVEFORM_SLV_24 is
+	-- begin
+		-- report "Not implemented" severity FAILURE;
+	-- end function;
 	
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_32; Times : NATURAL) return T_SIM_WAVEFORM_SLV_32 is
 		variable Result		: T_SIM_WAVEFORM_SLV_32(0 to Wave'length * Times - 1);
@@ -831,10 +831,10 @@ package body waveform is
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
 	
-	function "<" (Wave : T_SIM_WAVEFORM_SLV_32; Offset : TIME) return T_SIM_WAVEFORM_SLV_32 is
-	begin
-		report "Not implemented" severity FAILURE;
-	end function;
+	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_32; Offset : TIME) return T_SIM_WAVEFORM_SLV_32 is
+	-- begin
+		-- report "Not implemented" severity FAILURE;
+	-- end function;
 	
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_48; Times : NATURAL) return T_SIM_WAVEFORM_SLV_48 is
 		variable Result		: T_SIM_WAVEFORM_SLV_48(0 to Wave'length * Times - 1);
@@ -853,10 +853,10 @@ package body waveform is
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
 	
-	function "<" (Wave : T_SIM_WAVEFORM_SLV_48; Offset : TIME) return T_SIM_WAVEFORM_SLV_48 is
-	begin
-		report "Not implemented" severity FAILURE;
-	end function;
+	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_48; Offset : TIME) return T_SIM_WAVEFORM_SLV_48 is
+	-- begin
+		-- report "Not implemented" severity FAILURE;
+	-- end function;
 	
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_64; Times : NATURAL) return T_SIM_WAVEFORM_SLV_64 is
 		variable Result		: T_SIM_WAVEFORM_SLV_64(0 to Wave'length * Times - 1);
@@ -875,10 +875,10 @@ package body waveform is
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
 	
-	function "<" (Wave : T_SIM_WAVEFORM_SLV_64; Offset : TIME) return T_SIM_WAVEFORM_SLV_64 is
-	begin
-		report "Not implemented" severity FAILURE;
-	end function;
+	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_64; Offset : TIME) return T_SIM_WAVEFORM_SLV_64 is
+	-- begin
+		-- report "Not implemented" severity FAILURE;
+	-- end function;
 	
 	
 	function to_waveform(bv : BIT_VECTOR; Delay : TIME) return T_SIM_WAVEFORM is
