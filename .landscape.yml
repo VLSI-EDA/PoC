@@ -1,3 +1,22 @@
-max-line-length: 180
 python-targets:
-    - 3
+- 3
+doc-warnings: yes
+# strictness: medium
+max-line-length: 180
+pep8:
+  disable:
+  - E704
+  enable:
+  options:
+    max-line-length: 180
+ignore-paths:
+- lib
+- netlist
+- prj
+- sim
+- src
+# - tb
+- temp
+# - tools
+- ucf
+- xst
