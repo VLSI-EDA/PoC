@@ -3,7 +3,9 @@
 [![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
 [![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release)](https://travis-ci.org/VLSI-EDA/PoC)
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
+![Latest tag](https://img.shields.io/github/tag/Paebbels/PoC.svg)
+[![Latest release](https://img.shields.io/github/release/Paebbels/PoC.svg)](https://github.com/Paebbels/PoC/releases)
+[![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](LICENSE.md)
 
 This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - 
 Faculty of Computer Science, Technische Universität Dresden, Germany  
