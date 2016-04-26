@@ -1,0 +1,18 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+if (BoardName = "Atlys") then
+	vhdl	poc		"netlist/XC6SLX45-3CSG324/xil/mig/iodrp_controller.vhd"
+	vhdl	poc		"netlist/XC6SLX45-3CSG324/xil/mig/iodrp_mcb_controller.vhd"
+	vhdl	poc		"netlist/XC6SLX45-3CSG324/xil/mig/mcb_raw_wrapper.vhd"
+	vhdl	poc		"netlist/XC6SLX45-3CSG324/xil/mig/mcb_soft_calibration_top.vhd"
+	vhdl	poc		"netlist/XC6SLX45-3CSG324/xil/mig/mcb_soft_calibration.vhd"
+	vhdl	poc		"netlist/XC6SLX45-3CSG324/xil/mig/memc3_infrastructure.vhd"
+	vhdl	poc		"netlist/XC6SLX45-3CSG324/xil/mig/memc3_wrapper.vhd"
+	vhdl	poc		"netlist/XC6SLX45-3CSG324/xil/mig/mig_Atlys_1x128_top.vhd"
+else
+	report "This memory controller is configured for the Digilent Atlys board."
+end if

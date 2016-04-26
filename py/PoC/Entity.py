@@ -42,7 +42,7 @@ else:
 
 # load dependencies
 from collections					import OrderedDict
-from enum									import Enum, unique, IntEnum
+from enum									import Enum, unique
 from pathlib							import Path
 from flags								import Flags
 
