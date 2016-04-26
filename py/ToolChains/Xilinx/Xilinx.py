@@ -152,11 +152,14 @@ class XilinxProjectExportMixIn:
 
 	def _GenerateXilinxProjectFileContent(self, tool, vhdlVersion=VHDLVersion.VHDL93):
 		projectFileContent = ""
-		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
+		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile | FileTypes.VerilogSourceFile):
 			if (not file.Path.exists()):								raise XilinxException("Can not add '{0!s}' to {1} project file.".format(file.Path, tool)) from FileNotFoundError(str(file.Path))
-			# create one VHDL line for each VHDL file
-			if (vhdlVersion == VHDLVersion.VHDL2008):		projectFileContent += "vhdl2008 {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
-			else:																				projectFileContent += "vhdl {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
+			if file.FileType is FileTypes.VHDLSourceFile:
+				# create one VHDL line for each VHDL file
+				if (vhdlVersion == VHDLVersion.VHDL2008):		projectFileContent += "vhdl2008 {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
+				else:																				projectFileContent += "vhdl {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
+			else: # verilog
+				projectFileContent += "verilog work \"{0!s}\"\n".format(file.Path)
 
 		return projectFileContent
 

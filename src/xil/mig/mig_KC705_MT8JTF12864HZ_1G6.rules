@@ -4,31 +4,65 @@
 # ==============================================================================
 # Notes:
 #	- all files are relative to PoCRoot directory
-#	- ${section:option} expressions refer to the section, wherein this rule file was referenced
+#	- ${section:option} expressions refer to the section, wherin this rule file was referenced
+#
+# Section [CG.xil.mig.KC705_MT8JTF12864HZ_1G6.cg] defines `tempDir` and `dstDir`
 #
 PreProcessRules
-	# Empty
+	Copy "${SrcDir}/${TopLevel}.prj"																										To "${tempDir}/mig.prj"
 End PreProcessRules
 
 PostProcessRules
-	Copy "${SPECIAL:OutputDir}/${TopLevel}.ngc"													To "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.ngc"
-	Copy "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}_top.vhd"	To "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.vhdl"
-	
-	File "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.vhdl"
-		Replace "(architecture arch_mig.* of ${TopLevel} is).*(end architecture arch_mig.*;)"	With "\\1\\nbegin\\n\\2" Options DotAll
-		Replace "generic.*port\\s+\\("	With "port (" Options DotAll
-		Replace "DQ_WIDTH"						With "64"
-		Replace "DQS_WIDTH"						With "8"
-		Replace "ROW_WIDTH"						With "14"
-		Replace "BANK_WIDTH"					With "3"
-		Replace "CK_WIDTH"						With "1"
-		Replace "CKE_WIDTH"						With "1"
-		Replace "CS_WIDTH"						With "1"
-		Replace "nCS_PER_RANK"				With "1"
-		Replace "DM_WIDTH"						With "8"
-		Replace "ODT_WIDTH"						With "1"
-		Replace "ADDR_WIDTH"					With "28"
-		Replace "nCK_PER_CLK"					With "4"
-		Replace "PAYLOAD_WIDTH"				With "64"
-	End File
+	Copy "${tempDir}/user_design/rtl/ecc/mig_7series_v1_9_ecc_buf.v"										To "${dstDir}/mig_7series_v1_9_ecc_buf.v"
+	Copy "${tempDir}/user_design/rtl/ecc/mig_7series_v1_9_ecc_gen.v"										To "${dstDir}/mig_7series_v1_9_ecc_gen.v"
+	Copy "${tempDir}/user_design/rtl/ecc/mig_7series_v1_9_ecc_merge_enc.v"							To "${dstDir}/mig_7series_v1_9_ecc_merge_enc.v"
+	Copy "${tempDir}/user_design/rtl/ecc/mig_7series_v1_9_ecc_dec_fix.v"								To "${dstDir}/mig_7series_v1_9_ecc_dec_fix.v"
+	Copy "${tempDir}/user_design/rtl/clocking/mig_7series_v1_9_tempmon.v"								To "${dstDir}/mig_7series_v1_9_tempmon.v"
+	Copy "${tempDir}/user_design/rtl/clocking/mig_7series_v1_9_clk_ibuf.v"							To "${dstDir}/mig_7series_v1_9_clk_ibuf.v"
+	Copy "${tempDir}/user_design/rtl/clocking/mig_7series_v1_9_iodelay_ctrl.v"					To "${dstDir}/mig_7series_v1_9_iodelay_ctrl.v"
+	Copy "${tempDir}/user_design/rtl/clocking/mig_7series_v1_9_infrastructure.v"				To "${dstDir}/mig_7series_v1_9_infrastructure.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_bank_queue.v"					To "${dstDir}/mig_7series_v1_9_bank_queue.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_bank_compare.v"				To "${dstDir}/mig_7series_v1_9_bank_compare.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_arb_select.v"					To "${dstDir}/mig_7series_v1_9_arb_select.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_arb_mux.v"							To "${dstDir}/mig_7series_v1_9_arb_mux.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_col_mach.v"						To "${dstDir}/mig_7series_v1_9_col_mach.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_bank_common.v"					To "${dstDir}/mig_7series_v1_9_bank_common.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_bank_state.v"					To "${dstDir}/mig_7series_v1_9_bank_state.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_mc.v"									To "${dstDir}/mig_7series_v1_9_mc.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_bank_cntrl.v"					To "${dstDir}/mig_7series_v1_9_bank_cntrl.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_rank_cntrl.v"					To "${dstDir}/mig_7series_v1_9_rank_cntrl.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_bank_mach.v"						To "${dstDir}/mig_7series_v1_9_bank_mach.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_rank_mach.v"						To "${dstDir}/mig_7series_v1_9_rank_mach.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_arb_row_col.v"					To "${dstDir}/mig_7series_v1_9_arb_row_col.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_rank_common.v"					To "${dstDir}/mig_7series_v1_9_rank_common.v"
+	Copy "${tempDir}/user_design/rtl/controller/mig_7series_v1_9_round_robin_arb.v"			To "${dstDir}/mig_7series_v1_9_round_robin_arb.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_wrlvl.v"							To "${dstDir}/mig_7series_v1_9_ddr_phy_wrlvl.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_init.v"								To "${dstDir}/mig_7series_v1_9_ddr_phy_init.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_dqs_found_cal_hr.v"		To "${dstDir}/mig_7series_v1_9_ddr_phy_dqs_found_cal_hr.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_mc_phy_wrapper.v"					To "${dstDir}/mig_7series_v1_9_ddr_mc_phy_wrapper.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_mc_phy.v"									To "${dstDir}/mig_7series_v1_9_ddr_mc_phy.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_tempmon.v"						To "${dstDir}/mig_7series_v1_9_ddr_phy_tempmon.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_prbs_rdlvl.v"					To "${dstDir}/mig_7series_v1_9_ddr_phy_prbs_rdlvl.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_ck_addr_cmd_delay.v"	To "${dstDir}/mig_7series_v1_9_ddr_phy_ck_addr_cmd_delay.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_4lanes.v"							To "${dstDir}/mig_7series_v1_9_ddr_phy_4lanes.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_wrcal.v"							To "${dstDir}/mig_7series_v1_9_ddr_phy_wrcal.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_calib_top.v"							To "${dstDir}/mig_7series_v1_9_ddr_calib_top.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_if_post_fifo.v"						To "${dstDir}/mig_7series_v1_9_ddr_if_post_fifo.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_rdlvl.v"							To "${dstDir}/mig_7series_v1_9_ddr_phy_rdlvl.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_dqs_found_cal.v"			To "${dstDir}/mig_7series_v1_9_ddr_phy_dqs_found_cal.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_prbs_gen.v"								To "${dstDir}/mig_7series_v1_9_ddr_prbs_gen.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_wrlvl_off_delay.v"		To "${dstDir}/mig_7series_v1_9_ddr_phy_wrlvl_off_delay.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_oclkdelay_cal.v"			To "${dstDir}/mig_7series_v1_9_ddr_phy_oclkdelay_cal.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_of_pre_fifo.v"						To "${dstDir}/mig_7series_v1_9_ddr_of_pre_fifo.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_byte_lane.v"							To "${dstDir}/mig_7series_v1_9_ddr_byte_lane.v"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_phy_top.vhd"							To "${dstDir}/mig_7series_v1_9_ddr_phy_top.vhd"
+	Copy "${tempDir}/user_design/rtl/phy/mig_7series_v1_9_ddr_byte_group_io.v"					To "${dstDir}/mig_7series_v1_9_ddr_byte_group_io.v"
+	Copy "${tempDir}/user_design/rtl/ip_top/mig_7series_v1_9_mem_intfc.v"								To "${dstDir}/mig_7series_v1_9_mem_intfc.v"
+	Copy "${tempDir}/user_design/rtl/ip_top/mig_7series_v1_9_memc_ui_top_std.v"					To "${dstDir}/mig_7series_v1_9_memc_ui_top_std.v"
+	Copy "${tempDir}/user_design/rtl/ui/mig_7series_v1_9_ui_top.v"											To "${dstDir}/mig_7series_v1_9_ui_top.v"
+	Copy "${tempDir}/user_design/rtl/ui/mig_7series_v1_9_ui_rd_data.v"									To "${dstDir}/mig_7series_v1_9_ui_rd_data.v"
+	Copy "${tempDir}/user_design/rtl/ui/mig_7series_v1_9_ui_wr_data.v"									To "${dstDir}/mig_7series_v1_9_ui_wr_data.v"
+	Copy "${tempDir}/user_design/rtl/ui/mig_7series_v1_9_ui_cmd.v"											To "${dstDir}/mig_7series_v1_9_ui_cmd.v"
+	Copy "${tempDir}/user_design/rtl/${TopLevel}.vhd"																		To "${dstDir}/${TopLevel}_top.vhd"
+	Copy "${tempDir}/user_design/constraints/${TopLevel}.ucf"														To "${dstDir}/${TopLevel}.ncf"
 End PostProcessRules

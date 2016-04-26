@@ -257,7 +257,7 @@ class Compiler(ILogable):
 			postDeleteTasks = []
 			for rule in rulesFiles[0].PostProcessRules:
 				if isinstance(rule, DeleteRuleMixIn):
-					filePath = self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.filePath, {})
+					filePath = self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
 					task = DeleteTask(Path(filePath))
 					postDeleteTasks.append(task)
 		else:

@@ -150,7 +150,7 @@ class Testbench(object):
 		self.index_mask = 2**self.index_bits-1
 		self.tag_mask = 2**tag_bits-1
 
-		if DEBUG: print "Testbench: %d, %d, %d" % (self.index_bits, self.index_mask, self.tag_mask)
+		if DEBUG: print("Testbench: {0}, {1}, {2}".format(self.index_bits, self.index_mask, self.tag_mask))
 		
 		replacement_policy = dut.REPLACEMENT_POLICY.value
 		if replacement_policy != "LRU":
@@ -176,7 +176,7 @@ class Testbench(object):
 	def model(self, transaction):
 		'''Model the DUT based on the input transaction.'''
 		request, readWrite, invalidate, replace, address, cacheLineIn = transaction
-		if DEBUG >= 1: print "=== model called with stopped=%r, Request=%d, ReadWrite=%d, Invalidate=%d, Replace=%d, Address=%d, CacheLineIn=%d" % (self.stopped, request, readWrite, invalidate, replace, address, cacheLineIn)
+		if DEBUG >= 1: print("=== model called with stopped={0!r}, Request={1}, ReadWrite={2}, Invalidate={3}, Replace={4}, Address={5}, CacheLineIn={6}".format(self.stopped, request, readWrite, invalidate, replace, address, cacheLineIn))
 
 		index = address & self.index_mask
 		tag = (address >> self.index_bits) & self.tag_mask
@@ -207,7 +207,7 @@ class Testbench(object):
 				# actual replace
 				self.lrus[index][address] = cacheLineIn
 
-			if DEBUG >= 1: print "=== model: lrus[%d] = %s" % (index, self.lrus[index].items())
+			if DEBUG >= 1: print("=== model: lrus[{0}] = {1!s}".format(index, self.lrus[index].items()))
 			self.expected_output.append( (cacheLineOut, cacheHit, cacheMiss, oldAddress) )
 			
 	def stop(self):
@@ -234,7 +234,7 @@ def random_input_gen(tb,n=100000):
 	lru_tags = tuple([LeastRecentlyUsedDict(size_limit=tb.associativity) for _ in range(tb.cache_sets)])
 	
 	for i in range(n):
-		if DEBUG and (i % 1000 == 0): print "Generating transaction #%d ..." % i
+		if DEBUG and (i % 1000 == 0): print("Generating transaction #{0} ...".format(i))
 		
 		command = random.randint(1,60)
 		request, readWrite, invalidate, replace = 0, 0, 0, 0
@@ -263,8 +263,8 @@ def random_input_gen(tb,n=100000):
 		elif replace == 1:
 			lru_tags[index][tag] = 1 # allocate cache line
 
-		if DEBUG >= 2: print "=== random_input_gen: request=%d, readWrite=%d, invalidate=%d, replace=%d, address=%d" % (request, readWrite, invalidate, replace, address)
-		if DEBUG >= 2: print "=== random_input_gen: lru_tags[%d]=%s" % (index, lru_tags[index].items())
+		if DEBUG >= 2: print("=== random_input_gen: request={0}, readWrite={1}, invalidate={2}, replace={3}, address={4}".format(request, readWrite, invalidate, replace, address))
+		if DEBUG >= 2: print("=== random_input_gen: lru_tags[{0}]={1!s}".format(index, lru_tags[index].items()))
 		
 		yield InputTransaction(tb, request, readWrite, invalidate, replace, address, random.randint(0,data_high))
 

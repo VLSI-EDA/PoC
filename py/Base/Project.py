@@ -33,6 +33,7 @@
 # load dependencies
 from enum								import Enum, unique
 from pathlib						import Path
+from flags							import Flags
 
 from Base.Configuration import ConfigurationException
 from Base.Exceptions		import CommonException
@@ -43,26 +44,25 @@ from lib.Functions			import merge
 
 # TODO: nested filesets
 
-@unique
-class FileTypes(Enum):
-	Unknown =							-1
-	Any =									0
-	Text =								1
-	ProjectFile =					2
-	FileListFile =				3
-	RulesFile =						4
-	SourceFile =					10
-	VHDLSourceFile =			11
-	VerilogSourceFile =		12
-	PythonSourceFile =		15
-	CocotbSourceFile =		16
-	ConstraintFile =			20
-	UcfConstraintFile =		21
-	XdcConstraintFile =		22
-	SdcConstraintFile =		25
-	LdcConstraintFile =		26
-	SettingsFile =				30
-	QuartusSettingsFile =	31
+class FileTypes(Flags):
+	__no_flags_name__ = 	"Unknown"
+	__all_flags_name__ = 	"Any"
+	Text =								()
+	ProjectFile =					()
+	FileListFile =				()
+	RulesFile =						()
+	SourceFile =					()
+	VHDLSourceFile =			()
+	VerilogSourceFile =		()
+	PythonSourceFile =		()
+	CocotbSourceFile =		()
+	ConstraintFile =			()
+	UcfConstraintFile =		()
+	XdcConstraintFile =		()
+	SdcConstraintFile =		()
+	LdcConstraintFile =		()
+	SettingsFile =				()
+	QuartusSettingsFile =	()
 
 	def Extension(self):
 		if   (self == FileTypes.Unknown):							raise CommonException("Unknown file type.")
@@ -324,7 +324,7 @@ class Project():
 			fileSet = self._defaultFileSet
 		# print("init Project.Files generator")
 		for file in fileSet.Files:
-			if (file.FileType is fileType):
+			if (file.FileType in fileType):
 				yield file
 	
 	def ExtractVHDLLibrariesFromVHDLSourceFiles(self):
