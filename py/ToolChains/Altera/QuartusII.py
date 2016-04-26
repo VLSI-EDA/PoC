@@ -358,7 +358,8 @@ class QuartusSettingsFile(SettingsFile):
 		return self._projectFile
 	@File.setter
 	def File(self, value):
-		if (not isinstance(value, QuartusProjectFile)):		raise ValueError("Parameter 'value' is not of type QuartusProjectFile.")
+		if (not isinstance(value, QuartusProjectFile)):
+			raise ValueError("Parameter 'value' is not of type QuartusProjectFile.")
 		self._projectFile = value
 
 	@property
@@ -378,7 +379,11 @@ class QuartusSettingsFile(SettingsFile):
 
 		buffer += "\n"
 		for file in self._sourceFiles:
-			buffer += "set_global_assignment -name VHDL_FILE {file} -library {library}\n".format(file=file.Path.as_posix(), library=file.LibraryName)
+			if (not file.Path.exists()):
+				raise QuartusIIException("Can not add '{0!s}' to Quartus settings file.".
+																 format(file.Path)) from FileNotFoundError(str(file.Path))
+			buffer += "set_global_assignment -name VHDL_FILE {file} -library {library}\n".\
+				format(file=file.Path.as_posix(), library=file.LibraryName)
 
 		with self._projectFile.Path.open('w') as fileHandle:
 			fileHandle.write(buffer)

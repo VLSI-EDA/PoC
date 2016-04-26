@@ -96,7 +96,7 @@ class Compiler(BaseCompiler):
 		# netlist.XstFile = self._tempPath / (netlist.ModuleName + ".xst")
 		netlist.QsfFile = self._tempPath / (netlist.ModuleName + ".qsf")
 
-		self._WriteQuartusProjectFile(netlist)
+		self._WriteQuartusProjectFile(netlist, board.Device)
 
 		self._LogNormal("Executing pre-processing tasks...")
 		self._RunPreCopy(netlist)
@@ -124,12 +124,12 @@ class Compiler(BaseCompiler):
 		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self._tempPath.as_posix()
 
 
-	def _WriteQuartusProjectFile(self, netlist):
+	def _WriteQuartusProjectFile(self, netlist, device):
 		quartusProjectFile = QuartusProjectFile(netlist.QsfFile)
 
 		quartusProject = QuartusSettingsFile(netlist.ModuleName, quartusProjectFile)
-		quartusProject.GlobalAssignments['FAMILY'] =							"\"Stratix IV\""
-		quartusProject.GlobalAssignments['DEVICE'] =							"EP4SGX230KF40C2"
+		quartusProject.GlobalAssignments['FAMILY'] =							"\"{0}\"".format(device.Series)
+		quartusProject.GlobalAssignments['DEVICE'] =							device.ShortName
 		quartusProject.GlobalAssignments['TOP_LEVEL_ENTITY'] =		netlist.ModuleName
 		quartusProject.GlobalAssignments['VHDL_INPUT_VERSION'] =	"VHDL_2008"
 

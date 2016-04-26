@@ -71,24 +71,32 @@ class Vendors(BaseEnum):
 
 
 class Families(BaseEnum):
-	Unknown =		None
-	Generic =		"g"
-	# Xilinx families
-	Spartan =		"s"
-	Artix =			"a"
-	Kintex =		"k"
-	Virtex =		"v"
-	Zynq =			"z"
-	# Altera families
-	Max =				"m"
-	Cyclon =		"c"
-	Arria =			"a"
-	Stratix =		"s"
-
 	# @CachedReadOnlyProperty
 	@property
 	def Token(self):
 		return self.value
+
+
+class GenericFamilies(Families):
+	Unknown = None
+	Generic = "g"
+
+
+class XilinxFamilies(Families):
+	# Xilinx families
+	Spartan = "s"
+	Artix = "a"
+	Kintex = "k"
+	Virtex = "v"
+	Zynq = "z"
+
+
+class AlteraFamilies(Families):
+	# Altera families
+	Max =				"m"
+	Cyclone =   "c"
+	Arria =			"a"
+	Stratix =		"s"
 
 
 @unique
@@ -157,6 +165,9 @@ class SubTypes(BaseEnum):
 	GS =				("gs",	"")
 	GX =				("gx",	"")
 	GT =				("gt",	"")
+	GZ =				("gz",	"")
+	SX =				("sx",	"")
+	ST =				("st",	"")
 	# lAttice device subtypes
 	U =					("u",		"")
 	UM =				("um",	"")
@@ -201,13 +212,19 @@ class Packages(BaseEnum):
 	RBG =			41
 	RS =			42
 	RF =			43
-	
+
+	E =				50
+	Q =				51
+	F =				52
+	U =				53
+	M =				54
+
 
 class Device:
 	def __init__(self, deviceString):
 		# Device members
 		self.__vendor =			Vendors.Unknown
-		self.__family =			Families.Unknown
+		self.__family =			GenericFamilies.Unknown
 		self.__device =			Devices.Unknown
 		self.__generation =	0
 		self.__subtype =		SubTypes.Unknown
@@ -215,6 +232,7 @@ class Device:
 		self.__speedGrade =	0
 		self.__package =		Packages.Unknown
 		self.__pinCount =		0
+		self.__deviceString = deviceString
 		
 		if (not isinstance(deviceString, str)):
 			raise ValueError("Parameter 'deviceString' is not of type str.")
@@ -233,90 +251,40 @@ class Device:
 
 	def _DecodeGeneric(self):
 		self.__vendor =		Vendors.Generic
-		self.__family =		Families.Artix
+		self.__family =		GenericFamilies.Generic
 		self.__subtype =	SubTypes.Generic
 		self.__package =	Packages.Generic
 
 	def _DecodeAltera(self, deviceString):
 		self.__vendor = Vendors.Altera
-		self.__generation = int(deviceString[2:3])
 
-		familyToken = deviceString[3:4].lower()
-		if (familyToken == Families.Max.Token):				self._DecodeAlteraMax()
-		elif (familyToken == Families.Cyclon.Token):	self._DecodeAlteraCyclone(deviceString)
-		elif (familyToken == Families.Arria.Token):		self._DecodeAlteraArria()
-		elif (familyToken == Families.Stratix.Token):	self._DecodeAlteraStratix(deviceString)
-		else:																					raise ConfigurationException("Unknown Altera device family.")
+		deviceRegExpStr  = r"(?P<gen>\d{1,2})"  # generation
+		deviceRegExpStr += r"(?P<fam>[acms])"  # family
+		deviceRegExpStr += r"(?P<st>(ls|e|g|x|t|gs|gx|gt|gz|sx|st)?)"  # subtype
+		deviceRegExp = RegExpCompile(deviceRegExpStr)
+		deviceRegExpMatch = deviceRegExp.match(deviceString[2:].lower())
 
-	def _DecodeAlteraMax(self):
-		self.__family = Families.Max
-		raise NotImplementedError("No decode algorithm for Altera Max defined")
+		if (deviceRegExpMatch is not None):
+			self.__generation = int(deviceRegExpMatch.group('gen'))
 
-	def _DecodeAlteraArria(self):
-		self.__family = Families.Arria
-		raise NotImplementedError("No decode algorithm for Altera Arria defined")
+			family = deviceRegExpMatch.group('fam')
+			for fam in AlteraFamilies:
+				if fam.Token == family:
+					self.__family = fam
+					break
+			else:
+				raise ConfigurationException("Unknown Altera device family.")
 
-	def _DecodeAlteraCyclone(self, deviceString):
-		self.__family = Families.Cyclon
-		if (self.__generation == 1):		raise NotImplementedError("No decode algorithm for Cyclone I defined")
-		elif (self.__generation == 2):	raise NotImplementedError("No decode algorithm for Cyclone II defined")
-		elif (self.__generation == 3):	self._DecodeCyclone3(deviceString)
-		elif (self.__generation == 4):	raise ConfigurationException("A Cyclone IV device was never manufactured.")
-		elif (self.__generation == 5):	self._DecodeCyclone5(deviceString)
-		else:														raise ConfigurationException("Unknown Altera Cyclone generation.")
+			subtype = deviceRegExpMatch.group('st')
+			if (subtype != ""):
+				d = {"g": "gx", "x": "sx", "t": "gt"} # re-name for Stratix 10 and Arria 10
+				if subtype in d: subtype = d[subtype]
+				self.__subtype = SubTypes[subtype.upper()]
+			else:
+				self.__subtype = SubTypes.NoSubType
 
-	def _DecodeCyclone3(self, deviceString):
-		if (deviceString[4:6] == "LS"):
-			self.__subtype = SubTypes.LS
-			self.__number = int(deviceString[6:9])
 		else:
-			self.__number = int(deviceString[4:7])
-
-	def _DecodeCyclone5(self, deviceString):
-		# if (deviceString[4:5] == "E"):
-		# 	self.__subtype = SubTypes.E
-		# 	self.__number = int(deviceString[5:8])
-		# elif (deviceString[4:6] == "GX"):
-		# 	self.__subtype = SubTypes.GX
-		# 	self.__number = int(deviceString[6:9])
-		# else:
-		raise NotImplementedError("No decode algorithm for Cyclone V defined")
-
-	def _DecodeAlteraStratix(self, deviceString):
-		self.__family = Families.Stratix
-		if (self.__generation == 1):		raise NotImplementedError("No decode algorithm for Stratix I defined")
-		elif (self.__generation == 2):	raise NotImplementedError("No decode algorithm for Stratix II defined")
-		elif (self.__generation == 3):	raise NotImplementedError("No decode algorithm for Stratix III defined")
-		elif (self.__generation == 4):	self._DecodeAlteraStratix4(deviceString)
-		elif (self.__generation == 5):	self._DecodeAlteraStratix5(deviceString)
-		else:														raise ConfigurationException("Unknown Altera Stratix generation.")
-
-	def _DecodeAlteraStratix4(self, deviceString):
-		if (deviceString[4:5] == "E"):
-			self.__subtype = SubTypes.E
-			self.__number = int(deviceString[5:8])
-		elif (deviceString[4:6] == "GX"):
-			self.__subtype = SubTypes.GX
-			self.__number = int(deviceString[6:9])
-
-		# TODO: EP 4 S GX 230 KF 40 C2
-		else:
-			raise NotImplementedError("No decode algorithm for Stratix IV GT defined")
-
-	def _DecodeAlteraStratix5(self, deviceString):
-		if (deviceString[4:5] == "E"):
-			self.__subtype = SubTypes.E
-		# self.__number = int(deviceString[5:8])
-		elif (deviceString[4:6] == "GS"):
-			self.__subtype = SubTypes.GS
-		# self.__number = int(deviceString[5:8])
-		elif (deviceString[4:6] == "GX"):
-			self.__subtype = SubTypes.GX
-		# self.__number = int(deviceString[5:8])
-		elif (deviceString[4:6] == "GT"):
-			self.__subtype = SubTypes.GT
-		# self.__number = int(deviceString[5:8])
-		print("{RED}Device._DecodeAlteraStratix5(): not fully implemented for Altera Stratix V.{NOCOLOR}".format(**Init.Foreground))
+			raise ConfigurationException("RegExp mismatch.")
 
 	def _DecodeLatticeICE(self, deviceString):
 		self.__vendor = Vendors.Lattice
@@ -359,12 +327,12 @@ class Device:
 		self.__generation = int(deviceString[2:3])
 
 		familyToken = deviceString[3:4].lower()
-		if   (familyToken == Families.Artix.Token):		self.__family = Families.Artix
-		elif (familyToken == Families.Kintex.Token):	self.__family = Families.Kintex
-		elif (familyToken == Families.Spartan.Token):	self.__family = Families.Spartan
-		elif (familyToken == Families.Virtex.Token):	self.__family = Families.Virtex
-		elif (familyToken == Families.Zynq.Token):		self.__family = Families.Zynq
-		else:																					raise Exception("Unknown device family.")
+		for fam in XilinxFamilies:
+			if fam.Token == familyToken:
+				self.__family = fam
+				break
+		else:
+			raise ConfigurationException("Unknown Xilinx device family.")
 
 		deviceRegExpStr =  r"(?P<st1>[a-z]{0,2})"   # device subtype - part 1
 		deviceRegExpStr += r"(?P<no>\d{1,4})"       # device number
@@ -415,7 +383,7 @@ class Device:
 			return "GENERIC"
 		elif (self.__vendor is Vendors.Xilinx):
 			subtype = self.__subtype.Groups
-			if (self.__family is Families.Zynq):
+			if (self.__family is XilinxFamilies.Zynq):
 				number_format = "{num:03d}"
 			else:
 				number_format = "{num}"
@@ -427,11 +395,10 @@ class Device:
 				subtype[1]
 			)).upper()
 		elif (self.__vendor is Vendors.Altera):
-			print("{YELLOW}Device.ShortName() not implemented for vendor Altera.{NOCOLOR}".format(**Init.Foreground))
-			return "EP4SGX230KF40C2"
+			if self.__generation == 5: return self.__deviceString[2:]
+			return self.__deviceString
 		elif (self.__vendor is Vendors.Lattice):
-			print("{YELLOW}Device.ShortName() not implemented for vendor Lattice.{NOCOLOR}".format(**Init.Foreground))
-			return "ECP5UM-45F"
+			return self.__deviceString
 		else:
 			raise NotImplementedError("Device.ShortName() not implemented for vendor {0!s}".format(self.__vendor))
 	
@@ -442,7 +409,7 @@ class Device:
 			return "GENERIC"
 		elif (self.__vendor is Vendors.Xilinx):
 			subtype = self.__subtype.Groups
-			if (self.__family is Families.Zynq):
+			if (self.__family is XilinxFamilies.Zynq):
 				number_format = "{num:03d}"
 			else:
 				number_format = "{num}"
@@ -457,18 +424,16 @@ class Device:
 				self.__pinCount
 			)).upper()
 		elif (self.__vendor is Vendors.Altera):
-			print("{YELLOW}Device.FullName() not implemented for vendor Altera.{NOCOLOR}".format(**Init.Foreground))
-			return "EP4SGX230KF40C2"
+			return self.__deviceString
 		elif (self.__vendor is Vendors.Lattice):
-			print("{YELLOW}Device.FullName() not implemented for vendor Lattice.{NOCOLOR}".format(**Init.Foreground))
-			return "ECP5UM-45F"
+			return self.__deviceString
 		else:
 			raise NotImplementedError("Device.FullName() not implemented for vendor {0!s}".format(self.__vendor))
 
 	# @CachedReadOnlyProperty
 	@property
 	def FamilyName(self):
-		if (self.__family is Families.Zynq):
+		if (self.__family is XilinxFamilies.Zynq):
 			return str(self.__family)
 		else:
 			return str(self.__family) + str(self.__generation)
@@ -476,11 +441,18 @@ class Device:
 	# @CachedReadOnlyProperty
 	@property
 	def Series(self):
-		if (self.__generation == 7):
-			if self.__family in [Families.Artix, Families.Kintex, Families.Virtex, Families.Zynq]:
+		if self.__vendor is Vendors.Generic:
+			return "GENERIC"
+		elif self.__vendor is Vendors.Altera:
+			d = {1: "", 2: " II", 3: " III", 4: " IV", 5: " V", 10: " 10"}
+			return "{0!s}{1}".format(self.__family, d[self.__generation])
+		elif self.__vendor is Vendors.Xilinx:
+			if (self.__generation == 7):
 				return "Series-7"
-		else:
-			return "{0}-{1}".format(str(self.__family), self.__generation)
+			else:
+				return "{0}-{1}".format(str(self.__family), self.__generation)
+		elif self.__vendor is Vendors.Lattice:
+			raise NotImplementedError()
 	
 	def GetVariables(self):
 		result = {
