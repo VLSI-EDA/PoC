@@ -43,7 +43,7 @@ from cocotb.drivers import BusDriver
 from cocotb.binary import BinaryValue
 from cocotb.regression import TestFactory
 from cocotb.scoreboard import Scoreboard
-from cocotb.result import TestFailure, TestSuccess
+from cocotb.result import TestFailure
 
 from lru_dict import LeastRecentlyUsedDict
 from utils import log2ceil
@@ -121,8 +121,8 @@ class OutputMonitor(BusMonitor):
 
 # ==============================================================================
 class Testbench(object):
-	class Scoreboard(Scoreboard):
-		def compare(self, got, exp, log, strict_type=True):
+	class MyScoreboard(Scoreboard):
+		def compare(self, got, exp, log, **_):
 			"""Ignore received output if expected value is None"""
 			for i, val in enumerate(exp):
 				if val is not None:
@@ -166,7 +166,7 @@ class Testbench(object):
 		
 		# Create a scoreboard on the outputs
 		self.expected_output = [ init_val ]
-		self.scoreboard = Testbench.Scoreboard(dut)
+		self.scoreboard = Testbench.MyScoreboard(dut)
 		self.scoreboard.add_interface(self.output_mon, self.expected_output)
 
 		# Reconstruct the input transactions from the pins
@@ -176,10 +176,11 @@ class Testbench(object):
 	def model(self, transaction):
 		'''Model the DUT based on the input transaction.'''
 		request, readWrite, invalidate, replace, address, cacheLineIn = transaction
-		if DEBUG >= 1: print("=== model called with stopped={0!r}, Request={1}, ReadWrite={2}, Invalidate={3}, Replace={4}, Address={5}, CacheLineIn={6}".format(self.stopped, request, readWrite, invalidate, replace, address, cacheLineIn))
+		if DEBUG >= 1: print("=== model called with stopped={0!r}, Request={1}, ReadWrite={2}, Invalidate={3}, Replace={4}, Address={5}, CacheLineIn={6}".
+												 format(self.stopped, request, readWrite, invalidate, replace, address, cacheLineIn))
 
 		index = address & self.index_mask
-		tag = (address >> self.index_bits) & self.tag_mask
+		#tag = (address >> self.index_bits) & self.tag_mask
 		
 		# expected outputs, None means ignore
 		cacheLineOut, cacheHit, cacheMiss, oldAddress = None, 0, 0, None
