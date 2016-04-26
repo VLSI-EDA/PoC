@@ -51,13 +51,16 @@ from Base.Exceptions		import ExceptionBase
 from Base.Logging				import ILogable
 from Base.Project				import ToolChain, Tool, VHDLVersion, Environment, FileTypes
 from PoC.Project				import Project as PoCProject, FileListFile, RulesFile
-from Parser.RulesParser	import CopyRuleMixIn, ReplaceRuleMixIn
+from Parser.RulesParser	import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn
 
 
 class CompilerException(ExceptionBase):
 	pass
 
 class CopyTask(CopyRuleMixIn):
+	pass
+
+class DeleteTask(DeleteRuleMixIn):
 	pass
 
 class ReplaceTask(ReplaceRuleMixIn):
@@ -68,7 +71,7 @@ class Compiler(ILogable):
 	_TOOL_CHAIN =	ToolChain.Any
 	_TOOL =				Tool.Any
 
-	def __init__(self, host, showLogs, showReport):
+	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		if isinstance(host, ILogable):
 			ILogable.__init__(self, host.Logger)
 		else:
@@ -77,7 +80,8 @@ class Compiler(ILogable):
 		self.__host =				host
 		self.__showLogs =		showLogs
 		self.__showReport =	showReport
-		self.__dryRun =			False
+		self._noCleanUp =		noCleanUp
+		self._dryRun =			dryRun
 
 		self._vhdlVersion =	VHDLVersion.VHDL93
 		self._pocProject =	None
@@ -217,19 +221,19 @@ class Compiler(ILogable):
 			self._LogDebug("nothing to copy")
 
 	def _ParseCopyRules(self, rawList):
-		# read pre-copy tasks
+		# read copy tasks
 		copyTasks = []
 		if (len(rawList) != 0):
 			rawList = rawList.split("\n")
 			self._LogDebug("Copy tasks from config file:\n  " + ("\n  ".join(rawList)))
 
-			preCopyRegExpStr = r"^\s*(?P<SourceFilename>.*?)"  # Source filename
-			preCopyRegExpStr += r"\s->\s"  # Delimiter signs
-			preCopyRegExpStr += r"(?P<DestFilename>.*?)$"  # Destination filename
-			preCopyRegExp = re.compile(preCopyRegExpStr)
+			copyRegExpStr = r"^\s*(?P<SourceFilename>.*?)"  # Source filename
+			copyRegExpStr += r"\s->\s"  # Delimiter signs
+			copyRegExpStr += r"(?P<DestFilename>.*?)$"  # Destination filename
+			copyRegExp = re.compile(copyRegExpStr)
 
 			for item in rawList:
-				preCopyRegExpMatch = preCopyRegExp.match(item)
+				preCopyRegExpMatch = copyRegExp.match(item)
 				if (preCopyRegExpMatch is not None):
 					copyTasks.append(CopyTask(Path(preCopyRegExpMatch.group('SourceFilename')), Path(preCopyRegExpMatch.group('DestFilename'))))
 				else:
@@ -245,6 +249,55 @@ class Compiler(ILogable):
 
 			self._LogDebug("{0}-copying '{1!s}'.".format(text, task.SourcePath))
 			shutil.copy(str(task.SourcePath), str(task.DestinationPath))
+
+	def _RunPostDelete(self, netlist):
+		self._LogVerbose("copy generated files into netlist directory...")
+		rulesFiles = [file for file in self.PoCProject.Files(fileType=FileTypes.RulesFile)]  # FIXME: get rulefile from netlist object as a rulefile object instead of a path
+		if (rulesFiles):
+			postDeleteTasks = []
+			for rule in rulesFiles[0].PostProcessRules:
+				if isinstance(rule, DeleteRuleMixIn):
+					filePath = self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.filePath, {})
+					task = DeleteTask(Path(filePath))
+					postDeleteTasks.append(task)
+		else:
+			postDeleteRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PostDeleteRules']
+			if (len(postDeleteRules) != 0):
+				postDeleteTasks = self._ParseDeleteRules(postDeleteRules)
+			else:
+				postDeleteTasks = []
+
+		if (self._noCleanUp == True):
+			self._LogWarning("Disabled cleanup. Skipping post-delete rules.")
+		elif (len(postDeleteTasks) != 0):
+			self._ExecuteDeleteTasks(postDeleteTasks, "post")
+		else:
+			self._LogDebug("nothing to delete")
+
+	def _ParseDeleteRules(self, rawList):
+		# read delete tasks
+		deleteTasks = []
+		if (len(rawList) != 0):
+			rawList = rawList.split("\n")
+			self._LogDebug("Delete tasks from config file:\n  " + ("\n  ".join(rawList)))
+
+			deleteRegExpStr = r"^\s*(?P<Filename>.*?)$"  # filename
+			deleteRegExp = re.compile(deleteRegExpStr)
+
+			for item in rawList:
+				deleteRegExpMatch = deleteRegExp.match(item)
+				if (deleteRegExpMatch is not None):
+					deleteTasks.append(DeleteTask(Path(deleteRegExpMatch.group('Filename'))))
+				else:
+					raise CompilerException("Error in delete rule '{0}'.".format(item))
+		return deleteTasks
+
+	def _ExecuteDeleteTasks(self, tasks, text):
+		for task in tasks:
+			if not task.FilePath.exists(): raise CompilerException("Can not {0}-delete '{1!s}'.".format(text, task.FilePath)) from FileNotFoundError(str(task.FilePath))
+
+			self._LogDebug("{0}-deleting '{1!s}'.".format(text, task.FilePath))
+			task.FilePath.unlink()
 
 	def _RunPreReplace(self, netlist):
 		self._LogVerbose("patching files in temporary directory...")

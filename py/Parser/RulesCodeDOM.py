@@ -41,7 +41,10 @@ from Parser.CodeDOM	import EmptyLine, CommentLine, BlockedStatement as BlockStat
 class InFileStatements(BlockStatementBase):
 	_allowedStatements = []
 
-class ProcessStatements(BlockStatementBase):
+class PreProcessStatements(BlockStatementBase):
+	_allowedStatements = []
+
+class PostProcessStatements(BlockStatementBase):
 	_allowedStatements = []
 
 class DocumentStatements(BlockStatementBase):
@@ -130,6 +133,63 @@ class CopyStatement(Statement):
 			return "{0}Copy \"{1!s}\" To \"{2!s}\"    # {3}".format(("  " * indent), self._sourcePath, self._destinationPath, self._commentText)
 		else:
 			return "{0}Copy \"{1!s}\" To \"{2!s}\"".format(("  " * indent), self._sourcePath, self._destinationPath)
+
+class DeleteStatement(Statement):
+	def __init__(self, file, commentText):
+		super().__init__()
+		self._filePath =			file
+		self._commentText =		commentText
+
+	@property
+	def FilePath(self):			return self._filePath
+
+	@classmethod
+	def GetParser(cls):
+		# match for optional whitespacex
+		token = yield
+		if isinstance(token, SpaceToken):						token = yield
+		# match for DELETE keyword
+		if (not isinstance(token, StringToken)):		raise MismatchingParserResult("DeleteParser: Expected DELETE keyword.")
+		if (token.Value.lower() != "delete"):				raise MismatchingParserResult("DeleteParser: Expected DELETE keyword.")
+		# match for whitespace
+		token = yield
+		if (not isinstance(token, SpaceToken)):			raise MismatchingParserResult("DeleteParser: Expected whitespace before filename.")
+		# match for delimiter sign: "
+		token = yield
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("DeleteParser: Expected double quote sign before fileName.")
+		if (token.Value.lower() != "\""):            raise MismatchingParserResult("DeleteParser: Expected double quote sign before fileName.")
+		# match for string: filename
+		file = ""
+		while True:
+			token = yield
+			if (isinstance(token, CharacterToken) and (token.Value == "\"")):		break
+			file += token.Value
+		token = yield
+		# match for optional whitespace
+		if isinstance(token, SpaceToken):						token = yield
+		# match for delimiter sign: \n
+		commentText = ""
+		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult("DeleteParser: Expected end of line or comment")
+		if (token.Value == "\n"):
+			pass
+		elif (token.Value == "#"):
+			# match for any until line end
+			while True:
+				token = yield
+				if (isinstance(token, CharacterToken) and (token.Value == "\n")):    break
+				commentText += token.Value
+		else:
+			raise MismatchingParserResult("DeleteParser: Expected end of line or comment")
+
+		# construct result
+		result = cls(file, commentText)
+		raise MatchingParserResult(result)
+
+	def __str__(self, indent=0):
+		if (self._commentText != ""):
+			return "{0}Delete \"{1!s}\"    # {2}".format(("  " * indent), self._filePath, self._commentText)
+		else:
+			return "{0}Delete \"{1!s}\"".format(("  " * indent), self._filePath)
 
 
 class ReplaceStatement(Statement):
@@ -428,7 +488,7 @@ class PreProcessRulesStatement(BlockStatement):
 		# ==========================================================================
 		# construct result
 		result = cls(commentText)
-		parser = cls.GetRepeatParser(result.AddStatement, ProcessStatements.GetParser)
+		parser = cls.GetRepeatParser(result.AddStatement, PreProcessStatements.GetParser)
 		parser.send(None)
 
 		try:
@@ -515,7 +575,7 @@ class PostProcessStatement(BlockStatement):
 		# ==========================================================================
 		# construct result
 		result = cls(commentText)
-		parser = cls.GetRepeatParser(result.AddStatement, ProcessStatements.GetParser)
+		parser = cls.GetRepeatParser(result.AddStatement, PostProcessStatements.GetParser)
 		parser.send(None)
 
 		try:
@@ -592,10 +652,16 @@ InFileStatements.AddChoice(ReplaceStatement)
 InFileStatements.AddChoice(CommentLine)
 InFileStatements.AddChoice(EmptyLine)
 
-ProcessStatements.AddChoice(CopyStatement)
-ProcessStatements.AddChoice(FileStatement)
-ProcessStatements.AddChoice(CommentLine)
-ProcessStatements.AddChoice(EmptyLine)
+PreProcessStatements.AddChoice(CopyStatement)
+PreProcessStatements.AddChoice(FileStatement)
+PreProcessStatements.AddChoice(CommentLine)
+PreProcessStatements.AddChoice(EmptyLine)
+
+PostProcessStatements.AddChoice(CopyStatement)
+PostProcessStatements.AddChoice(DeleteStatement)
+PostProcessStatements.AddChoice(FileStatement)
+PostProcessStatements.AddChoice(CommentLine)
+PostProcessStatements.AddChoice(EmptyLine)
 
 DocumentStatements.AddChoice(PreProcessRulesStatement)
 DocumentStatements.AddChoice(PostProcessStatement)

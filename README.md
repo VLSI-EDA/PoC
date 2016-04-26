@@ -3,9 +3,10 @@
 [![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
 [![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release)](https://travis-ci.org/VLSI-EDA/PoC)
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-![Latest tag](https://img.shields.io/github/tag/Paebbels/PoC.svg)
-[![Latest release](https://img.shields.io/github/release/Paebbels/PoC.svg)](https://github.com/Paebbels/PoC/releases)
-[![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](LICENSE.md)
+![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)
+[![Latest release](https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat)](https://github.com/VLSI-EDA/PoC/releases)
+[![Apache License 2.0](https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat)](LICENSE.md)
+
 
 This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - 
 Faculty of Computer Science, Technische Universität Dresden, Germany  
@@ -87,6 +88,10 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  - Programming languages and runtimes:
 	- [Python 3][python] (&ge; 3.5):
 	     - [colorama][colorama]
+	     - [py-flags][pyflags]
+	  
+    All Python requirements are listed in [`pip3-requirements.lst`][pip3-req] and can be installed via:  
+   `pip3 install -r pip3-requirements.lst`
  - Synthesis tool chains:
      - Altera Quartus-II &ge; 13.0 or
      - Lattice Diamond or
@@ -102,8 +107,11 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 
  [python]:		https://www.python.org/downloads/
  [colorama]:	https://pypi.python.org/pypi/colorama
- [ghdl]:		https://sourceforge.net/projects/ghdl-updates/
+ [pyflags]:		https://pypi.python.org/pypi/py-flags
+ [ghdl]:			https://sourceforge.net/projects/ghdl-updates/
  [gtkwave]:		http://gtkwave.sourceforge.net/
+
+ [pip3-req]:  pip3-requirements.lst
 
 ##### Linux specific requirements:
  

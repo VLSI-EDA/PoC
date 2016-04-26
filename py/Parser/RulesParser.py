@@ -30,7 +30,7 @@
 # ==============================================================================
 #
 from lib.Parser						import ParserException
-from Parser.RulesCodeDOM	import Document, PreProcessRulesStatement, PostProcessStatement, CopyStatement, ReplaceStatement, FileStatement
+from Parser.RulesCodeDOM	import Document, PreProcessRulesStatement, PostProcessStatement, CopyStatement, ReplaceStatement, FileStatement, DeleteStatement
 
 
 class Rule:
@@ -49,6 +49,17 @@ class CopyRuleMixIn(Rule):
 
 	def __str__(self):
 		return "Copy rule: {0!s} => {1!s}".format(self._source, self._destination)
+
+
+class DeleteRuleMixIn(Rule):
+	def __init__(self, filePath):
+		self._source =			filePath
+
+	@property
+	def FilePath(self):		return self._source
+
+	def __str__(self):
+		return "Delete rule: {0!s}".format(self._source)
 
 
 class ReplaceRuleMixIn(Rule):
@@ -79,6 +90,7 @@ class ReplaceRuleMixIn(Rule):
 
 class RulesParserMixIn:
 	_classCopyRule =						CopyRuleMixIn
+	_classDeleteRule =					DeleteRuleMixIn
 	_classReplaceRule =					ReplaceRuleMixIn
 
 	def __init__(self):
@@ -110,6 +122,10 @@ class RulesParserMixIn:
 			sourceFile =			ruleStatement.SourcePath
 			destinationFile =	ruleStatement.DestinationPath
 			rule =						self._classCopyRule(sourceFile, destinationFile)
+			lst.append(rule)
+		elif isinstance(ruleStatement, DeleteStatement):
+			file =						ruleStatement.FilePath
+			rule =						self._classDeleteRule(file)
 			lst.append(rule)
 		elif isinstance(ruleStatement, FileStatement):
 			# FIXME: Currently, all replace rules are stored in individual rule instances.

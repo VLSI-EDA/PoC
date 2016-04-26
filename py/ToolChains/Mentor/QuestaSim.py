@@ -521,6 +521,8 @@ def QuestaVComFilter(gen):
 			yield LogEntry(line, Severity.Warning)
 		elif line.startswith("** Error: "):
 			yield LogEntry(line, Severity.Error)
+		elif line.startswith("** Fatal: "):
+			yield LogEntry(line, Severity.Error)
 		else:
 			yield LogEntry(line, Severity.Normal)
 
@@ -550,6 +552,8 @@ def QuestaVSimFilter(gen):
 			yield LogEntry(line, Severity.Warning)
 		elif line.startswith("** Error: "):
 			yield LogEntry(line, Severity.Error)
+		elif line.startswith("** Fatal: "):
+			yield LogEntry(line, Severity.Error)
 		else:
 			yield LogEntry(line, Severity.Normal)
 
@@ -558,6 +562,8 @@ def QuestaVLibFilter(gen):
 		if line.startswith("** Warning: "):
 			yield LogEntry(line, Severity.Warning)
 		elif line.startswith("** Error: "):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("** Fatal: "):
 			yield LogEntry(line, Severity.Error)
 		else:
 			yield LogEntry(line, Severity.Normal)

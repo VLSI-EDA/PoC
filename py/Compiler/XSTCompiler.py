@@ -57,8 +57,8 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =	ToolChain.Xilinx_ISE
 	_TOOL =				Tool.Xilinx_XST
 
-	def __init__(self, host, showLogs, showReport):
-		super(self.__class__, self).__init__(host, showLogs, showReport)
+	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
+		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
 		XilinxProjectExportMixIn.__init__(self)
 
 		self._device =				None
@@ -117,6 +117,7 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
+		self._RunPostDelete(netlist)
 		
 	def _PrepareCompilerEnvironment(self, device):
 		self._LogNormal("preparing synthesis environment...")

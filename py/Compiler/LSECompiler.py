@@ -55,8 +55,8 @@ class Compiler(BaseCompiler):
 	_TOOL_CHAIN =	ToolChain.Lattice_Diamond
 	_TOOL =				Tool.Lattice_LSE
 
-	def __init__(self, host, showLogs, showReport):
-		super(self.__class__, self).__init__(host, showLogs, showReport)
+	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
+		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
 
 		self._diamond =		None
 
@@ -107,6 +107,7 @@ class Compiler(BaseCompiler):
 		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
+		self._RunPostDelete(netlist)
 
 	def _PrepareCompilerEnvironment(self, device):
 		self._LogNormal("Preparing synthesis environment...")

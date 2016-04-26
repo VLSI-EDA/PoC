@@ -46,8 +46,16 @@ from lib.Functions				import Init
 from Base.Configuration		import ConfigurationException
 
 
+class BaseEnum(Enum):
+	def __str__(self):
+		return self.name
+
+	def __repr__(self):
+		return str(self).lower()
+
+
 @unique
-class Vendors(Enum):
+class Vendors(BaseEnum):
 	Unknown =			0
 	Generic =			1
 	Altera =			2
@@ -60,63 +68,34 @@ class Vendors(Enum):
 	
 	def __repr__(self):
 		return str(self).lower()
-	
-@unique
-class Families(Enum):
-	Unknown =		0
-	Generic =		1
-	# Xilinx families
-	Spartan =		10
-	Artix =			11
-	Kintex =		12
-	Virtex =		13
-	Zynq =			14
-	# Altera families
-	Max =				20
-	Cyclon =		21
-	Arria =			22
-	Stratix =		23
 
-	def __str__(self):
-		return self.name
-	
-	def __repr__(self):
-		return str(self).lower()
+
+class Families(BaseEnum):
+	Unknown =		None
+	Generic =		"g"
+	# Xilinx families
+	Spartan =		"s"
+	Artix =			"a"
+	Kintex =		"k"
+	Virtex =		"v"
+	Zynq =			"z"
+	# Altera families
+	Max =				"m"
+	Cyclon =		"c"
+	Arria =			"a"
+	Stratix =		"s"
 
 	# @CachedReadOnlyProperty
 	@property
 	def Token(self):
-		if   (self == Families.Generic):	return "g"
-		elif (self == Families.Spartan):	return "s"
-		elif (self == Families.Artix):		return "a"
-		elif (self == Families.Kintex):		return "k"
-		elif (self == Families.Virtex):		return "v"
-		elif (self == Families.Zynq):			return "z"
+		return self.value
+
 
 @unique
-class Devices(Enum):
+class Devices(BaseEnum):
 	Unknown =									0
 	Generic =									1
-	
-	# Xilinx.Spartan devices
-	Spartan3 =								10
-	Spartan6 =								11
-	Spartan7 =								12
-	# Xilinx.Artix devices
-	Artix7 =									20
-	# Xilinx.Kintex devices
-	Kintex7 =									30
-	# Xilinx.Virtex devices
-	Virtex2 =									40
-	Virtex4 =									41
-	Virtex5 =									42
-	Virtex6 =									43
-	Virtex7 =									44
-	VirtexUltraScale =				45
-	VirtexUltraScalePlus =		46
-	# Xilinx.Zynq devices
-	Zynq7000 =								50
-	
+
 	# Altera.Max devices
 	Max2 =										100
 	Max4 =										101
@@ -135,74 +114,74 @@ class Devices(Enum):
 	Stratix5 =								132
 	Stratix10 =								133
 
-	def __str__(self):
-		return self.name
-	
-	def __repr__(self):
-		return str(self).lower()
+	# Lattice.iCE device
+	iCE40 =										200
+	# Lattice.MachXO
+	MachXO =									210
+	MachXO2 =									211
+	MachXO3 =									212
+	# Lattice.ECP
+	ECP2 =										220
+	ECP3 =										221
+	ECP5 =										222
 
-	# @CachedReadOnlyProperty
-	@property
-	def Token(self):
-		if   (self == Families.Spartan):	return "s"
-		elif (self == Families.Artix):		return "a"
-		elif (self == Families.Kintex):		return "k"
-		elif (self == Families.Virtex):		return "v"
-		elif (self == Families.Zynq):			return "z"
+	# Xilinx.Spartan devices
+	Spartan3 =								310
+	Spartan6 =								311
+	# Spartan7 =								312
+	# Xilinx.Artix devices
+	Artix7 =									320
+	# Xilinx.Kintex devices
+	Kintex7 =									330
+	KintexUltraScale =				331
+	KintexUltraScalePlus =		332
+	# Xilinx.Virtex devices
+	Virtex2 =									340
+	Virtex4 =									341
+	Virtex5 =									342
+	Virtex6 =									343
+	Virtex7 =									344
+	VirtexUltraScale =				345
+	VirtexUltraScalePlus =		346
+	# Xilinx.Zynq devices
+	Zynq7000 =								350
+
 		
-@unique
-class SubTypes(Enum):
-	Unknown =		0
-	NoSubType = 1
-	Generic =		2
-	# Xilinx device subtypes
-	X =					101
-	T =					102
-	XT =				103
-	HT =				104
-	LX =				105
-	SXT =				106
-	LXT =				107
-	TXT =				108
-	FXT =				109
-	CXT =				110
-	HXT =				111
+class SubTypes(BaseEnum):
+	Unknown =		None
+	Generic =		1
+	NoSubType = ("",	"")
 	# Altera device subtypes
-	LS =				200
-	E =					201
-	GS =				202
-	GX =				203
-	GT =				204
+	LS =				("ls",	"")
+	E =					("e",		"")
+	GS =				("gs",	"")
+	GX =				("gx",	"")
+	GT =				("gt",	"")
+	# lAttice device subtypes
+	U =					("u",		"")
+	UM =				("um",	"")
+	# Xilinx device subtypes
+	X =					("x",		"")
+	T =					("",		"t")
+	XT =				("x",		"t")
+	HT =				("h",		"t")
+	LX =				("lx",	"")
+	SXT =				("sx",	"t")
+	LXT =				("lx",	"t")
+	TXT =				("tx",	"t")
+	FXT =				("fx",	"t")
+	CXT =				("cx",	"t")
+	HXT =				("hx",	"t")
 
-	def __str__(self):
-		if (self == SubTypes.Unknown):
-			return "??"
-		else:
-			return self.name
-	
-	def __repr__(self):
-		return str(self).lower()
-	
+
 	# @CachedReadOnlyProperty
 	@property
 	def Groups(self):
-		if   (self == SubTypes.NoSubType):	return ("",	"")
-		elif (self == SubTypes.Generic):		return ("",	"")
-		elif (self == SubTypes.X):					return ("x",	"")
-		elif (self == SubTypes.T):					return ("",		"t")
-		elif (self == SubTypes.XT):					return ("x",	"t")
-		elif (self == SubTypes.HT):					return ("h",	"t")
-		elif (self == SubTypes.LX):					return ("lx",	"")
-		elif (self == SubTypes.SXT):				return ("sx",	"t")
-		elif (self == SubTypes.LXT):				return ("lx",	"t")
-		elif (self == SubTypes.TXT):				return ("tx",	"t")
-		elif (self == SubTypes.FXT):				return ("fx",	"t")
-		elif (self == SubTypes.CXT):				return ("cx",	"t")
-		elif (self == SubTypes.HXT):				return ("hx",	"t")
-		else:																return ("??", "?")
-	
+		return self.value
+
+		
 @unique
-class Packages(Enum):
+class Packages(BaseEnum):
 	Unknown =	0
 	Generic =	1
 	
@@ -223,14 +202,6 @@ class Packages(Enum):
 	RS =			42
 	RF =			43
 	
-	def __str__(self):
-		if (self is Packages.Unknown):
-			return "??"
-		else:
-			return self.name
-			
-	def __repr__(self):
-		return str(self).lower()
 
 class Device:
 	def __init__(self, deviceString):
@@ -326,7 +297,7 @@ class Device:
 			self.__number = int(deviceString[5:8])
 		elif (deviceString[4:6] == "GX"):
 			self.__subtype = SubTypes.GX
-			self.__number = int(deviceString[5:8])
+			self.__number = int(deviceString[6:9])
 
 		# TODO: EP 4 S GX 230 KF 40 C2
 		else:

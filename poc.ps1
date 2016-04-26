@@ -36,10 +36,13 @@ $PyWrapper_PoShScriptDir =	"py"
 $PyWrapper_Script =					"PoC.py"
 $PyWrapper_MinVersion =			"3.5.0"
 
+$PyWrapper_RelPath =				"."
+$PyWrapper_Solution =				""
+
 # save parameters and current working directory
 $PyWrapper_Parameters =	$args
 $PyWrapper_WorkingDir =	Get-Location
-$PoC_RootDir_AbsPath =	Convert-Path (Resolve-Path ($PSScriptRoot + "\."))
+$PoC_RootDir_AbsPath =	Convert-Path (Resolve-Path ($PSScriptRoot + "\" + $PyWrapper_RelPath))
 
 # invoke main wrapper
 . ("$PoC_RootDir_AbsPath\$PyWrapper_PoShScriptDir\Wrapper.ps1")
