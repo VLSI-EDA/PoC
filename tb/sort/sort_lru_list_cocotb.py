@@ -99,7 +99,7 @@ class OutputMonitor(BusMonitor):
 
 # ==============================================================================
 class Testbench(object):
-	class Scoreboard(Scoreboard):
+	class MyScoreboard(Scoreboard):
 		def compare(self, got, exp, log, strict_type=True):
 			"""Compare Valid before DataOut."""
 			got_valid, got_elem = got
@@ -138,7 +138,7 @@ class Testbench(object):
 		
 		# Create a scoreboard on the outputs
 		self.expected_output = [ init_val ]
-		self.scoreboard = Testbench.Scoreboard(dut)
+		self.scoreboard = Testbench.MyScoreboard(dut)
 		self.scoreboard.add_interface(self.output_mon, self.expected_output)
 
 		# Reconstruct the input transactions from the pins

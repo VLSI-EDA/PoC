@@ -165,7 +165,7 @@ class Simulator(BaseSimulator):
 		except ActiveHDLException as ex:
 			raise SimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
 		if aSim.HasErrors:
-			raise SimulatorException("Error while simulating '{0}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
+			raise SimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
 
 	def _RunSimulationWithGUI(self, testbench):
 		self._LogNormal("Running simulation...")
