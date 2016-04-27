@@ -57,16 +57,40 @@ if [ -z "$XILINX" ]; then
 fi
 
 # Setup command to execute
-DestDir=$($poc_sh query PoC:InstallationDirectory 2>/dev/null)/temp/vsim	# Output directory
+DestDir=$($poc_sh query PoC:InstallationDirectory 2>/dev/null)/temp/precompiled/vsim/xilinx-ise	# Output directory
 if [ $? -ne 0 ]; then
-	echo -e "${RED}ERROR: Cannot get PoC installation dir.${NOCOLOR}"
+	echo 1>&2 -e "${RED}ERROR: Cannot get PoC installation dir.${NOCOLOR}"
 	exit;
 fi 
 SimulatorDir=$($poc_sh query ModelSim:InstallationDirectory 2>/dev/null)/bin	# Path to the simulators bin directory
 if [ $? -ne 0 ]; then
-	echo -e "${RED}ERROR: Cannot get ModelSim installation dir.${NOCOLOR}"
+	echo 1>&2 -e "${RED}ERROR: Cannot get ModelSim installation dir.${NOCOLOR}"
 	exit;
 fi 
 
-# Execute command
+# Change to destination directory and create initial modelsim.ini
+mkdir -p $DestDir
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}ERROR: Cannot create output directory.${NOCOLOR}"
+	exit;
+fi 
+
+cd $DestDir
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}ERROR: Cannot change to output directory.${NOCOLOR}"
+	exit;
+fi 
+echo "[Library]" > modelsim.ini
+echo "others = ../modelsim.ini" >> modelsim.ini
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}ERROR: Cannot create initial modelsim.ini.${NOCOLOR}"
+	exit;
+fi 
+
+# Execute command in destination directory
 compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $SimulatorDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise
+
+# create "xilinx" symlink
+cd ..
+rm -f xilinx
+ln -s xilinx-ise xilinx

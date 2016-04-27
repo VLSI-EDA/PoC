@@ -33,6 +33,7 @@
 # ==============================================================================
 #
 # entry point
+from PoC.Config import Vendors
 
 if __name__ != "__main__":
 	# place library initialization code here
@@ -87,15 +88,6 @@ class Simulator(BaseSimulator):
 			self._LogDebug("Build directory: {0!s}".format(simBuildPath))
 			simBuildPath.mkdir(parents=True)
 
-		# copy modelsim.ini from precompiled directory if exist
-		modelsimIniPath = self.Host.Directories["vSimPrecompiled"] / "modelsim.ini"
-		if modelsimIniPath.exists():
-			self._LogVerbose("Copying modelsim.ini from precompiled into build directory.")
-			self._LogDebug("copy {0!s} {1!s}".format(modelsimIniPath, simBuildPath))
-			shutil.copy(str(modelsimIniPath), str(simBuildPath))
-		else:
-			self._LogDebug("No 'modelsim.ini' in precompiled directory found. QuestaSim will use the default modelsim.ini.")
-
 	def PrepareSimulator(self):
 		# create the Cocotb executable factory
 		self._LogVerbose("Preparing Cocotb simulator.")
@@ -122,9 +114,28 @@ class Simulator(BaseSimulator):
 		# setup all needed paths to execute fuse
 		self._CreatePoCProject(testbench, board)
 		self._AddFileListFile(testbench.FilesFile)
-		self._Run(testbench)
+		self._Run(testbench, board)
 
-	def _Run(self, testbench):
+	def _Run(self, testbench, board):
+		# select modelsim.ini from precompiled
+		precompiledModelsimIniPath = self.Host.Directories["vSimPrecompiled"]
+		if board.Device.Vendor is Vendors.Xilinx:
+			precompiledModelsimIniPath /= "xilinx"
+		elif board.Device.Vendor is Vendors.Altera:
+			precompiledModelsimIniPath /= "altera"
+
+		precompiledModelsimIniPath /= "modelsim.ini"
+		if not precompiledModelsimIniPath.exists():
+			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(precompiledModelsimIniPath)) \
+				from FileNotFoundError(str(precompiledModelsimIniPath))
+
+		# write local modelsim.ini
+		modelsimIniPath = self.Host.Directories["CocotbTemp"] / "sim_build" / "modelsim.ini"
+		if modelsimIniPath.exists(): modelsimIniPath.unlink()
+		with modelsimIniPath.open('w') as fileHandle:
+			fileHandle.write("[Library]\nothers = {0!s}".format(precompiledModelsimIniPath))
+
+		#
 		self._LogNormal("Running simulation...")
 		cocotbTemplateFilePath = self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile']
 		topLevel =			testbench.TopLevel

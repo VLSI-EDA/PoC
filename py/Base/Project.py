@@ -96,7 +96,7 @@ class Environment(Enum):
 class ToolChain(Enum):
 	Any =								 0
 	Aldec_ActiveHDL =		10
-	Altera_QuartusII =	20
+	Altera_Quartus =	20
 	Altera_ModelSim =		21
 	Cocotb =					  30
 	GHDL_GTKWave =			40
@@ -111,7 +111,7 @@ class ToolChain(Enum):
 class Tool(Enum):
 	Any =								 0
 	Aldec_aSim =				10
-	Altera_QuartusII_Map =	20
+	Altera_Quartus_Map =	20
 	Cocotb_QuestaSim = 	30
 	GHDL =							40
 	GTKwave =						41

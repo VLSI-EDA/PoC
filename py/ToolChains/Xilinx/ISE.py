@@ -39,9 +39,9 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.ISE")
 
-from collections					import OrderedDict
 from pathlib							import Path
 from os										import environ
+from subprocess						import check_output
 
 from lib.Functions							import CallByRefParam
 from Base.Exceptions						import PlatformNotSupportedException
@@ -60,18 +60,18 @@ class ISEException(XilinxException):
 
 class Configuration(BaseConfiguration):
 	_vendor =		"Xilinx"
-	_shortName = "ISE"
-	_longName =	"Xilinx ISE"
+	_toolName =	"Xilinx ISE"
+	_section =	"INSTALL.Xilinx.ISE" 
 	_privateConfiguration = {
 		"Windows": {
-			"INSTALL.Xilinx.ISE": {
+			_section: {
 				"Version":								"14.7",
 				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
 				"BinaryDirectory":				"${InstallationDirectory}/ISE/bin/nt64"
 			}
 		},
 		"Linux": {
-			"INSTALL.Xilinx.ISE": {
+			_section: {
 				"Version":								"14.7",
 				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
 				"BinaryDirectory":				"${InstallationDirectory}/ISE/bin/lin64"
@@ -82,157 +82,39 @@ class Configuration(BaseConfiguration):
 	def __init__(self, host):
 		super().__init__(host)
 
-	def GetSections(self, Platform):
-		pass
-
-	def ConfigureForWindows(self):
-		xilinxISEPath = self.__GetXilinxISEPath()
-		if (xilinxISEPath is not None):
-			print("  Found a Xilinx ISE installation directory.")
-			xilinxISEPath = self.__ConfirmXilinxISEPath(xilinxISEPath)
-			if (xilinxISEPath is None):
-				xilinxISEPath = self.__AskXilinxISEPath()
-		else:
-			if (not self.__AskXilinxISE()):
-				self.__ClearXilinxISESections()
+	def ConfigureForAll(self):
+		super().ConfigureForAll()
+		try:
+			if (not self._AskInstalled("Is Xilinx ISE installed on your system?")):
+				self._ClearSection(self._section)
 			else:
-				xilinxISEPath = self.__AskXilinxISEPath()
-		if (not xilinxISEPath.exists()):    raise ConfigurationException("Xilinx ISE installation directory '{0}' does not exist.".format(xilinxISEPath))  from NotADirectoryError(xilinxISEPath)
-		self.__WriteXilinxISESection(xilinxISEPath)
+				self._host.PoCConfig[self._section]['Version'] = self._privateConfiguration[self._host.Platform][self._section]['Version']
+				self._host.PoCConfig[self._section]['InstallationDirectory'] = self._privateConfiguration[self._host.Platform][self._section]['InstallationDirectory']
+				self._host.PoCConfig[self._section]['BinaryDirectory'] = self._privateConfiguration[self._host.Platform][self._section]['BinaryDirectory']
+				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory']) # get resolved path
+				installPath = self._AskInstallPath(self._section, defaultPath)
+				if installPath != defaultPath: # write user entered path
+					self._WriteInstallationDirectory(self._section, installPath)
+				self.__CheckISEVersion()
+		except ConfigurationException:
+			self._ClearSection(self._section)
+			raise
 
-	def __GetXilinxISEPath(self):
-		xilinx = environ.get('XILINX')
-		if (xilinx is not None):
-			return Path(xilinx).parent
-		# FIXME: use Xilinx path to improve the search
+	def __CheckISEVersion(self):
+		# check for ISE 14.7
+		fusePath = Path(self._host.PoCConfig[self._section]['BinaryDirectory']) # get resolved path
 		if (self._host.Platform == "Linux"):
-			p = Path("/opt/xilinx/14.7/ISE_DS")
-			if (p.exists()):    return p
-			p = Path("/opt/Xilinx/14.7/ISE_DS")
-			if (p.exists()):    return p
-		elif (self._host.Platform == "Windows"):
-			for drive in "CDEFGH":
-				p = Path(r"{0}:\Xilinx\14.7\ISE_DS".format(drive))
-				try:
-					if (p.exists()):  return p
-				except OSError:
-					pass
-		return None
-
-	def __AskXilinxISE(self):
-		isXilinxISE = input("  Is Xilinx ISE installed on your system? [Y/n/p]: ")
-		isXilinxISE = isXilinxISE if isXilinxISE != "" else "Y"
-		if (isXilinxISE in ['p', 'P']):
-			raise SkipConfigurationException()
-		elif (isXilinxISE in ['n', 'N']):
-			return False
-		elif (isXilinxISE in ['y', 'Y']):
-			return True
+			fusePath /= "fuse"
 		else:
-			raise ConfigurationException("Unsupported choice '{0}'".format(isXilinxISE))
+			fusePath /= "fuse.exe"
 
-	def __AskXilinxISEPath(self):
-		default = Path(self._privateConfiguration[self._host.Platform]['INSTALL.Xilinx.ISE']['InstallationDirectory'])
-		xilinxISEDirectory = input("  Xilinx ISE installation directory [{0!s}]: ".format(default))
-		if (xilinxISEDirectory != ""):
-			return Path(xilinxISEDirectory)
-		else:
-			return default
+		if not fusePath.exists():
+			raise ConfigurationException("Executable '{0!s}' not found.".format(fusePath)) from FileNotFoundError(str(fusePath))
 
-	def __ConfirmXilinxISEPath(self, xilinxISEPath):
-		# Ask for installed Xilinx ISE
-		isXilinxISEPath = input("  Is Xilinx ISE installed in '{0!s}'? [Y/n/p]: ".format(xilinxISEPath))
-		isXilinxISEPath = isXilinxISEPath if isXilinxISEPath != "" else "Y"
-		if (isXilinxISEPath in ['p', 'P']):
-			raise SkipConfigurationException()
-		elif (isXilinxISEPath in ['n', 'N']):
-			return None
-		elif (isXilinxISEPath in ['y', 'Y']):
-			return xilinxISEPath
+		output = check_output([str(fusePath), "--version"], universal_newlines=True)
+		if "P.20131013" not in output:
+			raise ConfigurationException("ISE version mismatch. Expected version 14.7 (P.20131013).")
 
-	def __ClearXilinxISESections(self):
-		self._host.PoCConfig['INSTALL.Xilinx.ISE'] = OrderedDict()
-
-	def __WriteXilinxISESection(self, xilinxISEPath):
-		version = self._privateConfiguration[self._host.Platform]['INSTALL.Xilinx.ISE']['Version']
-		for p in xilinxISEPath.parts:
-			sp = p.split(".")
-			if (len(sp) == 2):
-				if ((12 <= int(sp[0]) <= 14) and (int(sp[1]) <= 7)):
-					version = p
-					break
-
-		self._host.PoCConfig['INSTALL.Xilinx.ISE']['Version'] = version
-		self._host.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'] = self._privateConfiguration[self._host.Platform]['INSTALL.Xilinx.ISE']['InstallationDirectory']
-		defaultPath = self._host.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory']
-
-		if (xilinxISEPath.as_posix() == defaultPath):
-			self._host.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'] = self._privateConfiguration[self._host.Platform]['INSTALL.Xilinx.ISE']['InstallationDirectory']
-		else:
-			self._host.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'] = xilinxISEPath.as_posix()
-
-		self._host.PoCConfig['INSTALL.Xilinx.ISE']['BinaryDirectory'] = self._privateConfiguration[self._host.Platform]['INSTALL.Xilinx.ISE']['BinaryDirectory']
-
-
-	# def ManualConfigureForWindows(self):
-	# 	# Ask for installed Xilinx ISE
-	# 	isXilinxISE = input('Is Xilinx ISE installed on your system? [Y/n/p]: ')
-	# 	isXilinxISE = isXilinxISE if isXilinxISE != "" else "Y"
-	# 	if (isXilinxISE in ['p', 'P']):
-	# 		return
-	# 	elif (isXilinxISE in ['n', 'N']):
-	# 		self.pocConfig['Xilinx.ISE'] = OrderedDict()
-	# 	elif (isXilinxISE in ['y', 'Y']):
-	# 		xilinxDirectory = input('Xilinx installation directory [C:\Xilinx]: ')
-	# 		iseVersion = input('Xilinx ISE version number [14.7]: ')
-	# 		print()
-	#
-	# 		xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "C:\Xilinx"
-	# 		iseVersion = iseVersion if iseVersion != "" else "14.7"
-	#
-	# 		xilinxDirectoryPath = Path(xilinxDirectory)
-	# 		if not xilinxDirectoryPath.exists():	raise ConfigurationException("Xilinx installation directory '{0}' does not exist.".format(xilinxDirectory))	from NotADirectoryError(xilinxDirectory)
-	#
-	# 		iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
-	# 		if not iseDirectoryPath.exists():			raise ConfigurationException("Xilinx ISE version '{0}' is not installed.".format(iseVersion))								from NotADirectoryError(xilinxDirectory)
-	#
-	# 		self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-	# 		self.pocConfig['Xilinx.ISE']['Version'] = iseVersion
-	# 		self.pocConfig['Xilinx.ISE']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/ISE_DS'
-	# 		self.pocConfig['Xilinx.ISE']['BinaryDirectory'] = '${InstallationDirectory}/ISE/bin/nt64'
-	# 	else:
-	# 		raise ConfigurationException("unknown option")
-	#
-	# def ManualConfigureForLinux(self):
-	# 	# Ask for installed Xilinx ISE
-	# 	isXilinxISE = input('Is Xilinx ISE installed on your system? [Y/n/p]: ')
-	# 	isXilinxISE = isXilinxISE if isXilinxISE != "" else "Y"
-	# 	if (isXilinxISE in ['p', 'P']):
-	# 		pass
-	# 	elif (isXilinxISE in ['n', 'N']):
-	# 		self.pocConfig['Xilinx.ISE'] = OrderedDict()
-	# 	elif (isXilinxISE in ['y', 'Y']):
-	# 		xilinxDirectory = input('Xilinx installation directory [/opt/Xilinx]: ')
-	# 		iseVersion = input('Xilinx ISE version number [14.7]: ')
-	# 		print()
-	#
-	# 		xilinxDirectory = xilinxDirectory if xilinxDirectory != "" else "/opt/Xilinx"
-	# 		iseVersion = iseVersion if iseVersion != "" else "14.7"
-	#
-	# 		xilinxDirectoryPath = Path(xilinxDirectory)
-	# 		iseDirectoryPath = xilinxDirectoryPath / iseVersion / "ISE_DS/ISE"
-	#
-	# 		if not xilinxDirectoryPath.exists():  raise ConfigurationException(
-	# 			"Xilinx installation directory '%s' does not exist." % xilinxDirectory)
-	# 		if not iseDirectoryPath.exists():      raise ConfigurationException(
-	# 			"Xilinx ISE version '%s' is not installed." % iseVersion)
-	#
-	# 		self.pocConfig['Xilinx']['InstallationDirectory'] = xilinxDirectoryPath.as_posix()
-	# 		self.pocConfig['Xilinx.ISE']['Version'] = iseVersion
-	# 		self.pocConfig['Xilinx.ISE']['InstallationDirectory'] = '${Xilinx:InstallationDirectory}/${Version}/ISE_DS'
-	# 		self.pocConfig['Xilinx.ISE']['BinaryDirectory'] = '${InstallationDirectory}/ISE/bin/lin64'
-	# 	else:
-	# 		raise ConfigurationException("unknown option")
 
 class ISEMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):

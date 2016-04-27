@@ -358,11 +358,11 @@ class Device:
 			raise ConfigurationException("RegExp mismatch.")
 
 	@property
-	def Vendor(self):			return str(self.__vendor)
+	def Vendor(self):			return self.__vendor
 	@property
-	def Family(self):			return str(self.__family)
+	def Family(self):			return self.__family
 	@property
-	def Device(self):			return str(self.__device)
+	def Device(self):			return self.__device
 	@property
 	def Generation(self):	return self.__generation
 	@property
@@ -458,8 +458,8 @@ class Device:
 		result = {
 			"DeviceShortName" :		self.ShortName,
 			"DeviceFullName" :		self.FullName,
-			"DeviceVendor" :			self.Vendor,
-			"DeviceFamily" :			self.Family,
+			"DeviceVendor" :			str(self.Vendor),
+			"DeviceFamily" :			str(self.Family),
 			"DeviceGeneration" :	self.Generation,
 			"DeviceNumber" :			self.Number,
 			"DeviceSpeedGrade" :	self.SpeedGrade,

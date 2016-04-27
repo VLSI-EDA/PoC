@@ -9,7 +9,7 @@ if (VHDL <= 2002) then
 else
 	if ((Tool = "GHDL") and ?("temp/precompiled/ghdl/altera")) then
 		library altera_mf "temp/precompiled/ghdl/altera"
-	elseif ((Tool = "Mentor_vSim") and ?("temp/precompiled/vsim/altera")) then
+	elseif ((Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) and ?("temp/precompiled/vsim/altera")) then
 		library altera_mf "temp/precompiled/vsim/altera"
 	elseif (ToolChain = "Altera_QuartusII") then
 		# implicitly referenced; nothing to reference

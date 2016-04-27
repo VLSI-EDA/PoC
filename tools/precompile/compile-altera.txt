@@ -1,5 +1,0 @@
-1) Open Quartus.
-2) Select menu Tools -> Launch Simulation Libary Compiler
-3) Select simulator and devices
-4) Set output directory to <poc-root-dir>/temp/vsim.
-5) Click "Start Simulation"

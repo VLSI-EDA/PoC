@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:					Patrick Lehmann
 #
-# Python Class:			Altera QuartusII specific classes
+# Python Class:			Altera Quartus specific classes
 #
 # Description:
 # ------------------------------------
@@ -37,7 +37,7 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.QuartusII")
+	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.Quartus")
 
 
 from collections									import OrderedDict
@@ -52,7 +52,7 @@ from Base.Executable							import Executable, ExecutableArgument, CommandLineArg
 from ToolChains.Altera.Altera import AlteraException
 
 
-class QuartusIIException(AlteraException):
+class QuartusException(AlteraException):
 	pass
 
 class Configuration(BaseConfiguration):
@@ -63,33 +63,33 @@ class Configuration(BaseConfiguration):
 
 	def manualConfigureForWindows(self) :
 		# Ask for installed Altera Quartus-II
-		isAlteraQuartusII = input('Is Altera Quartus-II installed on your system? [Y/n/p]: ')
-		isAlteraQuartusII = isAlteraQuartusII if isAlteraQuartusII != "" else "Y"
-		if (isAlteraQuartusII in ['p', 'P']) :
+		isAlteraQuartus = input('Is Altera Quartus-II installed on your system? [Y/n/p]: ')
+		isAlteraQuartus = isAlteraQuartus if isAlteraQuartus != "" else "Y"
+		if (isAlteraQuartus in ['p', 'P']) :
 			pass
-		elif (isAlteraQuartusII in ['n', 'N']) :
-			self.pocConfig['Altera.QuartusII'] = OrderedDict()
-		elif (isAlteraQuartusII in ['y', 'Y']) :
+		elif (isAlteraQuartus in ['n', 'N']) :
+			self.pocConfig['Altera.Quartus'] = OrderedDict()
+		elif (isAlteraQuartus in ['y', 'Y']) :
 			alteraDirectory = input('Altera installation directory [C:\Altera]: ')
-			quartusIIVersion = input('Altera QuartusII version number [15.0]: ')
+			QuartusVersion = input('Altera Quartus version number [15.0]: ')
 			print()
 
 
 			alteraDirectory = alteraDirectory if alteraDirectory != ""  else "C:\Altera"
-			quartusIIVersion = quartusIIVersion if quartusIIVersion != ""  else "15.0"
+			QuartusVersion = QuartusVersion if QuartusVersion != ""  else "15.0"
 
 			alteraDirectoryPath = Path(alteraDirectory)
-			quartusIIDirectoryPath = alteraDirectoryPath / quartusIIVersion / "quartus"
+			QuartusDirectoryPath = alteraDirectoryPath / QuartusVersion / "quartus"
 
 			if not alteraDirectoryPath.exists() :    raise ConfigurationException(
 				"Altera installation directory '%s' does not exist." % alteraDirectory)
-			if not quartusIIDirectoryPath.exists() :  raise ConfigurationException(
-				"Altera QuartusII version '%s' is not installed." % quartusIIVersion)
+			if not QuartusDirectoryPath.exists() :  raise ConfigurationException(
+				"Altera Quartus version '%s' is not installed." % QuartusVersion)
 
 			self.pocConfig['Altera']['InstallationDirectory'] = alteraDirectoryPath.as_posix()
-			self.pocConfig['Altera.QuartusII']['Version'] = quartusIIVersion
-			self.pocConfig['Altera.QuartusII']['InstallationDirectory'] = '${Altera:InstallationDirectory}/${Version}'
-			self.pocConfig['Altera.QuartusII']['BinaryDirectory'] = '${InstallationDirectory}/quartus/bin64'
+			self.pocConfig['Altera.Quartus']['Version'] = QuartusVersion
+			self.pocConfig['Altera.Quartus']['InstallationDirectory'] = '${Altera:InstallationDirectory}/${Version}'
+			self.pocConfig['Altera.Quartus']['BinaryDirectory'] = '${InstallationDirectory}/quartus/bin64'
 
 			# Ask for installed Altera ModelSimAltera
 			isAlteraModelSim = input('Is ModelSim - Altera Edition installed on your system? [Y/n/p]: ')
@@ -101,14 +101,14 @@ class Configuration(BaseConfiguration):
 			elif (isAlteraModelSim in ['y', 'Y']) :
 				alteraModelSimVersion = input('ModelSim - Altera Edition version number [10.1e]: ')
 
-				alteraModelSimDirectoryPath = alteraDirectoryPath / quartusIIVersion / "modelsim_ase"
+				alteraModelSimDirectoryPath = alteraDirectoryPath / QuartusVersion / "modelsim_ase"
 
 				if not alteraModelSimDirectoryPath.exists() :  raise BaseException(
 					"ModelSim - Altera Edition installation directory '%s' does not exist." % str(alteraModelSimDirectoryPath))
 
 				self.pocConfig['Altera.ModelSim']['Version'] = alteraModelSimVersion
 				self.pocConfig['Altera.ModelSim'][
-					'InstallationDirectory'] = '${Altera:InstallationDirectory}/${Altera.QuartusII:Version}/modelsim_ase'
+					'InstallationDirectory'] = '${Altera:InstallationDirectory}/${Altera.Quartus:Version}/modelsim_ase'
 				self.pocConfig['Altera.ModelSim']['BinaryDirectory'] = '${InstallationDirectory}/win32aloem'
 			else :
 				raise ConfigurationException("unknown option")
@@ -117,32 +117,32 @@ class Configuration(BaseConfiguration):
 
 	def manualConfigureForLinux(self) :
 		# Ask for installed Altera Quartus-II
-		isAlteraQuartusII = input('Is Altera Quartus-II installed on your system? [Y/n/p]: ')
-		isAlteraQuartusII = isAlteraQuartusII if isAlteraQuartusII != "" else "Y"
-		if (isAlteraQuartusII in ['p', 'P']) :
+		isAlteraQuartus = input('Is Altera Quartus-II installed on your system? [Y/n/p]: ')
+		isAlteraQuartus = isAlteraQuartus if isAlteraQuartus != "" else "Y"
+		if (isAlteraQuartus in ['p', 'P']) :
 			pass
-		elif (isAlteraQuartusII in ['n', 'N']) :
-			self.pocConfig['Altera.QuartusII'] = OrderedDict()
-		elif (isAlteraQuartusII in ['y', 'Y']) :
+		elif (isAlteraQuartus in ['n', 'N']) :
+			self.pocConfig['Altera.Quartus'] = OrderedDict()
+		elif (isAlteraQuartus in ['y', 'Y']) :
 			alteraDirectory = input('Altera installation directory [/opt/Altera]: ')
-			quartusIIVersion = input('Altera QuartusII version number [15.0]: ')
+			QuartusVersion = input('Altera Quartus version number [15.0]: ')
 			print()
 
 			alteraDirectory = alteraDirectory if alteraDirectory != ""  else "/opt/Altera"
-			quartusIIVersion = quartusIIVersion if quartusIIVersion != ""  else "15.0"
+			QuartusVersion = QuartusVersion if QuartusVersion != ""  else "15.0"
 
 			alteraDirectoryPath = Path(alteraDirectory)
-			quartusIIDirectoryPath = alteraDirectoryPath / quartusIIVersion / "quartus"
+			QuartusDirectoryPath = alteraDirectoryPath / QuartusVersion / "quartus"
 
 			if not alteraDirectoryPath.exists() :    raise ConfigurationException(
 				"Altera installation directory '%s' does not exist." % alteraDirectory)
-			if not quartusIIDirectoryPath.exists() :  raise ConfigurationException(
-				"Altera QuartusII version '%s' is not installed." % quartusIIVersion)
+			if not QuartusDirectoryPath.exists() :  raise ConfigurationException(
+				"Altera Quartus version '%s' is not installed." % QuartusVersion)
 
 			self.pocConfig['Altera']['InstallationDirectory'] = alteraDirectoryPath.as_posix()
-			self.pocConfig['Altera.QuartusII']['Version'] = quartusIIVersion
-			self.pocConfig['Altera.QuartusII']['InstallationDirectory'] = '${Altera:InstallationDirectory}/${Version}'
-			self.pocConfig['Altera.QuartusII']['BinaryDirectory'] = '${InstallationDirectory}/quartus/bin'
+			self.pocConfig['Altera.Quartus']['Version'] = QuartusVersion
+			self.pocConfig['Altera.Quartus']['InstallationDirectory'] = '${Altera:InstallationDirectory}/${Version}'
+			self.pocConfig['Altera.Quartus']['BinaryDirectory'] = '${InstallationDirectory}/quartus/bin'
 
 			# Ask for installed Altera ModelSimAltera
 			isAlteraModelSim = input('Is ModelSim - Altera Edition installed on your system? [Y/n/p]: ')
@@ -154,14 +154,14 @@ class Configuration(BaseConfiguration):
 			elif (isAlteraModelSim in ['y', 'Y']) :
 				alteraModelSimVersion = input('ModelSim - Altera Edition version number [10.1e]: ')
 
-				alteraModelSimDirectoryPath = alteraDirectoryPath / quartusIIVersion / "modelsim_ase"
+				alteraModelSimDirectoryPath = alteraDirectoryPath / QuartusVersion / "modelsim_ase"
 
 				if not alteraModelSimDirectoryPath.exists() :  raise BaseException(
 					"ModelSim - Altera Edition installation directory '%s' does not exist." % str(alteraModelSimDirectoryPath))
 
 				self.pocConfig['Altera.ModelSim']['Version'] = alteraModelSimVersion
 				self.pocConfig['Altera.ModelSim'][
-					'InstallationDirectory'] = '${Altera:InstallationDirectory}/${Altera.QuartusII:Version}/modelsim_ase'
+					'InstallationDirectory'] = '${Altera:InstallationDirectory}/${Altera.Quartus:Version}/modelsim_ase'
 				self.pocConfig['Altera.ModelSim']['BinaryDirectory'] = '${InstallationDirectory}/bin'
 			else :
 				raise ConfigurationException("unknown option")
@@ -169,7 +169,7 @@ class Configuration(BaseConfiguration):
 			raise ConfigurationException("unknown option")
 
 
-class QuartusIIMixIn:
+class QuartusMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		self._platform =						platform
 		self._binaryDirectoryPath =	binaryDirectoryPath
@@ -177,9 +177,9 @@ class QuartusIIMixIn:
 		self._logger =							logger
 
 
-class QuartusII(QuartusIIMixIn):
+class Quartus(QuartusMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusIIMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
 	def GetMap(self):
 		return Map(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
@@ -188,9 +188,9 @@ class QuartusII(QuartusIIMixIn):
 		return TclShell(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 
-class Map(Executable, QuartusIIMixIn):
+class Map(Executable, QuartusMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusIIMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
 		if (platform == "Windows") :			executablePath = binaryDirectoryPath / "quartus_map.exe"
 		elif (platform == "Linux") :			executablePath = binaryDirectoryPath / "quartus_map"
@@ -238,7 +238,7 @@ class Map(Executable, QuartusIIMixIn):
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
-			raise QuartusIIException("Failed to launch quartus_map.") from ex
+			raise QuartusException("Failed to launch quartus_map.") from ex
 
 		self._hasOutput = False
 		self._hasWarnings = False
@@ -261,7 +261,7 @@ class Map(Executable, QuartusIIMixIn):
 
 		except StopIteration as ex:
 			pass
-		except QuartusIIException:
+		except QuartusException:
 			raise
 		# except Exception as ex:
 		#	raise GHDLException("Error while executing GHDL.") from ex
@@ -269,9 +269,9 @@ class Map(Executable, QuartusIIMixIn):
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
 
-class TclShell(Executable, QuartusIIMixIn):
+class TclShell(Executable, QuartusMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusIIMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
 		if (platform == "Windows") :			executablePath = binaryDirectoryPath / "quartus_sh.exe"
 		elif (platform == "Linux") :			executablePath = binaryDirectoryPath / "quartus_sh"
@@ -371,7 +371,7 @@ class QuartusSettingsFile(SettingsFile):
 			self._sourceFiles.append(file)
 
 	def Write(self):
-		if (self._projectFile is None):		raise QuartusIIException("No file path for QuartusProject provided.")
+		if (self._projectFile is None):		raise QuartusException("No file path for QuartusProject provided.")
 
 		buffer = ""
 		for key,value in self._globalAssignments.items():
@@ -380,7 +380,7 @@ class QuartusSettingsFile(SettingsFile):
 		buffer += "\n"
 		for file in self._sourceFiles:
 			if (not file.Path.exists()):
-				raise QuartusIIException("Can not add '{0!s}' to Quartus settings file.".
+				raise QuartusException("Can not add '{0!s}' to Quartus settings file.".
 																	format(file.Path)) from FileNotFoundError(str(file.Path))
 			buffer += "set_global_assignment -name VHDL_FILE {file} -library {library}\n".\
 				format(file=file.Path.as_posix(), library=file.LibraryName)

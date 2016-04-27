@@ -39,7 +39,7 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
 from .Aldec.ActiveHDL		import Configuration as ActiveHDL_Configuration
-from .Altera.QuartusII	import Configuration as Quartus_Configuration
+from .Altera.Quartus	import Configuration as Quartus_Configuration
 from .GHDL							import Configuration as GHDL_Configuration
 from .GTKWave						import Configuration as GTKW_Configuration
 from .Lattice.Lattice		import Configuration as Diamond_Configuration

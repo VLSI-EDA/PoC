@@ -60,6 +60,9 @@ class ExtendedInterpolation(Interpolation):
 	def __init__(self):
 		self._cache = dict()
 
+	def clear_cache(self):
+		self._cache = dict()
+
 	def before_get(self, parser, section, option, value, defaults):
 		# print("before_get: {0}:{1} = '{2}'".format(section, option, value))
 		try:

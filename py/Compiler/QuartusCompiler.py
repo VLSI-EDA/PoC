@@ -48,12 +48,12 @@ from lib.Functions						import Init
 from Base.Exceptions					import NotConfiguredException, PlatformNotSupportedException
 from Base.Project							import VHDLVersion, Environment, ToolChain, Tool
 from Base.Compiler						import Compiler as BaseCompiler, CompilerException
-from ToolChains.Altera.QuartusII	import QuartusII, QuartusSettingsFile, QuartusProjectFile
+from ToolChains.Altera.Quartus	import Quartus, QuartusSettingsFile, QuartusProjectFile
 
 
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =	ToolChain.Altera_QuartusII
-	_TOOL =				Tool.Altera_QuartusII_Map
+	_TOOL_CHAIN =	ToolChain.Altera_Quartus
+	_TOOL =				Tool.Altera_Quartus_Map
 
 	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
@@ -63,7 +63,7 @@ class Compiler(BaseCompiler):
 	def PrepareCompiler(self, binaryPath, version):
 		# create the GHDL executable factory
 		self._LogVerbose("Preparing Quartus-II Map (quartus_map).")
-		self._quartus =		QuartusII(self.Host.Platform, binaryPath, version, logger=self.Logger)
+		self._quartus =		Quartus(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		for fqn in fqnList:

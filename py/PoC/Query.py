@@ -58,20 +58,18 @@ class Query:
 	def QueryConfiguration(self, query):
 		if (query == "ModelSim:InstallationDirectory"):
 			result = self._GetModelSimInstallationDirectory()
-		elif (query == "PoC:InstallationDirectory"):
-			result = self._GetPoCInstallationDirectory()
-		elif (query == "PoC:Version"):
-			result = self._GetPoCVersion()
-		elif (query == "Xilinx.ISE:InstallationDirectory"):
-			result = self._GetXilinxISEInstallationDirectory()
 		elif (query == "Xilinx.ISE:SettingsFile"):
 			result = self._GetXilinxISESettingsFile()
-		elif (query == "Xilinx.Vivado:InstallationDirectory"):
-			result = self._GetXilinxVivadoInstallationDirectory()
 		elif (query == "Xilinx.Vivado:SettingsFile"):
 			result = self._GetXilinxVivadoSettingsFile()
 		else:
-			raise ConfigurationException("Query string '{0}' is not supported.".format(query))
+			parts = query.split(":")
+			if (len(parts) == 2):
+				sectionName = parts[0]
+				optionName = parts[1]
+				result =  self.PoCConfig[sectionName][optionName]
+			else:
+				raise ConfigurationException("Syntax error in query string '{0}'".format(query))
 
 		if isinstance(result, Path):	result = str(result)
 		return result
@@ -84,26 +82,6 @@ class Query:
 		else:
 			raise NotConfiguredException("ERROR: ModelSim is not configured on this system.")
 
-	def _GetPoCInstallationDirectory(self):
-		if (len(self.PoCConfig.options('INSTALL.PoC')) != 0):
-			return Path(self.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
-		else:
-			raise NotConfiguredException("ERROR: PoC is not configured on this system.")
-
-	def _GetPoCVersion(self):
-		if (len(self.PoCConfig.options('INSTALL.PoC')) != 0):
-			return self.PoCConfig['INSTALL.PoC']['Version']
-		else:
-			raise NotConfiguredException("ERROR: PoC is not configured on this system.")
-
-	def _GetXilinxISEInstallationDirectory(self):
-		if (len(self.PoCConfig.options('INSTALL.Xilinx.ISE')) != 0):
-			return Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'])
-		elif (len(self.PoCConfig.options('INSTALL.Xilinx.LabTools')) != 0):
-			return Path(self.PoCConfig['INSTALL.Xilinx.LabTools']['InstallationDirectory'])
-		else:
-			raise NotConfiguredException("ERROR: Xilinx ISE or Xilinx LabTools is not configured on this system.")
-
 	def _GetXilinxISESettingsFile(self):
 		iseInstallationDirectoryPath = self._GetXilinxISEInstallationDirectory()
 		if (self.Platform == "Windows"):
@@ -112,14 +90,6 @@ class Query:
 			return iseInstallationDirectoryPath / "settings64.sh"
 		else:
 			raise PlatformNotSupportedException(self.Platform)
-
-	def _GetXilinxVivadoInstallationDirectory(self):
-		if (len(self.PoCConfig.options('INSTALL.Xilinx.Vivado')) != 0):
-			return Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory'])
-		elif (len(self.PoCConfig.options('INSTALL.Xilinx.HardwareServer')) != 0):
-			return Path(self.PoCConfig['INSTALL.Xilinx.HardwareServer']['InstallationDirectory'])
-		else:
-			raise NotConfiguredException("ERROR: Xilinx Vivado or Xilinx HardwareServer is not configured on this system.")
 
 	def _GetXilinxVivadoSettingsFile(self):
 		iseInstallationDirectoryPath = self._GetXilinxVivadoInstallationDirectory()

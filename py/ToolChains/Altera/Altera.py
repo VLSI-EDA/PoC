@@ -77,31 +77,26 @@ class Configuration(BaseConfiguration):
 		pass
 
 	def ConfigureForWindows(self):
-		xilinxPath = self.__GetAlteraPath()
-		if (xilinxPath is not None):
+		alteraPath = self.__GetAlteraPath()
+		if (alteraPath is not None):
 			print("  Found a Altera installation directory.")
-			xilinxPath = self.__ConfirmAlteraPath(xilinxPath)
-			if (xilinxPath is None):
-				xilinxPath = self.__AskAlteraPath()
+			alteraPath = self.__ConfirmAlteraPath(alteraPath)
+			if (alteraPath is None):
+				alteraPath = self.__AskAlteraPath()
 		else:
 			if (not self.__AskAltera()):
 				self.__ClearAlteraSections()
 			else:
-				xilinxPath = self.__AskAlteraPath()
-		if (not xilinxPath.exists()):		raise ConfigurationException("Altera installation directory '{0}' does not exist.".format(xilinxPath))	from NotADirectoryError(xilinxPath)
-		self.__WriteAlteraSection(xilinxPath)
+				alteraPath = self.__AskAlteraPath()
+		if (not alteraPath.exists()):		raise ConfigurationException("Altera installation directory '{0}' does not exist.".format(alteraPath))	from NotADirectoryError(alteraPath)
+		self.__WriteAlteraSection(alteraPath)
+		
+	def ConfigureForLinux(self):
+		raise SkipConfigurationException()
 
 	def __GetAlteraPath(self):
-		xilinx = environ.get("XILINX")
-		if (xilinx is not None):
-			return Path(xilinx).parent.parent.parent
-
-		xilinx = environ.get("XILINX_VIVADO")
-		if (xilinx is not None):
-			return Path(xilinx).parent.parent
-
 		if (self._host.Platform == "Linux"):
-			p = Path("/opt/xilinx")
+			p = Path("/opt/altera")
 			if (p.exists()):		return p
 			p = Path("/opt/Altera")
 			if (p.exists()):		return p
@@ -124,23 +119,23 @@ class Configuration(BaseConfiguration):
 
 	def __AskAlteraPath(self):
 		default = Path(self._privateConfiguration[self._host.Platform]['INSTALL.Altera']['InstallationDirectory'])
-		xilinxDirectory = input("  Altera installation directory [{0!s}]: ".format(default))
-		if (xilinxDirectory != ""):
-			return Path(xilinxDirectory)
+		alteraDirectory = input("  Altera installation directory [{0!s}]: ".format(default))
+		if (alteraDirectory != ""):
+			return Path(alteraDirectory)
 		else:
 			return default
 
-	def __ConfirmAlteraPath(self, xilinxPath):
+	def __ConfirmAlteraPath(self, alteraPath):
 		# Ask for installed Altera ISE
-		isAlteraPath = input("  Is your Altera software installed in '{0!s}'? [Y/n/p]: ".format(xilinxPath))
+		isAlteraPath = input("  Is your Altera software installed in '{0!s}'? [Y/n/p]: ".format(alteraPath))
 		isAlteraPath = isAlteraPath if isAlteraPath != "" else "Y"
 		if (isAlteraPath in ['p', 'P']):		raise SkipConfigurationException()
 		elif (isAlteraPath in ['n', 'N']):	return None
-		elif (isAlteraPath in ['y', 'Y']):	return xilinxPath
+		elif (isAlteraPath in ['y', 'Y']):	return alteraPath
 
 	def __ClearAlteraSections(self):
 		self._host.PoCConfig['INSTALL.Altera'] = OrderedDict()
 
-	def __WriteAlteraSection(self, xilinxPath):
-		self._host.PoCConfig['INSTALL.Altera']['InstallationDirectory'] = xilinxPath.as_posix()
+	def __WriteAlteraSection(self, alteraPath):
+		self._host.PoCConfig['INSTALL.Altera']['InstallationDirectory'] = alteraPath.as_posix()
 

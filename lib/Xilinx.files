@@ -6,8 +6,8 @@
 #
 if ((Tool = "GHDL") and ?("temp/precompiled/ghdl/xilinx")) then
 	library unisim "temp/precompiled/ghdl/xilinx"
-elseif ((Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) and ?("temp/precompiled/vsim")) then
-	library unisim "temp/precompiled/vsim"
+elseif ((Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) and ?("temp/precompiled/vsim/xilinx")) then
+	library unisim "temp/precompiled/vsim/xilinx"
 elseif (ToolChain in ["Xilinx_ISE", "Xilinx_Vivado"]) then
 	# implicitly referenced; nothing to reference
 elseif (Tool = "Aldec_aSim") then

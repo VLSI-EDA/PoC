@@ -92,7 +92,7 @@ class Configuration(BaseConfiguration):
 			print()
 
 			mentorDirectory = mentorDirectory if mentorDirectory != ""  else "C:\Altera"
-			quartusIIVersion = quartusIIVersion if quartusIIVersion != ""  else "15.0"
+			QuartusVersion = QuartusVersion if QuartusVersion != ""  else "15.0"
 
 			mentorDirectoryPath = Path(mentorDirectory)
 

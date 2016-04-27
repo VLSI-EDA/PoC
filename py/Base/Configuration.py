@@ -30,6 +30,9 @@
 # ==============================================================================
 #
 # entry point
+from collections import OrderedDict
+from pathlib import Path
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -75,14 +78,14 @@ class ISubClassRegistration(metaclass=RegisterSubClassesMeta):
 class Configuration:		#(ISubClassRegistration):
 	_privateConfiguration =	{}
 	_vendor =								"Unknown"
-	_longName =							"Unknown"
+	_toolName =							"Unknown"
 
 	def __init__(self, host):
 		self._host =	host
 
 	@property
-	def Name(self):
-		return self._longName
+	def ToolName(self):
+		return self._toolName
 
 	def IsSupportedPlatform(self, Platform):
 		result = (Platform in self._privateConfiguration)
@@ -91,11 +94,61 @@ class Configuration:		#(ISubClassRegistration):
 		else:
 			return True
 
-	def ManualConfigureForWindows(self):
-		raise NotImplementedError()
+	def ConfigureForWindows(self):
+		self.ConfigureForAll()
 
-	def ManualConfigureForLinux(self):
-		raise NotImplementedError()
+	def ConfigureForLinux(self):
+		self.ConfigureForAll()
+
+	def ConfigureForAll(self):
+		self._host.PoCConfig.Interpolation.clear_cache()
 
 	def __str__(self):
-		return self._longName
+		return self._toolName
+
+	def _AskInstalled(self, question):
+		isInstalled = input("  " + question + " [Y/n/p]: ")
+		isInstalled = isInstalled if isInstalled != "" else "Y"
+		if (isInstalled in ['p', 'P']):
+			raise SkipConfigurationException()
+		elif (isInstalled in ['n', 'N']):
+			return False
+		elif (isInstalled in ['y', 'Y']):
+			return True
+		else:
+			raise ConfigurationException("Unsupported choice '{0}'".format(isInstalled))
+
+	def _AskInstallPath(self, section, defaultPath):
+		directory = input("  {0} installation directory [{1!s}]: ".format(self.ToolName, defaultPath))
+		if (directory != ""):
+			installPath = Path(directory)
+		else:
+			installPath = defaultPath
+
+		if (not installPath.exists()):
+			raise ConfigurationException("{0} installation directory '{1!s}' does not exist.".format(self.ToolName, installPath))  \
+				from NotADirectoryError(str(installPath))
+
+		return installPath
+
+	def _TestDefaultInstallPath(self, defaults):
+		if (self._host.Platform == "Linux"):
+			p = Path("/opt") / defaults["Linux"]
+			if (p.exists()):    return p
+			p = Path("/opt") / defaults["Linux"].lower()
+			if (p.exists()):    return p
+		elif (self._host.Platform == "Windows"):
+			for drive in "CDEFGH":
+				p = Path("{0}:".format(drive)) / defaults["Windows"]
+				try:
+					if (p.exists()):  return p
+				except OSError:
+					pass
+		return None
+
+	def _ClearSection(self, section):
+		self._host.PoCConfig[section] = OrderedDict()
+
+
+	def _WriteInstallationDirectory(self, section, installPath):
+		self._host.PoCConfig[section]['InstallationDirectory'] = installPath.as_posix()

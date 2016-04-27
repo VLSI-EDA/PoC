@@ -30,6 +30,8 @@
 # ==============================================================================
 #
 # entry point
+from PoC.Config import Vendors
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -88,7 +90,19 @@ class Simulator(BaseSimulator):
 		# setup all needed paths to execute fuse
 		self._CreatePoCProject(testbench, board)
 		self._AddFileListFile(testbench.FilesFile)
-		
+
+		# select modelsim.ini
+		self._modelsimIniPath = self.Host.Directories["vSimPrecompiled"]
+		if board.Device.Vendor is Vendors.Xilinx:
+			self._modelsimIniPath  /= "xilinx"
+		elif board.Device.Vendor is Vendors.Altera:
+			self._modelsimIniPath /= "altera"
+
+		self._modelsimIniPath /= "modelsim.ini"
+		if not self._modelsimIniPath.exists():
+			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(self._modelsimIniPath)) \
+				from FileNotFoundError(str(self._modelsimIniPath))
+
 		self._RunCompile(testbench)
 		# self._RunOptimize()
 		
@@ -116,6 +130,7 @@ class Simulator(BaseSimulator):
 		vcom.Parameters[vcom.FlagQuietMode] =					True
 		vcom.Parameters[vcom.FlagExplicit] =					True
 		vcom.Parameters[vcom.FlagRangeCheck] =				True
+		vcom.Parameters[vcom.SwitchModelSimIniFile] = str(self._modelsimIniPath)
 
 		if (self._vhdlVersion == VHDLVersion.VHDL87):		vcom.Parameters[vcom.SwitchVHDLVersion] =		"87"
 		elif (self._vhdlVersion == VHDLVersion.VHDL93):	vcom.Parameters[vcom.SwitchVHDLVersion] =		"93"
@@ -151,6 +166,7 @@ class Simulator(BaseSimulator):
 		
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()
+		vsim.Parameters[vsim.SwitchModelSimIniFile] = str(self._modelsimIniPath)
 		# vsim.Parameters[vsim.FlagOptimization] =			True
 		vsim.Parameters[vsim.FlagReportAsError] =			"3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =	"1fs"

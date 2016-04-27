@@ -49,8 +49,7 @@ from Base.Configuration		import Configuration as BaseConfiguration
 
 class Configuration(BaseConfiguration):
 	_vendor =			None
-	_shortName =	"PoC"
-	_longName =		"PoC"
+	_toolName =	"PoC"
 	_privateConfiguration = {
 		"ALL": {
 			"INSTALL.PoC": {
@@ -64,16 +63,8 @@ class Configuration(BaseConfiguration):
 	def __init__(self, host):
 		super().__init__(host)
 
-	def GetSections(self, Platform):
-		pass
-
-	def ConfigureForWindows(self):
-		self.ConfigureForAll()
-
-	def ConfigureForLinux(self):
-		self.ConfigureForAll()
-
 	def ConfigureForAll(self):
+		super().ConfigureForAll()
 		try:
 			latestTagHash = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True)
 			latestTagName = check_output(["git", "describe", "--tags", latestTagHash[:-1]], universal_newlines=True)

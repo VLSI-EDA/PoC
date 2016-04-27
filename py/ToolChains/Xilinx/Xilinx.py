@@ -40,13 +40,10 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
 
 
-from collections					import OrderedDict
 from pathlib							import Path
 from os										import environ
 
-from Base.Exceptions						import PlatformNotSupportedException
-from Base.Logging								import LogEntry, Severity
-from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
+from Base.Configuration					import Configuration as BaseConfiguration
 from Base.Project								import FileTypes, VHDLVersion
 from Base.ToolChain							import ToolChainException
 
@@ -56,16 +53,16 @@ class XilinxException(ToolChainException):
 
 class Configuration(BaseConfiguration):
 	_vendor =			"Xilinx"
-	_shortName =	""
-	_longName =		"Xilinx"
+	_toolName =		"Xilinx"
+	_section  =		"INSTALL.Xilinx"
 	_privateConfiguration = {
 		"Windows": {
-			"INSTALL.Xilinx": {
+			_section: {
 				"InstallationDirectory":	"C:/Xilinx"
 			}
 		},
 		"Linux": {
-			"INSTALL.Xilinx": {
+			_section: {
 				"InstallationDirectory":	"/opt/Xilinx"
 			}
 		}
@@ -77,20 +74,17 @@ class Configuration(BaseConfiguration):
 	def GetSections(self, Platform):
 		pass
 
-	def ConfigureForWindows(self):
-		xilinxPath = self.__GetXilinxPath()
-		if (xilinxPath is not None):
-			print("  Found a Xilinx installation directory.")
-			xilinxPath = self.__ConfirmXilinxPath(xilinxPath)
-			if (xilinxPath is None):
-				xilinxPath = self.__AskXilinxPath()
+	def ConfigureForAll(self):
+		super().ConfigureForAll()
+		if (not self._AskInstalled("Are Xilinx products installed on your system?")):
+			self._ClearSection(self._section)
 		else:
-			if (not self.__AskXilinx()):
-				self.__ClearXilinxSections()
+			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
+				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
 			else:
-				xilinxPath = self.__AskXilinxPath()
-		if (not xilinxPath.exists()):		raise ConfigurationException("Xilinx installation directory '{0}' does not exist.".format(xilinxPath))	from NotADirectoryError(xilinxPath)
-		self.__WriteXilinxSection(xilinxPath)
+				defaultPath = self.__GetXilinxPath()
+			installPath = self._AskInstallPath(self._section, defaultPath)
+			self._WriteInstallationDirectory(self._section, installPath)
 
 	def __GetXilinxPath(self):
 		xilinx = environ.get("XILINX")
@@ -101,49 +95,7 @@ class Configuration(BaseConfiguration):
 		if (xilinx is not None):
 			return Path(xilinx).parent.parent
 
-		if (self._host.Platform == "Linux"):
-			p = Path("/opt/xilinx")
-			if (p.exists()):		return p
-			p = Path("/opt/Xilinx")
-			if (p.exists()):		return p
-		elif (self._host.Platform == "Windows"):
-			for drive in "CDEFGH":
-				p = Path("{0}:\Xilinx".format(drive))
-				try:
-					if (p.exists()):	return p
-				except OSError:
-					pass
-		return None
-
-	def __AskXilinx(self):
-		isXilinx = input("  Are Xilinx products installed on your system? [Y/n/p]: ")
-		isXilinx = isXilinx if isXilinx != "" else "Y"
-		if (isXilinx in ['p', 'P']):		raise SkipConfigurationException()
-		elif (isXilinx in ['n', 'N']):	return False
-		elif (isXilinx in ['y', 'Y']):	return True
-		else:														raise ConfigurationException("Unsupported choice '{0}'".format(isXilinx))
-
-	def __AskXilinxPath(self):
-		default = Path(self._privateConfiguration[self._host.Platform]['INSTALL.Xilinx']['InstallationDirectory'])
-		xilinxDirectory = input("  Xilinx installation directory [{0!s}]: ".format(default))
-		if (xilinxDirectory != ""):
-			return Path(xilinxDirectory)
-		else:
-			return default
-
-	def __ConfirmXilinxPath(self, xilinxPath):
-		# Ask for installed Xilinx ISE
-		isXilinxPath = input("  Is your Xilinx software installed in '{0!s}'? [Y/n/p]: ".format(xilinxPath))
-		isXilinxPath = isXilinxPath if isXilinxPath != "" else "Y"
-		if (isXilinxPath in ['p', 'P']):		raise SkipConfigurationException()
-		elif (isXilinxPath in ['n', 'N']):	return None
-		elif (isXilinxPath in ['y', 'Y']):	return xilinxPath
-
-	def __ClearXilinxSections(self):
-		self._host.PoCConfig['INSTALL.Xilinx'] = OrderedDict()
-
-	def __WriteXilinxSection(self, xilinxPath):
-		self._host.PoCConfig['INSTALL.Xilinx']['InstallationDirectory'] = xilinxPath.as_posix()
+		return super()._TestDefaultInstallPath({"Windows": "Xilinx", "Linux": "Xilinx"})
 
 
 class XilinxProjectExportMixIn:

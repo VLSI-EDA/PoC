@@ -99,7 +99,7 @@ class Configuration(BaseConfiguration):
 			print()
 
 			mentorDirectory = mentorDirectory if mentorDirectory != ""  else "C:\Altera"
-			quartusIIVersion = quartusIIVersion if quartusIIVersion != ""  else "15.0"
+			QuartusVersion = QuartusVersion if QuartusVersion != ""  else "15.0"
 
 			mentorDirectoryPath = Path(mentorDirectory)
 
@@ -230,8 +230,8 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 		_name =		"quiet"					# Do not report 'Loading...' messages"
 		_value =	None
 
-	class SwitchModelSimIniFile(metaclass=ShortValuedFlagArgument):
-		_name =		"modelsimini "
+	class SwitchModelSimIniFile(metaclass=ShortTupleArgument):
+		_name =		"modelsimini"
 		_value =	None
 
 	class FlagRangeCheck(metaclass=ShortFlagArgument):
@@ -352,8 +352,8 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		_name =		"c"
 		_value =	None
 
-	class SwitchModelSimIniFile(metaclass=ShortValuedFlagArgument):
-		_name =		"modelsimini "
+	class SwitchModelSimIniFile(metaclass=ShortTupleArgument):
+		_name =		"modelsimini"
 		_value =	None
 
 	class FlagOptimization(metaclass=ShortFlagArgument):
@@ -519,7 +519,7 @@ def QuestaVComFilter(gen):
 	for line in gen:
 		if line.startswith("** Warning: "):
 			yield LogEntry(line, Severity.Warning)
-		elif line.startswith("** Error: "):
+		elif line.startswith("** Error"):
 			yield LogEntry(line, Severity.Error)
 		elif line.startswith("** Fatal: "):
 			yield LogEntry(line, Severity.Error)
@@ -543,17 +543,17 @@ def QuestaVSimFilter(gen):
 		elif line.startswith("# ========================================"):
 			PoCOutputFound = True
 			yield LogEntry(line[2:], Severity.Normal)
+		elif line.startswith("# ** Warning: "):
+			yield LogEntry(line, Severity.Warning)
+		elif line.startswith("# ** Error"):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("# ** Fatal: "):
+			yield LogEntry(line, Severity.Error)
 		elif line.startswith("# "):
 			if (not PoCOutputFound):
 				yield LogEntry(line, Severity.Verbose)
 			else:
 				yield LogEntry(line[2:], Severity.Normal)
-		elif line.startswith("** Warning: "):
-			yield LogEntry(line, Severity.Warning)
-		elif line.startswith("** Error: "):
-			yield LogEntry(line, Severity.Error)
-		elif line.startswith("** Fatal: "):
-			yield LogEntry(line, Severity.Error)
 		else:
 			yield LogEntry(line, Severity.Normal)
 
@@ -561,7 +561,7 @@ def QuestaVLibFilter(gen):
 	for line in gen:
 		if line.startswith("** Warning: "):
 			yield LogEntry(line, Severity.Warning)
-		elif line.startswith("** Error: "):
+		elif line.startswith("** Error"):
 			yield LogEntry(line, Severity.Error)
 		elif line.startswith("** Fatal: "):
 			yield LogEntry(line, Severity.Error)
