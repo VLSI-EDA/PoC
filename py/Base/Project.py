@@ -257,7 +257,7 @@ class Project():
 	def CreateFileSet(self, name, setDefault=True):
 		fs =											FileSet(name, project=self)
 		self._fileSets[name] =		fs
-		if (setDefault == True):
+		if (setDefault is True):
 			self._defaultFileSet =	fs
 	
 	def AddFileSet(self, fileSet):

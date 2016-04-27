@@ -164,16 +164,3 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 				self._LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
 		testbench.Result = iSim.Simulate()
-
-		# print()
-		# if (not self.__guiMode):
-			# try:
-				# result = self.checkSimulatorOutput(simulatorLog)
-				
-				# if (result == True):
-					# print("Testbench '%s': PASSED" % testbenchName)
-				# else:
-					# print("Testbench '%s': FAILED" % testbenchName)
-					
-			# except SimulatorException as ex:
-				# raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED]' not found in simulator output.") from ex

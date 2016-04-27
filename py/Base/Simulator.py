@@ -15,7 +15,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -170,16 +170,6 @@ class Simulator(ILogable):
 	def Run(self, entity, board, vhdlVersion="93c", vhdlGenerics=None, **kwargs):
 		raise NotImplementedError("This method is abstract.")
 
-	def CheckSimulatorOutput(self, simulatorOutput):
-		matchPos = simulatorOutput.find("SIMULATION RESULT = ")
-		if (matchPos >= 0):
-			if (simulatorOutput[matchPos + 20: matchPos + 26] == "PASSED"):
-				return SimulationResult.Passed
-			elif (simulatorOutput[matchPos + 20: matchPos + 26] == "FAILED"):
-				return SimulationResult.Failed
-			elif (simulatorOutput[matchPos + 20: matchPos + 30] == "NO ASSERTS"):
-				return SimulationResult.NoAsserts
-		raise SimulatorException("String 'SIMULATION RESULT ...' not found in simulator output.")
 
 def PoCSimulationResultFilter(gen, simulationResult):
 	state = 0
@@ -208,8 +198,3 @@ def PoCSimulationResultFilter(gen, simulationResult):
 		yield line
 	else:
 		if (state != 6):		raise SimulatorException("No PoC Testbench Report in simulator output found.")
-
-
-
-
-

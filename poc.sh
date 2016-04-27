@@ -37,6 +37,9 @@ PyWrapper_BashScriptDir="py"
 PyWrapper_Script=PoC.py
 PyWrapper_MinVersion=3.5.0
 
+PyWrapper_RelPath="."
+PyWrapper_Solution=""
+
 # resolve script directory
 # solution is taken from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 SOURCE="${BASH_SOURCE[0]}"
@@ -51,7 +54,7 @@ SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 PyWrapper_Parameters=$@
 PyWrapper_WorkingDir=$(pwd)
 PoC_RootDir_RelPath="$SCRIPT_DIR/."
-PoC_RootDir_AbsPath=$(cd $PoC_RootDir_RelPath && pwd)
+PoC_RootDir_AbsPath=$(cd "$PoC_RootDir_RelPath/$PyWrapper_RelPath" && pwd)
 
 # invoke main wrapper
 source "$PoC_RootDir_AbsPath/$PyWrapper_BashScriptDir/wrapper.sh"

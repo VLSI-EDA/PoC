@@ -175,17 +175,3 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 		xSim.Parameters[xSim.SwitchSnapshot] = testbench.ModuleName
 		testbench.Result = xSim.Simulate()
-
-		# print()
-		# if (not self.__guiMode):
-			# try:
-				# result = self.checkSimulatorOutput(simulatorLog)
-				
-				# if (result == True):
-					# print("Testbench '%s': PASSED" % testbenchName)
-				# else:
-					# print("Testbench '%s': FAILED" % testbenchName)
-					
-			# except SimulatorException as ex:
-				# raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED]' not found in simulator output.") from ex
-	

@@ -108,7 +108,7 @@ class Simulator(BaseSimulator):
 		elif (testbench.Result is SimulationResult.Error):			self._LogQuiet("  {RED}[ERROR]{NOCOLOR}".format(**Init.Foreground))
 
 		# FIXME: a very quick implemenation
-		if (guiMode == True):
+		if (guiMode is True):
 			viewer = self.GetViewer()
 			viewer.View(testbench.VHDLTestbench)
 		
@@ -291,7 +291,7 @@ class Simulator(BaseSimulator):
 			waveformFilePath = self._tempPath / (testbench.ModuleName + ".ghw")
 		else:																						raise SimulatorException("Unknown waveform file format for GHDL.")
 		
-		if (not waveformFilePath.exists()):							raise SimulatorException("Waveform file not found.") from FileNotFoundError(str(waveformFilePath))
+		if (not waveformFilePath.exists()):							raise SimulatorException("Waveform file '{0!s}' not found.".format(waveformFilePath)) from FileNotFoundError(str(waveformFilePath))
 		
 		gtkwBinaryPath =		self.Host.Directories["GTKWBinary"]
 		gtkwVersion =				self.Host.PoCConfig['INSTALL.GTKWave']['Version']
@@ -301,10 +301,10 @@ class Simulator(BaseSimulator):
 		# if GTKWave savefile exists, load it's settings
 		gtkwSaveFilePath =	self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['gtkwSaveFile']
 		if gtkwSaveFilePath.exists():
-			self._LogDebug("Found waveform save file: '{0}'".format(str(gtkwSaveFilePath)))
+			self._LogDebug("Found waveform save file: '{0!s}'".format(gtkwSaveFilePath))
 			gtkw.Parameters[gtkw.SwitchSaveFile] = str(gtkwSaveFilePath)
 		else:
-			self._LogDebug("Didn't find waveform save file: '{0}'".format(str(gtkwSaveFilePath)))
+			self._LogDebug("Didn't find waveform save file: '{0!s}'".format(gtkwSaveFilePath))
 		
 		# run GTKWave GUI
 		gtkw.View()
@@ -315,9 +315,7 @@ class Simulator(BaseSimulator):
 			removeKeys = ("[dumpfile]", "[savefile]")
 			buffer = ""
 			with gtkwSaveFilePath.open('r') as gtkwHandle:
-				lineNumber = 0
 				for lineNumber,line in enumerate(gtkwHandle):
-					lineNumber += 1
 					if (not line.startswith(removeKeys)):			buffer += line
 					if (lineNumber > 10):											break
 				for line in gtkwHandle:
@@ -347,7 +345,4 @@ class Simulator(BaseSimulator):
 # 					print("    %s: '%s' in file '%s' at line %s" % (err['Type'], err['Component'], err['File'], err['Line']))
 # 			
 # 				raise SimulatorException("Errors while GHDL analysis phase.")
-#
-# 			except SimulatorException as ex:
-# 				raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED|NO ASSERTS]' not found in simulator output.") from ex
 #

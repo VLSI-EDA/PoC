@@ -182,17 +182,3 @@ class Simulator(BaseSimulator):
 			vsim.Parameters[vsim.SwitchBatchCommand] =	"add wave *; do {0}".format(tclGUIFilePath.as_posix())
 
 		testbench.Result = vsim.Simulate()
-
-		# if (not self.__guiMode):
-			# try:
-				# result = self.checkSimulatorOutput(simulatorLog)
-				
-				# if (result == True):
-					# print("Testbench '%s': PASSED" % testbenchName)
-				# else:
-					# print("Testbench '%s': FAILED" % testbenchName)
-					
-			# except SimulatorException as ex:
-				# raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED]' not found in simulator output.") from ex
-		
-

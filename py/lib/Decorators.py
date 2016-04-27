@@ -18,7 +18,7 @@ class LazyLoadTrigger:
 		self.func = func
 
 	def __call__(self, inst, *args, **kwargs):
-		if (inst.LazyLoadable_IsLoaded == False):
+		if (inst.LazyLoadable_IsLoaded is False):
 			inst._LazyLoadable_Load()
 		return self.func(inst, *args, **kwargs)
 

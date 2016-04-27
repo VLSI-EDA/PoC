@@ -113,13 +113,11 @@ class PathElement:
 	def Level(self):	return self._parent.Level + 1
 
 	def __str__(self):
-		return "{0}.{1}".format(str(self.Parent), self.Name)
+		return "{0!s}.{1}".format(self.Parent, self.Name)
 
 class Namespace(PathElement):
 	def __init__(self, host, name, configSection, parent):
 		super().__init__(host, name, configSection, parent)
-
-		self._configSection = configSection
 
 		self.__namespaces =		OrderedDict()
 		self.__entities =			OrderedDict()
@@ -136,7 +134,7 @@ class Namespace(PathElement):
 				self.__namespaces[optionName.lower()] = ns
 			elif (type == "Entity"):
 				# print("loading entity: {0}".format(optionName))
-				section = self._configSection.replace("PoC", "IP") + "." + optionName
+				section = ".".join(["IP"] + self._configSection.split(".")[1:] + [optionName])
 				ent = Entity(host=self._host, name=optionName, configSection=section, parent=self)
 				self.__entities[optionName.lower()] = ent
 
@@ -177,19 +175,42 @@ class Namespace(PathElement):
 			buffer += ns.pprint(indent + 1)
 		return buffer
 
-class Root(Namespace):
-	__POCRoot_Name =						"PoC"
-	__POCRoot_SectionName =			"PoC"
-
-	def __init__(self, host):
-		super().__init__(host, self.__POCRoot_Name, self.__POCRoot_SectionName, None)
-
+class Library(Namespace):
 	@property
 	def Level(self):
 		return 0
 
 	def __str__(self):
-		return self.__POCRoot_Name
+		return self.Name
+
+class Root:
+	__POCRoot_Name =						"PoC"
+	__POCRoot_SectionName =			"PoC"
+
+	def __init__(self, host):
+		self._host =				host
+
+		self.__libraries =	OrderedDict()
+		self.__libraries[self.__POCRoot_Name.lower()] = (Library(host, self.__POCRoot_Name, self.__POCRoot_SectionName, self))
+
+	@property
+	def Libraries(self):          return [lib for lib in self.__libraries.values()]
+	@property
+	def LibraryNames(self):       return [libName for libName in self.__libraries.keys()]
+
+	def GetLibraries(self):       return self.__libraries.values()
+	def GetLibraryNames(self):    return self.__libraries.keys()
+
+	def __contains__(self, item):
+		return item.lower() in self.__libraries
+
+	def __getitem__(self, key):
+		key = key.lower()
+		return self.__libraries[key]
+
+	def AddLibrary(self, libraryName, libraryPrefix):
+		self.__libraries[libraryName.lower()] = (Library(self._host, libraryName, libraryPrefix, self))
+
 
 class WildCard(PathElement):
 	def GetEntities(self):
@@ -649,7 +670,7 @@ class CoreGeneratorNetlist(Netlist):
 
 
 class FQN:
-	def __init__(self, host, fqn, defaultType=EntityTypes.Source):
+	def __init__(self, host, fqn, defaultLibrary="PoC", defaultType=EntityTypes.Source):
 		self.__host =		host
 		self.__type =		None
 		self.__parts =	[]
@@ -658,7 +679,7 @@ class FQN:
 		if (fqn == ""):				raise ValueError("Parameter 'fqn' is empty.")
 
 		# extract EntityType
-		splitList1 = fqn.split(':')
+		splitList1 = fqn.split(":")
 		if (len(splitList1) == 1):
 			self.__type =	defaultType
 			entity =			fqn
@@ -669,9 +690,9 @@ class FQN:
 			raise ValueError("Argument 'fqn' has to many ':' signs.")
 
 		# extract parts
-		parts = entity.split('.')
-		if (parts[0].lower() == "poc"):
-			parts = parts[1:]
+		parts = entity.split(".")
+		if (parts[0].lower() not in self.__host.Root):
+			parts.insert(0, defaultLibrary)
 
 		# check and resolve parts
 		cur = self.__host.Root
@@ -688,7 +709,7 @@ class FQN:
 				try:
 					pe = cur[part]
 				except KeyError:
-					raise ConfigurationException("PoC entity '{GREEN}PoC.{good}.{RED}{bad}{NOCOLOR}' not found.".format(good=(".".join(parts[:pos])), bad=(".".join(parts[pos:])), **Init.Foreground))
+					raise ConfigurationException("PoC entity '{GREEN}{good}{RED}.{bad}{NOCOLOR}' not found.".format(good=(".".join(parts[:pos])), bad=(".".join(parts[pos:])), **Init.Foreground))
 				self.__parts.append(pe)
 				cur = pe
 
@@ -698,25 +719,6 @@ class FQN:
 	@property
 	def Entity(self):
 		return self.__parts[-1]
-
-	# def GetEntities(self):
-	# 	if (self.__type is EntityTypes.Testbench):
-	# 		config = self.__host.PoCConfig
-	# 	elif (self.__type is EntityTypes.NetList):
-	# 		config = self.__host.PoCConfig
-	#
-	# 	entity = self.__parts[-1]
-	# 	if (not entity.IsStar):
-	# 		yield entity
-	# 	else:
-	# 		subns = self.__parts[-2]
-	# 		path =	str(subns) + "."
-	# 		for sectionName in config:
-	# 			if sectionName.startswith(path):
-	# 				if self.__host.PoCConfig.has_option('PoC.NamespacePrefixes', sectionName):
-	# 					continue
-	# 				fqn = FQN(self.__host, sectionName)
-	# 				yield fqn.Entity
 
 	def __str__(self):
 		return ".".join([p.Name for p in self.__parts])

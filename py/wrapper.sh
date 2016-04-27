@@ -85,6 +85,7 @@ if [ $PyWrapper_Debug -eq 1 ]; then
 	echo -e "${YELLOW}  working:       $PoC_WorkingDir${NOCOLOR}"
 	echo -e "${YELLOW}Script:${NOCOLOR}"
 	echo -e "${YELLOW}  Filename:      $PyWrapper_Script${NOCOLOR}"
+	echo -e "${YELLOW}  Solution:      $PyWrapper_Solution${NOCOLOR}"
 	echo -e "${YELLOW}  Parameters:    $PyWrapper_Parameters${NOCOLOR}"
 	echo -e "${YELLOW}Load Environment:${NOCOLOR}"
 	echo -e "${YELLOW}  Xilinx ISE:    $PyWrapper_LoadEnv_Xilinx_ISE${NOCOLOR}"
@@ -179,7 +180,12 @@ fi
 # execute script with appropriate python interpreter and all given parameters
 if [ $PoC_ExitCode -eq 0 ]; then
 	Python_Script="$PoC_RootDir_AbsPath/$PoC_PythonScriptDir/$PyWrapper_Script"
-	Python_ScriptParameters=$PyWrapper_Parameters
+
+	if [ -z $PyWrapper_Solution ]; then
+		Python_ScriptParameters=$PyWrapper_Parameters
+	else
+		Python_ScriptParameters="--sln=$PyWrapper_Solution $PyWrapper_Parameters"
+	fi
 	
 	if [ $PyWrapper_Debug -eq 1 ]; then
 		echo -e "${YELLOW}launching: '$Python_Interpreter $Python_Script $Python_ScriptParameters'${NOCOLOR}"

@@ -277,7 +277,7 @@ class PoC(ILogable, ArgParseMixin):
 	@CommonSwitchArgumentAttribute("-d", "--debug",		dest="debug",		help="enable debug mode")
 	@CommonSwitchArgumentAttribute("-v", "--verbose",	dest="verbose",	help="print out detailed messages")
 	@CommonSwitchArgumentAttribute("-q", "--quiet",		dest="quiet",		help="reduce messages to a minimum")
-	@CommonArgumentAttribute('--sln', metavar="<Solution>", dest="SolutionName", help="Solution name")
+	@CommonArgumentAttribute("--sln", metavar="<Solution>", dest="SolutionName", help="Solution name")
 	def Run(self):
 		ArgParseMixin.Run(self)
 
@@ -312,8 +312,8 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "help" command
 	# ----------------------------------------------------------------------------
-	@CommandAttribute('help', help="help help")
-	@ArgumentAttribute(metavar='<Command>', dest="Command", type=str, nargs='?', help='todo help')
+	@CommandAttribute("help", help="help help")
+	@ArgumentAttribute(metavar="<Command>", dest="Command", type=str, nargs="?", help="todo help")
 	# @HandleVerbosityOptions
 	def HandleHelp(self, args):
 		self.PrintHeadline()
@@ -343,11 +343,11 @@ class PoC(ILogable, ArgParseMixin):
 			self._InitializeConfiguration()
 
 		self._LogVerbose("starting manual configuration...")
-		print('Explanation of abbreviations:')
-		print('  y - yes')
-		print('  n - no')
-		print('  p - pass (jump to next question)')
-		#print('Upper case means default value')
+		print("Explanation of abbreviations:")
+		print("  y - yes")
+		print("  n - no")
+		print("  p - pass (jump to next question)")
+		#print("Upper case means default value")
 		print()
 
 		if (self.Platform == "Windows"):							self._manualConfigurationForWindows()
@@ -382,7 +382,7 @@ class PoC(ILogable, ArgParseMixin):
 			self._LogNormal("{CYAN}Configuring {0!s}{NOCOLOR}".format(configurator.Name, **Init.Foreground))
 
 			nxt = False
-			while (nxt == False):
+			while (nxt is False):
 				try:
 					configurator.ConfigureForWindows()
 					nxt = True
@@ -398,7 +398,7 @@ class PoC(ILogable, ArgParseMixin):
 			self._LogNormal("Configure {0}".format(configurator.Name))
 
 			nxt = False
-			while (nxt == False):
+			while (nxt is False):
 				try:
 					configurator.ConfigureForLinux()
 					nxt = True
@@ -434,14 +434,15 @@ class PoC(ILogable, ArgParseMixin):
 		elif (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) != 0):
 			self.Directories["XilinxPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory']) / "data/vhdl/src"
 		
-	def _ExtractBoard(self, BoardName, DeviceName):
+	def _ExtractBoard(self, BoardName, DeviceName, force=False):
 		if (BoardName is not None):			return Board(self, BoardName)
 		elif (DeviceName is not None):	return Board(self, "Custom", DeviceName)
+		elif (force is True):						raise CommonException("Either a board name or a device name is required.")
 		else:														return self.__SimulationDefaultBoard
 
-	def _ExtractFQNs(self, fqns, defaultType=EntityTypes.Testbench):
-		if (len(fqns) == 0):             raise SimulatorException("No FQN given.")
-		return [FQN(self, fqn, defaultType=defaultType) for fqn in fqns]
+	def _ExtractFQNs(self, fqns, defaultLibrary="PoC", defaultType=EntityTypes.Testbench):
+		if (len(fqns) == 0):             raise CommonException("No FQN given.")
+		return [FQN(self, fqn, defaultLibrary=defaultLibrary, defaultType=defaultType) for fqn in fqns]
 
 	def _ExtractVHDLVersion(self, vhdlVersion):
 		if (vhdlVersion is None):				return self.__SimulationDefaultVHDLVersion
@@ -465,13 +466,13 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("list-testbench", help="List all testbenches")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--kind', metavar="<Kind>", dest="TestbenchKind", help="Testbench kind: VHDL | COCOTB")
+	@ArgumentAttribute("--kind", metavar="<Kind>", dest="TestbenchKind", help="Testbench kind: VHDL | COCOTB")
 	# @HandleVerbosityOptions
 	def HandleListTestbenches(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 
-		if (len(args.FQN) == 0):              raise SimulatorException("No FQN given.")
+		defaultLibrary = "PoC"
 
 		if (args.SolutionName is not None):
 			solutionName = args.SolutionName
@@ -483,8 +484,37 @@ class PoC(ILogable, ArgParseMixin):
 				print("  Path: {0}".format(self.PoCConfig[sectionName]['Path']))
 
 				solutionRootPath = self.Directories["PoCRoot"] / self.PoCConfig[sectionName]['Path']
-				iniFile = solutionRootPath / ".PoC" / "PoC.Solution.ini"
-				print("  sln ini: {0!s}".format(iniFile))
+				solutionConfigFile = solutionRootPath / ".PoC" / "solution.config.ini"
+				solutionDefaultsFile = solutionRootPath / ".PoC" / "solution.defaults.ini"
+				print("  sln files: {0!s}  {1!s}".format(solutionConfigFile, solutionDefaultsFile))
+
+				self._LogVerbose("Reading solution file...")
+				self._LogDebug("  {0!s}".format(solutionConfigFile))
+				self._LogDebug("  {0!s}".format(solutionDefaultsFile))
+				if not solutionConfigFile.exists():		raise NotConfiguredException("Solution's {0} configuration file '{1!s}' does not exist.".format(solutionName, solutionConfigFile))  from FileNotFoundError(str(solutionConfigFile))
+				if not solutionDefaultsFile.exists():	raise NotConfiguredException("Solution's {0} defaults file '{1!s}' does not exist.".format(solutionName, solutionDefaultsFile))  from FileNotFoundError(str(solutionDefaultsFile))
+				self.__pocConfig.read(str(solutionConfigFile))
+				self.__pocConfig.read(str(solutionDefaultsFile))
+
+				section =					self.PoCConfig['PROJECT.Projects']
+				defaultLibrary =	section['DefaultLibrary']
+				print("Solution:")
+				print("  Name:            {0}".format(section['Name']))
+				print("  Default library: {0}".format(defaultLibrary))
+				print("  Projects:")
+				for item in section:
+					if (section[item] in ["PoCProject", "ISEProject", "VivadoProject", "QuartusProject"]):
+						sectionName2 = "PROJECT.{0}".format(item)
+						print("    {0}".format(self.PoCConfig[sectionName2]['Name']))
+
+				print("  Namespace roots:")
+				for item in section:
+					if (section[item] == "Library"):
+						libraryPrefix = item
+						print("    {0: <16}  {1}".format(self.PoCConfig[libraryPrefix]['Name'], libraryPrefix))
+
+						self.Root.AddLibrary(libraryPrefix, libraryPrefix)
+
 
 		if (args.TestbenchKind is None):
 			tbFilter =	TestbenchKind.All
@@ -495,7 +525,7 @@ class PoC(ILogable, ArgParseMixin):
 				elif (kind == "cocotb"):	tbFilter |= TestbenchKind.CocoTestbench
 				else:											raise CommonException("Argument --kind has an unknown value '{0}'.".format(kind))
 
-		fqnList = self._ExtractFQNs(args.FQN)
+		fqnList = self._ExtractFQNs(args.FQN, defaultLibrary)
 		for fqn in fqnList:
 			self._LogNormal("")
 			entity = fqn.Entity
@@ -515,9 +545,9 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("asim", help="Simulate a PoC Entity with Aldec Active-HDL")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
-	@ArgumentAttribute('--std', metavar="<VHDLVersion>", dest="VHDLVersion", help="Simulate with VHDL-??")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--std", metavar="<VHDLVersion>", dest="VHDLVersion", help="Simulate with VHDL-??")
 	@SwitchArgumentAttribute("-g", "--gui", dest="GUIMode", help="show waveform in a GUI window.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -552,8 +582,6 @@ class PoC(ILogable, ArgParseMixin):
 			# raise NotConfiguredException("Neither Aldec's Active-HDL nor Riviera PRO nor Active-HDL Lattice Edition are configured on this system.")
 			raise NotConfiguredException("Neither Aldec's Active-HDL nor Active-HDL Lattice Edition are configured on this system.")
 
-		if (len(args.FQN) == 0):              raise SimulatorException("No FQN given.")
-		
 		fqnList =			self._ExtractFQNs(args.FQN)
 		board =				self._ExtractBoard(args.BoardName, args.DeviceName)
 		vhdlVersion =	self._ExtractVHDLVersion(args.VHDLVersion)
@@ -578,9 +606,9 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("ghdl", help="Simulate a PoC Entity with GHDL")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
-	@ArgumentAttribute('--std', metavar="<VHDLVersion>", dest="VHDLVersion", help="Simulate with VHDL-??")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--std", metavar="<VHDLVersion>", dest="VHDLVersion", help="Simulate with VHDL-??")
 	@SwitchArgumentAttribute("-g", "--gui", dest="GUIMode", help="show waveform in GTKWave.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -607,7 +635,7 @@ class PoC(ILogable, ArgParseMixin):
 		ghdlVersion =														self.PoCConfig['INSTALL.GHDL']['Version']
 		ghdlBackend =														self.PoCConfig['INSTALL.GHDL']['Backend']
 
-		if (args.GUIMode == True):
+		if (args.GUIMode is True):
 			# prepare paths for GTKWave, if configured
 			if (len(self.PoCConfig.options("INSTALL.GTKWave")) != 0):
 				self.Directories["GTKWInstallation"] = Path(self.PoCConfig['INSTALL.GTKWave']['InstallationDirectory'])
@@ -632,8 +660,8 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("isim", help="Simulate a PoC Entity with Xilinx ISE Simulator (iSim)")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
 	@SwitchArgumentAttribute("-g", "--gui", dest="GUIMode", help="show waveform in a GUI window.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -676,9 +704,9 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("vsim", help="Simulate a PoC Entity with Mentor QuestaSim or ModelSim (vsim)")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
-	@ArgumentAttribute('--std', metavar="<VHDLVersion>", dest="VHDLVersion", help="Simulate with VHDL-??")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--std", metavar="<VHDLVersion>", dest="VHDLVersion", help="Simulate with VHDL-??")
 	@SwitchArgumentAttribute("-g", "--gui", dest="GUIMode", help="show waveform in a GUI window.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -732,9 +760,9 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("xsim", help="Simulate a PoC Entity with Xilinx Vivado Simulator (xSim)")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
-	@ArgumentAttribute('--std', metavar="<VHDLVersion>", dest="VHDLVersion", help="Simulate with VHDL-??")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--std", metavar="<VHDLVersion>", dest="VHDLVersion", help="Simulate with VHDL-??")
 	@SwitchArgumentAttribute("-g", "--gui", dest="GUIMode", help="show waveform in a GUI window.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -785,8 +813,8 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("cocotb", help="Simulate a PoC Entity with Cocotb and Questa Simulator")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
 	@SwitchArgumentAttribute("-g", "--gui", dest="GUIMode", help="show waveform in a GUI window.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -827,13 +855,11 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("list-netlist", help="List all netlists")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--kind', metavar="<Kind>", dest="NetlistKind", help="Netlist kind: Lattice | Quartus | XST | CoreGen")
+	@ArgumentAttribute("--kind", metavar="<Kind>", dest="NetlistKind", help="Netlist kind: Lattice | Quartus | XST | CoreGen")
 	# @HandleVerbosityOptions
 	def HandleListNetlist(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
-
-		if (len(args.FQN) == 0):              raise SimulatorException("No FQN given.")
 
 		if (args.NetlistKind is None):
 			nlFilter = NetlistKind.All
@@ -864,8 +890,8 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Synthesis commands")
 	@CommandAttribute("coregen", help="Generate an IP core with Xilinx ISE Core Generator")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
 	@SwitchArgumentAttribute("--no-cleanup", dest="NoCleanUp", help="Don't delete intermediate files. Skip post-delete rules.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -877,7 +903,7 @@ class PoC(ILogable, ArgParseMixin):
 		self._CheckISEEnvironment()
 		
 		fqnList =	self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName)
+		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
 		# prepare some paths
 		self.Directories["PoCNetlist"] =			self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['NetlistFiles']
@@ -899,8 +925,8 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Synthesis commands")
 	@CommandAttribute("xst", help="Compile a PoC IP core with Xilinx ISE XST to a netlist")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
 	@SwitchArgumentAttribute("--no-cleanup", dest="NoCleanUp", help="Don't delete intermediate files. Skip post-delete rules.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -911,7 +937,7 @@ class PoC(ILogable, ArgParseMixin):
 		self._CheckISEEnvironment()
 
 		fqnList =	self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName)
+		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
 		# prepare some paths
 		self.Directories["XSTFiles"] =				self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['ISESynthesisFiles']
@@ -934,8 +960,8 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Synthesis commands")
 	@CommandAttribute("quartus", help="Compile a PoC IP core with Altera Quartus II Map to a netlist")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
 	@SwitchArgumentAttribute("--no-cleanup", dest="NoCleanUp", help="Don't delete intermediate files. Skip post-delete rules.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -948,7 +974,7 @@ class PoC(ILogable, ArgParseMixin):
 		# self._CheckQuartusIIEnvironment()
 
 		fqnList =	self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName)
+		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
 		# prepare some paths
 		self.Directories["QuartusTemp"] =					self.Directories["PoCTemp"] / self.PoCConfig['CONFIG.DirectoryNames']['QuartusSynthesisFiles']
@@ -970,8 +996,8 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Synthesis commands")
 	@CommandAttribute("lattice", help="Compile a PoC IP core with Lattice Diamond LSE to a netlist")
 	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
-	@ArgumentAttribute('--device', metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
-	@ArgumentAttribute('--board', metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
+	@ArgumentAttribute("--device", metavar="<DeviceName>", dest="DeviceName", help="The target platform's device name.")
+	@ArgumentAttribute("--board", metavar="<BoardName>", dest="BoardName", help="The target platform's board name.")
 	@SwitchArgumentAttribute("--no-cleanup", dest="NoCleanUp", help="Don't delete intermediate files. Skip post-delete rules.")
 	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
 	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
@@ -984,7 +1010,7 @@ class PoC(ILogable, ArgParseMixin):
 		# self._CheckLatticeEnvironment()
 
 		fqnList =	self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName)
+		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
 		# prepare some paths
 		self.Directories["LatticeTemp"] =					self.Directories["PoCTemp"] / self.PoCConfig['CONFIG.DirectoryNames']['LatticeSynthesisFiles']

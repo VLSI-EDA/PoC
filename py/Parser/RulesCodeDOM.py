@@ -239,14 +239,14 @@ class ReplaceStatement(Statement):
 			token = yield
 			if isinstance(token, CharacterToken):
 				if (token.Value == "\""):
-					if (wasEscapeSign == True):
+					if (wasEscapeSign is True):
 						wasEscapeSign =		False
 						searchPattern +=	"\""
 						continue
 					else:
 						break
 				elif (token.Value == "\\"):
-					if (wasEscapeSign == True):
+					if (wasEscapeSign is True):
 						wasEscapeSign = False
 						searchPattern += "\\"
 						continue
@@ -275,14 +275,14 @@ class ReplaceStatement(Statement):
 			token = yield
 			if isinstance(token, CharacterToken):
 				if (token.Value == "\""):
-					if (wasEscapeSign == True):
+					if (wasEscapeSign is True):
 						wasEscapeSign = False
 						replacePattern += "\""
 						continue
 					else:
 						break
 				elif (token.Value == "\\"):
-					if (wasEscapeSign == True):
+					if (wasEscapeSign is True):
 						wasEscapeSign = False
 						replacePattern += "\\"
 						continue
