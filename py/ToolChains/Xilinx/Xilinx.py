@@ -54,7 +54,7 @@ class XilinxException(ToolChainException):
 
 class Configuration(BaseConfiguration):
 	_vendor =			"Xilinx"
-	_toolName =		"Xilinx"
+	_toolName =		None	# automatically configure only vendor path
 	_section  =		"INSTALL.Xilinx"
 	_template = {
 		"Windows": {
@@ -69,29 +69,18 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	# QUESTION: call super().ConfigureVendorPath("Altera") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
-	def ConfigureForAll(self):
-		super().ConfigureForAll()
-		if (not self._AskInstalled("Are Xilinx products installed on your system?")):
-			self._ClearSection(self._section)
-		else:
-			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
-				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
-			else:
-				defaultPath = self.__GetXilinxPath()
-			installPath = self._AskInstallPath(self._section, defaultPath)
-			self._WriteInstallationDirectory(self._section, installPath)
-
-	def __GetXilinxPath(self):
+	def _GetDefaultInstallationDirectory(self):
 		xilinx = environ.get("XILINX")
 		if (xilinx is not None):
-			return Path(xilinx).parent.parent.parent
+			return str(Path(xilinx).parent.parent.parent)
 
 		xilinx = environ.get("XILINX_VIVADO")
 		if (xilinx is not None):
-			return Path(xilinx).parent.parent
+			return str(Path(xilinx).parent.parent)
 
-		return super()._TestDefaultInstallPath({"Windows": "Xilinx", "Linux": "Xilinx"})
+		path = self._TestDefaultInstallPath({"Windows": "Xilinx", "Linux": "Xilinx"})
+		if path is None: return super()._GetDefaultInstallationDirectory()
+		return str(path)
 
 
 class XilinxProjectExportMixIn:

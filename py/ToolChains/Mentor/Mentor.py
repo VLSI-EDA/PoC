@@ -52,7 +52,7 @@ class MentorException(ToolChainException):
 
 class Configuration(BaseConfiguration):
 	_vendor =			"Mentor"
-	_toolName =		"Mentor"
+	_toolName =		None  # automatically configure only vendor path
 	_section =		"INSTALL.Mentor"
 	_template = {
 		"Windows": {
@@ -67,25 +67,10 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	# QUESTION: call super().ConfigureVendorPath("Mentor") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
-	def ConfigureForAll(self):
-		super().ConfigureForAll()
-		if (not self._AskInstalled("Are Mentor products installed on your system?")):
-			self._ClearSection(self._section)
-		else:
-			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
-				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
-			else:
-				defaultPath = self.__GetMentorPath()
-			installPath = self._AskInstallPath(self._section, defaultPath)
-			self._WriteInstallationDirectory(self._section, installPath)
-	
-	def __GetMentorPath(self):
-		# mentor = environ.get("QUARTUS_ROOTDIR")				# on Windows: D:\Mentor\13.1\quartus
-		# if (mentor is not None):
-		# 	return Path(mentor).parent.parent
-		
-		return super()._TestDefaultInstallPath({"Windows": "Mentor", "Linux": "Mentor"})
+	def _GetDefaultInstallationDirectory(self):
+		path = self._TestDefaultInstallPath({"Windows": "Mentor", "Linux": "Mentor"})
+		if path is None: return super()._GetDefaultInstallationDirectory()
+		return str(path)
 
 
 	# 

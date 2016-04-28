@@ -61,7 +61,6 @@ class Configuration(BaseConfiguration):
 	}
 
 	def ConfigureForAll(self):
-		super().ConfigureForAll()
 		try:
 			latestTagHash = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True)
 			latestTagName = check_output(["git", "describe", "--tags", latestTagHash[:-1]], universal_newlines=True)

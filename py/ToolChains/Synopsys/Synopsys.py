@@ -53,7 +53,7 @@ class SynopsysException(ToolChainException):
 
 class Configuration(BaseConfiguration):
 	_vendor =			"Synopsys"
-	_toolName =		"Synopsys"
+	_toolName =		None  # automatically configure only vendor path
 	_section =		"INSTALL.Synopsys"
 	_template = {
 		"Windows": {
@@ -68,25 +68,12 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	# QUESTION: call super().ConfigureVendorPath("Synopsys") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
-	def ConfigureForAll(self):
-		super().ConfigureForAll()
-		if (not self._AskInstalled("Are Synopsys products installed on your system?")):
-			self._ClearSection(self._section)
-		else:
-			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
-				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
-			else:
-				defaultPath = self.__GetSynopsysPath()
-			installPath = self._AskInstallPath(self._section, defaultPath)
-			self._WriteInstallationDirectory(self._section, installPath)
-	
-	def __GetSynopsysPath(self):
+	def _GetDefaultInstallationDirectory(self):
 		# synopsys = environ.get("QUARTUS_ROOTDIR")				# on Windows: D:\Synopsys\13.1\quartus
 		# if (synopsys is not None):
 		# 	return Path(synopsys).parent.parent
-		
-		return super()._TestDefaultInstallPath({"Windows": "Synopsys", "Linux": "Synopsys"})
+
+		return str(self._TestDefaultInstallPath({"Windows": "Synopsys", "Linux": "Synopsys"}))
 
 
 class SynopsysDesignConstraintFile(ConstraintFile):

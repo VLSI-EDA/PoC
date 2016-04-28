@@ -96,34 +96,29 @@ class Configuration(BaseConfiguration):
 	}
 
 	def ConfigureForAll(self):
-		super().ConfigureForAll()
 		try:
 			if (not self._AskInstalled("Is GHDL installed on your system?")):
-				self._ClearSection(self._section)
+				self.ClearSection()
 			else:
-				self._host.PoCConfig[self._section]['InstallationDirectory'] = self._template[self._host.Platform][self._section]['InstallationDirectory']
-				self._host.PoCConfig[self._section]['BinaryDirectory'] = self._template[self._host.Platform][self._section]['BinaryDirectory']
-				installPath = self._AskInstallPath(self._section, self.__GetGHDLPath())
-				self._WriteInstallationDirectory(self._section, installPath)
-				self.__WriteGHDLSection()
+				self._ConfigureInstallationDirectory()
+				binPath = self._ConfigureBinaryDirectory()
+				self.__WriteGHDLSection(binPath)
 		except ConfigurationException:
-			self._ClearSection(self._section)
+			self.ClearSection()
 			raise
 
-	def __GetGHDLPath(self):
+	def _GetDefaultInstallationDirectory(self):
 		if (self._host.Platform in ["Linux", "Darwin"]):
 			name = check_output(["which", "ghdl"], universal_newlines=True)
-			if name != "": return Path(name[:-1]).parent
+			if name != "": return str(Path(name[:-1]).parent)
 
-		return Path(self._host.PoCConfig[self._section]['InstallationDirectory'])  # get resolved path
+		return super()._GetDefaultInstallationDirectory()
 
-	def __WriteGHDLSection(self):
-		"""Further entries."""
-		ghdlPath = Path(self._host.PoCConfig[self._section]['BinaryDirectory'])  # get resolved path
+	def __WriteGHDLSection(self, binPath):
 		if (self._host.Platform == "Linux"):
-			ghdlPath /= "ghdl"
+			ghdlPath = binPath / "ghdl"
 		else:
-			ghdlPath /= "ghdl.exe"
+			ghdlPath = binPath / "ghdl.exe"
 
 		if not ghdlPath.exists():
 			raise ConfigurationException("Executable '{0!s}' not found.".format(ghdlPath)) from FileNotFoundError(

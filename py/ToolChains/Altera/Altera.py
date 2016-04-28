@@ -56,7 +56,7 @@ class AlteraException(ToolChainException):
 
 class Configuration(BaseConfiguration):
 	_vendor =			"Altera"
-	_toolName =		"Altera"
+	_toolName =		None  # automatically configure only vendor path
 	_section =		"INSTALL.Altera"
 	_template = {
 		"Windows": {
@@ -71,22 +71,11 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	# QUESTION: call super().ConfigureVendorPath("Altera") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
-	def ConfigureForAll(self):
-		super().ConfigureForAll()
-		if (not self._AskInstalled("Are Altera products installed on your system?")):
-			self._ClearSection(self._section)
-		else:
-			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
-				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
-			else:
-				defaultPath = self.__GetAlteraPath()
-			installPath = self._AskInstallPath(self._section, defaultPath)
-			self._WriteInstallationDirectory(self._section, installPath)
-	
-	def __GetAlteraPath(self):
+	def _GetDefaultInstallationDirectory(self):
 		# altera = environ.get("QUARTUS_ROOTDIR")				# on Windows: D:\Altera\13.1\quartus
 		# if (altera is not None):
-		# 	return Path(altera).parent.parent
-		
-		return super()._TestDefaultInstallPath({"Windows": "Altera", "Linux": "Altera"})
+		# 	return str(Path(altera).parent.parent)
+
+		path = self._TestDefaultInstallPath({"Windows": "Altera", "Linux": "Altera"})
+		if path is None: return super()._GetDefaultInstallationDirectory()
+		return str(path)

@@ -353,7 +353,9 @@ class PoC(ILogable, ArgParseMixin):
 			# skip configuration with unsupported platforms
 			if (not configurator.IsSupportedPlatform()):	continue
 			# skip configuration if dependency is not fulfilled
-			if (not configurator.CheckDependency):				continue
+			if (not configurator.CheckDependency()):
+				configurator.ClearSection()
+				continue
 
 			self._LogNormal("{CYAN}Configuring {0!s}{NOCOLOR}".format(configurator, **Init.Foreground))
 			nxt = False

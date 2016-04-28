@@ -85,30 +85,24 @@ class Configuration(BaseConfiguration):
 		return (len(self._host.PoCConfig['INSTALL.Xilinx']) != 0)
 
 	def ConfigureForAll(self):
-		super().ConfigureForAll()
 		try:
 			if (not self._AskInstalled("Is Xilinx ISE installed on your system?")):
-				self._ClearSection(self._section)
+				self.ClearSection()
 			else:
 				self._host.PoCConfig[self._section]['Version'] = self._template[self._host.Platform][self._section]['Version']
-				self._host.PoCConfig[self._section]['InstallationDirectory'] = self._template[self._host.Platform][self._section]['InstallationDirectory']
-				self._host.PoCConfig[self._section]['BinaryDirectory'] = self._template[self._host.Platform][self._section]['BinaryDirectory']
-				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory']) # get resolved path
-				installPath = self._AskInstallPath(self._section, defaultPath)
-				if installPath != defaultPath: # write user entered path
-					self._WriteInstallationDirectory(self._section, installPath)
-				self.__CheckISEVersion()
+				self._ConfigureInstallationDirectory()
+				binPath = self._ConfigureBinaryDirectory()
+				self.__CheckISEVersion(binPath)
 		except ConfigurationException:
-			self._ClearSection(self._section)
+			self.ClearSection()
 			raise
 
-	def __CheckISEVersion(self):
+	def __CheckISEVersion(self, binPath):
 		# check for ISE 14.7
-		fusePath = Path(self._host.PoCConfig[self._section]['BinaryDirectory']) # get resolved path
 		if (self._host.Platform == "Linux"):
-			fusePath /= "fuse"
+			fusePath = binPath / "fuse"
 		else:
-			fusePath /= "fuse.exe"
+			fusePath = binPath / "fuse.exe"
 
 		if not fusePath.exists():
 			raise ConfigurationException("Executable '{0!s}' not found.".format(fusePath)) from FileNotFoundError(str(fusePath))

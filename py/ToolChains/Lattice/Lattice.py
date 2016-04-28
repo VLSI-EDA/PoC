@@ -53,7 +53,7 @@ class LatticeException(ToolChainException):
 
 class Configuration(BaseConfiguration):
 	_vendor =			"Lattice"
-	_toolName =		"Lattice"
+	_toolName =		None  # automatically configure only vendor path
 	_section =		"INSTALL.Lattice"
 	_template = {
 		"Windows": {
@@ -68,21 +68,10 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	# QUESTION: call super().ConfigureVendorPath("Lattice") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
-	def ConfigureForAll(self):
-		super().ConfigureForAll()
-		if (not self._AskInstalled("Are Lattice products installed on your system?")):
-			self._ClearSection(self._section)
-		else:
-			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
-				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
-			else:
-				defaultPath = self.__GetLatticePath()
-			installPath = self._AskInstallPath(self._section, defaultPath)
-			self._WriteInstallationDirectory(self._section, installPath)
-
-	def __GetLatticePath(self):
-		return super()._TestDefaultInstallPath({"Windows": "Lattice", "Linux": "Lattice"})
+	def _GetDefaultInstallationDirectory(self):
+		path = self._TestDefaultInstallPath({"Windows": "Lattice", "Linux": "Lattice"})
+		if path is None: return super()._GetDefaultInstallationDirectory()
+		return str(path)
 
 
 class LatticeDesignConstraintFile(ConstraintFile):

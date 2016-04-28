@@ -84,10 +84,6 @@ class Configuration:		#(ISubClassRegistration):
 	def __init__(self, host):
 		self._host =	host
 
-	@property
-	def ToolName(self):
-		return self._toolName
-
 	def IsSupportedPlatform(self):
 		if (self._host.Platform not in self._template):
 			return ("ALL" in self._template)
@@ -116,10 +112,21 @@ class Configuration:		#(ISubClassRegistration):
 		self.ConfigureForAll()
 
 	def ConfigureForAll(self):
-		self._host.PoCConfig.Interpolation.clear_cache()
+		if self._toolName is None:
+			self._ConfigureVendorPath()
 
 	def __str__(self):
+		if self._toolName is None: return self._vendor
 		return self._toolName
+
+	def ClearSection(self):
+		self._host.PoCConfig[self._section] = OrderedDict()
+
+	def _ConfigureVendorPath(self):
+		if (not self._AskInstalled("Are {0} products installed on your system?".format(self._vendor))):
+			self.ClearSection()
+		else:
+			self._ConfigureInstallationDirectory()
 
 	def _AskInstalled(self, question):
 		isInstalled = input("  " + question + " [Y/n/p]: ")
@@ -133,20 +140,44 @@ class Configuration:		#(ISubClassRegistration):
 		else:
 			raise ConfigurationException("Unsupported choice '{0}'".format(isInstalled))
 
-	def _AskInstallPath(self, section, defaultPath):
-		directory = input("  {0} installation directory [{1!s}]: ".format(self.ToolName, defaultPath))
+	def _ConfigureInstallationDirectory(self):
+		"""
+			Asks for installation directory and updates section.
+			Checks if entered directory exists and returns Path object.
+			If no installation directory was configured before, then _GetDefaultInstallationDir is called.
+		"""
+		if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
+			defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
+		else:
+			unresolved = self._GetDefaultInstallationDirectory() # may return an unresolved configuration string
+			self._host.PoCConfig[self._section]['InstallationDirectory'] = unresolved # create entry
+			defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory']) # resolve entry
+
+		directory = input("  {0!s} installation directory [{1!s}]: ".format(self, defaultPath))
 		if (directory != ""):
 			installPath = Path(directory)
 		else:
 			installPath = defaultPath
 
 		if (not installPath.exists()):
-			raise ConfigurationException("{0} installation directory '{1!s}' does not exist.".format(self.ToolName, installPath))  \
+			raise ConfigurationException("{0!s} installation directory '{1!s}' does not exist.".format(self, installPath))  \
 				from NotADirectoryError(str(installPath))
+
+		if directory != "": # update only if user entered something
+			self._host.PoCConfig[self._section]['InstallationDirectory'] = installPath.as_posix()
+			self._host.PoCConfig.Interpolation.clear_cache()
 
 		return installPath
 
+	def _GetDefaultInstallationDirectory(self):
+		"""
+			Returns unresolved default installation directory (string) from template.
+			Overwrite function in sub-class for automatic search of installation directory.
+		"""
+		return self._template[self._host.Platform][self._section]['InstallationDirectory']
+
 	def _TestDefaultInstallPath(self, defaults):
+		"""Helper function for automatic search of installation directory."""
 		if (self._host.Platform == "Linux"):
 			p = Path("/opt") / defaults["Linux"]
 			if (p.exists()):    return p
@@ -161,9 +192,45 @@ class Configuration:		#(ISubClassRegistration):
 					pass
 		return None
 
-	def _ClearSection(self, section):
-		self._host.PoCConfig[section] = OrderedDict()
+	def _ConfigureVersion(self):
+		"""
+				Asks for version and updates section. Returns version as string.
+				If no version was configured before, then _GetDefaultVersion is called.
+			"""
+		if self._host.PoCConfig.has_option(self._section, 'Version'):
+			defaultVersion = self._host.PoCConfig[self._section]['Version']
+		else:
+			unresolved = self._GetDefaultVersion()  # may return an unresolved configuration string
+			self._host.PoCConfig[self._section]['Version'] = unresolved  # create entry
+			defaultVersion = self._host.PoCConfig[self._section]['Version']  # resolve entry
 
+		version = input("  {0!s} version [{1!s}]: ".format(self, defaultVersion))
+		if version != "":  # update only if user entered something
+			self._host.PoCConfig[self._section]['Version'] = version
+			self._host.PoCConfig.Interpolation.clear_cache()
+		else:
+			version = defaultVersion
 
-	def _WriteInstallationDirectory(self, section, installPath):
-		self._host.PoCConfig[section]['InstallationDirectory'] = installPath.as_posix()
+		return version
+
+	def _GetDefaultVersion(self):
+		"""
+			Returns unresolved default version (string) from template.
+			Overwrite function in sub-class for automatic search of version.
+		"""
+		return self._template[self._host.Platform][self._section]['Version']
+
+	def _ConfigureBinaryDirectory(self):
+		"""Updates section with value from _template and returns directory as Path object."""
+		unresolved = self._template[self._host.Platform][self._section]['BinaryDirectory']
+		self._host.PoCConfig[self._section]['BinaryDirectory'] = unresolved # create entry
+		defaultPath = Path(self._host.PoCConfig[self._section]['BinaryDirectory'])  # resolve entry
+		
+		binPath = defaultPath # may be more complex in the future
+
+		if (not binPath.exists()):
+			raise ConfigurationException("{0!s} binary directory '{1!s}' does not exist.".format(self, binPath)) \
+				from NotADirectoryError(str(binPath))
+		
+		return binPath
+
