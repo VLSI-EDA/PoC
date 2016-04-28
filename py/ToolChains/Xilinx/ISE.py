@@ -40,8 +40,7 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.ISE")
 
-from pathlib							import Path
-from os										import environ
+
 from subprocess						import check_output
 
 from lib.Functions							import CallByRefParam

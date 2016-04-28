@@ -477,14 +477,14 @@ class Board:
 		self.__boardName =	boardName
 		self.__device =			None
 
-		if (boardName is None):
-			boardName = "default"
-		elif (boardName == ""):
+		if (self.__boardName is None):
+			self.__boardName = "GENERIC"
+		elif (self.__boardName == ""):
 			raise ValueError("Parameter 'board' is empty.")
-		elif (not isinstance(boardName, str)):
+		elif (not isinstance(self.__boardName, str)):
 			raise ValueError("Parameter 'board' is not of type str.")
-		else:
-			boardName = boardName.lower()
+
+		boardName = self.__boardName.lower()
 
 		if (boardName == "custom"):
 			if (device is None):
@@ -499,7 +499,7 @@ class Board:
 				if (board.lower() == boardName):
 					boardSection = host.PoCConfig['BOARDS'][board]
 					break
-			if (boardSection is None):
+			else:
 				raise ConfigurationException("Unknown board '{0}'".format(boardSection))
 
 			deviceName = host.PoCConfig[boardSection]['FPGA']

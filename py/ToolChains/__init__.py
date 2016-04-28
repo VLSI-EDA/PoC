@@ -38,32 +38,48 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
-#from .Aldec.ActiveHDL		import Configuration as ActiveHDL_Configuration
-from .Altera.Altera			import Configuration as Altera_Configuration
-from .Altera.Quartus		import Configuration as Quartus_Configuration
-from .Altera.ModelSim		import Configuration as AlteraModelSim_Configuration
-from .GHDL							import Configuration as GHDL_Configuration
-from .GTKWave						import Configuration as GTKW_Configuration
-#from .Lattice.Lattice		import Configuration as Diamond_Configuration
-from .Mentor.Mentor			import Configuration as Mentor_Configuration
-from .Mentor.QuestaSim	import Configuration as Questa_Configuration
-from .PoC								import Configuration as PoC_Configuration
-from .Xilinx.Xilinx			import Configuration as Xilinx_Configuration
-from .Xilinx.ISE				import Configuration as ISE_Configuration
-from .Xilinx.Vivado			import Configuration as Vivado_Configuration
+
+from .PoC									import Configuration as PoC_Configuration
+from .Aldec.Aldec					import Configuration as Aldec_Configuration
+from .Aldec.ActiveHDL			import Configuration as ActiveHDL_Configuration
+from .Altera.Altera				import Configuration as Altera_Configuration
+from .Altera.Quartus			import Configuration as Quartus_Configuration
+from .Altera.ModelSim			import Configuration as AlteraModelSim_Configuration
+from .GHDL								import Configuration as GHDL_Configuration
+from .GTKWave							import Configuration as GTKW_Configuration
+from .Lattice.Lattice			import Configuration as Lattice_Configuration
+from .Lattice.Diamond			import Configuration as Diamond_Configuration
+from .Lattice.ActiveHDL		import Configuration as LatticeActiveHDL_Configuration
+# from .Lattice.Synopsys		import Configuration as LatticeSynopsys_Configuration
+from .Mentor.Mentor				import Configuration as Mentor_Configuration
+from .Mentor.QuestaSim		import Configuration as Questa_Configuration
+# from .Mentor.PrecisionRTL	import Configuration as PrecisionRTL_Configuration
+from .Xilinx.Xilinx				import Configuration as Xilinx_Configuration
+from .Xilinx.ISE					import Configuration as ISE_Configuration
+from .Xilinx.Vivado				import Configuration as Vivado_Configuration
+
 
 Configurations = [
 	PoC_Configuration,
-	Xilinx_Configuration,
-	ISE_Configuration,
-	Vivado_Configuration,
+	# Aldec products
+	Aldec_Configuration,
+	ActiveHDL_Configuration,
+	# Altera products
 	Altera_Configuration,
 	Quartus_Configuration,
 	AlteraModelSim_Configuration,
+	# Lattice products
+	Lattice_Configuration,
+	Diamond_Configuration,
+	LatticeActiveHDL_Configuration,
+	# Mentor products
 	Mentor_Configuration,
 	Questa_Configuration,
-	# Diamond_Configuration,
-	# ActiveHDL_Configuration,
+	# Xilinx products
+	Xilinx_Configuration,
+	ISE_Configuration,
+	Vivado_Configuration,
+	# other products
 	GHDL_Configuration,
 	GTKW_Configuration
 ]

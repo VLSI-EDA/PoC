@@ -59,8 +59,10 @@ from Base.ToolChain					import ToolChainException
 class GHDLException(ToolChainException):
 	pass
 
+
 class GHDLReanalyzeException(GHDLException):
 	pass
+
 
 class Configuration(BaseConfiguration):
 	_vendor =			None

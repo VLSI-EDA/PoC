@@ -62,21 +62,21 @@ class Configuration(BaseConfiguration):
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"3.3.70",
-				"InstallationDirectory":	"C:/Tools/GTKWave/${Version}",
+				"Version":								"3.3.71",
+				"InstallationDirectory":	"C:/Program Files (x86)/GTKWave",
 				"BinaryDirectory":				"${InstallationDirectory}/bin"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":								"3.3.70",
+				"Version":								"3.3.71",
 				"InstallationDirectory":	"/usr/bin",
 				"BinaryDirectory":				"${InstallationDirectory}"
 			}
 		},
 		"Darwin": {
 			_section: {
-				"Version":								"3.3.70",
+				"Version":								"3.3.71",
 				"InstallationDirectory":	"/usr/bin",
 				"BinaryDirectory":				"${InstallationDirectory}"
 			}
@@ -86,7 +86,6 @@ class Configuration(BaseConfiguration):
 	def CheckDependency(self):
 		# return True if Xilinx is configured
 		return (len(self._host.PoCConfig['INSTALL.GHDL']) != 0)
-
 
 	def ConfigureForAll(self):
 		try:

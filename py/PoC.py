@@ -327,7 +327,7 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("configure", help="Configure vendor tools for PoC.")
 	# @HandleVerbosityOptions
-	def HandleManualConfiguration(self, _):
+	def HandleConfiguration(self, _):
 		self.PrintHeadline()
 
 		if (self.Platform not in ["Darwin", "Linux", "Windows"]):		raise PlatformNotSupportedException(self.Platform)

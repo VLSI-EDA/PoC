@@ -43,10 +43,6 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.Vivado")
 
 
-from collections					import OrderedDict
-from pathlib							import Path
-from os										import environ
-
 from lib.Functions							import CallByRefParam
 from Base.Exceptions						import PlatformNotSupportedException
 from Base.Logging								import LogEntry, Severity
@@ -114,13 +110,13 @@ class Configuration(BaseConfiguration):
 			raise ConfigurationException("Vivado version mismatch. Expected version {0}.".format(version))
 
 
-
 class VivadoMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		self._platform =						platform
 		self._binaryDirectoryPath =	binaryDirectoryPath
 		self._version =							version
 		self._logger =							logger
+
 
 class Vivado(VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):

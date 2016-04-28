@@ -124,6 +124,7 @@ class Make(Executable):
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
 
+
 # TODO: this is a QuestaSim specific filter. Add support to specify a user-defined filter for Make
 def GNUMakeFilter(gen):
 	for line in gen:
@@ -132,5 +133,6 @@ def GNUMakeFilter(gen):
 		elif line.startswith("# ** Note"):	yield LogEntry(line, Severity.Info)
 		elif line.startswith("# ** Warn"):	yield LogEntry(line, Severity.Warning)
 		elif line.startswith("# ** Erro"):	yield LogEntry(line, Severity.Error)
+		elif line.startswith("# ** Fata"):	yield LogEntry(line, Severity.Error)
 		elif line.startswith("# //"): 			continue
 		else:																yield LogEntry(line, Severity.Normal)

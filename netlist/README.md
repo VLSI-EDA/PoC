@@ -2,8 +2,8 @@
 
 **The PoC-Library** supports the generation of netlists from pre-configured
 vendor IP cores (e.g. Xilinx Core Generator) or from bundled and pre-configured
-PoC entities. This can be done by invoking PoC's Service Tool through one of the
-provided wrapper scripts: `poc.[sh|ps1]`.
+PoC entities. This can be done by invoking PoC's Service Tool through the wrapper
+script: `poc.[sh|ps1]`.
 
 PoC supports the following tools:
 
@@ -32,14 +32,15 @@ the exact device name. The name can be passed by `--device=<DEVICE>` command
 line option to the script. An alternative is the `--board=<BOARD>` option. For
 a list of well-known board names, PoC knows the soldered FPGA device.
 
-Like other PoC scripts, common options are supported:
+The service tool offers several common options:
 
-```
--h  --help           Show the embedded help page(s).
--q  --quiet          Reduce messages to a minimum.
--v  --verbose        Enable verbose messages.
--d  --debug          Enable debug messages.
-```
+    Common Option           Description
+    ----------------------------------------------------------------------
+    -h   --help             Print a short help
+    -q                      Quiet-mode (print nothing)
+    -v                      Print more messages
+    -d                      Debug mode (print everything)
+    -D                      Debug wrapper script
 
 
 ## 2 Compiling pre-configured Xilinx IP Cores (*.xco files) to Netlists
@@ -69,16 +70,16 @@ flow requires an extension IP core search directory for *XST* and *Translate*
 (`-sd` option).
 
 ```PowerShell
-cd <PoCRoot>/netlist
-..\poc.ps1 coregen PoC.xil.ChipScopeICON_1 --board=KC705
+cd <PoCRoot>
+.\poc.ps1 coregen PoC.xil.ChipScopeICON_1 --board=KC705
 ```
 
 The compilation can be automated in a for-each loop for all IP cores:
 
 ```PowerShell
-cd <PoCRoot>/netlist
+cd <PoCRoot>
 foreach ($i in 1..15)
-{	..\poc.ps1 coregen PoC.xil.ChipScopeICON_$_ --board=KC705
+{	.\poc.ps1 coregen PoC.xil.ChipScopeICON_$_ --board=KC705
 }
 ```
 

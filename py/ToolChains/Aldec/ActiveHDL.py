@@ -32,6 +32,9 @@
 # ==============================================================================
 #
 # entry point
+from subprocess import check_output
+
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -40,40 +43,35 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Aldec.ActiveHDL")
 
 
-from lib.Functions				import CallByRefParam
-from Base.Exceptions			import PlatformNotSupportedException
-from Base.ToolChain				import ToolChainException
-from Base.Logging					import LogEntry, Severity
-from Base.Simulator				import SimulationResult, PoCSimulationResultFilter
-from Base.Executable			import Executable
-from Base.Executable			import ExecutableArgument, PathArgument, StringArgument
-from Base.Executable			import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
-from Base.Configuration		import Configuration as BaseConfiguration, ConfigurationException
+from lib.Functions					import CallByRefParam
+from Base.Exceptions				import PlatformNotSupportedException
+from Base.Logging						import LogEntry, Severity
+from Base.Simulator					import SimulationResult, PoCSimulationResultFilter
+from Base.Executable				import Executable
+from Base.Executable				import ExecutableArgument, PathArgument, StringArgument
+from Base.Executable				import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
+from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
+from ToolChains.Aldec.Aldec	import AldecException
 
 
-class ActiveHDLException(ToolChainException):
+class ActiveHDLException(AldecException):
 	pass
 
 
 class Configuration(BaseConfiguration):
 	_vendor =			"Aldec"
 	_toolName =		"Aldec Active-HDL"
+	_section  =		"INSTALL.Aldec.ActiveHDL"
 	_template = {
 		"Windows": {
-			"INSTALL.Aldec": {
-				"InstallationDirectory":	"C:/Aldec"
-			},
-			"INSTALL.Aldec.ActiveHDL": {
-				"Version":								"0.0",
+			_section: {
+				"Version":								"10.3",
 				"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/Active-HDL",
 				"BinaryDirectory":				"${InstallationDirectory}/BIN"
 			}
 		}#,
 		# "Linux": {
-		# 	"INSTALL.Aldec": {
-		# 		"InstallationDirectory":	"/opt/QuestaSim"
-		# 	},
-		# 	"INSTALL.Aldec.ActiveHDL": {
+		# 	_section: {
 		# 		"Version":								"10.4c",
 		# 		"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/${Version}",
 		# 		"BinaryDirectory":				"${InstallationDirectory}/bin"
@@ -85,6 +83,32 @@ class Configuration(BaseConfiguration):
 		# return True if Xilinx is configured
 		return (len(self._host.PoCConfig['INSTALL.Aldec']) != 0)
 
+	def ConfigureForAll(self):
+		try:
+			if (not self._AskInstalled("Is Aldec Active-HDL installed on your system?")):
+				self.ClearSection()
+			else:
+				version = self._ConfigureVersion()
+				self._ConfigureInstallationDirectory()
+				binPath = self._ConfigureBinaryDirectory()
+				self.__CheckActiveHDLVersion(binPath, version)
+		except ConfigurationException:
+			self.ClearSection()
+			raise
+
+	def __CheckActiveHDLVersion(self, binPath, version):
+		if (self._host.Platform == "Windows"):
+			vsimPath = binPath / "vsim.exe"
+		else:
+			vsimPath = binPath / "vsim"
+
+		if not vsimPath.exists():
+			raise ConfigurationException("Executable '{0!s}' not found.".format(vsimPath)) from FileNotFoundError(
+				str(vsimPath))
+
+		output = check_output([str(vsimPath), "-version"], universal_newlines=True)
+		if str(version) not in output:
+			raise ConfigurationException("Active-HDL version mismatch. Expected version {0}.".format(version))
 
 class ActiveHDLMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):

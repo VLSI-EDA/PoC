@@ -42,9 +42,6 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
 
 
-from collections								import OrderedDict
-from pathlib										import Path
-
 from lib.Functions							import CallByRefParam
 from Base.Exceptions						import PlatformNotSupportedException
 from Base.Logging								import LogEntry, Severity
@@ -57,6 +54,7 @@ from ToolChains.Mentor.Mentor		import MentorException
 
 class QuestaException(MentorException):
 	pass
+
 
 class Configuration(BaseConfiguration):
 	_vendor =			"Mentor"

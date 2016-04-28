@@ -706,7 +706,7 @@ package body vectors is
 --		variable test		: STD_LOGIC_VECTOR(T_SLV_8'range);
 --		variable slm		: T_SLM(slvv'range, test'range);				-- BUG: iSIM 14.5 cascaded 'range accesses let iSIM break down 
 --		variable slm		: T_SLM(slvv'range, T_SLV_8'range);			-- BUG: iSIM 14.5 allocates 9 bits in dimmension 2
-		variable slm		: T_SLM(slvv'range, 7 downto 0);
+		variable slm		: T_SLM(slvv'range, 7 downto 0);					-- WORKAROUND: use constant range
 	begin
 --		report "slvv:    slvv.length=" & INTEGER'image(slvv'length) &			"  slm.dim0.length=" & INTEGER'image(slm'length(1)) & "  slm.dim1.length=" & INTEGER'image(slm'length(2)) severity NOTE;
 --		report "T_SLV_8:     .length=" & INTEGER'image(T_SLV_8'length) &	"  .high=" & INTEGER'image(T_SLV_8'high) &	"  .low=" & INTEGER'image(T_SLV_8'low)	severity NOTE;
