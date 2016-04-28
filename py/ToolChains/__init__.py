@@ -38,11 +38,14 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
-from .Aldec.ActiveHDL		import Configuration as ActiveHDL_Configuration
-from .Altera.Quartus	import Configuration as Quartus_Configuration
+#from .Aldec.ActiveHDL		import Configuration as ActiveHDL_Configuration
+from .Altera.Altera			import Configuration as Altera_Configuration
+from .Altera.Quartus		import Configuration as Quartus_Configuration
+from .Altera.ModelSim		import Configuration as AlteraModelSim_Configuration
 from .GHDL							import Configuration as GHDL_Configuration
 from .GTKWave						import Configuration as GTKW_Configuration
-from .Lattice.Lattice		import Configuration as Diamond_Configuration
+#from .Lattice.Lattice		import Configuration as Diamond_Configuration
+from .Mentor.Mentor			import Configuration as Mentor_Configuration
 from .Mentor.QuestaSim	import Configuration as Questa_Configuration
 from .PoC								import Configuration as PoC_Configuration
 from .Xilinx.Xilinx			import Configuration as Xilinx_Configuration
@@ -54,10 +57,13 @@ Configurations = [
 	Xilinx_Configuration,
 	ISE_Configuration,
 	Vivado_Configuration,
-	# Quartus_Configuration,
-	# Questa_Configuration,
+	Altera_Configuration,
+	Quartus_Configuration,
+	AlteraModelSim_Configuration,
+	Mentor_Configuration,
+	Questa_Configuration,
 	# Diamond_Configuration,
 	# ActiveHDL_Configuration,
-	GHDL_Configuration
-	# GTKW_Configuration
+	GHDL_Configuration,
+	GTKW_Configuration
 ]

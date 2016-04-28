@@ -33,8 +33,6 @@
 # ==============================================================================
 #
 # entry point
-from subprocess import check_output
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -43,9 +41,9 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GHDL")
 
 
-from collections						import OrderedDict
 from pathlib								import Path
 from re											import compile as RegExpCompile
+from subprocess 						import check_output
 
 from lib.Functions					import CallByRefParam
 from Base.Exceptions				import PlatformNotSupportedException
@@ -115,10 +113,10 @@ class Configuration(BaseConfiguration):
 		return super()._GetDefaultInstallationDirectory()
 
 	def __WriteGHDLSection(self, binPath):
-		if (self._host.Platform == "Linux"):
-			ghdlPath = binPath / "ghdl"
-		else:
+		if (self._host.Platform == "Windows"):
 			ghdlPath = binPath / "ghdl.exe"
+		else:
+			ghdlPath = binPath / "ghdl"
 
 		if not ghdlPath.exists():
 			raise ConfigurationException("Executable '{0!s}' not found.".format(ghdlPath)) from FileNotFoundError(

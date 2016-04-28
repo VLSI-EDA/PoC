@@ -99,10 +99,10 @@ class Configuration(BaseConfiguration):
 
 	def __CheckISEVersion(self, binPath):
 		# check for ISE 14.7
-		if (self._host.Platform == "Linux"):
-			fusePath = binPath / "fuse"
-		else:
+		if (self._host.Platform == "Windows"):
 			fusePath = binPath / "fuse.exe"
+		else:
+			fusePath = binPath / "fuse"
 
 		if not fusePath.exists():
 			raise ConfigurationException("Executable '{0!s}' not found.".format(fusePath)) from FileNotFoundError(str(fusePath))

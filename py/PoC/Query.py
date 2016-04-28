@@ -83,7 +83,7 @@ class Query:
 			raise NotConfiguredException("ERROR: ModelSim is not configured on this system.")
 
 	def _GetXilinxISESettingsFile(self):
-		iseInstallationDirectoryPath = self._GetXilinxISEInstallationDirectory()
+		iseInstallationDirectoryPath = Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'])
 		if (self.Platform == "Windows"):
 			return iseInstallationDirectoryPath / "settings64.bat"
 		elif (self.Platform == "Linux"):
@@ -92,7 +92,7 @@ class Query:
 			raise PlatformNotSupportedException(self.Platform)
 
 	def _GetXilinxVivadoSettingsFile(self):
-		iseInstallationDirectoryPath = self._GetXilinxVivadoInstallationDirectory()
+		iseInstallationDirectoryPath = Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory'])
 		if (self.Platform == "Windows"):
 			return iseInstallationDirectoryPath / "settings64.bat"
 		elif (self.Platform == "Linux"):

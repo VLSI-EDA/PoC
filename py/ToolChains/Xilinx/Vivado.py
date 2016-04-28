@@ -101,10 +101,10 @@ class Configuration(BaseConfiguration):
 			raise
 
 	def __CheckVivadoVersion(self, binPath, version):
-		if (self._host.Platform == "Linux"):
-			vivadoPath = binPath / "vivado"
-		else:
+		if (self._host.Platform == "Windows"):
 			vivadoPath = binPath / "vivado.bat"
+		else:
+			vivadoPath = binPath / "vivado"
 
 		if not vivadoPath.exists():
 			raise ConfigurationException("Executable '{0!s}' not found.".format(vivadoPath)) from FileNotFoundError(str(vivadoPath))

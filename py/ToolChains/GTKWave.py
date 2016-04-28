@@ -40,8 +40,9 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GTKWave")
 
 
-from collections						import OrderedDict
 from pathlib								import Path
+from re											import compile as RegExpCompile
+from subprocess 						import check_output
 
 from Base.Exceptions				import PlatformNotSupportedException
 from Base.Logging						import LogEntry, Severity
@@ -87,73 +88,48 @@ class Configuration(BaseConfiguration):
 		return (len(self._host.PoCConfig['INSTALL.GHDL']) != 0)
 
 
-	# GTKWave unter Windows
-	"""
-	PS G:\git\PoC> C:\Tools\GTKwave\bin\gtkwave.exe --version
-	GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
+	def ConfigureForAll(self):
+		try:
+			if (not self._AskInstalled("Is GTKWave installed on your system?")):
+				self.ClearSection()
+			else:
+				self._ConfigureInstallationDirectory()
+				binPath = self._ConfigureBinaryDirectory()
+				self.__WriteGtkWaveSection(binPath)
+		except ConfigurationException:
+			self.ClearSection()
+			raise
 
-	This is free software; see the source for copying conditions.  There is NO
-	warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-	"""
+	def _GetDefaultInstallationDirectory(self):
+		if (self._host.Platform in ["Linux", "Darwin"]):
+			name = check_output(["which", "gtkwave"], universal_newlines=True)
+			if name != "": return str(Path(name[:-1]).parent)
 
+		return super()._GetDefaultInstallationDirectory()
 
-	# def manualConfigureForWindows(self) :
-	# 	# Ask for installed GTKWave
-	# 	isGTKW = input('Is GTKWave installed on your system? [Y/n/p]: ')
-	# 	isGTKW = isGTKW if isGTKW != "" else "Y"
-	# 	if (isGTKW in ['p', 'P']) :
-	# 		pass
-	# 	elif (isGTKW in ['n', 'N']) :
-	# 		self.pocConfig['GTKWave'] = OrderedDict()
-	# 	elif (isGTKW in ['y', 'Y']) :
-	# 		gtkwDirectory = input('GTKWave installation directory [C:\Program Files (x86)\GTKWave]: ')
-	# 		gtkwVersion = input('GTKWave version number [3.3.61]: ')
-	# 		print()
-	#
-	# 		gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "C:\Program Files (x86)\GTKWave"
-	# 		gtkwVersion = gtkwVersion if gtkwVersion != "" else "3.3.61"
-	#
-	# 		gtkwDirectoryPath = Path(gtkwDirectory)
-	# 		gtkwExecutablePath = gtkwDirectoryPath / "bin" / "gtkwave.exe"
-	#
-	# 		if not gtkwDirectoryPath.exists() :  raise ConfigurationException(
-	# 			"GTKWave installation directory '%s' does not exist." % gtkwDirectory)
-	# 		if not gtkwExecutablePath.exists() :  raise ConfigurationException("GTKWave is not installed.")
-	#
-	# 		self.pocConfig['GTKWave']['Version'] = gtkwVersion
-	# 		self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
-	# 		self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}/bin'
-	# 	else :
-	# 		raise ConfigurationException("unknown option")
-	#
-	# def manualConfigureForLinux(self) :
-	# 	# Ask for installed GTKWave
-	# 	isGTKW = input('Is GTKWave installed on your system? [Y/n/p]: ')
-	# 	isGTKW = isGTKW if isGTKW != "" else "Y"
-	# 	if (isGTKW in ['p', 'P']) :
-	# 		pass
-	# 	elif (isGTKW in ['n', 'N']) :
-	# 		self.pocConfig['GTKWave'] = OrderedDict()
-	# 	elif (isGTKW in ['y', 'Y']) :
-	# 		gtkwDirectory = input('GTKWave installation directory [/usr/bin]: ')
-	# 		gtkwVersion = input('GTKWave version number [3.3.61]: ')
-	# 		print()
-	#
-	# 		gtkwDirectory = gtkwDirectory if gtkwDirectory != "" else "/usr/bin"
-	# 		gtkwVersion = gtkwVersion if gtkwVersion != "" else "3.3.61"
-	#
-	# 		gtkwDirectoryPath = Path(gtkwDirectory)
-	# 		gtkwExecutablePath = gtkwDirectoryPath / "gtkwave"
-	#
-	# 		if not gtkwDirectoryPath.exists() :  raise ConfigurationException(
-	# 			"GTKWave installation directory '%s' does not exist." % gtkwDirectory)
-	# 		if not gtkwExecutablePath.exists() :  raise ConfigurationException("GTKWave is not installed.")
-	#
-	# 		self.pocConfig['GTKWave']['Version'] = gtkwVersion
-	# 		self.pocConfig['GTKWave']['InstallationDirectory'] = gtkwDirectoryPath.as_posix()
-	# 		self.pocConfig['GTKWave']['BinaryDirectory'] = '${InstallationDirectory}'
-	# 	else :
-	# 		raise ConfigurationException("unknown option")
+	def __WriteGtkWaveSection(self, binPath):
+		if (self._host.Platform == "Windows"):
+			gtkwPath = binPath / "gtkwave.exe"
+		else:
+			gtkwPath = binPath / "gtkwave"
+
+		if not gtkwPath.exists():
+			raise ConfigurationException("Executable '{0!s}' not found.".format(gtkwPath)) from FileNotFoundError(
+				str(gtkwPath))
+
+		# get version and backend
+		output = check_output([str(gtkwPath), "--version"], universal_newlines=True)
+		version = None
+		versionRegExpStr = r"^GTKWave Analyzer v(.+?) "
+		versionRegExp = RegExpCompile(versionRegExpStr)
+		for line in output.split('\n'):
+			if version is None:
+				match = versionRegExp.match(line)
+				if match is not None:
+					version = match.group(1)
+
+		self._host.PoCConfig[self._section]['Version'] = version
+
 
 
 class GTKWave(Executable):

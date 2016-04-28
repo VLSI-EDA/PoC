@@ -410,12 +410,11 @@ class PoC(ILogable, ArgParseMixin):
 		if addSections:
 			self._LogWarning("Adding new sections to configuration...")
 			for sectionName in addSections:
+				self._LogWarning("  Adding [{0}]".format(sectionName))
 				self.__pocConfig[sectionName] = OrderedDict()
 
 		if delSections:
-			self._LogWarning("Removing old sections from configuration...")
 			for sectionName in delSections:
-				self._LogWarning("  Removing [{0}]".format(sectionName))
 				self.__pocConfig.remove_section(sectionName)
 
 
