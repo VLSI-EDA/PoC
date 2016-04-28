@@ -155,7 +155,7 @@ class VHDLVersion(Enum):
 			elif (value == "1993"):	return cls.VHDL93
 			elif (value == "2002"):	return cls.VHDL02
 			elif (value == "2008"):	return cls.VHDL08
-		raise ValueError("'{0}' is not a member of {1}.".format(str(value), cls.__name__))
+		raise ValueError("'{0!s}' is not a member of {1}.".format(value, cls.__name__))
 
 	def __lt__(self, other):		return self.value < other.value
 	def __le__(self, other):		return self.value <= other.value
@@ -524,11 +524,11 @@ class File:
 		return self._file
 	
 	def Open(self):
-		if (not self._file.exists()):		raise ConfigurationException("File '{0}' not found.".format(str(self._file))) from FileNotFoundError(str(self._file))
+		if (not self._file.exists()):		raise ConfigurationException("File '{0!s}' not found.".format(self._file)) from FileNotFoundError(str(self._file))
 		try:
 			self._handle = self._file.open('r')
 		except Exception as ex:
-			raise CommonException("Error while opening file '{0}'.".format(str(self._file))) from ex
+			raise CommonException("Error while opening file '{0!s}'.".format(self._file)) from ex
 	
 	def ReadFile(self):
 		if self._handle is None:
@@ -536,7 +536,7 @@ class File:
 		try:
 			self._content = self._handle.read()
 		except Exception as ex:
-			raise CommonException("Error while reading file '{0}'.".format(str(self._file))) from ex
+			raise CommonException("Error while reading file '{0!s}'.".format(self._file)) from ex
 	
 	# interface method for FilesParserMixIn
 	def _ReadContent(self):

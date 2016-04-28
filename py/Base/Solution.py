@@ -79,8 +79,8 @@ class CommandLineProgram(object):
 		self.directories['Working'] =			Path.cwd()
 		self.directories['PoCRoot'] =			Path(environ.get('PoCRootDirectory'))
 		self.directories['ScriptRoot'] =	Path(environ.get('PoCRootDirectory'))
-		self.files['PoCPrivateConfig'] =	self.directories["PoCRoot"] / self.__scriptDirectoryName / self.__pocPrivateConfigFileName
-		self.files['PoCPublicConfig'] =		self.directories["PoCRoot"] / self.__scriptDirectoryName / self.__pocPublicConfigFileName
+		self.files['PoCPrivateConfig'] =	self.RootDirectory / self.__scriptDirectoryName / self.__pocPrivateConfigFileName
+		self.files['PoCPublicConfig'] =		self.RootDirectory / self.__scriptDirectoryName / self.__pocPublicConfigFileName
 		
 		self.readPoCConfiguration()
 

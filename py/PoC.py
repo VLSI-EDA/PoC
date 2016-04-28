@@ -4,6 +4,7 @@
 # 
 # ==============================================================================
 # Authors:         			Patrick Lehmann
+#												Martin Zabel
 # 
 # Python Main Module:		Entry point to the testbench tools in PoC repository.
 # 
@@ -33,7 +34,7 @@
 # ==============================================================================
 
 from argparse									import RawDescriptionHelpFormatter
-from collections import OrderedDict
+from collections							import OrderedDict
 from configparser							import Error as ConfigParser_Error, DuplicateOptionError
 from os												import environ
 from pathlib									import Path
@@ -42,8 +43,9 @@ from sys											import argv as sys_argv
 from textwrap									import dedent
 
 from lib.Functions						import Init, Exit
-from lib.ArgParseAttributes		import ArgParseMixin, CommandAttribute, CommonSwitchArgumentAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute, \
-	CommonArgumentAttribute
+from lib.ArgParseAttributes		import ArgParseMixin
+from lib.ArgParseAttributes		import CommonArgumentAttribute, CommonSwitchArgumentAttribute
+from lib.ArgParseAttributes		import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
 from lib.ConfigParser					import ExtendedConfigParser
 from lib.Parser								import ParserException
 from Base.Exceptions					import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
@@ -57,16 +59,18 @@ from PoC.Config								import Board
 from PoC.Entity								import Root, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
 from PoC.Query								import Query
 from ToolChains								import Configurations
+# Simulators
 from Simulator.ActiveHDLSimulator		import Simulator as ActiveHDLSimulator
 from Simulator.CocotbSimulator 			import Simulator as CocotbSimulator
 from Simulator.GHDLSimulator				import Simulator as GHDLSimulator
 from Simulator.ISESimulator					import Simulator as ISESimulator
 from Simulator.QuestaSimulator			import Simulator as QuestaSimulator
 from Simulator.VivadoSimulator			import Simulator as VivadoSimulator
-from Compiler.QuartusCompiler	import Compiler as MapCompiler
-from Compiler.LSECompiler			import Compiler as LSECompiler
-from Compiler.XCOCompiler			import Compiler as XCOCompiler
-from Compiler.XSTCompiler			import Compiler as XSTCompiler
+# Compilers
+from Compiler.QuartusCompiler				import Compiler as MapCompiler
+from Compiler.LSECompiler						import Compiler as LSECompiler
+from Compiler.XCOCompiler						import Compiler as XCOCompiler
+from Compiler.XSTCompiler						import Compiler as XSTCompiler
 
 
 # def HandleVerbosityOptions(func):
@@ -79,14 +83,14 @@ class PoC(ILogable, ArgParseMixin):
 	HeadLine =								"The PoC-Library - Service Tool"
 
 	# configure hard coded variables here
-	__CONFIGFILE_DIRECTORY =		"py"
-	__CONFIGFILE_PRIVATE =			"config.private.ini"
-	__CONFIGFILE_DEFAULTS =			"config.defaults.ini"
-	__CONFIGFILE_BOARDS =				"config.boards.ini"
-	__CONFIGFILE_STRUCTURE =		"config.structure.ini"
-	__CONFIGFILE_IPCORES =			"config.entity.ini"
+	__CONFIGFILE_DIRECTORY =	"py"
+	__CONFIGFILE_PRIVATE =		"config.private.ini"
+	__CONFIGFILE_DEFAULTS =		"config.defaults.ini"
+	__CONFIGFILE_BOARDS =			"config.boards.ini"
+	__CONFIGFILE_STRUCTURE =	"config.structure.ini"
+	__CONFIGFILE_IPCORES =		"config.entity.ini"
 
-	__PLATFORM =								platform_system()  # load platform information (Windows, Linux, ...)
+	__PLATFORM =							platform_system()  # load platform information (Windows, Linux, Darwin, ...)
 
 	# private fields
 
@@ -106,14 +110,14 @@ class PoC(ILogable, ArgParseMixin):
 
 		# Call the constructor of the ArgParseMixin
 		# --------------------------------------------------------------------------
-		description = dedent('''\
+		description = dedent("""\
 			This is the PoC-Library Service Tool.
-			''')
+			""")
 		epilog = "Epidingsbums"
 
 		class HelpFormatter(RawDescriptionHelpFormatter):
 			def __init__(self, *args, **kwargs):
-				kwargs['max_help_position'] = 34
+				kwargs['max_help_position'] = 25
 				super().__init__(*args, **kwargs)
 
 		ArgParseMixin.__init__(self, description=description, epilog=epilog, formatter_class=HelpFormatter, add_help=False)
@@ -128,15 +132,14 @@ class PoC(ILogable, ArgParseMixin):
 		self.__SimulationDefaultVHDLVersion = VHDLVersion.VHDL08
 		self.__SimulationDefaultBoard =				None
 
-		self.Directories['Working'] =			Path.cwd()
-		self.Directories['PoCRoot'] =			Path(environ.get('PoCRootDirectory'))
-		# self.Directories['ScriptRoot'] =	Path(environ.get('PoCRootDirectory'))
+		self.__workingDirectory =	Path.cwd()
+		self.__rootDirectory =		Path(environ.get('PoCRootDirectory'))
 
-		self._pocPrivateConfigFile =		self.Directories["PoCRoot"] / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_PRIVATE
-		self._pocDefaultsConfigFile =		self.Directories["PoCRoot"] / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_DEFAULTS
-		self._pocBoardConfigFile =			self.Directories["PoCRoot"] / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_BOARDS
-		self._pocStructureConfigFile =	self.Directories["PoCRoot"] / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_STRUCTURE
-		self._pocEntityConfigFile =			self.Directories["PoCRoot"] / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_IPCORES
+		self._pocPrivateConfigFile =		self.RootDirectory / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_PRIVATE
+		self._pocDefaultsConfigFile =		self.RootDirectory / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_DEFAULTS
+		self._pocBoardConfigFile =			self.RootDirectory / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_BOARDS
+		self._pocStructureConfigFile =	self.RootDirectory / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_STRUCTURE
+		self._pocEntityConfigFile =			self.RootDirectory / self.__CONFIGFILE_DIRECTORY / self.__CONFIGFILE_IPCORES
 
 	# class properties
 	# ============================================================================
@@ -144,20 +147,24 @@ class PoC(ILogable, ArgParseMixin):
 	def Platform(self):						return self.__PLATFORM
 	@property
 	def DryRun(self):							return self.__dryRun
+
+	@property
+	def WorkingDirectory(self):		return self.__workingDirectory
+	@property
+	def RootDirectory(self):			return self.__rootDirectory
+
 	@property
 	def Directories(self):				return self.__directories
 	@property
 	def PoCPrivateConfig(self):		return self._pocPrivateConfigFile
 	@property
-	def PoCPublicConfig(self): 		return self._pocStructureConfigFile
+	def PoCDefaultsConfig(self): 	return self._pocDefaultsConfigFile
+	@property
+	def PoCStructureConfig(self): return self._pocStructureConfigFile
 	@property
 	def PoCEntityConfig(self): 		return self._pocEntityConfigFile
 	@property
 	def PoCBoardConfig(self): 		return self._pocBoardConfigFile
-	@property
-	def PoCTBConfig(self): 				return self._pocDefaultsConfigFile
-	@property
-	def PoCNLConfig(self): 				return self._pocNLConfigFile
 	@property
 	def PoCConfig(self):					return self.__pocConfig
 	@property
@@ -217,12 +224,12 @@ class PoC(ILogable, ArgParseMixin):
 		# print("=" * 80)
 
 		# check PoC installation directory
-		if (self.Directories["PoCRoot"] != Path(self.PoCConfig['INSTALL.PoC']['InstallationDirectory'])):	raise NotConfiguredException("There is a mismatch between PoCRoot and PoC installation directory.")
+		if (self.RootDirectory != Path(self.PoCConfig['INSTALL.PoC']['InstallationDirectory'])):	raise NotConfiguredException("There is a mismatch between PoCRoot and PoC installation directory.")
 
 		self.__SimulationDefaultBoard =		Board(self)
 
 	def __WritePoCConfiguration(self):
-		for sectionName in [sectionName for sectionName in self.__pocConfig if not sectionName.startswith("INSTALL")]:
+		for sectionName in [sectionName for sectionName in self.__pocConfig if not (sectionName.startswith("INSTALL") or sectionName.startswith("SOLUTION"))]:
 			self.__pocConfig.remove_section(sectionName)
 
 		# Writing configuration to disc
@@ -238,21 +245,21 @@ class PoC(ILogable, ArgParseMixin):
 		self.__ReadPoCConfiguration()
 
 		# parsing values into class fields
-		self.Directories["PoCSource"] =			self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['HDLSourceFiles']
-		self.Directories["PoCTestbench"] =	self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['TestbenchFiles']
-		self.Directories["PoCTemp"] =				self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
+		self.Directories["PoCSource"] =			self.RootDirectory / self.PoCConfig['CONFIG.DirectoryNames']['HDLSourceFiles']
+		self.Directories["PoCTestbench"] =	self.RootDirectory / self.PoCConfig['CONFIG.DirectoryNames']['TestbenchFiles']
+		self.Directories["PoCTemp"] =				self.RootDirectory / self.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
 
 	def __PrepareForSynthesis(self):
 		self._LogNormal("Initializing PoC-Library Service Tool for synthesis")
 		self.__ReadPoCConfiguration()
 
 		# parsing values into class fields
-		self.Directories["PoCSource"] =			self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['HDLSourceFiles']
-		self.Directories["PoCNetList"] =		self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['NetlistFiles']
-		self.Directories["PoCTemp"] =				self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
+		self.Directories["PoCSource"] =			self.RootDirectory / self.PoCConfig['CONFIG.DirectoryNames']['HDLSourceFiles']
+		self.Directories["PoCNetList"] =		self.RootDirectory / self.PoCConfig['CONFIG.DirectoryNames']['NetlistFiles']
+		self.Directories["PoCTemp"] =				self.RootDirectory / self.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
 
-		# self.Directories["XSTFiles"] =			self.Directories["PoCRoot"] / self.PoCConfig['PoC.DirectoryNames']['ISESynthesisFiles']
-		# #self.Directories["QuartusFiles"] =	self.Directories["PoCRoot"] / self.PoCConfig['PoC.DirectoryNames']['QuartusSynthesisFiles']
+		# self.Directories["XSTFiles"] =			self.RootDirectory / self.PoCConfig['PoC.DirectoryNames']['ISESynthesisFiles']
+		# #self.Directories["QuartusFiles"] =	self.RootDirectory / self.PoCConfig['PoC.DirectoryNames']['QuartusSynthesisFiles']
 
 	# ============================================================================
 	# Common commands
@@ -322,6 +329,9 @@ class PoC(ILogable, ArgParseMixin):
 	# @HandleVerbosityOptions
 	def HandleManualConfiguration(self, _):
 		self.PrintHeadline()
+
+		if (self.Platform not in ["Darwin", "Linux", "Windows"]):		raise PlatformNotSupportedException(self.Platform)
+
 		try:
 			self.__ReadPoCConfiguration()
 			self.__UpdateConfiguration()
@@ -336,23 +346,47 @@ class PoC(ILogable, ArgParseMixin):
 		#print("Upper case means default value")
 		print()
 
-		if (self.Platform == "Windows"):							self._manualConfigurationForWindows()
-		elif (self.Platform in ["Linux", "Darwin"]):	self._manualConfigurationForLinux()
-		else:																					raise PlatformNotSupportedException(self.Platform)
+		# configure each vendor or tool of a tool chain
+		for config in Configurations:
+			configurator = config(self)
+
+			# skip configuration with unsupported platforms
+			if (not configurator.IsSupportedPlatform()):	continue
+			# skip configuration if dependency is not fulfilled
+			if (not configurator.CheckDependency):				continue
+
+			self._LogNormal("{CYAN}Configuring {0!s}{NOCOLOR}".format(configurator, **Init.Foreground))
+			nxt = False
+			while (nxt is False):
+				try:
+					if   (self.Platform == "Darwin"):		configurator.ConfigureForDarwin()
+					elif (self.Platform == "Linux"):		configurator.ConfigureForLinux()
+					elif (self.Platform == "Windows"):	configurator.ConfigureForWindows()
+
+					nxt = True
+				except SkipConfigurationException:
+					break
+				except ExceptionBase as ex:
+					print("  {RED}FAULT:{NOCOLOR} {0}".format(ex.message, **Init.Foreground))
 
 		# write configuration
 		self.__WritePoCConfiguration()
 		# re-read configuration
 		self.__ReadPoCConfiguration()
 
+		# QUESTION: move to QuestaSim package? What about ModelSim Altera Edition? add a hook into both, pointing to a Mentor MixIn class for writing the modelsim.ini?
 		# create non-vendor-specific modelsim.ini
 		tempDirectory = self.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
 		precompiledDirectory = self.PoCConfig['CONFIG.DirectoryNames']['PrecompiledFiles']
 		vSimSimulatorFiles = self.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
-		modelsimIniPath = self.Directories['PoCRoot'] / tempDirectory / precompiledDirectory / vSimSimulatorFiles / "modelsim.ini"
+		modelsimIniPath = self.RootDirectory / tempDirectory / precompiledDirectory / vSimSimulatorFiles / "modelsim.ini"
 		if not modelsimIniPath.exists():
 			with modelsimIniPath.open('w') as fileHandle:
-				fileHandle.write("[Library]\nothers = $MODEL_TECH/../modelsim.ini")
+				fileContent = dedent("""\
+					[Library]
+					others = $MODEL_TECH/../modelsim.ini
+					""")
+				fileHandle.write(fileContent)
 
 	def _InitializeConfiguration(self):
 		# create parser instance
@@ -361,47 +395,27 @@ class PoC(ILogable, ArgParseMixin):
 		# self.__pocConfig.optionxform = str
 
 		for config in Configurations:
-			if ("ALL" in config._privateConfiguration):
-				for sectionName in config._privateConfiguration['ALL']:
-					self.__pocConfig[sectionName] = OrderedDict()
-			if (self.Platform in config._privateConfiguration):
-				for sectionName in config._privateConfiguration[self.Platform]:
-					self.__pocConfig[sectionName] = OrderedDict()
+			for sectionName in config.GetSections(self.Platform):
+				self.__pocConfig[sectionName] = OrderedDict()
 
 	def __UpdateConfiguration(self):
-		pass
+		pocSections =			set([sectionName for sectionName in self.__pocConfig])
+		configSections =	set([sectionName for config in Configurations for sectionName in config.GetSections(self.Platform)])
 
-	def _manualConfigurationForWindows(self):
-		for config in Configurations:
-			configurator = config(self)
-			self._LogNormal("{CYAN}Configuring {0!s}{NOCOLOR}".format(configurator.ToolName, **Init.Foreground))
+		addSections = configSections.difference(pocSections)
+		delSections = pocSections.difference(configSections)
 
-			nxt = False
-			while (nxt is False):
-				try:
-					configurator.ConfigureForWindows()
-					nxt = True
-				except SkipConfigurationException:
-					break
-				except ExceptionBase as ex:
-					print("  {RED}FAULT:{NOCOLOR} {0}".format(ex.message, **Init.Foreground))
-			# end while
+		if addSections:
+			self._LogWarning("Adding new sections to configuration...")
+			for sectionName in addSections:
+				self.__pocConfig[sectionName] = OrderedDict()
 
-	def _manualConfigurationForLinux(self):
-		for config in Configurations:
-			configurator = config(self)
-			self._LogNormal("Configure {0}".format(configurator.ToolName))
+		if delSections:
+			self._LogWarning("Removing old sections from configuration...")
+			for sectionName in delSections:
+				self._LogWarning("  Removing [{0}]".format(sectionName))
+				self.__pocConfig.remove_section(sectionName)
 
-			nxt = False
-			while (nxt is False):
-				try:
-					configurator.ConfigureForLinux()
-					nxt = True
-				except SkipConfigurationException:
-					break
-				except ExceptionBase as ex:
-					print("FAULT: {0}".format(ex.message))
-			# end while
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "query" command
@@ -430,7 +444,7 @@ class PoC(ILogable, ArgParseMixin):
 			self.Directories["XilinxPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory']) / "ISE/vhdl/src"
 		elif (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) != 0):
 			self.Directories["XilinxPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory']) / "data/vhdl/src"
-		
+
 	def _ExtractBoard(self, BoardName, DeviceName, force=False):
 		if (BoardName is not None):			return Board(self, BoardName)
 		elif (DeviceName is not None):	return Board(self, "Custom", DeviceName)
@@ -480,7 +494,7 @@ class PoC(ILogable, ArgParseMixin):
 				print("  Name: {0}".format(self.PoCConfig[sectionName]['Name']))
 				print("  Path: {0}".format(self.PoCConfig[sectionName]['Path']))
 
-				solutionRootPath = self.Directories["PoCRoot"] / self.PoCConfig[sectionName]['Path']
+				solutionRootPath = self.RootDirectory / self.PoCConfig[sectionName]['Path']
 				solutionConfigFile = solutionRootPath / ".PoC" / "solution.config.ini"
 				solutionDefaultsFile = solutionRootPath / ".PoC" / "solution.defaults.ini"
 				print("  sln files: {0!s}  {1!s}".format(solutionConfigFile, solutionDefaultsFile))
@@ -535,7 +549,7 @@ class PoC(ILogable, ArgParseMixin):
 
 		Exit.exit()
 	
-	
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "asim" command
 	# ----------------------------------------------------------------------------
@@ -596,7 +610,7 @@ class PoC(ILogable, ArgParseMixin):
 
 		Exit.exit()
 	
-	
+
 # ----------------------------------------------------------------------------
 	# create the sub-parser for the "ghdl" command
 	# ----------------------------------------------------------------------------
@@ -693,8 +707,8 @@ class PoC(ILogable, ArgParseMixin):
 		simulator.RunAll(fqnList, board=board)		#, vhdlGenerics=None)
 
 		Exit.exit()
-		
-		
+
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "vsim" command
 	# ----------------------------------------------------------------------------
@@ -750,7 +764,7 @@ class PoC(ILogable, ArgParseMixin):
 
 		Exit.exit()
 	
-	
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "xsim" command
 	# ----------------------------------------------------------------------------
@@ -903,7 +917,7 @@ class PoC(ILogable, ArgParseMixin):
 		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
 		# prepare some paths
-		self.Directories["PoCNetlist"] =			self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['NetlistFiles']
+		self.Directories["PoCNetlist"] =			self.RootDirectory / self.PoCConfig['CONFIG.DirectoryNames']['NetlistFiles']
 		self.Directories["CoreGenTemp"] =			self.Directories["PoCTemp"] / self.PoCConfig['CONFIG.DirectoryNames']['ISECoreGeneratorFiles']
 		self.Directories["ISEInstallation"] = Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'])
 		self.Directories["ISEBinary"] =				Path(self.PoCConfig['INSTALL.Xilinx.ISE']['BinaryDirectory'])
@@ -937,7 +951,7 @@ class PoC(ILogable, ArgParseMixin):
 		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
 		# prepare some paths
-		self.Directories["XSTFiles"] =				self.Directories["PoCRoot"] / self.PoCConfig['CONFIG.DirectoryNames']['ISESynthesisFiles']
+		self.Directories["XSTFiles"] =				self.RootDirectory / self.PoCConfig['CONFIG.DirectoryNames']['ISESynthesisFiles']
 		self.Directories["XSTTemp"] =					self.Directories["PoCTemp"] / self.PoCConfig['CONFIG.DirectoryNames']['ISESynthesisFiles']
 		self.Directories["ISEInstallation"] = Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'])
 		self.Directories["ISEBinary"] =				Path(self.PoCConfig['INSTALL.Xilinx.ISE']['BinaryDirectory'])

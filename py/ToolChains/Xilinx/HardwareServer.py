@@ -49,9 +49,8 @@ from Base.Configuration import Configuration as BaseConfiguration, Configuration
 
 class Configuration(BaseConfiguration):
 	__vendor =		"Xilinx"
-	__shortName =	"HardwareServer"
-	__LongName =	"Xilinx HardwareServer"
-	__privateConfiguration = {
+	__toolName =	"Xilinx HardwareServer"
+	__template = {
 		"Windows": {
 			"INSTALL.Xilinx.HardwareServer": {
 				"Version":								"2015.4",
@@ -72,10 +71,7 @@ class Configuration(BaseConfiguration):
 		super().__init__()
 
 	def IsSupportedPlatform(self, Platform):
-		return (Platform in self.__privateConfiguration)
-
-	def GetSections(self, Platform):
-		pass
+		return (Platform in self.__template)
 
 	def manualConfigureForWindows(self) :
 		# Ask for installed Xilinx HardwareServer

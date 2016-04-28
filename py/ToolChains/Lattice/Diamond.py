@@ -54,9 +54,31 @@ from ToolChains.Lattice.Lattice		import LatticeException
 class DiamondException(LatticeException):
 	pass
 
+
 class Configuration(BaseConfiguration):
-	def __init__(self, host):
-		super().__init__(host)
+	_vendor =		"Lattice"
+	_toolName =	"Lattice Diamond"
+	_section =	"INSTALL.Lattice.Diamond"
+	_template = {
+		"Windows": {
+			_section: {
+				"Version":								"3.7",
+				"InstallationDirectory":	"${INSTALL.Lattice.Diamond:InstallationDirectory}/active-hdl",
+				"BinaryDirectory":				"${InstallationDirectory}/bin/nt64"
+			}
+		# },
+		# "Linux": {
+		# 	_section: {
+		# 		"Version":								"15.0",
+		# 		"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/${Version}/diamond",
+		# 		"BinaryDirectory":				"${InstallationDirectory}/fix_me"
+		# 	}
+		}
+	}
+
+	def CheckDependency(self):
+		# return True if Lattice is configured
+		return (len(self._host.PoCConfig['INSTALL.Lattice']) != 0)
 
 
 class DiamondMixIn:

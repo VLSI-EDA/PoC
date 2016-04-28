@@ -4,6 +4,7 @@
 #
 # ==============================================================================
 # Authors:					Patrick Lehmann
+#										Martin Zabel
 #
 # Python Class:			TODO:
 #
@@ -30,9 +31,6 @@
 # ==============================================================================
 #
 # entry point
-from collections import OrderedDict
-from pathlib import Path
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -40,6 +38,9 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Base.Configuration")
 
+
+from collections					import OrderedDict
+from pathlib							import Path
 
 from Base.Exceptions			import ExceptionBase
 
@@ -50,35 +51,35 @@ class ConfigurationException(ExceptionBase):
 class SkipConfigurationException(ExceptionBase):
 	pass
 
-class RegisterSubClassesMeta(type):
-	def __new__(mcs, name, bases, members):
-		#print("RegisterSubClassesMeta.new: {0} - ".format(name, members))
-		#print()
-		inst = super().__new__(mcs, name, bases, members)
-		if (len(bases) > 0):
-			baseClass = bases[0]
-			print(baseClass)
-			if issubclass(baseClass, ISubClassRegistration):
-				#print("interface match")
-				baseClass.RegisterSubClass(inst)
-		return inst
-
-class ISubClassRegistration(metaclass=RegisterSubClassesMeta):
-	_subclasses = []
-
-	@classmethod
-	def RegisterSubClass(cls, subcls):
-		print("Register: {0}".format(str(subcls)))
-		cls._subclasses.append(subcls)
-
-	@property
-	def SubClasses(self):
-		return self._subclasses
+# class RegisterSubClassesMeta(type):
+# 	def __new__(mcs, name, bases, members):
+# 		#print("RegisterSubClassesMeta.new: {0} - ".format(name, members))
+# 		#print()
+# 		inst = super().__new__(mcs, name, bases, members)
+# 		if (len(bases) > 0):
+# 			baseClass = bases[0]
+# 			print(baseClass)
+# 			if issubclass(baseClass, ISubClassRegistration):
+# 				#print("interface match")
+# 				baseClass.RegisterSubClass(inst)
+# 		return inst
+#
+# class ISubClassRegistration(metaclass=RegisterSubClassesMeta):
+# 	_subclasses = []
+#
+# 	@classmethod
+# 	def RegisterSubClass(cls, subcls):
+# 		print("Register: {0}".format(str(subcls)))
+# 		cls._subclasses.append(subcls)
+#
+# 	@property
+# 	def SubClasses(self):
+# 		return self._subclasses
 
 class Configuration:		#(ISubClassRegistration):
-	_privateConfiguration =	{}
 	_vendor =								"Unknown"
 	_toolName =							"Unknown"
+	_template =	{}
 
 	def __init__(self, host):
 		self._host =	host
@@ -87,17 +88,31 @@ class Configuration:		#(ISubClassRegistration):
 	def ToolName(self):
 		return self._toolName
 
-	def IsSupportedPlatform(self, Platform):
-		result = (Platform in self._privateConfiguration)
-		if (not result):
-			return ("ALL" in self._privateConfiguration)
+	def IsSupportedPlatform(self):
+		if (self._host.Platform not in self._template):
+			return ("ALL" in self._template)
 		else:
 			return True
 
-	def ConfigureForWindows(self):
+	@classmethod
+	def GetSections(cls, platform):
+		if ("ALL" in cls._template):
+			for sectionName in cls._template['ALL']:
+				yield sectionName
+		if (platform in cls._template):
+			for sectionName in cls._template[platform]:
+				yield sectionName
+
+	def CheckDependency(self):
+		return True
+
+	def ConfigureForDarwin(self):
 		self.ConfigureForAll()
 
 	def ConfigureForLinux(self):
+		self.ConfigureForAll()
+
+	def ConfigureForWindows(self):
 		self.ConfigureForAll()
 
 	def ConfigureForAll(self):
@@ -139,7 +154,7 @@ class Configuration:		#(ISubClassRegistration):
 			if (p.exists()):    return p
 		elif (self._host.Platform == "Windows"):
 			for drive in "CDEFGH":
-				p = Path("{0}:".format(drive)) / defaults["Windows"]
+				p = Path("{0}:/{1}".format(drive, defaults["Windows"]))
 				try:
 					if (p.exists()):  return p
 				except OSError:

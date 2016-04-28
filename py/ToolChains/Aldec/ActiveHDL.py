@@ -40,10 +40,6 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Aldec.ActiveHDL")
 
 
-#from collections				import OrderedDict
-#from pathlib						import Path
-#from re											import compile as re_compile
-
 from lib.Functions				import CallByRefParam
 from Base.Exceptions			import PlatformNotSupportedException
 from Base.ToolChain				import ToolChainException
@@ -56,10 +52,13 @@ from Base.Configuration		import Configuration as BaseConfiguration, Configuratio
 
 
 class ActiveHDLException(ToolChainException):
+	pass
+
+
+class Configuration(BaseConfiguration):
 	_vendor =			"Aldec"
-	_shortName =	"Active-HDL"
-	_longName =		"Aldec Active-HDL"
-	_privateConfiguration = {
+	_toolName =		"Aldec Active-HDL"
+	_template = {
 		"Windows": {
 			"INSTALL.Aldec": {
 				"InstallationDirectory":	"C:/Aldec"
@@ -82,8 +81,10 @@ class ActiveHDLException(ToolChainException):
 		# }
 	}
 
-class Configuration(BaseConfiguration):
-	pass
+	def CheckDependency(self):
+		# return True if Xilinx is configured
+		return (len(self._host.PoCConfig['INSTALL.Aldec']) != 0)
+
 
 class ActiveHDLMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):

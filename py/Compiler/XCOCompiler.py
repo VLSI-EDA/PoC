@@ -141,7 +141,7 @@ class Compiler(BaseCompiler):
 			WorkingDirectory = "./temp/"
 
 		# write CoreGenerator project file
-		cgProjectFileContent = dedent('''\
+		cgProjectFileContent = dedent("""\
 			SET addpads = false
 			SET asysymbol = false
 			SET busformat = BusFormatAngleBracketNotRipped
@@ -160,7 +160,7 @@ class Compiler(BaseCompiler):
 			SET verilogsim = false
 			SET vhdlsim = true
 			SET workingdirectory = {WorkingDirectory}
-			'''.format(
+			""".format(
 			Device=self._device.ShortName.lower(),
 			DeviceFamily=self._device.FamilyName.lower(),
 			Package=(str(self._device.Package).lower() + str(self._device.PinCount)),

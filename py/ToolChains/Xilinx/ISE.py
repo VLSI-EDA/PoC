@@ -4,6 +4,7 @@
 #
 # ==============================================================================
 # Authors:					Patrick Lehmann
+#										Martin Zabel
 #
 # Python Class:			Xilinx ISE specific classes
 #
@@ -62,7 +63,7 @@ class Configuration(BaseConfiguration):
 	_vendor =		"Xilinx"
 	_toolName =	"Xilinx ISE"
 	_section =	"INSTALL.Xilinx.ISE" 
-	_privateConfiguration = {
+	_template = {
 		"Windows": {
 			_section: {
 				"Version":								"14.7",
@@ -79,8 +80,9 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	def __init__(self, host):
-		super().__init__(host)
+	def CheckDependency(self):
+		# return True if Xilinx is configured
+		return (len(self._host.PoCConfig['INSTALL.Xilinx']) != 0)
 
 	def ConfigureForAll(self):
 		super().ConfigureForAll()
@@ -88,9 +90,9 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Xilinx ISE installed on your system?")):
 				self._ClearSection(self._section)
 			else:
-				self._host.PoCConfig[self._section]['Version'] = self._privateConfiguration[self._host.Platform][self._section]['Version']
-				self._host.PoCConfig[self._section]['InstallationDirectory'] = self._privateConfiguration[self._host.Platform][self._section]['InstallationDirectory']
-				self._host.PoCConfig[self._section]['BinaryDirectory'] = self._privateConfiguration[self._host.Platform][self._section]['BinaryDirectory']
+				self._host.PoCConfig[self._section]['Version'] = self._template[self._host.Platform][self._section]['Version']
+				self._host.PoCConfig[self._section]['InstallationDirectory'] = self._template[self._host.Platform][self._section]['InstallationDirectory']
+				self._host.PoCConfig[self._section]['BinaryDirectory'] = self._template[self._host.Platform][self._section]['BinaryDirectory']
 				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory']) # get resolved path
 				installPath = self._AskInstallPath(self._section, defaultPath)
 				if installPath != defaultPath: # write user entered path

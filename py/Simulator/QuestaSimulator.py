@@ -162,7 +162,7 @@ class Simulator(BaseSimulator):
 	def _RunSimulation(self, testbench):
 		self._LogNormal("Running simulation...")
 		
-		tclBatchFilePath =		self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
+		tclBatchFilePath =		self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()
@@ -178,8 +178,8 @@ class Simulator(BaseSimulator):
 	def _RunSimulationWithGUI(self, testbench):
 		self._LogNormal("Running simulation...")
 	
-		tclGUIFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
-		tclWaveFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
+		tclGUIFilePath =			self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
+		tclWaveFilePath =			self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
 
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()

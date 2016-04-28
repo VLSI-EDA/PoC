@@ -143,17 +143,17 @@ class Simulator(BaseSimulator):
 		
 		# run GHDL analysis for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
-			if (not file.Path.exists()):									raise SimulatorException("Can not analyse '{0}'.".format(str(file.Path))) from FileNotFoundError(str(file.Path))
+			if (not file.Path.exists()):									raise SimulatorException("Can not analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
 
 			ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			file.LibraryName
 			ghdl.Parameters[ghdl.ArgSourceFile] =					file.Path
 			try:
 				ghdl.Analyze()
 			except GHDLException as ex:
-				raise SimulatorException("Error while analysing '{0}'.".format(str(file.Path))) from ex
+				raise SimulatorException("Error while analysing '{0!s}'.".format(file.Path)) from ex
 
 			if ghdl.HasErrors:
-				raise SimulatorException("Error while analysing '{0}'.".format(str(file.Path)))
+				raise SimulatorException("Error while analysing '{0!s}'.".format(file.Path))
 
 
 	# running simulation
@@ -260,16 +260,16 @@ class Simulator(BaseSimulator):
 					
 			if (waveformFileFormat == "vcd"):
 				waveformFilePath = self._tempPath / (testbench.ModuleName + ".vcd")
-				runOptions.append("--vcd={0}".format(str(waveformFilePath)))
+				runOptions.append("--vcd={0!s}".format(waveformFilePath))
 			elif (waveformFileFormat == "vcdgz"):
 				waveformFilePath = self._tempPath / (testbench.ModuleName + ".vcd.gz")
-				runOptions.append("--vcdgz={0}".format(str(waveformFilePath)))
+				runOptions.append("--vcdgz={0!s}".format(waveformFilePath))
 			elif (waveformFileFormat == "fst"):
 				waveformFilePath = self._tempPath / (testbench.ModuleName + ".fst")
-				runOptions.append("--fst={0}".format(str(waveformFilePath)))
+				runOptions.append("--fst={0!s}".format(waveformFilePath))
 			elif (waveformFileFormat == "ghw"):
 				waveformFilePath = self._tempPath / (testbench.ModuleName + ".ghw")
-				runOptions.append("--wave={0}".format(str(waveformFilePath)))
+				runOptions.append("--wave={0!s}".format(waveformFilePath))
 			else:																						raise SimulatorException("Unknown waveform file format for GHDL.")
 		
 		ghdl.Run(testbench.ModuleName, runOptions)
@@ -299,7 +299,7 @@ class Simulator(BaseSimulator):
 		gtkw.Parameters[gtkw.SwitchDumpFile] = str(waveformFilePath)
 
 		# if GTKWave savefile exists, load it's settings
-		gtkwSaveFilePath =	self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['gtkwSaveFile']
+		gtkwSaveFilePath =	self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['gtkwSaveFile']
 		if gtkwSaveFilePath.exists():
 			self._LogDebug("Found waveform save file: '{0!s}'".format(gtkwSaveFilePath))
 			gtkw.Parameters[gtkw.SwitchSaveFile] = str(gtkwSaveFilePath)

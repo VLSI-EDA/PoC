@@ -40,28 +40,25 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.PoC")
 
 
-from os				import environ
-from pathlib	import Path
-from subprocess	import check_output, CalledProcessError
+from os										import environ
+from pathlib							import Path
+from subprocess						import check_output, CalledProcessError
 
 from Base.Configuration		import Configuration as BaseConfiguration
 
 
 class Configuration(BaseConfiguration):
-	_vendor =			None
-	_toolName =	"PoC"
-	_privateConfiguration = {
+	_vendor =			"VLSI-EDA"
+	_toolName =		"PoC"
+	_template =		{
 		"ALL": {
 			"INSTALL.PoC": {
 				"Version":								"0.0.0",
 				"InstallationDirectory":	None
 			},
-			"INSTALL.Solutions": {}
+			"SOLUTION.Solutions": {}
 		}
 	}
-
-	def __init__(self, host):
-		super().__init__(host)
 
 	def ConfigureForAll(self):
 		super().ConfigureForAll()
@@ -73,7 +70,7 @@ class Configuration(BaseConfiguration):
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = latestTagName
 		except CalledProcessError as ex:
 			print("WARNING: Can't get version information from latest git tag.")
-			pocVersion = self._privateConfiguration['ALL']['INSTALL.PoC']['Version']
+			pocVersion = self._template['ALL']['INSTALL.PoC']['Version']
 			self._host._LogNormal("  PoC version: {0} (found in default configuration)".format(pocVersion))
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = pocVersion
 

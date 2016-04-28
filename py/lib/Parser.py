@@ -542,7 +542,7 @@ class ExistsFunction(Function):
 		raise MatchingParserResult(result)
 		
 	def __str__(self):
-		return "exists(\"{0}\")".format(str(self._path))
+		return "exists(\"{0!s}\")".format(self._path)
 		
 class ListElement(Expression):
 	def __init__(self):

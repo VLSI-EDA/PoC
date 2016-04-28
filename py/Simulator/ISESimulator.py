@@ -142,9 +142,9 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		
 		iSimLogFilePath =		self._tempPath / (testbench.ModuleName + ".iSim.log")
 		exeFilePath =				self._tempPath / (testbench.ModuleName + ".exe")
-		tclBatchFilePath =	self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimBatchScript']
-		tclGUIFilePath =		self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimGUIScript']
-		wcfgFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimWaveformConfigFile']
+		tclBatchFilePath =	self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimBatchScript']
+		tclGUIFilePath =		self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimGUIScript']
+		wcfgFilePath =			self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimWaveformConfigFile']
 
 		# create a ISESimulator instance
 		iSim = ISESimulator(exeFilePath, logger=self.Logger)

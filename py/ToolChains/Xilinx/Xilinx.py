@@ -4,6 +4,7 @@
 #
 # ==============================================================================
 # Authors:					Patrick Lehmann
+#										Martin Zabel
 #
 # Python Class:			TODO
 #
@@ -37,7 +38,7 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module ToolChains.Xilinx.Xilinx")
 
 
 from pathlib							import Path
@@ -55,7 +56,7 @@ class Configuration(BaseConfiguration):
 	_vendor =			"Xilinx"
 	_toolName =		"Xilinx"
 	_section  =		"INSTALL.Xilinx"
-	_privateConfiguration = {
+	_template = {
 		"Windows": {
 			_section: {
 				"InstallationDirectory":	"C:/Xilinx"
@@ -68,12 +69,7 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	def __init__(self, host):
-		super().__init__(host)
-
-	def GetSections(self, Platform):
-		pass
-
+	# QUESTION: call super().ConfigureVendorPath("Altera") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
 	def ConfigureForAll(self):
 		super().ConfigureForAll()
 		if (not self._AskInstalled("Are Xilinx products installed on your system?")):

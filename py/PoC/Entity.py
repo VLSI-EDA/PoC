@@ -414,7 +414,7 @@ class Base(ILazyLoadable):
 		pass
 
 	def __str__(self):
-		return "{0}.{1}".format(str(self._parent), self._name)
+		return "{0!s}.{1}".format(self._parent, self._name)
 
 
 class Testbench(Base):

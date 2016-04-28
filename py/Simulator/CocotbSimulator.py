@@ -33,6 +33,8 @@
 # ==============================================================================
 #
 # entry point
+from textwrap import dedent
+
 from PoC.Config import Vendors
 
 if __name__ != "__main__":
@@ -133,11 +135,15 @@ class Simulator(BaseSimulator):
 		modelsimIniPath = self.Host.Directories["CocotbTemp"] / "sim_build" / "modelsim.ini"
 		if modelsimIniPath.exists(): modelsimIniPath.unlink()
 		with modelsimIniPath.open('w') as fileHandle:
-			fileHandle.write("[Library]\nothers = {0!s}".format(precompiledModelsimIniPath))
+			fileContent = dedent("""\
+				[Library]
+				others = {0!s}
+				""").format(precompiledModelsimIniPath)
+			fileHandle.write(fileContent)
 
 		#
 		self._LogNormal("Running simulation...")
-		cocotbTemplateFilePath = self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile']
+		cocotbTemplateFilePath = self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile']
 		topLevel =			testbench.TopLevel
 		cocotbModule =	testbench.ModuleName
 
@@ -161,7 +167,7 @@ class Simulator(BaseSimulator):
 		with cocotbTemplateFilePath.open('r') as fileHandle:
 			cocotbMakefileContent = fileHandle.read()
 
-		cocotbMakefileContent = cocotbMakefileContent.format(PoCRootDirectory=str(self.Host.Directories["PoCRoot"]), VHDLSources=vhdlSources,
+		cocotbMakefileContent = cocotbMakefileContent.format(PoCRootDirectory=str(self.Host.RootDirectory), VHDLSources=vhdlSources,
 																													TopLevel=topLevel, CocotbModule=cocotbModule)
 
 		cocotbMakefilePath = self.Host.Directories["CocotbTemp"] / "Makefile"

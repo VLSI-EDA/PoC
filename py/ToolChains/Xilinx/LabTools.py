@@ -49,9 +49,8 @@ from Base.Configuration import Configuration as BaseConfiguration, Configuration
 
 class Configuration(BaseConfiguration):
 	__vendor =		"Xilinx"
-	__shortName = "LabTools"
-	__LongName =	"Xilinx LabTools"
-	__privateConfiguration = {
+	__toolName =	"Xilinx LabTools"
+	__template = {
 		"Windows": {
 			"INSTALL.Xilinx.LabTools": {
 				"Version":								"14.7",
@@ -72,10 +71,7 @@ class Configuration(BaseConfiguration):
 		super().__init__()
 
 	def IsSupportedPlatform(self, Platform):
-		return (Platform in self.__privateConfiguration)
-
-	def GetSections(self, Platform):
-		pass
+		return (Platform in self.__template)
 
 	def manualConfigureForWindows(self):
 		# Ask for installed Xilinx LabTools

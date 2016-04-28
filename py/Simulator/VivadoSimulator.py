@@ -152,9 +152,9 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._LogNormal("Running simulation...")
 		
 		xSimLogFilePath =		self._tempPath / (testbench.ModuleName + ".xSim.log")
-		tclBatchFilePath =	self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimBatchScript']
-		tclGUIFilePath =		self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimGUIScript']
-		wcfgFilePath =			self.Host.Directories["PoCRoot"] / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimWaveformConfigFile']
+		tclBatchFilePath =	self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimBatchScript']
+		tclGUIFilePath =		self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimGUIScript']
+		wcfgFilePath =			self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimWaveformConfigFile']
 
 		# create a VivadoSimulator instance
 		xSim = self._vivado.GetSimulator()

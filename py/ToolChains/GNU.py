@@ -41,9 +41,6 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GNU")
 
 
-from collections						import OrderedDict
-from pathlib								import Path
-
 from Base.Exceptions				import PlatformNotSupportedException
 from Base.Logging						import LogEntry, Severity
 from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
@@ -54,9 +51,15 @@ from Base.ToolChain					import ToolChainException
 class GNUException(ToolChainException):
 	pass
 
+
 class Configuration(BaseConfiguration):
-	def __init__(self, host):
-		super().__init__(host)
+	_vendor =			"GNU"
+	_toolName =		"GNU Make"
+	_section = 		None
+
+	def CheckDependency(self):
+		return False
+
 
 class Make(Executable):
 	def __init__(self, platform, logger=None):

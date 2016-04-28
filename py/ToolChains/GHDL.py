@@ -4,6 +4,7 @@
 #
 # ==============================================================================
 # Authors:					Patrick Lehmann
+#										Martin Zabel
 #
 # Python Class:			GHDL specific classes
 #
@@ -67,7 +68,7 @@ class Configuration(BaseConfiguration):
 	_vendor =			None
 	_toolName =		"GHDL"
 	_section = 		"INSTALL.GHDL"
-	_privateConfiguration = {
+	_template = {
 		"Windows": {
 			_section: {
 				"Version":								"0.34dev",
@@ -94,20 +95,14 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	def __init__(self, host):
-		super().__init__(host)
-
-	def GetSections(self, Platform):
-		pass
-
 	def ConfigureForAll(self):
 		super().ConfigureForAll()
 		try:
 			if (not self._AskInstalled("Is GHDL installed on your system?")):
 				self._ClearSection(self._section)
 			else:
-				self._host.PoCConfig[self._section]['InstallationDirectory'] = self._privateConfiguration[self._host.Platform][self._section]['InstallationDirectory']
-				self._host.PoCConfig[self._section]['BinaryDirectory'] = self._privateConfiguration[self._host.Platform][self._section]['BinaryDirectory']
+				self._host.PoCConfig[self._section]['InstallationDirectory'] = self._template[self._host.Platform][self._section]['InstallationDirectory']
+				self._host.PoCConfig[self._section]['BinaryDirectory'] = self._template[self._host.Platform][self._section]['BinaryDirectory']
 				installPath = self._AskInstallPath(self._section, self.__GetGHDLPath())
 				self._WriteInstallationDirectory(self._section, installPath)
 				self.__WriteGHDLSection()

@@ -40,8 +40,7 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
 
-# from collections				import OrderedDict
-# from pathlib						import Path
+from pathlib						import Path
 
 from Base.Configuration		import Configuration as BaseConfiguration
 from Base.Project					import ConstraintFile, FileTypes
@@ -51,15 +50,45 @@ from Base.ToolChain				import ToolChainException
 class LatticeException(ToolChainException):
 	pass
 
+
 class Configuration(BaseConfiguration):
-	def __init__(self, host):
-		super().__init__(host)
+	_vendor =			"Lattice"
+	_toolName =		"Lattice"
+	_section =		"INSTALL.Lattice"
+	_template = {
+		"Windows": {
+			_section: {
+				"InstallationDirectory": "C:/Lattice"
+			}
+		# },
+		# "Linux":   {
+		# 	_section: {
+		# 		"InstallationDirectory": "/opt/Lattice"
+		# 	}
+		}
+	}
+
+	# QUESTION: call super().ConfigureVendorPath("Lattice") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
+	def ConfigureForAll(self):
+		super().ConfigureForAll()
+		if (not self._AskInstalled("Are Lattice products installed on your system?")):
+			self._ClearSection(self._section)
+		else:
+			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
+				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
+			else:
+				defaultPath = self.__GetLatticePath()
+			installPath = self._AskInstallPath(self._section, defaultPath)
+			self._WriteInstallationDirectory(self._section, installPath)
+
+	def __GetLatticePath(self):
+		return super()._TestDefaultInstallPath({"Windows": "Lattice", "Linux": "Lattice"})
 
 
 class LatticeDesignConstraintFile(ConstraintFile):
-	_FileType = FileTypes.UcfConstraintFile
+	_FileType = FileTypes.LdcConstraintFile
 
 	def __str__(self):
-		return "UCF file: '{0!s}".format(self._file)
+		return "LDC file: '{0!s}".format(self._file)
 
 

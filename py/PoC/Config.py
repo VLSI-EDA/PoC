@@ -450,7 +450,7 @@ class Device:
 			if (self.__generation == 7):
 				return "Series-7"
 			else:
-				return "{0}-{1}".format(str(self.__family), self.__generation)
+				return "{0!s}-{1}".format(self.__family, self.__generation)
 		elif self.__vendor is Vendors.Lattice:
 			raise NotImplementedError()
 	

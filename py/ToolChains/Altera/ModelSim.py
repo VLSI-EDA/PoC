@@ -40,11 +40,35 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.ModelSim")
 
 
-# from collections				import OrderedDict
-# from pathlib						import Path
-
 from Base.Configuration import Configuration as BaseConfiguration
+from ToolChains.Altera.Altera import AlteraException
+
+
+class ModelSimException(AlteraException):
+	pass
+
 
 class Configuration(BaseConfiguration):
-	def __init__(self):
-		super().__init__()
+	_vendor =		"Altera"
+	_toolName =	"ModelSim Altera Edition"
+	_section =	"INSTALL.Altera.ModelSim"
+	_template = {
+		"Windows": {
+			_section: {
+				"Version":								"15.0",
+				"InstallationDirectory":	"${INSTALL.Altera:InstallationDirectory}/${Version}/modelsim_ase",
+				"BinaryDirectory":				"${InstallationDirectory}/win32aloem"
+			}
+		},
+		"Linux": {
+			_section: {
+				"Version":								"15.0",
+				"InstallationDirectory":	"${INSTALL.Altera:InstallationDirectory}/${Version}/modelsim_ase",
+				"BinaryDirectory":				"${InstallationDirectory}/fix_me"
+			}
+		}
+	}
+
+	def CheckDependency(self):
+		# return True if Altera is configured
+		return (len(self._host.PoCConfig['INSTALL.Altera']) != 0)

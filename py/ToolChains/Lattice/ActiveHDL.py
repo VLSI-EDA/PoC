@@ -40,11 +40,35 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.ActiveHDL")
 
 
-# from collections				import OrderedDict
-# from pathlib						import Path
+from Base.Configuration					import Configuration as BaseConfiguration
+from ToolChains.Lattice.Lattice	import LatticeException
 
-from Base.Configuration import Configuration as BaseConfiguration
+
+class ActiveHDLException(LatticeException):
+	pass
+
 
 class Configuration(BaseConfiguration):
-	def __init__(self, host):
-		super().__init__(host)
+	_vendor =		"Lattice"
+	_toolName =	"Lattice ActiveHDL"
+	_section =	"INSTALL.Lattice.ActiveHDL"
+	_template = {
+		"Windows": {
+			_section: {
+				"Version":								"15.0",
+				"InstallationDirectory":	"${INSTALL.Lattice.Diamond:InstallationDirectory}/active-hdl",
+				"BinaryDirectory":				"${InstallationDirectory}/bin/nt64"
+			}
+		# },
+		# "Linux": {
+		# 	_section: {
+		# 		"Version":								"15.0",
+		# 		"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/${Version}/activeHDL",
+		# 		"BinaryDirectory":				"${InstallationDirectory}/fix_me"
+		# 	}
+		}
+	}
+
+	def CheckDependency(self):
+		# return True if Lattice is configured
+		return (len(self._host.PoCConfig['INSTALL.Lattice.Diamond']) != 0)

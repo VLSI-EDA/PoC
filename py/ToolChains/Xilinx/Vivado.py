@@ -4,6 +4,7 @@
 #
 # ==============================================================================
 # Authors:					Patrick Lehmann
+#										Martin Zabel
 #
 # Python Class:			Xilinx Vivado specific classes
 #
@@ -60,11 +61,12 @@ from ToolChains.Xilinx.Xilinx		import XilinxException
 class VivadoException(XilinxException):
 	pass
 
+
 class Configuration(BaseConfiguration):
-	_vendor =		"Xilinx"
-	_toolName =	"Xilinx Vivado"
-	_section = "INSTALL.Xilinx.Vivado"
-	_privateConfiguration = {
+	_vendor =			"Xilinx"
+	_toolName =		"Xilinx Vivado"
+	_section =		"INSTALL.Xilinx.Vivado"
+	_template = {
 		"Windows": {
 			_section: {
 				"Version":								"2015.4",
@@ -81,8 +83,9 @@ class Configuration(BaseConfiguration):
 		}
 	}
 
-	def __init__(self, host):
-		super().__init__(host)
+	def CheckDependency(self):
+		# return True if Xilinx is configured
+		return (len(self._host.PoCConfig['INSTALL.Xilinx']) != 0)
 
 	def ConfigureForAll(self):
 		super().ConfigureForAll()
@@ -91,15 +94,13 @@ class Configuration(BaseConfiguration):
 				self._ClearSection(self._section)
 			else:
 				# get version
-				defaultVersion = self._privateConfiguration[self._host.Platform][self._section]['Version']
+				defaultVersion = self._template[self._host.Platform][self._section]['Version']
 				version = input("  {0} version [{1!s}]: ".format(self.ToolName, defaultVersion))
 				if version == "": version = defaultVersion
 				self._host.PoCConfig[self._section]['Version'] = version
 
-				self._host.PoCConfig[self._section]['InstallationDirectory'] = \
-				self._privateConfiguration[self._host.Platform][self._section]['InstallationDirectory']
-				self._host.PoCConfig[self._section]['BinaryDirectory'] = \
-				self._privateConfiguration[self._host.Platform][self._section]['BinaryDirectory']
+				self._host.PoCConfig[self._section]['InstallationDirectory'] = self._template[self._host.Platform][self._section]['InstallationDirectory']
+				self._host.PoCConfig[self._section]['BinaryDirectory'] = self._template[self._host.Platform][self._section]['BinaryDirectory']
 				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])  # get resolved path
 				installPath = self._AskInstallPath(self._section, defaultPath)
 				if installPath != defaultPath:  # write user entered path
@@ -114,11 +115,10 @@ class Configuration(BaseConfiguration):
 		if (self._host.Platform == "Linux"):
 			vivadoPath /= "vivado"
 		else:
-			vivadoPath /= "vivado.exe"
+			vivadoPath /= "vivado.bat"
 
 		if not vivadoPath.exists():
-			raise ConfigurationException("Executable '{0!s}' not found.".format(vivadoPath)) from FileNotFoundError(
-				str(vivadoPath))
+			raise ConfigurationException("Executable '{0!s}' not found.".format(vivadoPath)) from FileNotFoundError(str(vivadoPath))
 
 		output = check_output([str(vivadoPath), "-version"], universal_newlines=True)
 		if str(version) not in output:

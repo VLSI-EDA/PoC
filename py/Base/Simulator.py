@@ -119,7 +119,7 @@ class Simulator(ILogable):
 		pocProject = PoCProject(testbench.ModuleName)
 
 		# configure the project
-		pocProject.RootDirectory = self.Host.Directories["PoCRoot"]
+		pocProject.RootDirectory = self.Host.RootDirectory
 		pocProject.Environment = Environment.Simulation
 		pocProject.ToolChain = self._TOOL_CHAIN
 		pocProject.Tool = self._TOOL

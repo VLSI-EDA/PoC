@@ -128,7 +128,7 @@ class Compiler(ILogable):
 		pocProject = PoCProject(netlist.ModuleName)
 
 		# configure the project
-		pocProject.RootDirectory =	self.Host.Directories["PoCRoot"]
+		pocProject.RootDirectory =	self.Host.RootDirectory
 		pocProject.Environment =		Environment.Synthesis
 		pocProject.ToolChain =			self._TOOL_CHAIN
 		pocProject.Tool =						self._TOOL

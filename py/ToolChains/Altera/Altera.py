@@ -53,89 +53,40 @@ from Base.ToolChain							import ToolChainException
 class AlteraException(ToolChainException):
 	pass
 
+
 class Configuration(BaseConfiguration):
 	_vendor =			"Altera"
-	_shortName =	""
-	_longName =		"Altera"
-	_privateConfiguration = {
+	_toolName =		"Altera"
+	_section =		"INSTALL.Altera"
+	_template = {
 		"Windows": {
-			"INSTALL.Altera": {
-				"InstallationDirectory":	"C:/Altera"
+			_section: {
+				"InstallationDirectory": "C:/Altera"
 			}
 		},
-		"Linux": {
-			"INSTALL.Altera": {
-				"InstallationDirectory":	"/opt/Altera"
+		"Linux":   {
+			_section: {
+				"InstallationDirectory": "/opt/Altera"
 			}
 		}
 	}
 
-	def __init__(self, host):
-		super().__init__(host)
-
-	def GetSections(self, Platform):
-		pass
-
-	def ConfigureForWindows(self):
-		alteraPath = self.__GetAlteraPath()
-		if (alteraPath is not None):
-			print("  Found a Altera installation directory.")
-			alteraPath = self.__ConfirmAlteraPath(alteraPath)
-			if (alteraPath is None):
-				alteraPath = self.__AskAlteraPath()
+	# QUESTION: call super().ConfigureVendorPath("Altera") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
+	def ConfigureForAll(self):
+		super().ConfigureForAll()
+		if (not self._AskInstalled("Are Altera products installed on your system?")):
+			self._ClearSection(self._section)
 		else:
-			if (not self.__AskAltera()):
-				self.__ClearAlteraSections()
+			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
+				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
 			else:
-				alteraPath = self.__AskAlteraPath()
-		if (not alteraPath.exists()):		raise ConfigurationException("Altera installation directory '{0}' does not exist.".format(alteraPath))	from NotADirectoryError(alteraPath)
-		self.__WriteAlteraSection(alteraPath)
-		
-	def ConfigureForLinux(self):
-		raise SkipConfigurationException()
-
+				defaultPath = self.__GetAlteraPath()
+			installPath = self._AskInstallPath(self._section, defaultPath)
+			self._WriteInstallationDirectory(self._section, installPath)
+	
 	def __GetAlteraPath(self):
-		if (self._host.Platform == "Linux"):
-			p = Path("/opt/altera")
-			if (p.exists()):		return p
-			p = Path("/opt/Altera")
-			if (p.exists()):		return p
-		elif (self._host.Platform == "Windows"):
-			for drive in "CDEFGH":
-				p = Path("{0}:\Altera".format(drive))
-				try:
-					if (p.exists()):	return p
-				except OSError:
-					pass
-		return None
-
-	def __AskAltera(self):
-		isAltera = input("  Are Altera products installed on your system? [Y/n/p]: ")
-		isAltera = isAltera if isAltera != "" else "Y"
-		if (isAltera in ['p', 'P']):		raise SkipConfigurationException()
-		elif (isAltera in ['n', 'N']):	return False
-		elif (isAltera in ['y', 'Y']):	return True
-		else:														raise ConfigurationException("Unsupported choice '{0}'".format(isAltera))
-
-	def __AskAlteraPath(self):
-		default = Path(self._privateConfiguration[self._host.Platform]['INSTALL.Altera']['InstallationDirectory'])
-		alteraDirectory = input("  Altera installation directory [{0!s}]: ".format(default))
-		if (alteraDirectory != ""):
-			return Path(alteraDirectory)
-		else:
-			return default
-
-	def __ConfirmAlteraPath(self, alteraPath):
-		# Ask for installed Altera ISE
-		isAlteraPath = input("  Is your Altera software installed in '{0!s}'? [Y/n/p]: ".format(alteraPath))
-		isAlteraPath = isAlteraPath if isAlteraPath != "" else "Y"
-		if (isAlteraPath in ['p', 'P']):		raise SkipConfigurationException()
-		elif (isAlteraPath in ['n', 'N']):	return None
-		elif (isAlteraPath in ['y', 'Y']):	return alteraPath
-
-	def __ClearAlteraSections(self):
-		self._host.PoCConfig['INSTALL.Altera'] = OrderedDict()
-
-	def __WriteAlteraSection(self, alteraPath):
-		self._host.PoCConfig['INSTALL.Altera']['InstallationDirectory'] = alteraPath.as_posix()
-
+		# altera = environ.get("QUARTUS_ROOTDIR")				# on Windows: D:\Altera\13.1\quartus
+		# if (altera is not None):
+		# 	return Path(altera).parent.parent
+		
+		return super()._TestDefaultInstallPath({"Windows": "Altera", "Linux": "Altera"})

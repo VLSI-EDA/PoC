@@ -40,126 +40,137 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
 
 
-from collections				import OrderedDict
 from pathlib						import Path
 
-from Base.Exceptions		import PlatformNotSupportedException
-from Base.Logging				import LogEntry, Severity
-from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
+from Base.Configuration import Configuration as BaseConfiguration
 from Base.ToolChain			import ToolChainException
 
 
 class MentorException(ToolChainException):
 	pass
 
+
 class Configuration(BaseConfiguration):
 	_vendor =			"Mentor"
-	_shortName =	"???"
-	_longName =		"Mentor"
-	_privateConfiguration = {
+	_toolName =		"Mentor"
+	_section =		"INSTALL.Mentor"
+	_template = {
 		"Windows": {
-			"INSTALL.Mentor": {
-				"InstallationDirectory":	"C:/Mentor"
+			_section: {
+				"InstallationDirectory": "C:/Mentor"
 			}
 		},
-		"Linux": {
-			"INSTALL.Mentor": {
-				"InstallationDirectory":	"/opt/QuestaSim"
+		"Linux":   {
+			_section: {
+				"InstallationDirectory": "/opt/QuestaSim"
 			}
 		}
 	}
 
+	# QUESTION: call super().ConfigureVendorPath("Mentor") ?? calls to __GetVendorPath      => refactor -> move method to ConfigurationBase
+	def ConfigureForAll(self):
+		super().ConfigureForAll()
+		if (not self._AskInstalled("Are Mentor products installed on your system?")):
+			self._ClearSection(self._section)
+		else:
+			if self._host.PoCConfig.has_option(self._section, 'InstallationDirectory'):
+				defaultPath = Path(self._host.PoCConfig[self._section]['InstallationDirectory'])
+			else:
+				defaultPath = self.__GetMentorPath()
+			installPath = self._AskInstallPath(self._section, defaultPath)
+			self._WriteInstallationDirectory(self._section, installPath)
+	
+	def __GetMentorPath(self):
+		# mentor = environ.get("QUARTUS_ROOTDIR")				# on Windows: D:\Mentor\13.1\quartus
+		# if (mentor is not None):
+		# 	return Path(mentor).parent.parent
+		
+		return super()._TestDefaultInstallPath({"Windows": "Mentor", "Linux": "Mentor"})
 
-	def __init__(self, host):
-		super().__init__(host)
 
-	def IsSupportedPlatform(self, Platform):
-		return (Platform in self._privateConfiguration)
-
-	def GetSections(self, Platform):
-		pass
-
-	def manualConfigureForWindows(self) :
-		# Ask for installed Mentor Graphic tools
-		isMentor = input('Is a Mentor Graphics tool installed on your system? [Y/n/p]: ')
-		isMentor = isMentor if isMentor != "" else "Y"
-		if (isMentor in ['p', 'P']) :
-			pass
-		elif (isMentor in ['n', 'N']) :
-			self.pocConfig['Mentor'] = OrderedDict()
-		elif (isMentor in ['y', 'Y']) :
-			mentorDirectory = input('Mentor Graphics installation directory [C:\Mentor]: ')
-			print()
-
-			mentorDirectory = mentorDirectory if mentorDirectory != ""  else "C:\Altera"
-			QuartusVersion = QuartusVersion if QuartusVersion != ""  else "15.0"
-
-			mentorDirectoryPath = Path(mentorDirectory)
-
-			if not mentorDirectoryPath.exists() :    raise BaseException(
-				"Mentor Graphics installation directory '%s' does not exist." % mentorDirectory)
-
-			self.pocConfig['Mentor']['InstallationDirectory'] = mentorDirectoryPath.as_posix()
-
-			# Ask for installed Mentor QuestaSIM
-			isQuestaSim = input('Is Mentor QuestaSIM installed on your system? [Y/n/p]: ')
-			isQuestaSim = isQuestaSim if isQuestaSim != "" else "Y"
-			if (isQuestaSim in ['p', 'P']) :
-				pass
-			elif (isQuestaSim in ['n', 'N']) :
-				self.pocConfig['Mentor.QuestaSIM'] = OrderedDict()
-			elif (isQuestaSim in ['y', 'Y']) :
-				QuestaSimDirectory = input(
-					'QuestaSIM installation directory [{0}\QuestaSim64\\10.2c]: '.format(str(mentorDirectory)))
-				QuestaSimVersion = input('QuestaSIM version number [10.4c]: ')
-				print()
-
-				QuestaSimDirectory = QuestaSimDirectory if QuestaSimDirectory != ""  else str(
-					mentorDirectory) + "\QuestaSim64\\10.4c"
-				QuestaSimVersion = QuestaSimVersion if QuestaSimVersion != ""    else "10.4c"
-
-				QuestaSimDirectoryPath = Path(QuestaSimDirectory)
-				QuestaSimExecutablePath = QuestaSimDirectoryPath / "win64" / "vsim.exe"
-
-				if not QuestaSimDirectoryPath.exists() :    raise ConfigurationException(
-					"QuestaSIM installation directory '%s' does not exist." % QuestaSimDirectory)
-				if not QuestaSimExecutablePath.exists() :  raise ConfigurationException("QuestaSIM is not installed.")
-
-				self.pocConfig['Mentor']['InstallationDirectory'] = MentorDirectoryPath.as_posix()
-
-				self.pocConfig['Mentor.QuestaSIM']['Version'] = QuestaSimVersion
-				self.pocConfig['Mentor.QuestaSIM']['InstallationDirectory'] = QuestaSimDirectoryPath.as_posix()
-				self.pocConfig['Mentor.QuestaSIM']['BinaryDirectory'] = '${InstallationDirectory}/win64'
-			else :
-				raise ConfigurationException("unknown option")
-		else :
-			raise ConfigurationException("unknown option")
-
-	def manualConfigureForLinux(self) :
-		# Ask for installed Mentor QuestaSIM
-		isQuestaSim = input('Is mentor QuestaSIM installed on your system? [Y/n/p]: ')
-		isQuestaSim = isQuestaSim if isQuestaSim != "" else "Y"
-		if (isQuestaSim in ['p', 'P']) :
-			pass
-		elif (isQuestaSim in ['n', 'N']) :
-			self.pocConfig['Mentor.QuestaSIM'] = OrderedDict()
-		elif (isQuestaSim in ['y', 'Y']) :
-			QuestaSimDirectory = input('QuestaSIM installation directory [/opt/QuestaSim/10.2c]: ')
-			QuestaSimVersion = input('QuestaSIM version number [10.2c]: ')
-			print()
-
-			QuestaSimDirectory = QuestaSimDirectory if QuestaSimDirectory != ""  else "/opt/QuestaSim/10.2c"
-			QuestaSimVersion = QuestaSimVersion if QuestaSimVersion != ""    else "10.2c"
-
-			QuestaSimDirectoryPath = Path(QuestaSimDirectory)
-			QuestaSimExecutablePath = QuestaSimDirectoryPath / "bin" / "vsim"
-
-			if not QuestaSimDirectoryPath.exists() :    raise ConfigurationException(
-				"QuestaSIM installation directory '%s' does not exist." % QuestaSimDirectory)
-			if not QuestaSimExecutablePath.exists() :  raise ConfigurationException("QuestaSIM is not installed.")
-
-			self.pocConfig['Mentor.QuestaSIM']['Version'] = QuestaSimVersion
-			self.pocConfig['Mentor.QuestaSIM']['InstallationDirectory'] = QuestaSimDirectoryPath.as_posix()
-			self.pocConfig['Mentor.QuestaSIM']['BinaryDirectory'] = '${InstallationDirectory}/bin'
-		else :
-			raise ConfigurationException("unknown option")
+	# 
+	# 
+	# def manualConfigureForWindows(self) :
+	# 	# Ask for installed Mentor Graphic tools
+	# 	isMentor = input('Is a Mentor Graphics tool installed on your system? [Y/n/p]: ')
+	# 	isMentor = isMentor if isMentor != "" else "Y"
+	# 	if (isMentor in ['p', 'P']) :
+	# 		pass
+	# 	elif (isMentor in ['n', 'N']) :
+	# 		self.pocConfig['Mentor'] = OrderedDict()
+	# 	elif (isMentor in ['y', 'Y']) :
+	# 		mentorDirectory = input('Mentor Graphics installation directory [C:\Mentor]: ')
+	# 		print()
+	# 
+	# 		mentorDirectory = mentorDirectory if mentorDirectory != ""  else "C:\Altera"
+	# 		QuartusVersion = QuartusVersion if QuartusVersion != ""  else "15.0"
+	# 
+	# 		mentorDirectoryPath = Path(mentorDirectory)
+	# 
+	# 		if not mentorDirectoryPath.exists() :    raise BaseException(
+	# 			"Mentor Graphics installation directory '%s' does not exist." % mentorDirectory)
+	# 
+	# 		self.pocConfig['Mentor']['InstallationDirectory'] = mentorDirectoryPath.as_posix()
+	# 
+	# 		# Ask for installed Mentor QuestaSIM
+	# 		isQuestaSim = input('Is Mentor QuestaSIM installed on your system? [Y/n/p]: ')
+	# 		isQuestaSim = isQuestaSim if isQuestaSim != "" else "Y"
+	# 		if (isQuestaSim in ['p', 'P']) :
+	# 			pass
+	# 		elif (isQuestaSim in ['n', 'N']) :
+	# 			self.pocConfig['Mentor.QuestaSIM'] = OrderedDict()
+	# 		elif (isQuestaSim in ['y', 'Y']) :
+	# 			QuestaSimDirectory = input(
+	# 				'QuestaSIM installation directory [{0}\QuestaSim64\\10.2c]: '.format(str(mentorDirectory)))
+	# 			QuestaSimVersion = input('QuestaSIM version number [10.4c]: ')
+	# 			print()
+	# 
+	# 			QuestaSimDirectory = QuestaSimDirectory if QuestaSimDirectory != ""  else str(
+	# 				mentorDirectory) + "\QuestaSim64\\10.4c"
+	# 			QuestaSimVersion = QuestaSimVersion if QuestaSimVersion != ""    else "10.4c"
+	# 
+	# 			QuestaSimDirectoryPath = Path(QuestaSimDirectory)
+	# 			QuestaSimExecutablePath = QuestaSimDirectoryPath / "win64" / "vsim.exe"
+	# 
+	# 			if not QuestaSimDirectoryPath.exists() :    raise ConfigurationException(
+	# 				"QuestaSIM installation directory '%s' does not exist." % QuestaSimDirectory)
+	# 			if not QuestaSimExecutablePath.exists() :  raise ConfigurationException("QuestaSIM is not installed.")
+	# 
+	# 			self.pocConfig['Mentor']['InstallationDirectory'] = MentorDirectoryPath.as_posix()
+	# 
+	# 			self.pocConfig['Mentor.QuestaSIM']['Version'] = QuestaSimVersion
+	# 			self.pocConfig['Mentor.QuestaSIM']['InstallationDirectory'] = QuestaSimDirectoryPath.as_posix()
+	# 			self.pocConfig['Mentor.QuestaSIM']['BinaryDirectory'] = '${InstallationDirectory}/win64'
+	# 		else :
+	# 			raise ConfigurationException("unknown option")
+	# 	else :
+	# 		raise ConfigurationException("unknown option")
+	# 
+	# def manualConfigureForLinux(self) :
+	# 	# Ask for installed Mentor QuestaSIM
+	# 	isQuestaSim = input('Is mentor QuestaSIM installed on your system? [Y/n/p]: ')
+	# 	isQuestaSim = isQuestaSim if isQuestaSim != "" else "Y"
+	# 	if (isQuestaSim in ['p', 'P']) :
+	# 		pass
+	# 	elif (isQuestaSim in ['n', 'N']) :
+	# 		self.pocConfig['Mentor.QuestaSIM'] = OrderedDict()
+	# 	elif (isQuestaSim in ['y', 'Y']) :
+	# 		QuestaSimDirectory = input('QuestaSIM installation directory [/opt/QuestaSim/10.2c]: ')
+	# 		QuestaSimVersion = input('QuestaSIM version number [10.2c]: ')
+	# 		print()
+	# 
+	# 		QuestaSimDirectory = QuestaSimDirectory if QuestaSimDirectory != ""  else "/opt/QuestaSim/10.2c"
+	# 		QuestaSimVersion = QuestaSimVersion if QuestaSimVersion != ""    else "10.2c"
+	# 
+	# 		QuestaSimDirectoryPath = Path(QuestaSimDirectory)
+	# 		QuestaSimExecutablePath = QuestaSimDirectoryPath / "bin" / "vsim"
+	# 
+	# 		if not QuestaSimDirectoryPath.exists() :    raise ConfigurationException(
+	# 			"QuestaSIM installation directory '%s' does not exist." % QuestaSimDirectory)
+	# 		if not QuestaSimExecutablePath.exists() :  raise ConfigurationException("QuestaSIM is not installed.")
+	# 
+	# 		self.pocConfig['Mentor.QuestaSIM']['Version'] = QuestaSimVersion
+	# 		self.pocConfig['Mentor.QuestaSIM']['InstallationDirectory'] = QuestaSimDirectoryPath.as_posix()
+	# 		self.pocConfig['Mentor.QuestaSIM']['BinaryDirectory'] = '${InstallationDirectory}/bin'
+	# 	else :
+	# 		raise ConfigurationException("unknown option")
