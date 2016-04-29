@@ -39,9 +39,6 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module  ToolChains.Aldec.Aldec")
 
-
-from pathlib							import Path
-
 from Base.Configuration		import Configuration as BaseConfiguration
 from Base.ToolChain				import ToolChainException
 

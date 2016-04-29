@@ -40,18 +40,17 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.ISE")
 
-
 from subprocess						import check_output
 
-from lib.Functions							import CallByRefParam
+from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException
 from Base.Exceptions						import PlatformNotSupportedException
-from Base.Logging								import LogEntry, Severity
-from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
-from Base.Project								import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
-from Base.Simulator							import SimulationResult, PoCSimulationResultFilter
 from Base.Executable						import Executable
 from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from Base.Logging								import LogEntry, Severity
+from Base.Project								import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from Base.Simulator							import SimulationResult, PoCSimulationResultFilter
 from ToolChains.Xilinx.Xilinx		import XilinxException
+from lib.Functions							import CallByRefParam
 
 
 class ISEException(XilinxException):

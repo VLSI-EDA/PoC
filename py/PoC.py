@@ -42,23 +42,24 @@ from platform									import system as platform_system
 from sys											import argv as sys_argv
 from textwrap									import dedent
 
-from lib.Functions						import Init, Exit
-from lib.ArgParseAttributes		import ArgParseMixin
-from lib.ArgParseAttributes		import CommonArgumentAttribute, CommonSwitchArgumentAttribute
-from lib.ArgParseAttributes		import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
-from lib.ConfigParser					import ExtendedConfigParser
-from lib.Parser								import ParserException
+from Base.Compiler						import CompilerException
+from Base.Configuration				import ConfigurationException, SkipConfigurationException
 from Base.Exceptions					import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
 from Base.Logging							import ILogable, Logger, Severity
-from Base.Configuration				import ConfigurationException, SkipConfigurationException
 from Base.Project							import VHDLVersion
-from Base.ToolChain						import ToolChainException
 from Base.Simulator						import SimulatorException
-from Base.Compiler						import CompilerException
+from Base.ToolChain						import ToolChainException
 from PoC.Config								import Board
 from PoC.Entity								import Root, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
 from PoC.Query								import Query
 from ToolChains								import Configurations
+from lib.ArgParseAttributes		import ArgParseMixin
+from lib.ArgParseAttributes		import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
+from lib.ArgParseAttributes		import CommonArgumentAttribute, CommonSwitchArgumentAttribute
+from lib.ConfigParser					import ExtendedConfigParser
+from lib.Functions						import Init, Exit
+from lib.Parser								import ParserException
+
 # Simulators
 from Simulator.ActiveHDLSimulator		import Simulator as ActiveHDLSimulator
 from Simulator.CocotbSimulator 			import Simulator as CocotbSimulator
@@ -383,6 +384,7 @@ class PoC(ILogable, ArgParseMixin):
 		vSimSimulatorFiles = self.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
 		modelsimIniPath = self.RootDirectory / tempDirectory / precompiledDirectory / vSimSimulatorFiles / "modelsim.ini"
 		if not modelsimIniPath.exists():
+			modelsimIniPath.parent.mkdir(parents=True)
 			with modelsimIniPath.open('w') as fileHandle:
 				fileContent = dedent("""\
 					[Library]

@@ -39,9 +39,8 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.ModelSim")
 
-
-from subprocess 						import check_output
 from re											import compile as RegExpCompile
+from subprocess 						import check_output
 
 from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
 from ToolChains.Altera.Altera import AlteraException

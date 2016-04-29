@@ -40,9 +40,8 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module ToolChains.Xilinx.Xilinx")
 
-
-from pathlib							import Path
 from os										import environ
+from pathlib							import Path
 
 from Base.Configuration					import Configuration as BaseConfiguration
 from Base.Project								import FileTypes, VHDLVersion

@@ -39,7 +39,6 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.PoC")
 
-
 from os										import environ
 from pathlib							import Path
 from subprocess						import check_output, CalledProcessError

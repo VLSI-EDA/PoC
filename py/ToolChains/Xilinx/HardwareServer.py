@@ -39,12 +39,7 @@ else :
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.HardwareServer")
 
-
-from collections					import OrderedDict
-from pathlib							import Path
-
-from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
-# from Base.Executable import Executable, ExecutableArgument, LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument
+from Base.Configuration import Configuration as BaseConfiguration
 
 
 class Configuration(BaseConfiguration):

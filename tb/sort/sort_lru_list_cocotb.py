@@ -40,7 +40,7 @@ from cocotb.drivers import BusDriver
 from cocotb.binary import BinaryValue
 from cocotb.regression import TestFactory
 from cocotb.scoreboard import Scoreboard
-from cocotb.result import TestFailure, TestSuccess
+from cocotb.result import TestFailure
 
 from lru_dict import LeastRecentlyUsedDict
 
@@ -54,7 +54,7 @@ class InputDriver(BusDriver):
 
 class InputTransaction(object):
 	"""Creates transaction to be send by InputDriver"""
-	def __init__(self, insert, free, remove, datain):
+	def __init__(self, insert, remove, datain):
 		self.Insert = BinaryValue(insert, 1)
 		self.Remove = BinaryValue(remove, 1)
 		self.DataIn  = BinaryValue(datain, 8, False)
@@ -100,12 +100,11 @@ class OutputMonitor(BusMonitor):
 # ==============================================================================
 class Testbench(object):
 	class MyScoreboard(Scoreboard):
-		def compare(self, got, exp, log, strict_type=True):
+		def compare(self, got, exp, log, **_):
 			"""Compare Valid before DataOut."""
 			got_valid, got_elem = got
 			exp_valid, exp_elem = exp
 
-			fail = False
 			if got_valid != exp_valid:
 				self.errors += 1
 				log.error("Received transaction differed from expected output.")
@@ -182,14 +181,14 @@ def random_input_gen(n=5000):
 	Generate random input data to be applied by InputDriver.
 	Returns up to n instances of InputTransaction.
 	"""
-	for i in range(n):
+	for _ in range(n):
 		command, datain = random.randint(1,100), random.randint(0, 255)
-		insert, free, remove = 0, 0, 0
+		insert, remove = 0, 0
 		# 80% insert, 10% remove, 10% idle
 		if command > 20: insert = 1
 		elif command > 10: remove = 1
-		#print "=== random_input_gen: insert=%d, free=%d, datain=%d" % (insert, free, datain)
-		yield InputTransaction(insert, free, remove, datain)
+		#print "=== random_input_gen: insert=%d, datain=%d" % (insert, free, datain)
+		yield InputTransaction(insert, remove, datain)
 
 @cocotb.coroutine
 def clock_gen(signal):
@@ -217,7 +216,7 @@ def run_test(dut):
 	# Wait for rising-edge of clock to execute last transaction from above.
 	# Apply idle command in following clock cycle, but stop generation of expected output data.
 	# Finish clock cycle to capture the resulting output from the last transaction above.
-	yield tb.input_drv.send(InputTransaction(0, 0, 0, 0))
+	yield tb.input_drv.send(InputTransaction(0, 0, 0))
 	tb.stop()
 	yield RisingEdge(dut.Clock)
 	

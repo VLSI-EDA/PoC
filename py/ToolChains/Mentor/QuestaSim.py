@@ -48,7 +48,7 @@ from Base.Logging								import LogEntry, Severity
 from Base.Configuration 				import Configuration as BaseConfiguration, ConfigurationException
 from Base.Simulator							import SimulationResult, PoCSimulationResultFilter
 from Base.Executable						import Executable
-from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
+from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
 from ToolChains.Mentor.Mentor		import MentorException
 
 

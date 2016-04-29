@@ -40,11 +40,10 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GNU")
 
-
+from Base.Configuration			import Configuration as BaseConfiguration
 from Base.Exceptions				import PlatformNotSupportedException
-from Base.Logging						import LogEntry, Severity
-from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
 from Base.Executable				import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument
+from Base.Logging						import LogEntry, Severity
 from Base.ToolChain					import ToolChainException
 
 

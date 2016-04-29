@@ -39,15 +39,14 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GTKWave")
 
-
 from pathlib								import Path
 from re											import compile as RegExpCompile
 from subprocess 						import check_output
 
-from Base.Exceptions				import PlatformNotSupportedException
-from Base.Logging						import LogEntry, Severity
 from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
+from Base.Exceptions				import PlatformNotSupportedException
 from Base.Executable				import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
+from Base.Logging						import LogEntry, Severity
 from Base.ToolChain					import ToolChainException
 
 

@@ -39,14 +39,7 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
 
-
-from collections					import OrderedDict
-from pathlib							import Path
-from os										import environ
-
-from Base.Exceptions						import PlatformNotSupportedException
-from Base.Logging								import LogEntry, Severity
-from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
+from Base.Configuration					import Configuration as BaseConfiguration
 from Base.ToolChain							import ToolChainException
 
 

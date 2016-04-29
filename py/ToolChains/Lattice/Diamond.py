@@ -39,13 +39,12 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
-
 from subprocess import check_output, CalledProcessError, STDOUT
 
-from Base.Exceptions							import PlatformNotSupportedException
-from Base.Logging									import Severity, LogEntry
 from Base.Configuration						import Configuration as BaseConfiguration, ConfigurationException
+from Base.Exceptions							import PlatformNotSupportedException
 from Base.Executable							import Executable, CommandLineArgumentList, ExecutableArgument
+from Base.Logging									import Severity, LogEntry
 from Base.Project									import File, FileTypes
 from ToolChains.Lattice.Lattice		import LatticeException
 
