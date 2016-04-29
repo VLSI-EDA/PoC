@@ -165,6 +165,6 @@ class Exit:
 	def printNotConfiguredException(cls, ex):
 		Init.init()
 		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
-		print("  Please run {YELLOW}'poc.[sh/cmd] configure'{NOCOLOR} in PoC root directory.".format(**Init.Foreground))
+		print("  Please run {YELLOW}'poc.[sh/ps1] configure'{NOCOLOR} in PoC root directory.".format(**Init.Foreground))
 		Exit.exit(1)
 

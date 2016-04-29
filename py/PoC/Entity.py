@@ -37,7 +37,7 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Base.Entity")
+	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module PoC.Entity")
 
 
 # load dependencies

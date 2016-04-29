@@ -67,7 +67,7 @@ class Query:
 			if (len(parts) == 2):
 				sectionName = parts[0]
 				optionName = parts[1]
-				result =  self.PoCConfig[sectionName][optionName]
+				result =  self.PoCConfig["INSTALL." + sectionName][optionName]
 			else:
 				raise ConfigurationException("Syntax error in query string '{0}'".format(query))
 
