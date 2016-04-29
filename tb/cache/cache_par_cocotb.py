@@ -234,7 +234,7 @@ def random_input_gen(tb,n=100000):
 	# we cannot directly access the content of the LRU list in the testbench because this function is called asynchronously
 	lru_tags = tuple([LeastRecentlyUsedDict(size_limit=tb.associativity) for _ in range(tb.cache_sets)])
 	
-	for _ in range(n):
+	for i in range(n):
 		if DEBUG and (i % 1000 == 0): print("Generating transaction #{0} ...".format(i))
 		
 		command = random.randint(1,60)

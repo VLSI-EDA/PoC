@@ -348,8 +348,8 @@ class PoC(ILogable, ArgParseMixin):
 		print()
 
 		# configure each vendor or tool of a tool chain
-		for config in Configurations:
-			configurator = config(self)
+		configurators = [config(self) for config in Configurations]
+		for configurator in configurators:
 
 			# skip configuration with unsupported platforms
 			if (not configurator.IsSupportedPlatform()):	continue
@@ -376,21 +376,8 @@ class PoC(ILogable, ArgParseMixin):
 		self.__WritePoCConfiguration()
 		# re-read configuration
 		self.__ReadPoCConfiguration()
-
-		# QUESTION: move to QuestaSim package? What about ModelSim Altera Edition? add a hook into both, pointing to a Mentor MixIn class for writing the modelsim.ini?
-		# create non-vendor-specific modelsim.ini
-		tempDirectory = self.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
-		precompiledDirectory = self.PoCConfig['CONFIG.DirectoryNames']['PrecompiledFiles']
-		vSimSimulatorFiles = self.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
-		modelsimIniPath = self.RootDirectory / tempDirectory / precompiledDirectory / vSimSimulatorFiles / "modelsim.ini"
-		if not modelsimIniPath.exists():
-			modelsimIniPath.parent.mkdir(parents=True)
-			with modelsimIniPath.open('w') as fileHandle:
-				fileContent = dedent("""\
-					[Library]
-					others = $MODEL_TECH/../modelsim.ini
-					""")
-				fileHandle.write(fileContent)
+		# run post-configuration tasks
+		for configurator in configurators: configurator.RunPostConfigurationTasks()
 
 	def _InitializeConfiguration(self):
 		# create parser instance
@@ -638,7 +625,12 @@ class PoC(ILogable, ArgParseMixin):
 		
 		fqnList =			self._ExtractFQNs(args.FQN)
 		board =				self._ExtractBoard(args.BoardName, args.DeviceName)
-		vhdlVersion =	self._ExtractVHDLVersion(args.VHDLVersion)
+
+		# FIXME: Altera vendor libraries are not compatible with VHDL-2008  -> use VHDL-93 by default
+		if (args.VHDLVersion is None):
+			vhdlVersion = VHDLVersion.VHDL93  # self.__SimulationDefaultVHDLVersion
+		else:
+			vhdlVersion = VHDLVersion.parse(args.VHDLVersion)
 
 		# prepare some paths
 		self.Directories["GHDLTemp"] =					self.Directories["PoCTemp"] / self.PoCConfig['CONFIG.DirectoryNames']['GHDLFiles']
@@ -813,7 +805,7 @@ class PoC(ILogable, ArgParseMixin):
 		# prepare paths to vendor simulation libraries
 		self.__PrepareVendorLibraryPaths()
 
-		# create a GHDLSimulator instance and prepare it
+		# create a VivadoSimulator instance and prepare it
 		simulator = VivadoSimulator(self, args.logs, args.reports, args.GUIMode)
 		simulator.PrepareSimulator(binaryPath, vivadoVersion)
 		simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)

@@ -6,11 +6,11 @@
 # ==============================================================================
 #	Authors:				 	Martin Zabel
 # 
-#	Bash Script:			Compile Xilinx's simulation libraries
+#	Bash Script:			Compile Altera's simulation libraries
 # 
 # Description:
 # ------------------------------------
-#	This is a bash script compiles Xilinx's simulation libraries into a local
+#	This is a bash script compiles Altera's simulation libraries into a local
 #	directory.
 #
 # License:
@@ -32,30 +32,24 @@
 # ==============================================================================
 
 poc_sh=../../poc.sh
-Simulator=questa						# questa, ghdl, ...
-Language=vhdl								# all, vhdl, verilog
-TargetArchitecture=all			# all, virtex5, virtex6, virtex7, ...
+Simulator=ghdl					# questasim, ghdl, ...
+Language=vhdl								# vhdl
+TargetArchitecture="cycloneiii	stratixiv"		# space separated device list
 
-ghdlScript=/space/install/ghdl/libraries/vendors/compile-xilinx-ise.sh
+ghdlScript=/space/install/ghdl/libraries/vendors/compile-altera.sh
 
 # define color escape codes
 RED='\e[0;31m'			# Red
 YELLOW='\e[1;33m'		# Yellow
 NOCOLOR='\e[0m'			# No Color
 
-# if $XILINX environment variable is not set and Simulator /= ghdl
-if [ -z "$XILINX" -a \( "$Simulator" != "ghdl" \) ]; then
-	PoC_ISE_SettingsFile=$($poc_sh query Xilinx.ISE:SettingsFile)
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${RED}ERROR: No Xilinx ISE installation found.${NOCOLOR}"
-		echo 1>&2 -e "${RED}Run 'PoC.py --configure' to configure your Xilinx ISE installation.${NOCOLOR}"
-		exit 1
-	fi
-	echo -e "${YELLOW}Loading Xilinx ISE environment '$PoC_ISE_SettingsFile'${NOCOLOR}"
-	PyWrapper_RescueArgs=$@
-	set --
-	source "$PoC_ISE_SettingsFile"
-	set -- $PyWrapper_RescueArgs
+# Setup command to execute
+if [ "$Simulator" != ghdl ]; then
+  QuartusSH=$($poc_sh query INSTALL.Altera.Quartus:BinaryDirectory 2>/dev/null)/quartus_sh
+  if [ $? -ne 0 ]; then
+	  echo 1>&2 -e "${RED}ERROR: Cannot get Altera Quartus binary dir.${NOCOLOR}"
+	  exit;
+  fi
 fi
 
 # Setup destination directory
@@ -69,8 +63,8 @@ case "$Simulator" in
 	ghdl)
 		DestDir=$DestDir/ghdl
 		;;
-	questa)
-		DestDir=$DestDir/vsim/xilinx-ise
+	questasim)
+		DestDir=$DestDir/vsim/altera
 		;;
 	*)
 		echo "Unsupported simulator."
@@ -80,7 +74,7 @@ esac
 
 # Setup simulator directory
 case "$Simulator" in
-	questa)
+	questasim)
 		SimulatorDir=$($poc_sh query ModelSim:InstallationDirectory 2>/dev/null)/bin	# Path to the simulators bin directory
 		if [ $? -ne 0 ]; then
 			echo 1>&2 -e "${RED}ERROR: Cannot get ModelSim installation dir.${NOCOLOR}"
@@ -102,12 +96,12 @@ if [ $? -ne 0 ]; then
 	exit;
 fi
 
-# Compile libraries with simulator, executed in $DestDir
+# Compile libraries with simulator, executed in destination directory
 case "$Simulator" in
 	ghdl)
 		$ghdlScript -a -s -S
 		;;
-	questa)
+	questasim)
 		# create modelsim.ini
 		echo "[Library]" > modelsim.ini
 		echo "others = ../modelsim.ini" >> modelsim.ini
@@ -116,16 +110,15 @@ case "$Simulator" in
 			exit;
 		fi
 
-		# call Xilinx script
-		compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $SimulatorDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise
-		cd ..
+		# call compile script
+		$QuartusSH --simlib_comp -tool $Simulator -language $Language -tool_path $SimulatorDir -directory $DestDir -rtl_only
+
+		for Family in $TargetArchitecture; do
+			$QuartusSH --simlib_comp -tool $Simulator -language $Language -family $Family -tool_path $SimulatorDir -directory $DestDir -no_rtl
+		done
 		;;
 	*)
 		echo "Unsupported simulator."
 		exit 1
 		;;
 esac
-
-# create "xilinx" symlink
-rm -f xilinx
-ln -s xilinx-ise xilinx

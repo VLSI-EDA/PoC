@@ -4,7 +4,7 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-if (VHDL <= 2002) then
+if (VHDL >= 2002) then
 	report "Altera primitives don't support VHDL-200x."
 else
 	if ((Tool = "GHDL") and ?("temp/precompiled/ghdl/altera")) then

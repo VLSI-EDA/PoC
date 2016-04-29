@@ -166,6 +166,7 @@ class Simulator(BaseSimulator):
 		ghdl.Parameters[ghdl.FlagVerbose] =						(self.Logger.LogLevel is Severity.Debug)
 		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			VHDL_TESTBENCH_LIBRARY_NAME
 		ghdl.Parameters[ghdl.ArgTopLevel] =						testbench.ModuleName
+		ghdl.Parameters[ghdl.FlagExplicit] =					True
 
 		# add external library references
 		ghdl.Parameters[ghdl.ArgListLibraryReferences] = [str(extLibrary.Path) for extLibrary in self._pocProject.ExternalVHDLLibraries]

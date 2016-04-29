@@ -234,3 +234,6 @@ class Configuration:		#(ISubClassRegistration):
 		
 		return binPath
 
+	def RunPostConfigurationTasks(self):
+		"""Virtual method. Overwrite to execute post-configuration tasks"""
+		pass

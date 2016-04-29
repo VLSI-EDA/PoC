@@ -32,8 +32,6 @@
 # ==============================================================================
 #
 # entry point
-from subprocess import check_output
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -41,6 +39,9 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
 
+
+from subprocess import check_output
+from textwrap import dedent
 
 from lib.Functions							import CallByRefParam
 from Base.Exceptions						import PlatformNotSupportedException
@@ -108,6 +109,22 @@ class Configuration(BaseConfiguration):
 		if str(version) not in output:
 			raise ConfigurationException("QuestaSim version mismatch. Expected version {0}.".format(version))
 
+	def RunPostConfigurationTasks(self):
+		if (len(self._host.PoCConfig[self._section]) == 0): return # exit if not configured
+
+		tempDirectory = self._host.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
+		precompiledDirectory = self._host.PoCConfig['CONFIG.DirectoryNames']['PrecompiledFiles']
+		vSimSimulatorFiles = self._host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
+		vsimPath = self._host.RootDirectory / tempDirectory / precompiledDirectory / vSimSimulatorFiles
+		modelsimIniPath = vsimPath / "modelsim.ini"
+		if not modelsimIniPath.exists():
+			if not vsimPath.exists(): vsimPath.mkdir(parents=True)
+			with modelsimIniPath.open('w') as fileHandle:
+				fileContent = dedent("""\
+								[Library]
+								others = $MODEL_TECH/../modelsim.ini
+								""")
+				fileHandle.write(fileContent)
 
 class QuestaSimMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
