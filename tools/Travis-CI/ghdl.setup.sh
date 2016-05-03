@@ -3,23 +3,23 @@
 # configure variables in the section below
 GHDL_BACKEND="llvm"
 GHDL_VERSION="0.34dev"
-RELEASE_DATE="2016.04.20"
+RELEASE_DATE="2016-05-03"
 
 GITHUB_SERVER="https://github.com"
-GITHUB_SLUG="Paebbels/ghdl"
+GITHUB_SLUG="tgingold/ghdl"
 
 TRAVIS_DIR="temp/Travis-CI"
 
 
 # assemble the GitHub URL
 # --------------------------------------
-# example: v0.34dev-2016.04.19
-GITHUB_TAGNAME="v$GHDL_VERSION-$RELEASE_DATE"
+# example: 2016-05-03
+GITHUB_TAGNAME="$RELEASE_DATE"
 
-# example: ghdl-llvm-0.34dev.tar.gz
-GITHUB_RELEASE_FILE="ghdl-$GHDL_BACKEND-$GHDL_VERSION.tar.gz"
+# example: ghdl-llvm-0.34dev-2016-05-03.tar.gz
+GITHUB_RELEASE_FILE="ghdl-$GHDL_VERSION-$GHDL_BACKEND-$RELEASE_DATE.tgz"
 
-# example: https://github.com/Paebbels/ghdl/releases/download/v0.34dev-2016.04.19/ghdl-llvm-0.34dev.tar.gz
+# example: https://github.com/tgingold/ghdl/releases/download/2016.05.03/ghdl-0.34dev-llvm-2016-05-03.tar.gz
 GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHUB_RELEASE_FILE"
 
 
@@ -58,7 +58,7 @@ fi
 # unpack GHDL
 if [ -e $GHDL_TARBALL ]; then
 	echo -e "${CYAN}Unpacking $GHDL_TARBALL... ${NOCOLOR}"
-	tar -xzf ghdl.tar.gz
+	tar -xzf ghdl.tgz
 	if [ $? -eq 0 ]; then
 		echo -e "${GREEN}Unpack [SUCCESSFUL]${NOCOLOR}"
 	else
@@ -66,6 +66,8 @@ if [ -e $GHDL_TARBALL ]; then
 		exit 1
 	fi
 fi
+
+ls -Ahl
 
 # remove downloaded files
 rm $GHDL_TARBALL
@@ -79,4 +81,3 @@ else
 	echo 1>&2 -e "${RED}GHDL test [FAILED]${NOCOLOR}"
 	exit 1
 fi
-
