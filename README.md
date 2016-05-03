@@ -13,7 +13,7 @@ Table of Content:
  1. [Overview](#1-overview)
  2. [Download](#2-download)
  3. [Requirements](#3-requirements)
- 4. [Dependencies](#4-dependencies)
+ 4. [Dependencies](#4-dependencies-optional)
  5. [Configuring PoC on a Local System (Stand Alone)](#5-configuring-poc-on-a-local-system-stand-alone)
  6. [Integrating PoC into Projects](#6-integrating-poc-into-projects)
  7. [Using PoC](#7-using-poc)
@@ -79,7 +79,7 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 ##### Common requirements:
 
  - Programming languages and runtimes:
-	- [Python 3][python] (&ge; 3.4):
+	- [Python 3][python] (&ge; 3.5):
 	     - [colorama][colorama]
  - Synthesis tool chains:
      - Altera Quartus-II &ge; 13.0 or
@@ -100,11 +100,10 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  [gtkwave]:		http://gtkwave.sourceforge.net/
 
 ##### Linux specific requirements:
- 
- - Debian specific:
-	- bash is configured as `/bin/sh` ([read more](https://wiki.debian.org/DashAsBinSh))  
-      `dpkg-reconfigure dash`
- 
+
+ - Some vendor scripts (e.g. Xilinx) assume a full `bash` behind `/bin/sh`:
+ 	- [Debian](https://wiki.debian.org/DashAsBinSh)
+
 ##### Windows specific requirements:
 
  - PowerShell 4.0 ([Windows Management Framework 4.0][wmf40])
@@ -117,7 +116,7 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  [pscx]:    http://pscx.codeplex.com/
 
 
-## 4 Dependencies
+## 4 Dependencies (optional)
 
 **The PoC-Library** depends on:
 
@@ -148,9 +147,13 @@ for more details.
 
 Run the following command line instructions to configure PoC on your local system.
 
+```bash
+cd <PoCRoot>
+./poc.sh configure
+```
 ```PowerShell
 cd <PoCRoot>
-.\poc.ps1 --configure
+.\poc.ps1 configure
 ```
 
 **Note:** The configuration process can be re-run at every time to add, remove
