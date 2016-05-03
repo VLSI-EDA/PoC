@@ -16,7 +16,7 @@ TRAVIS_DIR="temp/Travis-CI"
 # example: 2016-05-03
 GITHUB_TAGNAME="$RELEASE_DATE"
 
-# example: ghdl-llvm-0.34dev-2016-05-03.tar.gz
+# example: ghdl-llvm-0.34dev-2016-05-03.tgz
 GITHUB_RELEASE_FILE="ghdl-$GHDL_VERSION-$GHDL_BACKEND-$RELEASE_DATE.tgz"
 
 # example: https://github.com/tgingold/ghdl/releases/download/2016.05.03/ghdl-0.34dev-llvm-2016-05-03.tar.gz
@@ -27,7 +27,7 @@ GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHU
 # --------------------------------------
 GITROOT=$(pwd)
 POCROOT=$(pwd)
-GHDL_TARBALL="ghdl.tar.gz"
+GHDL_TARBALL="ghdl.tgz"
 
 # define color escape codes
 RED='\e[0;31m'			# Red
@@ -46,7 +46,7 @@ mkdir -p $TRAVIS_DIR
 cd $TRAVIS_DIR
 
 # downloading GHDL
-echo -e "${CYAN}Downloading ghdl.tar.gz from $GITHUB_URL...${NOCOLOR}"
+echo -e "${CYAN}Downloading $GHDL_TARBALL from $GITHUB_URL...${NOCOLOR}"
 wget -q --show-progress $GITHUB_URL -O $GHDL_TARBALL
 if [ $? -eq 0 ]; then
 	echo -e "${GREEN}Download [SUCCESSFUL]${NOCOLOR}"
@@ -58,7 +58,7 @@ fi
 # unpack GHDL
 if [ -e $GHDL_TARBALL ]; then
 	echo -e "${CYAN}Unpacking $GHDL_TARBALL... ${NOCOLOR}"
-	tar -xzf ghdl.tgz
+	tar -xzf $GHDL_TARBALL
 	if [ $? -eq 0 ]; then
 		echo -e "${GREEN}Unpack [SUCCESSFUL]${NOCOLOR}"
 	else
