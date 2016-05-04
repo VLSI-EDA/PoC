@@ -39,7 +39,8 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
-from subprocess import check_output, CalledProcessError, STDOUT
+
+from subprocess										import check_output, CalledProcessError, STDOUT
 
 from Base.Configuration						import Configuration as BaseConfiguration, ConfigurationException
 from Base.Exceptions							import PlatformNotSupportedException
@@ -64,13 +65,13 @@ class Configuration(BaseConfiguration):
 				"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/Diamond/${Version}_x64",
 				"BinaryDirectory":				"${InstallationDirectory}/bin/nt64"
 			}
-		# },
-		# "Linux": {
-		# 	_section: {
-		# 		"Version":								"15.0",
-		# 		"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/${Version}/diamond",
-		# 		"BinaryDirectory":				"${InstallationDirectory}/fix_me"
-		# 	}
+		},
+		"Linux": {
+			_section: {
+				"Version":								"3.7",
+				"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/diamond/${Version}_x64",
+				"BinaryDirectory":				"${InstallationDirectory}/bin/lin64"
+			}
 		}
 	}
 
@@ -92,10 +93,8 @@ class Configuration(BaseConfiguration):
 			raise
 
 	def __CheckDiamondVersion(self, binPath, version):
-		if (self._host.Platform == "Windows"):
-			tclShellPath = binPath / "pnmainc.exe"
-		else:
-			tclShellPath = binPath / "pnmainc"
+		if (self._host.Platform == "Windows"):	tclShellPath = binPath / "pnmainc.exe"
+		else:																		tclShellPath = binPath / "pnmainc"
 
 		if not tclShellPath.exists():
 			raise ConfigurationException("Executable '{0!s}' not found.".format(tclShellPath)) from FileNotFoundError(
@@ -135,7 +134,7 @@ class TclShell(Executable, DiamondMixIn):
 		DiamondMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
 		if (platform == "Windows"):		executablePath = binaryDirectoryPath / "pnmainc.exe"
-		# elif (platform == "Linux"):		executablePath = binaryDirectoryPath / "pnmainc"
+		elif (platform == "Linux"):		executablePath = binaryDirectoryPath / "pnmainc"
 		else:													raise PlatformNotSupportedException(platform)
 		Executable.__init__(self, platform, executablePath, logger=logger)
 

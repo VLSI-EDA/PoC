@@ -37,16 +37,20 @@
 # ============================================================================
 
 class Attribute:
-	AttributesMemberName =	"__meta__"
-	_debug =								False
+	__AttributesMemberName__ =	"__pyattr__"
+	_debug =										False
 	
 	def __call__(self, func):
-		# inherit attributes and append myself or create a new attributes list
-		if (Attribute.AttributesMemberName in func.__dict__):
-			func.__dict__[Attribute.AttributesMemberName].append(self)
-		else:
-			func.__setattr__(Attribute.AttributesMemberName, [self])
+		self._AppendAttribute(func, self)
 		return func
+
+	@staticmethod
+	def _AppendAttribute(func, attribute):
+		# inherit attributes and append myself or create a new attributes list
+		if (Attribute.__AttributesMemberName__ in func.__dict__):
+			func.__dict__[Attribute.__AttributesMemberName__].append(attribute)
+		else:
+			func.__setattr__(Attribute.__AttributesMemberName__, [attribute])
 	
 	def __str__(self):
 		return self.__name__
@@ -56,8 +60,8 @@ class Attribute:
 		methods = {}
 		for funcname,func in cl.__class__.__dict__.items():
 			if hasattr(func, '__dict__'):
-				if (Attribute.AttributesMemberName in func.__dict__):
-					attributes = func.__dict__[Attribute.AttributesMemberName]
+				if (Attribute.__AttributesMemberName__ in func.__dict__):
+					attributes = func.__dict__[Attribute.__AttributesMemberName__]
 					if isinstance(attributes, list):
 						for attribute in attributes:
 							if isinstance(attribute, cls):
@@ -66,8 +70,8 @@ class Attribute:
 		
 	@classmethod
 	def GetAttributes(cls, method):
-		if (Attribute.AttributesMemberName in method.__dict__):
-			attributes = method.__dict__[Attribute.AttributesMemberName]
+		if (Attribute.__AttributesMemberName__ in method.__dict__):
+			attributes = method.__dict__[Attribute.__AttributesMemberName__]
 			if isinstance(attributes, list):
 				return [attribute for attribute in attributes if isinstance(attribute, cls)]
 		return list()
@@ -82,15 +86,15 @@ class AttributeHelperMixin:
 		}.items()
 
 	def HasAttribute(self, method):
-		if (Attribute.AttributesMemberName in method.__dict__):
-			attributeList = method.__dict__[Attribute.AttributesMemberName]
+		if (Attribute.__AttributesMemberName__ in method.__dict__):
+			attributeList = method.__dict__[Attribute.__AttributesMemberName__]
 			return (isinstance(attributeList, list) and (len(attributeList) != 0))
 		else:
 			return False
 				
 	def GetAttributes(self, method):
-		if (Attribute.AttributesMemberName in method.__dict__):
-			attributeList = method.__dict__[Attribute.AttributesMemberName]
+		if (Attribute.__AttributesMemberName__ in method.__dict__):
+			attributeList = method.__dict__[Attribute.__AttributesMemberName__]
 			if isinstance(attributeList, list):
 				return attributeList
 		return list()

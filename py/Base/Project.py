@@ -178,7 +178,7 @@ class VHDLVersion(Enum):
 		elif (self == VHDLVersion.VHDL08):	return "08"
 
 
-class Project():
+class Project:
 	def __init__(self, name):
 		self._name =									name
 		self._rootDirectory =					None

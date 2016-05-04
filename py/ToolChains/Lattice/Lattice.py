@@ -39,6 +39,7 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
+
 from Base.Configuration		import Configuration as BaseConfiguration
 from Base.Project					import ConstraintFile, FileTypes
 from Base.ToolChain				import ToolChainException
@@ -57,16 +58,16 @@ class Configuration(BaseConfiguration):
 			_section: {
 				"InstallationDirectory": "C:/Lattice"
 			}
-		# },
-		# "Linux":   {
-		# 	_section: {
-		# 		"InstallationDirectory": "/opt/Lattice"
-		# 	}
+		},
+		"Linux":   {
+			_section: {
+				"InstallationDirectory": "/usr/local"
+			}
 		}
 	}
 
 	def _GetDefaultInstallationDirectory(self):
-		path = self._TestDefaultInstallPath({"Windows": "Lattice", "Linux": "Lattice"})
+		path = self._TestDefaultInstallPath({"Windows": "Lattice", "Linux": "diamond"})
 		if path is None: return super()._GetDefaultInstallationDirectory()
 		return str(path)
 

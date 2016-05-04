@@ -50,7 +50,7 @@ from lib.Parser import ParserException
 from Base.Exceptions		import ExceptionBase
 from Base.Logging				import ILogable
 from Base.Project				import ToolChain, Tool, VHDLVersion, Environment, FileTypes
-from PoC.Project				import Project as PoCProject, FileListFile, RulesFile
+from PoC.Project				import VirtualProject, FileListFile, RulesFile
 from Parser.RulesParser	import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn
 
 
@@ -86,9 +86,6 @@ class Compiler(ILogable):
 		self._vhdlVersion =	VHDLVersion.VHDL93
 		self._pocProject =	None
 
-		self._tempPath =		None
-		self._outputPath =	None
-
 	# class properties
 	# ============================================================================
 	@property
@@ -98,37 +95,33 @@ class Compiler(ILogable):
 	@property
 	def ShowReport(self):			return self.__showReport
 	@property
-	def TemporaryPath(self):	return self._tempPath
-	@property
-	def OutputPath(self):			return self._outputPath
-	@property
 	def PoCProject(self):			return self._pocProject
 
 	def _PrepareCompilerEnvironment(self):
-		# create temporary directory for GHDL if not existent
-		if (not (self._tempPath).exists()):
+		# create temporary directory for the compiler if not existent
+		if (not self.Directories.Working.exists()):
 			self._LogVerbose("Creating temporary directory for synthesizer files.")
-			self._LogDebug("Temporary directory: {0!s}".format(self._tempPath))
-			self._tempPath.mkdir(parents=True)
+			self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
+			self.Directories.Working.mkdir(parents=True)
 
 		# change working directory to temporary iSim path
 		self._LogVerbose("Changing working directory to temporary directory.")
-		self._LogDebug("cd \"{0!s}\"".format(self._tempPath))
-		chdir(str(self._tempPath))
+		self._LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
+		chdir(str(self.Directories.Working))
 
 		# create output directory for CoreGen if not existent
-		if not (self._outputPath).exists() :
+		if (not self.Directories.Destination.exists()) :
 			self._LogVerbose("Creating output directory for generated files.")
-			self._LogDebug("Output directory: {0!s}.".format(self._outputPath))
-			self._outputPath.mkdir(parents=True)
+			self._LogDebug("Output directory: {0!s}.".format(self.Directories.Destination))
+			self.Directories.Destination.mkdir(parents=True)
 
 	def _CreatePoCProject(self, netlist, board):
 		# create a PoCProject and read all needed files
 		self._LogVerbose("Creating a PoC project '{0}'".format(netlist.ModuleName))
-		pocProject = PoCProject(netlist.ModuleName)
+		pocProject = VirtualProject(netlist.ModuleName)
 
 		# configure the project
-		pocProject.RootDirectory =	self.Host.RootDirectory
+		pocProject.RootDirectory =	self.Host.Directories.Root
 		pocProject.Environment =		Environment.Synthesis
 		pocProject.ToolChain =			self._TOOL_CHAIN
 		pocProject.Tool =						self._TOOL

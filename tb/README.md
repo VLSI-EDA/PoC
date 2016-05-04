@@ -3,7 +3,7 @@
 **The PoC-Library** can launch manual, half-automated and fully automated
 testbenches. The testbench can be run in command line or GUI mode. If available,
 the used simulator is launched with pre-configured waveform files. This can be
-done by invoking PoC's frontend script: poc.[sh|ps1] and passing the simulator
+done by invoking PoC's frontend script: `poc.[sh|ps1]` and passing the simulator
 command plus the entity to simulate.
 
 PoC supports the following simulators:
@@ -47,7 +47,7 @@ Table of Content:
 ## Quick Example
 
 The following quick example uses the Xilinx ISE Simulator to compile a testbench for the module
-`arith_prng.vhdl` (Pseudo Random Number Generator - prng). The VHDL file is located at
+`arith_prng.vhdl` (Pseudo Random Number Generator - PRNG). The VHDL file is located at
 `<PoCRoot>/src/arith/` and virtually a member in the `PoC.arith` namespace. So the module can be
 identified by an unique name: `PoC.arith.prng`, which is passed to the testbench script.
 

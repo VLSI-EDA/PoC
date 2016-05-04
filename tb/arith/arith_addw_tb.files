@@ -8,8 +8,8 @@
 include				"src/arith/arith_addw.files"								# Unit Under Test
 
 # Testbench file(s)
-vhdl		test	"tb/arith/arith_addw_tb.vhdl"								# Testbench
-
-if (Tool = "Xilinx_iSim") then
-	report "This testbench does not support Xilinx ISE Simulator."
+if (Tool in ["Xilinx_iSim", "Xilinx_xSim"]) then
+	vhdl		test	"tb/arith/arith_addw_tb.iSim.vhdl"				# Testbench
+else
+  vhdl		test	"tb/arith/arith_addw_tb.vhdl"							# Testbench
 end if

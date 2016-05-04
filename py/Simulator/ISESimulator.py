@@ -41,11 +41,8 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.ISESimulator")
 
 # load dependencies
-from configparser							import NoSectionError
-from colorama									import Fore as Foreground
-
 from lib.Functions						import Init
-from Base.Project							import FileTypes, VHDLVersion, Environment, ToolChain, Tool
+from Base.Project							import VHDLVersion, ToolChain, Tool
 from Base.Simulator						import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult
 from ToolChains.Xilinx.Xilinx	import XilinxProjectExportMixIn
 from ToolChains.Xilinx.ISE		import ISE, ISESimulator, ISEException
@@ -54,6 +51,11 @@ from ToolChains.Xilinx.ISE		import ISE, ISESimulator, ISEException
 class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =						ToolChain.Xilinx_ISE
 	_TOOL =									Tool.Xilinx_iSim
+
+	class __Directories__:
+		Working =			None
+		PoCRoot =			None
+		PreCompiled =	None
 
 	def __init__(self, host, showLogs, showReport, guiMode):
 		super().__init__(host, showLogs, showReport)
@@ -65,17 +67,17 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._testbenchFQN =	None
 		self._vhdlGenerics =	None
 
+		self._directories =		self.__Directories__()
 		self._ise =						None
 
 		self._PrepareSimulationEnvironment()
 
 	@property
-	def TemporaryPath(self):
-		return self._tempPath
+	def Directories(self):
+		return self._directories
 
 	def _PrepareSimulationEnvironment(self):
 		self._LogNormal("Preparing simulation environment...")
-		self._tempPath = self.Host.Directories["iSimTemp"]
 		super()._PrepareSimulationEnvironment()
 
 	def PrepareSimulator(self, binaryPath, version):
@@ -105,7 +107,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	def _RunCompile(self, testbench):
 		self._LogNormal("  compiling source files...")
 		
-		prjFilePath = self._tempPath / (testbench.ModuleName + ".prj")
+		prjFilePath = self.Directories.Working / (testbench.ModuleName + ".prj")
 		self._WriteXilinxProjectFile(prjFilePath, "iSim", self._vhdlVersion)
 
 		# create an ISEVHDLCompiler instance
@@ -115,8 +117,8 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	def _RunLink(self, testbench):
 		self._LogNormal("Running fuse...")
 		
-		exeFilePath =	self._tempPath / (testbench.ModuleName + ".exe")
-		prjFilePath = self._tempPath / (testbench.ModuleName + ".prj")
+		exeFilePath =	self.Directories.Working / (testbench.ModuleName + ".exe")
+		prjFilePath = self.Directories.Working / (testbench.ModuleName + ".prj")
 		self._WriteXilinxProjectFile(prjFilePath, "iSim")
 
 		# create a ISELinker instance
@@ -140,11 +142,11 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	def _RunSimulation(self, testbench):
 		self._LogNormal("Running simulation...")
 		
-		iSimLogFilePath =		self._tempPath / (testbench.ModuleName + ".iSim.log")
-		exeFilePath =				self._tempPath / (testbench.ModuleName + ".exe")
-		tclBatchFilePath =	self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimBatchScript']
-		tclGUIFilePath =		self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimGUIScript']
-		wcfgFilePath =			self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimWaveformConfigFile']
+		iSimLogFilePath =		self.Directories.Working / (testbench.ModuleName + ".iSim.log")
+		exeFilePath =				self.Directories.Working / (testbench.ModuleName + ".exe")
+		tclBatchFilePath =	self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimBatchScript']
+		tclGUIFilePath =		self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimGUIScript']
+		wcfgFilePath =			self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimWaveformConfigFile']
 
 		# create a ISESimulator instance
 		iSim = ISESimulator(exeFilePath, logger=self.Logger)

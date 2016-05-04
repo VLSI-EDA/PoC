@@ -115,7 +115,7 @@ class Configuration(BaseConfiguration):
 		tempDirectory = self._host.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
 		precompiledDirectory = self._host.PoCConfig['CONFIG.DirectoryNames']['PrecompiledFiles']
 		vSimSimulatorFiles = self._host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
-		vsimPath = self._host.RootDirectory / tempDirectory / precompiledDirectory / vSimSimulatorFiles
+		vsimPath = self._host.Directories.Root / tempDirectory / precompiledDirectory / vSimSimulatorFiles
 		modelsimIniPath = vsimPath / "modelsim.ini"
 		if not modelsimIniPath.exists():
 			if not vsimPath.exists(): vsimPath.mkdir(parents=True)

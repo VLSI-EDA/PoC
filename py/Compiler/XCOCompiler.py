@@ -60,13 +60,24 @@ class Compiler(BaseCompiler):
 	_TOOL_CHAIN =	ToolChain.Xilinx_ISE
 	_TOOL =				Tool.Xilinx_CoreGen
 
+	class __Directories__:
+		Working =			None
+		PoCRoot =			None
+		Netlist =			None
+		Source =			None
+		Destination =	None
+
 	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
 
-		self._device =				None
-		self._tempPath =			None
-		self._outputPath =		None
-		self._ise =						None
+		self._device =			None
+
+		self._directories = self.__Directories__()
+		self._ise =					None
+
+	@property
+	def Directories(self):
+		return self._directories
 		
 	def PrepareCompiler(self, binaryPath, version):
 		# create the GHDL executable factory
@@ -115,8 +126,7 @@ class Compiler(BaseCompiler):
 
 	def _PrepareCompilerEnvironment(self, device):
 		self._LogNormal("preparing synthesis environment...")
-		self._tempPath =		self.Host.Directories["CoreGenTemp"]
-		self._outputPath =	self.Host.Directories["PoCNetList"] / str(device)
+		self.Directories.Destination = self.Directories.Netlist / str(device)
 		super()._PrepareCompilerEnvironment()
 
 	def _WriteSpecialSectionIntoConfig(self, device):
@@ -124,16 +134,16 @@ class Compiler(BaseCompiler):
 		self.Host.PoCConfig['SPECIAL'] = {}
 		self.Host.PoCConfig['SPECIAL']['Device'] =				device.FullName
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =	device.Series
-		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self._tempPath.as_posix()
+		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self.Directories.Working.as_posix()
 
 	def _RunCompile(self, netlist):
 		self._LogVerbose("Patching coregen.cgp and .cgc files...")
 		# read netlist settings from configuration file
 		xcoInputFilePath =		netlist.XcoFile
-		cgcTemplateFilePath =	self.Host.Directories["PoCNetlist"] / "template.cgc"
-		cgpFilePath =					self._tempPath / "coregen.cgp"
-		cgcFilePath =					self._tempPath / "coregen.cgc"
-		xcoFilePath =					self._tempPath / xcoInputFilePath.name
+		cgcTemplateFilePath =	self.Directories.Netlist / "template.cgc"
+		cgpFilePath =					self.Directories.Working / "coregen.cgp"
+		cgcFilePath =					self.Directories.Working / "coregen.cgc"
+		xcoFilePath =					self.Directories.Working / xcoInputFilePath.name
 
 		if (self.Host.Platform == "Windows"):
 			WorkingDirectory = ".\\temp\\"
@@ -191,12 +201,12 @@ class Compiler(BaseCompiler):
 
 		# copy xco file into temporary directory
 		self._LogVerbose("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
-		self._LogDebug("cp {0!s} {1!s}".format(xcoInputFilePath, self._tempPath))
+		self._LogDebug("cp {0!s} {1!s}".format(xcoInputFilePath, self.Directories.Working))
 		shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
 
 		# change working directory to temporary CoreGen path
-		self._LogDebug("cd {0!s}".format(self._tempPath))
-		chdir(str(self._tempPath))
+		self._LogDebug("cd {0!s}".format(self.Directories.Working))
+		chdir(str(self.Directories.Working))
 
 		# running CoreGen
 		# ==========================================================================

@@ -427,8 +427,6 @@ class Testbench(Base):
 		super().__init__(host, name, sectionName, parent)
 
 	@property
-	def Kind(self):						return self._kind
-	@property
 	@LazyLoadTrigger
 	def ModuleName(self):			return self._moduleName
 	@property

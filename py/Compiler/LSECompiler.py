@@ -55,10 +55,22 @@ class Compiler(BaseCompiler):
 	_TOOL_CHAIN =	ToolChain.Lattice_Diamond
 	_TOOL =				Tool.Lattice_LSE
 
+	class __Directories__:
+		Working =			None
+		PoCRoot =			None
+		Netlist =			None
+		Source =			None
+		Destination =	None
+
 	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
 
-		self._diamond =		None
+		self._directories =	self.__Directories__()
+		self._diamond =			None
+
+	@property
+	def Directories(self):
+		return self._directories
 
 	def PrepareCompiler(self, binaryPath, version):
 		# create the GHDL executable factory
@@ -93,7 +105,7 @@ class Compiler(BaseCompiler):
 		if (netlist.RulesFile is not None):
 			self._AddRulesFiles(netlist.RulesFile)
 
-		netlist.PrjFile = self._tempPath / (netlist.ModuleName + ".prj")
+		netlist.PrjFile = self.Directories.Working / (netlist.ModuleName + ".prj")
 
 		self._WriteQuartusProjectFile(netlist)
 
@@ -111,8 +123,7 @@ class Compiler(BaseCompiler):
 
 	def _PrepareCompilerEnvironment(self, device):
 		self._LogNormal("Preparing synthesis environment...")
-		self._tempPath =		self.Host.Directories["LatticeTemp"]
-		self._outputPath =	self.Host.Directories["PoCNetList"] / str(device)
+		self.Directories.Destination = self.Directories.Netlist / str(device)
 		super()._PrepareCompilerEnvironment()
 
 	def _WriteSpecialSectionIntoConfig(self, device):
@@ -120,14 +131,14 @@ class Compiler(BaseCompiler):
 		self.Host.PoCConfig['SPECIAL'] = {}
 		self.Host.PoCConfig['SPECIAL']['Device'] =				device.ShortName
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =	device.Series
-		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self._tempPath.as_posix()
+		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self.Directories.Working.as_posix()
 
 
 	def _WriteQuartusProjectFile(self, netlist):
 		argumentFile = SynthesisArgumentFile(netlist.PrjFile)
 		argumentFile.Architecture =	"\"ECP5UM\""
 		argumentFile.TopLevel =			netlist.ModuleName
-		argumentFile.LogFile =			self._tempPath / (netlist.ModuleName + ".lse.log")
+		argumentFile.LogFile =			self.Directories.Working / (netlist.ModuleName + ".lse.log")
 
 		argumentFile.Write(self.PoCProject)
 

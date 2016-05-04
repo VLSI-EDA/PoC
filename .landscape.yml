@@ -1,8 +1,8 @@
 python-targets:
 - 3
-requirements:
-- colorama
-- py-flags
+# requirements:
+# - colorama
+# - py-flags
 # doc-warnings: yes
 test-warnings: no
 strictness: medium

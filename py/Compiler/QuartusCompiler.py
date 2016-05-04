@@ -55,10 +55,22 @@ class Compiler(BaseCompiler):
 	_TOOL_CHAIN =	ToolChain.Altera_Quartus
 	_TOOL =				Tool.Altera_Quartus_Map
 
+	class __Directories__:
+		Working =			None
+		PoCRoot =			None
+		Netlist =			None
+		Source =			None
+		Destination =	None
+
 	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
 
-		self._quartus =		None
+		self._directories = self.__Directories__()
+		self._quartus =			None
+
+	@property
+	def Directories(self):
+		return self._directories
 
 	def PrepareCompiler(self, binaryPath, version):
 		# create the GHDL executable factory
@@ -93,8 +105,8 @@ class Compiler(BaseCompiler):
 		if (netlist.RulesFile is not None):
 			self._AddRulesFiles(netlist.RulesFile)
 
-		# netlist.XstFile = self._tempPath / (netlist.ModuleName + ".xst")
-		netlist.QsfFile = self._tempPath / (netlist.ModuleName + ".qsf")
+		# netlist.XstFile = self.Directories.Working / (netlist.ModuleName + ".xst")
+		netlist.QsfFile = self.Directories.Working / (netlist.ModuleName + ".qsf")
 
 		self._WriteQuartusProjectFile(netlist, board.Device)
 
@@ -112,8 +124,7 @@ class Compiler(BaseCompiler):
 
 	def _PrepareCompilerEnvironment(self, device):
 		self._LogNormal("preparing synthesis environment...")
-		self._tempPath =		self.Host.Directories["QuartusTemp"]
-		self._outputPath =	self.Host.Directories["PoCNetList"] / str(device)
+		self.Directories.Destination = self.Directories.Netlist / str(device)
 		super()._PrepareCompilerEnvironment()
 
 	def _WriteSpecialSectionIntoConfig(self, device):
@@ -121,7 +132,7 @@ class Compiler(BaseCompiler):
 		self.Host.PoCConfig['SPECIAL'] = {}
 		self.Host.PoCConfig['SPECIAL']['Device'] =				device.ShortName
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =	device.Series
-		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self._tempPath.as_posix()
+		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self.Directories.Working.as_posix()
 
 
 	def _WriteQuartusProjectFile(self, netlist, device):

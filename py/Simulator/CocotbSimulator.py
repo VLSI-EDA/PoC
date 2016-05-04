@@ -44,15 +44,12 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.CocotbSimulator")
 
+
 # load dependencies
-from configparser						import NoSectionError
 import shutil
 
-from colorama								import Fore as Foreground
-
-# from Base.Exceptions				import PlatformNotSupportedException, NotConfiguredException
 from lib.Functions					import Init
-from Base.Project						import FileTypes, VHDLVersion, Environment, ToolChain, Tool
+from Base.Project						import FileTypes, ToolChain, Tool
 from Base.Simulator					import SimulatorException, Simulator as BaseSimulator
 from PoC.Entity							import WildCard
 from ToolChains.GNU					import Make
@@ -63,6 +60,11 @@ class Simulator(BaseSimulator):
 	_TOOL =									Tool.Cocotb_QuestaSim
 	_COCOTB_SIMBUILD_DIRECTORY = "sim_build"
 
+	class __Directories__:
+		Working =			None
+		PoCRoot =			None
+		PreCompiled =	None
+
 	def __init__(self, host, showLogs, showReport, guiMode):
 		super().__init__(host, showLogs, showReport)
 
@@ -71,19 +73,20 @@ class Simulator(BaseSimulator):
 		self._entity =				None
 		self._testbenchFQN =	None
 
+		self._directories =		self.__Directories__()
+
 		self._LogNormal("preparing simulation environment...")
 		self._PrepareSimulationEnvironment()
 
 	@property
-	def TemporaryPath(self):
-		return self._tempPath
+	def Directories(self):
+		return self._directories
 
 	def _PrepareSimulationEnvironment(self):
 		self._LogNormal("preparing simulation environment...")
-		self._tempPath = self.Host.Directories["CocotbTemp"]
 		super()._PrepareSimulationEnvironment()
 
-		simBuildPath = self._tempPath / self._COCOTB_SIMBUILD_DIRECTORY
+		simBuildPath = self.Directories.Working / self._COCOTB_SIMBUILD_DIRECTORY
 		# create temporary directory for Cocotb if not existent
 		if (not (simBuildPath).exists()):
 			self._LogVerbose("Creating build directory for simulator files.")
@@ -143,7 +146,7 @@ class Simulator(BaseSimulator):
 
 		#
 		self._LogNormal("Running simulation...")
-		cocotbTemplateFilePath = self.Host.RootDirectory / self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile']
+		cocotbTemplateFilePath = self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile']
 		topLevel =			testbench.TopLevel
 		cocotbModule =	testbench.ModuleName
 
@@ -167,7 +170,7 @@ class Simulator(BaseSimulator):
 		with cocotbTemplateFilePath.open('r') as fileHandle:
 			cocotbMakefileContent = fileHandle.read()
 
-		cocotbMakefileContent = cocotbMakefileContent.format(PoCRootDirectory=str(self.Host.RootDirectory), VHDLSources=vhdlSources,
+		cocotbMakefileContent = cocotbMakefileContent.format(PoCRootDirectory=str(self.Host.Directories.Root), VHDLSources=vhdlSources,
 																													TopLevel=topLevel, CocotbModule=cocotbModule)
 
 		cocotbMakefilePath = self.Host.Directories["CocotbTemp"] / "Makefile"

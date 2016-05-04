@@ -90,8 +90,8 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 	     - [colorama][colorama]
 	     - [py-flags][pyflags]
 	  
-    All Python requirements are listed in [`pip3-requirements.lst`][pip3-req] and can be installed via:  
-   `pip3 install -r pip3-requirements.lst`
+    All Python requirements are listed in [`requirements.txt`][pip3-req] and can be installed via:  
+   `sudo python3.5 -m pip install -r requirements.txt`
  - Synthesis tool chains:
      - Altera Quartus-II &ge; 13.0 or
      - Lattice Diamond or
@@ -111,7 +111,7 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  [ghdl]:			https://sourceforge.net/projects/ghdl-updates/
  [gtkwave]:		http://gtkwave.sourceforge.net/
 
- [pip3-req]:  pip3-requirements.lst
+ [pip3-req]:  requirements.txt
 
 ##### Linux specific requirements:
  

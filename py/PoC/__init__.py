@@ -39,3 +39,8 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
 # load dependencies
+
+
+__POC_SOLUTION_KEYWORD__ =	"Solution"
+__POC_PROJECT_KEYWORD__ =		"Project"
+
