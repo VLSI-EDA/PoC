@@ -32,6 +32,8 @@
 # ==============================================================================
 #
 # entry point
+from pathlib import Path
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -52,11 +54,6 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =						ToolChain.Xilinx_ISE
 	_TOOL =									Tool.Xilinx_iSim
 
-	class __Directories__:
-		Working =			None
-		PoCRoot =			None
-		PreCompiled =	None
-
 	def __init__(self, host, showLogs, showReport, guiMode):
 		super().__init__(host, showLogs, showReport)
 		XilinxProjectExportMixIn.__init__(self)
@@ -67,22 +64,21 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._testbenchFQN =	None
 		self._vhdlGenerics =	None
 
-		self._directories =		self.__Directories__()
 		self._ise =						None
 
+		iseFilesDirectoryName = host.PoCConfig['CONFIG.DirectoryNames']['ISESimulatorFiles']
+		self.Directories.Working = host.Directories.Temp / iseFilesDirectoryName
+		self.Directories.PreCompiled = host.Directories.PreCompiled / iseFilesDirectoryName
+
 		self._PrepareSimulationEnvironment()
+		self._PrepareSimulator()
 
-	@property
-	def Directories(self):
-		return self._directories
-
-	def _PrepareSimulationEnvironment(self):
-		self._LogNormal("Preparing simulation environment...")
-		super()._PrepareSimulationEnvironment()
-
-	def PrepareSimulator(self, binaryPath, version):
+	def _PrepareSimulator(self):
 		# create the Xilinx ISE executable factory
 		self._LogVerbose("Preparing ISE simulator.")
+		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.ISE']
+		version = iseSection['Version']
+		binaryPath = Path(iseSection['BinaryDirectory'])
 		self._ise = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion=None, vhdlGenerics=None, guiMode=False):

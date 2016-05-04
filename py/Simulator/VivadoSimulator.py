@@ -32,6 +32,8 @@
 # ==============================================================================
 #
 # entry point
+from pathlib import Path
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -52,11 +54,6 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =						ToolChain.Xilinx_Vivado
 	_TOOL =									Tool.Xilinx_xSim
 
-	class __Directories__:
-		Working =			None
-		PoCRoot =			None
-		PreCompiled =	None
-
 	def __init__(self, host, showLogs, showReport, guiMode):
 		super(self.__class__, self).__init__(host, showLogs, showReport)
 		XilinxProjectExportMixIn.__init__(self)
@@ -68,22 +65,21 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._vhdlVersion =		None
 		self._vhdlGenerics =	None
 
-		self._directories =		self.__Directories__()
 		self._vivado =				None
 
+		vivadoFilesDirectoryName = host.PoCConfig['CONFIG.DirectoryNames']['VivadoSimulatorFiles']
+		self.Directories.Working = host.Directories.Temp / vivadoFilesDirectoryName
+		self.Directories.PreCompiled = host.Directories.PreCompiled / vivadoFilesDirectoryName
+
 		self._PrepareSimulationEnvironment()
+		self._PrepareSimulator()
 
-	@property
-	def Directories(self):
-		return self._directories
-
-	def _PrepareSimulationEnvironment(self):
-		self._LogNormal("preparing simulation environment...")
-		super()._PrepareSimulationEnvironment()
-
-	def PrepareSimulator(self, binaryPath, version):
+	def _PrepareSimulator(self):
 		# create the Vivado executable factory
 		self._LogVerbose("Preparing Vivado simulator.")
+		vivadoSection = self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
+		version =	vivadoSection['Version']
+		binaryPath = Path(vivadoSection['BinaryDirectory'])
 		self._vivado = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion="93", vhdlGenerics=None, guiMode=False):

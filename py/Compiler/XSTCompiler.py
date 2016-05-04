@@ -32,6 +32,8 @@
 # ==============================================================================
 #
 # entry point
+from pathlib import Path
+
 from PoC.Entity import WildCard
 
 if __name__ != "__main__":
@@ -43,10 +45,8 @@ else:
 
 
 # load dependencies
-import re											# used for output filtering
 
 from lib.Functions						import Init
-from Base.Exceptions					import NotConfiguredException, PlatformNotSupportedException
 from Base.Project							import ToolChain, Tool
 from Base.Compiler						import Compiler as BaseCompiler, CompilerException
 from ToolChains.Xilinx.Xilinx	import XilinxProjectExportMixIn
@@ -57,13 +57,8 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =	ToolChain.Xilinx_ISE
 	_TOOL =				Tool.Xilinx_XST
 
-	class __Directories__:
-		Working =			None
-		PoCRoot =			None
-		Netlist =			None
+	class __Directories__(BaseCompiler.__Directories__):
 		XSTFiles =		None
-		Source =			None
-		Destination =	None
 
 	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
@@ -71,16 +66,20 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 
 		self._device =			None
 
-		self._directories = self.__Directories__()
 		self._ise =					None
 
-	@property
-	def Directories(self):
-		return self._directories
-		
-	def PrepareCompiler(self, binaryPath, version):
-		# create the GHDL executable factory
+		configSection = host.PoCConfig['CONFIG.DirectoryNames']
+		self.Directories.Working = host.Directories.Temp / configSection['ISESynthesisFiles']
+		self.Directories.XSTFiles = host.Directories.Root / configSection['ISESynthesisFiles']
+		self.Directories.Netlist = host.Directories.Root / configSection['NetlistFiles']
+
+		self._PrepareCompiler()
+
+	def _PrepareCompiler(self):
 		self._LogVerbose("Preparing Xilinx Synthesis Tool (XST).")
+		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.ISE']
+		binaryPath = Path(iseSection['BinaryDirectory'])
+		version = iseSection['Version']
 		self._ise =		ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):

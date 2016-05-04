@@ -69,18 +69,18 @@ class Configuration(BaseConfiguration):
 				"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/Active-HDL",
 				"BinaryDirectory":				"${InstallationDirectory}/BIN"
 			}
-		}#,
-		# "Linux": {
-		# 	_section: {
-		# 		"Version":								"10.4c",
-		# 		"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/${Version}",
-		# 		"BinaryDirectory":				"${InstallationDirectory}/bin"
-		# 	}
-		# }
+		},
+		"Linux": {
+		 	_section: {
+			#		"Version":								"10.4c",
+			#		"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/${Version}",
+			#		"BinaryDirectory":				"${InstallationDirectory}/bin"
+		 	}
+		}
 	}
 
 	def CheckDependency(self):
-		# return True if Xilinx is configured
+		# return True if Aldec is configured
 		return (len(self._host.PoCConfig['INSTALL.Aldec']) != 0)
 
 	def ConfigureForAll(self):

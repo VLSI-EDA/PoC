@@ -56,11 +56,11 @@ class Configuration(BaseConfiguration):
 			_section: {
 				"InstallationDirectory":	"C:/Aldec"
 			}
-		# },
-		# "Linux": {
-		# 	_section: {
-		# 		"InstallationDirectory":	"/opt/Aldec"
-		# 	}
+		},
+		"Linux": {
+		 	_section: {
+		 	#	"InstallationDirectory":	"/opt/Aldec"
+		 	}
 		}
 	}
 

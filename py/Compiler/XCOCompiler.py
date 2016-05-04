@@ -43,14 +43,12 @@ else:
 
 	
 # load dependencies
-import re								# used for output filtering
 import shutil
 from os											import chdir
 from pathlib								import Path
 from textwrap								import dedent
 
 from lib.Functions					import Init
-from Base.Exceptions				import NotConfiguredException, PlatformNotSupportedException
 from Base.Project						import ToolChain, Tool
 from Base.Compiler					import Compiler as BaseCompiler, CompilerException
 from ToolChains.Xilinx.ISE	import ISE
@@ -60,28 +58,24 @@ class Compiler(BaseCompiler):
 	_TOOL_CHAIN =	ToolChain.Xilinx_ISE
 	_TOOL =				Tool.Xilinx_CoreGen
 
-	class __Directories__:
-		Working =			None
-		PoCRoot =			None
-		Netlist =			None
-		Source =			None
-		Destination =	None
-
 	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
 
 		self._device =			None
 
-		self._directories = self.__Directories__()
 		self._ise =					None
 
-	@property
-	def Directories(self):
-		return self._directories
-		
-	def PrepareCompiler(self, binaryPath, version):
-		# create the GHDL executable factory
+		configSection = host.PoCConfig['CONFIG.DirectoryNames']
+		self.Directories.Working = host.Directories.Temp / configSection['ISECoreGeneratorFiles']
+		self.Directories.Netlist = host.Directories.Root / configSection['NetlistFiles']
+
+		self._PrepareCompiler()
+
+	def _PrepareCompiler(self):
 		self._LogVerbose("Preparing Xilinx Core Generator Tool (CoreGen).")
+		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.ISE']
+		binaryPath = Path(iseSection['BinaryDirectory'])
+		version = iseSection['Version']
 		self._ise = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):

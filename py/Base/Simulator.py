@@ -74,6 +74,11 @@ class Simulator(ILogable):
 	_TOOL_CHAIN =	ToolChain.Any
 	_TOOL =				Tool.Any
 
+	class __Directories__:
+		Working = None
+		PoCRoot = None
+		PreCompiled = None
+
 	def __init__(self, host, showLogs, showReport):
 		if isinstance(host, ILogable):
 			ILogable.__init__(self, host.Logger)
@@ -87,6 +92,8 @@ class Simulator(ILogable):
 		self._vhdlVersion =	VHDLVersion.VHDL2008
 		self._pocProject =	None
 
+		self._directories = self.__Directories__()
+
 	# class properties
 	# ============================================================================
 	@property
@@ -95,18 +102,21 @@ class Simulator(ILogable):
 	def ShowLogs(self):				return self.__showLogs
 	@property
 	def ShowReport(self):			return self.__showReport
+	@property
+	def Directories(self):		return self._directories
 
 	def _PrepareSimulationEnvironment(self):
+		self._LogNormal("Preparing simulation environment...")
 		# create temporary directory if not existent
-		if (not self.Host.Directories.Working.exists()):
+		if (not self.Directories.Working.exists()):
 			self._LogVerbose("Creating temporary directory for simulator files.")
-			self._LogDebug("Temporary directory: {0!s}".format(self.Host.Directories.Working))
-			self.Host.Directories.Working.mkdir(parents=True)
+			self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
+			self.Directories.Working.mkdir(parents=True)
 
 		# change working directory to temporary path
 		self._LogVerbose("Changing working directory to temporary directory.")
-		self._LogDebug("cd \"{0!s}\"".format(self.Host.Directories.Working))
-		chdir(str(self.Host.Directories.Working))
+		self._LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
+		chdir(str(self.Directories.Working))
 
 	def _CreatePoCProject(self, testbench, board):
 		# create a PoCProject and read all needed files

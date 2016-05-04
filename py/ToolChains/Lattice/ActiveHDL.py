@@ -62,13 +62,13 @@ class Configuration(BaseConfiguration):
 				"InstallationDirectory":	"${INSTALL.Lattice.Diamond:InstallationDirectory}/active-hdl",
 				"BinaryDirectory":				"${InstallationDirectory}/BIN"
 			}
-		# },
-		# "Linux": {
-		# 	_section: {
-		# 		"Version":								"15.0",
-		# 		"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/${Version}/activeHDL",
-		# 		"BinaryDirectory":				"${InstallationDirectory}/fix_me"
-		# 	}
+		},
+		"Linux": {
+		 	_section: {
+			# 	"Version":								"15.0",
+			# 	"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/${Version}/activeHDL",
+			# 	"BinaryDirectory":				"${InstallationDirectory}/fix_me"
+		 	}
 		}
 	}
 

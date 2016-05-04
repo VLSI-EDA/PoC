@@ -71,6 +71,13 @@ class Compiler(ILogable):
 	_TOOL_CHAIN =	ToolChain.Any
 	_TOOL =				Tool.Any
 
+	class __Directories__:
+		Working = None
+		PoCRoot = None
+		Netlist = None
+		Source = None
+		Destination = None
+
 	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		if isinstance(host, ILogable):
 			ILogable.__init__(self, host.Logger)
@@ -86,6 +93,8 @@ class Compiler(ILogable):
 		self._vhdlVersion =	VHDLVersion.VHDL93
 		self._pocProject =	None
 
+		self._directories = self.__Directories__()
+
 	# class properties
 	# ============================================================================
 	@property
@@ -96,6 +105,8 @@ class Compiler(ILogable):
 	def ShowReport(self):			return self.__showReport
 	@property
 	def PoCProject(self):			return self._pocProject
+	@property
+	def Directories(self):		return self._directories
 
 	def _PrepareCompilerEnvironment(self):
 		# create temporary directory for the compiler if not existent

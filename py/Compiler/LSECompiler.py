@@ -32,6 +32,8 @@
 # ==============================================================================
 #
 # entry point
+from pathlib import Path
+
 from PoC.Entity import WildCard
 
 if __name__ != "__main__":
@@ -45,8 +47,7 @@ else:
 
 # load dependencies
 from lib.Functions							import Init
-from Base.Exceptions						import NotConfiguredException, PlatformNotSupportedException
-from Base.Project								import VHDLVersion, Environment, ToolChain, Tool
+from Base.Project								import ToolChain, Tool
 from Base.Compiler							import Compiler as BaseCompiler, CompilerException
 from ToolChains.Lattice.Diamond	import Diamond, SynthesisArgumentFile
 
@@ -55,26 +56,22 @@ class Compiler(BaseCompiler):
 	_TOOL_CHAIN =	ToolChain.Lattice_Diamond
 	_TOOL =				Tool.Lattice_LSE
 
-	class __Directories__:
-		Working =			None
-		PoCRoot =			None
-		Netlist =			None
-		Source =			None
-		Destination =	None
-
 	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
 		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
 
-		self._directories =	self.__Directories__()
 		self._diamond =			None
 
-	@property
-	def Directories(self):
-		return self._directories
+		configSection = host.PoCConfig['CONFIG.DirectoryNames']
+		self.Directories.Working = host.Directories.Temp / configSection['LatticeSynthesisFiles']
+		self.Directories.Netlist = host.Directories.Root / configSection['NetlistFiles']
+		
+		self._PrepareCompiler()
 
-	def PrepareCompiler(self, binaryPath, version):
-		# create the GHDL executable factory
+	def _PrepareCompiler(self):
 		self._LogVerbose("Preparing Lattice Synthesis Engine (LSE).")
+		diamondSection = self.Host.PoCConfig['INSTALL.Lattice.Diamond']
+		binaryPath = Path(diamondSection['BinaryDirectory'])
+		version = diamondSection['Version']
 		self._diamond =		Diamond(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):
