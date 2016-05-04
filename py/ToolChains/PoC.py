@@ -109,8 +109,8 @@ class Configuration(BaseConfiguration):
 	# PS G:\git\PoC> git merge-base "@" "@{u}"
 	# 0ff166a40010c1b85a5ab655eea0148474f680c6
 
-	# if (local == remote):	  return "Up-to-date"
-	# elif (local == base):	  return "Need to pull"
+	# if (local == remote):   return "Up-to-date"
+	# elif (local == base):   return "Need to pull"
 	# elif (remote == base):	return "Need to push"
-	# else:	                  return "divergent"
+	# else:                   return "divergent"
 

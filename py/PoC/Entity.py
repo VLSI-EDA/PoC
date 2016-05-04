@@ -400,7 +400,7 @@ class Base(ILazyLoadable):
 		self._Load()
 
 	@property
-	def Kind(self):  			        return self._kind
+	def Kind(self):  							return self._kind
 	@property
 	def Name(self):								return self._name
 	@property

@@ -425,7 +425,7 @@ class FileStatement(BlockStatement):
 		# match for keyword: FILE
 		token = yield
 		if (not isinstance(token, StringToken)):     raise MismatchingParserResult("FileParser: Expected FILE keyword.")
-		if (token.Value.lower() != "file"):  				 raise MismatchingParserResult("FileParser: Expected FILE keyword.")
+		if (token.Value.lower() != "file"):          raise MismatchingParserResult("FileParser: Expected FILE keyword.")
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):            token = yield

@@ -71,11 +71,11 @@ class Configuration(BaseConfiguration):
 			}
 		},
 		"Linux": {
-		 	_section: {
+			_section: {
 			#		"Version":								"10.4c",
 			#		"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/${Version}",
 			#		"BinaryDirectory":				"${InstallationDirectory}/bin"
-		 	}
+			}
 		}
 	}
 

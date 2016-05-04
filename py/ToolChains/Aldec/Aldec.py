@@ -58,9 +58,9 @@ class Configuration(BaseConfiguration):
 			}
 		},
 		"Linux": {
-		 	_section: {
-		 	#	"InstallationDirectory":	"/opt/Aldec"
-		 	}
+			_section: {
+			#	"InstallationDirectory":	"/opt/Aldec"
+			}
 		}
 	}
 

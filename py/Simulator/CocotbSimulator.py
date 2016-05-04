@@ -136,7 +136,7 @@ class Simulator(BaseSimulator):
 		#
 		self._LogNormal("Running simulation...")
 		cocotbTemplateFilePath = self.Host.Directories.Root / \
-														 self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile'] # depends on testbench
+															self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile'] # depends on testbench
 		topLevel =			testbench.TopLevel
 		cocotbModule =	testbench.ModuleName
 
@@ -165,8 +165,8 @@ class Simulator(BaseSimulator):
 			cocotbMakefileContent = fileHandle.read()
 
 		cocotbMakefileContent = cocotbMakefileContent.format(PoCRootDirectory=str(self.Host.Directories.Root),
-																												 VHDLSources=vhdlSources,
-																												 TopLevel=topLevel, CocotbModule=cocotbModule)
+																													VHDLSources=vhdlSources,
+																													TopLevel=topLevel, CocotbModule=cocotbModule)
 
 		cocotbMakefilePath = self.Directories.Working / "Makefile"
 		self._LogDebug("Writing Cocotb Makefile to '{0!s}'".format(cocotbMakefilePath))

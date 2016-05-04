@@ -64,11 +64,11 @@ class Configuration(BaseConfiguration):
 			}
 		},
 		"Linux": {
-		 	_section: {
+			_section: {
 			# 	"Version":								"15.0",
 			# 	"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/${Version}/activeHDL",
 			# 	"BinaryDirectory":				"${InstallationDirectory}/fix_me"
-		 	}
+			}
 		}
 	}
 

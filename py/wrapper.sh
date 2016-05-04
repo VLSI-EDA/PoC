@@ -4,9 +4,9 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-#	Authors:				 	Patrick Lehmann
-#										Thomas B. Preusser
-#										Martin Zabel
+#	Authors:				Patrick Lehmann
+#							Thomas B. Preusser
+#							Martin Zabel
 # 
 #	Bash Script:			Wrapper Script to execute a given Python script
 # 

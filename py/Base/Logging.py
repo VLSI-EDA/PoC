@@ -49,10 +49,10 @@ class Severity(Enum):
 	Quiet =			20
 	Warning =		15
 	Info =			10
-	Normal =		 4
-	Verbose =		 2
-	Debug =			 1
-	All =				 0
+	Normal =     4
+	Verbose =    2
+	Debug =      1
+	All =        0
 	
 	def __eq__(self, other):		return self.value ==	other.value
 	def __ne__(self, other):		return self.value !=	other.value

@@ -10,7 +10,7 @@ python:
 before_install:
 - sudo apt-get install -y libgnat-4.8
 install:
-- pip3 install -r tools/Travis-CI/pip3-requirements.lst
+- pip3 install -r tools/Travis-CI/requirements.txt
 before_script:
 - ./tools/Travis-CI/ghdl.setup.sh
 - ./tools/Travis-CI/poc.setup.sh
