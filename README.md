@@ -149,11 +149,11 @@ Run the following command line instructions to configure PoC on your local syste
 
 ```bash
 cd <PoCRoot>
-./poc.sh configure
+./poc.sh --configure
 ```
 ```PowerShell
 cd <PoCRoot>
-.\poc.ps1 configure
+.\poc.ps1 --configure
 ```
 
 **Note:** The configuration process can be re-run at every time to add, remove
