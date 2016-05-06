@@ -32,11 +32,13 @@
 # ==============================================================================
 #
 # entry point
+
 if __name__ != "__main__":
 	pass
 	# place library initialization code here
 else:
 	from lib.Functions import Exit
+
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Simulator.Base")
 
 
@@ -44,13 +46,13 @@ else:
 from enum							import Enum, unique
 from os								import chdir
 
-from Base.Exceptions	import ExceptionBase
+from Base.Exceptions	import ExceptionBase, CommonException
 from Base.Logging			import ILogable
 from Base.Project			import Environment, ToolChain, Tool, VHDLVersion
-from lib.Parser				import ParserException
-from PoC.Project			import VirtualProject, FileListFile
 from PoC.Entity				import WildCard
-
+from PoC.Project			import VirtualProject, FileListFile
+from lib.Functions 		import Init
+from lib.Parser				import ParserException
 
 VHDL_TESTBENCH_LIBRARY_NAME = "test"
 
@@ -144,8 +146,8 @@ class Simulator(ILogable):
 			fileListFile.CopyFilesToFileSet()
 			fileListFile.CopyExternalLibraries()
 			self._pocProject.ExtractVHDLLibrariesFromVHDLSourceFiles()
-		except ParserException as ex:
-			raise SimulatorException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
+		except (ParserException, CommonException) as ex:
+			raise SkipableSimulatorException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
 
 		self._LogDebug("=" * 78)
 		self._LogDebug("Pretty printing the PoCProject...")
@@ -154,23 +156,45 @@ class Simulator(ILogable):
 		if (len(fileListFile.Warnings) > 0):
 			for warn in fileListFile.Warnings:
 				self._LogWarning(warn)
-			raise SimulatorException("Found critical warnings while parsing '{0!s}'".format(fileListFilePath))
+			raise SkipableSimulatorException("Found critical warnings while parsing '{0!s}'".format(fileListFilePath))
 
 	def RunAll(self, fqnList, *args, **kwargs):
+		results = {key : 0 for key in SimulationResult}
+
 		for fqn in fqnList:
 			entity = fqn.Entity
 			if (isinstance(entity, WildCard)):
 				for testbench in entity.GetVHDLTestbenches():
 					try:
 						self.Run(testbench, *args, **kwargs)
-					except SkipableSimulatorException:
-						pass
+						results[testbench.Result] += 1
+					except SkipableSimulatorException as ex:
+						self._LogQuiet("  {RED}ERROR:{NOCOLOR} {0}".format(ex.message, **Init.Foreground))
+						self._LogQuiet("{RED}  [SKIPPED DUE TO ERRORS]{NOCOLOR}".format(**Init.Foreground))
+						results[SimulationResult.Error] += 1
 			else:
 				testbench = entity.VHDLTestbench
 				try:
 					self.Run(testbench, *args, **kwargs)
-				except SkipableSimulatorException:
-					pass
+					results[testbench.Result] += 1
+				except SkipableSimulatorException as ex:
+					self._LogQuiet("  {RED}ERROR:{NOCOLOR} {0}".format(ex.message, **Init.Foreground))
+					self._LogQuiet("{RED}  [SKIPPED DUE TO ERRORS]{NOCOLOR}".format(**Init.Foreground))
+					results[SimulationResult.Error] += 1
+
+		self._LogQuiet("Overall Results:")
+		allPassed = True
+		for key in SimulationResult:
+			if results[key] != 0:
+				if key is SimulationResult.Passed:
+					self._LogQuiet("{GREEN}  Passed:    {0}{NOCOLOR}".format(results[key], **Init.Foreground))
+				else:
+					allPassed = False
+					self._LogQuiet("{RED}  {0: <10} {1}{NOCOLOR}".format(key.name + ":", results[key], **Init.Foreground))
+
+		return allPassed
+
+
 
 	def Run(self, testbench, board, vhdlVersion="93c", vhdlGenerics=None, **kwargs):
 		raise NotImplementedError("This method is abstract.")

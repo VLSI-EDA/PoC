@@ -95,6 +95,8 @@ class Simulator(BaseSimulator):
 				except SimulatorException:
 					pass
 
+		return False # FIXME: check Cocotb result
+
 	def Run(self, testbench, board, **_):
 		self._LogQuiet("Testbench: {0!s}".format(testbench.Parent, **Init.Foreground))
 

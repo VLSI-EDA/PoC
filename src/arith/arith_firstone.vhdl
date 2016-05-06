@@ -70,14 +70,17 @@ begin
     process(rqst, tin)
       variable onehot : std_logic_vector(grnt'range);
       variable binary : unsigned(bin'range);
+			variable adder : unsigned(N downto 0);
     begin
-      onehot := std_logic_vector(unsigned(not rqst) + (1 to 1 => tin)) and rqst;
+			adder  := ("0" & unsigned(not rqst)) + (1 to 1 => tin);
+      onehot := std_logic_vector(adder(N-1 downto 0)) and rqst;
       binary := (others => '0');
       for i in onehot'range loop
         if onehot(i) = '1' then
           binary := binary or to_unsigned(i, binary'length);
         end if;
       end loop;
+			tout <= adder(N);
       grnt <= onehot;
       bin  <= std_logic_vector(binary);
     end process;

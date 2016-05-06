@@ -170,6 +170,8 @@ begin
 								     integer'image(to_integer(unsigned(QQ(i))))&" R "&integer'image(to_integer(unsigned(RR(i)))));
 			end loop;
 		end;
+
+		variable random : T_RANDOM;
   begin
 		-- Reset
 		rst <= '1';
@@ -187,7 +189,7 @@ begin
 
     -- Run Random Tests
     for i in 0 to 1023 loop
-      test(randomUniformDistibutedValue(0, 2**A_BITS-1), randomUniformDistibutedValue(0, 2**D_BITS-1));
+      test(random.getUniformDistributedValue(0, 2**A_BITS-1), random.getUniformDistributedValue(0, 2**D_BITS-1));
     end loop;
 
     simDeactivateProcess(PID);

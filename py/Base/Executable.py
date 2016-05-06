@@ -310,7 +310,7 @@ class Executable(ILogable):
 		
 		if isinstance(executablePath, str):							executablePath = Path(executablePath)
 		elif (not isinstance(executablePath, Path)):		raise ValueError("Parameter 'executablePath' is not of type str or Path.")
-		if (not executablePath.exists()):								raise CommonException("Executable '{0!s}' can not be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
+		if (not executablePath.exists()):								raise CommonException("Executable '{0!s}' cannot be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
 		
 		# prepend the executable
 		self._executablePath =		executablePath

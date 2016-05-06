@@ -73,6 +73,25 @@ architecture test of arith_convert_bin2bcd_tb is
 	signal Conv2_Binary			: STD_LOGIC_VECTOR(CONV2_BITS - 1 downto 0);
 	signal Conv2_BCDDigits	: T_BCD_VECTOR(CONV2_DIGITS - 1 DOWNTO 0);
 	signal Conv2_Sign				: STD_LOGIC;
+
+	function Check_Conv2(INPUT : INTEGER; BITS : POSITIVE; DIGITS : POSITIVE; BCDDigits : T_BCD_VECTOR; Sign : STD_LOGIC) return BOOLEAN is
+		variable nat : natural;
+	begin
+		if INPUT >= 2**(BITS-1) then
+			nat := (-INPUT) mod 2**(BITS-1);
+			if Sign /= '1' then
+				return false;
+			end if;
+		else
+			nat := INPUT;
+			if Sign /= '0' then
+				return false;
+			end if;
+		end if;
+
+		return to_BCD_Vector(nat, DIGITS) = BCDDigits;
+	end function;
+		
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -96,6 +115,12 @@ begin
 		for i in 0 to (CONV1_BITS - 1) loop
 			wait until rising_edge(Clock);
 		end loop;
+
+		simAssertion(to_BCD_Vector(INPUT_1, CONV1_DIGITS) = Conv1_BCDDigits, "Conv1_BCDDigits is wrong for INPUT_1.");
+		simAssertion(Check_Conv2(INPUT_1, CONV2_BITS, CONV2_DIGITS, Conv2_BCDDigits, Conv2_Sign),
+								 "Conv2_BCDDigits is wrong for INPUT_1.");
+
+		----------------------------------------------------------
 		
 		Start						<= '1';
 		Conv1_Binary		<= to_slv(INPUT_2, CONV1_BITS);
@@ -109,6 +134,12 @@ begin
 			wait until rising_edge(Clock);
 		end loop;
 		
+		simAssertion(to_BCD_Vector(INPUT_2, CONV1_DIGITS) = Conv1_BCDDigits, "Conv1_BCDDigits is wrong for INPUT_2.");
+		simAssertion(Check_Conv2(INPUT_2, CONV2_BITS, CONV2_DIGITS, Conv2_BCDDigits, Conv2_Sign),
+								 "Conv2_BCDDigits is wrong for INPUT_2.");
+		
+		----------------------------------------------------------
+		
 		Start						<= '1';
 		Conv1_Binary		<= to_slv(INPUT_3, CONV1_BITS);
 		Conv2_Binary		<= to_slv(INPUT_3, CONV2_BITS);
@@ -121,8 +152,11 @@ begin
 			wait until rising_edge(Clock);
 		end loop;
 		
-		wait until rising_edge(Clock);
-		wait until rising_edge(Clock);
+		simAssertion(to_BCD_Vector(INPUT_3, CONV1_DIGITS) = Conv1_BCDDigits, "Conv1_BCDDigits is wrong for INPUT_3.");
+		simAssertion(Check_Conv2(INPUT_3, CONV2_BITS, CONV2_DIGITS, Conv2_BCDDigits, Conv2_Sign),
+								 "Conv2_BCDDigits is wrong for INPUT_3.");
+		
+		----------------------------------------------------------
 		
 		-- This process is finished
 		simDeactivateProcess(simProcessID);

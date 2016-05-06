@@ -32,11 +32,6 @@
 # ==============================================================================
 #
 # entry point
-from pathlib import Path
-
-from Base.Exceptions import NotConfiguredException
-from Base.Logging import Severity
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -45,9 +40,14 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.GHDLSimulator")
 
 # load dependencies
+from pathlib import Path
+
+from Base.Exceptions import NotConfiguredException
+from Base.Logging import Severity
 from lib.Functions					import Init
 from Base.Project						import FileTypes, VHDLVersion, ToolChain, Tool
-from Base.Simulator					import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult
+from Base.Simulator					import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, \
+	SimulationResult, SkipableSimulatorException
 from ToolChains.GHDL				import GHDL, GHDLException
 from ToolChains.GTKWave			import GTKWave
 
@@ -157,7 +157,7 @@ class Simulator(BaseSimulator):
 		
 		# run GHDL analysis for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
-			if (not file.Path.exists()):									raise SimulatorException("Can not analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
+			if (not file.Path.exists()):									raise SkipableSimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
 
 			ghdl.Parameters[ghdl.SwitchVHDLLibrary] =			file.LibraryName
 			ghdl.Parameters[ghdl.ArgSourceFile] =					file.Path
@@ -167,7 +167,7 @@ class Simulator(BaseSimulator):
 				raise SimulatorException("Error while analysing '{0!s}'.".format(file.Path)) from ex
 
 			if ghdl.HasErrors:
-				raise SimulatorException("Error while analysing '{0!s}'.".format(file.Path))
+				raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(file.Path))
 
 
 	# running simulation
@@ -203,7 +203,7 @@ class Simulator(BaseSimulator):
 			raise SimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
 
 		if ghdl.HasErrors:
-			raise SimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
+			raise SkipableSimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
 	
 	
 	def _RunSimulation(self, testbench):
@@ -306,7 +306,9 @@ class Simulator(BaseSimulator):
 			waveformFilePath = self.Directories.Working / (testbench.ModuleName + ".ghw")
 		else:																						raise SimulatorException("Unknown waveform file format for GHDL.")
 		
-		if (not waveformFilePath.exists()):							raise SimulatorException("Waveform file '{0!s}' not found.".format(waveformFilePath)) from FileNotFoundError(str(waveformFilePath))
+		if (not waveformFilePath.exists()):
+			raise SkipableSimulatorException("Waveform file '{0!s}' not found.".format(waveformFilePath)) \
+				from FileNotFoundError(str(waveformFilePath))
 		
 		gtkwBinaryPath =		self.Directories.GTKWBinary
 		gtkwVersion =				self.Host.PoCConfig['INSTALL.GTKWave']['Version']

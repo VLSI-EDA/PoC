@@ -127,7 +127,7 @@ begin
 			for j in 0 to 1023 loop
 			
 				-- uniform distribution
-				RandomValue_int		:= randomUniformDistibutedValue(0, 2**DATA_BITS - 1);
+				RandomValue_int		:= randomUniformDistributedValue(0, 2**DATA_BITS - 1);
 				DataIn						<= to_slv(RandomValue_int, DATA_BITS);
 				
 				wait until falling_edge(Clock);

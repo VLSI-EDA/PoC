@@ -524,7 +524,7 @@ class File:
 		return self._file
 	
 	def Open(self):
-		if (not self._file.exists()):		raise ConfigurationException("File '{0!s}' not found.".format(self._file)) from FileNotFoundError(str(self._file))
+		if (not self._file.exists()):		raise CommonException("File '{0!s}' not found.".format(self._file)) from FileNotFoundError(str(self._file))
 		try:
 			self._handle = self._file.open('r')
 		except Exception as ex:

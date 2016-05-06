@@ -317,7 +317,7 @@ class QuartusSettingsFile(SettingsFile):
 		buffer += "\n"
 		for file in self._sourceFiles:
 			if (not file.Path.exists()):
-				raise QuartusException("Can not add '{0!s}' to Quartus settings file.".
+				raise QuartusException("Cannot add '{0!s}' to Quartus settings file.".
 																	format(file.Path)) from FileNotFoundError(str(file.Path))
 			buffer += "set_global_assignment -name VHDL_FILE {file} -library {library}\n".\
 				format(file=file.Path.as_posix(), library=file.LibraryName)

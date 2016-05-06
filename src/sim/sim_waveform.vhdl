@@ -428,7 +428,7 @@ package body waveform is
 		while (not simIsStopped(TestID)) loop
 			ieee.math_real.Uniform(Seed.Seed1, Seed.Seed2, rand);
 			Index		:= scale(rand, 0, JitterDistribution'length * 10) mod JitterDistribution'length;
-			randNormalDistibutedValue(Seed, rand, JitterDistribution(Index).StandardDeviation, JitterDistribution(Index).Mean, -1.0, 1.0);
+			randNormalDistributedValue(Seed, rand, JitterDistribution(Index).StandardDeviation, JitterDistribution(Index).Mean, -1.0, 1.0);
 			
 			Jitter := JitterAsFactor * rand;
 			Debug		<= rand;

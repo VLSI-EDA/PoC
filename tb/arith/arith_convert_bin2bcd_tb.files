@@ -4,9 +4,6 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-# Load external vendor libraries
-include				"lib/osvvm.files"														# Open Source VHDL Verification Methodology (OS-VVM)
-
 # PoC.arith
 include				"src/arith/arith_convert_bin2bcd.files"			# Unit Under Test
 

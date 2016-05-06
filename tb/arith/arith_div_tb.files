@@ -7,5 +7,9 @@
 # PoC.arith
 include				"src/arith/arith_div.files"									# Unit Under Test
 
+if (VHDL < 2002) then
+	report "VHDL version not supported."
+end if
+
 # Testbench file(s)
 vhdl		test	"tb/arith/arith_div_tb.vhdl"								# Testbench

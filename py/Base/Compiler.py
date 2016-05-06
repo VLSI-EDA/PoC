@@ -252,7 +252,7 @@ class Compiler(ILogable):
 
 	def _ExecuteCopyTasks(self, tasks, text):
 		for task in tasks:
-			if not task.SourcePath.exists(): raise CompilerException("Can not {0}-copy '{1!s}' to destination.".format(text, task.SourcePath)) from FileNotFoundError(str(task.SourcePath))
+			if not task.SourcePath.exists(): raise CompilerException("Cannot {0}-copy '{1!s}' to destination.".format(text, task.SourcePath)) from FileNotFoundError(str(task.SourcePath))
 
 			if not task.DestinationPath.parent.exists():
 				task.DestinationPath.parent.mkdir(parents=True)
@@ -304,7 +304,7 @@ class Compiler(ILogable):
 
 	def _ExecuteDeleteTasks(self, tasks, text):
 		for task in tasks:
-			if not task.FilePath.exists(): raise CompilerException("Can not {0}-delete '{1!s}'.".format(text, task.FilePath)) from FileNotFoundError(str(task.FilePath))
+			if not task.FilePath.exists(): raise CompilerException("Cannot {0}-delete '{1!s}'.".format(text, task.FilePath)) from FileNotFoundError(str(task.FilePath))
 
 			self._LogDebug("{0}-deleting '{1!s}'.".format(text, task.FilePath))
 			task.FilePath.unlink()
@@ -384,7 +384,7 @@ class Compiler(ILogable):
 
 	def _ExecuteReplaceTasks(self, tasks, text):
 		for task in tasks:
-			if not task.FilePath.exists(): raise CompilerException("Can not {0}-replace in file '{1!s}'.".format(text, task.FilePath)) from FileNotFoundError(str(task.FilePath))
+			if not task.FilePath.exists(): raise CompilerException("Cannot {0}-replace in file '{1!s}'.".format(text, task.FilePath)) from FileNotFoundError(str(task.FilePath))
 			self._LogDebug("{0}-replace in file '{1!s}': search for '{2}' replace by '{3}'.".format(text, task.FilePath, task.SearchPattern, task.ReplacePattern))
 
 			regExpFlags = 0

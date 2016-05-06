@@ -134,7 +134,7 @@ class Simulator(BaseSimulator):
 
 		# run acom compile for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
-			if (not file.Path.exists()):									raise SimulatorException("Can not analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
+			if (not file.Path.exists()):									raise SimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
 			acom.Parameters[acom.SwitchVHDLLibrary] =	file.LibraryName
 			acom.Parameters[acom.ArgSourceFile] =			file.Path
 			# set a per file log-file with '-l', 'vcom.log',

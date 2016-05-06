@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
 [*] Sat Mar 19 22:06:18 2016
 [*]
-[dumpfile] "G:\git\PoC\temp\ghdl\arith_convert_bin2bcd_tb.ghw"
 [dumpfile_mtime] "Sat Mar 19 22:01:58 2016"
 [dumpfile_size] 16168
-[savefile] "G:\git\PoC\sim\arith\arith_convert_bin2bcd_tb.gtkw"
 [timestart] 0
 [size] 1680 996
 [pos] -1 -1
