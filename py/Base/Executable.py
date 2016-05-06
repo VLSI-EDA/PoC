@@ -121,7 +121,7 @@ class StringListArgument(CommandLineArgument):
 			try:
 				for item in value:				self._value.append(str(value))
 			except TypeError as ex:			raise ValueError("Item '{0}' in parameter 'value' cannot be converted to type str.".format(item)) from ex
-		else:													raise ValueError("Parameter 'value' is no list or tuple.") from ex
+		else:													raise ValueError("Parameter 'value' is no list or tuple.")
 
 	def __str__(self):
 		if (self._value is None):			return ""

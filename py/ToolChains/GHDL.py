@@ -357,12 +357,8 @@ class GHDLAnalyze(GHDL):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except GHDLException:
-			raise
-		#except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -404,12 +400,8 @@ class GHDLElaborate(GHDL):
 				line.IndentBy(2)
 				self._Log(line)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except GHDLException:
-			raise
-		#except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -454,12 +446,8 @@ class GHDLRun(GHDL):
 				line.IndentBy(2)
 				self._Log(line)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except GHDLException:
-			raise
-		#except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))

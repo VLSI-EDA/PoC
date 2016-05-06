@@ -200,12 +200,8 @@ class GTKWave(Executable):
 				line.IndentBy(2)
 				self._Log(line)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except GTKWaveException:
-			raise
-		#except Exception as ex:
-		#	raise GTKWaveException("Error while executing GTKWave.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))

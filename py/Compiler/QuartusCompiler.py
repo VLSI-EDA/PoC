@@ -48,8 +48,8 @@ else:
 # load dependencies
 from lib.Functions						import Init
 from Base.Project							import ToolChain, Tool
-from Base.Compiler						import Compiler as BaseCompiler, CompilerException
-from ToolChains.Altera.Quartus	import Quartus, QuartusSettingsFile, QuartusProjectFile
+from Base.Compiler						import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
+from ToolChains.Altera.Quartus	import Quartus, QuartusSettingsFile, QuartusProjectFile, QuartusException
 
 
 class Compiler(BaseCompiler):
@@ -78,16 +78,16 @@ class Compiler(BaseCompiler):
 		for fqn in fqnList:
 			entity = fqn.Entity
 			if (isinstance(entity, WildCard)):
-				for testbench in entity.GetQuartusNetlist():
+				for netlist in entity.GetQuartusNetlists():
 					try:
-						self.Run(testbench, *args, **kwargs)
-					except CompilerException:
+						self.Run(netlist, *args, **kwargs)
+					except SkipableCompilerException:
 						pass
 			else:
-				testbench = entity.QuartusNetlist
+				netlist = entity.QuartusNetlist
 				try:
-					self.Run(testbench, *args, **kwargs)
-				except CompilerException:
+					self.Run(netlist, *args, **kwargs)
+				except SkipableCompilerException:
 					pass
 
 	def Run(self, netlist, board, **_):
@@ -112,17 +112,12 @@ class Compiler(BaseCompiler):
 		self._RunPreReplace(netlist)
 
 		self._LogNormal("Running Altera Quartus Map...")
-		self._RunCompile(netlist, board.Device)
+		self._RunCompile(netlist)
 
 		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
 		self._RunPostDelete(netlist)
-
-	def _PrepareCompilerEnvironment(self, device):
-		self._LogNormal("preparing synthesis environment...")
-		self.Directories.Destination = self.Directories.Netlist / str(device)
-		super()._PrepareCompilerEnvironment()
 
 	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
@@ -145,10 +140,13 @@ class Compiler(BaseCompiler):
 
 		quartusProject.Write()
 
-	def _RunPrepareCompile(self, netlist):
-		pass
-
-	def _RunCompile(self, netlist, device):
+	def _RunCompile(self, netlist):
 		q2map = self._quartus.GetMap()
 		q2map.Parameters[q2map.ArgProjectName] =	str(netlist.QsfFile)
-		q2map.Compile()
+
+		try:
+			q2map.Compile()
+		except QuartusException as ex:
+			raise CompilerException("Error while compiling '{0!s}'.".format(netlist)) from ex
+		if q2map.HasErrors:
+			raise CompilerException("Error while compiling '{0!s}'.".format(netlist))

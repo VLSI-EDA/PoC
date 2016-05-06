@@ -215,12 +215,8 @@ class TclShell(Executable, DiamondMixIn):
 		# 		self._Log(line)
 		# 		line = next(iterator)
 		#
-		# except StopIteration as ex:
+		# except StopIteration:
 		# 	pass
-		# except DiamondException:
-		# 	raise
-		# # except Exception as ex:
-		# #	raise GHDLException("Error while executing GHDL.") from ex
 		# finally:
 		# 	if self._hasOutput:
 		# 		self._LogNormal("    " + ("-" * 76))

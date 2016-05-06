@@ -48,7 +48,7 @@ else:
 # load dependencies
 from lib.Functions							import Init
 from Base.Project								import ToolChain, Tool
-from Base.Compiler							import Compiler as BaseCompiler, CompilerException
+from Base.Compiler							import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
 from ToolChains.Lattice.Diamond	import Diamond, SynthesisArgumentFile
 
 
@@ -78,16 +78,16 @@ class Compiler(BaseCompiler):
 		for fqn in fqnList:
 			entity = fqn.Entity
 			if (isinstance(entity, WildCard)):
-				for testbench in entity.GetLatticeNetlists():
+				for netlist in entity.GetLatticeNetlists():
 					try:
-						self.Run(testbench, *args, **kwargs)
-					except CompilerException:
+						self.Run(netlist, *args, **kwargs)
+					except SkipableCompilerException:
 						pass
 			else:
-				testbench = entity.LatticeNetlist
+				netlist = entity.LatticeNetlist
 				try:
-					self.Run(testbench, *args, **kwargs)
-				except CompilerException:
+					self.Run(netlist, *args, **kwargs)
+				except SkipableCompilerException:
 					pass
 
 	def Run(self, netlist, board, **_):
@@ -104,24 +104,19 @@ class Compiler(BaseCompiler):
 
 		netlist.PrjFile = self.Directories.Working / (netlist.ModuleName + ".prj")
 
-		self._WriteQuartusProjectFile(netlist)
+		self._WriteLSEProjectFile(netlist)
 
 		self._LogNormal("Executing pre-processing tasks...")
 		self._RunPreCopy(netlist)
 		self._RunPreReplace(netlist)
 
 		self._LogNormal("Running Lattice Diamond LSE...")
-		self._RunCompile(netlist, board.Device)
+		self._RunCompile(netlist)
 
 		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
 		self._RunPostDelete(netlist)
-
-	def _PrepareCompilerEnvironment(self, device):
-		self._LogNormal("Preparing synthesis environment...")
-		self.Directories.Destination = self.Directories.Netlist / str(device)
-		super()._PrepareCompilerEnvironment()
 
 	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
@@ -131,7 +126,7 @@ class Compiler(BaseCompiler):
 		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self.Directories.Working.as_posix()
 
 
-	def _WriteQuartusProjectFile(self, netlist):
+	def _WriteLSEProjectFile(self, netlist):
 		argumentFile = SynthesisArgumentFile(netlist.PrjFile)
 		argumentFile.Architecture =	"\"ECP5UM\""
 		argumentFile.TopLevel =			netlist.ModuleName
@@ -139,12 +134,15 @@ class Compiler(BaseCompiler):
 
 		argumentFile.Write(self.PoCProject)
 
-	def _RunPrepareCompile(self, netlist):
-		pass
-
-	def _RunCompile(self, netlist, device):
+	def _RunCompile(self, netlist):
 		tclShell = self._diamond.GetTclShell()
 
 		# raise NotImplementedError("Next: implement interactive shell")
 		self._LogWarning("Execution skipped due to Tcl shell problems.")
 		# tclShell.Run()
+		# try:
+		# 	q2map.Compile()
+		# except QuartusException as ex:
+		# 	raise CompilerException("Error while compiling '{0!s}'.".format(netlist)) from ex
+		# if q2map.HasErrors:
+		# 	raise CompilerException("Error while compiling '{0!s}'.".format(netlist))

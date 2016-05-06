@@ -245,12 +245,8 @@ class Fuse(Executable, ISEMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except ISEException:
-			raise
-		# except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -325,12 +321,8 @@ class ISESimulator(Executable):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except ISEException:
-			raise
-		# except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -407,12 +399,8 @@ class Xst(Executable, ISEMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except ISEException:
-			raise
-		# except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -486,12 +474,8 @@ class CoreGenerator(Executable, ISEMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except ISEException:
-			raise
-		# except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -547,21 +531,35 @@ def SimulatorFilter(gen):
 
 def XstFilter(gen):
 	for line in gen:
-		yield LogEntry(line, Severity.Normal)
+		if line.startswith("ERROR:"):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("WARNING:"):
+			yield LogEntry(line, Severity.Warning)
+		elif line.startswith("Note:"):
+			yield LogEntry(line, Severity.Info)
+		else:
+			yield LogEntry(line, Severity.Normal)
 
 def CoreGeneratorFilter(gen):
 	for line in gen:
-		yield LogEntry(line, Severity.Normal)
+		if line.startswith("ERROR:"):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("WARNING:"):
+			yield LogEntry(line, Severity.Warning)
+		elif line.startswith("Note:"):
+			yield LogEntry(line, Severity.Info)
+		else:
+			yield LogEntry(line, Severity.Normal)
 
 
 class ISEProject(BaseProject):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, name):
+		super().__init__(name)
 
 
 class ISEProjectFile(ProjectFile):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, file):
+		super().__init__(file)
 
 
 class UserConstraintFile(ConstraintFile):

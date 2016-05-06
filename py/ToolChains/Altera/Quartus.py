@@ -198,12 +198,8 @@ class Map(Executable, QuartusMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except QuartusException:
-			raise
-		# except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -234,21 +230,24 @@ def MapFilter(gen):
 	iterator = iter(gen)
 
 	for line in iterator:
-		if line.startswith("Info: Command: quartus_map"):		break
+		if line.startswith("Error ("):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("Info: Command: quartus_map"):
+			break
 
 	for line in iterator:
 		if line.startswith("Info ("):
-			yield LogEntry(line[5:], Severity.Verbose)
+			yield LogEntry(line, Severity.Verbose)
 		elif line.startswith("Error ("):
-			yield LogEntry(line[6:], Severity.Error)
+			yield LogEntry(line, Severity.Error)
 		elif line.startswith("Warning ("):
-			yield LogEntry(line[8:], Severity.Warning)
+			yield LogEntry(line, Severity.Warning)
 		elif line.startswith("    Info ("):
-			yield LogEntry("  " + line[9:], Severity.Verbose)
+			yield LogEntry(line, Severity.Verbose)
 		elif line.startswith("Info:"):
-			yield LogEntry(line[6:], Severity.Info)
+			yield LogEntry(line, Severity.Info)
 		elif line.startswith("    Info:"):
-			yield LogEntry(line[10:], Severity.Debug)
+			yield LogEntry(line, Severity.Debug)
 		else:
 			yield LogEntry(line, Severity.Normal)
 
@@ -263,7 +262,7 @@ class QuartusProject(BaseProject):
 		pass
 
 	def Read(self):
-		tclShell = self._host._quartus.GetTclShell()
+		tclShell = self._host.Toolchain.GetTclShell()
 		tclShell.StartProcess(["-s"])
 		tclShell.SendBoundary()
 		tclShell.ReadUntilBoundary()
@@ -290,7 +289,6 @@ class QuartusSettingsFile(SettingsFile):
 
 		self._sourceFiles =							[]
 		self._globalAssignments =				OrderedDict()
-		self._globalAssignmentsProxy =	GlobalAssignmentProxy(self)
 
 	@property
 	def File(self):
@@ -303,7 +301,7 @@ class QuartusSettingsFile(SettingsFile):
 
 	@property
 	def GlobalAssignments(self):
-		return self._globalAssignmentsProxy
+		return self._globalAssignments
 
 	def CopySourceFilesFromProject(self, project):
 		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
@@ -327,27 +325,6 @@ class QuartusSettingsFile(SettingsFile):
 		with self._projectFile.Path.open('w') as fileHandle:
 			fileHandle.write(buffer)
 
-class GlobalAssignmentProxy:
-	def __init__(self, project):
-		self._project = project
-
-	def __getitem__(self, key):
-		return self._project._globalAssignments[key]
-
-	def __setitem__(self, key, value):
-		self._project._globalAssignments[key] = value
-
-	def __delitem__(self, key):
-		del self._project._globalAssignments[key]
-
-	def __contains__(self, key):
-		return (key in self._project._globalAssignments)
-
-	def __len__(self):
-		return len(self._project._globalAssignments)
-
-	def __iter__(self):
-		return self._project._globalAssignments.__iter__()
 
 class QuartusProjectFile(ProjectFile):
 	def __init__(self, file):

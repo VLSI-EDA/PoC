@@ -172,7 +172,7 @@ class Simulator(ILogable):
 				except SkipableSimulatorException:
 					pass
 
-	def Run(self, entity, board, vhdlVersion="93c", vhdlGenerics=None, **kwargs):
+	def Run(self, testbench, board, vhdlVersion="93c", vhdlGenerics=None, **kwargs):
 		raise NotImplementedError("This method is abstract.")
 
 
@@ -201,5 +201,5 @@ def PoCSimulationResultFilter(gen, simulationResult):
 			state = 6
 
 		yield line
-	else:
-		if (state != 6):		raise SimulatorException("No PoC Testbench Report in simulator output found.")
+
+	if (state != 6):		raise SimulatorException("No PoC Testbench Report in simulator output found.")

@@ -122,73 +122,11 @@ class Vivado(VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
-	def GetVHDLCompiler(self):
-		return XVhComp(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
-
 	def GetElaborator(self):
 		return XElab(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 	def GetSimulator(self):
 		return XSim(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
-
-
-class XVhComp(Executable, VivadoMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "xvhcomp.bat"
-		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "xvhcomp"
-		else:																						raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, executablePath, logger=logger)
-
-		self._hasOutput = False
-		self._hasWarnings = False
-		self._hasErrors = False
-
-	@property
-	def HasWarnings(self):
-		return self._hasWarnings
-
-	@property
-	def HasErrors(self):
-		return self._hasErrors
-
-	def Compile(self):
-		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
-
-		try:
-			self.StartProcess(parameterList)
-		except Exception as ex:
-			raise VivadoException("Failed to launch xvhcomp.") from ex
-
-		self._hasOutput = False
-		self._hasWarnings = False
-		self._hasErrors = False
-		try:
-			iterator = iter(VHDLCompilerFilter(self.GetReader()))
-
-			line = next(iterator)
-			self._hasOutput = True
-			self._LogNormal("    xvhcomp messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
-			self._LogNormal("    " + ("-" * 76))
-
-			while True:
-				self._hasWarnings |= (line.Severity is Severity.Warning)
-				self._hasErrors |= (line.Severity is Severity.Error)
-
-				line.IndentBy(2)
-				self._Log(line)
-				line = next(iterator)
-
-		except StopIteration as ex:
-			pass
-		except VivadoException:
-			raise
-		# except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
-		finally:
-			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
 
 
 class XElab(Executable, VivadoMixIn):
@@ -302,7 +240,7 @@ class XElab(Executable, VivadoMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
 		except VivadoException:
 			raise
@@ -395,7 +333,7 @@ class XSim(Executable, VivadoMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
 		except VivadoException:
 			raise
@@ -407,10 +345,6 @@ class XSim(Executable, VivadoMixIn):
 
 		return simulationResult.value
 
-
-def VHDLCompilerFilter(gen):
-	for line in gen:
-		yield LogEntry(line, Severity.Normal)
 
 def ElaborationFilter(gen):
 	for line in gen:
@@ -482,6 +416,8 @@ def SimulatorFilter(gen):
 		elif line.startswith("========================================"):
 			PoCOutputFound = True
 			yield LogEntry(line, Severity.Normal)
+		elif line.startswith("Failure: "):
+			yield LogEntry(line, Severity.Error)
 		else:
 			yield LogEntry(line, Severity.Normal)
 

@@ -217,12 +217,8 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except ActiveHDLException:
-			raise
-		#except Exception as ex:
-		#	raise ActiveHDLException("Error while executing acom.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -292,12 +288,8 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except ActiveHDLException:
-			raise
-		#except Exception as ex:
-		#	raise ActiveHDLException("Error while executing vsimsa.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
@@ -437,12 +429,8 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 				self._Log(line)
 				line = next(iterator)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except ActiveHDLException:
-			raise
-		#except Exception as ex:
-		#	raise ActiveHDLException("Error while executing alib.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))

@@ -57,6 +57,9 @@ from Parser.RulesParser	import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn
 class CompilerException(ExceptionBase):
 	pass
 
+class SkipableCompilerException(CompilerException):
+	pass
+
 class CopyTask(CopyRuleMixIn):
 	pass
 
@@ -108,7 +111,10 @@ class Compiler(ILogable):
 	@property
 	def Directories(self):		return self._directories
 
-	def _PrepareCompilerEnvironment(self):
+	def _PrepareCompilerEnvironment(self, device):
+		self._LogNormal("Preparing synthesis environment...")
+		self.Directories.Destination = self.Directories.Netlist / str(device)
+
 		# create temporary directory for the compiler if not existent
 		if (not self.Directories.Working.exists()):
 			self._LogVerbose("Creating temporary directory for synthesizer files.")
@@ -398,15 +404,3 @@ class Compiler(ILogable):
 			# open file to write the replaced data
 			with task.FilePath.open('w') as fileHandle:
 				fileHandle.write(NewContent)
-
-	def RunAll(self, fqnList, *args, **kwargs):
-		for fqn in fqnList:
-			entity = fqn.Entity
-			# for entity in fqn.GetEntities():
-			# try:
-			self.Run(entity, *args, **kwargs)
-		# except SimulatorException:
-		# 	pass
-
-	def Run(self, entity, *args, **kwargs):
-		raise NotImplementedError("This method is abstract.")

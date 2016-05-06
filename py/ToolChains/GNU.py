@@ -113,12 +113,8 @@ class Make(Executable):
 				line.IndentBy(2)
 				self._Log(line)
 
-		except StopIteration as ex:
+		except StopIteration:
 			pass
-		except GNUException:
-			raise
-		#except Exception as ex:
-		#	raise GTKWaveException("Error while executing Make.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))
