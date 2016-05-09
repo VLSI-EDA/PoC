@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Module:		TODO
+# Python Module:    TODO
 # 
 # Description:
 # ------------------------------------
@@ -15,13 +15,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,168 +31,167 @@
 # ==============================================================================
 #
 # load dependencies
-from enum								import Enum, unique
-from pathlib						import Path
-from flags							import Flags
+from enum               import Enum, unique
+from pathlib            import Path
+from flags              import Flags
 
-from Base.Configuration import ConfigurationException
-from Base.Exceptions		import CommonException
-from Parser.FilesParser	import VHDLSourceFileMixIn, VerilogSourceFileMixIn, CocotbSourceFileMixIn
-from PoC.Config					import Board, Device
-from lib.Functions			import merge
+from lib.Functions      import merge
+from Base.Exceptions    import CommonException
+from Parser.FilesParser import VHDLSourceFileMixIn, VerilogSourceFileMixIn, CocotbSourceFileMixIn
+from PoC.Config         import Board, Device
 
 
 # TODO: nested filesets
 
 class FileTypes(Flags):
-	__no_flags_name__ = 	"Unknown"
-	__all_flags_name__ = 	"Any"
-	Text =								()
-	ProjectFile =					()
-	FileListFile =				()
-	RulesFile =						()
-	SourceFile =					()
-	VHDLSourceFile =			()
-	VerilogSourceFile =		()
-	PythonSourceFile =		()
-	CocotbSourceFile =		()
-	ConstraintFile =			()
-	UcfConstraintFile =		()
-	XdcConstraintFile =		()
-	SdcConstraintFile =		()
-	LdcConstraintFile =		()
-	SettingsFile =				()
-	QuartusSettingsFile =	()
+	__no_flags_name__ =   "Unknown"
+	__all_flags_name__ =  "Any"
+	Text =                ()
+	ProjectFile =         ()
+	FileListFile =        ()
+	RulesFile =           ()
+	SourceFile =          ()
+	VHDLSourceFile =      ()
+	VerilogSourceFile =   ()
+	PythonSourceFile =    ()
+	CocotbSourceFile =    ()
+	ConstraintFile =      ()
+	UcfConstraintFile =   ()
+	XdcConstraintFile =   ()
+	SdcConstraintFile =   ()
+	LdcConstraintFile =   ()
+	SettingsFile =        ()
+	QuartusSettingsFile = ()
 
 	def Extension(self):
-		if   (self == FileTypes.Unknown):							raise CommonException("Unknown file type.")
-		elif (self == FileTypes.Any):									raise CommonException("Generic file type.")
-		elif (self == FileTypes.Text):								return "txt"
-		elif (self == FileTypes.FileListFile):				return "files"
-		elif (self == FileTypes.SourceFile):					raise CommonException("Generic file type.")
-		elif (self == FileTypes.VHDLSourceFile):			return "vhdl"
-		elif (self == FileTypes.VerilogSourceFile):		return "v"
-		elif (self == FileTypes.CocotbSourceFile):		return "py"
-		elif (self == FileTypes.ConstraintFile):			raise CommonException("Generic file type.")
-		elif (self == FileTypes.UcfConstraintFile):		return "ucf"
-		elif (self == FileTypes.XdcConstraintFile):		return "xdc"
-		elif (self == FileTypes.SdcConstraintFile):		return "sdc"
-		elif (self == FileTypes.LdcConstraintFile):		return "ldc"
-		elif (self == FileTypes.SettingsFile):				raise CommonException("Generic file type.")
-		elif (self == FileTypes.QuartusSettingsFile):	return "qsf"
-		else:																					raise CommonException("This is not an enum member.")
+		if   (self == FileTypes.Unknown):             raise CommonException("Unknown file type.")
+		elif (self == FileTypes.Any):                 raise CommonException("Generic file type.")
+		elif (self == FileTypes.Text):                return "txt"
+		elif (self == FileTypes.FileListFile):        return "files"
+		elif (self == FileTypes.SourceFile):          raise CommonException("Generic file type.")
+		elif (self == FileTypes.VHDLSourceFile):      return "vhdl"
+		elif (self == FileTypes.VerilogSourceFile):   return "v"
+		elif (self == FileTypes.CocotbSourceFile):    return "py"
+		elif (self == FileTypes.ConstraintFile):      raise CommonException("Generic file type.")
+		elif (self == FileTypes.UcfConstraintFile):   return "ucf"
+		elif (self == FileTypes.XdcConstraintFile):   return "xdc"
+		elif (self == FileTypes.SdcConstraintFile):   return "sdc"
+		elif (self == FileTypes.LdcConstraintFile):   return "ldc"
+		elif (self == FileTypes.SettingsFile):        raise CommonException("Generic file type.")
+		elif (self == FileTypes.QuartusSettingsFile): return "qsf"
+		else:                                         raise CommonException("This is not an enum member.")
 
 	def __str__(self):
 		return self.name
 
 @unique
 class Environment(Enum):
-	Any =					0
-	Simulation =	1
-	Synthesis =		2
+	Any =         0
+	Simulation =  1
+	Synthesis =   2
 
 
 @unique
 class ToolChain(Enum):
-	Any =                0
-	Aldec_ActiveHDL =		10
+	Any =               0
+	Aldec_ActiveHDL =   10
 	Altera_Quartus =    20
-	Altera_ModelSim =		21
+	Altera_ModelSim =   21
 	Cocotb =            30
-	GHDL_GTKWave =			40
+	GHDL_GTKWave =      40
 	Lattice_Diamond =   50
-	Mentor_QuestaSim =	60
-	Xilinx_ISE =				70
-	Xilinx_PlanAhead =	71
-	Xilinx_Vivado =			72
+	Mentor_QuestaSim =  60
+	Xilinx_ISE =        70
+	Xilinx_PlanAhead =  71
+	Xilinx_Vivado =     72
 
 
 @unique
 class Tool(Enum):
-	Any =                0
-	Aldec_aSim =				10
-	Altera_Quartus_Map =20
-	Cocotb_QuestaSim = 	30
-	GHDL =							40
-	GTKwave =						41
-	Lattice_LSE =				50
-	Mentor_vSim =				60
-	Xilinx_iSim =				70
-	Xilinx_XST =				71
-	Xilinx_CoreGen =		72
-	Xilinx_xSim =				80
-	Xilinx_Synth =			81
+	Any =                 0
+	Aldec_aSim =         10
+	Altera_Quartus_Map = 20
+	Cocotb_QuestaSim =   30
+	GHDL =               40
+	GTKwave =            41
+	Lattice_LSE =        50
+	Mentor_vSim =        60
+	Xilinx_iSim =        70
+	Xilinx_XST =         71
+	Xilinx_CoreGen =     72
+	Xilinx_xSim =        80
+	Xilinx_Synth =       81
 
 
 class VHDLVersion(Enum):
-	Any =                0
-	VHDL87 =					1987
-	VHDL93 =					1993
-	VHDL02 =					2002
-	VHDL08 =					2008
-	VHDL1987 =				1987
-	VHDL1993 =				1993
-	VHDL2002 =				2002
-	VHDL2008 =				2008
+	Any =                 0
+	VHDL87 =           1987
+	VHDL93 =           1993
+	VHDL02 =           2002
+	VHDL08 =           2008
+	VHDL1987 =         1987
+	VHDL1993 =         1993
+	VHDL2002 =         2002
+	VHDL2008 =         2008
 
 	@classmethod
 	def parse(cls, value):
 		if isinstance(value, int):
-			if (value == 87):			return cls.VHDL87
-			elif (value == 93):		return cls.VHDL93
-			elif (value == 2):		return cls.VHDL02
-			elif (value == 8):		return cls.VHDL08
-			elif (value == 1987):	return cls.VHDL87
-			elif (value == 1993):	return cls.VHDL93
-			elif (value == 2002):	return cls.VHDL02
-			elif (value == 2008):	return cls.VHDL08
+			if (value == 87):       return cls.VHDL87
+			elif (value == 93):     return cls.VHDL93
+			elif (value == 2):      return cls.VHDL02
+			elif (value == 8):      return cls.VHDL08
+			elif (value == 1987):   return cls.VHDL87
+			elif (value == 1993):   return cls.VHDL93
+			elif (value == 2002):   return cls.VHDL02
+			elif (value == 2008):   return cls.VHDL08
 		elif isinstance(value, str):
-			if (value == "87"):			return cls.VHDL87
-			elif (value == "93"):		return cls.VHDL93
-			elif (value == "02"):		return cls.VHDL02
-			elif (value == "08"):		return cls.VHDL08
-			elif (value == "1987"):	return cls.VHDL87
-			elif (value == "1993"):	return cls.VHDL93
-			elif (value == "2002"):	return cls.VHDL02
-			elif (value == "2008"):	return cls.VHDL08
+			if (value == "87"):     return cls.VHDL87
+			elif (value == "93"):   return cls.VHDL93
+			elif (value == "02"):   return cls.VHDL02
+			elif (value == "08"):   return cls.VHDL08
+			elif (value == "1987"): return cls.VHDL87
+			elif (value == "1993"): return cls.VHDL93
+			elif (value == "2002"): return cls.VHDL02
+			elif (value == "2008"): return cls.VHDL08
 		raise ValueError("'{0!s}' is not a member of {1}.".format(value, cls.__name__))
 
-	def __lt__(self, other):		return self.value < other.value
-	def __le__(self, other):		return self.value <= other.value
-	def __gt__(self, other):		return self.value > other.value
-	def __ge__(self, other):		return self.value >= other.value
-	def __ne__(self, other):		return self.value != other.value
+	def __lt__(self, other):    return self.value < other.value
+	def __le__(self, other):    return self.value <= other.value
+	def __gt__(self, other):    return self.value > other.value
+	def __ge__(self, other):    return self.value >= other.value
+	def __ne__(self, other):    return self.value != other.value
 	def __eq__(self, other):
 		if ((self is VHDLVersion.Any) or (other is VHDLVersion.Any)):
 			return True
 		else:
-			return self.value == other.value
+			return (self.value == other.value)
 
 	def __str__(self):
 		return "VHDL'" + self.__repr__()
 
 	def __repr__(self):
-		if (self == VHDLVersion.VHDL87):		return "87"
-		elif (self == VHDLVersion.VHDL93):	return "93"
-		elif (self == VHDLVersion.VHDL02):	return "02"
-		elif (self == VHDLVersion.VHDL08):	return "08"
+		if (self == VHDLVersion.VHDL87):    return "87"
+		elif (self == VHDLVersion.VHDL93):  return "93"
+		elif (self == VHDLVersion.VHDL02):  return "02"
+		elif (self == VHDLVersion.VHDL08):  return "08"
 
 
 class Project:
 	def __init__(self, name):
-		self._name =									name
-		self._rootDirectory =					None
-		self._fileSets =							{}
-		self._defaultFileSet =				None
-		self._vhdlLibraries =					{}
+		self._name =                  name
+		self._rootDirectory =         None
+		self._fileSets =              {}
+		self._defaultFileSet =        None
+		self._vhdlLibraries =         {}
 		self._externalVHDLLibraries = []
 		
-		self._board =									None
-		self._device =								None
-		self._environment =						Environment.Any
-		self._toolChain =							ToolChain.Any
-		self._tool =									Tool.Any
-		self._vhdlVersion =						VHDLVersion.Any
+		self._board =                 None
+		self._device =                None
+		self._environment =           Environment.Any
+		self._toolChain =             ToolChain.Any
+		self._tool =                  Tool.Any
+		self._vhdlVersion =           VHDLVersion.Any
 		
 		self.CreateFileSet("default", setDefault=True)
 	
@@ -206,7 +205,7 @@ class Project:
 	
 	@RootDirectory.setter
 	def RootDirectory(self, value):
-		if isinstance(value, str):	value = Path(value)
+		if isinstance(value, str):  value = Path(value)
 		self._rootDirectory = value
 	
 	@property
@@ -217,9 +216,9 @@ class Project:
 	def Board(self, value):
 		if isinstance(value, str):
 			value = Board(value)
-		elif (not isinstance(value, Board)):						raise ValueError("Parameter 'board' is not of type Board.")
-		self._board =		value
-		self._device =	value.Device
+		elif (not isinstance(value, Board)):            raise ValueError("Parameter 'board' is not of type Board.")
+		self._board =    value
+		self._device =  value.Device
 	
 	@property
 	def Device(self):
@@ -229,36 +228,36 @@ class Project:
 	def Device(self, value):
 		if isinstance(value, (str, Device)):
 			board = Board("custom", value)
-		else:																						raise ValueError("Parameter 'device' is not of type str or Device.")
-		self._board =		board
-		self._device =	board.Device
+		else:                                            raise ValueError("Parameter 'device' is not of type str or Device.")
+		self._board =    board
+		self._device =  board.Device
 	
 	@property
-	def Environment(self):				return self._environment
+	def Environment(self):        return self._environment
 	@Environment.setter
-	def Environment(self, value):	self._environment = value
+	def Environment(self, value): self._environment = value
 	
 	@property
-	def ToolChain(self):					return self._toolChain
+	def ToolChain(self):          return self._toolChain
 	@ToolChain.setter
-	def ToolChain(self, value):		self._toolChain = value
+	def ToolChain(self, value):   self._toolChain = value
 	
 	@property
-	def Tool(self):								return self._tool
+	def Tool(self):               return self._tool
 	@Tool.setter
-	def Tool(self, value):				self._tool = value
+	def Tool(self, value):        self._tool = value
 	
 	@property
-	def VHDLVersion(self):				return self._vhdlVersion
+	def VHDLVersion(self):        return self._vhdlVersion
 	@VHDLVersion.setter
-	def VHDLVersion(self, value):	self._vhdlVersion = value
+	def VHDLVersion(self, value): self._vhdlVersion = value
 
 
 	def CreateFileSet(self, name, setDefault=True):
-		fs =											FileSet(name, project=self)
-		self._fileSets[name] =		fs
+		fs =                      FileSet(name, project=self)
+		self._fileSets[name] =    fs
 		if (setDefault is True):
-			self._defaultFileSet =	fs
+			self._defaultFileSet =  fs
 	
 	def AddFileSet(self, fileSet):
 		if (not isinstance(fileSet, FileSet)):
@@ -283,44 +282,44 @@ class Project:
 	@DefaultFileSet.setter
 	def DefaultFileSet(self, value):
 		if isinstance(value, str):
-			if (value not in self._fileSets.keys()):			raise CommonException("Fileset '{0}' is not in this project.".format(value))
+			if (value not in self._fileSets.keys()):      raise CommonException("Fileset '{0}' is not in this project.".format(value))
 			self._defaultFileSet = self._fileSets[value]
 		elif isinstance(value, FileSet):
-			if (value not in self.FileSets):							raise CommonException("Fileset '{0}' is not associated to this project.".format(value))
+			if (value not in self.FileSets):              raise CommonException("Fileset '{0}' is not associated to this project.".format(value))
 			self._defaultFileSet = value
-		else:																						raise ValueError("Unsupported parameter type for 'value'.")
+		else:                                           raise ValueError("Unsupported parameter type for 'value'.")
 		
 	def AddFile(self, file, fileSet = None):
 		# print("Project.AddFile: file={0}".format(file))
-		if (not isinstance(file, File)):								raise ValueError("Parameter 'file' is not of type Base.Project.File.")
+		if (not isinstance(file, File)):                raise ValueError("Parameter 'file' is not of type Base.Project.File.")
 		if (fileSet is None):
-			if (self._defaultFileSet is None):						raise CommonException("Neither the parameter 'file' set nor a default file set is given.")
+			if (self._defaultFileSet is None):            raise CommonException("Neither the parameter 'file' set nor a default file set is given.")
 			fileSet = self._defaultFileSet
 		elif isinstance(fileSet, str):
 			fileSet = self._fileSets[fileSet]
 		elif isinstance(fileSet, FileSet):
-			if (fileSet not in self.FileSets):						raise CommonException("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
-		else:																						raise ValueError("Unsupported parameter type for 'fileSet'.")
+			if (fileSet not in self.FileSets):            raise CommonException("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
+		else:                                           raise ValueError("Unsupported parameter type for 'fileSet'.")
 		fileSet.AddFile(file)
 		return file
 		
 	def AddSourceFile(self, file, fileSet = None):
 		# print("Project.AddSourceFile: file={0}".format(file))
-		if (not isinstance(file, SourceFile)):					raise ValueError("Parameter 'file' is not of type Base.Project.SourceFile.")
+		if (not isinstance(file, SourceFile)):          raise ValueError("Parameter 'file' is not of type Base.Project.SourceFile.")
 		if (fileSet is None):
-			if (self._defaultFileSet is None):						raise CommonException("Neither the parameter 'file' set nor a default file set is given.")
+			if (self._defaultFileSet is None):            raise CommonException("Neither the parameter 'file' set nor a default file set is given.")
 			fileSet = self._defaultFileSet
 		elif isinstance(fileSet, str):
 			fileSet = self._fileSets[fileSet]
 		elif isinstance(fileSet, FileSet):
-			if (fileSet not in self.FileSets):						raise CommonException("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
-		else:																						raise ValueError("Unsupported parameter type for 'fileSet'.")
+			if (fileSet not in self.FileSets):            raise CommonException("Fileset '{0}' is not associated to this project.".format(fileSet.Name))
+		else:                                           raise ValueError("Unsupported parameter type for 'fileSet'.")
 		fileSet.AddSourceFile(file)
 		return file
 	
 	def Files(self, fileType=FileTypes.Any, fileSet=None):
 		if (fileSet is None):
-			if (self._defaultFileSet is None):						raise CommonException("Neither the parameter 'fileSet' set nor a default file set is given.")
+			if (self._defaultFileSet is None):            raise CommonException("Neither the parameter 'fileSet' set nor a default file set is given.")
 			fileSet = self._defaultFileSet
 		# print("init Project.Files generator")
 		for file in fileSet.Files:
@@ -331,37 +330,37 @@ class Project:
 		for file in self.Files(fileType=FileTypes.VHDLSourceFile):
 			libraryName = file.LibraryName.lower()
 			if libraryName not in self._vhdlLibraries:
-				self._vhdlLibraries[libraryName] = library =	VHDLLibrary(libraryName)
+				self._vhdlLibraries[libraryName] = library =  VHDLLibrary(libraryName)
 			else:
 				library = self._vhdlLibraries[libraryName]
 			library.AddFile(file)
 			file.VHDLLibrary = library
 	
 	@property
-	def VHDLLibraries(self):					return self._vhdlLibraries.values()
+	def VHDLLibraries(self):          return self._vhdlLibraries.values()
 	@property
-	def ExternalVHDLLibraries(self):	return self._externalVHDLLibraries
+	def ExternalVHDLLibraries(self):  return self._externalVHDLLibraries
 
 	def AddExternalVHDLLibraries(self, library):
 		self._externalVHDLLibraries.append(library)
 	
 	def GetVariables(self):
 		result = {
-			"ProjectName" :			self._name,
-			"RootDirectory" :		str(self._rootDirectory),
-			"Environment" :			self._environment.name,
-			"ToolChain" :				self._toolChain.name,
-			"Tool" :						self._tool.name,
-			"VHDL" :						self._vhdlVersion.value
+			"ProjectName" :      self._name,
+			"RootDirectory" :    str(self._rootDirectory),
+			"Environment" :      self._environment.name,
+			"ToolChain" :        self._toolChain.name,
+			"Tool" :            self._tool.name,
+			"VHDL" :            self._vhdlVersion.value
 		}
 		return merge(result, self._board.GetVariables(), self._device.GetVariables())
 	
 	def pprint(self, indent=0):
 		_indent = "  " * indent
-		buffer =	"Project: {0}\n".format(self.Name)
-		buffer +=	_indent + "o-Settings:\n"
-		buffer +=	_indent + "| o-Board: {0}\n".format(self._board.Name)
-		buffer +=	_indent + "| o-Device: {0}\n".format(self._device.Name)
+		buffer =  "Project: {0}\n".format(self.Name)
+		buffer +=  _indent + "o-Settings:\n"
+		buffer +=  _indent + "| o-Board: {0}\n".format(self._board.Name)
+		buffer +=  _indent + "| o-Device: {0}\n".format(self._device.Name)
 		for fileSet in self.FileSets:
 			buffer += _indent + "o-FileSet: {0}\n".format(fileSet.Name)
 			for file in fileSet.Files:
@@ -382,9 +381,9 @@ class Project:
 class FileSet:
 	def __init__(self, name, project = None):
 		# print("FileSet.__init__: name={0}  project={0}".format(name, project))
-		self._name =		name
-		self._project =	project
-		self._files =		[]
+		self._name =    name
+		self._project =  project
+		self._files =    []
 	
 	@property
 	def Name(self):
@@ -396,7 +395,7 @@ class FileSet:
 	
 	@Project.setter
 	def Project(self, value):
-		if not isinstance(value, Project):							raise ValueError("Parameter 'value' is not of type Base.Project.Project.")
+		if not isinstance(value, Project):              raise ValueError("Parameter 'value' is not of type Base.Project.Project.")
 		self._project = value
 	
 	@property
@@ -413,12 +412,12 @@ class FileSet:
 		elif isinstance(file, SourceFile):
 			self.AddSourceFile(file)
 			return
-		elif (not isinstance(file, File)):							raise ValueError("Unsupported parameter type for 'file'.")
+		elif (not isinstance(file, File)):              raise ValueError("Unsupported parameter type for 'file'.")
 		file.FileSet = self
 		file.Project = self._project
 
 		for f in self._files:
-			if (f.FileName == file.FileName):	break
+			if (f.FileName == file.FileName):  break
 		else:
 			self._files.append(file)
 
@@ -429,12 +428,12 @@ class FileSet:
 			file = SourceFile(file, project=self._project, fileSet=self)
 		elif isinstance(file, Path):
 			file = SourceFile(file, project=self._project, fileSet=self)
-		elif (not isinstance(file, SourceFile)):				raise ValueError("Unsupported parameter type for 'file'.")
+		elif (not isinstance(file, SourceFile)):        raise ValueError("Unsupported parameter type for 'file'.")
 		file.FileSet = self
 		file.Project = self._project
 
 		for f in self._files:
-			if (f.FileName == file.FileName):	break
+			if (f.FileName == file.FileName):  break
 		else:
 			self._files.append(file)
 
@@ -443,9 +442,9 @@ class FileSet:
 
 class VHDLLibrary:
 	def __init__(self, name, project = None):
-		self._name =		name
-		self._project =	project
-		self._files =		[]
+		self._name =    name
+		self._project =  project
+		self._files =    []
 	
 	@property
 	def Name(self):
@@ -457,7 +456,7 @@ class VHDLLibrary:
 	
 	@Project.setter
 	def Project(self, value):
-		if not isinstance(value, Project):							raise ValueError("Parameter 'value' is not of type Base.Project.Project.")
+		if not isinstance(value, Project):              raise ValueError("Parameter 'value' is not of type Base.Project.Project.")
 		self._project = value
 	
 	@property
@@ -465,7 +464,7 @@ class VHDLLibrary:
 		return self._files
 	
 	def AddFile(self, file):
-		if (not isinstance(file, VHDLSourceFile)):			raise ValueError("Unsupported parameter type for 'file'.")
+		if (not isinstance(file, VHDLSourceFile)):      raise ValueError("Unsupported parameter type for 'file'.")
 		file.VHDLLibrary = self
 
 		for f in self._files:
@@ -481,14 +480,14 @@ class File:
 	_FileType = FileTypes.Unknown
 
 	def __init__(self, file, project = None, fileSet = None):
-		self._handle =	None
-		self._content =	None
+		self._handle =  None
+		self._content =  None
 		
 		if isinstance(file, str):
 			file = Path(file)
-		self._file =		file
-		self._project =	project
-		self._fileSet =	fileSet
+		self._file =    file
+		self._project =  project
+		self._fileSet =  fileSet
 	
 	@property
 	def Project(self):
@@ -496,7 +495,7 @@ class File:
 	
 	@Project.setter
 	def Project(self, value):
-		if not isinstance(value, Project):							raise ValueError("Parameter 'value' is not of type Base.Project.Project.")
+		if not isinstance(value, Project):              raise ValueError("Parameter 'value' is not of type Base.Project.Project.")
 		# print("File.Project(setter): value={0}".format(value))
 		self._project = value
 	
@@ -506,10 +505,10 @@ class File:
 	
 	@FileSet.setter
 	def FileSet(self, value):
-		if (value is None):															raise ValueError("'value' is None")
+		if (value is None):                              raise ValueError("'value' is None")
 		# print("File.FileSet(setter): value={0}".format(value))
-		self._fileSet =	value
-		self._project =	value.Project
+		self._fileSet =  value
+		self._project =  value.Project
 
 	@property
 	def FileType(self):
@@ -524,7 +523,7 @@ class File:
 		return self._file
 	
 	def Open(self):
-		if (not self._file.exists()):		raise CommonException("File '{0!s}' not found.".format(self._file)) from FileNotFoundError(str(self._file))
+		if (not self._file.exists()):    raise CommonException("File '{0!s}' not found.".format(self._file)) from FileNotFoundError(str(self._file))
 		try:
 			self._handle = self._file.open('r')
 		except Exception as ex:

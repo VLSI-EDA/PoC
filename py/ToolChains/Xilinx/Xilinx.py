@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
-#										Martin Zabel
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			TODO
+# Python Class:      TODO
 #
 # Description:
 # ------------------------------------
@@ -17,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,30 +40,31 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module ToolChains.Xilinx.Xilinx")
 
-from os										import environ
-from pathlib							import Path
 
-from Base.Configuration					import Configuration as BaseConfiguration
-from Base.Project								import FileTypes, VHDLVersion
-from Base.ToolChain							import ToolChainException
+from os                    import environ
+from pathlib              import Path
+
+from Base.Configuration          import Configuration as BaseConfiguration
+from Base.Project                import FileTypes, VHDLVersion
+from Base.ToolChain              import ToolChainException
 
 
 class XilinxException(ToolChainException):
 	pass
 
 class Configuration(BaseConfiguration):
-	_vendor =			"Xilinx"
-	_toolName =		None	# automatically configure only vendor path
-	_section  =		"INSTALL.Xilinx"
+	_vendor =      "Xilinx"
+	_toolName =    None	# automatically configure only vendor path
+	_section  =    "INSTALL.Xilinx"
 	_template = {
 		"Windows": {
 			_section: {
-				"InstallationDirectory":	"C:/Xilinx"
+				"InstallationDirectory":  "C:/Xilinx"
 			}
 		},
 		"Linux": {
 			_section: {
-				"InstallationDirectory":	"/opt/Xilinx"
+				"InstallationDirectory":  "/opt/Xilinx"
 			}
 		}
 	}
@@ -89,11 +90,11 @@ class XilinxProjectExportMixIn:
 	def _GenerateXilinxProjectFileContent(self, tool, vhdlVersion=VHDLVersion.VHDL93):
 		projectFileContent = ""
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile | FileTypes.VerilogSourceFile):
-			if (not file.Path.exists()):								raise XilinxException("Cannot add '{0!s}' to {1} project file.".format(file.Path, tool)) from FileNotFoundError(str(file.Path))
+			if (not file.Path.exists()):                raise XilinxException("Cannot add '{0!s}' to {1} project file.".format(file.Path, tool)) from FileNotFoundError(str(file.Path))
 			if file.FileType is FileTypes.VHDLSourceFile:
 				# create one VHDL line for each VHDL file
-				if (vhdlVersion == VHDLVersion.VHDL2008):		projectFileContent += "vhdl2008 {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
-				else:																				projectFileContent += "vhdl {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
+				if (vhdlVersion == VHDLVersion.VHDL2008):    projectFileContent += "vhdl2008 {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
+				else:                                        projectFileContent += "vhdl {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
 			else: # verilog
 				projectFileContent += "verilog work \"{0!s}\"\n".format(file.Path)
 

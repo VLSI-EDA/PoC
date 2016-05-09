@@ -156,6 +156,7 @@ begin
     
       -- This process is finished
 			simDeactivateProcess(simProcessID);
+			simFinalize;
 			wait;  -- forever
     end process;
   end generate genDUTs;

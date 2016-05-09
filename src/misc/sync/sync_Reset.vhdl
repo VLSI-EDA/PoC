@@ -110,7 +110,7 @@ begin
 		sync : sync_Reset_Altera
 			generic map (
 				SYNC_DEPTH	=> SYNC_DEPTH
-			);
+			)
 			port map (
 				Clock				=> Clock,
 				Input				=> Input,
@@ -123,7 +123,7 @@ begin
 		sync : sync_Reset_Xilinx
 			generic map (
 				SYNC_DEPTH	=> SYNC_DEPTH
-			);
+			)
 			port map (
 				Clock				=> Clock,
 				Input				=> Input,

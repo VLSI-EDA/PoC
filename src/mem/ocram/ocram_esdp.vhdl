@@ -101,7 +101,7 @@ architecture rtl of ocram_esdp is
 	constant DEPTH : positive := 2**A_BITS;
 	
 begin
-	gInfer : if ((VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
+	gInfer : if ((VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly
 		-- XST Advanced HDL Synthesis generates extended simple dual-port
 		-- memory as expected.
@@ -208,7 +208,7 @@ begin
 			);
 	end generate gAltera;
 	
-	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
+	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
 		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;
 end architecture;

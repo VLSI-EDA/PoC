@@ -53,8 +53,10 @@ end entity;
 
 
 architecture tb of stat_Histogram_tb is
-	constant CLOCK_FREQ							: FREQ					:= 100 MHz;
+	constant CLOCK_FREQ					: FREQ			:= 100 MHz;
 
+	constant GNUPLOT_DATA_FILE	: STRING		:= "stat_Histogram.dat";
+	
   -- component generics
 	constant DATA_BITS		: POSITIVE				:= 8;
 	constant COUNTER_BITS	: POSITIVE				:= 8;
@@ -76,13 +78,13 @@ architecture tb of stat_Histogram_tb is
 begin
 	-- initialize global simulation status
 	simInitialize;
-	randInitializeSeed;
-	LogFile_Open("stat_Histogram.log");
+	randomInitializeSeed;
+	LogFile_Open(GNUPLOT_DATA_FILE);
 	
 	-- generate global testbench clock
 	simGenerateClock(simTestID,			Clock,	CLOCK_FREQ);
 	simGenerateWaveform(simTestID,	Reset,	simGenerateWaveform_Reset(Pause =>  5 ns, ResetPulse => 10 ns));
-	simGenerateWaveform(simTestID,	Enable,	simGenerateWaveform_Reset(Pause => 35 ns, ResetPulse => ((1024 * SIM_COUNT) * 10 ns)));	-- (VALUES'length * 10 ns)));
+	simGenerateWaveform(simTestID,	Enable,	simGenerateWaveform_Reset(Pause => 25 ns, ResetPulse => ((1024 * SIM_COUNT) * 10 ns)));	-- (VALUES'length * 10 ns)));
   
   -- component instantiation
   UUT: entity PoC.stat_Histogram
@@ -121,9 +123,9 @@ begin
 		wait until (Enable = '1') and falling_edge(Clock);
 
 		for i in 0 to SIM_COUNT-1 loop
-			if (i mod 5 = 0) then
-				report "i=" & INTEGER'image(i) severity NOTE;
-			end if;
+			-- if (i mod 5 = 0) then
+				-- report "i=" & INTEGER'image(i) severity NOTE;
+			-- end if;
 			for j in 0 to 1023 loop
 			
 				-- uniform distribution
@@ -135,14 +137,15 @@ begin
 		end loop;
 
 		LogFile_PrintLine("# stat_Histogram_tb.vhdl");
-		LogFile_PrintLine("# plot 'stat_Histogram.dat' using 1:2 with boxes, 'stat_Histogram.dat' using (1):2:(255) smooth unique with xerrorbar");
+		LogFile_PrintLine("# plot '" & GNUPLOT_DATA_FILE & "' using 1:2 with boxes, '" & GNUPLOT_DATA_FILE & "' using (1):2:(255) smooth unique with xerrorbar");
 		
 		-- test result after all cycles
 		good := TRUE;
 		for i in Histogram_slvv'range loop
 			LogFile_PrintLine(raw_format_nat_dec(i) & " " & raw_format_nat_dec(to_integer(unsigned(Histogram_slvv(i)))));
-			-- good	:= good and (RESULT(i) = unsigned(Histogram_slvv(i)));
 		end loop;
+		
+		-- TODO: how to assert a histogram?
 		-- simAssertion(good, "Test failed.");
 
 		-- This process is finished

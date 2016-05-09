@@ -38,6 +38,7 @@ use			PoC.utils.all;
 use			PoC.vectors.all;
 use     PoC.arith.all;
 
+
 entity stat_Average is
 	generic (
 		DATA_BITS			: POSITIVE		:= 8;
@@ -59,7 +60,6 @@ end entity;
 
 
 architecture rtl of stat_Average is
-
 	signal DataIn_us	: UNSIGNED(DataIn'range);
 	
 	signal Counter_i	: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
@@ -99,24 +99,24 @@ begin
 	Counter_i	<= std_logic_vector(Counter_us);
 	Sum_i			<= std_logic_vector(Sum_us);
 
-  div : arith_div
+  div : entity PoC.arith_div
     generic map (
       A_BITS             => COUNTER_BITS,
       D_BITS             => COUNTER_BITS,
       PIPELINED          => true
     )
     port map (
-      clk => Clock,
-      rst => Reset,
+      clk =>		Clock,
+      rst =>		Reset,
 
-      start => Enable,
-      ready => Valid_i,
+      start =>	Enable,
+      ready =>	Valid_i,
 			
-      A => Sum_i,
-      D => Counter_i,
-      Q => Quotient,
-      R => open,
-      Z => open
+      A =>			Sum_i,
+      D =>			Counter_i,
+      Q =>			Quotient,
+      R =>			open,
+      Z =>			open
     );
 
 	Count_d		<= Count_d(Count_d'high - 1 downto 0) & Counter_i	when rising_edge(Clock);

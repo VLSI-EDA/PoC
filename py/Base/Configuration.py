@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
-#										Martin Zabel
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			TODO:
+# Python Class:      TODO:
 #
 # Description:
 # ------------------------------------
@@ -15,13 +15,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,10 +39,10 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Base.Configuration")
 
 
-from collections					import OrderedDict
-from pathlib							import Path
+from collections          import OrderedDict
+from pathlib              import Path
 
-from Base.Exceptions			import ExceptionBase
+from Base.Exceptions      import ExceptionBase
 
 
 class ConfigurationException(ExceptionBase):
@@ -76,14 +76,14 @@ class SkipConfigurationException(ExceptionBase):
 # 	def SubClasses(self):
 # 		return self._subclasses
 
-class Configuration:		#(ISubClassRegistration):
-	_vendor =			"Unknown"
-	_toolName =		"Unknown"
-	_section =		"ERROR"
-	_template =		{}
+class Configuration:    #(ISubClassRegistration):
+	_vendor =      "Unknown"
+	_toolName =    "Unknown"
+	_section =    "ERROR"
+	_template =    {}
 
 	def __init__(self, host):
-		self._host =	host
+		self._host =  host
 
 	def IsSupportedPlatform(self):
 		if (self._host.Platform not in self._template):

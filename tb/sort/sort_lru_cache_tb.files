@@ -6,7 +6,7 @@
 #
 # Load external vendor libraries
 if (ToolChain != "Cocotb") then
-	include				"lib/osvvm.files"													# 
+	include				"lib/OSVVM.files"													# 
 end if
 
 # PoC.sort

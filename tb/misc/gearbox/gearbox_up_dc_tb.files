@@ -5,7 +5,7 @@
 # Note: all files are relative to PoC root directory
 #
 # Load external vendor libraries
-include				"lib/osvvm.files"														# Open Source VHDL Verification Methodology (OS-VVM)
+include				"lib/OSVVM.files"														# Open Source VHDL Verification Methodology (OS-VVM)
 
 # PoC.misc.gearbox
 include				"src/misc/gearbox/gearbox_up_dc.files"			# UUT (Unit Under Test)

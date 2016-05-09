@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:         			Patrick Lehmann
+# Authors:               Patrick Lehmann
 #												Martin Zabel
 # 
-# Python Main Module:		Entry point to the testbench tools in PoC repository.
+# Python Main Module:    Entry point to the testbench tools in PoC repository.
 # 
 # Description:
 # ------------------------------------
@@ -33,46 +33,52 @@
 # limitations under the License.
 # ==============================================================================
 
-from argparse												import RawDescriptionHelpFormatter
-from collections										import OrderedDict
-from configparser										import Error as ConfigParser_Error, DuplicateOptionError
-from os															import environ
-from pathlib												import Path
-from platform												import system as platform_system
-from sys														import argv as sys_argv
-from textwrap												import dedent
+from argparse                        import RawDescriptionHelpFormatter
+from collections                    import OrderedDict
+from configparser                    import Error as ConfigParser_Error, DuplicateOptionError
+from os                              import environ
+from pathlib                        import Path
+from platform                        import system as platform_system
+from sys                            import argv as sys_argv
+from textwrap                        import dedent
 
-from Base.Compiler									import CompilerException
-from Base.Configuration							import ConfigurationException, SkipConfigurationException
-from Base.Exceptions								import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
-from Base.Logging										import ILogable, Logger, Severity
-from Base.Project										import VHDLVersion
-from Base.Simulator									import SimulatorException
-from Base.ToolChain									import ToolChainException
-from Compiler.LSECompiler						import Compiler as LSECompiler
-from Compiler.QuartusCompiler				import Compiler as MapCompiler
-from Compiler.XCOCompiler						import Compiler as XCOCompiler
-from Compiler.XSTCompiler						import Compiler as XSTCompiler
-from PoC.Config											import Board
-from PoC.Entity											import Root, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
-from PoC.Project										import Solution, Repository
-from PoC.Query											import Query
-from Simulator.ActiveHDLSimulator		import Simulator as ActiveHDLSimulator
-from Simulator.CocotbSimulator 			import Simulator as CocotbSimulator
-from Simulator.GHDLSimulator				import Simulator as GHDLSimulator
-from Simulator.ISESimulator					import Simulator as ISESimulator
-from Simulator.QuestaSimulator			import Simulator as QuestaSimulator
-from Simulator.VivadoSimulator			import Simulator as VivadoSimulator
-from ToolChains											import Configurations
-from ToolChains.GHDL								import Configuration as GHDLConfiguration
-from lib.ArgParseAttributes					import ArgParseMixin
-from lib.ArgParseAttributes					import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
-from lib.ArgParseAttributes					import CommonArgumentAttribute, CommonSwitchArgumentAttribute
-from lib.ConfigParser								import ExtendedConfigParser
-from lib.Functions									import Init, Exit
-from lib.Parser											import ParserException
-from lib.pyAttribute								import Attribute
+from Base.Compiler                  import CompilerException
+from Base.Configuration              import ConfigurationException, SkipConfigurationException
+from Base.Exceptions                import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
+from Base.Logging                    import ILogable, Logger, Severity
+from Base.Project                    import VHDLVersion
+from Base.Simulator                  import SimulatorException
+from Base.ToolChain                  import ToolChainException
+from Compiler.LSECompiler            import Compiler as LSECompiler
+from Compiler.QuartusCompiler        import Compiler as MapCompiler
+from Compiler.XCOCompiler            import Compiler as XCOCompiler
+from Compiler.XSTCompiler            import Compiler as XSTCompiler
+from Compiler.SynthCompiler          import Compiler as SynthCompiler
+from PoC.Config                      import Board
+from PoC.Entity                      import Root, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
+from PoC.Solution                    import Solution, Repository
+from PoC.Query                      import Query
+from Simulator.ActiveHDLSimulator    import Simulator as ActiveHDLSimulator
+from Simulator.CocotbSimulator       import Simulator as CocotbSimulator
+from Simulator.GHDLSimulator        import Simulator as GHDLSimulator
+from Simulator.ISESimulator          import Simulator as ISESimulator
+from Simulator.QuestaSimulator      import Simulator as QuestaSimulator
+from Simulator.VivadoSimulator      import Simulator as VivadoSimulator
+from ToolChains                      import Configurations
+from ToolChains.GHDL                import Configuration as GHDLConfiguration
+from lib.ArgParseAttributes          import ArgParseMixin
+from lib.ArgParseAttributes          import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
+from lib.ArgParseAttributes          import CommonArgumentAttribute, CommonSwitchArgumentAttribute
+from lib.ConfigParser                import ExtendedConfigParser
+from lib.Functions                  import Init, Exit
+from lib.Parser                      import ParserException
+from lib.pyAttribute                import Attribute
 
+
+class PoCEntityAttribute(Attribute):
+	def __call__(self, func):
+		self._AppendAttribute(func, ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="A space seperated list of PoC entities."))
+		return func
 
 class BoardDeviceAttributeGroup(Attribute):
 	def __call__(self, func):
@@ -96,49 +102,49 @@ class NoCleanUpAttribute(Attribute):
 		return func
 
 class PoC(ILogable, ArgParseMixin):
-	HeadLine =								"The PoC-Library - Service Tool"
+	HeadLine =                "The PoC-Library - Service Tool"
 
 	# configure hard coded variables here
-	__CONFIGFILE_DIRECTORY =	"py"
-	__CONFIGFILE_PRIVATE =		"config.private.ini"
-	__CONFIGFILE_DEFAULTS =		"config.defaults.ini"
-	__CONFIGFILE_BOARDS =			"config.boards.ini"
-	__CONFIGFILE_STRUCTURE =	"config.structure.ini"
-	__CONFIGFILE_IPCORES =		"config.entity.ini"
+	__CONFIGFILE_DIRECTORY =  "py"
+	__CONFIGFILE_PRIVATE =    "config.private.ini"
+	__CONFIGFILE_DEFAULTS =   "config.defaults.ini"
+	__CONFIGFILE_BOARDS =     "config.boards.ini"
+	__CONFIGFILE_STRUCTURE =  "config.structure.ini"
+	__CONFIGFILE_IPCORES =    "config.entity.ini"
 
 	# load platform information (Windows, Linux, Darwin, ...)
-	__PLATFORM =							platform_system()
+	__PLATFORM =              platform_system()
 
 	# records
 	class __Directories__:
-		Working =			None
-		Root =				None
-		ConfigFiles =	None
-		Solution =		None
-		Project =			None
-		Source =			None
-		Testbench =		None
-		Netlist =			None
-		Temp =				None
-		PreCompiled =	None
+		Working =     None
+		Root =        None
+		ConfigFiles = None
+		Solution =    None
+		Project =     None
+		Source =      None
+		Testbench =   None
+		Netlist =     None
+		Temp =        None
+		PreCompiled = None
 
 	class __ConfigFiles__:
-		Private =			None
-		Defaults =		None
-		Boards =			None
-		Structure =		None
-		IPCores =			None
-		Solution =		None
-		Project =			None
+		Private =     None
+		Defaults =    None
+		Boards =      None
+		Structure =   None
+		IPCores =     None
+		Solution =    None
+		Project =     None
 
 
 	def __init__(self, debug, verbose, quiet, dryRun):
 		# Call the initializer of ILogable
 		# --------------------------------------------------------------------------
-		if quiet:			severity = Severity.Quiet
-		elif debug:		severity = Severity.Debug
-		elif verbose:	severity = Severity.Verbose
-		else:					severity = Severity.Normal
+		if quiet:      severity = Severity.Quiet
+		elif debug:    severity = Severity.Debug
+		elif verbose:  severity = Severity.Verbose
+		else:          severity = Severity.Normal
 
 		logger = Logger(self, severity, printToStdOut=True)
 		ILogable.__init__(self, logger=logger)
@@ -162,47 +168,47 @@ class PoC(ILogable, ArgParseMixin):
 
 		# declare members
 		# --------------------------------------------------------------------------
-		self.__dryRun =				dryRun
-		self.__pocConfig =		None
-		self.__root =					None
-		self.__repo =					None
-		self.__directories =	{}
+		self.__dryRun =        dryRun
+		self.__pocConfig =    None
+		self.__root =          None
+		self.__repo =          None
+		self.__directories =  {}
 
 		self.__SimulationDefaultVHDLVersion = VHDLVersion.VHDL08
-		self.__SimulationDefaultBoard =				None
+		self.__SimulationDefaultBoard =        None
 
-		self._directories =							self.__Directories__()
-		self._directories.Working =			Path.cwd()
-		self._directories.Root =				Path(environ.get('PoCRootDirectory'))
-		self._directories.ConfigFiles =	self.Directories.Root / self.__CONFIGFILE_DIRECTORY
+		self._directories =              self.__Directories__()
+		self._directories.Working =      Path.cwd()
+		self._directories.Root =        Path(environ.get('PoCRootDirectory'))
+		self._directories.ConfigFiles =  self.Directories.Root / self.__CONFIGFILE_DIRECTORY
 
-		self._configFiles =							self.__ConfigFiles__()
-		self._configFiles.Private =			self.Directories.ConfigFiles / self.__CONFIGFILE_PRIVATE
-		self._configFiles.Defaults =		self.Directories.ConfigFiles / self.__CONFIGFILE_DEFAULTS
-		self._configFiles.Boards =			self.Directories.ConfigFiles / self.__CONFIGFILE_BOARDS
-		self._configFiles.Structure =		self.Directories.ConfigFiles / self.__CONFIGFILE_STRUCTURE
-		self._configFiles.IPCores =			self.Directories.ConfigFiles / self.__CONFIGFILE_IPCORES
+		self._configFiles =              self.__ConfigFiles__()
+		self._configFiles.Private =      self.Directories.ConfigFiles / self.__CONFIGFILE_PRIVATE
+		self._configFiles.Defaults =    self.Directories.ConfigFiles / self.__CONFIGFILE_DEFAULTS
+		self._configFiles.Boards =      self.Directories.ConfigFiles / self.__CONFIGFILE_BOARDS
+		self._configFiles.Structure =    self.Directories.ConfigFiles / self.__CONFIGFILE_STRUCTURE
+		self._configFiles.IPCores =      self.Directories.ConfigFiles / self.__CONFIGFILE_IPCORES
 
 	# class properties
 	# ============================================================================
 	@property
-	def Platform(self):						return self.__PLATFORM
+	def Platform(self):            return self.__PLATFORM
 	@property
-	def DryRun(self):							return self.__dryRun
+	def DryRun(self):              return self.__dryRun
 
 	@property
-	def Directories(self):				return self._directories
+	def Directories(self):        return self._directories
 	@property
-	def ConfigFiles(self):				return self._configFiles
+	def ConfigFiles(self):        return self._configFiles
 
 	@property
-	def PoCConfig(self):					return self.__pocConfig
+	def PoCConfig(self):          return self.__pocConfig
 	@property
-	def Root(self):								return self.__root
+	def Root(self):                return self.__root
 
 	def __CheckEnvironment(self):
-		if (self.Platform not in ["Windows", "Linux", "Darwin"]):	raise PlatformNotSupportedException(self.Platform)
-		if (environ.get('PoCRootDirectory') is None):							raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
+		if (self.Platform not in ["Windows", "Linux", "Darwin"]):  raise PlatformNotSupportedException(self.Platform)
+		if (environ.get('PoCRootDirectory') is None):              raise EnvironmentException("Shell environment does not provide 'PoCRootDirectory' variable.")
 
 	# read PoC configuration
 	# ============================================================================
@@ -241,14 +247,15 @@ class PoC(ILogable, ArgParseMixin):
 			raise NotConfiguredException("There is a mismatch between PoCRoot and PoC installation directory.")
 
 		# parsing values into class fields
-		self.Directories.Source =				self.Directories.Root / self.PoCConfig['CONFIG.DirectoryNames']['HDLSourceFiles']
-		self.Directories.Testbench =		self.Directories.Root / self.PoCConfig['CONFIG.DirectoryNames']['TestbenchFiles']
-		self.Directories.NetList =			self.Directories.Root / self.PoCConfig['CONFIG.DirectoryNames']['NetlistFiles']
-		self.Directories.Temp =					self.Directories.Root / self.PoCConfig['CONFIG.DirectoryNames']['TemporaryFiles']
-		self.Directories.PreCompiled =	self.Directories.Root / self.PoCConfig['CONFIG.DirectoryNames']['PrecompiledFiles']
+		configSection =                  self.PoCConfig['CONFIG.DirectoryNames']
+		self.Directories.Source =        self.Directories.Root / configSection['HDLSourceFiles']
+		self.Directories.Testbench =    self.Directories.Root / configSection['TestbenchFiles']
+		self.Directories.NetList =      self.Directories.Root / configSection['NetlistFiles']
+		self.Directories.Temp =          self.Directories.Root / configSection['TemporaryFiles']
+		self.Directories.PreCompiled =  self.Directories.Root / configSection['PrecompiledFiles']
 
 		# Initialize the default board (GENERIC)
-		self.__SimulationDefaultBoard =		Board(self)
+		self.__SimulationDefaultBoard =  Board(self)
 
 		# Initialize PoC's namespace structure
 		self.__root = Root(self)
@@ -291,7 +298,6 @@ class PoC(ILogable, ArgParseMixin):
 		ArgParseMixin.Run(self)
 
 	def PrintHeadline(self):
-		# self._LogNormal(Foreground.MAGENTA + "=" * 80)
 		self._LogNormal("{HEADLINE}{line}{NOCOLOR}".format(line="="*80, **Init.Foreground))
 		self._LogNormal("{HEADLINE}{headline: ^80s}{NOCOLOR}".format(headline=self.HeadLine, **Init.Foreground))
 		self._LogNormal("{HEADLINE}{line}{NOCOLOR}".format(line="="*80, **Init.Foreground))
@@ -343,7 +349,7 @@ class PoC(ILogable, ArgParseMixin):
 	def HandleConfiguration(self, _):
 		self.PrintHeadline()
 
-		if (self.Platform not in ["Darwin", "Linux", "Windows"]):		raise PlatformNotSupportedException(self.Platform)
+		if (self.Platform not in ["Darwin", "Linux", "Windows"]):    raise PlatformNotSupportedException(self.Platform)
 
 		try:
 			self.__ReadPoCConfiguration()
@@ -364,7 +370,7 @@ class PoC(ILogable, ArgParseMixin):
 		for configurator in configurators:
 
 			# skip configuration with unsupported platforms
-			if (not configurator.IsSupportedPlatform()):	continue
+			if (not configurator.IsSupportedPlatform()):  continue
 			# skip configuration if dependency is not fulfilled
 			if (not configurator.CheckDependency()):
 				configurator.ClearSection()
@@ -374,9 +380,9 @@ class PoC(ILogable, ArgParseMixin):
 			nxt = False
 			while (nxt is False):
 				try:
-					if   (self.Platform == "Darwin"):		configurator.ConfigureForDarwin()
-					elif (self.Platform == "Linux"):		configurator.ConfigureForLinux()
-					elif (self.Platform == "Windows"):	configurator.ConfigureForWindows()
+					if   (self.Platform == "Darwin"):    configurator.ConfigureForDarwin()
+					elif (self.Platform == "Linux"):    configurator.ConfigureForLinux()
+					elif (self.Platform == "Windows"):  configurator.ConfigureForWindows()
 
 					nxt = True
 				except SkipConfigurationException:
@@ -400,8 +406,8 @@ class PoC(ILogable, ArgParseMixin):
 				self.__pocConfig[sectionName] = OrderedDict()
 
 	def __UpdateConfiguration(self):
-		pocSections =			set([sectionName for sectionName in self.__pocConfig])
-		configSections =	set([sectionName for config in Configurations for sectionName in config.GetSections(self.Platform)])
+		pocSections =      set([sectionName for sectionName in self.__pocConfig])
+		configSections =  set([sectionName for config in Configurations for sectionName in config.GetSections(self.Platform)])
 
 		addSections = configSections.difference(pocSections)
 		delSections = pocSections.difference(configSections)
@@ -421,21 +427,20 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("add-solution", help="Add a solution to PoC.")
-	# @HandleVerbosityOptions
 	def HandleAddSolution(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
 
 		self._LogNormal("Register a new solutions in PoC")
 		solutionName = input("  Solution name: ")
-		if (solutionName == ""):				raise ConfigurationException("Empty input. Aborting!")
+		if (solutionName == ""):        raise ConfigurationException("Empty input. Aborting!")
 
 		solutionID = input("  Solution id:   ")
-		if (solutionID == ""):					raise ConfigurationException("Empty input. Aborting!")
-		if (solutionID in self.__repo):	raise ConfigurationException("Solution ID is already used.")
+		if (solutionID == ""):          raise ConfigurationException("Empty input. Aborting!")
+		if (solutionID in self.__repo):  raise ConfigurationException("Solution ID is already used.")
 
 		solutionRootPath = input("  Solution path: ")
-		if (solutionRootPath == ""):		raise ConfigurationException("Empty input. Aborting!")
+		if (solutionRootPath == ""):    raise ConfigurationException("Empty input. Aborting!")
 		solutionRootPath = Path(solutionRootPath)
 
 		if (not solutionRootPath.exists()):
@@ -458,7 +463,6 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("list-solution", help="List all solutions registered in PoC.")
-	# @HandleVerbosityOptions
 	def HandleListSolution(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -481,7 +485,6 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("remove-solution", help="Add a solution to PoC.")
 	@ArgumentAttribute(metavar="<SolutionID>", dest="SolutionID", type=str, help="Solution name.")
-	# @HandleVerbosityOptions
 	def HandleRemoveSolution(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -507,7 +510,6 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("add-project", help="Add a project to PoC.")
-	# @HandleVerbosityOptions
 	def HandleAddProject(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -517,14 +519,13 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("list-project", help="List all projects registered in PoC.")
-	# @HandleVerbosityOptions
 	def HandleListProject(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
 
-		if (args.SolutionID is None):		raise ConfigurationException("Missing command line argument '--sln'.")
+		if (args.SolutionID is None):    raise ConfigurationException("Missing command line argument '--sln'.")
 		try:
-			solution =	self.__repo[args.SolutionID]
+			solution =  self.__repo[args.SolutionID]
 		except KeyError as ex:
 			raise ConfigurationException("Solution ID '{0}' is not registered in PoC.".format(args.SolutionID)) from ex
 
@@ -541,7 +542,6 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("remove-project", help="Add a project to PoC.")
 	@ArgumentAttribute(metavar="<Project>", dest="Project", type=str, help="Project name.")
-	# @HandleVerbosityOptions
 	def HandleRemoveProject(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -551,7 +551,6 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("add-ipcore", help="Add a ipcore to PoC.")
-	# @HandleVerbosityOptions
 	def HandleAddIPCore(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -561,7 +560,6 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("list-ipcore", help="List all ipcores registered in PoC.")
-	# @HandleVerbosityOptions
 	def HandleListIPCore(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -578,7 +576,6 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("remove-ipcore", help="Add a ipcore to PoC.")
 	@ArgumentAttribute(metavar="<IPCore>", dest="IPCore", type=str, help="IPCore name.")
-	# @HandleVerbosityOptions
 	def HandleRemoveIPCore(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -588,7 +585,6 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("add-testbench", help="Add a testbench to PoC.")
-	# @HandleVerbosityOptions
 	def HandleAddTestbench(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -598,7 +594,6 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("list-testbench", help="List all testbenchs registered in PoC.")
-	# @HandleVerbosityOptions
 	def HandleListTestbench(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -615,7 +610,6 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("remove-testbench", help="Add a testbench to PoC.")
 	@ArgumentAttribute(metavar="<Testbench>", dest="Testbench", type=str, help="Testbench name.")
-	# @HandleVerbosityOptions
 	def HandleRemoveTestbench(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -626,7 +620,6 @@ class PoC(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("query", help="Simulate a PoC Entity with Aldec Active-HDL")
 	@ArgumentAttribute(metavar="<Query>", dest="Query", type=str, help="todo help")
-	# @HandleVerbosityOptions
 	def HandleQueryConfiguration(self, args):
 		self.__PrepareForConfiguration()
 		query = Query(self)
@@ -638,49 +631,50 @@ class PoC(ILogable, ArgParseMixin):
 	# ============================================================================
 	# Simulation	commands
 	# ============================================================================
-	def __PrepareVendorLibraryPaths(self):
-		# prepare vendor library path for Altera
-		if (len(self.PoCConfig.options("INSTALL.Altera.Quartus")) != 0):
-			self.Directories["AlteraPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Altera.Quartus']['InstallationDirectory']) / "eda/sim_lib"
-		# prepare vendor library path for Xilinx
-		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) != 0):
-			self.Directories["XilinxPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory']) / "ISE/vhdl/src"
-		elif (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) != 0):
-			self.Directories["XilinxPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory']) / "data/vhdl/src"
+	# TODO: Maybe required to self-compile libraries again or in the future
+	# def __PrepareVendorLibraryPaths(self):
+	# 	# prepare vendor library path for Altera
+	# 	if (len(self.PoCConfig.options("INSTALL.Altera.Quartus")) != 0):
+	# 		self.Directories["AlteraPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Altera.Quartus']['InstallationDirectory']) / "eda/sim_lib"
+	# 	# prepare vendor library path for Xilinx
+	# 	if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) != 0):
+	# 		self.Directories["XilinxPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory']) / "ISE/vhdl/src"
+	# 	elif (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) != 0):
+	# 		self.Directories["XilinxPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory']) / "data/vhdl/src"
 
 	def _ExtractBoard(self, BoardName, DeviceName, force=False):
-		if (BoardName is not None):			return Board(self, BoardName)
-		elif (DeviceName is not None):	return Board(self, "Custom", DeviceName)
-		elif (force is True):						raise CommonException("Either a board name or a device name is required.")
-		else:														return self.__SimulationDefaultBoard
+		if (BoardName is not None):      return Board(self, BoardName)
+		elif (DeviceName is not None):  return Board(self, "Custom", DeviceName)
+		elif (force is True):            raise CommonException("Either a board name or a device name is required.")
+		else:                            return self.__SimulationDefaultBoard
 
 	def _ExtractFQNs(self, fqns, defaultLibrary="PoC", defaultType=EntityTypes.Testbench):
 		if (len(fqns) == 0):             raise CommonException("No FQN given.")
 		return [FQN(self, fqn, defaultLibrary=defaultLibrary, defaultType=defaultType) for fqn in fqns]
 
 	def _ExtractVHDLVersion(self, vhdlVersion, defaultVersion=None):
-		if (defaultVersion is None):		defaultVersion = self.__SimulationDefaultVHDLVersion
-		if (vhdlVersion is None):				return defaultVersion
-		else:														return VHDLVersion.parse(vhdlVersion)
+		if (defaultVersion is None):    defaultVersion = self.__SimulationDefaultVHDLVersion
+		if (vhdlVersion is None):        return defaultVersion
+		else:                            return VHDLVersion.parse(vhdlVersion)
 
 	# TODO: move to Configuration class in ToolChains.Xilinx.Vivado
 	def _CheckVivadoEnvironment(self):
 		# check if Vivado is configure
-		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0):	raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
-		if (environ.get('XILINX_VIVADO') is None):											raise EnvironmentException("Xilinx Vivado environment is not loaded in this shell environment.")
+		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0):  raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
+		if (environ.get('XILINX_VIVADO') is None):                      raise EnvironmentException("Xilinx Vivado environment is not loaded in this shell environment.")
 
 	# TODO: move to Configuration class in ToolChains.Xilinx.ISE
 	def _CheckISEEnvironment(self):
 		# check if ISE is configure
-		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) == 0):		raise NotConfiguredException("Xilinx ISE is not configured on this system.")
-		if (environ.get('XILINX') is None):															raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
+		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) == 0):    raise NotConfiguredException("Xilinx ISE is not configured on this system.")
+		if (environ.get('XILINX') is None):                              raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-testbench" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("list-testbench", help="List all testbenches")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@ArgumentAttribute("--kind", metavar="<Kind>", dest="TestbenchKind", help="Testbench kind: VHDL | COCOTB")
 	def HandleListTestbenches(self, args):
 		self.PrintHeadline()
@@ -705,13 +699,13 @@ class PoC(ILogable, ArgParseMixin):
 				self._LogVerbose("Reading solution file...")
 				self._LogDebug("  {0!s}".format(solutionConfigFile))
 				self._LogDebug("  {0!s}".format(solutionDefaultsFile))
-				if not solutionConfigFile.exists():		raise NotConfiguredException("Solution's {0} configuration file '{1!s}' does not exist.".format(solutionName, solutionConfigFile))  from FileNotFoundError(str(solutionConfigFile))
-				if not solutionDefaultsFile.exists():	raise NotConfiguredException("Solution's {0} defaults file '{1!s}' does not exist.".format(solutionName, solutionDefaultsFile))  from FileNotFoundError(str(solutionDefaultsFile))
+				if not solutionConfigFile.exists():    raise NotConfiguredException("Solution's {0} configuration file '{1!s}' does not exist.".format(solutionName, solutionConfigFile))  from FileNotFoundError(str(solutionConfigFile))
+				if not solutionDefaultsFile.exists():  raise NotConfiguredException("Solution's {0} defaults file '{1!s}' does not exist.".format(solutionName, solutionDefaultsFile))  from FileNotFoundError(str(solutionDefaultsFile))
 				self.__pocConfig.read(str(solutionConfigFile))
 				self.__pocConfig.read(str(solutionDefaultsFile))
 
-				section =					self.PoCConfig['PROJECT.Projects']
-				defaultLibrary =	section['DefaultLibrary']
+				section =          self.PoCConfig['PROJECT.Projects']
+				defaultLibrary =  section['DefaultLibrary']
 				print("Solution:")
 				print("  Name:            {0}".format(section['Name']))
 				print("  Default library: {0}".format(defaultLibrary))
@@ -731,13 +725,13 @@ class PoC(ILogable, ArgParseMixin):
 
 
 		if (args.TestbenchKind is None):
-			tbFilter =	TestbenchKind.All
+			tbFilter =  TestbenchKind.All
 		else:
-			tbFilter =	TestbenchKind.Unknown
+			tbFilter =  TestbenchKind.Unknown
 			for kind in args.TestbenchKind.lower().split(","):
-				if   (kind == "vhdl"):		tbFilter |= TestbenchKind.VHDLTestbench
-				elif (kind == "cocotb"):	tbFilter |= TestbenchKind.CocoTestbench
-				else:											raise CommonException("Argument --kind has an unknown value '{0}'.".format(kind))
+				if   (kind == "vhdl"):    tbFilter |= TestbenchKind.VHDLTestbench
+				elif (kind == "cocotb"):  tbFilter |= TestbenchKind.CocoTestbench
+				else:                      raise CommonException("Argument --kind has an unknown value '{0}'.".format(kind))
 
 		fqnList = self._ExtractFQNs(args.FQN, defaultLibrary)
 		for fqn in fqnList:
@@ -758,22 +752,20 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("asim", help="Simulate a PoC Entity with Aldec Active-HDL")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
 	@GUIModeAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleActiveHDLSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 
-		fqnList =			self._ExtractFQNs(args.FQN)
-		board =				self._ExtractBoard(args.BoardName, args.DeviceName)
-		vhdlVersion =	self._ExtractVHDLVersion(args.VHDLVersion)
+		fqnList =      self._ExtractFQNs(args.FQN)
+		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
+		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
 		# create a GHDLSimulator instance and prepare it
-		simulator = ActiveHDLSimulator(self, args.logs, args.reports, args.GUIMode)
+		simulator = ActiveHDLSimulator(self, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -784,25 +776,23 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("ghdl", help="Simulate a PoC Entity with GHDL")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
 	@GUIModeAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleGHDLSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 
 		config = GHDLConfiguration(self)
-		if (not config.IsSupportedPlatform()):		raise PlatformNotSupportedException()
-		if (not config.IsConfigured()):						raise NotConfiguredException("GHDL is not configured on this system.")
+		if (not config.IsSupportedPlatform()):    raise PlatformNotSupportedException()
+		if (not config.IsConfigured()):            raise NotConfiguredException("GHDL is not configured on this system.")
 
-		fqnList =			self._ExtractFQNs(args.FQN)
-		board =				self._ExtractBoard(args.BoardName, args.DeviceName)
-		vhdlVersion =	self._ExtractVHDLVersion(args.VHDLVersion)
+		fqnList =      self._ExtractFQNs(args.FQN)
+		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
+		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
-		simulator = GHDLSimulator(self, args.logs, args.reports, args.GUIMode)
+		simulator = GHDLSimulator(self, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion, guiMode=args.GUIMode)		#, vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -813,20 +803,18 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("isim", help="Simulate a PoC Entity with Xilinx ISE Simulator (iSim)")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@GUIModeAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleISESimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 		self._CheckISEEnvironment()
 		
-		fqnList =			self._ExtractFQNs(args.FQN)
-		board =				self._ExtractBoard(args.BoardName, args.DeviceName)
+		fqnList =      self._ExtractFQNs(args.FQN)
+		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 
-		simulator = ISESimulator(self, args.logs, args.reports, args.GUIMode)
+		simulator = ISESimulator(self, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board)		#, vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -837,21 +825,19 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("vsim", help="Simulate a PoC Entity with Mentor QuestaSim or ModelSim (vsim)")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
 	@GUIModeAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleQuestaSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 
-		fqnList =			self._ExtractFQNs(args.FQN)
-		board =				self._ExtractBoard(args.BoardName, args.DeviceName)
-		vhdlVersion =	self._ExtractVHDLVersion(args.VHDLVersion)
+		fqnList =      self._ExtractFQNs(args.FQN)
+		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
+		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
-		simulator = QuestaSimulator(self, args.logs, args.reports, args.GUIMode)
+		simulator = QuestaSimulator(self, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -862,24 +848,22 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("xsim", help="Simulate a PoC Entity with Xilinx Vivado Simulator (xSim)")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
 	@GUIModeAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleVivadoSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 
 		self._CheckVivadoEnvironment()
 		
-		fqnList =			self._ExtractFQNs(args.FQN)
-		board =				self._ExtractBoard(args.BoardName, args.DeviceName)
+		fqnList =      self._ExtractFQNs(args.FQN)
+		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 		# FIXME: VHDL-2008 is broken in Vivado 2016.1 -> use VHDL-93 by default
 		vhdlVersion = self._ExtractVHDLVersion(args.VHDLVersion, defaultVersion=VHDLVersion.VHDL93)
 
-		simulator = VivadoSimulator(self, args.logs, args.reports, args.GUIMode)
+		simulator = VivadoSimulator(self, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -890,11 +874,9 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("cocotb", help="Simulate a PoC Entity with Cocotb and Questa Simulator")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@GUIModeAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleCocotbSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -903,11 +885,11 @@ class PoC(ILogable, ArgParseMixin):
 		if (len(self.PoCConfig.options("INSTALL.Mentor.QuestaSim")) == 0):
 			raise NotConfiguredException("Mentor QuestaSim is not configured on this system.")
 
-		fqnList =	self._ExtractFQNs(args.FQN)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName)
+		fqnList =  self._ExtractFQNs(args.FQN)
+		board =    self._ExtractBoard(args.BoardName, args.DeviceName)
 
 		# create a CocotbSimulator instance and prepare it
-		simulator = CocotbSimulator(self, args.logs, args.reports, args.GUIMode)
+		simulator = CocotbSimulator(self, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board)
 
 		Exit.exit(0 if allPassed else 1)
@@ -920,7 +902,7 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
 	@CommandAttribute("list-netlist", help="List all netlists")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@ArgumentAttribute("--kind", metavar="<Kind>", dest="NetlistKind", help="Netlist kind: Lattice | Quartus | XST | CoreGen")
 	def HandleListNetlist(self, args):
 		self.PrintHeadline()
@@ -931,11 +913,11 @@ class PoC(ILogable, ArgParseMixin):
 		else:
 			nlFilter = NetlistKind.Unknown
 			for kind in args.TestbenchKind.lower().split(","):
-				if   (kind == "lattice"):	nlFilter |= NetlistKind.LatticeNetlist
-				elif (kind == "quartus"):	nlFilter |= NetlistKind.QuartusNetlist
-				elif (kind == "xst"):			nlFilter |= NetlistKind.XstNetlist
-				elif (kind == "coregen"):	nlFilter |= NetlistKind.CoreGeneratorNetlist
-				else:											raise CommonException("Argument --kind has an unknown value '{0}'.".format(kind))
+				if   (kind == "lattice"):  nlFilter |= NetlistKind.LatticeNetlist
+				elif (kind == "quartus"):  nlFilter |= NetlistKind.QuartusNetlist
+				elif (kind == "xst"):      nlFilter |= NetlistKind.XstNetlist
+				elif (kind == "coregen"):  nlFilter |= NetlistKind.CoreGeneratorNetlist
+				else:                      raise CommonException("Argument --kind has an unknown value '{0}'.".format(kind))
 
 		fqnList = self._ExtractFQNs(args.FQN)
 		for fqn in fqnList:
@@ -954,20 +936,18 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
 	@CommandAttribute("coregen", help="Generate an IP core with Xilinx ISE Core Generator")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@NoCleanUpAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleCoreGeneratorCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
 		self._CheckISEEnvironment()
 		
-		fqnList =	self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
+		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
+		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
-		compiler = XCOCompiler(self, args.logs, args.reports, self.DryRun, args.NoCleanUp)
+		compiler = XCOCompiler(self, self.DryRun, args.NoCleanUp)
 		compiler.RunAll(fqnList, board)
 
 		Exit.exit()
@@ -977,20 +957,39 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
 	@CommandAttribute("xst", help="Compile a PoC IP core with Xilinx ISE XST to a netlist")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@NoCleanUpAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleXstCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
 		self._CheckISEEnvironment()
 
-		fqnList =	self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
+		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
+		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
-		compiler = XSTCompiler(self, args.logs, args.reports, self.DryRun, args.NoCleanUp)
+		compiler = XSTCompiler(self, self.DryRun, args.NoCleanUp)
+		compiler.RunAll(fqnList, board)
+
+		Exit.exit()
+
+	# ----------------------------------------------------------------------------
+	# create the sub-parser for the "synth" command
+	# ----------------------------------------------------------------------------
+	@CommandGroupAttribute("Synthesis commands")
+	@CommandAttribute("synth", help="Compile a PoC IP core with Xilinx Vivado Synth to a design checkpoint")
+	@PoCEntityAttribute()
+	@BoardDeviceAttributeGroup()
+	@NoCleanUpAttribute()
+	def HandleSynthCompilation(self, args):
+		self.PrintHeadline()
+		self.__PrepareForSynthesis()
+		self._CheckVivadoEnvironment()
+
+		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
+		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
+
+		compiler = SynthCompiler(self, self.DryRun, args.NoCleanUp)
 		compiler.RunAll(fqnList, board)
 
 		Exit.exit()
@@ -1001,11 +1000,9 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
 	@CommandAttribute("quartus", help="Compile a PoC IP core with Altera Quartus II Map to a netlist")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@NoCleanUpAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
 	def HandleQuartusCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1013,10 +1010,10 @@ class PoC(ILogable, ArgParseMixin):
 		# TODO: check env variables
 		# self._CheckQuartusEnvironment()
 
-		fqnList =	self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
+		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
+		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
-		compiler = MapCompiler(self, args.logs, args.reports, self.DryRun, args.NoCleanUp)
+		compiler = MapCompiler(self, self.DryRun, args.NoCleanUp)
 		compiler.RunAll(fqnList, board)
 
 		Exit.exit()
@@ -1026,23 +1023,21 @@ class PoC(ILogable, ArgParseMixin):
 	# create the sub-parser for the "lattice" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("lattice", help="Compile a PoC IP core with Lattice Diamond LSE to a netlist")
-	@ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="todo help")
+	@CommandAttribute("lse", help="Compile a PoC IP core with Lattice Diamond LSE to a netlist")
+	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@NoCleanUpAttribute()
-	@SwitchArgumentAttribute("-l", dest="logs", help="show logs")
-	@SwitchArgumentAttribute("-r", dest="reports", help="show reports")
-	def HandleLatticeCompilation(self, args):
+	def HandleLSECompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
 
 		# TODO: check env variables
 		# self._CheckLatticeEnvironment()
 
-		fqnList =	self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
-		board =		self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
+		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
+		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
-		compiler = LSECompiler(self, args.logs, args.reports, self.DryRun, args.NoCleanUp)
+		compiler = LSECompiler(self, self.DryRun, args.NoCleanUp)
 		compiler.RunAll(fqnList, board)
 
 		Exit.exit()
@@ -1050,10 +1045,10 @@ class PoC(ILogable, ArgParseMixin):
 
 # main program
 def main():
-	dryRun =	"-D" in sys_argv
-	debug =		"-d" in sys_argv
-	verbose =	"-v" in sys_argv
-	quiet =		"-q" in sys_argv
+	dryRun =  "-D" in sys_argv
+	debug =    "-d" in sys_argv
+	verbose =  "-v" in sys_argv
+	quiet =    "-q" in sys_argv
 
 	# configure Exit class
 	Exit.quiet = quiet
@@ -1090,19 +1085,19 @@ def main():
 			else:
 				print("  Possible causes:")
 				print("   - The compile order is broken.")
-				print("   - A source file was not compile and an old file got used.")
+				print("   - A source file was not compiled and an old file got used.")
 
 		if (not (verbose or debug)):
 			print()
 			print("{CYAN}  Use '-v' for verbose or '-d' for debug to print out extended messages.{NOCOLOR}".format(**Init.Foreground))
 		Exit.exit(1)
 
-	except EnvironmentException as ex:					Exit.printEnvironmentException(ex)
-	except NotConfiguredException as ex:				Exit.printNotConfiguredException(ex)
-	except PlatformNotSupportedException as ex:	Exit.printPlatformNotSupportedException(ex)
-	except ExceptionBase as ex:									Exit.printExceptionbase(ex)
-	except NotImplementedError as ex:						Exit.printNotImplementedError(ex)
-	# except Exception as ex:											Exit.printException(ex)
+	except EnvironmentException as ex:          Exit.printEnvironmentException(ex)
+	except NotConfiguredException as ex:        Exit.printNotConfiguredException(ex)
+	except PlatformNotSupportedException as ex:  Exit.printPlatformNotSupportedException(ex)
+	except ExceptionBase as ex:                  Exit.printExceptionbase(ex)
+	except NotImplementedError as ex:            Exit.printNotImplementedError(ex)
+	# except Exception as ex:                      Exit.printException(ex)
 
 # entry point
 if __name__ == "__main__":

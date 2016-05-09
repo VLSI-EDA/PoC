@@ -3,9 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 # 
-# Python Class:			This PoCXCOCompiler compiles xco IPCores to netlists
+# Python Class:      This PoCXCOCompiler compiles xco IPCores to netlists
 # 
 # Description:
 # ------------------------------------
@@ -16,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,34 +33,31 @@
 # ==============================================================================
 #
 # entry point
-from pathlib import Path
-
-from PoC.Entity import WildCard
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
 	from lib.Functions import Exit
-
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
 
 
 # load dependencies
-from lib.Functions							import Init
-from Base.Project								import ToolChain, Tool
-from Base.Compiler							import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
-from ToolChains.Lattice.Diamond	import Diamond, SynthesisArgumentFile
+from pathlib                    import Path
+
+from Base.Project                import ToolChain, Tool
+from Base.Compiler              import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
+from PoC.Entity                  import WildCard
+from ToolChains.Lattice.Diamond  import Diamond, SynthesisArgumentFile
 
 
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =	ToolChain.Lattice_Diamond
-	_TOOL =				Tool.Lattice_LSE
+	_TOOL_CHAIN =  ToolChain.Lattice_Diamond
+	_TOOL =        Tool.Lattice_LSE
 
-	def __init__(self, host, showLogs, showReport, dryRun, noCleanUp):
-		super().__init__(host, showLogs, showReport, dryRun, noCleanUp)
+	def __init__(self, host, dryRun, noCleanUp):
+		super().__init__(host, dryRun, noCleanUp)
 
-		self._diamond =			None
+		self._toolChain =      None
 
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working = host.Directories.Temp / configSection['LatticeSynthesisFiles']
@@ -72,35 +70,20 @@ class Compiler(BaseCompiler):
 		diamondSection = self.Host.PoCConfig['INSTALL.Lattice.Diamond']
 		binaryPath = Path(diamondSection['BinaryDirectory'])
 		version = diamondSection['Version']
-		self._diamond =		Diamond(self.Host.Platform, binaryPath, version, logger=self.Logger)
+		self._toolChain =    Diamond(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		for fqn in fqnList:
 			entity = fqn.Entity
 			if (isinstance(entity, WildCard)):
 				for netlist in entity.GetLatticeNetlists():
-					try:
-						self.Run(netlist, *args, **kwargs)
-					except SkipableCompilerException:
-						pass
+					self.TryRun(netlist, *args, **kwargs)
 			else:
 				netlist = entity.LatticeNetlist
-				try:
-					self.Run(netlist, *args, **kwargs)
-				except SkipableCompilerException:
-					pass
+				self.TryRun(netlist, *args, **kwargs)
 
-	def Run(self, netlist, board, **_):
-		self._LogQuiet("IP core: {0!s}".format(netlist.Parent, **Init.Foreground))
-
-		# setup all needed paths to execute fuse
-		self._PrepareCompilerEnvironment(board.Device)
-		self._WriteSpecialSectionIntoConfig(board.Device)
-
-		self._CreatePoCProject(netlist, board)
-		self._AddFileListFile(netlist.FilesFile)
-		if (netlist.RulesFile is not None):
-			self._AddRulesFiles(netlist.RulesFile)
+	def Run(self, netlist, board):
+		super().Run(netlist, board)
 
 		netlist.PrjFile = self.Directories.Working / (netlist.ModuleName + ".prj")
 
@@ -118,24 +101,16 @@ class Compiler(BaseCompiler):
 		self._RunPostReplace(netlist)
 		self._RunPostDelete(netlist)
 
-	def _WriteSpecialSectionIntoConfig(self, device):
-		# add the key Device to section SPECIAL at runtime to change interpolation results
-		self.Host.PoCConfig['SPECIAL'] = {}
-		self.Host.PoCConfig['SPECIAL']['Device'] =				device.ShortName
-		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =	device.Series
-		self.Host.PoCConfig['SPECIAL']['OutputDir']	=			self.Directories.Working.as_posix()
-
-
 	def _WriteLSEProjectFile(self, netlist):
 		argumentFile = SynthesisArgumentFile(netlist.PrjFile)
-		argumentFile.Architecture =	"\"ECP5UM\""
-		argumentFile.TopLevel =			netlist.ModuleName
-		argumentFile.LogFile =			self.Directories.Working / (netlist.ModuleName + ".lse.log")
+		argumentFile.Architecture =  "\"ECP5UM\""
+		argumentFile.TopLevel =      netlist.ModuleName
+		argumentFile.LogFile =      self.Directories.Working / (netlist.ModuleName + ".lse.log")
 
 		argumentFile.Write(self.PoCProject)
 
 	def _RunCompile(self, netlist):
-		tclShell = self._diamond.GetTclShell()
+		tclShell = self._toolChain.GetTclShell()
 
 		# raise NotImplementedError("Next: implement interactive shell")
 		self._LogWarning("Execution skipped due to Tcl shell problems.")
@@ -145,4 +120,4 @@ class Compiler(BaseCompiler):
 		# except QuartusException as ex:
 		# 	raise CompilerException("Error while compiling '{0!s}'.".format(netlist)) from ex
 		# if q2map.HasErrors:
-		# 	raise CompilerException("Error while compiling '{0!s}'.".format(netlist))
+		# 	raise 		SkipableCompilerException("Error while compiling '{0!s}'.".format(netlist))

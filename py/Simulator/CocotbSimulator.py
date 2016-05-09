@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
 #                   Martin Zabel
 # 
-# Python Class:			TODO
+# Python Class:      TODO
 # 
 # Description:
 # ------------------------------------
@@ -17,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,10 +33,6 @@
 # ==============================================================================
 #
 # entry point
-from textwrap import dedent
-
-from PoC.Config import Vendors
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -47,30 +43,31 @@ else:
 
 # load dependencies
 import shutil
+from textwrap                import dedent
 
-from lib.Functions					import Init
-from Base.Project						import FileTypes, ToolChain, Tool
-from Base.Simulator					import SimulatorException, Simulator as BaseSimulator
-from PoC.Entity							import WildCard
-from ToolChains.GNU					import Make
+from Base.Project            import FileTypes, ToolChain, Tool, VHDLVersion
+from Base.Simulator          import SimulatorException, Simulator as BaseSimulator
+from PoC.Config              import Vendors
+from PoC.Entity              import WildCard
+from ToolChains.GNU          import Make
 
 
 class Simulator(BaseSimulator):
-	_TOOL_CHAIN =						ToolChain.Cocotb
-	_TOOL =									Tool.Cocotb_QuestaSim
+	_TOOL_CHAIN =            ToolChain.Cocotb
+	_TOOL =                  Tool.Cocotb_QuestaSim
 	_COCOTB_SIMBUILD_DIRECTORY = "sim_build"
 
-	def __init__(self, host, showLogs, showReport, guiMode):
-		super().__init__(host, showLogs, showReport)
+	def __init__(self, host, guiMode):
+		super().__init__(host)
 
-		self._guiMode =				guiMode
+		self._guiMode =        guiMode
 
-		self._entity =				None
-		self._testbenchFQN =	None
+		self._entity =        None
+		self._testbenchFQN =  None
 
-		configSection = host.PoCConfig['CONFIG.DirectoryNames']
-		self.Directories.Working = host.Directories.Temp / configSection['CocotbFiles']
-		self.Directories.PreCompiled = host.Directories.PreCompiled / configSection['QuestaSimFiles']
+		configSection =                  host.PoCConfig['CONFIG.DirectoryNames']
+		self.Directories.Working =      host.Directories.Temp / configSection['CocotbFiles']
+		self.Directories.PreCompiled =  host.Directories.PreCompiled / configSection['QuestaSimFiles']
 
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()
@@ -84,34 +81,28 @@ class Simulator(BaseSimulator):
 			entity = fqn.Entity
 			if (isinstance(entity, WildCard)):
 				for testbench in entity.GetCocoTestbenches():
-					try:
-						self.Run(testbench, *args, **kwargs)
-					except SimulatorException:
-						pass
+					self.TryRun(testbench, *args, **kwargs)
 			else:
 				testbench = entity.CocoTestbench
-				try:
-					self.Run(testbench, *args, **kwargs)
-				except SimulatorException:
-					pass
+				self.TryRun(testbench, *args, **kwargs)
 
-		return False # FIXME: check Cocotb result
+		# if (len(self._testSuite) > 1):
+		self.PrintOverallSimulationReport()
+
+		return self._testSuite.IsAllPassed
 
 	def Run(self, testbench, board, **_):
-		self._LogQuiet("Testbench: {0!s}".format(testbench.Parent, **Init.Foreground))
+		super().Run(testbench, board, VHDLVersion.VHDL08)
 
-		# setup all needed paths to execute fuse
-		self._CreatePoCProject(testbench, board)
-		self._AddFileListFile(testbench.FilesFile)
 		self._Run(testbench, board)
 
 	def _Run(self, testbench, board):
 		# select modelsim.ini from precompiled
 		precompiledModelsimIniPath = self.Directories.PreCompiled
-		if board.Device.Vendor is Vendors.Xilinx:
-			precompiledModelsimIniPath /= "xilinx"
-		elif board.Device.Vendor is Vendors.Altera:
-			precompiledModelsimIniPath /= "altera"
+		if board.Device.Vendor is Vendors.Altera:
+			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
+		elif board.Device.Vendor is Vendors.Xilinx:
+			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
 		precompiledModelsimIniPath /= "modelsim.ini"
 		if not precompiledModelsimIniPath.exists():
@@ -139,8 +130,8 @@ class Simulator(BaseSimulator):
 		self._LogNormal("Running simulation...")
 		cocotbTemplateFilePath = self.Host.Directories.Root / \
 															self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile'] # depends on testbench
-		topLevel =			testbench.TopLevel
-		cocotbModule =	testbench.ModuleName
+		topLevel =      testbench.TopLevel
+		cocotbModule =  testbench.ModuleName
 
 		# create one VHDL line for each VHDL file
 		vhdlSources = ""

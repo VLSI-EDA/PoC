@@ -3,9 +3,9 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:						Patrick Lehmann
+# Authors:            Patrick Lehmann
 # 
-# Python functions:		Auxillary functions to exit a program and report an error message.
+# Python functions:    Auxillary functions to exit a program and report an error message.
 # 
 # Description:
 # ------------------------------------
@@ -14,13 +14,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,9 +30,9 @@
 # ==============================================================================
 #
 
-from functools	import reduce
-from operator		import or_
-from sys				import version_info
+from functools  import reduce
+from operator    import or_
+from sys        import version_info
 
 
 def merge(*dicts):
@@ -48,13 +48,13 @@ class CallByRefParam:
 	def __lshift__(self, other):
 		self.value = other
 
-	def __eq__(self, other):	return self.value == other
-	def __ne__(self, other):	return self.value != other
-	def __lt__(self, other):	return self.value < other
-	def __le__(self, other):	return self.value <= other
-	def __gt__(self, other):	return self.value > other
-	def __ge__(self, other):	return self.value >= other
-	def __neg__(self):				return not self.value
+	def __eq__(self, other):  return self.value == other
+	def __ne__(self, other):  return self.value != other
+	def __lt__(self, other):  return self.value < other
+	def __le__(self, other):  return self.value <= other
+	def __gt__(self, other):  return self.value > other
+	def __ge__(self, other):  return self.value >= other
+	def __neg__(self):        return not self.value
 
 
 class Init:
@@ -65,26 +65,29 @@ class Init:
 
 	from colorama import Fore as Foreground
 	Foreground = {
-		"RED":			Foreground.LIGHTRED_EX,
-		"GREEN":		Foreground.LIGHTGREEN_EX,
-		"YELLOW":		Foreground.LIGHTYELLOW_EX,
-		"MAGENTA":	Foreground.LIGHTMAGENTA_EX,
-		"BLUE":			Foreground.LIGHTBLUE_EX,
-		"CYAN":			Foreground.LIGHTCYAN_EX,
-		"GRAY":			Foreground.WHITE,
-		"DARKGRAY":	Foreground.LIGHTBLACK_EX,
-		"NOCOLOR":	Foreground.RESET,
+		"RED":        Foreground.LIGHTRED_EX,
+		"DARK_RED":		Foreground.RED,
+		"GREEN":      Foreground.LIGHTGREEN_EX,
+		"DARK_GREEN": Foreground.GREEN,
+		"YELLOW":     Foreground.LIGHTYELLOW_EX,
+		"MAGENTA":    Foreground.LIGHTMAGENTA_EX,
+		"BLUE":       Foreground.LIGHTBLUE_EX,
+		"CYAN":       Foreground.LIGHTCYAN_EX,
+		"DARK_CYAN":  Foreground.CYAN,
+		"GRAY":       Foreground.WHITE,
+		"DARK_GRAY":  Foreground.LIGHTBLACK_EX,
+		"NOCOLOR":    Foreground.RESET,
 
-		"HEADLINE":	Foreground.LIGHTMAGENTA_EX,
-		"ERROR":		Foreground.LIGHTRED_EX,
-		"WARNING":	Foreground.LIGHTYELLOW_EX
+		"HEADLINE":   Foreground.LIGHTMAGENTA_EX,
+		"ERROR":      Foreground.LIGHTRED_EX,
+		"WARNING":    Foreground.LIGHTYELLOW_EX
 	}
 
 
 class Exit:
 	@classmethod
 	def exit(cls, returnCode=0):
-		from colorama		import Fore as Foreground, Back as Background, Style
+		from colorama    import Fore as Foreground, Back as Background, Style
 		print(Foreground.RESET + Background.RESET + Style.RESET_ALL, end="")
 		exit(returnCode)
 
@@ -118,7 +121,7 @@ class Exit:
 
 	@classmethod
 	def printException(cls, ex):
-		from traceback	import print_tb, walk_tb
+		from traceback  import print_tb, walk_tb
 		Init.init()
 		print("{RED}FATAL: An unknown or unhandled exception reached the topmost exception handler!{NOCOLOR}".format(message=ex.__str__(), **Init.Foreground))
 		print("{YELLOW}  Exception type:{NOCOLOR}    {type}".format(type=ex.__class__.__name__, **Init.Foreground))
@@ -134,7 +137,7 @@ class Exit:
 
 	@classmethod
 	def printNotImplementedError(cls, ex):
-		from traceback	import walk_tb
+		from traceback  import walk_tb
 		Init.init()
 		frame, _ = [x for x in walk_tb(ex.__traceback__)][-1]
 		filename = frame.f_code.co_filename

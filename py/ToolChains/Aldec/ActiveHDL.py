@@ -3,9 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			Aldec Active-HDL specific classes
+# Python Class:      Aldec Active-HDL specific classes
 #
 # Description:
 # ------------------------------------
@@ -16,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,15 +44,15 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Aldec.ActiveHDL")
 
 
-from lib.Functions					import CallByRefParam
-from Base.Exceptions				import PlatformNotSupportedException
-from Base.Logging						import LogEntry, Severity
-from Base.Simulator					import SimulationResult, PoCSimulationResultFilter
-from Base.Executable				import Executable
-from Base.Executable				import ExecutableArgument, PathArgument, StringArgument
-from Base.Executable				import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
-from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
-from ToolChains.Aldec.Aldec	import AldecException
+from lib.Functions          import CallByRefParam
+from Base.Exceptions        import PlatformNotSupportedException
+from Base.Logging            import LogEntry, Severity
+from Base.Simulator          import SimulationResult, PoCSimulationResultFilter
+from Base.Executable        import Executable
+from Base.Executable        import ExecutableArgument, PathArgument, StringArgument
+from Base.Executable        import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
+from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
+from ToolChains.Aldec.Aldec  import AldecException
 
 
 class ActiveHDLException(AldecException):
@@ -59,22 +60,22 @@ class ActiveHDLException(AldecException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =			"Aldec"
-	_toolName =		"Aldec Active-HDL"
-	_section  =		"INSTALL.Aldec.ActiveHDL"
+	_vendor =      "Aldec"
+	_toolName =    "Aldec Active-HDL"
+	_section  =    "INSTALL.Aldec.ActiveHDL"
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"10.3",
-				"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/Active-HDL",
-				"BinaryDirectory":				"${InstallationDirectory}/BIN"
+				"Version":                "10.3",
+				"InstallationDirectory":  "${INSTALL.Aldec:InstallationDirectory}/Active-HDL",
+				"BinaryDirectory":        "${InstallationDirectory}/BIN"
 			}
 		},
 		"Linux": {
 			_section: {
-			#		"Version":								"10.4c",
-			#		"InstallationDirectory":	"${INSTALL.Aldec:InstallationDirectory}/${Version}",
-			#		"BinaryDirectory":				"${InstallationDirectory}/bin"
+			#		"Version":                "10.4c",
+			#		"InstallationDirectory":  "${INSTALL.Aldec:InstallationDirectory}/${Version}",
+			#		"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}
 		}
 	}
@@ -112,10 +113,10 @@ class Configuration(BaseConfiguration):
 
 class ActiveHDLMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		self._platform =						platform
-		self._binaryDirectoryPath =	binaryDirectoryPath
-		self._version =							version
-		self._logger =							logger
+		self._platform =            platform
+		self._binaryDirectoryPath =  binaryDirectoryPath
+		self._version =              version
+		self._logger =              logger
 
 class ActiveHDL(ActiveHDLMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
@@ -134,14 +135,14 @@ class ActiveHDL(ActiveHDLMixIn):
 class VHDLCompiler(Executable, ActiveHDLMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		ActiveHDLMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "vcom.exe"
-		# elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "vcom"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vcom.exe"
+		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vcom"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
-		self._hasOutput =		False
-		self._hasWarnings =	False
-		self._hasErrors =		False
+		self._hasOutput =    False
+		self._hasWarnings =  False
+		self._hasErrors =    False
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -154,23 +155,23 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =	None
+		_value =  None
 
 	class FlagNoRangeCheck(metaclass=LongFlagArgument):
-		_name =		"norangecheck"
-		_value =	None
+		_name =    "norangecheck"
+		_value =  None
 
 	class SwitchVHDLVersion(metaclass=ShortValuedFlagArgument):
-		_pattern =	"-{1}"
-		_name =			""
-		_value =		None
+		_pattern =  "-{1}"
+		_name =      ""
+		_value =    None
 
 	class SwitchVHDLLibrary(metaclass=ShortTupleArgument):
-		_name =		"work"
-		_value =	None
+		_name =    "work"
+		_value =  None
 
 	class ArgSourceFile(metaclass=PathArgument):
-		_value =	None
+		_value =  None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -227,14 +228,14 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 class StandaloneSimulator(Executable, ActiveHDLMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		ActiveHDLMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "vsimsa.exe"
-		# elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "vsimsa"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vsimsa.exe"
+		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vsimsa"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
-		self._hasOutput =		False
-		self._hasWarnings =	False
-		self._hasErrors =		False
+		self._hasOutput =    False
+		self._hasWarnings =  False
+		self._hasErrors =    False
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -247,11 +248,11 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =	None
+		_value =  None
 
 	class SwitchBatchCommand(metaclass=ShortTupleArgument):
-		_name =		"do"
-		_value =	None
+		_name =    "do"
+		_value =  None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -281,8 +282,8 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 			self._LogNormal("    " + ("-" * 76))
 
 			while True:
-				self._hasWarnings |=	(line.Severity is Severity.Warning)
-				self._hasErrors |=		(line.Severity is Severity.Error)
+				self._hasWarnings |=  (line.Severity is Severity.Warning)
+				self._hasErrors |=    (line.Severity is Severity.Error)
 
 				line.IndentBy(2)
 				self._Log(line)
@@ -300,38 +301,38 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 class Simulator(Executable, ActiveHDLMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		ActiveHDLMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "vsimsa.exe"
-		# elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "vsimsa"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vsimsa.exe"
+		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vsimsa"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =	None
+		_value =  None
 
 	# class FlagVerbose(metaclass=ShortFlagArgument):
-	# 	_name =		"v"
-	# 	_value =	None
+	# 	_name =    "v"
+	# 	_value =  None
 	#
 	# class FlagOptimization(metaclass=ShortFlagArgument):
-	# 	_name =		"vopt"
-	# 	_value =	None
+	# 	_name =    "vopt"
+	# 	_value =  None
 	#
 	# class FlagCommandLineMode(metaclass=ShortFlagArgument):
-	# 	_name =		"c"
-	# 	_value =	None
+	# 	_name =    "c"
+	# 	_value =  None
 	#
 	# class SwitchTimeResolution(metaclass=ShortTupleArgument):
-	# 	_name =		"t"
-	# 	_value =	None
+	# 	_name =    "t"
+	# 	_value =  None
 
 	class SwitchBatchCommand(metaclass=ShortTupleArgument):
-		_name =		"do"
+		_name =    "do"
 
 	# class SwitchTopLevel(metaclass=ShortValuedFlagArgument):
-	# 	_name =		""
-	# 	_value =	None
+	# 	_name =    ""
+	# 	_value =  None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -366,14 +367,14 @@ class Simulator(Executable, ActiveHDLMixIn):
 class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		ActiveHDLMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "vlib.exe"
-		# elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "vlib"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vlib.exe"
+		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vlib"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
-		self._hasOutput =		False
-		self._hasWarnings =	False
-		self._hasErrors =		False
+		self._hasOutput =    False
+		self._hasWarnings =  False
+		self._hasErrors =    False
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -386,14 +387,14 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =	None
+		_value =  None
 
 	# class FlagVerbose(metaclass=FlagArgument):
-	# 	_name =		"-v"
-	# 	_value =	None
+	# 	_name =    "-v"
+	# 	_value =  None
 
 	class SwitchLibraryName(metaclass=StringArgument):
-		_value =	None
+		_value =  None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -422,8 +423,8 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 			self._LogNormal("    " + ("-" * 76))
 
 			while True:
-				self._hasWarnings |=	(line.Severity is Severity.Warning)
-				self._hasErrors |=		(line.Severity is Severity.Error)
+				self._hasWarnings |=  (line.Severity is Severity.Warning)
+				self._hasErrors |=    (line.Severity is Severity.Error)
 
 				line.IndentBy(2)
 				self._Log(line)

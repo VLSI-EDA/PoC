@@ -16,4 +16,4 @@ vhdl		poc		"src/sort/sortnet/sortnet.pkg.vhdl"									#
 include				"src/sort/sortnet/sortnet_BitonicSort.files"				# 
 include				"src/sort/sortnet/sortnet_OddEvenSort.files"				# 
 include				"src/sort/sortnet/sortnet_OddEvenMergeSort.files"		# 
-vhdl		poc		"src/sort/sortnet/sortnet_Stream_Adapter2.vhdl"			#  Top-Level
+vhdl		poc		"src/sort/sortnet/sortnet_Stream_Adapter.vhdl"			#  Top-Level

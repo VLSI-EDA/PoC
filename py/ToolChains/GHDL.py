@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
-#										Martin Zabel
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			GHDL specific classes
+# Python Class:      GHDL specific classes
 #
 # Description:
 # ------------------------------------
@@ -17,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,19 +40,20 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GHDL")
 
-from pathlib								import Path
-from re											import compile as RegExpCompile
-from subprocess 						import check_output
 
-from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
-from Base.Exceptions				import PlatformNotSupportedException
-from Base.Executable				import Executable
-from Base.Executable				import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
-from Base.Executable				import ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
-from Base.Logging						import LogEntry, Severity
-from Base.Simulator					import PoCSimulationResultFilter, SimulationResult
-from Base.ToolChain					import ToolChainException
-from lib.Functions					import CallByRefParam
+from pathlib                import Path
+from re                      import compile as RegExpCompile
+from subprocess             import check_output
+
+from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
+from Base.Exceptions        import PlatformNotSupportedException
+from Base.Executable        import Executable
+from Base.Executable        import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
+from Base.Executable        import ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
+from Base.Logging            import LogEntry, Severity
+from Base.Simulator          import PoCSimulationResultFilter, SimulationResult
+from Base.ToolChain          import ToolChainException
+from lib.Functions          import CallByRefParam
 
 
 class GHDLException(ToolChainException):
@@ -64,32 +65,32 @@ class GHDLReanalyzeException(GHDLException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =			None
-	_toolName =		"GHDL"
-	_section = 		"INSTALL.GHDL"
+	_vendor =      None
+	_toolName =    "GHDL"
+	_section =     "INSTALL.GHDL"
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"0.34dev",
-				"InstallationDirectory":	"C:/Tools/GHDL/0.34dev",
-				"BinaryDirectory":				"${InstallationDirectory}/bin",
-				"Backend":								"mcode"
+				"Version":                "0.34dev",
+				"InstallationDirectory":  "C:/Tools/GHDL/0.34dev",
+				"BinaryDirectory":        "${InstallationDirectory}/bin",
+				"Backend":                "mcode"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":								"0.34dev",
-				"InstallationDirectory":	"/usr/bin/ghdl",
-				"BinaryDirectory":				"${InstallationDirectory}",
-				"Backend":								"llvm"
+				"Version":                "0.34dev",
+				"InstallationDirectory":  "/usr/bin/ghdl",
+				"BinaryDirectory":        "${InstallationDirectory}",
+				"Backend":                "llvm"
 			}
 		},
 		"Darwin": {
 			_section: {
-				"Version":								"0.34dev",
-				"InstallationDirectory":	None,
-				"BinaryDirectory":				"${InstallationDirectory}",
-				"Backend":								"llvm"
+				"Version":                "0.34dev",
+				"InstallationDirectory":  None,
+				"BinaryDirectory":        "${InstallationDirectory}",
+				"Backend":                "llvm"
 			}
 		}
 	}
@@ -148,40 +149,40 @@ class Configuration(BaseConfiguration):
 
 class GHDL(Executable):
 	def __init__(self, platform, binaryDirectoryPath, version, backend, logger=None):
-		if (platform == "Windows"):			executablePath = binaryDirectoryPath/ "ghdl.exe"
-		elif (platform == "Linux"):			executablePath = binaryDirectoryPath/ "ghdl"
-		elif (platform == "Darwin"):		executablePath = binaryDirectoryPath/ "ghdl"
-		else:																						raise PlatformNotSupportedException(platform)
+		if (platform == "Windows"):      executablePath = binaryDirectoryPath/ "ghdl.exe"
+		elif (platform == "Linux"):      executablePath = binaryDirectoryPath/ "ghdl"
+		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath/ "ghdl"
+		else:                                            raise PlatformNotSupportedException(platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Executable = executablePath
 		#self.Parameters[self.Executable] = executablePath
 
 		if (platform == "Windows"):
-			if (backend not in ["mcode"]):								raise GHDLException("GHDL for Windows does not support backend '{0}'.".format(backend))
+			if (backend not in ["mcode"]):                raise GHDLException("GHDL for Windows does not support backend '{0}'.".format(backend))
 		elif (platform == "Linux"):
-			if (backend not in ["gcc", "llvm", "mcode"]):	raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
+			if (backend not in ["gcc", "llvm", "mcode"]):  raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
 		elif (platform == "Darwin"):
 			if (backend not in ["gcc", "llvm", "mcode"]):  raise GHDLException("GHDL for OS X does not support backend '{0}'.".format(backend))
 
-		self._binaryDirectoryPath =	binaryDirectoryPath
-		self._backend =							backend
-		self._version =							version
+		self._binaryDirectoryPath =  binaryDirectoryPath
+		self._backend =              backend
+		self._version =              version
 
-		self._hasOutput =						False
-		self._hasWarnings =					False
-		self._hasErrors =						False
+		self._hasOutput =            False
+		self._hasWarnings =          False
+		self._hasErrors =            False
 
 	@property
-	def BinaryDirectoryPath(self):	return self._binaryDirectoryPath
+	def BinaryDirectoryPath(self):  return self._binaryDirectoryPath
 	@property
-	def Backend(self):							return self._backend
+	def Backend(self):              return self._backend
 	@property
-	def Version(self):							return self._version
+	def Version(self):              return self._version
 	@property
-	def HasWarnings(self):					return self._hasWarnings
+	def HasWarnings(self):          return self._hasWarnings
 	@property
-	def HasErrors(self):						return self._hasErrors
+	def HasErrors(self):            return self._hasErrors
 
 	def deco(Arg):
 		def getter(self):
@@ -196,53 +197,53 @@ class GHDL(Executable):
 	#	pass
 
 	class CmdAnalyze(metaclass=ShortFlagArgument):
-		_name =		"a"
+		_name =    "a"
 
 	class CmdElaborate(metaclass=ShortFlagArgument):
-		_name =		"e"
+		_name =    "e"
 
 	class CmdRun(metaclass=ShortFlagArgument):
-		_name =		"r"
+		_name =    "r"
 
 	class FlagVerbose(metaclass=ShortFlagArgument):
-		_name =		"v"
+		_name =    "v"
 
 	class FlagExplicit(metaclass=ShortFlagArgument):
-		_name =		"fexplicit"
+		_name =    "fexplicit"
 
 	class FlagRelaxedRules(metaclass=ShortFlagArgument):
-		_name =		"frelaxed-rules"
+		_name =    "frelaxed-rules"
 
 	class FlagWarnBinding(metaclass=LongFlagArgument):
-		_name =		"warn-binding"
+		_name =    "warn-binding"
 
 	class FlagNoVitalChecks(metaclass=LongFlagArgument):
-		_name =		"no-vital-checks"
+		_name =    "no-vital-checks"
 
 	class FlagMultiByteComments(metaclass=LongFlagArgument):
-		_name =		"mb-comments"
+		_name =    "mb-comments"
 
 	class FlagSynBinding(metaclass=LongFlagArgument):
-		_name =		"syn-binding"
+		_name =    "syn-binding"
 
 	class FlagPSL(metaclass=ShortFlagArgument):
-		_name =		"fpsl"
+		_name =    "fpsl"
 
 	class SwitchIEEEFlavor(metaclass=ShortValuedFlagArgument):
-		_pattern =	"--{0}={1}"
-		_name =			"ieee"
+		_pattern =  "--{0}={1}"
+		_name =      "ieee"
 
 	class SwitchVHDLVersion(metaclass=ShortValuedFlagArgument):
-		_pattern =	"--{0}={1}"
-		_name =			"std"
+		_pattern =  "--{0}={1}"
+		_name =      "std"
 
 	class SwitchVHDLLibrary(metaclass=ShortValuedFlagArgument):
-		_pattern =	"--{0}={1}"
-		_name =			"work"
+		_pattern =  "--{0}={1}"
+		_name =      "work"
 
 	class ArgListLibraryReferences(metaclass=ValuedFlagListArgument):
-		_pattern =	"-{0}{1}"
-		_name =			"P"
+		_pattern =  "-{0}{1}"
+		_name =      "P"
 
 	class ArgSourceFile(metaclass=PathArgument):
 		pass
@@ -272,24 +273,24 @@ class GHDL(Executable):
 	)
 
 	class SwitchIEEEAsserts(metaclass=ShortValuedFlagArgument):
-		_pattern =	"--{0}={1}"
-		_name =			"ieee-asserts"
+		_pattern =  "--{0}={1}"
+		_name =      "ieee-asserts"
 
 	class SwitchVCDWaveform(metaclass=ShortValuedFlagArgument):
-		_pattern =	"--{0}={1}"
-		_name =			"vcd"
+		_pattern =  "--{0}={1}"
+		_name =      "vcd"
 
 	class SwitchVCDGZWaveform(metaclass=ShortValuedFlagArgument):
-		_pattern =	"--{0}={1}"
-		_name =			"vcdgz"
+		_pattern =  "--{0}={1}"
+		_name =      "vcdgz"
 
 	class SwitchFastWaveform(metaclass=ShortValuedFlagArgument):
-		_pattern =	"--{0}={1}"
-		_name =			"fst"
+		_pattern =  "--{0}={1}"
+		_name =      "fst"
 
 	class SwitchGHDLWaveform(metaclass=ShortValuedFlagArgument):
-		_pattern =	"--{0}={1}"
-		_name =			"wave"
+		_pattern =  "--{0}={1}"
+		_name =      "wave"
 
 	RunOptions = CommandLineArgumentList(
 		SwitchIEEEAsserts,
@@ -320,7 +321,7 @@ class GHDL(Executable):
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
 				ghdl.Parameters[param] = None
-		ghdl.Parameters[ghdl.CmdRun] =			True
+		ghdl.Parameters[ghdl.CmdRun] =      True
 		return ghdl
 
 
@@ -338,20 +339,20 @@ class GHDLAnalyze(GHDL):
 		except Exception as ex:
 			raise GHDLException("Failed to launch GHDL analyze.") from ex
 
-		self._hasOutput =		False
-		self._hasWarnings =	False
-		self._hasErrors =		False
+		self._hasOutput =    False
+		self._hasWarnings =  False
+		self._hasErrors =    False
 		try:
 			iterator = iter(GHDLAnalyzeFilter(self.GetReader()))
 
 			line = next(iterator)
-			self._hasOutput =		True
+			self._hasOutput =    True
 			self._LogNormal("    ghdl analyze messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
 			self._LogNormal("    " + ("-" * 76))
 
 			while True:
-				self._hasWarnings |=	(line.Severity is Severity.Warning)
-				self._hasErrors |=		(line.Severity is Severity.Error)
+				self._hasWarnings |=  (line.Severity is Severity.Warning)
+				self._hasErrors |=    (line.Severity is Severity.Error)
 
 				line.IndentBy(2)
 				self._Log(line)
@@ -422,18 +423,18 @@ class GHDLRun(GHDL):
 		except Exception as ex:
 			raise GHDLException("Failed to launch GHDL run.") from ex
 
-		self._hasOutput =		False
-		self._hasWarnings =	False
-		self._hasErrors =		False
-		simulationResult =	CallByRefParam(SimulationResult.Error)
+		self._hasOutput =    False
+		self._hasWarnings =  False
+		self._hasErrors =    False
+		simulationResult =  CallByRefParam(SimulationResult.Error)
 		try:
 			iterator = iter(PoCSimulationResultFilter(GHDLRunFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
 			line.IndentBy(2)
 			self._hasOutput = True
-			vhdlLibraryName =	self.Parameters[self.SwitchVHDLLibrary]
-			topLevel =				self.Parameters[self.ArgTopLevel]
+			vhdlLibraryName =  self.Parameters[self.SwitchVHDLLibrary]
+			topLevel =        self.Parameters[self.ArgTopLevel]
 			self._LogNormal("    ghdl run messages for '{0}.{1}'".format(vhdlLibraryName, topLevel))
 			self._LogNormal("    " + ("-" * 76))
 			self._Log(line)
@@ -456,11 +457,11 @@ class GHDLRun(GHDL):
 
 
 def GHDLAnalyzeFilter(gen):
-	warningRegExpPattern =	r".+?:\d+:\d+:warning: (?P<Message>.*)"			# <Path>:<line>:<column>:warning: <message>
-	errorRegExpPattern =		r".+?:\d+:\d+: (?P<Message>.*)"  						# <Path>:<line>:<column>: <message>
+	warningRegExpPattern =  r".+?:\d+:\d+:warning: (?P<Message>.*)"			# <Path>:<line>:<column>:warning: <message>
+	errorRegExpPattern =    r".+?:\d+:\d+: (?P<Message>.*)"  						# <Path>:<line>:<column>: <message>
 
-	warningRegExp =	RegExpCompile(warningRegExpPattern)
-	errorRegExp =		RegExpCompile(errorRegExpPattern)
+	warningRegExp =  RegExpCompile(warningRegExpPattern)
+	errorRegExp =    RegExpCompile(errorRegExpPattern)
 
 	for line in gen:
 		warningRegExpMatch = warningRegExp.match(line)
@@ -479,15 +480,31 @@ def GHDLAnalyzeFilter(gen):
 GHDLElaborateFilter = GHDLAnalyzeFilter
 
 def GHDLRunFilter(gen):
+	warningRegExpPattern = r".+?:\d+:\d+:warning: (?P<Message>.*)"  # <Path>:<line>:<column>:warning: <message>
+	errorRegExpPattern = r".+?:\d+:\d+: (?P<Message>.*)"  # <Path>:<line>:<column>: <message>
+
+	warningRegExp = RegExpCompile(warningRegExpPattern)
+	errorRegExp = RegExpCompile(errorRegExpPattern)
+
 	lineno = 0
 	for line in gen:
 		if (lineno < 2):
 			lineno += 1
 			if ("Linking in memory" in line):
 				yield LogEntry(line, Severity.Verbose)
+				continue
 			elif ("Starting simulation" in line):
 				yield LogEntry(line, Severity.Verbose)
-			else:
-				yield LogEntry(line, Severity.Normal)
-		else:
-			yield LogEntry(line, Severity.Normal)
+				continue
+
+		warningRegExpMatch = warningRegExp.match(line)
+		if (warningRegExpMatch is not None):
+			yield LogEntry(line, Severity.Warning)
+			continue
+
+		errorRegExpMatch = errorRegExp.match(line)
+		if (errorRegExpMatch is not None):
+			yield LogEntry(line, Severity.Error)
+			continue
+
+		yield LogEntry(line, Severity.Normal)

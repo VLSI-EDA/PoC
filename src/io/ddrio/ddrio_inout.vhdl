@@ -59,6 +59,7 @@ library	IEEE;
 use			IEEE.std_logic_1164.all;
 
 library	PoC;
+use			PoC.utils.all;
 use			PoC.config.all;
 use			PoC.ddrio.all;
 
@@ -87,7 +88,7 @@ end entity;
 architecture rtl of ddrio_inout is
   
 begin
-	assert (VENDOR = VENDOR_XILINX) or (VENDOR = VENDOR_ALTERA)
+	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.inout is not implemented for given DEVICE."
 		severity FAILURE;
 	
@@ -127,5 +128,48 @@ begin
 				DataIn_low			=> DataIn_low,
 				Pad							=> Pad
 			);
+	end generate;
+	
+	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
+		signal DataOut_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		signal DataOut_low_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		signal DataOut_low_d2	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		signal Pad_o					: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		
+		signal Pad_d_fe				: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		signal DataIn_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		signal DataIn_low_d		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+	begin
+		DataOut_high_d	<= DataOut_high		when rising_edge(ClockOut) and (ClockOutEnable = '1');
+		DataOut_low_d		<= DataOut_low		when rising_edge(ClockOut) and (ClockOutEnable = '1');
+		DataOut_low_d2	<= DataOut_low_d	when falling_edge(ClockOut) and (ClockOutEnable = '1');		
+		
+		process(ClockOut, OutputEnable, DataOut_high_d, DataOut_low_d2)
+			type T_MUX is array(BIT) of STD_LOGIC_VECTOR(BITS - 1 downto 0);
+			variable MuxInput		: T_MUX;
+			variable MuxControl	: BIT		:= '0';
+		begin
+			MuxInput('0')	:= DataOut_high_d;
+			MuxInput('1')	:= DataOut_low_d2;
+		
+			if ClockOut'event then
+				MuxControl := not MuxControl;
+			end if;
+		
+			if (OutputEnable = '1') then
+				Pad_o		<= MuxInput(MuxControl);
+			else
+				Pad_o		<= (others => 'Z');
+			end if;
+		end process;
+		
+		Pad			<= Pad_o;
+	
+		Pad_d_fe				<= Pad			when falling_edge(ClockIn)	and (ClockInEnable = '1');
+		DataIn_high_d		<= Pad			when rising_edge(ClockIn)		and (ClockInEnable = '1');
+		DataIn_low_d		<= Pad_d_fe	when rising_edge(ClockIn)		and (ClockInEnable = '1');
+		
+		DataIn_high			<= DataIn_high_d;
+		DataIn_low			<= DataIn_low_d;
 	end generate;
 end architecture;

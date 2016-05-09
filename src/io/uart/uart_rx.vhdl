@@ -29,8 +29,12 @@
 -- limitations under the License.
 -- ===========================================================================
 
-library IEEE;
-use IEEE.std_logic_1164.all;
+library	IEEE;
+use			IEEE.std_logic_1164.all;
+use			IEEE.numeric_std.all;
+
+library	PoC;
+
 
 entity uart_rx is
   generic (
@@ -51,9 +55,6 @@ entity uart_rx is
   );
 end entity;
 
-
-library IEEE;
-use IEEE.numeric_std.all;
 
 architecture rtl of uart_rx is
   -- RX Synchronization
@@ -76,13 +77,13 @@ begin
   -- Input synchronization
 	sync :  entity PoC.sync_Bits
 		generic map (
-			INIT					=> (SYNC_DEPTH - 1 downto 0 => '1');	-- initialitation bits
+			INIT					=> (SYNC_DEPTH - 1 downto 0 => '1'),	-- initialitation bits
 			SYNC_DEPTH		=> SYNC_DEPTH													-- generate SYNC_DEPTH many stages, at least 2
 		)
 		port map (
 			Clock					=> clk,		-- <Clock>	output clock domain
-			Input					=> rx,		-- @async:	input bits
-			Output				=> rxs		-- @Clock:	output bits
+			Input(0)			=> rx,		-- @async:	input bits
+			Output(0)			=> rxs		-- @Clock:	output bits
 		);
 	
   -- Reception state

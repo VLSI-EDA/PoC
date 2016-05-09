@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Module:		TODO
+# Python Module:    TODO
 # 
 # Description:
 # ------------------------------------
@@ -15,13 +15,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,11 +31,11 @@
 # ==============================================================================
 #
 
-from Parser.FilesCodeDOM	import Document
-from Parser.FilesCodeDOM	import IfElseIfElseStatement, ReportStatement
-from Parser.FilesCodeDOM	import IncludeStatement, LibraryStatement
-from Parser.FilesCodeDOM	import UcfStatement, XdcStatement, SdcStatement
-from Parser.FilesCodeDOM	import VHDLStatement, VerilogStatement, CocotbStatement
+from Parser.FilesCodeDOM  import Document
+from Parser.FilesCodeDOM  import IfElseIfElseStatement, ReportStatement
+from Parser.FilesCodeDOM  import IncludeStatement, LibraryStatement
+from Parser.FilesCodeDOM  import UcfStatement, XdcStatement, SdcStatement
+from Parser.FilesCodeDOM  import VHDLStatement, VerilogStatement, CocotbStatement
 from lib.Parser import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression
 from lib.Parser import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
 from lib.Parser import ExistsFunction, ListConstructorExpression
@@ -45,7 +45,7 @@ from lib.Parser import StringLiteral, IntegerLiteral, Identifier
 
 class FileReference:
 	def __init__(self, file):
-		self._file =		file
+		self._file =    file
 
 	@property
 	def File(self):
@@ -63,7 +63,7 @@ class IncludeFileMixIn(FileReference):
 class VHDLSourceFileMixIn(FileReference):
 	def __init__(self, file, library):
 		super().__init__(file)
-		self._library =	library
+		self._library =  library
 
 	@property
 	def LibraryName(self):
@@ -118,22 +118,22 @@ class VHDLLibraryReference:
 
 
 class FilesParserMixIn:
-	_classIncludeFile =					IncludeFileMixIn
-	_classVHDLSourceFile =			VHDLSourceFileMixIn
-	_classVerilogSourceFile =		VerilogSourceFileMixIn
-	_classCocotbSourceFile =		CocotbSourceFileMixIn
-	_classUcfSourceFile =				UcfSourceFileMixIn
-	_classXdcSourceFile =				XdcSourceFileMixIn
-	_classSdcSourceFile =				SdcSourceFileMixIn
+	_classIncludeFile =          IncludeFileMixIn
+	_classVHDLSourceFile =      VHDLSourceFileMixIn
+	_classVerilogSourceFile =    VerilogSourceFileMixIn
+	_classCocotbSourceFile =    CocotbSourceFileMixIn
+	_classUcfSourceFile =        UcfSourceFileMixIn
+	_classXdcSourceFile =        XdcSourceFileMixIn
+	_classSdcSourceFile =        SdcSourceFileMixIn
 
 	def __init__(self):
-		self._rootDirectory =	None
-		self._document =			None
+		self._rootDirectory =  None
+		self._document =      None
 		
-		self._files =					[]
-		self._includes =			[]
-		self._libraries =			[]
-		self._warnings =			[]
+		self._files =          []
+		self._includes =      []
+		self._libraries =      []
+		self._warnings =      []
 		
 	def _Parse(self):
 		self._ReadContent()
@@ -147,33 +147,33 @@ class FilesParserMixIn:
 		
 		for stmt in statements:
 			if isinstance(stmt, VHDLStatement):
-				file =						self._rootDirectory / stmt.FileName
-				vhdlSrcFile =			self._classVHDLSourceFile(file, stmt.LibraryName)		# stmt.Library, 
+				file =            self._rootDirectory / stmt.FileName
+				vhdlSrcFile =      self._classVHDLSourceFile(file, stmt.LibraryName)		# stmt.Library, 
 				self._files.append(vhdlSrcFile)
 			elif isinstance(stmt, VerilogStatement):
-				file =						self._rootDirectory / stmt.FileName
-				verilogSrcFile =	self._classVerilogSourceFile(file)
+				file =            self._rootDirectory / stmt.FileName
+				verilogSrcFile =  self._classVerilogSourceFile(file)
 				self._files.append(verilogSrcFile)
 			elif isinstance(stmt, CocotbStatement):
-				file =						self._rootDirectory / stmt.FileName
-				cocotbSrcFile =		self._classCocotbSourceFile(file)
+				file =            self._rootDirectory / stmt.FileName
+				cocotbSrcFile =    self._classCocotbSourceFile(file)
 				self._files.append(cocotbSrcFile)
 			elif isinstance(stmt, UcfStatement):
-				file =						self._rootDirectory / stmt.FileName
-				ucfSrcFile =		self._classCocotbSourceFile(file)
+				file =            self._rootDirectory / stmt.FileName
+				ucfSrcFile =    self._classCocotbSourceFile(file)
 				self._files.append(ucfSrcFile)
 			elif isinstance(stmt, XdcStatement):
-				file =						self._rootDirectory / stmt.FileName
-				xdcSrcFile =			self._classCocotbSourceFile(file)
+				file =            self._rootDirectory / stmt.FileName
+				xdcSrcFile =      self._classCocotbSourceFile(file)
 				self._files.append(xdcSrcFile)
 			elif isinstance(stmt, SdcStatement):
-				file =						self._rootDirectory / stmt.FileName
-				sdcSrcFile =			self._classCocotbSourceFile(file)
+				file =            self._rootDirectory / stmt.FileName
+				sdcSrcFile =      self._classCocotbSourceFile(file)
 				self._files.append(sdcSrcFile)
 			elif isinstance(stmt, IncludeStatement):
 				# add the include file to the fileset
-				file =						self._rootDirectory / stmt.FileName
-				includeFile =			self._classFileListFile(file)
+				file =            self._rootDirectory / stmt.FileName
+				includeFile =      self._classFileListFile(file)
 				self._fileSet.AddFile(includeFile)
 				includeFile.Parse()
 				
@@ -185,8 +185,8 @@ class FilesParserMixIn:
 				for warn in includeFile.Warnings:
 					self._warnings.append(warn)
 			elif isinstance(stmt, LibraryStatement):
-				lib =					self._rootDirectory / stmt.DirectoryName
-				vhdlLibRef =	VHDLLibraryReference(stmt.Library, lib)
+				lib =          self._rootDirectory / stmt.DirectoryName
+				vhdlLibRef =  VHDLLibraryReference(stmt.Library, lib)
 				self._libraries.append(vhdlLibRef)
 			elif isinstance(stmt, IfElseIfElseStatement):
 				exprValue = self._Evaluate(stmt._ifStatement._expression)
@@ -209,7 +209,7 @@ class FilesParserMixIn:
 		if isinstance(expr, Identifier):
 			try:
 				return self._variables[expr.Name]
-			except KeyError as ex:												raise ParserException("Identifier '{0}' not found.".format(expr.Name)) from ex
+			except KeyError as ex:                        raise ParserException("Identifier '{0}' not found.".format(expr.Name)) from ex
 		elif isinstance(expr, StringLiteral):
 			return expr.Value
 		elif isinstance(expr, IntegerLiteral):
@@ -244,16 +244,16 @@ class FilesParserMixIn:
 			return self._Evaluate(expr.LeftChild) > self._Evaluate(expr.RightChild)
 		elif isinstance(expr, GreaterThanEqualExpression):
 			return self._Evaluate(expr.LeftChild) >= self._Evaluate(expr.RightChild)
-		else:																						raise ParserException("Unsupported expression type '{0}'".format(type(expr)))
+		else:                                            raise ParserException("Unsupported expression type '{0}'".format(type(expr)))
 
 	@property
-	def Files(self):			return self._files
+	def Files(self):      return self._files
 	@property
-	def Includes(self):		return self._includes
+	def Includes(self):    return self._includes
 	@property	
-	def Libraries(self):	return self._libraries
+	def Libraries(self):  return self._libraries
 	@property
-	def Warnings(self):		return self._warnings
+	def Warnings(self):    return self._warnings
 
-	def __str__(self):		return "FILES file: '{0!s}'".format(self._file)
-	def __repr__(self):		return self.__str__()
+	def __str__(self):    return "FILES file: '{0!s}'".format(self._file)
+	def __repr__(self):    return self.__str__()

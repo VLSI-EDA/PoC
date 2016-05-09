@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
-#										Martin Zabel
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			Xilinx ISE specific classes
+# Python Class:      Xilinx ISE specific classes
 #
 # Description:
 # ------------------------------------
@@ -17,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,17 +40,18 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.ISE")
 
-from subprocess						import check_output
 
-from Base.Configuration					import Configuration as BaseConfiguration, ConfigurationException
-from Base.Exceptions						import PlatformNotSupportedException
-from Base.Executable						import Executable
-from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
-from Base.Logging								import LogEntry, Severity
-from Base.Project								import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
-from Base.Simulator							import SimulationResult, PoCSimulationResultFilter
-from ToolChains.Xilinx.Xilinx		import XilinxException
-from lib.Functions							import CallByRefParam
+from subprocess            import check_output
+
+from Base.Configuration          import Configuration as BaseConfiguration, ConfigurationException
+from Base.Exceptions            import PlatformNotSupportedException
+from Base.Executable            import Executable
+from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from Base.Logging                import LogEntry, Severity
+from Base.Project                import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
+from ToolChains.Xilinx.Xilinx    import XilinxException
+from lib.Functions              import CallByRefParam
 
 
 class ISEException(XilinxException):
@@ -58,22 +59,22 @@ class ISEException(XilinxException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =		"Xilinx"
-	_toolName =	"Xilinx ISE"
-	_section =	"INSTALL.Xilinx.ISE" 
+	_vendor =    "Xilinx"
+	_toolName =  "Xilinx ISE"
+	_section =  "INSTALL.Xilinx.ISE" 
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"14.7",
-				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
-				"BinaryDirectory":				"${InstallationDirectory}/ISE/bin/nt64"
+				"Version":                "14.7",
+				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
+				"BinaryDirectory":        "${InstallationDirectory}/ISE/bin/nt64"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":								"14.7",
-				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
-				"BinaryDirectory":				"${InstallationDirectory}/ISE/bin/lin64"
+				"Version":                "14.7",
+				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
+				"BinaryDirectory":        "${InstallationDirectory}/ISE/bin/lin64"
 			}
 		}
 	}
@@ -112,10 +113,10 @@ class Configuration(BaseConfiguration):
 
 class ISEMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		self._platform =						platform
-		self._binaryDirectoryPath =	binaryDirectoryPath
-		self._version =							version
-		self._logger =							logger
+		self._platform =            platform
+		self._binaryDirectoryPath =  binaryDirectoryPath
+		self._version =              version
+		self._logger =              logger
 
 
 class ISE(ISEMixIn):
@@ -139,9 +140,9 @@ class ISE(ISEMixIn):
 # 	def __init__(self, platform, binaryDirectoryPath, version, defaultParameters=[], logger=None):
 # 		ISESimulatorExecutable.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
 #
-# 		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "vhcomp.exe"
-# 		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "vhcomp"
-# 		else:																						raise PlatformNotSupportedException(self._platform)
+# 		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vhcomp.exe"
+# 		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vhcomp"
+# 		else:                                            raise PlatformNotSupportedException(self._platform)
 # 		super().__init__(platform, executablePath, defaultParameters, logger=logger)
 #
 # 	def Compile(self, vhdlFile):
@@ -163,9 +164,9 @@ class ISE(ISEMixIn):
 class Fuse(Executable, ISEMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):		executablePath = binaryDirectoryPath / "fuse.exe"
-		elif (platform == "Linux"):		executablePath = binaryDirectoryPath / "fuse"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "fuse.exe"
+		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "fuse"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -182,29 +183,29 @@ class Fuse(Executable, ISEMixIn):
 	def HasErrors(self):
 		return self._hasErrors
 
-	class Executable(metaclass=ExecutableArgument):						pass
+	class Executable(metaclass=ExecutableArgument):            pass
 
 	class FlagIncremental(metaclass=ShortFlagArgument):
-		_name =		"incremental"
+		_name =    "incremental"
 
 	# FlagIncremental = ShortFlagArgument(_name="incremntal")
 
 	class FlagRangeCheck(metaclass=ShortFlagArgument):
-		_name =		"rangecheck"
+		_name =    "rangecheck"
 
 	class SwitchMultiThreading(metaclass=ShortTupleArgument):
-		_name =		"mt"
+		_name =    "mt"
 
 	class SwitchTimeResolution(metaclass=ShortTupleArgument):
-		_name =		"timeprecision_vhdl"
+		_name =    "timeprecision_vhdl"
 
 	class SwitchProjectFile(metaclass=ShortTupleArgument):
-		_name =		"prj"
+		_name =    "prj"
 
 	class SwitchOutputFile(metaclass=ShortTupleArgument):
-		_name =		"o"
+		_name =    "o"
 
-	class ArgTopLevel(metaclass=StringArgument):					pass
+	class ArgTopLevel(metaclass=StringArgument):          pass
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -270,19 +271,19 @@ class ISESimulator(Executable):
 	def HasErrors(self):
 		return self._hasErrors
 
-	class Executable(metaclass=ExecutableArgument):			pass
+	class Executable(metaclass=ExecutableArgument):      pass
 
 	class SwitchLogFile(metaclass=ShortTupleArgument):
-		_name =		"log"
+		_name =    "log"
 
 	class FlagGuiMode(metaclass=ShortFlagArgument):
-		_name =		"gui"
+		_name =    "gui"
 
 	class SwitchTclBatchFile(metaclass=ShortTupleArgument):
-		_name =		"tclbatch"
+		_name =    "tclbatch"
 
 	class SwitchWaveformFile(metaclass=ShortTupleArgument):
-		_name =		"view"
+		_name =    "view"
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -304,7 +305,7 @@ class ISESimulator(Executable):
 		self._hasOutput = False
 		self._hasWarnings = False
 		self._hasErrors = False
-		simulationResult =	CallByRefParam(SimulationResult.Error)
+		simulationResult =  CallByRefParam(SimulationResult.Error)
 		try:
 			iterator = iter(PoCSimulationResultFilter(SimulatorFilter(self.GetReader()), simulationResult))
 
@@ -333,9 +334,9 @@ class ISESimulator(Executable):
 class Xst(Executable, ISEMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):			executablePath = binaryDirectoryPath / "xst.exe"
-		elif (platform == "Linux"):			executablePath = binaryDirectoryPath / "xst"
-		else:														raise PlatformNotSupportedException(platform)
+		if (platform == "Windows"):      executablePath = binaryDirectoryPath / "xst.exe"
+		elif (platform == "Linux"):      executablePath = binaryDirectoryPath / "xst"
+		else:                            raise PlatformNotSupportedException(platform)
 		Executable.__init__(self, platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -409,9 +410,9 @@ class Xst(Executable, ISEMixIn):
 class CoreGenerator(Executable, ISEMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):			executablePath = binaryDirectoryPath / "coregen.exe"
-		elif (platform == "Linux"):			executablePath = binaryDirectoryPath / "coregen"
-		else:														raise PlatformNotSupportedException(platform)
+		if (platform == "Windows"):      executablePath = binaryDirectoryPath / "coregen.exe"
+		elif (platform == "Linux"):      executablePath = binaryDirectoryPath / "coregen"
+		else:                            raise PlatformNotSupportedException(platform)
 		Executable.__init__(self, platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -428,7 +429,7 @@ class CoreGenerator(Executable, ISEMixIn):
 	def HasErrors(self):
 		return self._hasErrors
 
-	class Executable(metaclass=ExecutableArgument):				pass
+	class Executable(metaclass=ExecutableArgument):        pass
 
 	class FlagRegenerate(metaclass=ShortFlagArgument):
 		_name = "r"

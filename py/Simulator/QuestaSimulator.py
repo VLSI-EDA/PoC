@@ -3,9 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 # 
-# Python Class:			TODO
+# Python Class:      TODO
 # 
 # Description:
 # ------------------------------------
@@ -14,13 +15,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,11 +31,6 @@
 # ==============================================================================
 #
 # entry point
-from pathlib import Path
-
-from Base.Exceptions import NotConfiguredException
-from PoC.Config import Vendors
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -44,31 +40,35 @@ else:
 
 
 # load dependencies
-from lib.Functions								import Init
-from Base.Project									import FileTypes, VHDLVersion, ToolChain, Tool
-from Base.Simulator								import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult
-from ToolChains.Mentor.QuestaSim	import QuestaSim, QuestaException
+from pathlib                      import Path
+
+from Base.Exceptions              import NotConfiguredException
+from Base.Project                  import FileTypes, VHDLVersion, ToolChain, Tool
+from Base.Simulator                import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult, \
+	SkipableSimulatorException
+from PoC.Config                    import Vendors
+from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaException
 
 
 class Simulator(BaseSimulator):
-	_TOOL_CHAIN =						ToolChain.Mentor_QuestaSim
-	_TOOL =									Tool.Mentor_vSim
+	_TOOL_CHAIN =            ToolChain.Mentor_QuestaSim
+	_TOOL =                  Tool.Mentor_vSim
 
-	def __init__(self, host, showLogs, showReport, guiMode):
-		super(self.__class__, self).__init__(host, showLogs, showReport)
+	def __init__(self, host, guiMode):
+		super().__init__(host)
 
-		self._guiMode =				guiMode
+		self._guiMode =        guiMode
 
-		self._entity =				None
-		self._testbenchFQN =	None
-		self._vhdlVersion =		None
-		self._vhdlGenerics =	None
+		self._entity =        None
+		self._testbenchFQN =  None
+		self._vhdlVersion =    None
+		self._vhdlGenerics =  None
 
-		self._questa =				None
+		self._questa =        None
 
 		vSimSimulatorFiles = host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
-		self.Directories.Working =			host.Directories.Temp / vSimSimulatorFiles
-		self.Directories.PreCompiled =	host.Directories.PreCompiled / vSimSimulatorFiles
+		self.Directories.Working =      host.Directories.Temp / vSimSimulatorFiles
+		self.Directories.PreCompiled =  host.Directories.PreCompiled / vSimSimulatorFiles
 
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()
@@ -88,22 +88,15 @@ class Simulator(BaseSimulator):
 		version = questaSection['Version']
 		self._questa = QuestaSim(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def Run(self, testbench, board, vhdlVersion="93", vhdlGenerics=None, guiMode=False):
-		self._LogQuiet("Testbench: {0!s}".format(testbench.Parent, **Init.Foreground))
-
-		self._vhdlVersion =		vhdlVersion
-		self._vhdlGenerics =	vhdlGenerics
-
-		# setup all needed paths to execute fuse
-		self._CreatePoCProject(testbench, board)
-		self._AddFileListFile(testbench.FilesFile)
+	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
+		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
 
 		# select modelsim.ini
 		self._modelsimIniPath = self.Directories.PreCompiled
 		if board.Device.Vendor is Vendors.Altera:
-			self._modelsimIniPath /= "altera"
+			self._modelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
 		elif board.Device.Vendor is Vendors.Xilinx:
-			self._modelsimIniPath  /= "xilinx"
+			self._modelsimIniPath  /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
 		self._modelsimIniPath /= "modelsim.ini"
 		if not self._modelsimIniPath.exists():
@@ -118,11 +111,6 @@ class Simulator(BaseSimulator):
 		else:
 			self._RunSimulationWithGUI(testbench)
 
-		if (testbench.Result is SimulationResult.Passed):				self._LogQuiet("  {GREEN}[PASSED]{NOCOLOR}".format(**Init.Foreground))
-		elif (testbench.Result is SimulationResult.NoAsserts):	self._LogQuiet("  {YELLOW}[NO ASSERTS]{NOCOLOR}".format(**Init.Foreground))
-		elif (testbench.Result is SimulationResult.Failed):			self._LogQuiet("  {RED}[FAILED]{NOCOLOR}".format(**Init.Foreground))
-		elif (testbench.Result is SimulationResult.Error):			self._LogQuiet("  {RED}[ERROR]{NOCOLOR}".format(**Init.Foreground))
-		
 	def _RunCompile(self, testbench):
 		self._LogNormal("Running VHDL compiler for every vhdl file...")
 
@@ -134,33 +122,32 @@ class Simulator(BaseSimulator):
 
 		# create a QuestaVHDLCompiler instance
 		vcom = self._questa.GetVHDLCompiler()
-		vcom.Parameters[vcom.FlagQuietMode] =					True
-		vcom.Parameters[vcom.FlagExplicit] =					True
-		vcom.Parameters[vcom.FlagRangeCheck] =				True
+		vcom.Parameters[vcom.FlagQuietMode] =          True
+		vcom.Parameters[vcom.FlagExplicit] =          True
+		vcom.Parameters[vcom.FlagRangeCheck] =        True
 		vcom.Parameters[vcom.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 
-		if (self._vhdlVersion == VHDLVersion.VHDL87):		vcom.Parameters[vcom.SwitchVHDLVersion] =	"87"
-		elif (self._vhdlVersion == VHDLVersion.VHDL93):	vcom.Parameters[vcom.SwitchVHDLVersion] =	"93"
-		elif (self._vhdlVersion == VHDLVersion.VHDL02):	vcom.Parameters[vcom.SwitchVHDLVersion] =	"2002"
-		elif (self._vhdlVersion == VHDLVersion.VHDL08):	vcom.Parameters[vcom.SwitchVHDLVersion] =	"2008"
-		else:																					raise SimulatorException("VHDL version is not supported.")
+		if (self._vhdlVersion == VHDLVersion.VHDL87):    vcom.Parameters[vcom.SwitchVHDLVersion] =  "87"
+		elif (self._vhdlVersion == VHDLVersion.VHDL93):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "93"
+		elif (self._vhdlVersion == VHDLVersion.VHDL02):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "2002"
+		elif (self._vhdlVersion == VHDLVersion.VHDL08):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "2008"
+		else:                                          raise SimulatorException("VHDL version is not supported.")
 
 		# run vcom compile for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
-			if (not file.Path.exists()):								raise SimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
+			if (not file.Path.exists()):                raise SimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
 
 			vcomLogFile = self.Directories.Working / (file.Path.stem + ".vcom.log")
-			vcom.Parameters[vcom.SwitchVHDLLibrary] =	file.LibraryName
-			vcom.Parameters[vcom.ArgLogFile] =				vcomLogFile
-			vcom.Parameters[vcom.ArgSourceFile] =			file.Path
+			vcom.Parameters[vcom.SwitchVHDLLibrary] =  file.LibraryName
+			vcom.Parameters[vcom.ArgLogFile] =        vcomLogFile
+			vcom.Parameters[vcom.ArgSourceFile] =      file.Path
 
 			try:
 				vcom.Compile()
 			except QuestaException as ex:
 				raise SimulatorException("Error while compiling '{0!s}'.".format(file.Path)) from ex
-
 			if vcom.HasErrors:
-				raise SimulatorException("Error while compiling '{0!s}'.".format(file.Path))
+				raise SkipableSimulatorException("Error while compiling '{0!s}'.".format(file.Path))
 
 			# delete empty log files
 			if (vcomLogFile.stat().st_size == 0):
@@ -169,40 +156,40 @@ class Simulator(BaseSimulator):
 	def _RunSimulation(self, testbench):
 		self._LogNormal("Running simulation...")
 		
-		tclBatchFilePath =		self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
+		tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()
-		vsim.Parameters[vsim.SwitchModelSimIniFile] =	self._modelsimIniPath.as_posix()
-		# vsim.Parameters[vsim.FlagOptimization] =			True
-		vsim.Parameters[vsim.FlagReportAsError] =			"3473"
-		vsim.Parameters[vsim.SwitchTimeResolution] =	"1fs"
-		vsim.Parameters[vsim.FlagCommandLineMode] =		True
-		vsim.Parameters[vsim.SwitchBatchCommand] =		"do {0}".format(tclBatchFilePath.as_posix())
-		vsim.Parameters[vsim.SwitchTopLevel] =				"{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+		vsim.Parameters[vsim.SwitchModelSimIniFile] =  self._modelsimIniPath.as_posix()
+		# vsim.Parameters[vsim.FlagOptimization] =      True
+		vsim.Parameters[vsim.FlagReportAsError] =      "3473"
+		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
+		vsim.Parameters[vsim.FlagCommandLineMode] =    True
+		vsim.Parameters[vsim.SwitchBatchCommand] =    "do {0}".format(tclBatchFilePath.as_posix())
+		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 		testbench.Result = vsim.Simulate()
 		
 	def _RunSimulationWithGUI(self, testbench):
 		self._LogNormal("Running simulation...")
 	
-		tclGUIFilePath =			self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
-		tclWaveFilePath =			self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
+		tclGUIFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
+		tclWaveFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
 
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()
-		vsim.Parameters[vsim.SwitchModelSimIniFile] =	self._modelsimIniPath.as_posix()
-		# vsim.Parameters[vsim.FlagOptimization] =			True
-		vsim.Parameters[vsim.FlagReportAsError] =			"3473"
-		vsim.Parameters[vsim.SwitchTimeResolution] =	"1fs"
-		vsim.Parameters[vsim.FlagGuiMode] =						True
-		vsim.Parameters[vsim.SwitchTopLevel] =				"{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
-		# vsim.Parameters[vsim.SwitchTitle] =						testbenchName
+		vsim.Parameters[vsim.SwitchModelSimIniFile] =  self._modelsimIniPath.as_posix()
+		# vsim.Parameters[vsim.FlagOptimization] =      True
+		vsim.Parameters[vsim.FlagReportAsError] =      "3473"
+		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
+		vsim.Parameters[vsim.FlagGuiMode] =            True
+		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+		# vsim.Parameters[vsim.SwitchTitle] =            testbenchName
 
 		if (tclWaveFilePath.exists()):
 			self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
-			vsim.Parameters[vsim.SwitchBatchCommand] =	"do {0}; do {1}".format(tclWaveFilePath.as_posix(), tclGUIFilePath.as_posix())
+			vsim.Parameters[vsim.SwitchBatchCommand] =  "do {0}; do {1}".format(tclWaveFilePath.as_posix(), tclGUIFilePath.as_posix())
 		else:
 			self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
-			vsim.Parameters[vsim.SwitchBatchCommand] =	"add wave *; do {0}".format(tclGUIFilePath.as_posix())
+			vsim.Parameters[vsim.SwitchBatchCommand] =  "add wave *; do {0}".format(tclGUIFilePath.as_posix())
 
 		testbench.Result = vsim.Simulate()

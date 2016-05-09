@@ -3,9 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			Mentor QuestaSim specific classes
+# Python Class:      Mentor QuestaSim specific classes
 #
 # Description:
 # ------------------------------------
@@ -16,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,14 +44,14 @@ else:
 from subprocess import check_output
 from textwrap import dedent
 
-from lib.Functions							import CallByRefParam
-from Base.Exceptions						import PlatformNotSupportedException
-from Base.Logging								import LogEntry, Severity
-from Base.Configuration 				import Configuration as BaseConfiguration, ConfigurationException
-from Base.Simulator							import SimulationResult, PoCSimulationResultFilter
-from Base.Executable						import Executable
-from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
-from ToolChains.Mentor.Mentor		import MentorException
+from lib.Functions              import CallByRefParam
+from Base.Exceptions            import PlatformNotSupportedException
+from Base.Logging                import LogEntry, Severity
+from Base.Configuration         import Configuration as BaseConfiguration, ConfigurationException
+from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
+from Base.Executable            import Executable
+from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
+from ToolChains.Mentor.Mentor    import MentorException
 
 
 class QuestaException(MentorException):
@@ -58,22 +59,22 @@ class QuestaException(MentorException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =			"Mentor"
-	_toolName =		"Mentor QuestaSim"
-	_section = 		"INSTALL.Mentor.QuestaSim"
+	_vendor =      "Mentor"
+	_toolName =    "Mentor QuestaSim"
+	_section =     "INSTALL.Mentor.QuestaSim"
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"10.4d",
-				"InstallationDirectory":	"${INSTALL.Mentor:InstallationDirectory}/QuestaSim/${Version}",
-				"BinaryDirectory":				"${InstallationDirectory}/win64"
+				"Version":                "10.4d",
+				"InstallationDirectory":  "${INSTALL.Mentor:InstallationDirectory}/QuestaSim/${Version}",
+				"BinaryDirectory":        "${InstallationDirectory}/win64"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":								"10.4d",
-				"InstallationDirectory":	"${INSTALL.Mentor:InstallationDirectory}/${Version}/questasim",
-				"BinaryDirectory":				"${InstallationDirectory}/bin"
+				"Version":                "10.4d",
+				"InstallationDirectory":  "${INSTALL.Mentor:InstallationDirectory}/${Version}/questasim",
+				"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}
 		}
 	}
@@ -127,10 +128,10 @@ class Configuration(BaseConfiguration):
 
 class QuestaSimMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		self._platform =						platform
-		self._binaryDirectoryPath =	binaryDirectoryPath
-		self._version =							version
-		self._logger =							logger
+		self._platform =            platform
+		self._binaryDirectoryPath =  binaryDirectoryPath
+		self._version =              version
+		self._logger =              logger
 
 class QuestaSim(QuestaSimMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
@@ -150,9 +151,9 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		QuestaSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "vcom.exe"
-		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "vcom"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vcom.exe"
+		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vcom"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -170,42 +171,42 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =	None
+		_value =  None
 
 	class FlagTime(metaclass=ShortFlagArgument):
-		_name =		"time"					# Print the compilation wall clock time
-		_value =	None
+		_name =    "time"					# Print the compilation wall clock time
+		_value =  None
 
 	class FlagExplicit(metaclass=ShortFlagArgument):
-		_name =		"explicit"
-		_value =	None
+		_name =    "explicit"
+		_value =  None
 
 	class FlagQuietMode(metaclass=ShortFlagArgument):
-		_name =		"quiet"					# Do not report 'Loading...' messages"
-		_value =	None
+		_name =    "quiet"					# Do not report 'Loading...' messages"
+		_value =  None
 
 	class SwitchModelSimIniFile(metaclass=ShortTupleArgument):
-		_name =		"modelsimini"
-		_value =	None
+		_name =    "modelsimini"
+		_value =  None
 
 	class FlagRangeCheck(metaclass=ShortFlagArgument):
-		_name =		"rangecheck"
-		_value =	None
+		_name =    "rangecheck"
+		_value =  None
 
 	class SwitchVHDLVersion(metaclass=StringArgument):
-		_pattern =	"-{0}"
-		_value =		None
+		_pattern =  "-{0}"
+		_value =    None
 
 	class ArgLogFile(metaclass=ShortTupleArgument):
-		_name =		"l"			# what's the difference to -logfile ?
-		_value =	None
+		_name =    "l"			# what's the difference to -logfile ?
+		_value =  None
 
 	class SwitchVHDLLibrary(metaclass=ShortTupleArgument):
-		_name =		"work"
-		_value =	None
+		_name =    "work"
+		_value =  None
 
 	class ArgSourceFile(metaclass=PathArgument):
-		_value =	None
+		_value =  None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -260,9 +261,9 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		QuestaSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "vsim.exe"
-		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "vsim"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vsim.exe"
+		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vsim"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -280,58 +281,58 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =	None
+		_value =  None
 
 	class FlagQuietMode(metaclass=ShortFlagArgument):
-		_name =		"quiet"					# Do not report 'Loading...' messages"
-		_value =	None
+		_name =    "quiet"					# Do not report 'Loading...' messages"
+		_value =  None
 
 	class FlagBatchMode(metaclass=ShortFlagArgument):
-		_name =		"batch"
-		_value =	None
+		_name =    "batch"
+		_value =  None
 
 	class FlagGuiMode(metaclass=ShortFlagArgument):
-		_name =		"gui"
-		_value =	None
+		_name =    "gui"
+		_value =  None
 
 	class SwitchBatchCommand(metaclass=ShortTupleArgument):
-		_name =		"do"
-		_value =	None
+		_name =    "do"
+		_value =  None
 
 	class FlagCommandLineMode(metaclass=ShortFlagArgument):
-		_name =		"c"
-		_value =	None
+		_name =    "c"
+		_value =  None
 
 	class SwitchModelSimIniFile(metaclass=ShortTupleArgument):
-		_name =		"modelsimini"
-		_value =	None
+		_name =    "modelsimini"
+		_value =  None
 
 	class FlagOptimization(metaclass=ShortFlagArgument):
-		_name =		"vopt"
-		_value =	None
+		_name =    "vopt"
+		_value =  None
 
 	class FlagReportAsError(metaclass=ShortTupleArgument):
-		_name =		"error"
-		_value =	None
+		_name =    "error"
+		_value =  None
 
 	class SwitchTimeResolution(metaclass=ShortTupleArgument):
-		_name =		"t"			# -t [1|10|100]fs|ps|ns|us|ms|sec  Time resolution limit
-		_value =	None
+		_name =    "t"			# -t [1|10|100]fs|ps|ns|us|ms|sec  Time resolution limit
+		_value =  None
 
 	class ArgLogFile(metaclass=ShortTupleArgument):
-		_name =		"l"			# what's the difference to -logfile ?
-		_value =	None
+		_name =    "l"			# what's the difference to -logfile ?
+		_value =  None
 
 	class ArgVHDLLibraryName(metaclass=ShortTupleArgument):
-		_name =		"lib"
-		_value =	None
+		_name =    "lib"
+		_value =  None
 
 	class ArgOnFinishMode(metaclass=ShortTupleArgument):
-		_name =		"onfinish"
-		_value =	None				# Customize the kernel shutdown behavior at the end of simulation; Valid modes: ask, stop, exit, final (Default: ask)
+		_name =    "onfinish"
+		_value =  None				# Customize the kernel shutdown behavior at the end of simulation; Valid modes: ask, stop, exit, final (Default: ask)
 
 	class SwitchTopLevel(metaclass=StringArgument):
-		_value =	None
+		_value =  None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -393,9 +394,9 @@ class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		QuestaSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "vlib.exe"
-		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "vlib"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vlib.exe"
+		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vlib"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -412,8 +413,8 @@ class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 	def HasErrors(self):
 		return self._hasErrors
 
-	class Executable(metaclass=ExecutableArgument):			pass
-	class SwitchLibraryName(metaclass=StringArgument):	pass
+	class Executable(metaclass=ExecutableArgument):      pass
+	class SwitchLibraryName(metaclass=StringArgument):  pass
 
 	Parameters = CommandLineArgumentList(
 		Executable,

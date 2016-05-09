@@ -19,13 +19,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -70,6 +70,7 @@ for param in $PyWrapper_Parameters; do
 	
 	if [ "$param" = "coregen" ];	then PyWrapper_LoadEnv_Xilinx_ISE=1; fi
 	if [ "$param" = "xst" ];			then PyWrapper_LoadEnv_Xilinx_ISE=1; fi
+	if [ "$param" = "synth" ];		then PyWrapper_LoadEnv_Xilinx_Vivado=1; fi
 done
 
 # publish PoC directories as environment variables
@@ -194,6 +195,7 @@ if [ $PoC_ExitCode -eq 0 ]; then
 	
 	# launching python script
 	exec $Python_Interpreter $Python_Script $Python_ScriptParameters
+	PoC_ExitCode=$?
 fi
 
 # clean up environment variables

@@ -3,9 +3,9 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
 #
-# Python Class:			Mentor QuestaSim specific classes
+# Python Class:      Mentor QuestaSim specific classes
 #
 # Description:
 # ------------------------------------
@@ -16,13 +16,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,9 +39,10 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Synopsys.Synopsys")
 
-from Base.Configuration	import Configuration as BaseConfiguration
-from Base.Project				import ConstraintFile, FileTypes
-from Base.ToolChain			import ToolChainException
+
+from Base.Configuration  import Configuration as BaseConfiguration
+from Base.Project        import ConstraintFile, FileTypes
+from Base.ToolChain      import ToolChainException
 
 
 class SynopsysException(ToolChainException):
@@ -49,9 +50,9 @@ class SynopsysException(ToolChainException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =			"Synopsys"
-	_toolName =		None  # automatically configure only vendor path
-	_section =		"INSTALL.Synopsys"
+	_vendor =      "Synopsys"
+	_toolName =    None  # automatically configure only vendor path
+	_section =    "INSTALL.Synopsys"
 	_template = {
 		"Windows": {
 			_section: {

@@ -51,6 +51,7 @@ use			IEEE.std_logic_1164.all;
 
 library	PoC;
 use			PoC.config.all;
+use			PoC.utils.all;
 use			PoC.ddrio.all;
 
 
@@ -74,7 +75,7 @@ end entity;
 architecture rtl of ddrio_out is
   
 begin
-	assert (VENDOR = VENDOR_XILINX) or (VENDOR = VENDOR_ALTERA)
+	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.out is not implemented for given DEVICE."
 		severity FAILURE;
 	
@@ -110,5 +111,37 @@ begin
 				DataOut_low		=> DataOut_low,
 				Pad						=> Pad
 			);
+	end generate;
+	
+	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
+		signal DataOut_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataOut_low_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataOut_low_d2	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal Pad_o					: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+	begin
+		DataOut_high_d	<= DataOut_high		when rising_edge(Clock) and (ClockEnable = '1');
+		DataOut_low_d		<= DataOut_low		when rising_edge(Clock) and (ClockEnable = '1');
+		DataOut_low_d2	<= DataOut_low_d	when falling_edge(Clock) and (ClockEnable = '1');		
+		
+		process(Clock, OutputEnable, DataOut_high_d, DataOut_low_d2)
+			type T_MUX is array(BIT) of STD_LOGIC_VECTOR(BITS - 1 downto 0);
+			variable MuxInput		: T_MUX;
+			variable MuxControl	: BIT		:= '0';
+		begin
+			MuxInput('0')	:= DataOut_high_d;
+			MuxInput('1')	:= DataOut_low_d2;
+		
+			if Clock'event then
+				MuxControl := not MuxControl;
+			end if;
+		
+			if (OutputEnable = '1') then
+				Pad_o		<= MuxInput(MuxControl);
+			else
+				Pad_o		<= (others => 'Z');
+			end if;
+		end process;
+		
+		Pad			<= Pad_o;
 	end generate;
 end architecture;

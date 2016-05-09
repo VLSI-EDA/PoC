@@ -971,6 +971,9 @@ package body waveform is
 		--	Issue:
 		--		return (0 => Pause, 1 => ResetPulse); always evaluates to (0 ns, 10 ns),
 		--		regardless of the passed function parameters
+		--	Bugfix:
+		--		The bugfix will be included in 10.5a, but this workaround must be
+		--		present until Altera updates the embedded ModelSim Altera Edition.
 		p  := Pause;
 		rp := ResetPulse;
 		return (0 => p, 1 => rp);

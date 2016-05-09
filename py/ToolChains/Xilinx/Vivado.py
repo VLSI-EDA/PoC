@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
-#										Martin Zabel
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			Xilinx Vivado specific classes
+# Python Class:      Xilinx Vivado specific classes
 #
 # Description:
 # ------------------------------------
@@ -17,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,15 +43,15 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.Vivado")
 
 
-from lib.Functions							import CallByRefParam
-from Base.Exceptions						import PlatformNotSupportedException
-from Base.Logging								import LogEntry, Severity
-from Base.Configuration 				import Configuration as BaseConfiguration, ConfigurationException
-from Base.Project								import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
-from Base.Simulator							import SimulationResult, PoCSimulationResultFilter
-from Base.Executable						import Executable
-from Base.Executable						import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
-from ToolChains.Xilinx.Xilinx		import XilinxException
+from lib.Functions              import CallByRefParam
+from Base.Exceptions            import PlatformNotSupportedException
+from Base.Logging                import LogEntry, Severity
+from Base.Configuration         import Configuration as BaseConfiguration, ConfigurationException
+from Base.Project                import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
+from Base.Executable            import Executable
+from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from ToolChains.Xilinx.Xilinx    import XilinxException
 
 
 class VivadoException(XilinxException):
@@ -59,22 +59,22 @@ class VivadoException(XilinxException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =			"Xilinx"
-	_toolName =		"Xilinx Vivado"
-	_section =		"INSTALL.Xilinx.Vivado"
+	_vendor =      "Xilinx"
+	_toolName =    "Xilinx Vivado"
+	_section =    "INSTALL.Xilinx.Vivado"
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"2016.1",
-				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
-				"BinaryDirectory":				"${InstallationDirectory}/bin"
+				"Version":                "2016.1",
+				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
+				"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":								"2016.1",
-				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
-				"BinaryDirectory":				"${InstallationDirectory}/bin"
+				"Version":                "2016.1",
+				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
+				"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}
 		}
 	}
@@ -112,10 +112,10 @@ class Configuration(BaseConfiguration):
 
 class VivadoMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		self._platform =						platform
-		self._binaryDirectoryPath =	binaryDirectoryPath
-		self._version =							version
-		self._logger =							logger
+		self._platform =            platform
+		self._binaryDirectoryPath =  binaryDirectoryPath
+		self._version =              version
+		self._logger =              logger
 
 
 class Vivado(VivadoMixIn):
@@ -132,9 +132,9 @@ class Vivado(VivadoMixIn):
 class XElab(Executable, VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "xelab.bat"
-		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "xelab"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "xelab.bat"
+		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "xelab"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -152,50 +152,50 @@ class XElab(Executable, VivadoMixIn):
 		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =	None
+		_value =  None
 
 	class FlagRangeCheck(metaclass=ShortFlagArgument):
-		_name =		"rangecheck"
-		_value =	None
+		_name =    "rangecheck"
+		_value =  None
 
 	class SwitchMultiThreading(metaclass=ShortTupleArgument):
-		_name =		"mt"
-		_value =	None
+		_name =    "mt"
+		_value =  None
 
 	class SwitchVerbose(metaclass=ShortTupleArgument):
-		_name =		"verbose"
-		_value =	None
+		_name =    "verbose"
+		_value =  None
 
 	class SwitchDebug(metaclass=ShortTupleArgument):
-		_name =		"debug"
-		_value =	None
+		_name =    "debug"
+		_value =  None
 
 	# class SwitchVHDL2008(metaclass=ShortFlagArgument):
-	# 	_name =		"vhdl2008"
-	# 	_value =	None
+	# 	_name =    "vhdl2008"
+	# 	_value =  None
 
 	class SwitchOptimization(metaclass=ShortValuedFlagArgument):
-		_name =		"O"
-		_value =	None
+		_name =    "O"
+		_value =  None
 
 	class SwitchTimeResolution(metaclass=ShortTupleArgument):
-		_name =		"timeprecision_vhdl"
-		_value =	None
+		_name =    "timeprecision_vhdl"
+		_value =  None
 
 	class SwitchProjectFile(metaclass=ShortTupleArgument):
-		_name =		"prj"
-		_value =	None
+		_name =    "prj"
+		_value =  None
 
 	class SwitchLogFile(metaclass=ShortTupleArgument):
-		_name =		"log"
-		_value =	None
+		_name =    "log"
+		_value =  None
 
 	class SwitchSnapshot(metaclass=ShortTupleArgument):
-		_name =		"s"
-		_value =	None
+		_name =    "s"
+		_value =  None
 
 	class ArgTopLevel(metaclass=StringArgument):
-		_value =	None
+		_value =  None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -254,9 +254,9 @@ class XElab(Executable, VivadoMixIn):
 class XSim(Executable, VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
-		if (self._platform == "Windows"):		executablePath = binaryDirectoryPath / "xsim.bat"
-		elif (self._platform == "Linux"):		executablePath = binaryDirectoryPath / "xsim"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "xsim.bat"
+		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "xsim"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -274,26 +274,26 @@ class XSim(Executable, VivadoMixIn):
 		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =	None
+		_value =  None
 
 	class SwitchLogFile(metaclass=ShortTupleArgument):
-		_name =		"-log"
-		_value =	None
+		_name =    "-log"
+		_value =  None
 
 	class FlagGuiMode(metaclass=ShortFlagArgument):
-		_name =		"-gui"
-		_value =	None
+		_name =    "-gui"
+		_value =  None
 
 	class SwitchTclBatchFile(metaclass=ShortTupleArgument):
-		_name =		"-tclbatch"
-		_value =	None
+		_name =    "-tclbatch"
+		_value =  None
 
 	class SwitchWaveformFile(metaclass=ShortTupleArgument):
-		_name =		"-view"
-		_value =	None
+		_name =    "-view"
+		_value =  None
 
 	class SwitchSnapshot(metaclass=StringArgument):
-		_value =	None
+		_value =  None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -316,7 +316,7 @@ class XSim(Executable, VivadoMixIn):
 		self._hasOutput = False
 		self._hasWarnings = False
 		self._hasErrors = False
-		simulationResult =	CallByRefParam(SimulationResult.Error)
+		simulationResult =  CallByRefParam(SimulationResult.Error)
 		try:
 			iterator = iter(PoCSimulationResultFilter(SimulatorFilter(self.GetReader()), simulationResult))
 
@@ -335,10 +335,6 @@ class XSim(Executable, VivadoMixIn):
 
 		except StopIteration:
 			pass
-		except VivadoException:
-			raise
-		# except Exception as ex:
-		#	raise GHDLException("Error while executing GHDL.") from ex
 		finally:
 			if self._hasOutput:
 				self._LogNormal("    " + ("-" * 76))

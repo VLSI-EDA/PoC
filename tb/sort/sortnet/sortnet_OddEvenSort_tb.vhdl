@@ -55,7 +55,7 @@ architecture tb of sortnet_OddEvenSort_tb is
 	
 	constant TAG_BITS								: POSITIVE	:= 4;
 	
-	constant INPUTS									: POSITIVE	:= 32;
+	constant INPUTS									: POSITIVE	:= 64;
 	constant DATA_COLUMNS						: POSITIVE	:= 2;
 	
 	constant KEY_BITS								: POSITIVE	:= 8;
@@ -63,7 +63,7 @@ architecture tb of sortnet_OddEvenSort_tb is
 	constant META_BITS							: POSITIVE	:= TAG_BITS;
 	constant PIPELINE_STAGE_AFTER		: NATURAL		:= 2;
 
-	constant LOOP_COUNT							: POSITIVE	:= 10;	--1024;
+	constant LOOP_COUNT							: POSITIVE	:= 1024;
 	
 	constant STAGES									: POSITIVE	:= INPUTS;
 	constant DELAY									: NATURAL		:= STAGES / PIPELINE_STAGE_AFTER;
@@ -201,17 +201,17 @@ begin
 			wait until falling_edge(Clock);
 			
 			Check		:= TRUE;
-			LastValue	:= (others => '0');
-			for j in 0 to INPUTS - 1 loop
-				CurValue	:= unsigned(Sort_Data(j)(KEY_BITS - 1 downto 0));
-				Check			:= Check and (LastValue <= CurValue);
-				LastValue	:= CurValue;
-			end loop;
-			simAssertion(Check, "Result is not monotonic." & raw_format_slv_hex(std_logic_vector(LastValue)));
-		end loop;
-
-		for i in 0 to 15 loop
-			wait until rising_edge(Clock);
+			if (Sort_IsKey = '1') then
+				LastValue	:= (others => '0');
+				for j in 0 to INPUTS - 1 loop
+					CurValue	:= unsigned(Sort_Data(j)(KEY_BITS - 1 downto 0));
+					Check			:= Check and (LastValue <= CurValue);
+					LastValue	:= CurValue;
+				end loop;
+				simAssertion(Check, "Result is not monotonic." & raw_format_slv_hex(std_logic_vector(LastValue)));
+			else
+				-- no routine implemented to check if sorting network is switched as in the previous cycles
+			end if;
 		end loop;
 		
 		-- This process is finished

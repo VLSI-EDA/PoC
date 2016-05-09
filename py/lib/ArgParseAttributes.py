@@ -11,9 +11,9 @@
 # |_|    |___/                                           
 # 
 # =============================================================================
-# Authors:						Patrick Lehmann
+# Authors:            Patrick Lehmann
 # 
-# Python package:			ArgParse pyAttribute attributes
+# Python package:      ArgParse pyAttribute attributes
 #
 # Description:
 # ------------------------------------
@@ -27,7 +27,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -51,7 +51,7 @@ class CommandGroupAttribute(Attribute):
 		return self.__groupName
 
 class DefaultAttribute(Attribute):
-	__handler =	None
+	__handler =  None
 	
 	def __call__(self, func):
 		self.__handler = func
@@ -62,14 +62,14 @@ class DefaultAttribute(Attribute):
 		return self.__handler
 		
 class CommandAttribute(Attribute):
-	__command =	""
-	__handler =	None
-	__kwargs =	None
+	__command =  ""
+	__handler =  None
+	__kwargs =  None
 
 	def __init__(self, command, **kwargs):
 		super().__init__()
-		self.__command =	command
-		self.__kwargs =		kwargs
+		self.__command =  command
+		self.__kwargs =    kwargs
 	
 	def __call__(self, func):
 		self.__handler = func
@@ -88,13 +88,13 @@ class CommandAttribute(Attribute):
 		return self.__kwargs
 		
 class ArgumentAttribute(Attribute):
-	__args =		None
-	__kwargs =	None
+	__args =    None
+	__kwargs =  None
 
 	def __init__(self, *args, **kwargs):
 		super().__init__()
-		self.__args =		args
-		self.__kwargs =	kwargs
+		self.__args =    args
+		self.__kwargs =  kwargs
 	
 	@property
 	def Args(self):
@@ -106,9 +106,9 @@ class ArgumentAttribute(Attribute):
 		
 class SwitchArgumentAttribute(ArgumentAttribute):
 	def __init__(self, *args, **kwargs):
-		kwargs['action'] =	"store_const"
-		kwargs['const'] =		True
-		kwargs['default'] =	False
+		kwargs['action'] =  "store_const"
+		kwargs['const'] =    True
+		kwargs['default'] =  False
 		super().__init__(*args, **kwargs)
 
 class CommonArgumentAttribute(ArgumentAttribute):
@@ -118,9 +118,9 @@ class CommonSwitchArgumentAttribute(SwitchArgumentAttribute):
 	pass
 	
 class ArgParseMixin(AttributeHelperMixin):
-	__mainParser = 	None
-	__subParser =		None
-	__subParsers =	{}
+	__mainParser =   None
+	__subParser =    None
+	__subParsers =  {}
 
 	def __init__(self, **kwargs):
 		super().__init__()

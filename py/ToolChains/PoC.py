@@ -3,9 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			PoC specific classes
+# Python Class:      PoC specific classes
 #
 # Description:
 # ------------------------------------
@@ -16,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,21 +40,22 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.PoC")
 
-from os										import environ
-from pathlib							import Path
-from subprocess						import check_output, CalledProcessError
 
-from Base.Configuration		import Configuration as BaseConfiguration
+from os                    import environ
+from pathlib              import Path
+from subprocess            import check_output, CalledProcessError
+
+from Base.Configuration    import Configuration as BaseConfiguration
 
 
 class Configuration(BaseConfiguration):
-	_vendor =			"VLSI-EDA"
-	_toolName =		"PoC"
-	_template =		{
+	_vendor =      "VLSI-EDA"
+	_toolName =    "PoC"
+	_template =    {
 		"ALL": {
 			"INSTALL.PoC": {
-				"Version":								"0.0.0",
-				"InstallationDirectory":	None
+				"Version":                "0.0.0",
+				"InstallationDirectory":  None
 			},
 			"SOLUTION.Solutions": {}
 		}
@@ -111,6 +113,6 @@ class Configuration(BaseConfiguration):
 
 	# if (local == remote):   return "Up-to-date"
 	# elif (local == base):   return "Need to pull"
-	# elif (remote == base):	return "Need to push"
+	# elif (remote == base):  return "Need to push"
 	# else:                   return "divergent"
 

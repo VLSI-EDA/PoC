@@ -21,5 +21,5 @@ echo -e "${CYAN}mkdir -p $POC_GHDL_DIR && cd $POC_GHDL_DIR${NOCOLOR}"
 mkdir -p $POC_GHDL_DIR && cd $POC_GHDL_DIR
 
 echo -e "Starting first test: PoC.arith.prng"
-$POCROOT/poc.sh -q ghdl PoC.arith.\*
+$POCROOT/poc.sh -q ghdl PoC.\*
 

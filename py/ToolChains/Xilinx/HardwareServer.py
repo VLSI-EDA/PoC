@@ -3,9 +3,9 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
 #
-# Python Class:			Xilinx Hardware Server specific classes
+# Python Class:      Xilinx Hardware Server specific classes
 #
 # Description:
 # ------------------------------------
@@ -16,13 +16,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,22 +43,22 @@ from Base.Configuration import Configuration as BaseConfiguration
 
 
 class Configuration(BaseConfiguration):
-	_vendor =		"Xilinx"
-	_toolName =	"Xilinx HardwareServer"
-	_section = 	"INSTALL.Xilinx.HardwareServer"
+	_vendor =    "Xilinx"
+	_toolName =  "Xilinx HardwareServer"
+	_section =   "INSTALL.Xilinx.HardwareServer"
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"2015.4",
-				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
-				"BinaryDirectory":				"${InstallationDirectory}/bin"
+				"Version":                "2015.4",
+				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
+				"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":								"2015.4",
-				"InstallationDirectory":	"${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
-				"BinaryDirectory":				"${InstallationDirectory}/bin"
+				"Version":                "2015.4",
+				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
+				"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}
 		}
 	}

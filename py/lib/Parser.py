@@ -3,9 +3,9 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
 # 
-# Python Module:		TODO
+# Python Module:    TODO
 # 
 # Description:
 # ------------------------------------
@@ -19,7 +19,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,25 +29,25 @@
 # ==============================================================================
 #
 
-DEBUG =		False#True
-DEBUG2 =	False#True
+DEBUG =    False#True
+DEBUG2 =  False#True
 
-from enum			import Enum
-from colorama	import Fore
-from pathlib	import Path
+from enum      import Enum
+from colorama  import Fore
+from pathlib  import Path
 
 class ParserException(Exception):
 	pass
 
-class MismatchingParserResult(StopIteration):							pass
-class EmptyChoiseParserResult(MismatchingParserResult):		pass
-class MatchingParserResult(StopIteration):								pass
+class MismatchingParserResult(StopIteration):              pass
+class EmptyChoiseParserResult(MismatchingParserResult):    pass
+class MatchingParserResult(StopIteration):                pass
 
 class SourceCodePosition:
 	def __init__(self, row, column, absolute):
-		self._row =				row
-		self._column =		column
-		self._absolute =	absolute
+		self._row =        row
+		self._column =    column
+		self._absolute =  absolute
 	
 	@property
 	def Row(self):
@@ -75,10 +75,10 @@ class SourceCodePosition:
 
 class Token:
 	def __init__(self, previousToken, value, start, end=None):
-		self._previousToken =	previousToken
-		self._value =			value
-		self._start =			start
-		self._end =				end
+		self._previousToken =  previousToken
+		self._value =      value
+		self._start =      start
+		self._end =        end
 
 	def __len__(self):
 		return self._end.Absolute - self._start.Absolute + 1
@@ -105,7 +105,7 @@ class Token:
 
 class CharacterToken(Token):
 	def __init__(self, previousToken, value, start):
-		if (len(value) != 1):		raise ValueError()
+		if (len(value) != 1):    raise ValueError()
 		super().__init__(previousToken, value, start=start, end=start)
 
 	def __len__(self):
@@ -153,40 +153,40 @@ class StringToken(Token):
 
 class Tokenizer:
 	class TokenKind(Enum):
-		SpaceChars =			0
-		AlphaChars =			1
-		NumberChars =			2
-		DelimiterChars =	3
-		OtherChars =			4
+		SpaceChars =      0
+		AlphaChars =      1
+		NumberChars =      2
+		DelimiterChars =  3
+		OtherChars =      4
 
 	@classmethod
 	def GetCharacterTokenizer(cls, iterable):
-		previousToken =	None
-		absolute =	0
-		column =		0
-		row =				1
+		previousToken =  None
+		absolute =  0
+		column =    0
+		row =        1
 		for char in iterable:
-			absolute +=	1
-			column +=		1
+			absolute +=  1
+			column +=    1
 			previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
 			yield previousToken
 			if (char == "\n"):
-				column =	0
-				row +=		1
+				column =  0
+				row +=    1
 	
 	@classmethod
 	def GetWordTokenizer(cls, iterable):
-		previousToken =	None
-		tokenKind =	cls.TokenKind.OtherChars
-		start =			SourceCodePosition(1, 1, 1)
-		end =				start
-		buffer =		""
-		absolute =	0
-		column =		0
-		row =				1
+		previousToken =  None
+		tokenKind =  cls.TokenKind.OtherChars
+		start =      SourceCodePosition(1, 1, 1)
+		end =        start
+		buffer =    ""
+		absolute =  0
+		column =    0
+		row =        1
 		for char in iterable:
-			absolute +=	1
-			column +=		1
+			absolute +=  1
+			column +=    1
 			
 			if (tokenKind is cls.TokenKind.SpaceChars):
 				if ((char == " ") or (char == "\t")):
@@ -255,13 +255,13 @@ class Tokenizer:
 			else:
 				raise ParserException("Unknown state.")
 			
-			end.Row =				row
-			end.Column =		column
-			end.Absolute =	absolute
+			end.Row =        row
+			end.Column =    column
+			end.Absolute =  absolute
 			
 			if (char == "\n"):
-				column =	0
-				row +=		1
+				column =  0
+				row +=    1
 		# end for
 	
 class CodeDOMMeta(type):
@@ -279,7 +279,7 @@ class CodeDOMMeta(type):
 			tup = (choice, parser)
 			parsers.append(tup)
 			
-		removeList =	[]
+		removeList =  []
 		while True:
 			token = yield
 			for parser in parsers:
@@ -326,7 +326,7 @@ class CodeDOMMeta(type):
 class CodeDOMObject(metaclass=CodeDOMMeta):
 	def __init__(self):
 		super().__init__()
-		# self._name =	None
+		# self._name =  None
 	
 	# @property
 	# def Name(self):
@@ -406,7 +406,7 @@ class Identifier(Expression):
 		# match for identifier name
 		token = yield
 		if DEBUG2: print("IdentifierParser: token={0} expected name".format(token))
-		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
+		if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
 		name = token.Value
 		
 		# construct result
@@ -436,8 +436,8 @@ class StringLiteral(Literal):
 		# match for opening "
 		token = yield
 		if DEBUG2: print("StringLiteralParser: token={0} expected '\"'".format(token))
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "\""):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "\""):                      raise MismatchingParserResult()
 		
 		# match for string value
 		value = ""
@@ -472,7 +472,7 @@ class IntegerLiteral(Literal):
 		# match for opening "
 		token = yield
 		if DEBUG2: print("IntegerLiteralParser: token={0} expected number".format(token))
-		if (not isinstance(token, NumberToken)):			raise MismatchingParserResult()
+		if (not isinstance(token, NumberToken)):      raise MismatchingParserResult()
 		value = int(token.Value)
 		
 		# construct result
@@ -502,24 +502,24 @@ class ExistsFunction(Function):
 		# match for EXISTS keyword
 		token = yield
 		if DEBUG2: print("ExistsFunctionParser: token={0} expected '('".format(token))
-		# if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
-		# if (token.Value != "exists"):									raise MismatchingParserResult()
+		# if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
+		# if (token.Value != "exists"):                  raise MismatchingParserResult()
 		
-		if (not isinstance(token, CharacterToken)):			raise MismatchingParserResult()
-		if (token.Value != "?"):												raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):      raise MismatchingParserResult()
+		if (token.Value != "?"):                        raise MismatchingParserResult()
 		
 		# match for opening (
 		token = yield
 		if DEBUG2: print("ExistsFunctionParser: token={0} expected '('".format(token))
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
 		if DEBUG2: print("ExistsFunctionParser: token={0}".format(token))
-		if isinstance(token, SpaceToken):						token = yield
+		if isinstance(token, SpaceToken):            token = yield
 		# match for delimiter sign: "
-		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult("ExistsFunctionParser: Expected double quote sign before VHDL fileName.")
-		if (token.Value.lower() != "\""):						raise MismatchingParserResult("ExistsFunctionParser: Expected double quote sign before VHDL fileName.")
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("ExistsFunctionParser: Expected double quote sign before VHDL fileName.")
+		if (token.Value.lower() != "\""):            raise MismatchingParserResult("ExistsFunctionParser: Expected double quote sign before VHDL fileName.")
 		# match for string: path
 		path = ""
 		while True:
@@ -531,10 +531,10 @@ class ExistsFunction(Function):
 		# match for optional whitespace
 		token = yield
 		if DEBUG2: print("ExistsFunctionParser: token={0}".format(token))
-		if isinstance(token, SpaceToken):						token = yield
+		if isinstance(token, SpaceToken):            token = yield
 		# match for delimiter sign: \n
-		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult("ExistsFunctionParser: Expected end of line or comment")
-		if (token.Value != ")"):										raise MismatchingParserResult("ExistsFunctionParser: Expected end of line or comment")
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("ExistsFunctionParser: Expected end of line or comment")
+		if (token.Value != ")"):                    raise MismatchingParserResult("ExistsFunctionParser: Expected end of line or comment")
 		
 		# construct result
 		result = cls(path)
@@ -555,12 +555,12 @@ class ListElement(Expression):
 		# match for EXISTS keyword
 		token = yield
 		if DEBUG2: print("ListElementParser: token={0} expected '('".format(token))
-		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult()
-		if (token.Value != ","):										raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult()
+		if (token.Value != ","):                    raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
 		if DEBUG2: print("ListElementParser: token={0}".format(token))
-		if isinstance(token, SpaceToken):						token = yield
+		if isinstance(token, SpaceToken):            token = yield
 		
 		parser = Expressions.GetParser()
 		parser.send(None)
@@ -589,12 +589,12 @@ class ListConstructorExpression(Expression):
 		# match for sign "["
 		token = yield
 		if DEBUG2: print("ListConstructorExpressionParser: token={0} expected '('".format(token))
-		if (not isinstance(token, CharacterToken)):			raise MismatchingParserResult()
-		if (token.Value != "["):												raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):      raise MismatchingParserResult()
+		if (token.Value != "["):                        raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
 		if DEBUG2: print("ListConstructorExpressionParser: token={0}".format(token))
-		if isinstance(token, SpaceToken):						token = yield
+		if isinstance(token, SpaceToken):            token = yield
 		
 		result = cls()
 		parser = Expressions.GetParser()
@@ -620,10 +620,10 @@ class ListConstructorExpression(Expression):
 		# match for optional whitespace
 		# token = yield
 		if DEBUG2: print("ListConstructorExpressionParser: token={0}".format(token))
-		if isinstance(token, SpaceToken):						token = yield
+		if isinstance(token, SpaceToken):            token = yield
 		# match for delimiter sign: \n
-		if (not isinstance(token, CharacterToken)):	raise MismatchingParserResult("ListConstructorExpressionParser: Expected end of line or comment")
-		if (token.Value != "]"):										raise MismatchingParserResult("ListConstructorExpressionParser: Expected end of line or comment")
+		if (not isinstance(token, CharacterToken)):  raise MismatchingParserResult("ListConstructorExpressionParser: Expected end of line or comment")
+		if (token.Value != "]"):                    raise MismatchingParserResult("ListConstructorExpressionParser: Expected end of line or comment")
 		
 		# construct result
 		if DEBUG: print("ListConstructorExpressionParser: matched {0}".format(result))
@@ -656,15 +656,15 @@ class NotExpression(UnaryExpression):
 		# match for "!"
 		token = yield
 		if DEBUG2: print("NotExpressionParser: token={0} expected '('".format(token))
-		# if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
-		# if (token.Value != "not"):										raise MismatchingParserResult()
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "!"):											raise MismatchingParserResult()
+		# if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
+		# if (token.Value != "not"):                    raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "!"):                      raise MismatchingParserResult()
 		
 		# match for optional whitespace
 		token = yield
 		if DEBUG2: print("NotExpressionParser: token={0}".format(token))
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -689,8 +689,8 @@ class NotExpression(UnaryExpression):
 class BinaryExpression(Expression):
 	def __init__(self, leftChild, rightChild):
 		super().__init__()
-		self._leftChild =		leftChild
-		self._rightChild =	rightChild
+		self._leftChild =    leftChild
+		self._rightChild =  rightChild
 	
 	@property
 	def LeftChild(self):
@@ -717,8 +717,8 @@ class EqualExpression(CompareExpression):
 		# match for opening (
 		token = yield
 		if DEBUG2: print("EqualExpressionParser: token={0} expected '('".format(token))
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		
 		# match for optional whitespace
 		token = yield
@@ -748,8 +748,8 @@ class EqualExpression(CompareExpression):
 		
 		# match for equal sign =
 		if DEBUG2: print("EqualExpressionParser: token={0} expected '='".format(token))
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "="):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "="):                      raise MismatchingParserResult()
 		
 		# match for optional whitespace
 		token = yield
@@ -779,8 +779,8 @@ class EqualExpression(CompareExpression):
 		
 		# match for closing )
 		if DEBUG2: print("EqualExpressionParser: token={0} expected ')'".format(token))
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 	
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -797,11 +797,11 @@ class UnequalExpression(CompareExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -817,17 +817,17 @@ class UnequalExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for equal sign !
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "!"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "!"):                      raise MismatchingParserResult()
 		# match for equal sign =
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "="):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "="):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -843,10 +843,10 @@ class UnequalExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -863,11 +863,11 @@ class LessThanExpression(CompareExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -883,13 +883,13 @@ class LessThanExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for equal sign <
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "<"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "<"):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -905,10 +905,10 @@ class LessThanExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -925,11 +925,11 @@ class LessThanEqualExpression(CompareExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -945,17 +945,17 @@ class LessThanEqualExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for equal sign <
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "<"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "<"):                      raise MismatchingParserResult()
 		# match for equal sign =
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "="):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "="):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -971,10 +971,10 @@ class LessThanEqualExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -991,11 +991,11 @@ class GreaterThanExpression(CompareExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1011,13 +1011,13 @@ class GreaterThanExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for equal sign >
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ">"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ">"):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1033,10 +1033,10 @@ class GreaterThanExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -1053,11 +1053,11 @@ class GreaterThanEqualExpression(CompareExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1073,17 +1073,17 @@ class GreaterThanEqualExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for equal sign >
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ">"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ">"):                      raise MismatchingParserResult()
 		# match for equal sign =
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "="):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "="):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1099,10 +1099,10 @@ class GreaterThanEqualExpression(CompareExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -1119,11 +1119,11 @@ class AndExpression(LogicalExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1139,14 +1139,14 @@ class AndExpression(LogicalExpression):
 		
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		# match for AND keyword
 		token = yield
-		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
-		if (token.Value.lower() != "and"):						raise MismatchingParserResult()
+		if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
+		if (token.Value.lower() != "and"):            raise MismatchingParserResult()
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1162,10 +1162,10 @@ class AndExpression(LogicalExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -1182,11 +1182,11 @@ class OrExpression(LogicalExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1202,14 +1202,14 @@ class OrExpression(LogicalExpression):
 		
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		# match for OR keyword
 		token = yield
-		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
-		if (token.Value.lower() != "or"):							raise MismatchingParserResult()
+		if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
+		if (token.Value.lower() != "or"):              raise MismatchingParserResult()
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1225,10 +1225,10 @@ class OrExpression(LogicalExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -1245,11 +1245,11 @@ class XorExpression(LogicalExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1265,14 +1265,14 @@ class XorExpression(LogicalExpression):
 		
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		# match for XOR keyword
 		token = yield
-		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
-		if (token.Value.lower() != "xor"):						raise MismatchingParserResult()
+		if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
+		if (token.Value.lower() != "xor"):            raise MismatchingParserResult()
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1288,10 +1288,10 @@ class XorExpression(LogicalExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -1308,11 +1308,11 @@ class InExpression(LogicalExpression):
 		
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1328,14 +1328,14 @@ class InExpression(LogicalExpression):
 		
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		# match for IN keyword
 		token = yield
-		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
-		if (token.Value.lower() != "in"):						raise MismatchingParserResult()
+		if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
+		if (token.Value.lower() != "in"):            raise MismatchingParserResult()
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		
 		# match for sub expression
 		# ==========================================================================
@@ -1351,10 +1351,10 @@ class InExpression(LogicalExpression):
 		
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 		
 		# construct result
 		result = cls(leftChild, rightChild)
@@ -1371,11 +1371,11 @@ class NotInExpression(LogicalExpression):
 
 		# match for opening (
 		token = yield
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != "("):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != "("):                      raise MismatchingParserResult()
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 
 		# match for sub expression
 		# ==========================================================================
@@ -1391,21 +1391,21 @@ class NotInExpression(LogicalExpression):
 
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		# match for NOT keyword
 		token = yield
-		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
-		if (token.Value.lower() != "not"):						raise MismatchingParserResult()
+		if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
+		if (token.Value.lower() != "not"):            raise MismatchingParserResult()
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 		# match for IN keyword
 		token = yield
-		if (not isinstance(token, StringToken)):			raise MismatchingParserResult()
-		if (token.Value.lower() != "in"):							raise MismatchingParserResult()
+		if (not isinstance(token, StringToken)):      raise MismatchingParserResult()
+		if (token.Value.lower() != "in"):              raise MismatchingParserResult()
 		# match for whitespace
 		token = yield
-		if (not isinstance(token, SpaceToken)):				raise MismatchingParserResult()
+		if (not isinstance(token, SpaceToken)):        raise MismatchingParserResult()
 
 		# match for sub expression
 		# ==========================================================================
@@ -1421,10 +1421,10 @@ class NotInExpression(LogicalExpression):
 
 		# match for optional whitespace
 		token = yield
-		if isinstance(token, SpaceToken):							token = yield
+		if isinstance(token, SpaceToken):              token = yield
 		# match for closing )
-		if (not isinstance(token, CharacterToken)):		raise MismatchingParserResult()
-		if (token.Value != ")"):											raise MismatchingParserResult()
+		if (not isinstance(token, CharacterToken)):    raise MismatchingParserResult()
+		if (token.Value != ")"):                      raise MismatchingParserResult()
 
 		# construct result
 		result = cls(leftChild, rightChild)

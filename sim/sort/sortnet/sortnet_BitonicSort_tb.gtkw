@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
 [*] Sun Mar 20 16:55:14 2016
 [*]
-[dumpfile] "G:\git\PoC\temp\ghdl\sortnet_BitonicSort_tb.ghw"
 [dumpfile_mtime] "Sun Mar 20 16:54:49 2016"
 [dumpfile_size] 654474
-[savefile] "G:\git\PoC\sim\sort\sortnet\sortnet_BitonicSort_tb.gtkw"
 [timestart] 0
 [size] 1676 997
 [pos] -1 -1

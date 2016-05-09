@@ -3,9 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			Lattice Diamond specific classes
+# Python Class:      Lattice Diamond specific classes
 #
 # Description:
 # ------------------------------------
@@ -16,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,14 +41,14 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
 
-from subprocess										import check_output, CalledProcessError, STDOUT
+from subprocess                    import check_output, CalledProcessError, STDOUT
 
-from Base.Configuration						import Configuration as BaseConfiguration, ConfigurationException
-from Base.Exceptions							import PlatformNotSupportedException
-from Base.Executable							import Executable, CommandLineArgumentList, ExecutableArgument
-from Base.Logging									import Severity, LogEntry
-from Base.Project									import File, FileTypes
-from ToolChains.Lattice.Lattice		import LatticeException
+from Base.Configuration            import Configuration as BaseConfiguration, ConfigurationException
+from Base.Exceptions              import PlatformNotSupportedException
+from Base.Executable              import Executable, CommandLineArgumentList, ExecutableArgument
+from Base.Logging                  import Severity, LogEntry
+from Base.Project                  import File, FileTypes
+from ToolChains.Lattice.Lattice    import LatticeException
 
 
 class DiamondException(LatticeException):
@@ -55,22 +56,22 @@ class DiamondException(LatticeException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =		"Lattice"
-	_toolName =	"Lattice Diamond"
-	_section =	"INSTALL.Lattice.Diamond"
+	_vendor =    "Lattice"
+	_toolName =  "Lattice Diamond"
+	_section =  "INSTALL.Lattice.Diamond"
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"3.7",
-				"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/Diamond/${Version}_x64",
-				"BinaryDirectory":				"${InstallationDirectory}/bin/nt64"
+				"Version":                "3.7",
+				"InstallationDirectory":  "${INSTALL.Lattice:InstallationDirectory}/Diamond/${Version}_x64",
+				"BinaryDirectory":        "${InstallationDirectory}/bin/nt64"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":								"3.7",
-				"InstallationDirectory":	"${INSTALL.Lattice:InstallationDirectory}/diamond/${Version}_x64",
-				"BinaryDirectory":				"${InstallationDirectory}/bin/lin64"
+				"Version":                "3.7",
+				"InstallationDirectory":  "${INSTALL.Lattice:InstallationDirectory}/diamond/${Version}_x64",
+				"BinaryDirectory":        "${InstallationDirectory}/bin/lin64"
 			}
 		}
 	}
@@ -93,8 +94,8 @@ class Configuration(BaseConfiguration):
 			raise
 
 	def __CheckDiamondVersion(self, binPath, version):
-		if (self._host.Platform == "Windows"):	tclShellPath = binPath / "pnmainc.exe"
-		else:																		tclShellPath = binPath / "pnmainc"
+		if (self._host.Platform == "Windows"):  tclShellPath = binPath / "pnmainc.exe"
+		else:                                    tclShellPath = binPath / "pnmainc"
 
 		if not tclShellPath.exists():
 			raise ConfigurationException("Executable '{0!s}' not found.".format(tclShellPath)) from FileNotFoundError(
@@ -133,9 +134,9 @@ class TclShell(Executable, DiamondMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		DiamondMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
-		if (platform == "Windows"):		executablePath = binaryDirectoryPath / "pnmainc.exe"
-		elif (platform == "Linux"):		executablePath = binaryDirectoryPath / "pnmainc"
-		else:													raise PlatformNotSupportedException(platform)
+		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "pnmainc.exe"
+		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "pnmainc"
+		else:                          raise PlatformNotSupportedException(platform)
 		Executable.__init__(self, platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -145,9 +146,9 @@ class TclShell(Executable, DiamondMixIn):
 		self._hasErrors = False
 
 	@property
-	def HasWarnings(self):	return self._hasWarnings
+	def HasWarnings(self):  return self._hasWarnings
 	@property
-	def HasErrors(self):		return self._hasErrors
+	def HasErrors(self):    return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
 		pass
@@ -231,9 +232,9 @@ class SynthesisArgumentFile(File):
 	def __init__(self, file):
 		super().__init__(file)
 
-		self._architecture =	None
-		self._topLevel =			None
-		self._logfile =				None
+		self._architecture =  None
+		self._topLevel =      None
+		self._logfile =        None
 
 	@property
 	def Architecture(self):
@@ -260,9 +261,9 @@ class SynthesisArgumentFile(File):
 		if (self._file is None):    raise DiamondException("No file path for SynthesisArgumentFile provided.")
 
 		buffer = ""
-		if (self._architecture is None):	raise DiamondException("Argument 'Architecture' (-a) is not set.")
+		if (self._architecture is None):  raise DiamondException("Argument 'Architecture' (-a) is not set.")
 		buffer += "-a {0}\n".format(self._architecture)
-		if (self._topLevel is None):			raise DiamondException("Argument 'TopLevel' (-top) is not set.")
+		if (self._topLevel is None):      raise DiamondException("Argument 'TopLevel' (-top) is not set.")
 		buffer += "-top {0}\n".format(self._topLevel)
 		if (self._logfile is not None):
 			buffer += "-logfile {0}\n".format(self._logfile)

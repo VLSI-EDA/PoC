@@ -105,8 +105,6 @@ begin
 	process(Clock)
 		variable TagHit_idx 			: NATURAL;
 	begin
-		TagHit_idx			:= to_index(onehot2bin(TagHit, 0));
-	
 		if rising_edge(Clock) then
 			if (Reset = '1') then
 				ValidMemory										<= (others => '0');
@@ -143,7 +141,8 @@ begin
 					end if;
 				end loop;
 			elsif ((slv_or(TagHit) and Enable)= '1') then
-				CounterMemory(TagHit_idx)			<= CounterMemory(TagHit_idx) + 1;
+				TagHit_idx								:= to_index(onehot2bin(TagHit, 0));
+				CounterMemory(TagHit_idx)	<= CounterMemory(TagHit_idx) + 1;
 			end if;
 		end if;
 	end process;

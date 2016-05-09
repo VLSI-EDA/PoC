@@ -3,10 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Python Class:			TODO
-# 
-# Authors:					Patrick Lehmann
-# 
+# Authors:          Patrick Lehmann
+#
+# Python Class:      TODO
+#
 # Description:
 # ------------------------------------
 #		TODO:
@@ -16,13 +16,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,61 +39,61 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Base.PoCBase")
 
-from colorama								import Fore as Foreground
-from enum										import Enum, unique
+from colorama                import Fore as Foreground
+from enum                    import Enum, unique
 	
 @unique
 class Severity(Enum):
-	Fatal =			30
-	Error =			25
-	Quiet =			20
-	Warning =		15
-	Info =			10
+	Fatal =      30
+	Error =      25
+	Quiet =      20
+	Warning =    15
+	Info =      10
 	Normal =     4
 	Verbose =    2
 	Debug =      1
 	All =        0
 	
-	def __eq__(self, other):		return self.value ==	other.value
-	def __ne__(self, other):		return self.value !=	other.value
-	def __lt__(self, other):		return self.value <		other.value
-	def __le__(self, other):		return self.value <=	other.value
-	def __gt__(self, other):		return self.value >		other.value
-	def __ge__(self, other):		return self.value >=	other.value
+	def __eq__(self, other):    return self.value ==  other.value
+	def __ne__(self, other):    return self.value !=  other.value
+	def __lt__(self, other):    return self.value <		other.value
+	def __le__(self, other):    return self.value <=  other.value
+	def __gt__(self, other):    return self.value >		other.value
+	def __ge__(self, other):    return self.value >=  other.value
 	
 
 class LogEntry:
 	def __init__(self, message, severity=Severity.Normal, indent=0):
-		self._severity =	severity
-		self._message =		message
-		self._indent =		indent
+		self._severity =  severity
+		self._message =    message
+		self._indent =    indent
 	
 	@property
-	def Severity(self):		return self._severity
+	def Severity(self):    return self._severity
 	@property
-	def Indent(self):			return self._indent
+	def Indent(self):      return self._indent
 	@property
-	def Message(self):		return ("  " * self._indent) + self._message
+	def Message(self):    return ("  " * self._indent) + self._message
 
 	def IndentBy(self, indent):
 		self._indent += indent
 	
 	def __str__(self):
-		if (self._severity is Severity.Fatal):			return "FATAL: " +		self._message
-		elif (self._severity is Severity.Error):		return "ERROR: " +		self._message
-		elif (self._severity is Severity.Warning):	return "WARNING: " +	self._message
-		elif (self._severity is Severity.Info):			return "INFO: " +			self._message
-		elif (self._severity is Severity.Quiet):		return 								self._message
-		elif (self._severity is Severity.Normal):		return 								self._message
-		elif (self._severity is Severity.Verbose):	return "VERBOSE: " +	self._message
-		elif (self._severity is Severity.Debug):		return "DEBUG: " +		self._message
+		if (self._severity is Severity.Fatal):      return "FATAL: " +		self._message
+		elif (self._severity is Severity.Error):    return "ERROR: " +		self._message
+		elif (self._severity is Severity.Warning):  return "WARNING: " +	self._message
+		elif (self._severity is Severity.Info):      return "INFO: " +			self._message
+		elif (self._severity is Severity.Quiet):    return 								self._message
+		elif (self._severity is Severity.Normal):    return 								self._message
+		elif (self._severity is Severity.Verbose):  return "VERBOSE: " +	self._message
+		elif (self._severity is Severity.Debug):    return "DEBUG: " +		self._message
 
 class Logger:
 	def __init__(self, host, logLevel, printToStdOut=True):
-		self._host =					host
-		self._logLevel =			logLevel
-		self._printToStdOut =	printToStdOut
-		self._entries =				[]
+		self._host =          host
+		self._logLevel =      logLevel
+		self._printToStdOut =  printToStdOut
+		self._entries =        []
 	
 	@property
 	def LogLevel(self):
@@ -106,14 +106,14 @@ class Logger:
 		if (entry.Severity >= self._logLevel):
 			self._entries.append(entry)
 			if self._printToStdOut:
-				if (entry.Severity is Severity.Fatal):			print("{0}{1}{2}".format(Foreground.RED, entry.Message, Foreground.RESET))
-				elif (entry.Severity is Severity.Error):		print("{0}{1}{2}".format(Foreground.LIGHTRED_EX, entry.Message, Foreground.RESET))
-				elif (entry.Severity is Severity.Quiet):		print("{0}{1}{2}".format(Foreground.LIGHTCYAN_EX, entry.Message, Foreground.RESET))
-				elif (entry.Severity is Severity.Warning):	print("{0}{1}{2}".format(Foreground.LIGHTYELLOW_EX, entry.Message, Foreground.RESET))
-				elif (entry.Severity is Severity.Info):			print("{0}{1}{2}".format(Foreground.CYAN, entry.Message, Foreground.RESET))
-				elif (entry.Severity is Severity.Normal):		print(entry.Message)
-				elif (entry.Severity is Severity.Verbose):	print("{0}{1}{2}".format(Foreground.WHITE, entry.Message, Foreground.RESET))
-				elif (entry.Severity is Severity.Debug):		print("{0}{1}{2}".format(Foreground.LIGHTBLACK_EX, entry.Message, Foreground.RESET))
+				if (entry.Severity is Severity.Fatal):      print("{0}{1}{2}".format(Foreground.RED, entry.Message, Foreground.RESET))
+				elif (entry.Severity is Severity.Error):    print("{0}{1}{2}".format(Foreground.LIGHTRED_EX, entry.Message, Foreground.RESET))
+				elif (entry.Severity is Severity.Quiet):    print(entry.Message)
+				elif (entry.Severity is Severity.Warning):  print("{0}{1}{2}".format(Foreground.LIGHTYELLOW_EX, entry.Message, Foreground.RESET))
+				elif (entry.Severity is Severity.Info):      print("{0}{1}{2}".format(Foreground.CYAN, entry.Message, Foreground.RESET))
+				elif (entry.Severity is Severity.Normal):    print(entry.Message)
+				elif (entry.Severity is Severity.Verbose):  print("{0}{1}{2}".format(Foreground.WHITE, entry.Message, Foreground.RESET))
+				elif (entry.Severity is Severity.Debug):    print("{0}{1}{2}".format(Foreground.LIGHTBLACK_EX, entry.Message, Foreground.RESET))
 
 			return True
 		else:

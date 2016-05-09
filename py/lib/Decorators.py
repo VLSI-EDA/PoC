@@ -7,7 +7,7 @@ class ILazyLoadable:
 		self.__IsLoaded = False
 
 	def _LazyLoadable_Load(self):
-		self.__IsLoaded =	True
+		self.__IsLoaded =  True
 
 	@property
 	def LazyLoadable_IsLoaded(self):
@@ -27,8 +27,8 @@ class LazyLoadTrigger:
 
 class CachedReadOnlyProperty:
 	def __init__(self, func):
-		self.func =		func
-		self.__cache =	None
+		self.func =    func
+		self.__cache =  None
 	
 	def __call__(self, *args):
 		if self.__cache is None:
@@ -43,8 +43,8 @@ class CachedReadOnlyProperty:
 		functools.partial(self.__call__, obj)
 
 # def property(function):
-# 	import sys
-# 	import builtins
+#   import sys
+#   import builtins
 #
 # 	keys = 'fget', 'fset', 'fdel'
 # 	func_locals = {'doc' : function.__doc__}

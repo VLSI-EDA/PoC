@@ -401,7 +401,13 @@ package body sim_protected is
 					ActiveProcessCount								:= dec(not Processes(ProcID).IsLowPriority, ActiveProcessCount);
 					Tests(TestID).ActiveProcessCount	:= dec(not Processes(ProcID).IsLowPriority, Tests(TestID).ActiveProcessCount);
 					if (Tests(TestID).ActiveProcessCount = 0) then
-						finalizeTest(TestID);
+						if (TestID = C_SIM_DEFAULT_TEST_ID) then
+							if (finalizeDefaultTest = TRUE) then
+								finalize;
+							end if;
+						else
+							finalizeTest(TestID);
+						end if;
 					end if;
 				end if;
 			else

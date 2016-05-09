@@ -3,9 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 # 
-# Python Class:			TODO
+# Python Class:      TODO
 # 
 # Description:
 # ------------------------------------
@@ -14,13 +15,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,12 +39,12 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module PoC.Config")
 
 # load dependencies
-from enum									import Enum, EnumMeta, unique
-from re										import compile as RegExpCompile
+from enum                  import Enum, EnumMeta, unique
+from re                    import compile as RegExpCompile
 
-# from lib.Decorators				import CachedReadOnlyProperty
-from lib.Functions				import Init
-from Base.Configuration		import ConfigurationException
+# from lib.Decorators        import CachedReadOnlyProperty
+from lib.Functions        import Init
+from Base.Configuration    import ConfigurationException
 
 
 class BaseEnum(Enum):
@@ -56,12 +57,12 @@ class BaseEnum(Enum):
 
 @unique
 class Vendors(BaseEnum):
-	Unknown =			0
-	Generic =			1
-	Altera =			2
-	Lattice =			3
-	MicroSemi =		4
-	Xilinx =			5
+	Unknown =      0
+	Generic =      1
+	Altera =      2
+	Lattice =      3
+	MicroSemi =    4
+	Xilinx =      5
 
 	def __str__(self):
 		return self.name
@@ -93,96 +94,96 @@ class XilinxFamilies(Families):
 
 class AlteraFamilies(Families):
 	# Altera families
-	Max =				"m"
+	Max =        "m"
 	Cyclone =   "c"
-	Arria =			"a"
-	Stratix =		"s"
+	Arria =      "a"
+	Stratix =    "s"
 
 
 @unique
 class Devices(BaseEnum):
-	Unknown =									0
-	Generic =									1
+	Unknown =                  0
+	Generic =                  1
 
 	# Altera.Max devices
-	Max2 =										100
-	Max4 =										101
-	Max5 =										102
-	Max10 =										103
+	Max2 =                    100
+	Max4 =                    101
+	Max5 =                    102
+	Max10 =                    103
 	# Altera.Cyclone devices
-	Cyclone3 =								110
-	Cyclone4 =								111
-	Cyclone5 =								112
+	Cyclone3 =                110
+	Cyclone4 =                111
+	Cyclone5 =                112
 	# Altera.Arria devices
-	Arria2 =									120
-	Arria5 =									121
+	Arria2 =                  120
+	Arria5 =                  121
 	# Altera.Stratix devices
-	Stratix2 =								130
-	Stratix4 =								131
-	Stratix5 =								132
-	Stratix10 =								133
+	Stratix2 =                130
+	Stratix4 =                131
+	Stratix5 =                132
+	Stratix10 =                133
 
 	# Lattice.iCE device
-	iCE40 =										200
+	iCE40 =                    200
 	# Lattice.MachXO
-	MachXO =									210
-	MachXO2 =									211
-	MachXO3 =									212
+	MachXO =                  210
+	MachXO2 =                  211
+	MachXO3 =                  212
 	# Lattice.ECP
-	ECP2 =										220
-	ECP3 =										221
-	ECP5 =										222
+	ECP2 =                    220
+	ECP3 =                    221
+	ECP5 =                    222
 
 	# Xilinx.Spartan devices
-	Spartan3 =								310
-	Spartan6 =								311
-	# Spartan7 =								312
+	Spartan3 =                310
+	Spartan6 =                311
+	# Spartan7 =                312
 	# Xilinx.Artix devices
-	Artix7 =									320
+	Artix7 =                  320
 	# Xilinx.Kintex devices
-	Kintex7 =									330
-	KintexUltraScale =				331
-	KintexUltraScalePlus =		332
+	Kintex7 =                  330
+	KintexUltraScale =        331
+	KintexUltraScalePlus =    332
 	# Xilinx.Virtex devices
-	Virtex2 =									340
-	Virtex4 =									341
-	Virtex5 =									342
-	Virtex6 =									343
-	Virtex7 =									344
-	VirtexUltraScale =				345
-	VirtexUltraScalePlus =		346
+	Virtex2 =                  340
+	Virtex4 =                  341
+	Virtex5 =                  342
+	Virtex6 =                  343
+	Virtex7 =                  344
+	VirtexUltraScale =        345
+	VirtexUltraScalePlus =    346
 	# Xilinx.Zynq devices
-	Zynq7000 =								350
+	Zynq7000 =                350
 
 		
 class SubTypes(BaseEnum):
-	Unknown =		None
-	Generic =		1
+	Unknown =    None
+	Generic =    1
 	NoSubType = ("",	"")
 	# Altera device subtypes
-	LS =				("ls",	"")
-	E =					("e",		"")
-	GS =				("gs",	"")
-	GX =				("gx",	"")
-	GT =				("gt",	"")
-	GZ =				("gz",	"")
-	SX =				("sx",	"")
-	ST =				("st",	"")
+	LS =        ("ls",	"")
+	E =          ("e",		"")
+	GS =        ("gs",	"")
+	GX =        ("gx",	"")
+	GT =        ("gt",	"")
+	GZ =        ("gz",	"")
+	SX =        ("sx",	"")
+	ST =        ("st",	"")
 	# lAttice device subtypes
-	U =					("u",		"")
-	UM =				("um",	"")
+	U =          ("u",		"")
+	UM =        ("um",	"")
 	# Xilinx device subtypes
-	X =					("x",		"")
-	T =					("",		"t")
-	XT =				("x",		"t")
-	HT =				("h",		"t")
-	LX =				("lx",	"")
-	SXT =				("sx",	"t")
-	LXT =				("lx",	"t")
-	TXT =				("tx",	"t")
-	FXT =				("fx",	"t")
-	CXT =				("cx",	"t")
-	HXT =				("hx",	"t")
+	X =          ("x",		"")
+	T =          ("",		"t")
+	XT =        ("x",		"t")
+	HT =        ("h",		"t")
+	LX =        ("lx",	"")
+	SXT =        ("sx",	"t")
+	LXT =        ("lx",	"t")
+	TXT =        ("tx",	"t")
+	FXT =        ("fx",	"t")
+	CXT =        ("cx",	"t")
+	HXT =        ("hx",	"t")
 
 
 	# @CachedReadOnlyProperty
@@ -193,45 +194,45 @@ class SubTypes(BaseEnum):
 		
 @unique
 class Packages(BaseEnum):
-	Unknown =	0
-	Generic =	1
+	Unknown =  0
+	Generic =  1
 	
-	TQG =			10
+	TQG =      10
 	
-	CPG =			20
-	CSG =			21
+	CPG =      20
+	CSG =      21
 	
-	FF =			30
-	FFG =			31
-	FTG =			32
-	FGG =			33
-	FLG =			34
-	FT =			35
+	FF =      30
+	FFG =      31
+	FTG =      32
+	FGG =      33
+	FLG =      34
+	FT =      35
 	
-	RB =			40
-	RBG =			41
-	RS =			42
-	RF =			43
+	RB =      40
+	RBG =      41
+	RS =      42
+	RF =      43
 
-	E =				50
-	Q =				51
-	F =				52
-	U =				53
-	M =				54
+	E =        50
+	Q =        51
+	F =        52
+	U =        53
+	M =        54
 
 
 class Device:
 	def __init__(self, deviceString):
 		# Device members
-		self.__vendor =			Vendors.Unknown
-		self.__family =			GenericFamilies.Unknown
-		self.__device =			Devices.Unknown
-		self.__generation =	0
-		self.__subtype =		SubTypes.Unknown
-		self.__number =			0
-		self.__speedGrade =	0
-		self.__package =		Packages.Unknown
-		self.__pinCount =		0
+		self.__vendor =      Vendors.Unknown
+		self.__family =      GenericFamilies.Unknown
+		self.__device =      Devices.Unknown
+		self.__generation =  0
+		self.__subtype =    SubTypes.Unknown
+		self.__number =      0
+		self.__speedGrade =  0
+		self.__package =    Packages.Unknown
+		self.__pinCount =    0
 		self.__deviceString = deviceString
 		
 		if (not isinstance(deviceString, str)):
@@ -241,19 +242,19 @@ class Device:
 		
 		# vendor = GENERIC
 		# ==========================================================================
-		if   (deviceString[0:2].lower() == "ge"):		self._DecodeGeneric()									# ge - Generic FPGA device
-		elif (deviceString[0:2].lower() == "xc"):		self._DecodeXilinx(deviceString)			# xc - Xilinx Commercial
-		elif (deviceString[0:2].lower() == "ep"):		self._DecodeAltera(deviceString)			# ep -
-		elif (deviceString[0:3].lower() == "ice"):	self._DecodeLatticeICE(deviceString)	# ice - Lattice iCE series
-		elif (deviceString[0:3].lower() == "lcm"):	self._DecodeLatticeLCM(deviceString)	# lcm - Lattice MachXO series
-		elif (deviceString[0:3].lower() == "lfe"):	self._DecodeLatticeLFE(deviceString)	# lfe - Lattice ECP series
-		else:																				raise ConfigurationException("Unknown manufacturer code in device string '{0}'".format(deviceString))
+		if   (deviceString[0:2].lower() == "ge"):    self._DecodeGeneric()									# ge - Generic FPGA device
+		elif (deviceString[0:2].lower() == "xc"):    self._DecodeXilinx(deviceString)			# xc - Xilinx Commercial
+		elif (deviceString[0:2].lower() == "ep"):    self._DecodeAltera(deviceString)			# ep -
+		elif (deviceString[0:3].lower() == "ice"):  self._DecodeLatticeICE(deviceString)	# ice - Lattice iCE series
+		elif (deviceString[0:3].lower() == "lcm"):  self._DecodeLatticeLCM(deviceString)	# lcm - Lattice MachXO series
+		elif (deviceString[0:3].lower() == "lfe"):  self._DecodeLatticeLFE(deviceString)	# lfe - Lattice ECP series
+		else:                                        raise ConfigurationException("Unknown manufacturer code in device string '{0}'".format(deviceString))
 
 	def _DecodeGeneric(self):
-		self.__vendor =		Vendors.Generic
-		self.__family =		GenericFamilies.Generic
-		self.__subtype =	SubTypes.Generic
-		self.__package =	Packages.Generic
+		self.__vendor =    Vendors.Generic
+		self.__family =    GenericFamilies.Generic
+		self.__subtype =  SubTypes.Generic
+		self.__package =  Packages.Generic
 
 	def _DecodeAltera(self, deviceString):
 		self.__vendor = Vendors.Altera
@@ -296,27 +297,27 @@ class Device:
 		self.__vendor = Vendors.Lattice
 		self.__generation = int(deviceString[3:4])
 
-		if   (self.__generation == 3):	self._DecodeLatticeECP3(deviceString)
-		elif (self.__generation == 5):	self._DecodeLatticeECP5(deviceString)
-		else:														raise ConfigurationException("Unknown Lattice ECP generation.")
+		if   (self.__generation == 3):  self._DecodeLatticeECP3(deviceString)
+		elif (self.__generation == 5):  self._DecodeLatticeECP5(deviceString)
+		else:                            raise ConfigurationException("Unknown Lattice ECP generation.")
 
 		# "ECP5UM-45F"
 		print("{RED}Device._DecodeLattice(): not fully implemented for Lattice devices.{NOCOLOR}".format(**Init.Foreground))
 
 	def _DecodeLatticeECP3(self, deviceString):
-		self.__subtype =	SubTypes.NoSubType
-		self.__number =		int(deviceString[5:8])
+		self.__subtype =  SubTypes.NoSubType
+		self.__number =    int(deviceString[5:8])
 
 	def _DecodeLatticeECP5(self, deviceString):
 		familyToken = deviceString[4:6].lower()
 		if (familyToken == "u-"):
-			self.__subtype =		SubTypes.U
-			self.__number =			int(deviceString[6:8])
-			self.__speedGrade =	int(deviceString[9:10])
-			self.__package =		Packages(deviceString[10:15])
+			self.__subtype =    SubTypes.U
+			self.__number =      int(deviceString[6:8])
+			self.__speedGrade =  int(deviceString[9:10])
+			self.__package =    Packages(deviceString[10:15])
 		elif (familyToken == "um"):
-			self.__subtype =		SubTypes.UM
-			self.__number =			int(deviceString[7:9])
+			self.__subtype =    SubTypes.UM
+			self.__number =      int(deviceString[7:9])
 			self.__speedGrade = int(deviceString[10:11])
 			self.__package = Packages(deviceString[11:16])
 		else:
@@ -347,34 +348,34 @@ class Device:
 			subtype = deviceRegExpMatch.group('st1') + deviceRegExpMatch.group('st2')
 			package = deviceRegExpMatch.group('pack')
 
-			if (subtype != ""):		self.__subtype = SubTypes[subtype.upper()]
-			else:									self.__subtype = SubTypes.NoSubType
+			if (subtype != ""):    self.__subtype = SubTypes[subtype.upper()]
+			else:                  self.__subtype = SubTypes.NoSubType
 
-			self.__number =			int(deviceRegExpMatch.group('no'))
-			self.__speedGrade =	int(deviceRegExpMatch.group('sg'))
-			self.__package =		Packages[package.upper()]
-			self.__pinCount =		int(deviceRegExpMatch.group('pins'))
+			self.__number =      int(deviceRegExpMatch.group('no'))
+			self.__speedGrade =  int(deviceRegExpMatch.group('sg'))
+			self.__package =    Packages[package.upper()]
+			self.__pinCount =    int(deviceRegExpMatch.group('pins'))
 		else:
 			raise ConfigurationException("RegExp mismatch.")
 
 	@property
-	def Vendor(self):			return self.__vendor
+	def Vendor(self):      return self.__vendor
 	@property
-	def Family(self):			return self.__family
+	def Family(self):      return self.__family
 	@property
-	def Device(self):			return self.__device
+	def Device(self):      return self.__device
 	@property
-	def Generation(self):	return self.__generation
+	def Generation(self):  return self.__generation
 	@property
-	def Number(self):			return self.__number
+	def Number(self):      return self.__number
 	@property
-	def SpeedGrade(self):	return self.__speedGrade
+	def SpeedGrade(self):  return self.__speedGrade
 	@property
-	def PinCount(self):		return self.__pinCount
+	def PinCount(self):    return self.__pinCount
 	@property
-	def Package(self):		return self.__package
+	def Package(self):    return self.__package
 	@property
-	def Name(self):				return self.FullName.upper()
+	def Name(self):        return self.FullName.upper()
 
 	# @CachedReadOnlyProperty
 	@property
@@ -456,15 +457,16 @@ class Device:
 	
 	def GetVariables(self):
 		result = {
-			"DeviceShortName" :		self.ShortName,
-			"DeviceFullName" :		self.FullName,
-			"DeviceVendor" :			str(self.Vendor),
-			"DeviceFamily" :			str(self.Family),
-			"DeviceGeneration" :	self.Generation,
-			"DeviceNumber" :			self.Number,
-			"DeviceSpeedGrade" :	self.SpeedGrade,
-			"DevicePackage" :			self.Package,
-			"DevicePinCount" :		self.PinCount
+			"DeviceShortName" :    self.ShortName,
+			"DeviceFullName" :    self.FullName,
+			"DeviceVendor" :      str(self.Vendor),
+			"DeviceFamily" :      str(self.Family),
+			"DeviceGeneration" :  self.Generation,
+			"DeviceSeries" :      self.Series,
+			"DeviceNumber" :      self.Number,
+			"DeviceSpeedGrade" :  self.SpeedGrade,
+			"DevicePackage" :      self.Package,
+			"DevicePinCount" :    self.PinCount
 		}
 		return result
 	
@@ -506,9 +508,9 @@ class Board:
 		self.__boardName = boardName
 
 	@property
-	def Name(self):			return self.__boardName
+	def Name(self):      return self.__boardName
 	@property
-	def Device(self):		return self.__device
+	def Device(self):    return self.__device
 	
 	def GetVariables(self):
 		result = {

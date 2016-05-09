@@ -3,9 +3,9 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
 #
-# Python Class:			TODO
+# Python Class:      TODO
 #
 # Description:
 # ------------------------------------
@@ -16,13 +16,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,12 +32,6 @@
 # ==============================================================================
 
 # entry point
-from collections import OrderedDict
-from pathlib import Path
-from textwrap import dedent
-
-from Base.Configuration import ConfigurationException
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -47,12 +41,16 @@ else:
 
 
 # load dependencies
-from lib.Decorators			import ILazyLoadable, LazyLoadTrigger
-from Base.Exceptions		import CommonException
-from Base.Project				import Project as BaseProject, File, FileTypes, VHDLSourceFile, VerilogSourceFile, CocotbSourceFile  #, ProjectFile
-from Parser.FilesParser	import FilesParserMixIn
-from Parser.RulesParser	import RulesParserMixIn
-from PoC								import __POC_SOLUTION_KEYWORD__, __POC_PROJECT_KEYWORD__
+from collections import OrderedDict
+from textwrap import dedent
+
+from lib.Decorators      import ILazyLoadable, LazyLoadTrigger
+from Base.Exceptions    import CommonException
+from Base.Configuration import ConfigurationException
+from Base.Project        import Project as BaseProject, File, FileTypes, VHDLSourceFile, VerilogSourceFile, CocotbSourceFile  #, ProjectFile
+from Parser.FilesParser  import FilesParserMixIn
+from Parser.RulesParser  import RulesParserMixIn
+from PoC                import __POC_SOLUTION_KEYWORD__, __POC_PROJECT_KEYWORD__
 
 
 class Base(ILazyLoadable):
@@ -63,19 +61,19 @@ class Base(ILazyLoadable):
 	def __init__(self, host, sectionPrefix, sectionID, parent):
 		ILazyLoadable.__init__(self)
 
-		self._host =					host
-		self._id =						sectionID
-		self._configSection =	"{0}.{1}".format(sectionPrefix, sectionID)
-		self._parent =				parent
+		self._host =          host
+		self._id =            sectionID
+		self._configSection =  "{0}.{1}".format(sectionPrefix, sectionID)
+		self._parent =        parent
 
 		self._Load()
 
 	@property
-	def ID(self):									return self._id
+	def ID(self):                  return self._id
 	@property
-	def Parent(self):							return self._parent
+	def Parent(self):              return self._parent
 	@property
-	def ConfigSectionName(self):	return self._configSection
+	def ConfigSectionName(self):  return self._configSection
 
 	def _Load(self):
 		"""Implement this method for early loading."""
@@ -84,7 +82,7 @@ class Base(ILazyLoadable):
 
 class Repository(Base):
 	def __init__(self, host):
-		self._solutions =	{}
+		self._solutions =  {}
 
 		super().__init__(host, "SOLUTION", "Solutions", None)
 
@@ -139,15 +137,15 @@ class Repository(Base):
 
 
 class Solution(Base):
-	__SOLUTION_CONFIG_FILE__ =	"solution.config.ini"
-	__SOLUTION_DEFAULT_FILE__ =	"solution.defaults.ini"
+	__SOLUTION_CONFIG_FILE__ =  "solution.config.ini"
+	__SOLUTION_DEFAULT_FILE__ =  "solution.defaults.ini"
 
 	def __init__(self, host, slnID, parent):
 		super().__init__(host, "SOLUTION", slnID, parent)
 
-		self._name =			None
-		self._path =			None
-		self._projects =	{}
+		self._name =      None
+		self._path =      None
+		self._projects =  {}
 
 	def Register(self):
 		self._host.PoCConfig[self._configSection] = OrderedDict()
@@ -289,23 +287,23 @@ class FileListFile(File, FilesParserMixIn):
 		super().__init__(file, project=project, fileSet=fileSet)
 		FilesParserMixIn.__init__(self)
 
-		self._variables =								None
+		self._variables =                None
 
 		# self.__classInclude
-		self._classFileListFile =				FileListFile
-		self._classVHDLSourceFile =			VHDLSourceFile
-		self._classVerilogSourceFile =	VerilogSourceFile
-		self._classCocotbSourceFile =		CocotbSourceFile
+		self._classFileListFile =        FileListFile
+		self._classVHDLSourceFile =      VHDLSourceFile
+		self._classVerilogSourceFile =  VerilogSourceFile
+		self._classCocotbSourceFile =    CocotbSourceFile
 
 	def Parse(self):
 		# print("FileListFile.Parse:")
-		if (self._fileSet is None):											raise CommonException("File '{0!s}' is not associated to a fileset.".format(self._file))
-		if (self._project is None):											raise CommonException("File '{0!s}' is not associated to a project.".format(self._file))
-		if (self._project.RootDirectory is None):				raise CommonException("No RootDirectory configured for this project.")
+		if (self._fileSet is None):                      raise CommonException("File '{0!s}' is not associated to a fileset.".format(self._file))
+		if (self._project is None):                      raise CommonException("File '{0!s}' is not associated to a project.".format(self._file))
+		if (self._project.RootDirectory is None):        raise CommonException("No RootDirectory configured for this project.")
 
 		# prepare FilesParserMixIn environment
 		self._rootDirectory = self.Project.RootDirectory
-		self._variables =			self.Project.GetVariables()
+		self._variables =      self.Project.GetVariables()
 		self._Parse()
 		self._Resolve()
 
@@ -328,16 +326,16 @@ class RulesFile(File, RulesParserMixIn):
 		super().__init__(file, project=project, fileSet=fileSet)
 		RulesParserMixIn.__init__(self)
 
-		self._variables =								None
+		self._variables =                None
 
 	def Parse(self):
-		if (self._fileSet is None):											raise CommonException("File '{0!s}' is not associated to a fileset.".format(self._file))
-		if (self._project is None):											raise CommonException("File '{0!s}' is not associated to a project.".format(self._file))
-		if (self._project.RootDirectory is None):				raise CommonException("No RootDirectory configured for this project.")
+		if (self._fileSet is None):                      raise CommonException("File '{0!s}' is not associated to a fileset.".format(self._file))
+		if (self._project is None):                      raise CommonException("File '{0!s}' is not associated to a project.".format(self._file))
+		if (self._project.RootDirectory is None):        raise CommonException("No RootDirectory configured for this project.")
 
 		# prepare FilesParserMixIn environment
 		self._rootDirectory = self.Project.RootDirectory
-		self._variables =			self.Project.GetVariables()
+		self._variables =      self.Project.GetVariables()
 		self._Parse()
 		self._Resolve()
 

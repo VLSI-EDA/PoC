@@ -93,20 +93,9 @@ architecture tb of stat_Average_tb is
 	
 	type T_RESULT_VECTOR	is array(NATURAL range <>) of T_RESULT;
 	
-	-- constant RESULT				: T_RESULT_VECTOR		:= (
-		-- (Minimum => 3,	Count => 1),
-		-- (Minimum => 5,	Count => 3),
-		-- (Minimum => 7,	Count => 6),
-		-- (Minimum => 9,	Count => 1),
-		-- (Minimum => 10,	Count => 4),
-		-- (Minimum => 11,	Count => 2),
-		-- (Minimum => 12,	Count => 7),
-		-- (Minimum => 13,	Count => 3)
-	-- );
-	
 	constant DATA_BITS		: POSITIVE				:= 8;
 	constant COUNTER_BITS	: POSITIVE				:= 16;
-	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for ???");
+	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DATA_BITS=" & INTEGER'image(DATA_BITS) & "  COUNTER_BITS=" & INTEGER'image(COUNTER_BITS));
 
   -- component ports
   signal Clock		: STD_LOGIC;
@@ -125,8 +114,8 @@ begin
 	simInitialize;
 	-- generate global testbench clock
 	simGenerateClock(simTestID,			Clock,	CLOCK_FREQ);
-	simGenerateWaveform(simTestID,	Reset,	simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
-	simGenerateWaveform(simTestID,	Enable,	simGenerateWaveform_Reset(Pause => 40 ns, ResetPulse => (VALUES'length * 10 ns)));
+	simGenerateWaveform(simTestID,	Reset,	simGenerateWaveform_Reset(Pause =>  5 ns, ResetPulse => 10 ns));
+	simGenerateWaveform(simTestID,	Enable,	simGenerateWaveform_Reset(Pause => 25 ns, ResetPulse => (VALUES'length * 10 ns)));
   
   -- component instantiation
   UUT: entity PoC.stat_Average
@@ -149,25 +138,29 @@ begin
 
 	procStimuli : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator and Checker");
-		variable good					: BOOLEAN;
+		variable ExpectedCnt	: NATURAL;
+		variable ExpectedSum	: NATURAL;
+		variable ExpectedAvg	: NATURAL;
 	begin
 		DataIn		<= (others => '0');
-		wait until (Enable = '1') and rising_edge(Clock);
+		wait until (Enable = '1') and falling_edge(Clock);
 
 		for i in VALUES'range loop
 			--Enable	<= to_sl(VALUES(i) /= 35);
 			DataIn	<= to_slv(VALUES(i), DataIn'length);
-			wait until rising_edge(Clock);
+			wait until falling_edge(Clock);
 		end loop;
 
-		-- test result after all cycles
-		-- good	:= TRUE;
---		good := (slv_and(Valids) = '1');
---		for i in RESULT'range loop
---			good	:= good and (RESULT(i).Minimum = unsigned(Minimums_slvv(i))) and (RESULT(i).Count = unsigned(Counts_slvv(i)));
---		end loop;
-		-- simAssertion(good, "Test failed.");
-
+		wait until (Valid = '0') and rising_edge(Clock);
+		
+		ExpectedCnt := VALUES'length;
+		ExpectedSum := isum(VALUES);
+		ExpectedAvg := ExpectedSum / ExpectedCnt;
+		
+		simAssertion((unsigned(Count) = ExpectedCnt), "Count mismatch. Count=" & INTEGER'image(to_integer(unsigned(Count))) & "  Expected=" & INTEGER'image(ExpectedCnt));
+		simAssertion((unsigned(Sum) = ExpectedSum), "Sum mismatch. Sum=" & INTEGER'image(to_integer(unsigned(Sum))) & "  Expected=" & INTEGER'image(ExpectedSum));
+		simAssertion((unsigned(Average) = ExpectedAvg), "Average mismatch. Average=" & INTEGER'image(to_integer(unsigned(Average))) & "  Expected=" & INTEGER'image(ExpectedAvg));
+		
 		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		wait;  -- forever

@@ -17,6 +17,8 @@ elseif (DeviceVendor = "Xilinx") then
 	# Load external vendor libraries
 	include			"lib/Xilinx.files"													# Xilinx primitives
 	vhdl	poc		"src/io/ddrio/ddrio_in_xilinx.vhdl"					# 
+elseif ((Environment = "Simulation") and (DeviceVendor = "Generic")) then
+	# use a simple implementation to testing
 else
 	report "Only Altera and Xilinx are supported yet."
 end if

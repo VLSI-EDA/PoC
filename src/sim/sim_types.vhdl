@@ -46,7 +46,7 @@ package sim_types is
 	attribute pocIsSimulation		: BOOLEAN;
 	attribute pocIsSimulation of sim_types			: package is TRUE;
 
-	constant C_SIM_VERBOSE					: BOOLEAN		:= FALSE;		-- POC_VERBOSE
+	constant C_SIM_VERBOSE					: BOOLEAN		:= TRUE;		-- POC_VERBOSE
 
 	-- ===========================================================================
   -- Simulation Task and Status Management

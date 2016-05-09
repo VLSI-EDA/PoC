@@ -3,9 +3,10 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:					Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Class:			GTKWave specific classes
+# Python Class:      GTKWave specific classes
 #
 # Description:
 # ------------------------------------
@@ -16,13 +17,13 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,15 +40,16 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GTKWave")
 
-from pathlib								import Path
-from re											import compile as RegExpCompile
-from subprocess 						import check_output
 
-from Base.Configuration			import Configuration as BaseConfiguration, ConfigurationException
-from Base.Exceptions				import PlatformNotSupportedException
-from Base.Executable				import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
-from Base.Logging						import LogEntry, Severity
-from Base.ToolChain					import ToolChainException
+from pathlib                import Path
+from re                      import compile as RegExpCompile
+from subprocess             import check_output
+
+from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
+from Base.Exceptions        import PlatformNotSupportedException
+from Base.Executable        import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
+from Base.Logging            import LogEntry, Severity
+from Base.ToolChain          import ToolChainException
 
 
 class GTKWaveException(ToolChainException):
@@ -55,29 +57,29 @@ class GTKWaveException(ToolChainException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =			None
-	_toolName =		"GTKWave"
-	_section = 		"INSTALL.GTKWave"
+	_vendor =      None
+	_toolName =    "GTKWave"
+	_section =     "INSTALL.GTKWave"
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":								"3.3.71",
-				"InstallationDirectory":	"C:/Program Files (x86)/GTKWave",
-				"BinaryDirectory":				"${InstallationDirectory}/bin"
+				"Version":                "3.3.71",
+				"InstallationDirectory":  "C:/Program Files (x86)/GTKWave",
+				"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":								"3.3.71",
-				"InstallationDirectory":	"/usr/bin",
-				"BinaryDirectory":				"${InstallationDirectory}"
+				"Version":                "3.3.71",
+				"InstallationDirectory":  "/usr/bin",
+				"BinaryDirectory":        "${InstallationDirectory}"
 			}
 		},
 		"Darwin": {
 			_section: {
-				"Version":								"3.3.71",
-				"InstallationDirectory":	"/usr/bin",
-				"BinaryDirectory":				"${InstallationDirectory}"
+				"Version":                "3.3.71",
+				"InstallationDirectory":  "/usr/bin",
+				"BinaryDirectory":        "${InstallationDirectory}"
 			}
 		}
 	}
@@ -132,16 +134,16 @@ class Configuration(BaseConfiguration):
 
 class GTKWave(Executable):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		if (platform == "Windows"):			executablePath = binaryDirectoryPath/ "gtkwave.exe"
-		elif (platform == "Linux"):			executablePath = binaryDirectoryPath/ "gtkwave"
-		elif (platform == "Darwin"):		executablePath = binaryDirectoryPath/ "gtkwave"
-		else:																						raise PlatformNotSupportedException(self._platform)
+		if (platform == "Windows"):      executablePath = binaryDirectoryPath/ "gtkwave.exe"
+		elif (platform == "Linux"):      executablePath = binaryDirectoryPath/ "gtkwave"
+		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath/ "gtkwave"
+		else:                                            raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
-		self._binaryDirectoryPath =	binaryDirectoryPath
-		self._version =			version
+		self._binaryDirectoryPath =  binaryDirectoryPath
+		self._version =      version
 
 		self._hasOutput = False
 		self._hasWarnings = False
