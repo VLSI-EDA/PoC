@@ -1,14 +1,71 @@
-# common
+# Testbench name
+regexp=Testbench:
+colours=cyan
+count=stop
+
+=========
+# Python Exceptions
+regexp=\s*ERROR:
+colours=red
+count=stop
+=========
+regexp=\s*\wError:
+colours=yellow
+count=stop
+=========
+regexp=\s*\wException:
+colours=yellow
+count=stop
+=========
+regexp=\[SKIPPED DUE TO ERRORS\]
+colours=red
+count=stop
+
+# Colorize status keywords in simulation report
+=========
+regexp=INT\. ERROR
+colours=red
+count=stop
+=========
+regexp=SYS\. ERROR
+colours=red
+count=stop
+=========
+regexp=ANA\. ERROR
+colours=red
+count=stop
+=========
+regexp=ELAB\. ERROR
+colours=red
+count=stop
+=========
+regexp=SIM\. ERROR
+colours=red
+count=stop
+=========
+regexp=FAILED
+colours=red
+count=stop
+=========
 regexp=NO ASSERTS
 colours=yellow
 count=stop
 =========
-# deleted
-regexp=ERROR
-colours=red
-count=stop
-=========
-# created
 regexp=PASSED
 colours=green
 count=stop
+
+
+# Colorize summary line
+=========
+regexp=Passed: \d+
+colours=green
+=========
+regexp=No Asserts: \d+
+colours=yellow
+=========
+regexp=Failed: \d+
+colours=red
+=========
+regexp=Errors: \d+
+colours=red
