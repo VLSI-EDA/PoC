@@ -11,14 +11,14 @@ echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}             Configuring PoC            ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 
-echo "${CYAN}Copy config.private.ini into ./py directory${NOCOLOR}"
+echo -e "${CYAN}Copy config.private.ini into ./py directory${NOCOLOR}"
 cp ./tools/Travis-CI/config.private.ini ./py
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${RED}Copy of ./tools/Travis-CI/config.private.ini [FAILED]${NOCOLOR}"
 	exit 1
 fi
 
-echo "${CYAN}Copy my_project.vhdl into ./tb/common directory${NOCOLOR}"
+echo -e "${CYAN}Copy my_project.vhdl into ./tb/common directory${NOCOLOR}"
 cp ./tools/Travis-CI/my_project.vhdl ./tb/common
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${RED}Copy of ./tools/Travis-CI/my_project.vhdl [FAILED]${NOCOLOR}"
