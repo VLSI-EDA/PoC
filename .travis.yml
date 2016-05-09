@@ -23,6 +23,5 @@ install:
 before_script:
   - ./tools/Travis-CI/ghdl.setup.sh
   - ./tools/Travis-CI/poc.setup.sh
-  - export POC_ENTITY="PoC.io.ddrio.*"
 script:
-  - ./tools/Travis-CI/poc.run.sh $POC_ENTITY
+  - ./tools/Travis-CI/poc.run.sh "PoC.*"
