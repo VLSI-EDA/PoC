@@ -8,13 +8,13 @@ addons:
     packages:
     - gnat
 before_install:
-- sudo apt-get install -y libgnat-4.8
+- sudo apt-get install -y libgnat-4.8 grc
+- sudo ./tools/Travis-CI/grc.setup.sh
 install:
 - pip3 install -r tools/Travis-CI/requirements.txt
 before_script:
 - gnat
 - ./tools/Travis-CI/ghdl.setup.sh
-- ./tools/Travis-CI/grc.setup.sh
 - ./tools/Travis-CI/poc.setup.sh
 script:
 - ./tools/Travis-CI/poc.run.sh
