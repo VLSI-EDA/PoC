@@ -4,13 +4,18 @@ matrix:
     - os: linux
       sudo: required
       dist: trusty
-      env: CONFIG="Trusty,Python3.5,libgnat-4.8,grc-1.9"
+      env:
+        - CONFIG="Trusty,Python3.5,libgnat-4.8,grc-1.9"
+        - POC_ENTITY="PoC.io.ddrio.*"
       python: "3.5"
       before_install:
         - sudo apt-get install -y libgnat-4.8
         - sudo ./tools/Travis-CI/grc.setup.sh
+  allow_failures:
     - os: linux
-      env: CONFIG="Precise,Python3.5,gnat-5"
+      env:
+        - CONFIG="Precise,Python3.5,gnat-5"
+        - POC_ENTITY="PoC.io.ddrio.*"
       python: "3.5"
       addons:
         apt:
@@ -22,4 +27,4 @@ before_script:
   - ./tools/Travis-CI/ghdl.setup.sh
   - ./tools/Travis-CI/poc.setup.sh
 script:
-  - ./tools/Travis-CI/poc.run.sh
+  - ./tools/Travis-CI/poc.run.sh $POC_ENTITY

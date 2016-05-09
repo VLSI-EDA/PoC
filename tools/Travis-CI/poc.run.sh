@@ -29,7 +29,7 @@ if grcat $TRAVIS_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
 fi
 
 echo -e "Running all testbenches..."
-$POCROOT/poc.sh -q ghdl PoC.io.ddrio.\*
+$POCROOT/poc.sh -q ghdl $1
 ret=$?
 
 # Cleanup and exit
