@@ -1,66 +1,30 @@
 language: python
-python:
-- "3.5"
+python: "3.5"
 matrix:
   include:
-  - os: linux
-    sudo: required
-    dist: trusty
-#    addons:
-#      apt:
-#        packages:
-#        - gnat-5
-#        - grc
-    before_install:
-# libgnat-4.8 is required by GHDL, because it's build with 4.8
-    - sudo apt-get install -y libgnat-4.8
-# Ubuntu Trusty has only grc 1.5 included
-    - sudo ./tools/Travis-CI/grc.setup.sh
-    install:
-    - pip3 install -r tools/Travis-CI/requirements.txt
-    before_script:
-    - ./tools/Travis-CI/ghdl.setup.sh
-    - ./tools/Travis-CI/poc.setup.sh
-    script:
-    - ./tools/Travis-CI/poc.run.sh
-#    after_success:
-#    - 
-#    after_failure:
-#    - 
-#    before_deploy:
-#    - 
-#    deploy:
-#    - 
-#    after_deploy:
-#    - 
-#    after_script:
-#    - 
+    - os: linux
+      sudo: required
+      dist: trusty
+      before_install:
+        - sudo apt-get install -y libgnat-4.8
+        - sudo ./tools/Travis-CI/grc.setup.sh
+      install:
+        - pip3 install -r tools/Travis-CI/requirements.txt
+      before_script:
+        - ./tools/Travis-CI/ghdl.setup.sh
+        - ./tools/Travis-CI/poc.setup.sh
+      script:
+        - ./tools/Travis-CI/poc.run.sh
 # experimental without sudo rights
-  - os: linux
-    addons:
-      apt:
-        packages:
-        - gnat-5
-#        - grc
-    before_install:
-# Ubuntu Trusty has only grc 1.5 included
-#    - sudo ./tools/Travis-CI/grc.setup.sh
-    install:
-    - pip3 install -r tools/Travis-CI/requirements.txt
-    before_script:
-    - ./tools/Travis-CI/ghdl.setup.sh
-    - ./tools/Travis-CI/poc.setup.sh
-    script:
-    - ./tools/Travis-CI/poc.run.sh
-#    after_success:
-#    - 
-#    after_failure:
-#    - 
-#    before_deploy:
-#    - 
-#    deploy:
-#    - 
-#    after_deploy:
-#    - 
-#    after_script:
-#    - 
+    - os: linux
+      addons:
+        apt:
+          packages:
+            - gnat-5
+      install:
+        - pip3 install -r tools/Travis-CI/requirements.txt
+      before_script:
+        - ./tools/Travis-CI/ghdl.setup.sh
+        - ./tools/Travis-CI/poc.setup.sh
+      script:
+        - ./tools/Travis-CI/poc.run.sh
