@@ -53,7 +53,7 @@ from Compiler.LSECompiler            import Compiler as LSECompiler
 from Compiler.QuartusCompiler        import Compiler as MapCompiler
 from Compiler.XCOCompiler            import Compiler as XCOCompiler
 from Compiler.XSTCompiler            import Compiler as XSTCompiler
-from Compiler.SynthCompiler          import Compiler as SynthCompiler
+from Compiler.VivadoCompiler          import Compiler as VivadoCompiler
 from PoC.Config                      import Board
 from PoC.Entity                      import Root, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
 from PoC.Solution                    import Solution, Repository
@@ -974,14 +974,14 @@ class PoC(ILogable, ArgParseMixin):
 		Exit.exit()
 
 	# ----------------------------------------------------------------------------
-	# create the sub-parser for the "synth" command
+	# create the sub-parser for the "vivado" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("synth", help="Compile a PoC IP core with Xilinx Vivado Synth to a design checkpoint")
+	@CommandAttribute("vivado", help="Compile a PoC IP core with Xilinx Vivado Synth to a design checkpoint")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@NoCleanUpAttribute()
-	def HandleSynthCompilation(self, args):
+	def HandleVivadoCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
 		self._CheckVivadoEnvironment()
@@ -989,7 +989,7 @@ class PoC(ILogable, ArgParseMixin):
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
-		compiler = SynthCompiler(self, self.DryRun, args.NoCleanUp)
+		compiler = VivadoCompiler(self, self.DryRun, args.NoCleanUp)
 		compiler.RunAll(fqnList, board)
 
 		Exit.exit()
