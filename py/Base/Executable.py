@@ -58,8 +58,8 @@ class CommandLineArgument(type):
 	_value = None
 	
 	# def __new__(mcls, name, bases, nmspc):
-		# print("CommandLineArgument.new: %s - %s" % (name, nmspc))
-		# return super(CommandLineArgument, mcls).__new__(mcls, name, bases, nmspc)
+	# 	print("CommandLineArgument.new: %s - %s" % (name, nmspc))
+	# 	return super(CommandLineArgument, mcls).__new__(mcls, name, bases, nmspc)
 
 class ExecutableArgument(CommandLineArgument):
 	@property

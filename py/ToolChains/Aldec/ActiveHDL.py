@@ -437,20 +437,20 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 				self._LogNormal("    " + ("-" * 76))
 
 
-					# # assemble acom command as list of parameters
-					# parameterList = [
-						# str(aComExecutablePath),
-						# '-O3',
-						# '-relax',
-						# '-l', 'acom.log',
-						# vhdlStandard,
-						# '-work', vhdlLibraryName,
-						# str(vhdlFilePath)
-					# ]
+		# 			# assemble acom command as list of parameters
+		# 			parameterList = [
+		# 				str(aComExecutablePath),
+		# 				'-O3',
+		# 				'-relax',
+		# 				'-l', 'acom.log',
+		# 				vhdlStandard,
+		# 				'-work', vhdlLibraryName,
+		# 				str(vhdlFilePath)
+		# 			]
 		# parameterList = [
-			# str(aSimExecutablePath)#,
-			# # '-vopt',
-			# # '-t', '1fs',
+		# 	str(aSimExecutablePath)#,
+		# 	# '-vopt',
+		# 	# '-t', '1fs',
 		# ]
 
 

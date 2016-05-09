@@ -42,12 +42,12 @@ else:
 
 
 # load dependencies
-from pathlib                  import Path
+from pathlib                    import Path
 
-from Base.Project              import VHDLVersion, ToolChain, Tool
-from Base.Simulator            import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult, SkipableSimulatorException
-from ToolChains.Xilinx.Xilinx  import XilinxProjectExportMixIn
-from ToolChains.Xilinx.ISE    import ISE, ISESimulator, ISEException
+from Base.Project               import ToolChain, Tool
+from Base.Simulator             import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from ToolChains.Xilinx.Xilinx   import XilinxProjectExportMixIn
+from ToolChains.Xilinx.ISE      import ISE, ISESimulator, ISEException
 
 
 class Simulator(BaseSimulator, XilinxProjectExportMixIn):

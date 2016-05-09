@@ -139,7 +139,9 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 
 		# read XST options file template
 		self._LogDebug("Reading Xilinx Compiler Tool option file from '{0!s}'".format(netlist.XstTemplateFile))
-		if (not netlist.XstTemplateFile.exists()):    raise CompilerException("XST template files '{0!s}' not found.".format(netlist.XstTemplateFile)) from FileNotFoundError(str(netlist.XstTemplateFile))
+		if (not netlist.XstTemplateFile.exists()):
+			raise CompilerException("XST template files '{0!s}' not found.".format(netlist.XstTemplateFile))\
+				from FileNotFoundError(str(netlist.XstTemplateFile))
 
 		with netlist.XstTemplateFile.open('r') as fileHandle:
 			xstFileContent = fileHandle.read()

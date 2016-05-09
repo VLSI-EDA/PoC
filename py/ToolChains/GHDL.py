@@ -185,9 +185,9 @@ class GHDL(Executable):
 	def HasErrors(self):            return self._hasErrors
 
 	def deco(Arg):
-		def getter(self):
+		def getter(_):
 			return Arg.Value
-		def setter(self, value):
+		def setter(_, value):
 			Arg.Value = value
 		return property(getter, setter)
 

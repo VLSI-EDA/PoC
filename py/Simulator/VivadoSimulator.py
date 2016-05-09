@@ -42,13 +42,13 @@ else:
 
 
 # load dependencies
-from pathlib                  import Path
+from pathlib                    import Path
 
-from Base.Project              import ToolChain, Tool
-from Base.Simulator            import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult, SkipableSimulatorException
-from Base.Logging              import Severity
-from ToolChains.Xilinx.Xilinx  import XilinxProjectExportMixIn
-from ToolChains.Xilinx.Vivado  import Vivado, VivadoException
+from Base.Project               import ToolChain, Tool
+from Base.Simulator             import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from Base.Logging               import Severity
+from ToolChains.Xilinx.Xilinx   import XilinxProjectExportMixIn
+from ToolChains.Xilinx.Vivado   import Vivado, VivadoException
 
 
 class Simulator(BaseSimulator, XilinxProjectExportMixIn):

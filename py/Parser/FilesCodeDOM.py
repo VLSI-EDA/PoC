@@ -990,7 +990,7 @@ class Document(BlockStatement):
 			while True:
 				token = yield
 				parser.send(token)
-		except MatchingParserResult as ex:
+		except MatchingParserResult:
 			raise MatchingParserResult(result)
 	
 	def __str__(self, indent=0):

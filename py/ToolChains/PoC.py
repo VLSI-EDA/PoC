@@ -41,11 +41,11 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.PoC")
 
 
-from os                    import environ
+from os                   import environ
 from pathlib              import Path
-from subprocess            import check_output, CalledProcessError
+from subprocess           import check_output, CalledProcessError
 
-from Base.Configuration    import Configuration as BaseConfiguration
+from Base.Configuration   import Configuration as BaseConfiguration
 
 
 class Configuration(BaseConfiguration):
@@ -68,7 +68,7 @@ class Configuration(BaseConfiguration):
 			latestTagName = latestTagName[:-1]
 			self._host._LogNormal("  PoC version: {0} (found in git)".format(latestTagName))
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = latestTagName
-		except CalledProcessError as ex:
+		except CalledProcessError:
 			print("WARNING: Can't get version information from latest git tag.")
 			pocVersion = self._template['ALL']['INSTALL.PoC']['Version']
 			self._host._LogNormal("  PoC version: {0} (found in default configuration)".format(pocVersion))
@@ -80,7 +80,7 @@ class Configuration(BaseConfiguration):
 
 	def __CheckForGit(self):
 		try:
-			gitVersionString = check_output(["git", "--version"], universal_newlines=True)
+			check_output(["git", "--version"], universal_newlines=True)
 			return True
 		except OSError:
 			return False

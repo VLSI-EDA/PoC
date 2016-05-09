@@ -699,8 +699,12 @@ class PoC(ILogable, ArgParseMixin):
 				self._LogVerbose("Reading solution file...")
 				self._LogDebug("  {0!s}".format(solutionConfigFile))
 				self._LogDebug("  {0!s}".format(solutionDefaultsFile))
-				if not solutionConfigFile.exists():    raise NotConfiguredException("Solution's {0} configuration file '{1!s}' does not exist.".format(solutionName, solutionConfigFile))  from FileNotFoundError(str(solutionConfigFile))
-				if not solutionDefaultsFile.exists():  raise NotConfiguredException("Solution's {0} defaults file '{1!s}' does not exist.".format(solutionName, solutionDefaultsFile))  from FileNotFoundError(str(solutionDefaultsFile))
+				if not solutionConfigFile.exists():
+					raise NotConfiguredException("Solution's {0} configuration file '{1!s}' does not exist.".format(solutionName, solutionConfigFile)) \
+						from FileNotFoundError(str(solutionConfigFile))
+				if not solutionDefaultsFile.exists():
+					raise NotConfiguredException("Solution's {0} defaults file '{1!s}' does not exist.".format(solutionName, solutionDefaultsFile)) \
+						from FileNotFoundError(str(solutionDefaultsFile))
 				self.__pocConfig.read(str(solutionConfigFile))
 				self.__pocConfig.read(str(solutionDefaultsFile))
 

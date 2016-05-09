@@ -30,7 +30,7 @@
 # ==============================================================================
 #
 from lib.Parser      import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult
-from lib.Parser      import SpaceToken, CharacterToken, StringToken, NumberToken
+from lib.Parser      import SpaceToken, CharacterToken, StringToken
 from lib.Parser      import Statement, BlockStatement
 from Parser.CodeDOM  import EmptyLine, CommentLine, BlockedStatement as BlockStatementBase
 
