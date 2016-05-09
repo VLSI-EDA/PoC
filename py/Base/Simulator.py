@@ -33,9 +33,6 @@
 # ==============================================================================
 #
 # entry point
-from datetime import datetime
-from time import time
-
 if __name__ != "__main__":
 	pass
 	# place library initialization code here
@@ -45,17 +42,20 @@ else:
 
 
 # load dependencies
+import shutil
+from datetime          import datetime
 from enum              import Enum, unique
 from os                import chdir
 
 from lib.Functions     import Init
 from lib.Parser        import ParserException
-from Base.Exceptions  import ExceptionBase, CommonException
+from Base.Exceptions   import ExceptionBase, CommonException
 from Base.Logging      import ILogable, LogEntry
 from Base.Project      import Environment, ToolChain, Tool, VHDLVersion
 from PoC.Entity        import WildCard
 from PoC.Solution      import VirtualProject, FileListFile
 from PoC.TestCase      import TestSuite, TestCase, Status
+
 
 VHDL_TESTBENCH_LIBRARY_NAME = "test"
 
@@ -132,11 +132,13 @@ class Simulator(ILogable):
 
 	def _PrepareSimulationEnvironment(self):
 		self._LogNormal("Preparing simulation environment...")
-		# create temporary directory if not existent
-		if (not self.Directories.Working.exists()):
-			self._LogVerbose("Creating temporary directory for simulator files.")
-			self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
-			self.Directories.Working.mkdir(parents=True)
+
+		# create fresh temporary directory
+		self._LogVerbose("Creating fresh temporary directory for simulator files.")
+		self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
+		if (self.Directories.Working.exists()):
+			shutil.rmtree(str(self.Directories.Working))
+		self.Directories.Working.mkdir(parents=True)
 
 		# change working directory to temporary path
 		self._LogVerbose("Changing working directory to temporary directory.")
@@ -218,7 +220,7 @@ class Simulator(ILogable):
 			self.Run(testbench, *args, **kwargs)
 			testCase.UpdateStatus(testbench.Result)
 		except SkipableSimulatorException as ex:
-			testCase.Status = self.__SIMULATION_STATE_TO_TESTCASE_STATUS__[testbench._state]
+			testCase.Status = self.__SIMULATION_STATE_TO_TESTCASE_STATUS__[self._state]
 
 			self._LogQuiet("  {RED}ERROR:{NOCOLOR} {ExMsg}".format(ExMsg=ex.message, **Init.Foreground))
 			cause = ex.__cause__
@@ -229,7 +231,7 @@ class Simulator(ILogable):
 					self._LogQuiet("      {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
 			self._LogQuiet("  {RED}[SKIPPED DUE TO ERRORS]{NOCOLOR}".format(**Init.Foreground))
 		except SimulatorException:
-			testCase.Status = self.__SIMULATION_STATE_TO_TESTCASE_STATUS__[testbench._state]
+			testCase.Status = self.__SIMULATION_STATE_TO_TESTCASE_STATUS__[self._state]
 			raise
 		except ExceptionBase:
 			testCase.Status = Status.SystemError
@@ -262,7 +264,7 @@ class Simulator(ILogable):
 		self.PrintSimulationReportLine(self._testSuite, 0, 24)
 
 		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
-		self._LogQuiet("Time: {time: >5}  Count:  {count: >3}  Passed:  {passed: >3}  No Asserts: {noassert: >2}  Failed: {failed: >2}  Errors: {error: >2}".format(
+		self._LogQuiet("Time: {time: >5}  Count: {count: <3}  Passed: {passed: <3}  No Asserts: {noassert: <2}  Failed: {failed: <2}  Errors: {error: <2}".format(
 				time=to_time(self._testSuite.OverallRunTime),
 				count=self._testSuite.Count,
 				passed=self._testSuite.PassedCount,
@@ -277,18 +279,20 @@ class Simulator(ILogable):
 		Status.SystemError:         "DARK_RED",
 		Status.AnalyzeError:        "DARK_RED",
 		Status.ElaborationError:    "DARK_RED",
-		Status.SimulationError:     "DARK_RED",
+		Status.OptimizationError:   "DARK_RED",
+		Status.SimulationError:     "RED",
 		Status.SimulationFailed:    "RED",
 		Status.SimulationNoAsserts: "YELLOW",
 		Status.SimulationSuccess:   "GREEN"
 	}
 
 	__SIMULATION_REPORT_STATUS_TEXT_TABLE__ = {
-		Status.Unknown:             "--- ?? ---",
+		Status.Unknown:             "-- ?? --",
 		Status.SystemError:         "SYS. ERROR",
 		Status.AnalyzeError:        "ANA. ERROR",
 		Status.ElaborationError:    "ELAB. ERROR",
-		Status.SimulationError:     "ERROR",
+		Status.OptimizationError:   "OPT. ERROR",
+		Status.SimulationError:     "SIM. ERROR",
 		Status.SimulationFailed:    "FAILED",
 		Status.SimulationNoAsserts: "NO ASSERTS",
 		Status.SimulationSuccess:   "PASSED"
@@ -302,7 +306,7 @@ class Simulator(ILogable):
 
 		_indent = "  " * indent
 		for group in testObject.TestGroups.values():
-			pattern = "{indent}{{groupName: <{nameColumnWidth}}} |         | ".format(indent=_indent, nameColumnWidth=nameColumnWidth)
+			pattern = "{indent}{{groupName: <{nameColumnWidth}}} |       | ".format(indent=_indent, nameColumnWidth=nameColumnWidth)
 			self._LogQuiet(pattern.format(groupName=group.Name))
 			self.PrintSimulationReportLine(group, indent+1, nameColumnWidth-2)
 		for testCase in testObject.TestCases.values():

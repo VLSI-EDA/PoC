@@ -194,7 +194,8 @@ if [ $PoC_ExitCode -eq 0 ]; then
 	fi
 	
 	# launching python script
-	exec $Python_Interpreter $Python_Script $Python_ScriptParameters
+	set -f
+	$Python_Interpreter $Python_Script $Python_ScriptParameters
 	PoC_ExitCode=$?
 fi
 

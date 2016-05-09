@@ -8,4 +8,4 @@
 include				"src/misc/sync/sync_Vector.files"						# Unit Under Test
 
 # Testbench file(s)
-vhdl		test	"tb/misc/sync/sync_vector_tb.vhdl"					# Testbench
+vhdl		test	"tb/misc/sync/sync_Vector_tb.vhdl"					# Testbench

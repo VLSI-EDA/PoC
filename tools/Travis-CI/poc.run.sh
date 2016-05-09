@@ -20,6 +20,6 @@ echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${CYAN}mkdir -p $POC_GHDL_DIR && cd $POC_GHDL_DIR${NOCOLOR}"
 mkdir -p $POC_GHDL_DIR && cd $POC_GHDL_DIR
 
-echo -e "Starting first test: PoC.arith.prng"
+echo -e "Running all testbenches..."
 $POCROOT/poc.sh -q ghdl PoC.\*
 

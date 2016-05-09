@@ -133,7 +133,7 @@ begin
 	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
 		signal DataOut_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
 		signal DataOut_low_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		signal DataOut_low_d2	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		signal OutputEnable_d	: STD_LOGIC;
 		signal Pad_o					: STD_LOGIC_VECTOR(BITS - 1 downto 0);
 		
 		signal Pad_d_fe				: STD_LOGIC_VECTOR(BITS - 1 downto 0);
@@ -142,22 +142,17 @@ begin
 	begin
 		DataOut_high_d	<= DataOut_high		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 		DataOut_low_d		<= DataOut_low		when rising_edge(ClockOut) and (ClockOutEnable = '1');
-		DataOut_low_d2	<= DataOut_low_d	when falling_edge(ClockOut) and (ClockOutEnable = '1');		
+		OutputEnable_d	<= OutputEnable		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 		
-		process(ClockOut, OutputEnable, DataOut_high_d, DataOut_low_d2)
+		process(ClockOut, OutputEnable, DataOut_high_d, DataOut_low_d)
 			type T_MUX is array(BIT) of STD_LOGIC_VECTOR(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
-			variable MuxControl	: BIT		:= '0';
 		begin
-			MuxInput('0')	:= DataOut_high_d;
-			MuxInput('1')	:= DataOut_low_d2;
+			MuxInput('1')	:= DataOut_high_d;
+			MuxInput('0')	:= DataOut_low_d;
 		
-			if ClockOut'event then
-				MuxControl := not MuxControl;
-			end if;
-		
-			if (OutputEnable = '1') then
-				Pad_o		<= MuxInput(MuxControl);
+			if (OutputEnable_d = '1') then
+				Pad_o		<= MuxInput(to_bit(ClockOut));
 			else
 				Pad_o		<= (others => 'Z');
 			end if;

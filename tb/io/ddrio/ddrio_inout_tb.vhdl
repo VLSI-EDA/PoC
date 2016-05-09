@@ -72,7 +72,7 @@ architecture sim of ddrio_inout_tb is
 
 	-- delay from "ClockOut" input to output "Pad" of DUT
 	-- must be less than CLOCK_OUT_PERIOD/2
-	constant OUTPUT_OUT_DELAY : time :=  6 ns;
+	constant OUTPUT_OUT_DELAY : time :=  4 ns;
 
 begin
 	-- initialize global simulation status
