@@ -1,0 +1,14 @@
+# common
+regexp=NO ASSERTS
+colours=yellow
+count=stop
+=========
+# deleted
+regexp=ERROR
+colours=red
+count=stop
+=========
+# created
+regexp=PASSED
+colours=green
+count=stop

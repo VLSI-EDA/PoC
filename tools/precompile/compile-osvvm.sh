@@ -35,25 +35,19 @@
 # ==============================================================================
 
 poc_sh=../../poc.sh
+Simulator=questasim					# questasim, ghdl, ...
 
 # define color escape codes
 RED='\e[0;31m'			# Red
 YELLOW='\e[1;33m'		# Yellow
 NOCOLOR='\e[0m'			# No Color
 
-# Setup command to execute
-DestDir=$($poc_sh --poc-installdir 2>/dev/null)/temp/vsim	# Output directory
+# Files
+SourceDir=$($poc_sh query INSTALL.PoC:InstallationDirectory 2>/dev/null)/lib/osvvm
 if [ $? -ne 0 ]; then
-	echo "${RED}ERROR: Cannot get PoC installation dir.${NOCOLOR}"
+	echo 1>&2 -e "${RED}ERROR: Cannot get PoC installation dir.${NOCOLOR}"
 	exit;
 fi 
-SimulatorDir=$($poc_sh --modelsim-installdir 2>/dev/null)/bin	# Path to the simulators bin directory
-if [ $? -ne 0 ]; then
-	echo "${RED}ERROR: Cannot get ModelSim installation dir.${NOCOLOR}"
-	exit;
-fi 
-
-SourceDir=$($poc_sh --poc-installdir 2>/dev/null)/lib/osvvm
 Files=(
 		$SourceDir/NamePkg.vhd
 		$SourceDir/OsvvmGlobalPkg.vhd
@@ -69,17 +63,81 @@ Files=(
 		$SourceDir/OsvvmContext.vhd
 )
 
-# Check if modelsim.ini exists in DestDir
-if [ ! -f "$DestDir/modelsim.ini" ]; then
-	echo "Please run compile-xilinx-ise.sh first."
-	exit 1
+# Simulator binary directory
+case "$Simulator" in
+	ghdl)
+		BinDir=$($poc_sh query INSTALL.GHDL:BinaryDirectory 2>/dev/null)	# Path to the simulators bin directory
+		if [ $? -ne 0 ]; then
+			echo 1>&2 -e "${RED}ERROR: Cannot get GHDL binary dir.${NOCOLOR}"
+			exit;
+		fi
+		;;
+	questasim)
+		BinDir=$($poc_sh query ModelSim:BinaryDirectory 2>/dev/null)	# Path to the simulators bin directory
+		if [ $? -ne 0 ]; then
+			echo 1>&2 -e "${RED}ERROR: Cannot get ModelSim binary dir.${NOCOLOR}"
+			exit;
+		fi
+		;;
+	*)
+		echo "Unsupported simulator."
+		exit 1
+		;;
+esac
+
+# Setup destination directory
+DestDir=$($poc_sh query INSTALL.PoC:InstallationDirectory 2>/dev/null)/temp/precompiled
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}ERROR: Cannot get PoC installation dir.${NOCOLOR}"
+	exit;
+fi 
+
+case "$Simulator" in
+	ghdl)
+		DestDir=$DestDir/ghdl/osvvm
+		;;
+	questasim)
+		DestDir=$DestDir/vsim
+		;;
+	*)
+		echo "Unsupported simulator."
+		exit 1
+		;;
+esac
+
+# Create and change to destination directory
+mkdir -p $DestDir
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}ERROR: Cannot create output directory.${NOCOLOR}"
+	exit;
+fi 
+
+cd $DestDir
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}ERROR: Cannot change to output directory.${NOCOLOR}"
+	exit;
 fi
 
-# Execute command
-cd $DestDir
-rm -rf osvvm
-vlib osvvm
-vmap osvvm osvvm
-for File in ${Files[@]}; do
-	vcom -2008 -work osvvm $File
-done
+# Compile libraries with simulator, executed in destination directory
+case "$Simulator" in
+  ghdl)
+		for file in ${Files[@]}; do
+			echo "Compiling $file..."
+			$BinDir/ghdl -a -fexplicit -frelaxed-rules --no-vital-checks --warn-binding --mb-comments --std=08 --work=osvvm $file
+		done
+		;;
+	questasim)
+		rm -rf osvvm
+		vlib osvvm
+		vmap -del osvvm
+		vmap osvvm $DestDir/osvvm
+		for file in ${Files[@]}; do
+			echo "Compiling $file..."
+			$BinDir/vcom -2008 -work osvvm $file
+		done
+		;;
+	*)
+		echo "Unsupported simulator."
+		exit 1
+		;;
+esac

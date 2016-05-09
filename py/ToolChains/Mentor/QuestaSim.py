@@ -123,6 +123,7 @@ class Configuration(BaseConfiguration):
 				fileContent = dedent("""\
 								[Library]
 								others = $MODEL_TECH/../modelsim.ini
+								osvvm = osvvm
 								""")
 				fileHandle.write(fileContent)
 

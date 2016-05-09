@@ -67,8 +67,6 @@ if [ -e $GHDL_TARBALL ]; then
 	fi
 fi
 
-ls -Ahl
-
 # remove downloaded files
 rm $GHDL_TARBALL
 

@@ -139,7 +139,7 @@ class TestSuite(TestGroup):
 
 	@property
 	def IsAllPassed(self):
-		return (self.Count == self.PassedCount)
+		return (self.Count == self.PassedCount + self.NoAssertsCount)
 
 	def AddTestCase(self, testCase):
 		cur = self
