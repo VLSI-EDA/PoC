@@ -103,7 +103,7 @@ class Simulator(BaseSimulator):
 
 		super().Run(testbench, board, vhdlVersion, vhdlGenerics, guiMode)
 
-	def _RunAnalysis(self, testbench):
+	def _RunAnalysis(self, _):
 		# create a QuestaVHDLCompiler instance
 		vlib = self._questa.GetVHDLLibraryTool()
 		for lib in self._pocProject.VHDLLibraries:

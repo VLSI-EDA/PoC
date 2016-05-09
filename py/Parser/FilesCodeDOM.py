@@ -863,9 +863,22 @@ class ElseStatement(BlockStatement):
 class IfElseIfElseStatement(Statement):
 	def __init__(self):
 		super().__init__()
-		self._ifStatement =        None
-		self._elseIfStatements =  None
-		self._elseStatement =      None
+		self._ifClause =      None
+		self._elseIfClauses =  None
+		self._elseClause =    None
+
+	@property
+	def IfClause(self):             return self._ifClause
+	@IfClause.setter
+	def IfClause(self, value):      self._ifClause = value
+	@property
+	def ElseIfClauses(self):        return self._elseIfClauses
+	@ElseIfClauses.setter
+	def ElseIfClauses(self, value): self._elseIfClauses = value
+	@property
+	def ElseClause(self):           return self._elseClause
+	@ElseClause.setter
+	def ElseClause(self, value):    self._elseClause = value
 
 	@classmethod
 	def GetParser(cls):
@@ -881,7 +894,7 @@ class IfElseIfElseStatement(Statement):
 				token = yield
 				parser.send(token)
 		except MatchingParserResult as ex:
-			result._ifStatement = ex.value
+			result.IfClause = ex.value
 		
 		# match for multiple ELSEIF clauses
 		# ==========================================================================
@@ -896,9 +909,9 @@ class IfElseIfElseStatement(Statement):
 						token = yield
 						parser.send(token)
 				except MatchingParserResult as ex:
-					if (result._elseIfStatements is None):
-						result._elseIfStatements = []
-					result._elseIfStatements.append(ex.value)
+					if (result.ElseIfClauses is None):
+						result.ElseIfClauses = []
+					result.ElseIfClauses.append(ex.value)
 		except MismatchingParserResult as ex:
 			pass
 
@@ -914,7 +927,7 @@ class IfElseIfElseStatement(Statement):
 				token = yield
 				parser.send(token)
 		except MatchingParserResult as ex:
-			result._elseStatement = ex.value
+			result.ElseClause = ex.value
 		except MismatchingParserResult as ex:
 			pass
 
@@ -958,12 +971,12 @@ class IfElseIfElseStatement(Statement):
 	def __str__(self, indent=0):
 		_indent = "  " * indent
 		buffer = _indent + "IfElseIfElseStatement\n"
-		buffer += self._ifStatement.__str__(indent + 1)
-		if (self._elseIfStatements is not None):
-			for elseIf in self._elseIfStatements:
+		buffer += self.IfClause.__str__(indent + 1)
+		if (self.ElseIfClauses is not None):
+			for elseIf in self.ElseIfClauses:
 				buffer += "\n" + elseIf.__str__(indent + 1)
-		if (self._elseStatement is not None):
-			buffer += "\n" + self._elseStatement.__str__(indent + 1)
+		if (self.ElseClause is not None):
+			buffer += "\n" + self.ElseClause.__str__(indent + 1)
 		return buffer
 
 		

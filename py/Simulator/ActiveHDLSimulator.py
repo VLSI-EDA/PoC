@@ -86,7 +86,7 @@ class Simulator(BaseSimulator):
 		version = asimSection['Version']
 		self._toolChain =    ActiveHDL(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def _RunAnalysis(self, testbench):
+	def _RunAnalysis(self, _):
 		# create a ActiveHDLVHDLCompiler instance
 		alib = self._toolChain.GetVHDLLibraryTool()
 

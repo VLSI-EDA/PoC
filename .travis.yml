@@ -3,16 +3,18 @@ dist: trusty
 language: python
 python:
 - "3.5"
-#addons:
-#- apt:
-#  - packages:
-#    - libgnat-4.8
+addons:
+  apt:
+    packages:
+    - gnat
 before_install:
 - sudo apt-get install -y libgnat-4.8
 install:
 - pip3 install -r tools/Travis-CI/requirements.txt
 before_script:
+- gnat
 - ./tools/Travis-CI/ghdl.setup.sh
+- ./tools/Travis-CI/grc.setup.sh
 - ./tools/Travis-CI/poc.setup.sh
 script:
 - ./tools/Travis-CI/poc.run.sh

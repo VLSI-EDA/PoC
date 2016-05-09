@@ -42,12 +42,12 @@ else:
 
 
 # load dependencies
-from pathlib                    import Path
+from pathlib                      import Path
 
-from Base.Project                import ToolChain, Tool
-from Base.Compiler              import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
-from PoC.Entity                  import WildCard
-from ToolChains.Lattice.Diamond  import Diamond, SynthesisArgumentFile
+from Base.Project                 import ToolChain, Tool
+from Base.Compiler                import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
+from PoC.Entity                   import WildCard
+from ToolChains.Lattice.Diamond   import Diamond, SynthesisArgumentFile
 
 
 class Compiler(BaseCompiler):

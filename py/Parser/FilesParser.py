@@ -189,17 +189,17 @@ class FilesParserMixIn:
 				vhdlLibRef =  VHDLLibraryReference(stmt.Library, lib)
 				self._libraries.append(vhdlLibRef)
 			elif isinstance(stmt, IfElseIfElseStatement):
-				exprValue = self._Evaluate(stmt._ifStatement._expression)
+				exprValue = self._Evaluate(stmt.IfClause._expression)
 				if (exprValue is True):
-					self._Resolve(stmt._ifStatement.Statements)
-				elif (stmt._elseIfStatements is not None):
-					for elseif in stmt._elseIfStatements:
+					self._Resolve(stmt.IfClause.Statements)
+				elif (stmt.ElseIfClauses is not None):
+					for elseif in stmt.ElseIfClauses:
 						exprValue = self._Evaluate(elseif._expression)
 						if (exprValue is True):
 							self._Resolve(elseif.Statements)
 							break
-				if ((exprValue is False) and (stmt._elseStatement is not None)):
-					self._Resolve(stmt._elseStatement.Statements)
+				if ((exprValue is False) and (stmt.ElseClause is not None)):
+					self._Resolve(stmt.ElseClause.Statements)
 			elif isinstance(stmt, ReportStatement):
 				self._warnings.append("WARNING: {0}".format(stmt.Message))
 			else:

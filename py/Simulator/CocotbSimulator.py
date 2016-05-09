@@ -45,7 +45,7 @@ else:
 import shutil
 from textwrap                import dedent
 
-from Base.Project            import FileTypes, ToolChain, Tool, VHDLVersion
+from Base.Project            import FileTypes, ToolChain, Tool
 from Base.Simulator          import SimulatorException, Simulator as BaseSimulator
 from PoC.Config              import Vendors
 from PoC.Entity              import WildCard
