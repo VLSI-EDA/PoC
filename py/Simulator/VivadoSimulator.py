@@ -83,15 +83,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		binaryPath = Path(vivadoSection['BinaryDirectory'])
 		self._vivado = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
-		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
-
-		self._RunLink(testbench)
-		self._RunSimulation(testbench)
-		
-	def _RunLink(self, testbench):
-		self._LogNormal("Running xelab...")
-		
+	def _RunElaboration(self, testbench):
 		xelabLogFilePath =  self.Directories.Working / (testbench.ModuleName + ".xelab.log")
 		prjFilePath =        self.Directories.Working / (testbench.ModuleName + ".prj")
 		self._WriteXilinxProjectFile(prjFilePath, "xSim", self._vhdlVersion)
@@ -102,18 +94,14 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		xelab.Parameters[xelab.SwitchMultiThreading] =  "off" if self.Logger.LogLevel is Severity.Debug else "auto"		# disable multithreading support in debug mode
 		xelab.Parameters[xelab.FlagRangeCheck] =        True
 
-		# xelab.Parameters[xelab.SwitchOptimization] =    "2"
-		xelab.Parameters[xelab.SwitchDebug] =            "typical"
+		xelab.Parameters[xelab.SwitchOptimization] =    "0" if self.Logger.LogLevel is Severity.Debug else "2"		# set to "0" to disable optimization
+		xelab.Parameters[xelab.SwitchDebug] =           "typical"
 		xelab.Parameters[xelab.SwitchSnapshot] =        testbench.ModuleName
 
-		# if (self._vhdlVersion == VHDLVersion.VHDL2008):
-		# 	xelab.Parameters[xelab.SwitchVHDL2008] =      True
-
-		# if (self.verbose):
-		xelab.Parameters[xelab.SwitchVerbose] =          "1" if self.Logger.LogLevel is Severity.Debug else "0"		# set to "1" for detailed messages
-		xelab.Parameters[xelab.SwitchProjectFile] =      str(prjFilePath)
-		xelab.Parameters[xelab.SwitchLogFile] =          str(xelabLogFilePath)
-		xelab.Parameters[xelab.ArgTopLevel] =            "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+		xelab.Parameters[xelab.SwitchVerbose] =         "1" if self.Logger.LogLevel is Severity.Debug else "0"		# set to "1" for detailed messages
+		xelab.Parameters[xelab.SwitchProjectFile] =     str(prjFilePath)
+		xelab.Parameters[xelab.SwitchLogFile] =         str(xelabLogFilePath)
+		xelab.Parameters[xelab.ArgTopLevel] =           "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 
 		try:
 			xelab.Link()
@@ -123,8 +111,6 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 			raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(prjFilePath))
 
 	def _RunSimulation(self, testbench):
-		self._LogNormal("Running simulation...")
-		
 		xSimLogFilePath =    self.Directories.Working / (testbench.ModuleName + ".xSim.log")
 		tclBatchFilePath =  self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimBatchScript']
 		tclGUIFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimGUIScript']

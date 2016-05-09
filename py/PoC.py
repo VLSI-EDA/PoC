@@ -815,7 +815,7 @@ class PoC(ILogable, ArgParseMixin):
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 
 		simulator = ISESimulator(self, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board)		#, vhdlGenerics=None)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL93)		#, vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
 
@@ -890,7 +890,7 @@ class PoC(ILogable, ArgParseMixin):
 
 		# create a CocotbSimulator instance and prepare it
 		simulator = CocotbSimulator(self, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL08)
 
 		Exit.exit(0 if allPassed else 1)
 

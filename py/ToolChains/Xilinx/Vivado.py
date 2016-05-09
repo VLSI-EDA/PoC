@@ -175,6 +175,7 @@ class XElab(Executable, VivadoMixIn):
 	# 	_value =  None
 
 	class SwitchOptimization(metaclass=ShortValuedFlagArgument):
+		_pattern = "--{0}{1}"
 		_name =    "O"
 		_value =  None
 

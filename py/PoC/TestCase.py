@@ -50,8 +50,7 @@ class Status(Enum):
 	InternalError =        2
 	AnalyzeError =         3
 	ElaborationError =     4
-	OptimizationError =    5
-	SimulationError =      6
+	SimulationError =      5
 	SimulationFailed =    10
 	SimulationNoAsserts = 15
 	SimulationSuccess =   20
@@ -107,23 +106,23 @@ class TestGroup(TestElement):
 	@property
 	def PassedCount(self):
 		return sum([tg.PassedCount for tg in self._testGroups.values()]) \
-					 + sum([1 for tc in self._testCases.values() if tc.Status is Status.SimulationSuccess])
+						+ sum([1 for tc in self._testCases.values() if tc.Status is Status.SimulationSuccess])
 
 	@property
 	def NoAssertsCount(self):
 		return sum([tg.NoAssertsCount for tg in self._testGroups.values()]) \
-					 + sum([1 for tc in self._testCases.values() if tc.Status is Status.SimulationNoAsserts])
+						+ sum([1 for tc in self._testCases.values() if tc.Status is Status.SimulationNoAsserts])
 
 	@property
 	def FailedCount(self):
 		return sum([tg.FailedCount for tg in self._testGroups.values()]) \
-					 + sum([1 for tc in self._testCases.values() if tc.Status is Status.SimulationFailed])
+						+ sum([1 for tc in self._testCases.values() if tc.Status is Status.SimulationFailed])
 
 	@property
 	def ErrorCount(self):
 		return sum([tg.ErrorCount for tg in self._testGroups.values()]) \
-					 + sum(
-				[1 for tc in self._testCases.values() if tc.Status in (Status.SystemError, Status.AnalyzeError, Status.ElaborationError, Status.SimulationError)])
+						+ sum([1 for tc in self._testCases.values() if tc.Status
+										in (Status.SystemError, Status.AnalyzeError, Status.ElaborationError, Status.SimulationError)])
 
 
 class TestSuite(TestGroup):

@@ -81,26 +81,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		binaryPath = Path(iseSection['BinaryDirectory'])
 		self._ise = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
-		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
-
-		# self._RunCompile(testbenchName)
-		self._RunLink(testbench)
-		self._RunSimulation(testbench)
-
-	def _RunCompile(self, testbench):
-		self._LogNormal("  compiling source files...")
-		
-		prjFilePath = self.Directories.Working / (testbench.ModuleName + ".prj")
-		self._WriteXilinxProjectFile(prjFilePath, "iSim", self._vhdlVersion)
-
-		# create an ISEVHDLCompiler instance
-		vhcomp = self._ise.GetVHDLCompiler()
-		vhcomp.Compile(str(prjFilePath))
-
-	def _RunLink(self, testbench):
-		self._LogNormal("Running fuse...")
-		
+	def _RunElaboration(self, testbench):
 		exeFilePath =  self.Directories.Working / (testbench.ModuleName + ".exe")
 		prjFilePath = self.Directories.Working / (testbench.ModuleName + ".prj")
 		self._WriteXilinxProjectFile(prjFilePath, "iSim")
@@ -121,10 +102,8 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 			raise SimulatorException("Error while analysing '{0!s}'.".format(prjFilePath)) from ex
 		if fuse.HasErrors:
 			raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(prjFilePath))
-	
+
 	def _RunSimulation(self, testbench):
-		self._LogNormal("Running simulation...")
-		
 		iSimLogFilePath =    self.Directories.Working / (testbench.ModuleName + ".iSim.log")
 		exeFilePath =        self.Directories.Working / (testbench.ModuleName + ".exe")
 		tclBatchFilePath =  self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimBatchScript']

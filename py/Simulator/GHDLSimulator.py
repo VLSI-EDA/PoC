@@ -97,40 +97,7 @@ class Simulator(BaseSimulator):
 		backend = ghdlSection['Backend']
 		self._toolChain =      GHDL(self.Host.Platform, binaryPath, version, backend, logger=self.Logger)
 
-	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
-		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
-
-		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
-
-		if (self._toolChain.Backend in ["gcc", "llvm"]):
-			self._RunAnalysis()
-			self._analyzeTime =     self._GetTimeDeltaSinceLastEvent()
-
-			self._RunElaboration(testbench)
-			self._elaborationTime = self._GetTimeDeltaSinceLastEvent()
-
-			self._RunSimulation(testbench)
-			self._simulationTime =  self._GetTimeDeltaSinceLastEvent()
-		elif (self._toolChain.Backend == "mcode"):
-			self._RunAnalysis()
-			self._analyzeTime =     self._GetTimeDeltaSinceLastEvent()
-			self._elaborationTime = self._GetTimeDeltaSinceLastEvent()
-
-			self._RunSimulation(testbench)
-			self._simulationTime =  self._GetTimeDeltaSinceLastEvent()
-
-		# FIXME: a very quick implemenation
-		if (guiMode is True):
-			self._state = SimulationState.View
-			viewer = self.GetViewer()
-			viewer.View(testbench)
-
-		self._endAt = datetime.now()
-
-	def _RunAnalysis(self):
-		self._LogNormal("Running analysis for every vhdl file...")
-		self._state = SimulationState.Analyze
-		
+	def _RunAnalysis(self, testbench):
 		# create a GHDLAnalyzer instance
 		ghdl = self._toolChain.GetGHDLAnalyze()
 		ghdl.Parameters[ghdl.FlagVerbose] =            (self.Logger.LogLevel is Severity.Debug)
@@ -172,13 +139,12 @@ class Simulator(BaseSimulator):
 			if ghdl.HasErrors:
 				raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(file.Path))
 
-
-	# running simulation
+	# running elaboration
 	# ==========================================================================
 	def _RunElaboration(self, testbench):
-		self._LogNormal("Running elaboration...")
-		self._state = SimulationState.Elaborate
-		
+		if (self._toolChain.Backend == "mcode"):
+			return
+
 		# create a GHDLElaborate instance
 		ghdl = self._toolChain.GetGHDLElaborate()
 		ghdl.Parameters[ghdl.FlagVerbose] =            (self.Logger.LogLevel is Severity.Debug)
@@ -207,12 +173,8 @@ class Simulator(BaseSimulator):
 			raise SimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
 		if ghdl.HasErrors:
 			raise SkipableSimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
-	
-	
+
 	def _RunSimulation(self, testbench):
-		self._LogNormal("Running simulation...")
-		self._state = SimulationState.Simulate
-			
 		# create a GHDLRun instance
 		ghdl = self._toolChain.GetGHDLRun()
 		ghdl.Parameters[ghdl.FlagVerbose] =             (self.Logger.LogLevel is Severity.Debug)
@@ -262,43 +224,7 @@ class Simulator(BaseSimulator):
 		
 		testbench.Result = ghdl.Run()
 
-	# def _ExecuteSimulation(self, testbench):
-	# 	self._LogNormal("Executing simulation...")
-	#
-	# 	# create a GHDLRun instance
-	# 	ghdl = self._toolChain.GetGHDLRun()
-	# 	ghdl.VHDLVersion =  self._vhdlVersion
-	# 	ghdl.VHDLLibrary =  VHDL_TESTBENCH_LIBRARY_NAME
-	#
-	# 	# configure RUNOPTS
-	# 	runOptions = []
-	# 	runOptions.append('--ieee-asserts={0}'.format("disable-at-0"))		# enable, disable, disable-at-0
-	# 	# set dump format to save simulation results to *.vcd file
-	# 	if (self._guiMode):
-	# 		waveformFileFormat =  self.Host.PoCConfig[testbench.ConfigSectionName]['ghdlWaveformFileFormat']
-	#
-	# 		if (waveformFileFormat == "vcd"):
-	# 			waveformFilePath = self.Directories.Working / (testbench.ModuleName + ".vcd")
-	# 			runOptions.append("--vcd={0!s}".format(waveformFilePath))
-	# 		elif (waveformFileFormat == "vcdgz"):
-	# 			waveformFilePath = self.Directories.Working / (testbench.ModuleName + ".vcd.gz")
-	# 			runOptions.append("--vcdgz={0!s}".format(waveformFilePath))
-	# 		elif (waveformFileFormat == "fst"):
-	# 			waveformFilePath = self.Directories.Working / (testbench.ModuleName + ".fst")
-	# 			runOptions.append("--fst={0!s}".format(waveformFilePath))
-	# 		elif (waveformFileFormat == "ghw"):
-	# 			waveformFilePath = self.Directories.Working / (testbench.ModuleName + ".ghw")
-	# 			runOptions.append("--wave={0!s}".format(waveformFilePath))
-	# 		else:                                            raise SimulatorException("Unknown waveform file format for GHDL.")
-	#
-	# 	ghdl.Run(testbench.ModuleName, runOptions)
-	
-	def GetViewer(self):
-		return self
-	
-	def View(self, testbench):
-		self._LogNormal("Executing GTKWave...")
-
+	def _RunView(self, testbench):
 		# FIXME: get waveform database filename from testbench object
 		waveformFileFormat =  self.Host.PoCConfig[testbench.ConfigSectionName]['ghdlWaveformFileFormat']
 		if (waveformFileFormat == "vcd"):

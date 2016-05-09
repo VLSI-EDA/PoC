@@ -42,11 +42,10 @@ else:
 # load dependencies
 from pathlib import Path
 
-from Base.Exceptions            import NotConfiguredException
-from Base.Project                import FileTypes, VHDLVersion, ToolChain, Tool
-from Base.Simulator              import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult, \
-	SkipableSimulatorException
-from ToolChains.Aldec.ActiveHDL  import ActiveHDL, ActiveHDLException
+from Base.Exceptions              import NotConfiguredException
+from Base.Project                 import FileTypes, VHDLVersion, ToolChain, Tool
+from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from ToolChains.Aldec.ActiveHDL   import ActiveHDL, ActiveHDLException
 
 
 class Simulator(BaseSimulator):
@@ -87,20 +86,7 @@ class Simulator(BaseSimulator):
 		version = asimSection['Version']
 		self._toolChain =    ActiveHDL(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
-		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
-
-		self._RunCompile(testbench)
-
-		if (not self._guiMode):
-			self._RunSimulation(testbench)
-		else:
-			raise SimulatorException("GUI mode is not supported for Active-HDL.")
-			# self._RunSimulationWithGUI(testbenchName)
-
-	def _RunCompile(self, testbench):
-		self._LogNormal("Running VHDL compiler for every vhdl file...")
-		
+	def _RunAnalysis(self, testbench):
 		# create a ActiveHDLVHDLCompiler instance
 		alib = self._toolChain.GetVHDLLibraryTool()
 
@@ -133,11 +119,11 @@ class Simulator(BaseSimulator):
 			if acom.HasErrors:
 				raise SkipableSimulatorException("Error while compiling '{0!s}'.".format(file.Path))
 
-
 	def _RunSimulation(self, testbench):
-		self._LogNormal("Running simulation...")
-		
-		tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimBatchScript']
+		if self._guiMode:
+			return self._RunSimulationWithGUI(testbench)
+
+		# tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimBatchScript']
 		
 		# create a ActiveHDLSimulator instance
 		aSim = self._toolChain.GetSimulator()
@@ -156,23 +142,24 @@ class Simulator(BaseSimulator):
 			raise SkipableSimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
 
 	def _RunSimulationWithGUI(self, testbench):
-		self._LogNormal("Running simulation...")
-	
-		tclGUIFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimGUIScript']
-		tclWaveFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimWaveScript']
-		
-		# create a ActiveHDLSimulator instance
-		aSim = self._toolChain.GetSimulator()
-		aSim.Optimization =    True
-		aSim.TimeResolution =  "1fs"
-		aSim.Title =          testbench.ModuleName
-	
-		if (tclWaveFilePath.exists()):
-			self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
-			aSim.BatchCommand =  "do {0!s}; do {1!s}".format(tclWaveFilePath, tclGUIFilePath)
-		else:
-			self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
-			aSim.BatchCommand =  "add wave *; do {0!s}".format(tclGUIFilePath)
+		raise SimulatorException("GUI mode is not supported for Active-HDL.")
 
-		aSim.TopLevel =    "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
-		aSim.Simulate()
+		# tclGUIFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimGUIScript']
+		# tclWaveFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimWaveScript']
+		#
+		# # create a ActiveHDLSimulator instance
+		# aSim = self._toolChain.GetSimulator()
+		# aSim.Optimization =    True
+		# aSim.TimeResolution =  "1fs"
+		# aSim.Title =          testbench.ModuleName
+		#
+		# if (tclWaveFilePath.exists()):
+		# 	self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
+		# 	aSim.BatchCommand =  "do {0!s}; do {1!s}".format(tclWaveFilePath, tclGUIFilePath)
+		# else:
+		# 	self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
+		# 	aSim.BatchCommand =  "add wave *; do {0!s}".format(tclGUIFilePath)
+		#
+		# aSim.TopLevel =    "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+		# aSim.Simulate()
+

@@ -43,10 +43,9 @@ else:
 from pathlib                      import Path
 
 from Base.Exceptions              import NotConfiguredException
-from Base.Project                  import FileTypes, VHDLVersion, ToolChain, Tool
-from Base.Simulator                import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SimulationResult, \
-	SkipableSimulatorException
-from PoC.Config                    import Vendors
+from Base.Project                 import FileTypes, VHDLVersion, ToolChain, Tool
+from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from PoC.Config                   import Vendors
 from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaException
 
 
@@ -89,8 +88,7 @@ class Simulator(BaseSimulator):
 		self._questa = QuestaSim(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
-		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
-
+		# TODO: refactor into a ModelSim module, shared by QuestaSim and Cocotb (-> MixIn class)?
 		# select modelsim.ini
 		self._modelsimIniPath = self.Directories.PreCompiled
 		if board.Device.Vendor is Vendors.Altera:
@@ -103,17 +101,9 @@ class Simulator(BaseSimulator):
 			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(self._modelsimIniPath)) \
 				from FileNotFoundError(str(self._modelsimIniPath))
 
-		self._RunCompile(testbench)
-		# self._RunOptimize()
-		
-		if (not self._guiMode):
-			self._RunSimulation(testbench)
-		else:
-			self._RunSimulationWithGUI(testbench)
+		super().Run(testbench, board, vhdlVersion, vhdlGenerics, guiMode)
 
-	def _RunCompile(self, testbench):
-		self._LogNormal("Running VHDL compiler for every vhdl file...")
-
+	def _RunAnalysis(self, testbench):
 		# create a QuestaVHDLCompiler instance
 		vlib = self._questa.GetVHDLLibraryTool()
 		for lib in self._pocProject.VHDLLibraries:
@@ -154,36 +144,35 @@ class Simulator(BaseSimulator):
 				vcomLogFile.unlink()
 
 	def _RunSimulation(self, testbench):
-		self._LogNormal("Running simulation...")
-		
+		if self._guiMode:
+			return self._RunSimulationWithGUI(testbench)
+
 		tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()
-		vsim.Parameters[vsim.SwitchModelSimIniFile] =  self._modelsimIniPath.as_posix()
-		# vsim.Parameters[vsim.FlagOptimization] =      True
-		vsim.Parameters[vsim.FlagReportAsError] =      "3473"
+		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
+		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
+		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
-		vsim.Parameters[vsim.FlagCommandLineMode] =    True
+		vsim.Parameters[vsim.FlagCommandLineMode] =   True
 		vsim.Parameters[vsim.SwitchBatchCommand] =    "do {0}".format(tclBatchFilePath.as_posix())
 		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 		testbench.Result = vsim.Simulate()
-		
+
 	def _RunSimulationWithGUI(self, testbench):
-		self._LogNormal("Running simulation...")
-	
 		tclGUIFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
 		tclWaveFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
 
 		# create a QuestaSimulator instance
 		vsim = self._questa.GetSimulator()
-		vsim.Parameters[vsim.SwitchModelSimIniFile] =  self._modelsimIniPath.as_posix()
-		# vsim.Parameters[vsim.FlagOptimization] =      True
-		vsim.Parameters[vsim.FlagReportAsError] =      "3473"
+		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
+		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
+		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
-		vsim.Parameters[vsim.FlagGuiMode] =            True
+		vsim.Parameters[vsim.FlagGuiMode] =           True
 		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
-		# vsim.Parameters[vsim.SwitchTitle] =            testbenchName
+		# vsim.Parameters[vsim.SwitchTitle] =           testbenchName
 
 		if (tclWaveFilePath.exists()):
 			self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
