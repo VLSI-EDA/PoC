@@ -3,10 +3,10 @@ dist: trusty
 language: python
 python:
 - "3.5"
-addons:
-  apt:
-    packages:
-    - gnat-5
+#addons:
+#  apt:
+#    packages:
+#    - gnat-5
 #    - grc
 before_install:
 # libgnat-4.8 is required by GHDL, because it's build with 4.8
