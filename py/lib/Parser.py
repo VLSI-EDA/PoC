@@ -1452,11 +1452,19 @@ Expressions.AddChoice(InExpression)
 Expressions.AddChoice(NotInExpression)
 
 class Statement(CodeDOMObject):
-	pass
+	def __init__(self, commentText=""):
+		super().__init__()
+		self._commentText = commentText
+
+	@property
+	def CommentText(self):        return self._commentText
+	@CommentText.setter
+	def CommentText(self, value): self._commentText = value
+
 
 class BlockStatement(Statement):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, commentText=""):
+		super().__init__(commentText)
 		self._statements = []
 	
 	def AddStatement(self, stmt):
@@ -1474,9 +1482,13 @@ class BlockStatement(Statement):
 		return buffer
 
 class ConditionalBlockStatement(BlockStatement):
-	def __init__(self, expression):
-		super().__init__()
+	def __init__(self, expression, commentText=""):
+		super().__init__(commentText)
 		self._expression = expression
+
+	@property
+	def Expression(self):
+		return self._expression
 	
 	def __str__(self, indent=0):
 		_indent = "  " * indent

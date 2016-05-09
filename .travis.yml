@@ -4,17 +4,17 @@ language: python
 python:
 - "3.5"
 #addons:
-#  apt:
-#    packages:
+  apt:
+    packages:
 # this will install gnat-4.6 (trusty)
-#    - gnat
+    - gnat-4.8
+    - grc
 before_install:
 - sudo apt-get install -y libgnat-4.8 grc
 - sudo ./tools/Travis-CI/grc.setup.sh
 install:
 - pip3 install -r tools/Travis-CI/requirements.txt
 before_script:
-- gnat
 - ./tools/Travis-CI/ghdl.setup.sh
 - ./tools/Travis-CI/poc.setup.sh
 script:

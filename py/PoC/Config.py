@@ -38,13 +38,13 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module PoC.Config")
 
-# load dependencies
-from enum                  import Enum, EnumMeta, unique
-from re                    import compile as RegExpCompile
 
-# from lib.Decorators        import CachedReadOnlyProperty
+# load dependencies
+from enum                 import Enum, unique
+from re                   import compile as RegExpCompile
+
 from lib.Functions        import Init
-from Base.Configuration    import ConfigurationException
+from Base.Configuration   import ConfigurationException
 
 
 class BaseEnum(Enum):

@@ -31,16 +31,16 @@
 # ==============================================================================
 #
 
+from lib.Parser           import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression
+from lib.Parser           import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
+from lib.Parser           import ExistsFunction, ListConstructorExpression
+from lib.Parser           import ParserException
+from lib.Parser           import StringLiteral, IntegerLiteral, Identifier
 from Parser.FilesCodeDOM  import Document
 from Parser.FilesCodeDOM  import IfElseIfElseStatement, ReportStatement
 from Parser.FilesCodeDOM  import IncludeStatement, LibraryStatement
 from Parser.FilesCodeDOM  import UcfStatement, XdcStatement, SdcStatement
 from Parser.FilesCodeDOM  import VHDLStatement, VerilogStatement, CocotbStatement
-from lib.Parser import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression
-from lib.Parser import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
-from lib.Parser import ExistsFunction, ListConstructorExpression
-from lib.Parser import ParserException
-from lib.Parser import StringLiteral, IntegerLiteral, Identifier
 
 
 class FileReference:
@@ -118,13 +118,13 @@ class VHDLLibraryReference:
 
 
 class FilesParserMixIn:
-	_classIncludeFile =          IncludeFileMixIn
+	_classIncludeFile =         IncludeFileMixIn
 	_classVHDLSourceFile =      VHDLSourceFileMixIn
-	_classVerilogSourceFile =    VerilogSourceFileMixIn
+	_classVerilogSourceFile =   VerilogSourceFileMixIn
 	_classCocotbSourceFile =    CocotbSourceFileMixIn
-	_classUcfSourceFile =        UcfSourceFileMixIn
-	_classXdcSourceFile =        XdcSourceFileMixIn
-	_classSdcSourceFile =        SdcSourceFileMixIn
+	_classUcfSourceFile =       UcfSourceFileMixIn
+	_classXdcSourceFile =       XdcSourceFileMixIn
+	_classSdcSourceFile =       SdcSourceFileMixIn
 
 	def __init__(self):
 		self._rootDirectory =  None
@@ -148,7 +148,7 @@ class FilesParserMixIn:
 		for stmt in statements:
 			if isinstance(stmt, VHDLStatement):
 				file =            self._rootDirectory / stmt.FileName
-				vhdlSrcFile =      self._classVHDLSourceFile(file, stmt.LibraryName)		# stmt.Library, 
+				vhdlSrcFile =     self._classVHDLSourceFile(file, stmt.LibraryName)		# stmt.Library,
 				self._files.append(vhdlSrcFile)
 			elif isinstance(stmt, VerilogStatement):
 				file =            self._rootDirectory / stmt.FileName
@@ -156,11 +156,11 @@ class FilesParserMixIn:
 				self._files.append(verilogSrcFile)
 			elif isinstance(stmt, CocotbStatement):
 				file =            self._rootDirectory / stmt.FileName
-				cocotbSrcFile =    self._classCocotbSourceFile(file)
+				cocotbSrcFile =   self._classCocotbSourceFile(file)
 				self._files.append(cocotbSrcFile)
 			elif isinstance(stmt, UcfStatement):
 				file =            self._rootDirectory / stmt.FileName
-				ucfSrcFile =    self._classCocotbSourceFile(file)
+				ucfSrcFile =      self._classCocotbSourceFile(file)
 				self._files.append(ucfSrcFile)
 			elif isinstance(stmt, XdcStatement):
 				file =            self._rootDirectory / stmt.FileName
@@ -173,7 +173,7 @@ class FilesParserMixIn:
 			elif isinstance(stmt, IncludeStatement):
 				# add the include file to the fileset
 				file =            self._rootDirectory / stmt.FileName
-				includeFile =      self._classFileListFile(file)
+				includeFile =     self._classFileListFile(file)
 				self._fileSet.AddFile(includeFile)
 				includeFile.Parse()
 				
@@ -189,12 +189,12 @@ class FilesParserMixIn:
 				vhdlLibRef =  VHDLLibraryReference(stmt.Library, lib)
 				self._libraries.append(vhdlLibRef)
 			elif isinstance(stmt, IfElseIfElseStatement):
-				exprValue = self._Evaluate(stmt.IfClause._expression)
+				exprValue = self._Evaluate(stmt.IfClause.Expression)
 				if (exprValue is True):
 					self._Resolve(stmt.IfClause.Statements)
 				elif (stmt.ElseIfClauses is not None):
 					for elseif in stmt.ElseIfClauses:
-						exprValue = self._Evaluate(elseif._expression)
+						exprValue = self._Evaluate(elseif.Expression)
 						if (exprValue is True):
 							self._Resolve(elseif.Statements)
 							break
@@ -249,11 +249,11 @@ class FilesParserMixIn:
 	@property
 	def Files(self):      return self._files
 	@property
-	def Includes(self):    return self._includes
+	def Includes(self):   return self._includes
 	@property	
 	def Libraries(self):  return self._libraries
 	@property
-	def Warnings(self):    return self._warnings
+	def Warnings(self):   return self._warnings
 
 	def __str__(self):    return "FILES file: '{0!s}'".format(self._file)
-	def __repr__(self):    return self.__str__()
+	def __repr__(self):   return self.__str__()

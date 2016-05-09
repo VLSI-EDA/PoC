@@ -47,16 +47,15 @@ class BlockedStatement(BlockedStatementBase):
 # ==============================================================================
 class VHDLStatement(Statement):
 	def __init__(self, libraryName, fileName, commentText):
-		super().__init__()
-		self._libraryName =  libraryName
-		self._fileName =    fileName
-		self._commentText =  commentText
-	
+		super().__init__(commentText)
+		self._libraryName =   libraryName
+		self._fileName =      fileName
+
 	@property
 	def LibraryName(self):  return self._libraryName
 	@property
-	def FileName(self):      return self._fileName
-	
+	def FileName(self):     return self._fileName
+
 	@classmethod
 	def GetParser(cls):
 		# match for optional whitespace

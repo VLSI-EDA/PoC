@@ -172,13 +172,13 @@ class Namespace(PathElement):
 
 	def _Load(self):
 		for optionName in self.ConfigSection:
-			type = self.ConfigSection[optionName]
-			if (type == "Namespace"):
+			kind = self.ConfigSection[optionName]
+			if (kind == "Namespace"):
 				# print("loading namespace: {0}".format(optionName))
 				section = self._configSectionName + "." + optionName
 				ns = Namespace(host=self._host, name=optionName, configSectionName=section, parent=self)
 				self.__namespaces[optionName.lower()] = ns
-			elif (type == "Entity"):
+			elif (kind == "Entity"):
 				# print("loading entity: {0}".format(optionName))
 				section = ".".join(["IP"] + self._configSectionName.split(".")[1:] + [optionName])
 				ent = IPCore(host=self._host, name=optionName, configSectionName=section, parent=self)

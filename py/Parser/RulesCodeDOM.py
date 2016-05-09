@@ -441,7 +441,7 @@ class FileStatement(BlockStatement):
 		else:
 			raise MismatchingParserResult("FileParser: Expected end of line or comment")
 
-		result._commentText = commentText
+		result.CommentText = commentText
 
 		raise MatchingParserResult(result)
 
@@ -639,7 +639,7 @@ class Document(BlockStatement):
 			while True:
 				token = yield
 				parser.send(token)
-		except MatchingParserResult as ex:
+		except MatchingParserResult:
 			raise MatchingParserResult(result)
 	
 	def __str__(self, indent=0):
