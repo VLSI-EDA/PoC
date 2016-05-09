@@ -1,7 +1,4 @@
 language: python
-env:
-  - CONFIG="Trusty,Python3.5,libgnat-4.8,grc-1.9"
-  - CONFIG="Precise,Python3.5,gnat-5"
 matrix:
   include:
     - env: CONFIG="Trusty,Python3.5,libgnat-4.8,grc-1.9"
