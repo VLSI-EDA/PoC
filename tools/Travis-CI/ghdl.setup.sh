@@ -45,9 +45,6 @@ echo -e "${CYAN}mkdir -p $TRAVIS_DIR${NOCOLOR}"
 mkdir -p $TRAVIS_DIR
 cd $TRAVIS_DIR
 
-pwd
-ls -ahl
-
 # downloading GHDL
 echo -e "${CYAN}Downloading $GHDL_TARBALL from $GITHUB_URL...${NOCOLOR}"
 wget -q --show-progress $GITHUB_URL -O $GHDL_TARBALL

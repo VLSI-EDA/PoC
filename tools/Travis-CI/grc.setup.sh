@@ -2,7 +2,7 @@
 
 # configure variables in the section below
 GRC_FILE="grc_1.9-1_all.deb"
-TRAVIS_DIR="temp/Travis-CI"
+TEMP_DIR="temp"
 
 
 # assemble the download URL
@@ -27,9 +27,8 @@ NOCOLOR='\e[0m'			# No Color
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}     Downloading and installing grcat   ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
-echo -e "${CYAN}mkdir -p $TRAVIS_DIR${NOCOLOR}"
-mkdir -p $TRAVIS_DIR
-cd $TRAVIS_DIR
+echo -e "${CYAN}mkdir -p $TEMP_DIR${NOCOLOR}"
+mkdir -p $TEMP_DIR && cd $TEMP_DIR
 
 # downloading GHDL
 echo -e "${CYAN}Downloading $GRC_DEB from $GRC_URL...${NOCOLOR}"
