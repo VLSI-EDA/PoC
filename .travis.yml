@@ -1,10 +1,11 @@
 language: python
-python: "3.5"
 matrix:
   include:
     - os: linux
+      env: CONFIG="Trusty,Python3.5,libgnat-4.8,grc-1.9"
       sudo: required
       dist: trusty
+      python: "3.5"
       before_install:
         - sudo apt-get install -y libgnat-4.8
         - sudo ./tools/Travis-CI/grc.setup.sh
@@ -15,11 +16,12 @@ matrix:
         - ./tools/Travis-CI/poc.setup.sh
       script:
         - ./tools/Travis-CI/poc.run.sh
-# experimental without sudo rights
     - os: linux
+      env: CONFIG="Precise,Python3.5,gnat-5"
       addons:
         apt:
           packages:
+            - python3.5
             - gnat-5
       install:
         - pip3 install -r tools/Travis-CI/requirements.txt
