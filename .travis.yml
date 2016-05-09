@@ -6,11 +6,12 @@ python:
 addons:
   apt:
     packages:
-# this will install gnat-4.6 (trusty)
-    - gnat-4.8
-    - grc
+    - gnat-5
+#    - grc
 before_install:
-- sudo apt-get install -y libgnat-4.8 grc
+# libgnat-4.8 is required by GHDL, because it's build with 4.8
+- sudo apt-get install -y libgnat-4.8
+# Ubuntu Trusty has only grc 1.5 included
 - sudo ./tools/Travis-CI/grc.setup.sh
 install:
 - pip3 install -r tools/Travis-CI/requirements.txt
@@ -31,4 +32,3 @@ script:
 #- 
 #after_script:
 #- 
-
