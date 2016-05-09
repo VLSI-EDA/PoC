@@ -3,7 +3,7 @@ dist: trusty
 language: python
 python:
 - "3.5"
-#addons:
+addons:
   apt:
     packages:
 # this will install gnat-4.6 (trusty)
