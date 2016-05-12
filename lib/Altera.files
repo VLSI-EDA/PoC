@@ -11,7 +11,7 @@ else
 		library altera_mf "temp/precompiled/ghdl/altera"
 	elseif ((Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) and ?("temp/precompiled/vsim/altera")) then
 		library altera_mf "temp/precompiled/vsim/altera"
-	elseif (ToolChain = "Altera_QuartusII") then
+	elseif (ToolChain = "Altera_Quartus") then
 		# implicitly referenced; nothing to reference
 	elseif (Tool = "Aldec_aSim") then
 		# Active-HDL is shipped with Xilinx libraries.

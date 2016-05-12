@@ -303,13 +303,13 @@ class Executable(ILogable):
 
 	def __init__(self, platform, executablePath, logger=None):
 		super().__init__(logger)
-		
+
 		self._platform =  platform
 		self._process =    None
 		
-		if isinstance(executablePath, str):              executablePath = Path(executablePath)
+		if isinstance(executablePath, str):             executablePath = Path(executablePath)
 		elif (not isinstance(executablePath, Path)):    raise ValueError("Parameter 'executablePath' is not of type str or Path.")
-		if (not executablePath.exists()):                raise CommonException("Executable '{0!s}' cannot be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
+		if (not executablePath.exists()):               raise CommonException("Executable '{0!s}' cannot be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
 		
 		# prepend the executable
 		self._executablePath =    executablePath
@@ -322,7 +322,10 @@ class Executable(ILogable):
 	def StartProcess(self, parameterList):
 		# start child process
 		# parameterList.insert(0, str(self._executablePath))
-		self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
+		try:
+			self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
+		except OSError as ex:
+			raise CommonException("Error while accessing '{0!s}'.".format(self._executablePath)) from ex
 
 	def Send(self, line, end="\n"):
 		self._process.stdin.write(line + end)

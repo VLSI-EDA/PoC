@@ -4,6 +4,7 @@
 # 
 # ==============================================================================
 # Authors:          Patrick Lehmann
+#                   Thomas B. Preusser
 #
 # Python Class:      TODO
 #
@@ -60,7 +61,15 @@ class Severity(Enum):
 	def __le__(self, other):    return self.value <=  other.value
 	def __gt__(self, other):    return self.value >		other.value
 	def __ge__(self, other):    return self.value >=  other.value
-	
+
+	@classmethod
+	def fromVhdlLevel(cls, severity, fallback = None):
+		return {
+			"failure": cls.Fatal,
+			"error":   cls.Error,
+			"warning": cls.Warning,
+			"note":    cls.Info
+		}.get(severity, fallback)
 
 class LogEntry:
 	def __init__(self, message, severity=Severity.Normal, indent=0):

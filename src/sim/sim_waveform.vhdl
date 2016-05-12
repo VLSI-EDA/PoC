@@ -338,7 +338,7 @@ package body waveform is
 		constant TimeLow						: TIME			:= Period - TimeHigh + (Period * WanderAsFactor);						-- and 50% to the low level
 		constant ClockAfterRun_cy		: POSITIVE	:= 5;
 		
-		constant PROCESS_ID					: T_SIM_PROCESS_ID	:= simRegisterProcess(TestID, "simGenerateClock", IsLowPriority => TRUE);
+		constant PROCESS_ID					: T_SIM_PROCESS_ID	:= simRegisterProcess(TestID, "simGenerateClock(freq=" & to_string(to_freq(Period), 2) & ")", IsLowPriority => TRUE);
 	begin
 		-- report "simGenerateClock: (Instance: '" & Clock'instance_name & "')" & CR &
 			-- "Period: "						& TIME'image(Period) & CR &

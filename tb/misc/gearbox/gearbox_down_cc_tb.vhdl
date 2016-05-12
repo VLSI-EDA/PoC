@@ -202,6 +202,8 @@ begin
 		begin
 			Check		:= TRUE;
 			
+			wait until rising_edge(Clock) and (FirstOut = '1');
+			
 			for i in 0 to LOOP_COUNT - 1 loop
 				wait until rising_edge(Clock);
 				-- simAssertion(Check, "TODO: ");
@@ -218,6 +220,7 @@ begin
 			
 			-- This process is finished
 			simDeactivateProcess(simProcessID);
+			simFinalizeTest(simTestID);
 			wait;		-- forever
 		end process;
 	end generate;

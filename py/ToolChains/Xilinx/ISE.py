@@ -531,6 +531,7 @@ def SimulatorFilter(gen):
 			yield LogEntry(line, Severity.Normal)
 
 def XstFilter(gen):
+	flagNormal = False
 	for line in gen:
 		if line.startswith("ERROR:"):
 			yield LogEntry(line, Severity.Error)
@@ -538,8 +539,12 @@ def XstFilter(gen):
 			yield LogEntry(line, Severity.Warning)
 		elif line.startswith("Note:"):
 			yield LogEntry(line, Severity.Info)
-		else:
+		elif line.startswith("*         "): # progress
 			yield LogEntry(line, Severity.Normal)
+			flagNormal = True
+		else:
+			yield LogEntry(line, Severity.Normal if flagNormal else Severity.Verbose)
+			flagNormal = False
 
 def CoreGeneratorFilter(gen):
 	for line in gen:

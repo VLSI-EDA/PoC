@@ -482,8 +482,6 @@ def QuestaVSimFilter(gen):
 				yield LogEntry(line, Severity.Debug)
 			else:
 				continue
-		elif line.startswith("# do "):
-			yield LogEntry(line, Severity.Verbose)
 		elif line.startswith("# ========================================"):
 			PoCOutputFound = True
 			yield LogEntry(line[2:], Severity.Normal)

@@ -128,7 +128,7 @@ class Compiler(ILogable):
 		self._WriteSpecialSectionIntoConfig(board.Device)
 
 		self._CreatePoCProject(netlist, board)
-		self._AddFileListFile(netlist.FilesFile)
+		if netlist.FilesFile is not None: self._AddFileListFile(netlist.FilesFile)
 		if (netlist.RulesFile is not None):
 			self._AddRulesFiles(netlist.RulesFile)
 
@@ -137,10 +137,12 @@ class Compiler(ILogable):
 		self.Directories.Destination = self.Directories.Netlist / str(device)
 
 		# create temporary directory for the compiler if not existent
-		if (not self.Directories.Working.exists()):
-			self._LogVerbose("Creating temporary directory for synthesizer files.")
-			self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
-			self.Directories.Working.mkdir(parents=True)
+		self._LogVerbose("Creating temporary directory for synthesizer files.")
+		self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
+		if (self.Directories.Working.exists()):
+			shutil.rmtree(str(self.Directories.Working))
+		self.Directories.Working.mkdir(parents=True)
+
 
 		# change working directory to temporary iSim path
 		self._LogVerbose("Changing working directory to temporary directory.")

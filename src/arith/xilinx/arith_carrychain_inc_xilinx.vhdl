@@ -5,11 +5,11 @@
 -- ============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Module:					Carray-chain abstraction for increment by one operations
+-- Module:					Carry-chain abstraction for increment by one operations
 --
 -- Description:
 -- ------------------------------------
---	This is a Xilinx specific carray-chain abstraction for increment by one
+--	This is a Xilinx specific carry-chain abstraction for increment by one
 --	operations.
 --
 --	Y <= X + (0...0) & Cin

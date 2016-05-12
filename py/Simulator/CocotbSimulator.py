@@ -33,11 +33,13 @@
 # ==============================================================================
 #
 # entry point
+
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
 else:
 	from lib.Functions import Exit
+
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.CocotbSimulator")
 
 
@@ -77,27 +79,32 @@ class Simulator(BaseSimulator):
 		self._LogVerbose("Preparing Cocotb simulator.")
 
 	def RunAll(self, fqnList, *args, **kwargs):
-		for fqn in fqnList:
-			entity = fqn.Entity
-			if (isinstance(entity, WildCard)):
-				for testbench in entity.GetCocoTestbenches():
+		self._testSuite.StartTimer()
+		try:
+			for fqn in fqnList:
+				entity = fqn.Entity
+				if (isinstance(entity, WildCard)):
+					for testbench in entity.GetCocoTestbenches():
+						self.TryRun(testbench, *args, **kwargs)
+				else:
+					testbench = entity.CocoTestbench
 					self.TryRun(testbench, *args, **kwargs)
-			else:
-				testbench = entity.CocoTestbench
-				self.TryRun(testbench, *args, **kwargs)
+		except KeyboardInterrupt:
+			self._LogError("Received a keyboard interrupt.")
+		finally:
+			self._testSuite.StopTimer()
 
 		self.PrintOverallSimulationReport()
 
 		return self._testSuite.IsAllPassed
 
 	def _RunSimulation(self, testbench):
-		board = self._pocProject.Board
-
 		# select modelsim.ini from precompiled
 		precompiledModelsimIniPath = self.Directories.PreCompiled
-		if board.Device.Vendor is Vendors.Altera:
+		device_vendor = self._pocProject.Board.Device.Vendor
+		if device_vendor is Vendors.Altera:
 			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
-		elif board.Device.Vendor is Vendors.Xilinx:
+		elif device_vendor is Vendors.Xilinx:
 			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
 		precompiledModelsimIniPath /= "modelsim.ini"
@@ -165,4 +172,4 @@ class Simulator(BaseSimulator):
 		# execute make
 		make = Make(self.Host.Platform, logger=self.Host.Logger)
 		if self._guiMode: make.Parameters[Make.SwitchGui] = 1
-		make.Run()
+		testbench.Result = make.RunCocotb()

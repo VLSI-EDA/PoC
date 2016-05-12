@@ -83,7 +83,7 @@ begin
 		gen : for i in 0 to BITS - 1 generate
 			signal Data_async							: STD_LOGIC;
 			signal Data_meta							: STD_LOGIC																		:= INIT_I(i);
-			signal Data_sync							: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 0)		:= (others => INIT_I(i));
+			signal Data_sync							: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 1)		:= (others => INIT_I(i));
 			
 			-- Mark register DataSync_async's input as asynchronous and ignore timings (TIG)
 			attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
@@ -99,7 +99,7 @@ begin
 			begin
 				if rising_edge(Clock) then
 					Data_meta		<= Data_async;
-					Data_sync		<= Data_sync(Data_sync'high - 1 downto 0) & Data_meta;
+					Data_sync		<= Data_sync(Data_sync'high - 1 downto 1) & Data_meta;
 				end if;
 			end process;		
 			

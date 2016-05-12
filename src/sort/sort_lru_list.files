@@ -7,11 +7,8 @@
 # Common PoC packages for configuration, synthesis and simulation
 include				"src/common/common.files"										# load common packages
 
-if (DeviceVendor = "Xilinx") then
-	include			"lib/Xilinx.files"													# load Xilinx primitives
-else
-	report "Only Xilinx devices are supported yet."
-end if
+# PoC.arith
+include				"src/arith/arith_prefix_and.files"
 
 # PoC.sort
 vhdl		poc		"src/sort/sort_lru_list.vhdl"								# Top-Level

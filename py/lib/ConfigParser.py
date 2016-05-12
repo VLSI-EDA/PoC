@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:      Derived and extended configparser from Python standard library
+# Python Class:     Derived and extended configparser from Python standard library
 #
 # Description:
 # ------------------------------------
@@ -38,22 +38,18 @@ from collections  import OrderedDict as _default_dict, ChainMap as _ChainMap
 from configparser import ConfigParser, SectionProxy, Interpolation, MAX_INTERPOLATION_DEPTH, DEFAULTSECT, _UNSET, ConverterMapping
 from configparser import NoSectionError, InterpolationDepthError, InterpolationSyntaxError, NoOptionError, InterpolationMissingOptionError
 
-
 class ExtendedSectionProxy(SectionProxy):
 	def __getitem__(self, key):
 		if not self._parser.has_option(self._name, key):
 			raise KeyError(self._name + ":" + key)
 		return self._parser.get(self._name, key)
 
-SectionProxy = ExtendedSectionProxy
+# Monkey patching ... (a.k.a. duck punshing
+import configparser
+configparser.SectionProxy = ExtendedSectionProxy
 
 
 class ExtendedInterpolation(Interpolation):
-	"""
-	Advanced variant of interpolation, supports the syntax used by
-	`zc.buildout'. Enables interpolation between sections.
-	"""
-
 	_KEYCRE = re.compile(r"\$\{(?P<ref>[^}]+)\}")
 	_KEYCRE2 = re.compile(r"\$\[(?P<ref>[^\]]+)\}")
 
@@ -251,11 +247,11 @@ class ExtendedConfigParser(ConfigParser):
 		else:
 			d = "|".join(re.escape(d) for d in delimiters)
 			if allow_no_value:            self._optcre = re.compile(self._OPT_NV_TMPL.format(delim=d), re.VERBOSE)
-			else:                          self._optcre = re.compile(self._OPT_TMPL.format(delim=d), re.VERBOSE)
+			else:                         self._optcre = re.compile(self._OPT_TMPL.format(delim=d), re.VERBOSE)
 
-		if (interpolation is None):      self._interpolation = Interpolation()
-		elif (interpolation is _UNSET):  self._interpolation = ExtendedInterpolation()
-		else:                            self._interpolation = interpolation
+		if (interpolation is None):     self._interpolation = Interpolation()
+		elif (interpolation is _UNSET): self._interpolation = ExtendedInterpolation()
+		else:                           self._interpolation = interpolation
 
 	@property
 	def Interpolation(self):

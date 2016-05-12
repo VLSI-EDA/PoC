@@ -107,9 +107,8 @@ begin
 		
 	begin
 		-- generate global testbench clock
-		simGenerateClock(Clock1,		CLOCK1_PERIOD);
-		simGenerateClock(Clock2,		CLOCK2_PERIOD);
-	
+		simGenerateClock(simTestID, Clock1,		CLOCK1_PERIOD);
+		simGenerateClock(simTestID, Clock2,		CLOCK2_PERIOD);
 	
 		procGenerator : process
 			-- from Simulation
@@ -158,21 +157,25 @@ begin
 			);
 		
 		procChecker : process
-			-- from Simulation
 			constant simProcessID	: T_SIM_PROCESS_ID	:= simRegisterProcess(simTestID, "Checker " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
 			
 			variable	Check		: BOOLEAN;
 		begin
-			Check		:= FALSE;
+			-- Check		:= FALSE;
+			
+			wait until rising_edge(Clock2) and (Valid = '1');
 			
 			for i in 0 to LOOP_COUNT - 1 loop
 				wait until rising_edge(Clock2);
-				Check := Check or (Valid = '1');
+				-- Check := Check or (Valid = '1');
 			end loop;
-			simAssertion(Check, "Valid not asserted.");
+			-- simAssertion(Check, "Valid not asserted.");
 
+			simWaitUntilRisingEdge(simTestID, Clock2, 4);
+			
 			-- This process is finished
 			simDeactivateProcess(simProcessID);
+			simFinalizeTest(simTestID);
 			wait;		-- forever
 		end process;
 	end generate;
