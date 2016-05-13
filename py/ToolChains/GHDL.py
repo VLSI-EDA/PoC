@@ -506,7 +506,7 @@ def GHDLRunFilter(gen):
 
 		filterMatch = filterRegExp.match(line)
 		if filterMatch is not None:
-			yield LogEntry(line, Severity.fromVhdlLevel(filterMatch.group('severity'), Severity.Error))
+			yield LogEntry(line, Severity.ParseVHDLSeverityLevel(filterMatch.group('severity'), Severity.Error))
 			continue
 
 		yield LogEntry(line, Severity.Normal)

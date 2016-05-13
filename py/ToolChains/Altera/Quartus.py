@@ -264,7 +264,7 @@ class QuartusProject(BaseProject):
 		pass
 
 	def Read(self):
-		tclShell = self._host.Toolchain.GetTclShell()
+		tclShell = self._host.Toolchain.GetSynthesizer()
 		tclShell.StartProcess(["-s"])
 		tclShell.SendBoundary()
 		tclShell.ReadUntilBoundary()

@@ -99,6 +99,11 @@ class AlteraFamilies(Families):
 	Arria =      "a"
 	Stratix =    "s"
 
+class LatticeFamilies(Families):
+	# lattice families
+	ECP =        "lfe"
+	# FIXME: MachXO, iCE, ...
+
 
 @unique
 class Devices(BaseEnum):
@@ -194,31 +199,33 @@ class SubTypes(BaseEnum):
 		
 @unique
 class Packages(BaseEnum):
-	Unknown =  0
-	Generic =  1
+	Unknown = 0
+	Generic = 1
 	
-	TQG =      10
+	TQG =     10
 	
-	CPG =      20
-	CSG =      21
+	CPG =     20
+	CSG =     21
+
+	CABGA =   25
 	
 	FF =      30
-	FFG =      31
-	FTG =      32
-	FGG =      33
-	FLG =      34
+	FFG =     31
+	FTG =     32
+	FGG =     33
+	FLG =     34
 	FT =      35
 	
 	RB =      40
-	RBG =      41
+	RBG =     41
 	RS =      42
 	RF =      43
 
-	E =        50
-	Q =        51
-	F =        52
-	U =        53
-	M =        54
+	E =       50
+	Q =       51
+	F =       52
+	U =       53
+	M =       54
 
 
 class Device:
@@ -295,31 +302,32 @@ class Device:
 
 	def _DecodeLatticeLFE(self, deviceString):
 		self.__vendor = Vendors.Lattice
+		self.__family = LatticeFamilies.ECP
 		self.__generation = int(deviceString[3:4])
 
 		if   (self.__generation == 3):  self._DecodeLatticeECP3(deviceString)
 		elif (self.__generation == 5):  self._DecodeLatticeECP5(deviceString)
 		else:                            raise ConfigurationException("Unknown Lattice ECP generation.")
 
-		# "ECP5UM-45F"
-		print("{RED}Device._DecodeLattice(): not fully implemented for Lattice devices.{NOCOLOR}".format(**Init.Foreground))
-
 	def _DecodeLatticeECP3(self, deviceString):
 		self.__subtype =  SubTypes.NoSubType
 		self.__number =    int(deviceString[5:8])
 
 	def _DecodeLatticeECP5(self, deviceString):
+		self.__device =       Devices.ECP5
 		familyToken = deviceString[4:6].lower()
 		if (familyToken == "u-"):
 			self.__subtype =    SubTypes.U
-			self.__number =      int(deviceString[6:8])
-			self.__speedGrade =  int(deviceString[9:10])
-			self.__package =    Packages(deviceString[10:15])
+			self.__number =     int(deviceString[6:8])
+			self.__speedGrade = int(deviceString[10:11])
+			self.__package =    Packages.CABGA
+			self.__pinCount =   381                            # XXX: implement other packages and pin counts
 		elif (familyToken == "um"):
 			self.__subtype =    SubTypes.UM
-			self.__number =      int(deviceString[7:9])
-			self.__speedGrade = int(deviceString[10:11])
-			self.__package = Packages(deviceString[11:16])
+			self.__number =     int(deviceString[7:9])
+			self.__speedGrade = int(deviceString[11:12])
+			self.__package =    Packages.CABGA
+			self.__pinCount =   381                            # XXX: implement other packages and pin counts
 		else:
 			raise ConfigurationException("Unknown Lattice ECP5 subtype.")
 
@@ -399,7 +407,7 @@ class Device:
 			if self.__generation == 5: return self.__deviceString[2:]
 			return self.__deviceString
 		elif (self.__vendor is Vendors.Lattice):
-			return self.__deviceString
+			return "{0!s}{1!s}{2!s}-{3!s}F".format(self.__family.value, self.__generation, self.__subtype, self.__number)
 		else:
 			raise NotImplementedError("Device.ShortName() not implemented for vendor {0!s}".format(self.__vendor))
 	
@@ -453,11 +461,11 @@ class Device:
 			else:
 				return "{0!s}-{1}".format(self.__family, self.__generation)
 		elif self.__vendor is Vendors.Lattice:
-			raise NotImplementedError()
+			return "{0!s}{1!s}".format(self.__device, self.__subtype)
 	
 	def GetVariables(self):
 		result = {
-			"DeviceShortName" :    self.ShortName,
+			"DeviceShortName" :   self.ShortName,
 			"DeviceFullName" :    self.FullName,
 			"DeviceVendor" :      str(self.Vendor),
 			"DeviceFamily" :      str(self.Family),

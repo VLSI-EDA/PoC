@@ -152,7 +152,10 @@ class Simulator(BaseSimulator):
 				raise SimulatorException("Cannot copy '{0!s}' to Cocotb temp directory.".format(file.Path)) \
 					from FileNotFoundError(str(file.Path))
 			self._LogDebug("copy {0!s} {1}".format(file.Path, cocotbTempDir))
-			shutil.copy(str(file.Path), cocotbTempDir)
+			try:
+				shutil.copy(str(file.Path), cocotbTempDir)
+			except OSError as ex:
+				raise SimulatorException("Error while copying '{0!s}'.".format(file.Path)) from ex
 
 		# read/write Makefile template
 		self._LogVerbose("Generating Makefile...")

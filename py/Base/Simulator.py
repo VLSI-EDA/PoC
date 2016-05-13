@@ -129,6 +129,10 @@ class Simulator(ILogable):
 	def Host(self):           return self.__host
 	@property
 	def Directories(self):    return self._directories
+	@property
+	def PoCProject(self):     return self._pocProject
+	@property
+	def TestSuite(self):      return self._testSuite
 
 	def _GetTimeDeltaSinceLastEvent(self):
 		now = datetime.now()
@@ -143,13 +147,22 @@ class Simulator(ILogable):
 		self._LogVerbose("Creating fresh temporary directory for simulator files.")
 		self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
 		if (self.Directories.Working.exists()):
-			shutil.rmtree(str(self.Directories.Working))
-		self.Directories.Working.mkdir(parents=True)
+			try:
+				shutil.rmtree(str(self.Directories.Working))
+			except OSError as ex:
+				raise SimulatorException("Error while deleting '{0!s}'.".format(self.Directories.Working)) from ex
+		try:
+			self.Directories.Working.mkdir(parents=True)
+		except OSError as ex:
+			raise SimulatorException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
 
 		# change working directory to temporary path
 		self._LogVerbose("Changing working directory to temporary directory.")
 		self._LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
-		chdir(str(self.Directories.Working))
+		try:
+			chdir(str(self.Directories.Working))
+		except OSError as ex:
+			raise SimulatorException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		"""Run a list of testbenches. Expand wildcards to all selected testbenches."""

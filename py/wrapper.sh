@@ -52,7 +52,7 @@ PyWrapper_LoadEnv_Aldec_ActiveHDL=0
 # PyWrapper_LoadEnv_Altera_Quartus=0
 # PyWrapper_LoadEnv_Altera_ModelSim=0
 PyWrapper_LoadEnv_GHDL_GTKWave=0
-# PyWrapper_LoadEnv_Lattice_Diamond=0
+PyWrapper_LoadEnv_Lattice_Diamond=0
 # PyWrapper_LoadEnv_Lattice_ActiveHDL=0
 PyWrapper_LoadEnv_Mentor_QuestaSim=0
 PyWrapper_LoadEnv_Xilinx_ISE=0
@@ -71,6 +71,8 @@ for param in $PyWrapper_Parameters; do
 	if [ "$param" = "coregen" ];	then PyWrapper_LoadEnv_Xilinx_ISE=1; fi
 	if [ "$param" = "xst" ];			then PyWrapper_LoadEnv_Xilinx_ISE=1; fi
 	if [ "$param" = "vivado" ];		then PyWrapper_LoadEnv_Xilinx_Vivado=1; fi
+
+	if [ "$param" = "lse" ];			then PyWrapper_LoadEnv_Lattice_Diamond=1; fi
 done
 
 # publish PoC directories as environment variables
@@ -172,6 +174,36 @@ if [ $PoC_ExitCode -eq 0 ]; then
 			else
 				echo 1>&2 -e "${RED}ERROR: ExitCode for '$command' was not zero. Aborting script execution.${NOCOLOR}"
 				echo 1>&2 -e "${RED}$PoC_Vivado_SettingsFile${NOCOLOR}"
+				PoC_ExitCode=1
+			fi
+		fi
+	fi
+fi
+
+# load Lattice Diamond environment
+if [ $PoC_ExitCode -eq 0 ]; then
+	if [ $PyWrapper_LoadEnv_Lattice_Diamond -eq 1 ]; then
+		# if $XILINX_VIVADO environment variable is not set
+		if [ -z "$LSC_DIAMOND" ]; then
+			command="$Python_Interpreter $PoC_RootDir_AbsPath/$PoC_PythonScriptDir/PoC.py query INSTALL.Lattice.Diamond:BinaryDirectory"
+			if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}getting Lattice Diamond binary directory: command='$command'${NOCOLOR}"; fi
+			PoC_Diamond_BinDir=$($command)
+			if [ $? -eq 0 ]; then
+				if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}Lattice Diamond binary directory: '$PoC_Diamond_BinDir'${NOCOLOR}"; fi
+				if [ -z "$PoC_Diamond_BinDir" ]; then
+					echo 1>&2 -e "${RED}No Lattice Diamond installation found.${NOCOLOR}"
+					echo 1>&2 -e "${RED}Run 'PoC.py --configure' to configure your Lattice Diamond installation.${NOCOLOR}"
+					PoC_ExitCode=1
+				fi
+				echo -e "${YELLOW}Loading Lattice Diamond environment '$PoC_Diamond_BinDir/diamond_env'${NOCOLOR}"
+				PyWrapper_RescueArgs=$@
+				set --
+				bindir=$PoC_Diamond_BinDir #variable required by diamond_env
+				source $bindir/diamond_env
+				unset bindir
+				set -- $PyWrapper_RescueArgs
+			else
+				echo 1>&2 -e "${RED}ERROR: ExitCode for '$command' was not zero. Aborting script execution.${NOCOLOR}"
 				PoC_ExitCode=1
 			fi
 		fi

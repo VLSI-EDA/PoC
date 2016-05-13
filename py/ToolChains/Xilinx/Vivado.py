@@ -499,6 +499,8 @@ def SimulatorFilter(gen):
 			yield LogEntry(line, Severity.Normal)
 		elif line.startswith("Failure: "):
 			yield LogEntry(line, Severity.Error)
+		elif line.startswith("FATAL_ERROR: "):
+			yield LogEntry(line, Severity.Error)
 		else:
 			yield LogEntry(line, Severity.Normal)
 
