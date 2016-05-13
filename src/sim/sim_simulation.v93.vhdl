@@ -52,6 +52,8 @@ package simulation is
 	alias simRegisterProcess		is work.sim_unprotected.registerProcess[STRING, BOOLEAN return T_SIM_PROCESS_ID];
 	alias simDeactivateProcess	is work.sim_unprotected.deactivateProcess[T_SIM_PROCESS_ID];
 
+	procedure simStopAllClocks;
+	--alias simStopAllClocks			is work.sim_unprotected.stopAllClocks[];
 	alias simIsStopped					is work.sim_unprotected.isStopped[T_SIM_TEST_ID return BOOLEAN];
 	alias simIsFinalized				is work.sim_unprotected.isFinalized[T_SIM_TEST_ID return BOOLEAN];
 	alias simIsAllFinalized			is work.sim_unprotected.isAllFinalized [return BOOLEAN];
@@ -75,5 +77,10 @@ package body simulation is
 			report "simInitialize: TIMEOUT" severity ERROR;
 			work.sim_unprotected.finalize;
 		end if;
+	end procedure;
+	
+	procedure simStopAllClocks is
+	begin
+		work.sim_unprotected.stopAllClocks;
 	end procedure;
 end package body;

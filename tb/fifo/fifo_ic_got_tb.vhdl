@@ -88,12 +88,12 @@ architecture tb of fifo_ic_got_tb is
   
 begin
 	-- initialize global simulation status
-	simInitialize(MaxSimulationRuntime => 1 us);
+	simInitialize;
 	-- generate global testbench clock
 	simGenerateClock(clk0, 14 ns);
 	simGenerateClock(clk1, 24 ns);
 	simGenerateClock(clk2, 10 ns);
-	simGenerateWaveform(rst,	simGenerateWaveform_Reset(Pause => 0 ns, ResetPulse => 16 ns));
+	simGenerateWaveform(rst,	simGenerateWaveform_Reset(Pause => 0 ns, ResetPulse => 30 ns));
 
   -----------------------------------------------------------------------------
   -- Initial Generator
@@ -198,11 +198,17 @@ begin
     variable cnt : natural := 0;
   begin
     -- Pass-thru Checking
-    wait until rising_edge(clk1);
-		simAssertion(((rst = '1') or (put1 = '0') or (do1 = di1)), "Mismatch in clk1.");
-    if put1 = '1' then
-      cnt := cnt + 1;
-    end if;
+		while cnt < 4*MIN_DEPTH loop
+			wait until rising_edge(clk1);
+			simAssertion(((rst = '1') or (put1 = '0') or (do1 = di1)), "Mismatch in clk1.");
+			if put1 = '1' then
+				cnt := cnt + 1;
+			end if;
+		end loop;
+		
+    -- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;
   end process;
 
   fifo1_2 : entity PoC.fifo_ic_got
@@ -252,19 +258,19 @@ begin
     variable del : natural := 0;
   begin
     -- Final Checking
-    wait until rising_edge(clk2);
-    got2 <= '0';
-    if vld2 = '1' then
-      del := del + 1;
-      if del = 3 then
-        got2 <= '1';
-				simAssertion((dat2 = do2), "Mismatch in clk2.");
-        cnt := cnt + 1;
-        del := 0;
-      end if;
-    end if;
-    --port "Count: "&integer'image(cnt) severity note;
-    wait until (cnt = 4 * MIN_DEPTH);
+		while cnt < 4*MIN_DEPTH loop
+			wait until rising_edge(clk2);
+			got2 <= '0';
+			if vld2 = '1' then
+				del := del + 1;
+				if del = 3 then
+					got2 <= '1';
+					simAssertion((dat2 = do2), "Mismatch in clk2.");
+					cnt := cnt + 1;
+					del := 0;
+				end if;
+			end if;
+		end loop;
 		
 		-- This process is finished
 		simDeactivateProcess(simProcessID);

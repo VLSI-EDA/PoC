@@ -72,7 +72,7 @@ end entity;
 
 
 architecture rtl of gearbox_down_cc is
-	constant C_VERBOSE				: BOOLEAN			:= POC_VERBOSE;
+	constant C_VERBOSE				: BOOLEAN			:= FALSE;		--POC_VERBOSE;
 
 	constant BITS_PER_CHUNK		: POSITIVE		:= greatestCommonDivisor(INPUT_BITS, OUTPUT_BITS);
 	constant INPUT_CHUNKS			: POSITIVE		:= INPUT_BITS / BITS_PER_CHUNK;
@@ -102,11 +102,11 @@ architecture rtl of gearbox_down_cc is
 		variable UseBuffer	: BOOLEAN;
 		variable k					: T_MUX_INDEX;
 	begin
-		if (not C_VERBOSE) then		report "genMuxDescription: IC=" & INTEGER'image(INPUT_CHUNKS) severity NOTE;		end if;
+		if (C_VERBOSE = TRUE) then		report "genMuxDescription: IC=" & INTEGER'image(INPUT_CHUNKS) severity NOTE;		end if;
 		
 		k := INPUT_CHUNKS - 1;
 		for i in 0 to INPUT_CHUNKS - 1 loop
-			if (not C_VERBOSE) then		report "  i: " & INTEGER'image(i) & "  List:" severity NOTE;		end if;
+			if (C_VERBOSE = TRUE) then		report "  i: " & INTEGER'image(i) & "  List:" severity NOTE;		end if;
 			UseBuffer					:= TRUE;
 			for j in 0 to OUTPUT_CHUNKS - 1 loop
 				k													:= (k + 1) mod INPUT_CHUNKS;
@@ -114,14 +114,14 @@ architecture rtl of gearbox_down_cc is
 				DESC(i).List(j).Index			:= k;
 				DESC(i).List(j).UseBuffer	:= UseBuffer;
 				
-				if (not C_VERBOSE) then		report "    j= " & INTEGER'image(j) & "  k=" & INTEGER'image(DESC(i).List(j).Index) severity NOTE;		end if;
+				if (C_VERBOSE = TRUE) then		report "    j= " & INTEGER'image(j) & "  k=" & INTEGER'image(DESC(i).List(j).Index) severity NOTE;		end if;
 			end loop;
 			DESC(i).Reg_en		:= to_sl(not UseBuffer);
 			DESC(i).Nxt				:= to_sl(k + OUTPUT_CHUNKS >= INPUT_CHUNKS);
 			DESC(i).First			:= to_sl(i = 0);
 			DESC(i).Last			:= to_sl(i = INPUT_CHUNKS - 1);
 			
-			if (not C_VERBOSE) then		report "    en=" & STD_LOGIC'image(DESC(i).Reg_en) & "  nxt=" & STD_LOGIC'image(DESC(i).Nxt) severity NOTE;		end if;
+			if (C_VERBOSE = TRUE) then		report "    en=" & STD_LOGIC'image(DESC(i).Reg_en) & "  nxt=" & STD_LOGIC'image(DESC(i).Nxt) severity NOTE;		end if;
 		end loop;
 		return DESC;
 	end function;

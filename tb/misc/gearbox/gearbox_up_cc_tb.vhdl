@@ -110,7 +110,6 @@ begin
 		
 	begin
 		procGenerator : process
-			-- from Simulation
 			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
 			-- protected type from RandomPkg
 			variable RandomVar		: RandomPType;
@@ -201,6 +200,8 @@ begin
 		begin
 			Check		:= TRUE;
 			
+			wait until rising_edge(Clock) and (FirstOut = '1');
+			
 			for i in 0 to LOOP_COUNT - 1 loop
 				wait until rising_edge(Clock);
 				-- simAssertion(Check, "TODO: ");
@@ -217,6 +218,7 @@ begin
 			
 			-- This process is finished
 			simDeactivateProcess(simProcessID);
+			simFinalizeTest(simTestID);
 			wait;		-- forever
 		end process;
 	end generate;

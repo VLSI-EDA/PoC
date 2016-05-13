@@ -48,7 +48,7 @@ entity icmpv4_RX is
 		Clock													: in	STD_LOGIC;																	-- 
 		Reset													: in	STD_LOGIC;																	-- 
 		-- CSE interface
-		Command												: in	T_NET_ICMPV4_RX_COMMand;
+		Command												: in	T_NET_ICMPV4_RX_COMMAND;
 		Status												: out	T_NET_ICMPV4_RX_STATUS;
 		Error													: out	T_NET_ICMPV4_RX_ERROR;
 		-- IN port
@@ -190,9 +190,9 @@ begin
 					if (In_EOF = '0') then
 						Type_en										<= '1';
 					
-						if (In_Data = C_NET_ICMPV4_type_ECHO_REPLY) then
+						if (In_Data = C_NET_ICMPV4_TYPE_ECHO_REPLY) then
 							NextState								<= ST_RECEIVE_ECHO_CODE;
-						elsif (In_Data = C_NET_ICMPV4_type_ECHO_REQUEST) then
+						elsif (In_Data = C_NET_ICMPV4_TYPE_ECHO_REQUEST) then
 							NextState								<= ST_RECEIVE_ECHO_CODE;
 						else
 							NextState								<= ST_DISCARD_FRAME;
@@ -322,9 +322,9 @@ begin
 				end if;
 
 			when ST_RECEIVE_ECHO_COMPLETE =>
-				if (Code_d = C_NET_ICMPV4_type_ECHO_REPLY) then
+				if (Code_d = C_NET_ICMPV4_TYPE_ECHO_REPLY) then
 					Status											<= NET_ICMPV4_RX_STATUS_RECEIVED_ECHO_REPLY;
-				elsif (Code_d = C_NET_ICMPV4_type_ECHO_REQUEST) then
+				elsif (Code_d = C_NET_ICMPV4_TYPE_ECHO_REQUEST) then
 					Status											<= NET_ICMPV4_RX_STATUS_RECEIVED_ECHO_REQUEST;
 				end if;
 

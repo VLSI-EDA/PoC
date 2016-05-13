@@ -9,12 +9,7 @@ for various devices families.
 
 ## Package
 
-The package [`xil`][xil.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.xil.all;
-```
+The package [`PoC.xil`][xil.pkg] holds all component declarations for this namespace.
 
 
 ## Entities
@@ -50,6 +45,7 @@ use     PoC.xil.all;
     7-Series XADC primitive to measure the FPGA's temperature.
 
  [xil.mig]:							mig
+
  [xil.pkg]:							xil.pkg.vhdl
 
  [xil_BSCAN]:						xil_BSCAN.vhdl

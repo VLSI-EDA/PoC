@@ -64,7 +64,6 @@ begin
 	-- initialize global simulation status
 	simInitialize;
 
-	
 	genInstances : for i in TB_GENERATOR_LIST'range generate
 		constant INPUT_BITS						: POSITIVE		:= TB_GENERATOR_LIST(i).InputBits;
 		constant OUTPUT_BITS					: POSITIVE		:= TB_GENERATOR_LIST(i).OutputBits;
@@ -105,9 +104,8 @@ begin
 		
 	begin
 		-- generate global testbench clock
-		simGenerateClock(Clock1,		CLOCK1_PERIOD);
-		simGenerateClock(Clock2,		CLOCK2_PERIOD);
-	
+		simGenerateClock(simTestID, Clock1,		CLOCK1_PERIOD);
+		simGenerateClock(simTestID, Clock2,		CLOCK2_PERIOD);
 	
 		procGenerator : process
 			-- from Simulation
@@ -154,20 +152,17 @@ begin
 			);
 		
 		procChecker : process
-			-- from Simulation
 			constant simProcessID	: T_SIM_PROCESS_ID	:= simRegisterProcess(simTestID, "Checker " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
-			
-
-			variable	Check		: BOOLEAN;
 		begin
-			Check		:= FALSE;
-			
 			for i in 0 to (LOOP_COUNT * RATIO) - 1 loop
 				wait until rising_edge(Clock2);
 			end loop;
 			
+			simWaitUntilRisingEdge(simTestID, Clock2, 4);
+			
 			-- This process is finished
 			simDeactivateProcess(simProcessID);
+			simFinalizeTest(simTestID);
 			wait;		-- forever
 		end process;
 	end generate;

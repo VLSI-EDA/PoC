@@ -250,13 +250,13 @@ begin
 		signal StmMux_MetaIn_Data									: STD_LOGIC_VECTOR(isum(TXSTMMUX_META_BITS) - 1 downto 0);
 		
 	begin
-		StmBuf_MetaIn_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_SRCADR)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_SRCADR))	<= TX_Meta_SrcIPv4Address_Data(I);
-		StmBuf_MetaIn_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_DESTADR)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_DESTADR))	<= TX_Meta_DestIPv4Address_Data(I);
-		StmBuf_MetaIn_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_LENGTH)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_LENGTH))	<= TX_Meta_Length(I);
+		StmBuf_MetaIn_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_SRCADR)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_SRCADR))	<= TX_Meta_SrcIPv4Address_Data(i);
+		StmBuf_MetaIn_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_DESTADR)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_DESTADR))	<= TX_Meta_DestIPv4Address_Data(i);
+		StmBuf_MetaIn_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_LENGTH)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_LENGTH))	<= TX_Meta_Length(i);
 	
---		TX_Meta_rst(I)									<= Meta_rst;
-		TX_Meta_SrcIPv4Address_nxt(I)		<= StmBuf_MetaIn_nxt(TXSTMBUF_META_STREAMID_SRCADR);
-		TX_Meta_DestIPv4Address_nxt(I)	<= StmBuf_MetaIn_nxt(TXSTMBUF_META_STREAMID_DESTADR);
+--		TX_Meta_rst(i)									<= Meta_rst;
+		TX_Meta_SrcIPv4Address_nxt(i)		<= StmBuf_MetaIn_nxt(TXSTMBUF_META_STREAMID_SRCADR);
+		TX_Meta_DestIPv4Address_nxt(i)	<= StmBuf_MetaIn_nxt(TXSTMBUF_META_STREAMID_DESTADR);
 	
 		TX_StmBuf : entity PoC.stream_Buffer
 			generic map (
@@ -270,20 +270,20 @@ begin
 				Clock													=> Clock,
 				Reset													=> Reset,
 				
-				In_Valid											=> TX_Valid(I),
-				In_Data												=> TX_Data(I),
-				In_SOF												=> TX_SOF(I),
-				In_EOF												=> TX_EOF(I),
-				In_Ack												=> TX_Ack	(I),
-				In_Meta_rst										=> TX_Meta_rst(I),
+				In_Valid											=> TX_Valid(i),
+				In_Data												=> TX_Data(i),
+				In_SOF												=> TX_SOF(i),
+				In_EOF												=> TX_EOF(i),
+				In_Ack												=> TX_Ack	(i),
+				In_Meta_rst										=> TX_Meta_rst(i),
 				In_Meta_nxt										=> StmBuf_MetaIn_nxt,
 				In_Meta_Data									=> StmBuf_MetaIn_Data,
 				
-				Out_Valid											=> StmMux_In_Valid(I),
+				Out_Valid											=> StmMux_In_Valid(i),
 				Out_Data											=> StmBuf_DataOut,
-				Out_SOF												=> StmMux_In_SOF(I),
-				Out_EOF												=> StmMux_In_EOF(I),
-				Out_Ack												=> StmMux_In_Ack	(I),
+				Out_SOF												=> StmMux_In_SOF(i),
+				Out_EOF												=> StmMux_In_EOF(i),
+				Out_Ack												=> StmMux_In_Ack	(i),
 				Out_Meta_rst									=> StmBuf_Meta_rst,
 				Out_Meta_nxt									=> StmBuf_MetaOut_nxt,
 				Out_Meta_Data									=> StmBuf_MetaOut_Data
@@ -294,20 +294,20 @@ begin
 		StmBuf_Meta_DestIPv4Address_Data										<= StmBuf_MetaOut_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_DESTADR)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_DESTADR));
 		StmBuf_Meta_Length																	<= StmBuf_MetaOut_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_LENGTH)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_LENGTH));
 		
-		StmBuf_Meta_rst																			<= StmMux_In_Meta_rev(I, TXSTMMUX_META_RST_BIT);
-		StmBuf_MetaOut_nxt(TXSTMBUF_META_STREAMID_SRCADR)		<= StmMux_In_Meta_rev(I, TXSTMMUX_META_SRC_NXT_BIT);
-		StmBuf_MetaOut_nxt(TXSTMBUF_META_STREAMID_DESTADR)	<= StmMux_In_Meta_rev(I, TXSTMMUX_META_DEST_NXT_BIT);
+		StmBuf_Meta_rst																			<= StmMux_In_Meta_rev(i, TXSTMMUX_META_RST_BIT);
+		StmBuf_MetaOut_nxt(TXSTMBUF_META_STREAMID_SRCADR)		<= StmMux_In_Meta_rev(i, TXSTMMUX_META_SRC_NXT_BIT);
+		StmBuf_MetaOut_nxt(TXSTMBUF_META_STREAMID_DESTADR)	<= StmMux_In_Meta_rev(i, TXSTMMUX_META_DEST_NXT_BIT);
 		StmBuf_MetaOut_nxt(TXSTMBUF_META_STREAMID_LENGTH)		<= '0';
 		
 		-- repack metadata into 1 dim vector for mux
 		StmMux_MetaIn_Data(high(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_SRCADR)		downto low(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_SRCADR))		<= StmBuf_Meta_SrcIPv4Address_Data;
 		StmMux_MetaIn_Data(high(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_DESTADR)		downto low(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_DESTADR))		<= StmBuf_Meta_DestIPv4Address_Data;
 		StmMux_MetaIn_Data(high(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_LENGTH)		downto low(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_LENGTH))		<= StmBuf_Meta_Length;
-		StmMux_MetaIn_Data(high(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_PROTOCOL)	downto low(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_PROTOCOL))	<= PACKET_TYPES(I);
+		StmMux_MetaIn_Data(high(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_PROTOCOL)	downto low(TXSTMMUX_META_BITS, TXSTMMUX_META_STREAMID_PROTOCOL))	<= PACKET_TYPES(i);
 		
 		-- assign vectors to matrix
-		assign_row(StmMux_In_Data, StmBuf_DataOut, I);
-		assign_row(StmMux_In_Meta, StmMux_MetaIn_Data,	 I);
+		assign_row(StmMux_In_Data, StmBuf_DataOut, i);
+		assign_row(StmMux_In_Meta, StmMux_MetaIn_Data,	 i);
 	end generate;
 
 
@@ -432,7 +432,7 @@ begin
 		);
 
 	genStmDeMux_Control : for i in 0 to IPV4_SWITCH_PORTS - 1 generate
-		StmDeMux_Control(I)		<= to_sl(IPv4_RX_Meta_Protocol = PACKET_TYPES(I));
+		StmDeMux_Control(i)		<= to_sl(IPv4_RX_Meta_Protocol = PACKET_TYPES(i));
 	end generate;
 	
 	-- decompress meta_rev vector to single bits

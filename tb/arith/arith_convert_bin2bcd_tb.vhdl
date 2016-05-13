@@ -39,9 +39,9 @@ use			PoC.vectors.all;
 use			PoC.strings.all;
 use			PoC.physical.all;
 -- simulation only packages
-use			PoC.sim_global.all;
 use			PoC.sim_types.all;
 use			PoC.simulation.all;
+use			PoC.waveform.all;
 
 
 entity arith_convert_bin2bcd_tb is
@@ -49,22 +49,21 @@ end entity;
 
 
 architecture test of arith_convert_bin2bcd_tb is
-	constant CLOCK_FREQ		: FREQ				:= 100 MHz;
+	constant CLOCK_FREQ		: FREQ						:= 100 MHz;
 
-	constant INPUT_1			: INTEGER			:= 38442113;
-	constant INPUT_2			: INTEGER			:= 78734531;
-	constant INPUT_3			: INTEGER			:= 14902385;
+	constant INPUT_1			: INTEGER					:= 38442113;
+	constant INPUT_2			: INTEGER					:= 78734531;
+	constant INPUT_3			: INTEGER					:= 14902385;
 	
-	constant CONV1_BITS		: POSITIVE		:= 30;
-	constant CONV1_DIGITS	: POSITIVE		:= 8;
-	constant CONV2_BITS		: POSITIVE		:= 27;
-	constant CONV2_DIGITS	: POSITIVE		:= 8;
+	constant CONV1_BITS		: POSITIVE				:= 30;
+	constant CONV1_DIGITS	: POSITIVE				:= 8;
+	constant CONV2_BITS		: POSITIVE				:= 27;
+	constant CONV2_DIGITS	: POSITIVE				:= 8;
+	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for CONV1_BITS=" & INTEGER'image(CONV1_BITS) & "; INPUT_1=" & INTEGER'image(INPUT_1));
 
 
-	signal SimStop				: std_logic 	:= '0';
-
-	signal Clock					: STD_LOGIC		:= '1';
-	signal Reset					: STD_LOGIC		:= '0';
+	signal Clock					: STD_LOGIC;
+	signal Reset					: STD_LOGIC;
 	
 	signal Start					: STD_LOGIC		:= '0';
 	
@@ -74,23 +73,36 @@ architecture test of arith_convert_bin2bcd_tb is
 	signal Conv2_Binary			: STD_LOGIC_VECTOR(CONV2_BITS - 1 downto 0);
 	signal Conv2_BCDDigits	: T_BCD_VECTOR(CONV2_DIGITS - 1 DOWNTO 0);
 	signal Conv2_Sign				: STD_LOGIC;
-begin
 
-	blkClock : block
-		constant CLOCK_PERIOD		: TIME	:= to_time(CLOCK_FREQ);
+	function Check_Conv2(INPUT : INTEGER; BITS : POSITIVE; DIGITS : POSITIVE; BCDDigits : T_BCD_VECTOR; Sign : STD_LOGIC) return BOOLEAN is
+		variable nat : natural;
 	begin
-		Clock <= Clock xnor SimStop after CLOCK_PERIOD / 2.0;
-	end block;
+		if INPUT >= 2**(BITS-1) then
+			nat := (-INPUT) mod 2**(BITS-1);
+			if Sign /= '1' then
+				return false;
+			end if;
+		else
+			nat := INPUT;
+			if Sign /= '0' then
+				return false;
+			end if;
+		end if;
 
-	process
-	begin
-		wait until rising_edge(Clock);
+		return to_BCD_Vector(nat, DIGITS) = BCDDigits;
+	end function;
 		
-		Reset						<= '1';
-		wait until rising_edge(Clock);
-	
-		Reset						<= '0';
-		wait until rising_edge(Clock);
+begin
+	-- initialize global simulation status
+	simInitialize;
+	-- generate global testbench clock and reset
+	simGenerateClock(simTestID,			Clock, CLOCK_FREQ);
+	simGenerateWaveform(simTestID,	Reset, simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
+
+	procStimuli : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Stimuli for " & INTEGER'image(CONV1_BITS) & " bits");
+	begin
+		simWaitUntilRisingEdge(Clock, 4);
 
 		Start						<= '1';
 		Conv1_Binary		<= to_slv(INPUT_1, CONV1_BITS);
@@ -103,6 +115,12 @@ begin
 		for i in 0 to (CONV1_BITS - 1) loop
 			wait until rising_edge(Clock);
 		end loop;
+
+		simAssertion(to_BCD_Vector(INPUT_1, CONV1_DIGITS) = Conv1_BCDDigits, "Conv1_BCDDigits is wrong for INPUT_1.");
+		simAssertion(Check_Conv2(INPUT_1, CONV2_BITS, CONV2_DIGITS, Conv2_BCDDigits, Conv2_Sign),
+								 "Conv2_BCDDigits is wrong for INPUT_1.");
+
+		----------------------------------------------------------
 		
 		Start						<= '1';
 		Conv1_Binary		<= to_slv(INPUT_2, CONV1_BITS);
@@ -116,6 +134,12 @@ begin
 			wait until rising_edge(Clock);
 		end loop;
 		
+		simAssertion(to_BCD_Vector(INPUT_2, CONV1_DIGITS) = Conv1_BCDDigits, "Conv1_BCDDigits is wrong for INPUT_2.");
+		simAssertion(Check_Conv2(INPUT_2, CONV2_BITS, CONV2_DIGITS, Conv2_BCDDigits, Conv2_Sign),
+								 "Conv2_BCDDigits is wrong for INPUT_2.");
+		
+		----------------------------------------------------------
+		
 		Start						<= '1';
 		Conv1_Binary		<= to_slv(INPUT_3, CONV1_BITS);
 		Conv2_Binary		<= to_slv(INPUT_3, CONV2_BITS);
@@ -128,13 +152,16 @@ begin
 			wait until rising_edge(Clock);
 		end loop;
 		
-		wait until rising_edge(Clock);
-		wait until rising_edge(Clock);
+		simAssertion(to_BCD_Vector(INPUT_3, CONV1_DIGITS) = Conv1_BCDDigits, "Conv1_BCDDigits is wrong for INPUT_3.");
+		simAssertion(Check_Conv2(INPUT_3, CONV2_BITS, CONV2_DIGITS, Conv2_BCDDigits, Conv2_Sign),
+								 "Conv2_BCDDigits is wrong for INPUT_3.");
+		
+		----------------------------------------------------------
 		
 		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		-- Report overall result
-		globalSimulationStatus.finalize;
+		simFinalize;
 		wait;  -- forever
 	end process;
 

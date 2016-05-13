@@ -75,8 +75,8 @@ architecture rtl of dstruct_deque is
     constant A_BITS : natural := log2ceil(MIN_DEPTH);
 
     -- MEMORY variable
-    type memory_t is array ((2**A_BITS)-1 downto 0) of std_logic_vector(D_BITS-1 downto 0);
-    signal memory : memory_t := (others => (others => '0'));
+    -- type memory_t is array ((2**A_BITS)-1 downto 0) of std_logic_vector(D_BITS-1 downto 0);
+    -- signal memory : memory_t := (others => (others => '0'));
 
     -- Signals
     signal combined : std_logic_vector(3 downto 0) := (others => '0');
@@ -90,18 +90,18 @@ architecture rtl of dstruct_deque is
 
     signal delayed_valid : std_logic := '0';
     signal delay : std_logic := '0';
-    signal s_validA : std_logic := '0';
-    signal s_validB : std_logic := '0';
+    -- signal s_validA : std_logic := '0';
+    -- signal s_validB : std_logic := '0';
 
     -- Stackpointer
     -- A
     signal stackpointerA : unsigned (A_BITS-1 downto 0) := shift_right(to_unsigned(MIN_DEPTH-1,A_BITS),1) ;
-    signal rea : std_logic := '0';
-    signal wea : std_logic := '0';
+    -- signal reA : std_logic := '0';
+    signal weA : std_logic := '0';
     -- B
     signal stackpointerB : unsigned (A_BITS-1 downto 0) := shift_right(to_unsigned(MIN_DEPTH-1,A_BITS),1) + 1;
-    signal reb : std_logic := '0';
-    signal web : std_logic := '0';
+    -- signal reB : std_logic := '0';
+    signal weB : std_logic := '0';
 
 
     -- ctrl signal for stackpointer operations
@@ -136,7 +136,7 @@ begin
     q2	=> doutB
   );
 
-    sub <= stackpointerB - StackpointerA;
+    sub <= stackpointerB - stackpointerA;
 
     combined <= putA & gotA & putB & gotB;
 
@@ -144,8 +144,8 @@ begin
     begin
         ctrlA <= IDLE;
         ctrlB <= IDLE;
-        reA <= '1';
-        reB <= '1';
+        -- reA <= '1';
+        -- reB <= '1';
         adrA <= stackpointerA + 1;
         adrB <= stackpointerB - 1;
         weA <= '0';
@@ -162,7 +162,7 @@ begin
                 -- B read a valid value
                 -- update stackpointer
                 ctrlB <= POP;
-                reB <= '1';
+                -- reB <= '1';
                 adrB <= stackpointerB - 2;
                 last_op_ctrl <= UNSET;
                 if (ctrl = "01") then
@@ -209,7 +209,7 @@ begin
             when x"3" =>    --readB, writeB
                 -- B read a valid value and writes a new value at the same spot
                 -- don't update stackpointer
-                reB <= '1';
+                -- reB <= '1';
                 adrB <= stackpointerB - 1;
                 weB <= '1';
                 last_op_ctrl <= SET;
@@ -250,7 +250,7 @@ begin
                 -- A read a valid values
                 -- update stackpointer
                 ctrlA <= POP;
-                reA <= '1';
+                -- reA <= '1';
                 adrA <= stackpointerA + 2;
                 last_op_ctrl <= UNSET;
                 if (ctrl = "01" and last_operation = '0') then
@@ -264,9 +264,9 @@ begin
                 -- update both stackpointers
                 ctrlA <= POP;
                 ctrlB <= POP;
-                reB <= '1';
+                -- reB <= '1';
                 adrB <= stackpointerB - 2;
-                reA <= '1';
+                -- reA <= '1';
                 adrA <= stackpointerA + 2;
                 last_op_ctrl <= UNSET;
                 if (ctrl = "01") then
@@ -293,7 +293,7 @@ begin
                 -- update both stackpointers
                 ctrlA <= POP;
                 ctrlB <= PUSH;
-                reA <= '1';
+                -- reA <= '1';
                 adrA <= stackpointerA + 2;
                 weB <= '1';
                 adrB <= stackpointerB;
@@ -333,10 +333,10 @@ begin
                 -- Update stackpointerA and don't update stackpointer B
                 ctrlA <= POP;
                 adrB <= stackpointerB - 1;
-                reB <= '1';
+                -- reB <= '1';
                 weB <= '1';
                 adrA <= stackpointerA + 2;
-                reA <= '1';
+                -- reA <= '1';
                 last_op_ctrl <= SET;
                 if (ctrl = "01") then
                     if last_operation = '1' then
@@ -381,13 +381,13 @@ begin
                 -- update stackpointer
                 ctrlA <= PUSH;
                 weA <= '1';
-                adrA <= StackpointerA;
+                adrA <= stackpointerA;
                 last_op_ctrl <= SET;
                 if (ctrl = "01") then
                     if (last_operation = '1') then
                         --> deque is full
                         -- A cant write!
-                        ctrla <= IDLE;
+                        ctrlA <= IDLE;
                         weA <= '0';
                         adrA <= stackpointerA + 1;
                     end if;
@@ -397,7 +397,7 @@ begin
                 -- update both stackpointers
                 ctrlA <= PUSH;
                 ctrlB <= POP;
-                reB <= '1';
+                -- reB <= '1';
                 weA <= '1';
                 adrA <= stackpointerA;
                 adrB <= stackpointerB - 2;
@@ -465,7 +465,7 @@ begin
                 ctrlA <= PUSH;
                 weA <= '1';
                 adrA <= stackpointerA;
-                reB <= '1';
+                -- reB <= '1';
                 weB <= '1';
                 adrB <= stackpointerB - 1;
                 last_op_ctrl <= SET;
@@ -505,7 +505,7 @@ begin
                 --> A read a valid value and writes a new value at the same spot!
                 -- => don't update stackpointer!
                 ctrlA <= IDLE;
-                reA <= '1';
+                -- reA <= '1';
                 weA <= '1';
                 adrA <= stackpointerA + 1;
                 last_op_ctrl <= SET;
@@ -530,10 +530,10 @@ begin
                 -- don't update stackpointerA and update stackpointerB
                 ctrlB <= POP;
                 ctrlA <= IDLE;
-                reA <= '1';
+                -- reA <= '1';
                 weA <= '1';
                 adrA <= stackpointerA + 1;
-                reB <= '1';
+                -- reB <= '1';
                 adrB <= stackpointerB - 2;
                 last_op_ctrl <= SET;
                 if (ctrl = "01") then
@@ -568,7 +568,7 @@ begin
                 -- update stackpiunterB and don't update stackpointerA
                 ctrlB <= PUSH;
                 ctrlA <= IDLE;
-                reA <= '1';
+                -- reA <= '1';
                 weA <= '1';
                 adrA <= stackpointerA + 1;
                 weB <= '1';
@@ -605,11 +605,11 @@ begin
                 -- don't update both stackpointers
                 ctrlA <= IDLE;
                 ctrlB <= IDLE;
-                reA <= '1';
+                -- reA <= '1';
                 weA <= '1';
                 adrA <= stackpointerA + 1;
                 weB <= '1';
-                reB <= '1';
+                -- reB <= '1';
                 adrB <= stackpointerB - 1;
                 last_op_ctrl <= SET;
                 if (ctrl = "01") then

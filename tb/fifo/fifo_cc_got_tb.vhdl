@@ -156,8 +156,8 @@ begin
     
       -- This process is finished
 			simDeactivateProcess(simProcessID);
+			simFinalizeTest(simTestID);
 			wait;  -- forever
     end process;
   end generate genDUTs;
-
 end architecture;

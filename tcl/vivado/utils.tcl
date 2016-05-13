@@ -2,9 +2,9 @@
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # ============================================================================
-# Tcl Include: Vivado Workflow Utility Procedures
+# Authors:					Thomas B. Preusser
 #
-# Authors:   Thomas B. Preusser
+# Tcl Include:			Vivado Workflow Utility Procedures
 #
 # Description
 # -----------

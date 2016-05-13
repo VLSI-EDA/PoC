@@ -1,0 +1,81 @@
+# Testbench name
+regexp=Testbench:
+colours=cyan
+count=stop
+
+# GHDL errors and warnings
+=========
+regexp=.+?:\d+:\d+:warning: .*
+colours=yellow
+count=stop
+=========
+regexp=.+?:\d+:\d+: .*
+colours=red
+count=stop
+
+# Python Exceptions
+=========
+regexp=\s*ERROR:
+colours=red
+count=stop
+=========
+regexp=\s*\w+Error:
+colours=yellow
+count=stop
+=========
+regexp=\s*\w+Exception:
+colours=yellow
+count=stop
+=========
+regexp=\[SKIPPED DUE TO ERRORS\]
+colours=red
+count=stop
+
+# Colorize status keywords in simulation report
+=========
+regexp=INT\. ERROR
+colours=red
+count=stop
+=========
+regexp=SYS\. ERROR
+colours=red
+count=stop
+=========
+regexp=ANA\. ERROR
+colours=red
+count=stop
+=========
+regexp=ELAB\. ERROR
+colours=red
+count=stop
+=========
+regexp=SIM\. ERROR
+colours=red
+count=stop
+=========
+regexp=FAILED
+colours=red
+count=stop
+=========
+regexp=NO ASSERTS
+colours=yellow
+count=stop
+=========
+regexp=PASSED
+colours=green
+count=stop
+
+
+# Colorize summary line
+=========
+regexp=Passed: \d+
+colours=green
+=========
+regexp=No Asserts: \d+
+colours=yellow
+=========
+regexp=Failed: \d+
+colours=red
+=========
+regexp=Errors: \d+
+colours=red

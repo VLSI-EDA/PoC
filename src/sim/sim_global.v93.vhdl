@@ -50,7 +50,7 @@ package sim_global is
 	shared variable globalSim_FailedAssertCount			: NATURAL																	:= 0;
 		
 	-- Clock Management
-	shared variable globalSim_MainprocessEnables		: T_SIM_BOOLVEC(T_SIM_TEST_ID)						:= (others => TRUE);
+	shared variable globalSim_MainProcessEnables		: T_SIM_BOOLVEC(T_SIM_TEST_ID)						:= (others => TRUE);
 	shared variable globalSim_MainClockEnables			: T_SIM_BOOLVEC(T_SIM_TEST_ID)						:= (others => TRUE);
 		
 	-- Process Management

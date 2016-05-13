@@ -49,7 +49,7 @@ entity icmpv4_TX is
 		Clock													: in	STD_LOGIC;																	-- 
 		Reset													: in	STD_LOGIC;																	-- 
 		-- CSE interface
-		Command												: in	T_NET_ICMPV4_TX_COMMand;
+		Command												: in	T_NET_ICMPV4_TX_COMMAND;
 		Status												: out	T_NET_ICMPV4_TX_STATUS;
 		Error													: out	T_NET_ICMPV4_TX_ERROR;
 		-- OUT port

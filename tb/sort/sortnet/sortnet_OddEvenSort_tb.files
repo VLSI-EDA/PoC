@@ -3,38 +3,12 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # ==============================================================================
 # Note: all files are relative to PoC root directory
-
+#
 # Load external vendor libraries
-@library osvvm "osvvm"						# Open Source VHDL Verification Methodology (OS-VVM)
-
-
-# board and device configuration
-vhdl		poc		"tb/common/my_config_KC705.vhdl"
-vhdl		poc		"tb/common/my_project.vhdl"
-
-# PoC core packages
-vhdl		poc		"src/common/utils.vhdl"									# PoC utility collection
-vhdl		poc		"src/common/config.vhdl"								# PoC device configuration mechanism
-vhdl		poc		"src/common/strings.vhdl"								# PoC string package
-vhdl		poc		"src/common/vectors.vhdl"								# PoC vector package
-vhdl		poc		"src/common/physical.vhdl"							# PoC physical types package
-vhdl		poc		"src/common/components.vhdl"						# PoC components
-
-vhdl		poc		"src/sim/sim_types.vhdl"								# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_random.v93.vhdl"						# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_global.v93.vhdl"						# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_unprotected.v93.vhdl"			# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_simulation.v93.vhdl"				# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_random.v08.vhdl"						# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_protected.v08.vhdl"				# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_global.v08.vhdl"						# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_simulation.v08.vhdl"				# PoC simulation helper
-vhdl		poc		"src/sim/sim_waveform.vhdl"							# PoC simulation helper
-
-# PoC.sort
+include				"lib/OSVVM.files"																# Open Source VHDL Verification Methodology (OS-VVM)
 
 # PoC.sort.sortnet
-vhdl		poc		"src/sort/sortnet/sortnet_OddEvenSort.vhdl"			# UUT (Unit Under Test)
+include				"src/sort/sortnet/sortnet_OddEvenSort.files"		# UUT (Unit Under Test)
 
 # Testbench file(s)
 vhdl		test	"tb/sort/sortnet/sortnet_OddEvenSort_tb.vhdl"		# Testbench

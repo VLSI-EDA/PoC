@@ -1,0 +1,25 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Common PoC packages for configuration, synthesis and simulation
+include				"src/common/common.files"										# load common packages
+
+# PoC.io.ddrio
+vhdl		poc		"src/io/ddrio/ddrio.pkg.vhdl"								#
+if (DeviceVendor = "Altera") then
+	# Load external vendor libraries
+	include			"lib/Altera.files"													# Altera primitives
+	vhdl 	poc		"src/io/ddrio/ddrio_in_altera.vhdl"					# 
+elseif (DeviceVendor = "Xilinx") then
+	# Load external vendor libraries
+	include			"lib/Xilinx.files"													# Xilinx primitives
+	vhdl	poc		"src/io/ddrio/ddrio_in_xilinx.vhdl"					# 
+elseif ((Environment = "Simulation") and (DeviceVendor = "Generic")) then
+	# use a simple implementation to testing
+else
+	report "Only Altera and Xilinx are supported yet."
+end if
+vhdl 		poc		"src/io/ddrio/ddrio_in.vhdl"								# 

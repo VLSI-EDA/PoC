@@ -22,7 +22,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,11 +41,15 @@
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
+library	PoC;
+use			PoC.sync.all;
+
 
 entity sync_Bits_Altera is
 	generic (
 		BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
-		INIT					: STD_LOGIC_VECTOR		:= x"00000000"				-- initialitation bits
+		INIT					: STD_LOGIC_VECTOR		:= x"00000000";				-- initialitation bits
+		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
 		Clock					: in	STD_LOGIC;														-- Clock to be synchronized to
@@ -64,8 +68,8 @@ architecture rtl of sync_Bits_Altera is
 begin
 	gen : for i in 0 to BITS - 1 generate
 		signal Data_async				: STD_LOGIC;
-		signal Data_meta				: STD_LOGIC		:= INIT(i);
-		signal Data_sync				: STD_LOGIC		:= INIT(i);
+		signal Data_meta				: STD_LOGIC																		:= INIT(i);
+		signal Data_sync				: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 0)		:= (others => INIT(i));
 
 		-- preserve both registers (no optimization, shift register extraction, ...)
 		attribute PRESERVE of Data_meta						: signal is TRUE;
@@ -79,11 +83,11 @@ begin
 		begin
 			if rising_edge(Clock) then
 				Data_meta <= Data_async;
-				Data_sync <= Data_meta;
+				Data_sync <= Data_sync(Data_sync'high - 1 downto 0) & Data_meta;
 			end if;
 		end process;
 			
-		Output(i)		<= Data_sync;
+		Output(i)		<= Data_sync(Data_sync'high);
 	end generate;
 	
 end architecture;

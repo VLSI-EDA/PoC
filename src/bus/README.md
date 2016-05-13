@@ -13,12 +13,7 @@ The namespace `PoC.bus` offers different bus specific modules.
 
 ## Package
 
-The package [`bus`][bus.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.bus.all;
-```
+The package [`PoC.bus`][bus.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

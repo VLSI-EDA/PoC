@@ -128,8 +128,8 @@ begin
 	simInitialize;
 	-- generate global testbench clock
 	simGenerateClock(simTestID,			Clock,	CLOCK_FREQ);
-	simGenerateWaveform(simTestID,	Reset,	simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
-	simGenerateWaveform(simTestID,	Enable,	simGenerateWaveform_Reset(Pause => 40 ns, ResetPulse => (VALUES'length * 10 ns)));
+	simGenerateWaveform(simTestID,	Reset,	simGenerateWaveform_Reset(Pause =>  5 ns, ResetPulse => 10 ns));
+	simGenerateWaveform(simTestID,	Enable,	simGenerateWaveform_Reset(Pause => 25 ns, ResetPulse => (VALUES'length * 10 ns)));
   
   -- component instantiation
   UUT: entity PoC.stat_Maximum
@@ -158,14 +158,16 @@ begin
 		variable good					: BOOLEAN;
 	begin
 		DataIn		<= (others => '0');
-		wait until (Enable = '1') and rising_edge(Clock);
+		wait until (Enable = '1') and falling_edge(Clock);
 	
 		for i in VALUES'range loop
 			--Enable	<= to_sl(VALUES(i) /= 35);
 			DataIn	<= to_slv(VALUES(i), DataIn'length);
-			wait until rising_edge(Clock);
+			wait until falling_edge(Clock);
 		end loop;
 
+		wait until rising_edge(Clock);
+		
 		-- test result after all cycles
 		good := (slv_and(Valids) = '1');
 		for i in RESULT'range loop

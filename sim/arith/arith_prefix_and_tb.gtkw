@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
 [*] Sat Feb 06 00:35:00 2016
 [*]
-[dumpfile] "H:\Austausch\PoC\temp\ghdl\arith_prefix_and_tb.ghw"
 [dumpfile_mtime] "Sat Feb 06 00:31:35 2016"
 [dumpfile_size] 9001
-[savefile] "H:\Austausch\PoC\sim\arith\arith_prefix_and_tb.gtkw"
 [timestart] 0
 [size] 1680 997
 [pos] -113 -113

@@ -81,9 +81,9 @@ architecture rtl of ocrom_dp is
 	constant DEPTH				: positive := 2**A_BITS;
 
 begin
-	assert (str_length(FileName) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
+	assert (str_length(FILENAME) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
 
-	gInfer: if VENDOR = VENDOR_XILINX generate
+	gInfer: if ((VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly only for newer FPGAs!
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		rom_t		is array(0 to DEPTH - 1) of word_t;
@@ -91,7 +91,7 @@ begin
 		-- Compute the initialization of a RAM array, if specified, from the passed file.
 		impure function ocrom_InitMemory(FilePath : string) return rom_t is
 			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
-			variable res			: ram_t;
+			variable res			: rom_t;
 		begin
 			if (str_length(FilePath) = 0) then
         -- shortcut required by Vivado (assert above is ignored)
@@ -137,7 +137,7 @@ begin
 		q2 <= rom(to_integer(a2_reg));		-- returns new data
 	end generate gInfer;
 	
-	gAltera: if VENDOR = VENDOR_ALTERA generate
+	gAltera: if (VENDOR = VENDOR_ALTERA) generate
 		component ocram_tdp_altera
 			generic (
 				A_BITS		: positive;
@@ -186,7 +186,7 @@ begin
 			);
 	end generate gAltera;
 	
-	assert VENDOR = VENDOR_ALTERA or VENDOR = VENDOR_XILINX
-		report "Vendor not yet supported."
+	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_XILINX))
+		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;
-end rtl;
+end architecture;

@@ -42,13 +42,13 @@ use			PoC.components.all;
 
 entity sortnet_BitonicSort is
 	generic (
-		INPUTS								: POSITIVE	:= 8;
-		KEY_BITS							: POSITIVE	:= 32;
-		DATA_BITS							: POSITIVE	:= 32;
-		META_BITS							: NATURAL		:= 2;
-		PIPELINE_STAGE_AFTER	: NATURAL		:= 2;
-		ADD_INPUT_REGISTERS		: BOOLEAN		:= FALSE;
-		ADD_OUTPUT_REGISTERS	: BOOLEAN		:= TRUE
+		INPUTS								: POSITIVE	:= 8;				-- input count
+		KEY_BITS							: POSITIVE	:= 32;			-- the first KEY_BITS of In_Data are used as a sorting critera (key)
+		DATA_BITS							: POSITIVE	:= 32;			-- inclusive KEY_BITS
+		META_BITS							: NATURAL		:= 2;				-- additional bits, not sorted but delayed as long as In_Data
+		PIPELINE_STAGE_AFTER	: NATURAL		:= 2;				-- add a pipline stage after n sorting stages
+		ADD_INPUT_REGISTERS		: BOOLEAN		:= FALSE;		-- 
+		ADD_OUTPUT_REGISTERS	: BOOLEAN		:= TRUE			-- 
 	);
 	port (
 		Clock				: in	STD_LOGIC;

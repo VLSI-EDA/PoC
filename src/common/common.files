@@ -1,0 +1,30 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# PoC config packages
+include			"tb/common/my_config.files"							# board and device configuration
+
+# PoC core packages
+vhdl	poc		"src/common/utils.vhdl"									# PoC utility collection
+vhdl	poc		"src/common/config.vhdl"								# PoC device configuration mechanism
+vhdl	poc		"src/common/math.vhdl"									# PoC math extension package
+vhdl	poc		"src/common/strings.vhdl"								# PoC string package
+vhdl	poc		"src/common/vectors.vhdl"								# PoC vector package
+vhdl	poc		"src/common/physical.vhdl"							# PoC physical types package
+vhdl	poc		"src/common/components.vhdl"						# PoC components
+
+if (ToolChain not in ["Altera_QuartusII", "Lattice_Diamond"]) then
+	if (VHDL < 2002) then
+		vhdl	poc		"src/common/fileio.v93.vhdl"				# 
+	elseif (VHDL >= 2002) then
+		vhdl	poc		"src/common/protected.v08.vhdl"			# PoC protected type implementations
+		vhdl	poc		"src/common/fileio.v08.vhdl"				# 
+	end if
+end if
+
+if (Environment = "Simulation") then
+	include				"src/sim/sim.files"									# Simulation packages
+end if

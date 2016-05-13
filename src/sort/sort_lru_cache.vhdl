@@ -50,9 +50,6 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 
-library UNISIM;
-use UNISIM.VCOMPONENTS.all;
-
 library PoC;
 use PoC.config.all;
 use PoC.utils.all;
@@ -82,18 +79,24 @@ architecture rtl of sort_lru_cache is
 	subtype T_ELEMENT is std_logic_vector(KEY_BITS - 1 downto 0);
 	type T_ELEMENT_VECTOR is array (natural range <>) of T_ELEMENT;
 
-	signal NewElementsUp 	: T_ELEMENT_VECTOR(ELEMENTS downto 0);
+	signal NewElement    : T_ELEMENT;
 
 	signal ElementsUp			: T_ELEMENT_VECTOR(ELEMENTS downto 0);
 	signal ElementsDown		: T_ELEMENT_VECTOR(ELEMENTS downto 0);
 
 	signal MovesDown : std_logic_vector(ELEMENTS downto 0);
 	signal MovesUp	 : std_logic_vector(ELEMENTS downto 0);
+	signal UnEqual	 : std_logic_vector(ELEMENTS-1 downto 0);
+
+  signal MovesUpCond   		: std_logic_vector(ELEMENTS downto 0);
+  signal MovesDownCond 		: std_logic_vector(ELEMENTS downto 0);
+  signal MovesDownCondRev : std_logic_vector(ELEMENTS downto 0);
+  signal MovesDownRev 		: std_logic_vector(ELEMENTS downto 0);
 
 begin
 	-- next element (top)
-	ElementsDown(ELEMENTS) 	<= NewElementsUp(ELEMENTS);
-	MovesDown(ELEMENTS) 		<= Insert;
+	ElementsDown(ELEMENTS) 	<= NewElement;
+	MovesDownCond(ELEMENTS) <= Insert;
 
 	-- current element
 	genElements : for I in ELEMENTS - 1 downto 0 generate
@@ -101,52 +104,17 @@ begin
 		signal Element_nxt	 : std_logic_vector(KEY_BITS - 1 downto 0);
 		signal Element_d		 : std_logic_vector(KEY_BITS - 1 downto 0) := INITIAL_ELEMENT;
 
-		signal UnEqual	: std_logic;
 		signal MoveDown : std_logic;
 		signal MoveUp		: std_logic;
 
-		component MUXCY
-			port (
-				O	 : out std_ulogic;
-				CI : in	 std_ulogic;
-				DI : in	 std_ulogic;
-				S	 : in	 std_ulogic
-				);
-		end component;
-
 	begin
 		-- local movements
-		UnEqual <= to_sl(Element_d /= NewElementsUp(I));
+		UnEqual(i) <= to_sl(Element_d /= NewElement);
 
-		genXilinx : if (VENDOR = VENDOR_XILINX) generate
-			a : MUXCY
-				port map (
-					S	 => UnEqual,
-					CI => MovesDown(I + 1),
-					DI => '0',
-					O	 => MovesDown(I)
-					);
-
-			b : MUXCY
-				port map (
-					S	 => UnEqual,
-					CI => MovesUp(I),
-					DI => '0',
-					O	 => MovesUp(I + 1)
-					);
-		end generate;
-
-		-- movements for the current element	
-		MoveDown <= MovesDown(I + 1);
-		MoveUp	 <= MovesUp(I);
-
-		-- passthrought all new
-		NewElementsUp(I + 1) <= NewElementsUp(I);
-
-		ElementsUp(I + 1)		<= Element_d;
+		ElementsUp(I + 1)    <= Element_d;
 
 		-- multiplexer
-		Element_nxt	<= mux(MoveDown, mux(MoveUp,	Element_d,	ElementsUp(I)),	ElementsDown(I + 1));
+		Element_nxt	<= mux(MovesDown(I+1), mux(MovesUp(i), Element_d, ElementsUp(I)), ElementsDown(I + 1));
 
 		-- register
 		Element_d		<= ffdre(q => Element_d,	d => Element_nxt,	rst => Reset, INIT => INITIAL_ELEMENT)	when rising_edge(Clock);
@@ -154,10 +122,33 @@ begin
 		ElementsDown(I)		<= Element_d;
 	end generate;
 
+	-- MovesUp / MovesDown propagation
+	MovesUpCond  (ELEMENTS   downto 1) <= UnEqual;
+	MovesDownCond(ELEMENTS-1 downto 0) <= UnEqual;
+	MovesDownCondRev <= reverse(MovesDownCond);
+	MovesDown        <= reverse(MovesDownRev);
+	
+	MovesUpProp: entity poc.arith_prefix_and
+		generic map (
+			N => ELEMENTS+1)
+		port map (
+			-- Individual association of 'x' didn't work in QuestaSim
+			x => MovesUpCond,
+			y => MovesUp);
+
+	MovesDownProp: entity poc.arith_prefix_and
+		generic map (
+			N => ELEMENTS+1)
+		port map (
+			-- Individual association of 'x' didn't work in QuestaSim
+			x => MovesDownCondRev,
+			y => MovesDownRev);
+
 	-- previous element (bottom)
-	NewElementsUp(0) 	<= KeyIn;
-	MovesUp(0)	 			<= Free;
+	NewElement        <= KeyIn;
 	ElementsUp(0)	 		<= KeyIn;
+	MovesUpCond(0) 		<= Free;
+
 
 	KeyOut <= ElementsDown(0);
 end architecture;

@@ -40,7 +40,6 @@ from cocotb.drivers import BusDriver
 from cocotb.binary import BinaryValue
 from cocotb.regression import TestFactory
 from cocotb.scoreboard import Scoreboard
-from cocotb.result import TestFailure, TestSuccess
 
 from lru_dict import LeastRecentlyUsedDict
 
@@ -153,7 +152,7 @@ def random_input_gen(n=2000):
 	Generate random input data to be applied by InputDriver.
 	Returns up to n instances of InputTransaction.
 	"""
-	for i in range(n):
+	for _ in range(n):
 		command = random.randint(1,100)
 		insert, free = 0, 0
 		# 89% insert, 1% free, 10% idle

@@ -173,7 +173,7 @@ package body strings is
 	function to_IPStyle(str : STRING) return T_IPSTYLE is
 	begin
 		for i in T_IPSTYLE'pos(T_IPSTYLE'low) to T_IPSTYLE'pos(T_IPSTYLE'high) loop
-			if str_imatch(str, T_IPSTYLE'image(T_IPSTYLE'val(I))) then
+			if str_imatch(str, T_IPSTYLE'image(T_IPSTYLE'val(i))) then
 				return T_IPSTYLE'val(i);
 			end if;
 		end loop;
@@ -480,7 +480,7 @@ package body strings is
 		variable Result		: STRING(1 to rawstring'length);
 	begin
 		for i in rawstring'low to rawstring'high loop
-			Result(I - rawstring'low + 1)	:= to_char(rawstring(I));
+			Result(i - rawstring'low + 1)	:= to_char(rawstring(i));
 		end loop;
 		return Result;
 	end function;
@@ -565,7 +565,7 @@ package body strings is
 		variable Digit			: INTEGER;
 	begin
 		for i in str'range loop
-			Digit	:= to_digit_bin(str(I));
+			Digit	:= to_digit_bin(str(i));
 			if (Digit /= -1) then
 				Result	:= Result * 2 + Digit;
 			else
@@ -581,7 +581,7 @@ package body strings is
 		variable Digit			: INTEGER;
 	begin
 		for i in str'range loop
-			Digit	:= to_digit_oct(str(I));
+			Digit	:= to_digit_oct(str(i));
 			if (Digit /= -1) then
 				Result	:= Result * 8 + Digit;
 			else
@@ -603,7 +603,7 @@ package body strings is
 		--	Solution:
 		--		implement a manual conversion using shift and multiply
 		for i in str'range loop
-			Digit	:= to_digit_dec(str(I));
+			Digit	:= to_digit_dec(str(i));
 			if (Digit /= -1) then
 				Result	:= Result * 10 + Digit;
 			else
@@ -619,7 +619,7 @@ package body strings is
 		variable Digit			: INTEGER;
 	begin
 		for i in str'range loop
-			Digit	:= to_digit_hex(str(I));
+			Digit	:= to_digit_hex(str(i));
 			if (Digit /= -1) then
 				Result	:= Result * 16 + Digit;
 			else
@@ -978,7 +978,7 @@ package body strings is
 		variable Result		: STRING(str'range);
 	begin
 		for i in str'range loop
-			Result(I)	:= chr_toLower(str(I));
+			Result(i)	:= chr_toLower(str(i));
 		end loop;
 		return Result;
 	end function;
@@ -988,7 +988,7 @@ package body strings is
 		variable Result		: STRING(str'range);
 	begin
 		for i in str'range loop
-			Result(I)	:= chr_toUpper(str(I));
+			Result(i)	:= chr_toUpper(str(i));
 		end loop;
 		return Result;
 	end function;

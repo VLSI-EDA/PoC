@@ -56,33 +56,33 @@ package sim_random is
 	
 	-- Uniform distributed random values
 	-- ===========================================================================
-	procedure				randomUniformDistibutedValue(Value : out REAL);
-	procedure				randomUniformDistibutedValue(Value : out INTEGER; Minimum : in INTEGER; Maximum : in INTEGER);
-	procedure				randomUniformDistibutedValue(Value : out REAL; Minimum : in REAL; Maximum : in REAL);
+	procedure				randomUniformDistributedValue(Value : out REAL);
+	procedure				randomUniformDistributedValue(Value : out INTEGER; Minimum : in INTEGER; Maximum : in INTEGER);
+	procedure				randomUniformDistributedValue(Value : out REAL; Minimum : in REAL; Maximum : in REAL);
 	
-	impure function	randomUniformDistibutedValue return REAL;
-	impure function	randomUniformDistibutedValue(Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER;
-	impure function	randomUniformDistibutedValue(Minimum : in REAL; Maximum : in REAL) return REAL;
+	impure function	randomUniformDistributedValue return REAL;
+	impure function	randomUniformDistributedValue(Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER;
+	impure function	randomUniformDistributedValue(Minimum : in REAL; Maximum : in REAL) return REAL;
 	
 	-- Normal / Gaussian distributed random values
 	-- ===========================================================================
-	procedure				randomNormalDistibutedValue(Value : out REAL; StandardDeviation : in REAL := 1.0; Mean : in REAL := 0.0);
-	procedure				randomNormalDistibutedValue(Value : out INTEGER; StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER);
-	procedure				randomNormalDistibutedValue(Value : out REAL; StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL);
+	procedure				randomNormalDistributedValue(Value : out REAL; StandardDeviation : in REAL := 1.0; Mean : in REAL := 0.0);
+	procedure				randomNormalDistributedValue(Value : out INTEGER; StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER);
+	procedure				randomNormalDistributedValue(Value : out REAL; StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL);
 	
-	impure function	randomNormalDistibutedValue(StandardDeviation : in REAL := 1.0; Mean : in REAL := 0.0) return REAL;
-	impure function	randomNormalDistibutedValue(StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER;
-	impure function	randomNormalDistibutedValue(StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) return REAL;
+	impure function	randomNormalDistributedValue(StandardDeviation : in REAL := 1.0; Mean : in REAL := 0.0) return REAL;
+	impure function	randomNormalDistributedValue(StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER;
+	impure function	randomNormalDistributedValue(StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) return REAL;
 	
 	-- Poisson distributed random values
 	-- ===========================================================================
-	procedure				randomPoissonDistibutedValue(Value : out REAL; Mean : in REAL);
-	procedure				randomPoissonDistibutedValue(Value : out INTEGER; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER);
-	procedure				randomPoissonDistibutedValue(Value : out REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL);
+	procedure				randomPoissonDistributedValue(Value : out REAL; Mean : in REAL);
+	procedure				randomPoissonDistributedValue(Value : out INTEGER; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER);
+	procedure				randomPoissonDistributedValue(Value : out REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL);
 	
-	impure function	randomPoissonDistibutedValue(Mean : in REAL) return REAL;
-	impure function	randomPoissonDistibutedValue(Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER;
-	impure function	randomPoissonDistibutedValue(Mean : in REAL; Minimum : in REAL; Maximum : in REAL) return REAL;
+	impure function	randomPoissonDistributedValue(Mean : in REAL) return REAL;
+	impure function	randomPoissonDistributedValue(Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER;
+	impure function	randomPoissonDistributedValue(Mean : in REAL; Minimum : in REAL; Maximum : in REAL) return REAL;
 end package;
 
 
@@ -117,117 +117,117 @@ package body sim_random is
 	-- ===========================================================================
 	-- Uniform distributed random values
 	-- ===========================================================================
-	procedure randomUniformDistibutedValue(Value : out REAL) is
+	procedure randomUniformDistributedValue(Value : out REAL) is
 	begin
-		randUniformDistibutedValue(SeedValue, Value);
+		randUniformDistributedValue(SeedValue, Value);
 	end procedure;
 
-	procedure randomUniformDistibutedValue(Value : out INTEGER; Minimum : in INTEGER; Maximum : in INTEGER) is
+	procedure randomUniformDistributedValue(Value : out INTEGER; Minimum : in INTEGER; Maximum : in INTEGER) is
 	begin
-		randUniformDistibutedValue(SeedValue, Value, Minimum, Maximum);
+		randUniformDistributedValue(SeedValue, Value, Minimum, Maximum);
 	end procedure;
 
-	procedure randomUniformDistibutedValue(Value : out REAL; Minimum : in REAL; Maximum : in REAL) is
+	procedure randomUniformDistributedValue(Value : out REAL; Minimum : in REAL; Maximum : in REAL) is
 	begin
-		randUniformDistibutedValue(SeedValue, Value, Minimum, Maximum);
+		randUniformDistributedValue(SeedValue, Value, Minimum, Maximum);
 	end procedure;
 	
-	impure function randomUniformDistibutedValue return REAL is
+	impure function randomUniformDistributedValue return REAL is
 		variable Result		: REAL;
 	begin
-		randUniformDistibutedValue(SeedValue, Result);
+		randUniformDistributedValue(SeedValue, Result);
 		return Result;
 	end function;
 
-	impure function randomUniformDistibutedValue(Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER is
+	impure function randomUniformDistributedValue(Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER is
 		variable Result		: INTEGER;
 	begin
-		randUniformDistibutedValue(SeedValue, Result, Minimum, Maximum);
+		randUniformDistributedValue(SeedValue, Result, Minimum, Maximum);
 		return Result;
 	end function;
 
-	impure function randomUniformDistibutedValue(Minimum : in REAL; Maximum : in REAL) return REAL is
+	impure function randomUniformDistributedValue(Minimum : in REAL; Maximum : in REAL) return REAL is
 		variable Result		: REAL;
 	begin
-		randUniformDistibutedValue(SeedValue, Result, Minimum, Maximum);
+		randUniformDistributedValue(SeedValue, Result, Minimum, Maximum);
 		return Result;
 	end function;
 
 	-- ===========================================================================
 	-- Normal / Gaussian distributed random values
 	-- ===========================================================================
-	procedure randomNormalDistibutedValue(Value : out REAL; StandardDeviation : in REAL := 1.0; Mean : in REAL := 0.0) is
+	procedure randomNormalDistributedValue(Value : out REAL; StandardDeviation : in REAL := 1.0; Mean : in REAL := 0.0) is
 	begin
-		randNormalDistibutedValue(SeedValue, Value, StandardDeviation, Mean);
+		randNormalDistributedValue(SeedValue, Value, StandardDeviation, Mean);
 	end procedure;
 
-	procedure randomNormalDistibutedValue(Value : out INTEGER; StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) is
+	procedure randomNormalDistributedValue(Value : out INTEGER; StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) is
 	begin
-		randNormalDistibutedValue(SeedValue, Value, StandardDeviation, Mean, Minimum, Maximum);
+		randNormalDistributedValue(SeedValue, Value, StandardDeviation, Mean, Minimum, Maximum);
 	end procedure;
 
-	procedure randomNormalDistibutedValue(Value : out REAL; StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) is
+	procedure randomNormalDistributedValue(Value : out REAL; StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) is
 	begin
-		randNormalDistibutedValue(SeedValue, Value, StandardDeviation, Mean, Minimum, Maximum);
+		randNormalDistributedValue(SeedValue, Value, StandardDeviation, Mean, Minimum, Maximum);
 	end procedure;
 	
-	impure function randomNormalDistibutedValue(StandardDeviation : in REAL := 1.0; Mean : in REAL := 0.0) return REAL is
+	impure function randomNormalDistributedValue(StandardDeviation : in REAL := 1.0; Mean : in REAL := 0.0) return REAL is
 		variable Result		: REAL;
 	begin
-		randNormalDistibutedValue(SeedValue, Result, StandardDeviation, Mean);
+		randNormalDistributedValue(SeedValue, Result, StandardDeviation, Mean);
 		return Result;
 	end function;
 
-	impure function randomNormalDistibutedValue(StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER is
+	impure function randomNormalDistributedValue(StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER is
 		variable Result		: INTEGER;
 	begin
-		randNormalDistibutedValue(SeedValue, Result, StandardDeviation, Mean, Minimum, Maximum);
+		randNormalDistributedValue(SeedValue, Result, StandardDeviation, Mean, Minimum, Maximum);
 		return Result;
 	end function;
 
-	impure function randomNormalDistibutedValue(StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) return REAL is
+	impure function randomNormalDistributedValue(StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) return REAL is
 		variable Result		: REAL;
 	begin
-		randNormalDistibutedValue(SeedValue, Result, StandardDeviation, Mean, Minimum, Maximum);
+		randNormalDistributedValue(SeedValue, Result, StandardDeviation, Mean, Minimum, Maximum);
 		return Result;
 	end function;
 	
 	-- ===========================================================================
 	-- Poisson distributed random values
 	-- ===========================================================================
-	procedure randomPoissonDistibutedValue(Value : out REAL; Mean : in REAL) is
+	procedure randomPoissonDistributedValue(Value : out REAL; Mean : in REAL) is
 	begin
-		randPoissonDistibutedValue(SeedValue, Value, Mean);
+		randPoissonDistributedValue(SeedValue, Value, Mean);
 	end procedure;
 	
-	procedure randomPoissonDistibutedValue(Value : out INTEGER; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) is
+	procedure randomPoissonDistributedValue(Value : out INTEGER; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) is
 	begin
-		randPoissonDistibutedValue(SeedValue, Value, Mean, Minimum, Maximum);
+		randPoissonDistributedValue(SeedValue, Value, Mean, Minimum, Maximum);
 	end procedure;
 	
-	procedure randomPoissonDistibutedValue(Value : out REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) is
+	procedure randomPoissonDistributedValue(Value : out REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) is
 	begin
-		randPoissonDistibutedValue(SeedValue, Value, Mean, Minimum, Maximum);
+		randPoissonDistributedValue(SeedValue, Value, Mean, Minimum, Maximum);
 	end procedure;
 	
-	impure function randomPoissonDistibutedValue(Mean : in REAL) return REAL is
+	impure function randomPoissonDistributedValue(Mean : in REAL) return REAL is
 		variable Result		: REAL;
 	begin
-		randPoissonDistibutedValue(SeedValue, Result, Mean);
+		randPoissonDistributedValue(SeedValue, Result, Mean);
 		return Result;
 	end function;
 	
-	impure function randomPoissonDistibutedValue(Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER is
+	impure function randomPoissonDistributedValue(Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) return INTEGER is
 		variable Result		: INTEGER;
 	begin
-		randPoissonDistibutedValue(SeedValue, Result, Mean, Minimum, Maximum);
+		randPoissonDistributedValue(SeedValue, Result, Mean, Minimum, Maximum);
 		return Result;
 	end function;
 	
-	impure function randomPoissonDistibutedValue(Mean : in REAL; Minimum : in REAL; Maximum : in REAL) return REAL is
+	impure function randomPoissonDistributedValue(Mean : in REAL; Minimum : in REAL; Maximum : in REAL) return REAL is
 		variable Result		: REAL;
 	begin
-		randPoissonDistibutedValue(SeedValue,Result, Mean, Minimum, Maximum);
+		randPoissonDistributedValue(SeedValue,Result, Mean, Minimum, Maximum);
 		return Result;
 	end function;
 end package body;

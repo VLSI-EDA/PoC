@@ -32,7 +32,7 @@
 -- 
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,13 +59,14 @@ use			PoC.sync.all;
 
 entity sync_Bits is
   generic (
-	  BITS								: POSITIVE						:= 1;									-- number of bit to be synchronized
-		INIT								: STD_LOGIC_VECTOR		:= x"00000000"				-- initialitation bits
+	  BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
+		INIT					: STD_LOGIC_VECTOR		:= x"00000000";				-- initialitation bits
+		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 	);
   port (
-		Clock								: in	STD_LOGIC;														-- <Clock>	output clock domain
-		Input								: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- @async:	input bits
-		Output							: out STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- @Clock:	output bits
+		Clock					: in	STD_LOGIC;														-- <Clock>	output clock domain
+		Input					: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- @async:	input bits
+		Output				: out STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- @Clock:	output bits
 	);
 end entity;
 
@@ -81,8 +82,8 @@ begin
 	begin
 		gen : for i in 0 to BITS - 1 generate
 			signal Data_async							: STD_LOGIC;
-			signal Data_meta							: STD_LOGIC		:= INIT_I(i);
-			signal Data_sync							: STD_LOGIC		:= INIT_I(i);
+			signal Data_meta							: STD_LOGIC																		:= INIT_I(i);
+			signal Data_sync							: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 1)		:= (others => INIT_I(i));
 			
 			-- Mark register DataSync_async's input as asynchronous and ignore timings (TIG)
 			attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
@@ -98,11 +99,11 @@ begin
 			begin
 				if rising_edge(Clock) then
 					Data_meta		<= Data_async;
-					Data_sync		<= Data_meta;
+					Data_sync		<= Data_sync(Data_sync'high - 1 downto 1) & Data_meta;
 				end if;
 			end process;		
 			
-			Output(i)	<= Data_sync;
+			Output(i)	<= Data_sync(Data_sync'high);
 		end generate;
 	end generate;
 
@@ -110,8 +111,9 @@ begin
 	genAltera : if (VENDOR = VENDOR_ALTERA) generate
 		sync : sync_Bits_Altera
 			generic map (
-				BITS			=> BITS,
-				INIT			=> INIT_I
+				BITS				=> BITS,
+				INIT				=> INIT_I,
+				SYNC_DEPTH	=> SYNC_DEPTH
 			)
 			port map (
 				Clock			=> Clock,
@@ -124,8 +126,9 @@ begin
 	genXilinx : if (VENDOR = VENDOR_XILINX) generate
 		sync : sync_Bits_Xilinx
 			generic map (
-				BITS			=> BITS,
-				INIT			=> INIT_I
+				BITS				=> BITS,
+				INIT				=> INIT_I,
+				SYNC_DEPTH	=> SYNC_DEPTH
 			)
 			port map (
 				Clock			=> Clock,

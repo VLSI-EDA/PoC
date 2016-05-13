@@ -1,15 +1,15 @@
 [*]
-[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Thu Jan 14 23:24:31 2016
+[*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
+[*] Sun Mar 20 17:07:11 2016
 [*]
-[dumpfile] "H:\Austausch\PoC\temp\ghdl\sortnet_Stream_Adapter_tb.ghw"
-[dumpfile_mtime] "Thu Jan 14 23:21:04 2016"
-[dumpfile_size] 91773
-[savefile] "H:\Austausch\PoC\sim\sort\sortnet\sortnet_Stream_Adapter_tb.gtkw"
+[dumpfile] "G:\git\PoC\temp\ghdl\sortnet_Stream_Adapter_tb.ghw"
+[dumpfile_mtime] "Sun Mar 20 17:06:47 2016"
+[dumpfile_size] 89113
+[savefile] "G:\git\PoC\sim\sort\sortnet\sortnet_Stream_Adapter_tb.gtkw"
 [timestart] 0
 [size] 1676 997
 [pos] -1 -1
-*-28.626871 51200000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-27.321276 281700000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.sortnet_stream_adapter_tb.
 [treeopen] top.sortnet_stream_adapter_tb.sort.
@@ -18,7 +18,7 @@
 [treeopen] top.sortnet_stream_adapter_tb.sort.B1.sort.[6].B1.
 [treeopen] top.sortnet_stream_adapter_tb.sort.B1.sort.datamatrix.[0].
 [sst_width] 230
-[signals_width] 215
+[signals_width] 261
 [sst_expanded] 1
 [sst_vpaned_height] 293
 @28

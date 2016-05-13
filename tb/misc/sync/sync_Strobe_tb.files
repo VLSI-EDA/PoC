@@ -4,37 +4,8 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-# Load external vendor libraries
-@library unisim "xilinx"													# Xilinx ISE primitives
-
-# board and device configuration
-vhdl		poc		"tb/common/my_config_ML505.vhdl"
-vhdl		poc		"tb/common/my_project.vhdl"
-
-# PoC core packages
-vhdl		poc		"src/common/utils.vhdl"									# PoC utility collection
-vhdl		poc		"src/common/config.vhdl"								# PoC device configuration mechanism
-vhdl		poc		"src/common/strings.vhdl"								# PoC string package
-vhdl		poc		"src/common/vectors.vhdl"								# PoC vector package
-vhdl		poc		"src/common/physical.vhdl"							# PoC physical types package
-
-vhdl		poc		"src/sim/sim_types.vhdl"								# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_random.v93.vhdl"						# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_global.v93.vhdl"						# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_unprotected.v93.vhdl"			# PoC simulation helper
-vhdl-93	poc		"src/sim/sim_simulation.v93.vhdl"				# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_random.v08.vhdl"						# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_protected.v08.vhdl"				# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_global.v08.vhdl"						# PoC simulation helper
-vhdl-08	poc		"src/sim/sim_simulation.v08.vhdl"				# PoC simulation helper
-vhdl		poc		"src/sim/sim_waveform.vhdl"							# PoC simulation helper
-
 # PoC.misc.sync
-vhdl		poc		"src/misc/sync/sync.pkg.vhdl"						# PoC.misc.sync package
-vhdl		poc		"src/misc/sync/sync_Bits_Xilinx.vhdl"		# Xilinx specific synchronizer
-vhdl		poc		"src/misc/sync/sync_Bits.vhdl"					# Synchronizer for flag signals
-vhdl		poc		"src/misc/sync/sync_Strobe.vhdl"				# Unit Under Test
+include				"src/misc/sync/sync_Strobe.files"						# Unit Under Test
 
 # Testbench file(s)
-vhdl		test	"tb/misc/sync/sync_Strobe_tb.vhdl"			# Testbench
-
+vhdl		test	"tb/misc/sync/sync_Strobe_tb.vhdl"					# Testbench

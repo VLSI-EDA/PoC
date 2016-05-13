@@ -113,10 +113,10 @@ package body sim_unprotected is
 		if (globalSim_StateIsFinalized = FALSE) then
 			if C_SIM_VERBOSE then		report "finalize: " severity NOTE;		end if;
 			globalSim_StateIsFinalized		:= TRUE;
-			Dummy		:= finalizeDefaultTest;
 			for i in 0 to globalSim_TestCount - 1 loop
 				finalizeTest(i);
 			end loop;
+			Dummy		:= finalizeDefaultTest;
 			writeReport;
 		end if;
 	end procedure;
@@ -295,7 +295,13 @@ package body sim_unprotected is
 	procedure finalizeTest(TestID : T_SIM_TEST_ID) is
 		variable Dummy	: BOOLEAN;
 	begin
-		if (TestID < globalSim_TestCount) then
+		if (TestID = C_SIM_DEFAULT_TEST_ID) then
+			if (globalSim_ActiveTestCount = 1) then
+				if (finalizeDefaultTest = TRUE) then
+					finalize;
+				end if;
+			end if;
+		elsif (TestID < globalSim_TestCount) then
 			if (globalSim_Tests(TestID).Status /= SIM_TEST_STATUS_ENDED) then
 				if C_SIM_VERBOSE then		report "finalizeTest(TestID=" & T_SIM_TEST_ID'image(TestID) & "): " severity NOTE;		end if;
 				globalSim_Tests(TestID).Status	:= SIM_TEST_STATUS_ENDED;
@@ -351,6 +357,7 @@ package body sim_unprotected is
 			return Proc.ID;
 		else
 			report "TestID (" & T_SIM_TEST_ID'image(TestID) & ") is unknown." severity FAILURE;
+			return T_SIM_PROCESS_ID'high;
 		end if;
 	end function;
 	

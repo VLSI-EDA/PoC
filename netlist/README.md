@@ -2,18 +2,21 @@
 
 **The PoC-Library** supports the generation of netlists from pre-configured
 vendor IP cores (e.g. Xilinx Core Generator) or from bundled and pre-configured
-PoC entities. This can be done by invoking PoC's `Netlist.py` through one of the
-provided wrapper scripts: netlist.[sh|ps1].
+PoC entities. This can be done by invoking PoC's Service Tool through the wrapper
+script: `poc.[sh|ps1]`.
 
 PoC supports the following tools:
 
+ -  Altera Quartus II / Quartus Prime
+ -  Lattice Diamond LSE
  -  Xilinx Core Generator 14.7 (corgen)
  -  Xilinx Synthesis Tool 14.7 (xst)
 
 Planned tool support:
 
  -  Altera MegaFunction Wizard
- -  Altera Quartus-II Synthesis
+ -  Xilinx Vivado Synth
+ -  Xilinx Vivado IP Core Catalog
 
 > All Windows command line instructions are intended for **Windows PowerShell**,
 > if not marked otherwise. So executing the following instructions in Windows
@@ -25,17 +28,19 @@ Planned tool support:
 ## 1 Common Explanations
 
 A netlist is always compiled for a specific platform. In case of an FPGA it's
-the exact device name. The name can be passed by `--device <DEVICE>` command
-line option to the script. An alternative is the `--board <BOARD>` option. For
+the exact device name. The name can be passed by `--device=<DEVICE>` command
+line option to the script. An alternative is the `--board=<BOARD>` option. For
 a list of well-known board names, PoC knows the soldered FPGA device.
 
-Like other PoC scripts, common options are supported:
+The service tool offers several common options:
 
-```
--h  --help           Show the embedded help page(s).
--v  --verbose        Enable verbose messages.
--d  --debug          Enable debug messages.
-```
+    Common Option           Description
+    ----------------------------------------------------------------------
+    -h   --help             Print a short help
+    -q                      Quiet-mode (print nothing)
+    -v                      Print more messages
+    -d                      Debug mode (print everything)
+    -D                      Debug wrapper script
 
 
 ## 2 Compiling pre-configured Xilinx IP Cores (*.xco files) to Netlists
@@ -47,7 +52,7 @@ core configuration files (e.g. *.xco) are stored as regular source files in the
 `<PoCRoot>\src` directory.
 
 ```PowerShell
-.\netlist.ps1 [-v] [-d] --corgen <PoC-Entity> [--device <DEVICE>|--board <BOARD>]
+.\poc.ps1 [-q] [-v] [-d] coregen <PoC-Entity> [--device=<DEVICE>|--board=<BOARD>]
 ```
 
 #### Use Case - Compiling all ChipScopeICON IP Cores
@@ -65,16 +70,16 @@ flow requires an extension IP core search directory for *XST* and *Translate*
 (`-sd` option).
 
 ```PowerShell
-cd <PoCRoot>/netlist
-.\netlist.ps1 --coregen PoC.xil.ChipScopeICON_1 --board KC705
+cd <PoCRoot>
+.\poc.ps1 coregen PoC.xil.ChipScopeICON_1 --board=KC705
 ```
 
 The compilation can be automated in a for-each loop for all IP cores:
 
 ```PowerShell
-cd <PoCRoot>/netlist
+cd <PoCRoot>
 foreach ($i in 1..15)
-{	.\netlist.ps1 --coregen PoC.xil.ChipScopeICON_$_ --board KC705
+{	.\poc.ps1 coregen PoC.xil.ChipScopeICON_$_ --board=KC705
 }
 ```
 
@@ -87,7 +92,7 @@ The IP core filelist file (*.files) and the XST option file (*.xst) are stored
 in the `<PoCRoot>\xst` directory.
 
 ```PowerShell
-.\netlist.ps1 [-v] [-d] --xst <PoC-Entity> [--device <DEVICE>|--board <BOARD>]
+.\poc.ps1 [-q] [-v] [-d] xst <PoC-Entity> [--device=<DEVICE>|--board=<BOARD>]
 ```
 
 #### Use Case - Compiling a Gigabit Ethernet UDP/IP Stack for a KC705 board

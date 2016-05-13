@@ -1,0 +1,16 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# PoC.sort
+include				"src/sort/sort_lru_list.files"			# UUT (Unit Under Test)
+
+# Testbench file(s)
+if (ToolChain = "Cocotb") then
+	cocotb			"tb/common/lru_dict.py"
+	cocotb			"tb/sort/sort_lru_list_cocotb.py"	# Cocotb Testbench
+else
+	report "Only Cocotb testbench available."
+end if

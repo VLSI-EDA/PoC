@@ -230,7 +230,7 @@ package body components is
 	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : NATURAL := 0) return UNSIGNED is
 	begin
 		if (rst = '1') then
-			return to_unsigned(init, cnt'length);
+			return to_unsigned(INIT, cnt'length);
 		elsif (en = '1') then
 			return cnt + 1;
 		else
@@ -248,7 +248,7 @@ package body components is
 	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : INTEGER := 0) return SIGNED is
 	begin
 		if (rst = '1') then
-			return to_signed(init, cnt'length);
+			return to_signed(INIT, cnt'length);
 		elsif (en = '1') then
 			return cnt - 1;
 		else

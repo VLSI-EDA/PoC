@@ -2,7 +2,7 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
--- ============================================================================================================================================================
+-- ===================================================================================
 -- Authors:					Martin Zabel
 --									Patrick Lehmann
 -- 
@@ -14,7 +14,7 @@
 --		Synchronized Reset is used.
 --
 -- License:
--- ============================================================================================================================================================
+-- ===================================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
@@ -29,7 +29,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================================================================================================
+-- ===================================================================================
 
 library ieee;
 use			ieee.std_logic_1164.all;
@@ -41,7 +41,7 @@ use			PoC.utils.all;
 
 entity arith_prng is
 	generic (
-		BITS : positive;
+		BITS : positive					:= 32;
 		SEED : std_logic_vector := "0"
 	);
 	port (
@@ -234,7 +234,6 @@ architecture rtl of arith_prng is
 	signal val_r		: std_logic_vector(BITS downto 1)		:= resize(SEED, BITS);
 	
 begin
-	-- psl default clock is rising_edge(clk);
 	assert ((3 <= BITS) and (BITS <= 168)) report "Width not yet supported." severity failure;
 	
 	-----------------------------------------------------------------------------

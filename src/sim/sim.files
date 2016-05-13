@@ -1,0 +1,24 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# PoC simulation packages
+if (ToolChain != "Cocotb") then
+	vhdl		poc		"src/sim/sim_types.vhdl"								# PoC simulation helper
+	if (VHDL < 2002) then
+		vhdl	poc		"src/sim/sim_random.v93.vhdl"						# PoC simulation helper
+		vhdl	poc		"src/sim/sim_global.v93.vhdl"						# PoC simulation helper
+		vhdl	poc		"src/sim/sim_unprotected.v93.vhdl"			# PoC simulation helper
+		vhdl	poc		"src/sim/sim_simulation.v93.vhdl"				# PoC simulation helper
+	elseif (VHDL >= 2002) then
+		vhdl	poc		"src/sim/sim_random.v08.vhdl"						# PoC simulation helper
+		vhdl	poc		"src/sim/sim_protected.v08.vhdl"				# PoC simulation helper
+		vhdl	poc		"src/sim/sim_global.v08.vhdl"						# PoC simulation helper
+		vhdl	poc		"src/sim/sim_simulation.v08.vhdl"				# PoC simulation helper
+	else
+		report "VHDL version not supported."
+	end if
+	vhdl		poc		"src/sim/sim_waveform.vhdl"							# PoC simulation helper
+end if

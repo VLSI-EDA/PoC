@@ -5,20 +5,20 @@ The namespace `PoC.sim` offers simulation helper packages.
 
 ## Common Package
 
-The package [`sim_types`][sim_types.pkg] is VHDL version independent and contains common type declarations
+The package [`PoC.sim_types`][sim_types.pkg] is VHDL version independent and contains common type declarations
 needed for PoC's simulation helpers.
 
 ## VHDL-93 Packages:
 
-  - [`sim_unprotected`][sim_unprotected.pkg.v93] 
-  - [`sim_global`][sim_global.pkg.v93] 
-  - [`sim_simulation`][sim_simulation.pkg.v93] 
+  - [`PoC.sim_unprotected`][sim_unprotected.pkg.v93] 
+  - [`PoC.sim_global`][sim_global.pkg.v93] 
+  - [`PoC.sim_simulation`][sim_simulation.pkg.v93] 
 
 ## VHDL-2008 Packages:
 
-  - [`sim_protected`][sim_protected.pkg.v08] 
-  - [`sim_global`][sim_global.pkg.v08] 
-  - [`sim_simulation`][sim_simulation.pkg.v08] 
+  - [`PoC.sim_protected`][sim_protected.pkg.v08] 
+  - [`PoC.sim_global`][sim_global.pkg.v08] 
+  - [`PoC.sim_simulation`][sim_simulation.pkg.v08] 
 
 ## Provided Procedures and Functions
 

@@ -33,7 +33,7 @@
 --			
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,10 +59,13 @@ use			PoC.sync.all;
 
 
 entity sync_Reset is
+	generic (
+		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2	-- generate SYNC_DEPTH many stages, at least 2
+	);
   port (
-		Clock			: in	STD_LOGIC;		-- <Clock>	output clock domain
-		Input			: in	STD_LOGIC;		-- @async:	reset input
-		Output		: out STD_LOGIC			-- @Clock:	reset output
+		Clock					: in	STD_LOGIC;						-- <Clock>	output clock domain
+		Input					: in	STD_LOGIC;						-- @async:	reset input
+		Output				: out STD_LOGIC							-- @Clock:	reset output
 	);
 end entity;
 
@@ -74,8 +77,8 @@ begin
 		attribute SHREG_EXTRACT								: STRING;
 		
 		signal Data_async											: STD_LOGIC;
-		signal Data_meta											: STD_LOGIC		:= '0';
-		signal Data_sync											: STD_LOGIC		:= '0';
+		signal Data_meta											: STD_LOGIC		:= '1';
+		signal Data_sync											: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 0)		:= (others => '1');
 		
 		-- Mark registers as asynchronous
 		attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
@@ -92,33 +95,39 @@ begin
 		begin
 			if (Data_async = '1') then
 				Data_meta		<= '1';
-				Data_sync		<= '1';
+				Data_sync		<= (others => '1');
 			elsif rising_edge(Clock) then
 				Data_meta		<= '0';
-				Data_sync		<= Data_meta;
+				Data_sync		<= Data_sync(Data_sync'high - 1 downto 0) & Data_meta;
 			end if;
 		end process;		
 				
-		Output		<= Data_sync;
+		Output		<= Data_sync(Data_sync'high);
 	end generate;
 
 	-- use dedicated and optimized 2 D-FF synchronizer for Altera FPGAs
 	genAltera : if (VENDOR = VENDOR_ALTERA) generate
 		sync : sync_Reset_Altera
+			generic map (
+				SYNC_DEPTH	=> SYNC_DEPTH
+			)
 			port map (
-				Clock			=> Clock,
-				Input			=> Input,
-				Output		=> Output
+				Clock				=> Clock,
+				Input				=> Input,
+				Output			=> Output
 			);
 	end generate;
 	
 	-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
 	genXilinx : if (VENDOR = VENDOR_XILINX) generate
 		sync : sync_Reset_Xilinx
+			generic map (
+				SYNC_DEPTH	=> SYNC_DEPTH
+			)
 			port map (
-				Clock			=> Clock,
-				Input			=> Input,
-				Output		=> Output
+				Clock				=> Clock,
+				Input				=> Input,
+				Output			=> Output
 			);
 	end generate;
 end architecture;

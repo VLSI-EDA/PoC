@@ -92,7 +92,7 @@ architecture rtl of arp_Cache is
 		variable slvv		: T_SLVV_32(CacheContent'high downto CacheContent'low)	:= (others => (others => '0'));
 	begin
 		for i in CacheContent'range loop
-			slvv(I)	:= to_slv(CacheContent(I).Tag);
+			slvv(i)	:= to_slv(CacheContent(i).Tag);
 		end loop;
 		return to_slm(slvv);
 	end function;
@@ -101,7 +101,7 @@ architecture rtl of arp_Cache is
 		variable slvv		: T_SLVV_48(CACHE_LINES - 1 downto 0)	:= (others => (others => '0'));
 	begin
 		for i in CacheContent'range loop
-			slvv(I)	:= to_slv(CacheContent(I).MAC);
+			slvv(i)	:= to_slv(CacheContent(i).MAC);
 		end loop;
 		return slvv;
 	end function;
@@ -113,7 +113,7 @@ architecture rtl of arp_Cache is
 	begin
 		for i in slvv'range loop
 			for j in 0 to BYTES_PER_LINE - 1 loop
-				result((I * BYTES_PER_LINE) + J)	:= slvv(I)((J * 8) + 7 downto J * 8);
+				result((i * BYTES_PER_LINE) + j)	:= slvv(i)((j * 8) + 7 downto j * 8);
 			end loop;
 		end loop;
 		return result;
@@ -247,11 +247,11 @@ begin
 	IPv4Address_nxt			<= TU_Tag_nxt;
 	TU_Tag_Data					<= IPv4Address_Data;
 
-	CacheResult					<= to_cache_result(CacheHit, CacheMiss);
+	CacheResult					<= to_Cache_Result(CacheHit, CacheMiss);
 
 	-- Cache TagUnit
 --	TU : entity L_Global.Cache_TagUnit_seq
-	TU : entity PoC.Cache_TagUnit_seq
+	TU : entity PoC.cache_TagUnit_seq
 		generic map (
 			REPLACEMENT_POLICY				=> REPLACEMENT_POLICY,
 			CACHE_LINES								=> CACHE_LINES,

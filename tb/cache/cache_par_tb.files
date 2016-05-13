@@ -1,0 +1,17 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# PoC.cache
+include				"src/cache/cache_par.files"			# UUT (Unit Under Test)
+
+# Testbench file(s)
+if (ToolChain = "Cocotb") then
+	cocotb			"tb/common/utils.py"
+	cocotb			"tb/common/lru_dict.py"
+	cocotb			"tb/cache/cache_par_cocotb.py"	# Cocotb Testbench
+else
+	report "Only Cocotb testbench available."
+end if

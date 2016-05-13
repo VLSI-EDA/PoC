@@ -1,6 +1,6 @@
 # Namespace `PoC.io.ddrio`
 
-The namespace PoC.io.ddrio offers components for dual-data-rate (DDR) input
+The namespace `PoC.io.ddrio` offers components for dual-data-rate (DDR) input
 and output of data. It uses the DDR flip flops in the FPGA
 I/O buffers, if available. PoC has two platform specific
 implementations for Altera and Xilinx, which are chosen, if the
@@ -9,12 +9,7 @@ appropriate `MY_DEVICE` is configured in [`my_config.vhdl`][my_config].
 
 ## Package(s)
 
-The package [`ddrio`][ddrio.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.ddrio.all;
-```
+The package [`PoC.ddrio`][ddrio.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

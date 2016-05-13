@@ -53,9 +53,9 @@ architecture tb of sync_Bits_tb is
 	signal Clock1							: STD_LOGIC;
 	signal Clock2							: STD_LOGIC;
 	
-	signal Sync_in						: STD_LOGIC_VECTOR(0 downto 0)	:= "0";
+	constant INIT 						: STD_LOGIC_VECTOR(0 downto 0) := "0";
+	signal Sync_in						: STD_LOGIC_VECTOR(0 downto 0) := INIT;
 	signal Sync_out						: STD_LOGIC_VECTOR(0 downto 0);
-	
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -67,47 +67,64 @@ begin
 	procStimuli : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Stimuli process");
 	begin
-		simWaitUntilRisingEdge(Clock1, 8);
-		
-		Sync_in			<=	"X";
-		wait until rising_edge(Clock1);
-		
-		Sync_in			<=	"0";
-		wait until rising_edge(Clock1);
-		
+		simWaitUntilRisingEdge(Clock1, 4);
 		Sync_in			<=	"1";
-		wait until rising_edge(Clock1);
-		
-		Sync_in			<=	"0";
+
 		simWaitUntilRisingEdge(Clock1, 2);
-		
-		Sync_in			<=	"1";
-		wait until rising_edge(Clock1);
-		
 		Sync_in			<=	"0";
-		simWaitUntilRisingEdge(Clock1, 6);
-	
+		
+		simWaitUntilRisingEdge(Clock1, 2);
 		Sync_in			<=	"1";
+		
+		simWaitUntilRisingEdge(Clock1, 2);
+		Sync_in			<=	"0";
+		
+		simWaitUntilRisingEdge(Clock1, 6);
+		Sync_in			<=	"1";
+		
 		simWaitUntilRisingEdge(Clock1, 16);
-		
 		Sync_in			<=	"0";
-		wait until rising_edge(Clock1);
 		
+		simWaitUntilRisingEdge(Clock1, 2);
 		Sync_in			<=	"1";
-		wait until rising_edge(Clock1);
 		
+		simWaitUntilRisingEdge(Clock1, 2);
 		Sync_in			<=	"0";
-		simWaitUntilRisingEdge(Clock1, 6);
 		
 		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		wait;  -- forever
 	end process;
+
+	procChecker: process is
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker process");
+		variable toggled 			: natural := 0;
+		variable Sync_out_old : std_logic_vector(Sync_out'range);
+	begin
+		-- check initial value
+		wait until rising_edge(Clock2);
+		simAssertion(Sync_out = INIT, "Wrong initial value on Sync_out.");
+		Sync_out_old := Sync_out;
+		
+		for i in 1 to 50 loop -- wait for a maximum of 50 clock cycles
+			wait until rising_edge(Clock2);
+			if Sync_out = not Sync_out_old then
+				toggled := toggled + 1;
+				Sync_out_old := Sync_out;
+			end if;
+		end loop;
+
+		simAssertion(toggled = 8, "Wrong number of events on Sync_out.");
+		
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
+	end process procChecker;
 	
 	UUT : entity PoC.sync_Bits
 		generic map (
 			BITS			=> 1,							-- number of bit to be synchronized
-			INIT			=> "0"						-- 
+			INIT			=> INIT						-- 
 		)                             
 		port map (                    
 			Clock			=> Clock2,				-- input clock domain

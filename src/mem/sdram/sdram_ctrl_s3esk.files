@@ -1,0 +1,18 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Common PoC packages for configuration, synthesis and simulation
+include				"src/common/common.files"											# load common packages
+
+# PoC.mem.sdram
+if (DeviceVendor = "Xilinx") then
+	include			"lib/Xilinx.files"														# Xilinx primitives
+	vhdl	poc		"src/mem/ocram/sdram_ctrl_phy_s3esk.vhdl"			# Physical layer abstraction for the Terrasic DE0 board
+	vhdl	poc		"src/mem/ocram/sdram_ctrl_fsm.vhdl"						# SDR/DDR SDRAM controller FSM
+	vhdl	poc		"src/mem/ocram/sdram_ctrl_s3esk.vhdl"					# Top-Level
+else
+	report "This SDRAM controller supports only the 'Spartan-3E Starter Kit' board."
+end if

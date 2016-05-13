@@ -24,7 +24,7 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,11 +40,10 @@
 -- limitations under the License.
 -- =============================================================================
 
-library PoC;
 
 package my_config is
   -- Change these lines to setup configuration.
-  constant MY_BOARD   : string := "S3SK"; -- Spartan-3 Starter Kit
+  constant MY_BOARD   : string := "S3SK1000"; -- Spartan-3 Starter Kit
   constant MY_DEVICE  : string := "XC3S1000-FT2564C";
 		
 	-- For internal use only

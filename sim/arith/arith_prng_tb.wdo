@@ -1,9 +1,9 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /arith_prng_tb/prng/clk
-add wave -noupdate /arith_prng_tb/prng/rst
-add wave -noupdate /arith_prng_tb/prng/got
-add wave -noupdate -radix unsigned /arith_prng_tb/prng/val
+add wave -noupdate /arith_prng_tb/Clock
+add wave -noupdate /arith_prng_tb/Reset
+add wave -noupdate /arith_prng_tb/PRNG_Value
+add wave -noupdate /arith_prng_tb/Test_got
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {2594999323 fs} 0}
 quietly wave cursor active 1
@@ -21,4 +21,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 fs} {2724750 ps}
+WaveRestoreZoom {0 fs} {2824500 ps}
