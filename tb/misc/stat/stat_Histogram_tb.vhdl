@@ -78,8 +78,6 @@ architecture tb of stat_Histogram_tb is
 begin
 	-- initialize global simulation status
 	simInitialize;
-	randomInitializeSeed;
-	LogFile_Open(GNUPLOT_DATA_FILE);
 	
 	-- generate global testbench clock
 	simGenerateClock(simTestID,			Clock,	CLOCK_FREQ);
@@ -117,8 +115,13 @@ begin
 		constant UpperBound					: REAL	:= +(Span / 2.0) + Mean;
 		constant Scaler							: REAL	:= (2.0 ** DATA_BITS) / Span;
 		constant Move								: REAL	:= 2.0 ** (DATA_BITS - 1);
-		
+
+		variable random  : T_RANDOM;
+		variable logfile : T_LOGFILE;
 	begin
+		random.setSeed;
+		logfile.OpenFile(GNUPLOT_DATA_FILE);
+
 		DataIn		<= (others => '0');
 		wait until (Enable = '1') and falling_edge(Clock);
 
@@ -129,20 +132,20 @@ begin
 			for j in 0 to 1023 loop
 			
 				-- uniform distribution
-				RandomValue_int		:= randomUniformDistributedValue(0, 2**DATA_BITS - 1);
+				RandomValue_int		:= random.getUniformDistributedValue(0, 2**DATA_BITS - 1);
 				DataIn						<= to_slv(RandomValue_int, DATA_BITS);
 				
 				wait until falling_edge(Clock);
 			end loop;
 		end loop;
 
-		LogFile_PrintLine("# stat_Histogram_tb.vhdl");
-		LogFile_PrintLine("# plot '" & GNUPLOT_DATA_FILE & "' using 1:2 with boxes, '" & GNUPLOT_DATA_FILE & "' using (1):2:(255) smooth unique with xerrorbar");
+		logfile.PrintLine("# stat_Histogram_tb.vhdl");
+		logfile.PrintLine("# plot '" & GNUPLOT_DATA_FILE & "' using 1:2 with boxes, '" & GNUPLOT_DATA_FILE & "' using (1):2:(255) smooth unique with xerrorbar");
 		
 		-- test result after all cycles
 		good := TRUE;
 		for i in Histogram_slvv'range loop
-			LogFile_PrintLine(raw_format_nat_dec(i) & " " & raw_format_nat_dec(to_integer(unsigned(Histogram_slvv(i)))));
+			logfile.PrintLine(raw_format_nat_dec(i) & " " & raw_format_nat_dec(to_integer(unsigned(Histogram_slvv(i)))));
 		end loop;
 		
 		-- TODO: how to assert a histogram?

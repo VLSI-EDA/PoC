@@ -56,7 +56,7 @@ from Compiler.XSTCompiler            import Compiler as XSTCompiler
 from Compiler.VivadoCompiler          import Compiler as VivadoCompiler
 from PoC.Config                      import Board
 from PoC.Entity                      import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
-from PoC.Solution                    import Solution, Repository
+from PoC.Solution                    import Repository
 from PoC.Query                      import Query
 from Simulator.ActiveHDLSimulator    import Simulator as ActiveHDLSimulator
 from Simulator.CocotbSimulator       import Simulator as CocotbSimulator
@@ -308,7 +308,7 @@ class PoC(ILogable, ArgParseMixin):
 	# fallback handler if no command was recognized
 	# ----------------------------------------------------------------------------
 	@DefaultAttribute()
-	def HandleDefault(self, args):
+	def HandleDefault(self, _):
 		self.PrintHeadline()
 
 		# print("Common arguments:")
@@ -429,7 +429,7 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("add-solution", help="Add a solution to PoC.")
-	def HandleAddSolution(self, args):
+	def HandleAddSolution(self, _): #args
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
 
@@ -465,7 +465,7 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("list-solution", help="List all solutions registered in PoC.")
-	def HandleListSolution(self, args):
+	def HandleListSolution(self, _): #args
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
 
@@ -510,11 +510,11 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "add-project" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("add-project", help="Add a project to PoC.")
-	def HandleAddProject(self, args):
-		self.PrintHeadline()
-		self.__PrepareForConfiguration()
+	# @CommandGroupAttribute("Configuration commands")
+	# @CommandAttribute("add-project", help="Add a project to PoC.")
+	# def HandleAddProject(self, args):
+	# 	self.PrintHeadline()
+	# 	self.__PrepareForConfiguration()
 	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-project" command
@@ -541,80 +541,65 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-project" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("remove-project", help="Add a project to PoC.")
-	@ArgumentAttribute(metavar="<Project>", dest="Project", type=str, help="Project name.")
-	def HandleRemoveProject(self, args):
-		self.PrintHeadline()
-		self.__PrepareForConfiguration()
+	# @CommandGroupAttribute("Configuration commands")
+	# @CommandAttribute("remove-project", help="Add a project to PoC.")
+	# @ArgumentAttribute(metavar="<Project>", dest="Project", type=str, help="Project name.")
+	# def HandleRemoveProject(self, args):
+	# 	self.PrintHeadline()
+	# 	self.__PrepareForConfiguration()
 		
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "add-ipcore" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("add-ipcore", help="Add a ipcore to PoC.")
-	def HandleAddIPCore(self, args):
-		self.PrintHeadline()
-		self.__PrepareForConfiguration()
+	# @CommandGroupAttribute("Configuration commands")
+	# @CommandAttribute("add-ipcore", help="Add a ipcore to PoC.")
+	# def HandleAddIPCore(self, args):
+	# 	self.PrintHeadline()
+	# 	self.__PrepareForConfiguration()
 	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-ipcore" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("list-ipcore", help="List all ipcores registered in PoC.")
-	def HandleListIPCore(self, args):
-		self.PrintHeadline()
-		self.__PrepareForConfiguration()
-		
-		ipcore = Solution(self)
-		
-		self._LogNormal("Registered ipcores in PoC:")
-		for ipcoreName in ipcore.GetIPCoreNames():
-			print("  {0}".format(ipcoreName))
+	# @CommandGroupAttribute("Configuration commands")
+	# @CommandAttribute("list-ipcore", help="List all ipcores registered in PoC.")
+	# def HandleListIPCore(self, args):
+	# 	self.PrintHeadline()
+	# 	self.__PrepareForConfiguration()
+	#
+	# 	ipcore = Solution(self)
+	#
+	# 	self._LogNormal("Registered ipcores in PoC:")
+	# 	for ipcoreName in ipcore.GetIPCoreNames():
+	# 		print("  {0}".format(ipcoreName))
 	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-ipcore" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("remove-ipcore", help="Add a ipcore to PoC.")
-	@ArgumentAttribute(metavar="<IPCore>", dest="IPCore", type=str, help="IPCore name.")
-	def HandleRemoveIPCore(self, args):
-		self.PrintHeadline()
-		self.__PrepareForConfiguration()
-		
+	# @CommandGroupAttribute("Configuration commands")
+	# @CommandAttribute("remove-ipcore", help="Add a ipcore to PoC.")
+	# @ArgumentAttribute(metavar="<IPCore>", dest="IPCore", type=str, help="IPCore name.")
+	# def HandleRemoveIPCore(self, args):
+	# 	self.PrintHeadline()
+	# 	self.__PrepareForConfiguration()
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "add-testbench" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("add-testbench", help="Add a testbench to PoC.")
-	def HandleAddTestbench(self, args):
-		self.PrintHeadline()
-		self.__PrepareForConfiguration()
-	
-	# ----------------------------------------------------------------------------
-	# create the sub-parser for the "list-testbench" command
-	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("list-testbench", help="List all testbenchs registered in PoC.")
-	def HandleListTestbench(self, args):
-		self.PrintHeadline()
-		self.__PrepareForConfiguration()
-		
-		testbench = Solution(self)
-		
-		self._LogNormal("Registered testbenchs in PoC:")
-		for testbenchName in testbench.GetTestbenchNames():
-			print("  {0}".format(testbenchName))
+	# @CommandGroupAttribute("Configuration commands")
+	# @CommandAttribute("add-testbench", help="Add a testbench to PoC.")
+	# def HandleAddTestbench(self, args):
+	# 	self.PrintHeadline()
+	# 	self.__PrepareForConfiguration()
 	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-testbench" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("remove-testbench", help="Add a testbench to PoC.")
-	@ArgumentAttribute(metavar="<Testbench>", dest="Testbench", type=str, help="Testbench name.")
-	def HandleRemoveTestbench(self, args):
-		self.PrintHeadline()
-		self.__PrepareForConfiguration()
+	# @CommandGroupAttribute("Configuration commands")
+	# @CommandAttribute("remove-testbench", help="Add a testbench to PoC.")
+	# @ArgumentAttribute(metavar="<Testbench>", dest="Testbench", type=str, help="Testbench name.")
+	# def HandleRemoveTestbench(self, args):
+	# 	self.PrintHeadline()
+	# 	self.__PrepareForConfiguration()
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "query" command

@@ -579,7 +579,7 @@ class VHDLSourceFile(SourceFile, VHDLSourceFileMixIn):
 		VHDLSourceFileMixIn.__init__(self, file, vhdlLibraryName.lower())
 
 	def Parse(self):
-		self._Parse()
+		self._Parse()# only available via late binding
 	
 	def __str__(self):
 		return "VHDL file: '{0!s}".format(self._file)

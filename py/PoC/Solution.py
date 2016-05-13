@@ -53,7 +53,7 @@ from Base.Configuration import ConfigurationException
 from Base.Project        import Project as BaseProject, File, FileTypes, VHDLSourceFile, VerilogSourceFile, CocotbSourceFile  #, ProjectFile
 from Parser.FilesParser  import FilesParserMixIn
 from Parser.RulesParser  import RulesParserMixIn
-from PoC                import __POC_SOLUTION_KEYWORD__, __POC_PROJECT_KEYWORD__
+from PoC                import __POC_SOLUTION_KEYWORD__
 
 
 class Base(ILazyLoadable):

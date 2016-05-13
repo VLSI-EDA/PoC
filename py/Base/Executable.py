@@ -155,12 +155,17 @@ class PathArgument(CommandLineArgument):
 		elif (self._PosixFormat):        return self._value.as_posix()
 		else:                            return str(self._value)
 
-class FlagArgument(CommandLineArgument):
-	_pattern =    "{0}"
+
+class NamedCommandLineArgument(CommandLineArgument):
+	_name = None  # set in sub-classes
 
 	@property
 	def Name(self):
 		return self._name
+
+
+class FlagArgument(NamedCommandLineArgument):
+	_pattern =    "{0}"
 
 	@property
 	def Value(self):
@@ -186,7 +191,7 @@ class ShortFlagArgument(FlagArgument):    _pattern =  "-{0}"
 class LongFlagArgument(FlagArgument):      _pattern =  "--{0}"
 class WindowsFlagArgument(FlagArgument):  _pattern =  "/{0}"
 
-class ValuedFlagArgument(CommandLineArgument):
+class ValuedFlagArgument(NamedCommandLineArgument):
 	_pattern = "{0}={1}"
 
 	@property
@@ -214,7 +219,7 @@ class ValuedFlagArgument(CommandLineArgument):
 class ShortValuedFlagArgument(ValuedFlagArgument):  _pattern = "-{0}={1}"
 class LongValuedFlagArgument(ValuedFlagArgument):    _pattern = "--{0}={1}"
 
-class ValuedFlagListArgument(CommandLineArgument):
+class ValuedFlagListArgument(NamedCommandLineArgument):
 	_pattern = "{0}={1}"
 
 	@property
@@ -240,7 +245,7 @@ class ValuedFlagListArgument(CommandLineArgument):
 class ShortValuedFlagListArgument(ValuedFlagListArgument):  _pattern = "-{0}={1}"
 class LongValuedFlagListArgument(ValuedFlagListArgument):    _pattern = "--{0}={1}"
 
-class TupleArgument(CommandLineArgument):
+class TupleArgument(NamedCommandLineArgument):
 	_switchPattern =  "{0}"
 	_valuePattern =    "{0}"
 

@@ -89,7 +89,7 @@ class XilinxProjectExportMixIn:
 
 	def _GenerateXilinxProjectFileContent(self, tool, vhdlVersion=VHDLVersion.VHDL93):
 		projectFileContent = ""
-		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile | FileTypes.VerilogSourceFile):
+		for file in self.PoCProject.Files(fileType=FileTypes.VHDLSourceFile | FileTypes.VerilogSourceFile): #self.PoCProject only available via late binding
 			if (not file.Path.exists()):                raise XilinxException("Cannot add '{0!s}' to {1} project file.".format(file.Path, tool)) from FileNotFoundError(str(file.Path))
 			if file.FileType is FileTypes.VHDLSourceFile:
 				# create one VHDL line for each VHDL file
@@ -102,6 +102,6 @@ class XilinxProjectExportMixIn:
 
 	def _WriteXilinxProjectFile(self, projectFilePath, tool, vhdlVersion=VHDLVersion.VHDL93):
 		projectFileContent = self._GenerateXilinxProjectFileContent(tool, vhdlVersion)
-		self._LogDebug("Writing {0} project file to '{1!s}'".format(tool, projectFilePath))
+		self._LogDebug("Writing {0} project file to '{1!s}'".format(tool, projectFilePath)) #self._LogDebug only available via late binding
 		with projectFilePath.open('w') as prjFileHandle:
 			prjFileHandle.write(projectFileContent)

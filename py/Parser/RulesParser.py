@@ -101,8 +101,8 @@ class RulesParserMixIn:
 		self._postProcessRules =  []
 
 	def _Parse(self):
-		self._ReadContent()
-		self._document = Document.parse(self._content, printChar=not True)
+		self._ReadContent() #only available via late binding
+		self._document = Document.parse(self._content, printChar=not True) #self._content only available via late binding
 		# print("{DARK_GRAY}{0!s}{NOCOLOR}".format(self._document, **Init.Foreground))
 		
 	def _Resolve(self):
@@ -145,5 +145,5 @@ class RulesParserMixIn:
 	@property
 	def PostProcessRules(self):    return self._postProcessRules
 
-	def __str__(self):    return "RULES file: '{0!s}'".format(self._file)
+	def __str__(self):    return "RULES file: '{0!s}'".format(self._file) #self._file only available via late binding
 	def __repr__(self):    return self.__str__()
