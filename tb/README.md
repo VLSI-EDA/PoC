@@ -55,7 +55,7 @@ identified by an unique name: `PoC.arith.prng`, which is passed to the testbench
 
 ```Bash
 cd <PoCRoot>
-.\poc.ps1 isim PoC.arith.prng
+./poc.sh isim PoC.arith.prng
 ```
 
 The CLI option switch `isim` chooses *ISE Simulator* (iSim) as the simulator and passes the module name as parameter
