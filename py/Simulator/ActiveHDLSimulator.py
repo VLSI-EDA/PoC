@@ -52,19 +52,15 @@ class Simulator(BaseSimulator):
 	_TOOL_CHAIN =            ToolChain.Aldec_ActiveHDL
 	_TOOL =                  Tool.Aldec_aSim
 
-	def __init__(self, host, guiMode):
-		super().__init__(host)
+	def __init__(self, host, dryRun, guiMode):
+		super().__init__(host, dryRun)
 
-		self._guiMode =        guiMode
-
-		self._entity =        None
-		self._testbenchFQN =  None
-		self._vhdlVersion =    None
+		self._guiMode =       guiMode
+		self._vhdlVersion =   None
 		self._vhdlGenerics =  None
+		self._toolChain =     None
 
-		self._toolChain =      None
-
-		activeHDLFilesDirectoryName =    host.PoCConfig['CONFIG.DirectoryNames']['ActiveHDLFiles']
+		activeHDLFilesDirectoryName =   host.PoCConfig['CONFIG.DirectoryNames']['ActiveHDLFiles']
 		self.Directories.Working =      host.Directories.Temp / activeHDLFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / activeHDLFilesDirectoryName
 		
@@ -101,10 +97,7 @@ class Simulator(BaseSimulator):
 
 		# create a ActiveHDLVHDLCompiler instance
 		acom = self._toolChain.GetVHDLCompiler()
-		if (self._vhdlVersion == VHDLVersion.VHDL87):      acom.Parameters[acom.SwitchVHDLVersion] =  "87"
-		elif (self._vhdlVersion == VHDLVersion.VHDL93):    acom.Parameters[acom.SwitchVHDLVersion] =  "93"
-		elif (self._vhdlVersion == VHDLVersion.VHDL02):    acom.Parameters[acom.SwitchVHDLVersion] =  "2002"
-		elif (self._vhdlVersion == VHDLVersion.VHDL08):    acom.Parameters[acom.SwitchVHDLVersion] =  "2008"
+		acom.Parameters[acom.SwitchVHDLVersion] = repr(self._vhdlVersion)
 
 		# run acom compile for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):

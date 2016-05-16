@@ -37,7 +37,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
+    # 'sphinx.ext.githubpages',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'The PoC-Library'
-copyright = '2016, Patrick Lehmann, Thomas B. Preusser, Martin Zabel'
+copyright = '2007-2016 Technische Universitaet Dresden - Germany, Chair for VLSI-Design, Diagnostics and Architecture'
 author = 'Patrick Lehmann, Thomas B. Preusser, Martin Zabel'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -79,7 +79,7 @@ language = None
 # non-false value, then it is used:
 #today = ''
 # Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
+#today_fmt = '%d.%m.%Y'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -218,7 +218,7 @@ htmlhelp_basename = 'ThePoC-Librarydoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+	'papersize': 'a4paper',
 
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',

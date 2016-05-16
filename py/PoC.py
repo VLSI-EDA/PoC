@@ -174,7 +174,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__repo =         None
 		self.__directories =  {}
 
-		self.__SimulationDefaultVHDLVersion = VHDLVersion.VHDL08
+		self.__SimulationDefaultVHDLVersion = VHDLVersion.VHDL2008
 		self.__SimulationDefaultBoard =       None
 
 		self._directories =             self.__Directories__()
@@ -453,7 +453,10 @@ class PoC(ILogable, ArgParseMixin):
 			elif (createPath not in ['y', 'Y']):
 				raise ConfigurationException("Unsupported choice '{0}'".format(createPath))
 
-			solutionRootPath.mkdir(parents=True)
+			try:
+				solutionRootPath.mkdir(parents=True)
+			except OSError as ex:
+				raise ConfigurationException("Error while creating '{0!s}'.".format(solutionRootPath)) from ex
 
 			self.__repo.AddSolution(solutionID, solutionName, solutionRootPath)
 		self.__WritePoCConfiguration()
@@ -642,7 +645,7 @@ class PoC(ILogable, ArgParseMixin):
 	def _ExtractVHDLVersion(self, vhdlVersion, defaultVersion=None):
 		if (defaultVersion is None):    defaultVersion = self.__SimulationDefaultVHDLVersion
 		if (vhdlVersion is None):        return defaultVersion
-		else:                            return VHDLVersion.parse(vhdlVersion)
+		else:                            return VHDLVersion.Parse(vhdlVersion)
 
 	# TODO: move to Configuration class in ToolChains.Xilinx.Vivado
 	def _CheckVivadoEnvironment(self):
@@ -756,7 +759,7 @@ class PoC(ILogable, ArgParseMixin):
 		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
 		# create a GHDLSimulator instance and prepare it
-		simulator = ActiveHDLSimulator(self, args.GUIMode)
+		simulator = ActiveHDLSimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -783,7 +786,7 @@ class PoC(ILogable, ArgParseMixin):
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
-		simulator = GHDLSimulator(self, args.GUIMode)
+		simulator = GHDLSimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion, guiMode=args.GUIMode)		#, vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -805,7 +808,7 @@ class PoC(ILogable, ArgParseMixin):
 		fqnList =      self._ExtractFQNs(args.FQN)
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 
-		simulator = ISESimulator(self, args.GUIMode)
+		simulator = ISESimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL93)		#, vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -828,7 +831,7 @@ class PoC(ILogable, ArgParseMixin):
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
-		simulator = QuestaSimulator(self, args.GUIMode)
+		simulator = QuestaSimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -854,7 +857,7 @@ class PoC(ILogable, ArgParseMixin):
 		# FIXME: VHDL-2008 is broken in Vivado 2016.1 -> use VHDL-93 by default
 		vhdlVersion = self._ExtractVHDLVersion(args.VHDLVersion, defaultVersion=VHDLVersion.VHDL93)
 
-		simulator = VivadoSimulator(self, args.GUIMode)
+		simulator = VivadoSimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -880,8 +883,8 @@ class PoC(ILogable, ArgParseMixin):
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName)
 
 		# create a CocotbSimulator instance and prepare it
-		simulator = CocotbSimulator(self, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL08)
+		simulator = CocotbSimulator(self, self.DryRun, args.GUIMode)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL2008)
 
 		Exit.exit(0 if allPassed else 1)
 
@@ -1038,9 +1041,9 @@ class PoC(ILogable, ArgParseMixin):
 # main program
 def main():
 	dryRun =  "-D" in sys_argv
-	debug =    "-d" in sys_argv
-	verbose =  "-v" in sys_argv
-	quiet =    "-q" in sys_argv
+	debug =   "-d" in sys_argv
+	verbose = "-v" in sys_argv
+	quiet =   "-q" in sys_argv
 
 	# configure Exit class
 	Exit.quiet = quiet
@@ -1086,10 +1089,10 @@ def main():
 
 	except EnvironmentException as ex:          Exit.printEnvironmentException(ex)
 	except NotConfiguredException as ex:        Exit.printNotConfiguredException(ex)
-	except PlatformNotSupportedException as ex:  Exit.printPlatformNotSupportedException(ex)
-	except ExceptionBase as ex:                  Exit.printExceptionbase(ex)
-	except NotImplementedError as ex:            Exit.printNotImplementedError(ex)
-	# except Exception as ex:                      Exit.printException(ex)
+	except PlatformNotSupportedException as ex: Exit.printPlatformNotSupportedException(ex)
+	except ExceptionBase as ex:                 Exit.printExceptionbase(ex)
+	except NotImplementedError as ex:           Exit.printNotImplementedError(ex)
+	except Exception as ex:                     Exit.printException(ex)
 
 # entry point
 if __name__ == "__main__":

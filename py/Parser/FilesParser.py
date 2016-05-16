@@ -30,18 +30,20 @@
 # limitations under the License.
 # ==============================================================================
 #
-
-from lib.Parser           import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression
-from lib.Parser           import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
-from lib.Parser           import ExistsFunction, ListConstructorExpression
+from lib.Functions        import Init
 from lib.Parser           import ParserException
-from lib.Parser           import StringLiteral, IntegerLiteral, Identifier
-from Parser.FilesCodeDOM  import Document
+from lib.CodeDOM          import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression
+from lib.CodeDOM          import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
+from lib.CodeDOM          import StringLiteral, IntegerLiteral, Identifier
+from Parser.FilesCodeDOM  import Document, InterpolateLiteral, SubDirectoryExpression, ConcatenateExpression
+from Parser.FilesCodeDOM  import ExistsFunction, ListConstructorExpression, PathStatement
 from Parser.FilesCodeDOM  import IfElseIfElseStatement, ReportStatement
 from Parser.FilesCodeDOM  import IncludeStatement, LibraryStatement
-from Parser.FilesCodeDOM  import UcfStatement, XdcStatement, SdcStatement
+from Parser.FilesCodeDOM  import LDCStatement, SDCStatement, UCFStatement, XDCStatement
 from Parser.FilesCodeDOM  import VHDLStatement, VerilogStatement, CocotbStatement
 
+# to print the reconstructed files file after parsing, set DEBUG to True
+DEBUG = not True
 
 class FileReference:
 	def __init__(self, file):
@@ -83,19 +85,24 @@ class CocotbSourceFileMixIn(FileReference):
 		return "Cocotb file: '{0!s}'".format(self._file)
 
 
-class UcfSourceFileMixIn(FileReference):
+class LDCSourceFileMixIn(FileReference):
+	def __str__(self):
+		return "LDC file: '{0!s}'".format(self._file)
+
+
+class SDCSourceFileMixIn(FileReference):
+	def __str__(self):
+		return "SDC file: '{0!s}'".format(self._file)
+
+
+class UCFSourceFileMixIn(FileReference):
 	def __str__(self):
 		return "UCF file: '{0!s}'".format(self._file)
 
 
-class XdcSourceFileMixIn(FileReference):
+class XDCSourceFileMixIn(FileReference):
 	def __str__(self):
 		return "XDC file: '{0!s}'".format(self._file)
-
-
-class SdcSourceFileMixIn(FileReference):
-	def __str__(self):
-		return "SDC file: '{0!s}'".format(self._file)
 
 
 class VHDLLibraryReference:
@@ -122,60 +129,77 @@ class FilesParserMixIn:
 	_classVHDLSourceFile =      VHDLSourceFileMixIn
 	_classVerilogSourceFile =   VerilogSourceFileMixIn
 	_classCocotbSourceFile =    CocotbSourceFileMixIn
-	_classUcfSourceFile =       UcfSourceFileMixIn
-	_classXdcSourceFile =       XdcSourceFileMixIn
-	_classSdcSourceFile =       SdcSourceFileMixIn
+	_classLDCSourceFile =       LDCSourceFileMixIn
+	_classSDCSourceFile =       SDCSourceFileMixIn
+	_classUCFSourceFile =       UCFSourceFileMixIn
+	_classXDCSourceFile =       XDCSourceFileMixIn
 
 	def __init__(self):
-		self._rootDirectory =  None
+		self._rootDirectory = None
 		self._document =      None
 		
-		self._files =          []
+		self._files =         []
 		self._includes =      []
-		self._libraries =      []
+		self._libraries =     []
 		self._warnings =      []
 		
 	def _Parse(self):
 		self._ReadContent() #only available via late binding
-		self._document = Document.parse(self._content, printChar=not True) #self._content only available via late binding
-		# print(Fore.LIGHTBLACK_EX + str(self._document) + Fore.RESET)
-		
-	def _Resolve(self, statements=None):
-		# print("Resolving {0}".format(str(self._file)))
+		self._document = Document.Parse(self._content, printChar=not True) #self._content only available via late binding
+
+		if DEBUG:
+			print("{DARK_GRAY}{line}{NOCOLOR}".format(line="*"*80, **Init.Foreground))
+			print("{DARK_GRAY}{doc!s}{NOCOLOR}".format(doc=self._document, **Init.Foreground))
+			print("{DARK_GRAY}{line}{NOCOLOR}".format(line="*"*80, **Init.Foreground))
+
+	# FIXME: is there a better way to passthrough/access host?
+	def _Resolve(self, host, statements=None):
 		if (statements is None):
 			statements = self._document.Statements
 		
 		for stmt in statements:
 			if isinstance(stmt, VHDLStatement):
-				file =            self._rootDirectory / stmt.FileName
-				vhdlSrcFile =     self._classVHDLSourceFile(file, stmt.LibraryName)		# stmt.Library,
+				path = self._EvaluatePath(host, stmt.PathExpression)
+				file = self._rootDirectory / path
+				vhdlSrcFile =     self._classVHDLSourceFile(file, stmt.LibraryName)
 				self._files.append(vhdlSrcFile)
 			elif isinstance(stmt, VerilogStatement):
-				file =            self._rootDirectory / stmt.FileName
+				path = self._EvaluatePath(host, stmt.PathExpression)
+				file = self._rootDirectory / path
 				verilogSrcFile =  self._classVerilogSourceFile(file)
 				self._files.append(verilogSrcFile)
 			elif isinstance(stmt, CocotbStatement):
-				file =            self._rootDirectory / stmt.FileName
+				path = self._EvaluatePath(host, stmt.PathExpression)
+				file = self._rootDirectory / path
 				cocotbSrcFile =   self._classCocotbSourceFile(file)
 				self._files.append(cocotbSrcFile)
-			elif isinstance(stmt, UcfStatement):
-				file =            self._rootDirectory / stmt.FileName
-				ucfSrcFile =      self._classCocotbSourceFile(file)
-				self._files.append(ucfSrcFile)
-			elif isinstance(stmt, XdcStatement):
-				file =            self._rootDirectory / stmt.FileName
-				xdcSrcFile =      self._classCocotbSourceFile(file)
-				self._files.append(xdcSrcFile)
-			elif isinstance(stmt, SdcStatement):
-				file =            self._rootDirectory / stmt.FileName
-				sdcSrcFile =      self._classCocotbSourceFile(file)
+			elif isinstance(stmt, LDCStatement):
+				path = self._EvaluatePath(host, stmt.PathExpression)
+				file = self._rootDirectory / path
+				ldcSrcFile =      self._classLDCSourceFile(file)
+				self._files.append(ldcSrcFile)
+			elif isinstance(stmt, SDCStatement):
+				path = self._EvaluatePath(host, stmt.PathExpression)
+				file = self._rootDirectory / path
+				sdcSrcFile =      self._classSDCSourceFile(file)
 				self._files.append(sdcSrcFile)
+			elif isinstance(stmt, UCFStatement):
+				path = self._EvaluatePath(host, stmt.PathExpression)
+				file = self._rootDirectory / path
+				ucfSrcFile =      self._classUCFSourceFile(file)
+				self._files.append(ucfSrcFile)
+			elif isinstance(stmt, XDCStatement):
+				path = self._EvaluatePath(host, stmt.PathExpression)
+				file = self._rootDirectory / path
+				xdcSrcFile =      self._classXDCSourceFile(file)
+				self._files.append(xdcSrcFile)
 			elif isinstance(stmt, IncludeStatement):
 				# add the include file to the fileset
-				file =            self._rootDirectory / stmt.FileName
+				path =            self._EvaluatePath(host, stmt.PathExpression)
+				file =            self._rootDirectory / path
 				includeFile =     self._classFileListFile(file) #self._classFileListFile only available via late binding
 				self._fileSet.AddFile(includeFile) #self._fileSet only available via late binding
-				includeFile.Parse()
+				includeFile.Parse(host)
 				
 				self._includes.append(includeFile)
 				for srcFile in includeFile.Files:
@@ -185,66 +209,97 @@ class FilesParserMixIn:
 				for warn in includeFile.Warnings:
 					self._warnings.append(warn)
 			elif isinstance(stmt, LibraryStatement):
-				lib =          self._rootDirectory / stmt.DirectoryName
+				path =        self._EvaluatePath(host, stmt.PathExpression)
+				lib =         self._rootDirectory / path
 				vhdlLibRef =  VHDLLibraryReference(stmt.Library, lib)
 				self._libraries.append(vhdlLibRef)
+			elif isinstance(stmt, PathStatement):
+				path =        self._EvaluatePath(host, stmt.PathExpression)
+				self._variables[stmt.Variable] = path
 			elif isinstance(stmt, IfElseIfElseStatement):
-				exprValue = self._Evaluate(stmt.IfClause.Expression)
+				exprValue = self._Evaluate(host, stmt.IfClause.Expression)
 				if (exprValue is True):
-					self._Resolve(stmt.IfClause.Statements)
+					self._Resolve(host, stmt.IfClause.Statements)
 				elif (stmt.ElseIfClauses is not None):
 					for elseif in stmt.ElseIfClauses:
-						exprValue = self._Evaluate(elseif.Expression)
+						exprValue = self._Evaluate(host, elseif.Expression)
 						if (exprValue is True):
-							self._Resolve(elseif.Statements)
+							self._Resolve(host, elseif.Statements)
 							break
 				if ((exprValue is False) and (stmt.ElseClause is not None)):
-					self._Resolve(stmt.ElseClause.Statements)
+					self._Resolve(host, stmt.ElseClause.Statements)
 			elif isinstance(stmt, ReportStatement):
 				self._warnings.append("WARNING: {0}".format(stmt.Message))
 			else:
-				ParserException("Found unknown statement type '{0}'.".format(stmt.__class__.__name__))
+				ParserException("Found unknown statement type '{0!s}'.".format(type(stmt)))
 	
-	def _Evaluate(self, expr):
+	def _Evaluate(self, host, expr):
 		if isinstance(expr, Identifier):
 			try:
 				return self._variables[expr.Name] #self._variables only available via late binding
-			except KeyError as ex:                        raise ParserException("Identifier '{0}' not found.".format(expr.Name)) from ex
+			except KeyError as ex:
+				raise ParserException("Identifier '{0}' not found.".format(expr.Name)) from ex
 		elif isinstance(expr, StringLiteral):
 			return expr.Value
 		elif isinstance(expr, IntegerLiteral):
 			return expr.Value
 		elif isinstance(expr, ExistsFunction):
-			return (self._rootDirectory / expr.Path).exists()
+			path = self._EvaluatePath(host, expr.Expression)
+			return (self._rootDirectory / path).exists()
 		elif isinstance(expr, ListConstructorExpression):
-			return [self._Evaluate(item) for item in expr.List]
+			return [self._Evaluate(host, item) for item in expr.List]
 		elif isinstance(expr, NotExpression):
-			return not self._Evaluate(expr.Child)
+			return not self._Evaluate(host, expr.Child)
 		elif isinstance(expr, InExpression):
-			return self._Evaluate(expr.LeftChild) in self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) in self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, NotInExpression):
-			return self._Evaluate(expr.LeftChild) not in self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) not in self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, AndExpression):
-			return self._Evaluate(expr.LeftChild) and self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) and self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, OrExpression):
-			return self._Evaluate(expr.LeftChild) or self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) or self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, XorExpression):
-			l = self._Evaluate(expr.LeftChild)
-			r = self._Evaluate(expr.RightChild)
+			l = self._Evaluate(host, expr.LeftChild)
+			r = self._Evaluate(host, expr.RightChild)
 			return (not l and r) or (l and not r)
 		elif isinstance(expr, EqualExpression):
-			return self._Evaluate(expr.LeftChild) == self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) == self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, UnequalExpression):
-			return self._Evaluate(expr.LeftChild) != self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) != self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, LessThanExpression):
-			return self._Evaluate(expr.LeftChild) < self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) < self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, LessThanEqualExpression):
-			return self._Evaluate(expr.LeftChild) <= self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) <= self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, GreaterThanExpression):
-			return self._Evaluate(expr.LeftChild) > self._Evaluate(expr.RightChild)
+			return self._Evaluate(host, expr.LeftChild) > self._Evaluate(host, expr.RightChild)
 		elif isinstance(expr, GreaterThanEqualExpression):
-			return self._Evaluate(expr.LeftChild) >= self._Evaluate(expr.RightChild)
-		else:                                            raise ParserException("Unsupported expression type '{0}'".format(type(expr)))
+			return self._Evaluate(host, expr.LeftChild) >= self._Evaluate(host, expr.RightChild)
+		else:
+			raise ParserException("Unsupported expression type '{0!s}'".format(type(expr)))
+
+	def _EvaluatePath(self, host, expr):
+		if isinstance(expr, Identifier):
+			try:
+				return self._variables[expr.Name]  # self._variables only available via late binding
+			except KeyError as ex:
+				raise ParserException("Identifier '{0}' not found.".format(expr.Name)) from ex
+		elif isinstance(expr, StringLiteral):
+			return expr.Value
+		elif isinstance(expr, IntegerLiteral):
+			return str(expr.Value)
+		elif isinstance(expr, InterpolateLiteral):
+			config = host.PoCConfig
+			return config.Interpolation.interpolate(config, "CONFIG.DirectoryNames", "xxxx", str(expr), {})
+		elif isinstance(expr, SubDirectoryExpression):
+			l = self._EvaluatePath(host, expr.LeftChild)
+			r = self._EvaluatePath(host, expr.RightChild)
+			return l + "/" + r
+		elif isinstance(expr, ConcatenateExpression):
+			l = self._EvaluatePath(host, expr.LeftChild)
+			r = self._EvaluatePath(host, expr.RightChild)
+			return l + r
+		else:
+			raise ParserException("Unsupported path expression type '{0!s}'".format(type(expr)))
 
 	@property
 	def Files(self):      return self._files
@@ -256,4 +311,4 @@ class FilesParserMixIn:
 	def Warnings(self):   return self._warnings
 
 	def __str__(self):    return "FILES file: '{0!s}'".format(self._file) #self._file only available via late binding
-	def __repr__(self):   return self.__str__()
+	__repr__ = __str__

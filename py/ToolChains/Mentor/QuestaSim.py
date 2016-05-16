@@ -118,7 +118,12 @@ class Configuration(BaseConfiguration):
 		vsimPath = self._host.Directories.Root / precompiledDirectory / vSimSimulatorFiles
 		modelsimIniPath = vsimPath / "modelsim.ini"
 		if not modelsimIniPath.exists():
-			if not vsimPath.exists(): vsimPath.mkdir(parents=True)
+			if not vsimPath.exists():
+				try:
+					vsimPath.mkdir(parents=True)
+				except OSError as ex:
+					raise ConfigurationException("Error while creating '{0!s}'.".format(vsimPath)) from ex
+
 			with modelsimIniPath.open('w') as fileHandle:
 				fileContent = dedent("""\
 								[Library]

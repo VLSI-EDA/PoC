@@ -1,24 +1,38 @@
-.. The PoC-Library documentation master file, created by
-   sphinx-quickstart on Fri May  6 11:28:20 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+The PoC-Library's Documentation
+################################################################################################################################################################
 
-Welcome to The PoC-Library's documentation!
-===========================================
+This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - Faculty of Computer Science, Technische Universität
+Dresden, Germany `http://vlsi-eda.inf.tu-dresden.de <http://vlsi-eda.inf.tu-dresden.de>`_
 
-bla blub foo bar
+.. image:: https://github.com/VLSI-EDA/PoC/wiki/images/logo_tud.gif
+   :alt: Logo: Technische Universität Dresden
+
+.. include:: Introduction.rst
+
 
 Contents:
 
-.. toctree::
-   :maxdepth: 2
-
-   includeme
+..  toctree::
+    :maxdepth: 2
+    :glob:
+    
+    Download
+    Requirements
+    Dependencies
+    Configuration
+    Integration
+    Using
+    Updating
+    Changes
+    Authors
+    ThirdParty
+    Licenses/*
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
+.. deactivated
+   * :ref:`modindex`

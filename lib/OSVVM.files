@@ -4,12 +4,28 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-if (VHDL = 2008) then
-	if ((Tool = "GHDL") and ?("temp/precompiled/ghdl/osvvm")) then
-		library osvvm "temp/precompiled/ghdl/osvvm"
-	elseif ((Tool = "Mentor_vSim") and ?("temp/precompiled/vsim/osvvm")) then
-		library osvvm "temp/precompiled/vsim/osvvm"
+path PreCompiled =      ${CONFIG.DirectoryNames:PrecompiledFiles}
+path OSVVM_Directory =  "osvvm"
+
+if (VHDLVersion < 2008) then
+	report "OSVVM requires VHDL-2008; See OSVVM documentation for VHDL-2002 support."
+elseif (VHDLVersion = 2008) then
+	if (Tool = "GHDL") then
+		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:GHDLFiles} / OSVVM_Directory))
+		if ?{(OSVVM_LibraryPath / "osvvm-obj08.cf")} then
+			library osvvm	OSVVM_LibraryPath
+		else
+			report "No precompiled OSVVM library for GHDL found."
+		end if
+	elseif (Tool = "Mentor_vSim") then
+		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / OSVVM_Directory))
+		if ?{ OSVVM_LibraryPath} then
+			library osvvm	OSVVM_LibraryPath
+		else
+			report "No precompiled QuestaSim/ModelSim library for GHDL found."
+		end if
 	else
+		# TODO self-compile section?
 		vhdl	osvvm	"lib/osvvm/NamePkg.vhd"									# OSVVM 
 		vhdl	osvvm	"lib/osvvm/OsvvmGlobalPkg.vhd"					# OSVVM 
 		vhdl	osvvm	"lib/osvvm/TextUtilPkg.vhd"							# OSVVM 
@@ -24,5 +40,5 @@ if (VHDL = 2008) then
 		vhdl	osvvm	"lib/osvvm/OsvvmContext.vhd"						# OSVVM 
 	end if
 else
-	report "OSVVM requires VHDL-2008"
+	report "VHDL version not supported by OSVVM."
 end if

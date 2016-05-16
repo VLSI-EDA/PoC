@@ -81,7 +81,7 @@ $PyWrapper_LoadEnv =		@{
 		"PostHookFile" =		"Xilinx.post.ps1";
 		"Tools" =						@{
 			"ISE" =						@{"Load" = $false; "Commands" = @("isim", "xst", "coregen");	"PreHookFile" = "Xilinx.ISE.pre.ps1";						"PostHookFile" = "Xilinx.ISE.post.ps1"};
-			"Vivado" =				@{"Load" = $false; "Commands" = @("xsim", "synth");						"PreHookFile" = "Xilinx.Vivado.pre.ps1";				"PostHookFile" = "Xilinx.Vivado.post.ps1"}
+			"Vivado" =				@{"Load" = $false; "Commands" = @("xsim", "vivado");					"PreHookFile" = "Xilinx.Vivado.pre.ps1";				"PostHookFile" = "Xilinx.Vivado.post.ps1"}
 		}}
 }
 

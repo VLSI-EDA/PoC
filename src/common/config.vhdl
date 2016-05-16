@@ -244,10 +244,24 @@ package body config_private is
 			EthernetCount =>	1
 		),(
 			BoardName =>			conf("ZC706"),
-			FPGADevice =>			conf("XC7Z045-2FFG900"),						-- XC7K325T-2FFG900C
+			FPGADevice =>			conf("XC7Z045-2FFG900"),							-- XC7Z045-2FFG900C
 			UART =>						C_BOARD_UART_DTE_921600_NONE,
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
+		),(
+			BoardName =>			conf("ZedBoard"),
+			FPGADevice =>			conf("XC7Z020-1CLG484"),							-- XC7Z020-1CLG484
+			UART =>						C_BOARD_UART_DTE_921600_NONE,
+			Ethernet =>				C_BOARD_ETH_NONE,
+			EthernetCount =>	0
+		),(
+			BoardName =>			conf("AC701"),
+			FPGADevice =>			conf("XC7A200T-2FBG676C"),						-- XC7A200T-2FBG676C
+			UART =>						C_BOARD_UART_DTE_921600_NONE,
+			Ethernet => (
+				0 =>			C_BOARD_ETH_SOFT_GMII_88E1111,
+				others =>	C_BOARD_ETH_EMPTY),
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("KC705"),
 			FPGADevice =>			conf("XC7K325T-2FFG900C"),						-- XC7K325T-2FFG900C
@@ -308,12 +322,6 @@ package body config_private is
 			BoardName =>			conf("VC709"),
 			FPGADevice =>			conf("XC7VX690T-2FFG1761C"),					-- XC7VX690T-2FFG1761C
 			UART =>						C_BOARD_UART_DTE_921600_NONE,
-			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount =>	0
-		),(
-			BoardName =>			conf("ZEDBOARD"),
-			FPGADevice =>			conf("XC7Z020-1CLG484"),							-- XC7Z020-1CLG484
-			UART =>						C_BOARD_UART_EMPTY,
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),

@@ -78,6 +78,7 @@ class Init:
 		"DARK_CYAN":  Foreground.CYAN,
 		"GRAY":       Foreground.WHITE,
 		"DARK_GRAY":  Foreground.LIGHTBLACK_EX,
+		"WHITE":      Foreground.LIGHTWHITE_EX,
 		"NOCOLOR":    Foreground.RESET,
 
 		"HEADLINE":   Foreground.LIGHTMAGENTA_EX,

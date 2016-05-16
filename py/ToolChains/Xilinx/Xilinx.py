@@ -93,7 +93,7 @@ class XilinxProjectExportMixIn:
 			if (not file.Path.exists()):                raise XilinxException("Cannot add '{0!s}' to {1} project file.".format(file.Path, tool)) from FileNotFoundError(str(file.Path))
 			if file.FileType is FileTypes.VHDLSourceFile:
 				# create one VHDL line for each VHDL file
-				if (vhdlVersion == VHDLVersion.VHDL2008):    projectFileContent += "vhdl2008 {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
+				if (vhdlVersion is VHDLVersion.VHDL2008):    projectFileContent += "vhdl2008 {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
 				else:                                        projectFileContent += "vhdl {0} \"{1!s}\"\n".format(file.LibraryName, file.Path)
 			else: # verilog
 				projectFileContent += "verilog work \"{0!s}\"\n".format(file.Path)
