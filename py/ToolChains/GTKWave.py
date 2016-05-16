@@ -5,6 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
+#                   Thomas B. Preusser
 #
 # Python Class:      GTKWave specific classes
 #
@@ -42,8 +43,8 @@ else:
 
 
 from pathlib                import Path
-from re                      import compile as RegExpCompile
-from subprocess             import check_output
+from re                     import compile as RegExpCompile
+from subprocess             import check_output, CalledProcessError
 
 from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
 from Base.Exceptions        import PlatformNotSupportedException
@@ -102,8 +103,11 @@ class Configuration(BaseConfiguration):
 
 	def _GetDefaultInstallationDirectory(self):
 		if (self._host.Platform in ["Linux", "Darwin"]):
-			name = check_output(["which", "gtkwave"], universal_newlines=True)
-			if name != "": return str(Path(name[:-1]).parent)
+			try:
+				name = check_output(["which", "gtkwave"], universal_newlines=True)
+				if name != "": return str(Path(name[:-1]).parent)
+			except CalledProcessError:
+				pass # `which` returns non-zero exit code if executable is not in PATH
 
 		return super()._GetDefaultInstallationDirectory()
 

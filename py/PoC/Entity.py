@@ -42,13 +42,13 @@ else:
 
 # load dependencies
 from collections          import OrderedDict
-from enum                  import Enum, unique
+from enum                 import Enum, unique
 from pathlib              import Path
 from flags                import Flags
 
 from lib.Functions        import Init
-from lib.Decorators        import LazyLoadTrigger, ILazyLoadable
-from Base.Configuration    import ConfigurationException
+from lib.Decorators       import LazyLoadTrigger, ILazyLoadable
+from Base.Configuration   import ConfigurationException
 
 
 @unique
@@ -94,11 +94,12 @@ class NetlistKind(BaseFlags):
 	QuartusNetlist = ()
 	XstNetlist = ()
 	CoreGeneratorNetlist = ()
+	VivadoNetlist = ()
 
 
-class Root:
+class NamespaceRoot:
 	__POCRoot_Name =            "PoC"
-	__POCRoot_SectionName =      "PoC"
+	__POCRoot_SectionName =     "PoC"
 
 	def __init__(self, host):
 		self._host =        host
@@ -124,6 +125,27 @@ class Root:
 	def AddLibrary(self, libraryName, libraryPrefix):
 		self.__libraries[libraryName.lower()] = (Library(self._host, libraryName, libraryPrefix, self))
 
+@unique
+class Visibility(Enum):
+	Unknown =		0
+	Private =   1
+	Public =    2
+
+	def __eq__(self, other):  return self.value == other.value
+	def __ne__(self, other):  return self.value != other.value
+	def __lt__(self, other):  return self.value <  other.value
+	def __le__(self, other):  return self.value <= other.value
+	def __gt__(self, other):  return self.value >  other.value
+	def __ge__(self, other):  return self.value >= other.value
+
+	@classmethod
+	def Parse(cls, value):
+		for key,member in cls.__members__.items():
+			if (key == value):
+				return member
+		else:
+			raise ValueError("'{0!s}' is not a valid {1}".format(value, cls.__name__))
+
 
 class PathElement:
 	def __init__(self, host, name, configSectionName, parent):
@@ -131,6 +153,7 @@ class PathElement:
 		self._name =              name
 		self._parent =            parent
 		self._configSectionName = configSectionName
+		self._visibility =        Visibility.Unknown
 
 		self._Load()
 
@@ -145,6 +168,11 @@ class PathElement:
 	@property
 	def Level(self):              return self._parent.Level + 1
 	@property
+	def Visibility(self):         return self._visibility
+	@property
+	def IsVisible(self):          return self._host.Repository.Kind <= self._visibility
+
+	@property
 	def Path(self):
 		cur = self
 		result = []
@@ -158,7 +186,7 @@ class PathElement:
 		return result
 
 	def _Load(self):
-		pass
+		self._visibility = Visibility.Parse(self.ConfigSection['Visibility'])
 
 	def __str__(self):
 		return "{0!s}.{1}".format(self.Parent, self.Name)
@@ -171,6 +199,7 @@ class Namespace(PathElement):
 		super().__init__(host, name, configSectionName, parent)
 
 	def _Load(self):
+		super()._Load()
 		for optionName in self.ConfigSection:
 			kind = self.ConfigSection[optionName]
 			if (kind == "Namespace"):
@@ -185,18 +214,34 @@ class Namespace(PathElement):
 				self.__entities[optionName.lower()] = ent
 
 	@property
-	def Namespaces(self):          return [ns for ns in self.__namespaces.values()]
+	def Namespaces(self):         return [ns for ns in self.GetNamespaces()]
 	@property
-	def NamespaceNames(self):      return [nsName for nsName in self.__namespaces.keys()]
+	def NamespaceNames(self):     return [nsName for nsName in self.GetNamespaceNames()]
 	@property
-	def Entities(self):            return [ent for ent in self.__entities.values()]
+	def Entities(self):           return [entity for entity in self.GetEntities()]
 	@property
-	def EntityNames(self):        return [entName for entName in self.__entities.keys()]
+	def EntityNames(self):        return [entityName for entityName in self.GetEntityNames()]
 
-	def GetNamespaces(self):      return self.__namespaces.values()
-	def GetNamespaceNames(self):  return self.__namespaces.keys()
-	def GetEntities(self):        return self.__entities.values()
-	def GetEntityNames(self):      return self.__entities.keys()
+	def GetNamespaces(self):
+		for namespace in self.__namespaces.values():
+			if namespace.IsVisible:
+				yield namespace
+
+	def GetNamespaceNames(self):
+		for namespace in self.__namespaces.values():
+			if namespace.IsVisible:
+				yield namespace.Name
+
+	def GetEntities(self):
+		for entity in self.__entities.values():
+			if entity.IsVisible:
+				yield entity
+
+	def GetEntityNames(self):
+		for entity in self.__entities.values():
+			if entity.IsVisible:
+				yield entity.Name
+
 	def GetAllEntities(self):
 		for namespace in self.GetNamespaces():
 			for entity in namespace.GetAllEntities():
@@ -207,9 +252,13 @@ class Namespace(PathElement):
 	def __getitem__(self, key):
 		key = key.lower()
 		try:
-			return self.__namespaces[key]
+			item = self.__namespaces[key]
 		except KeyError:
-			return self.__entities[key]
+			item = self.__entities[key]
+		if (not item.IsVisible):
+			raise KeyError("Item '{0!s}' is not visible.".format(key))
+
+		return item
 
 	def pprint(self, indent=0):
 		__indent = "  " * indent
@@ -231,7 +280,7 @@ class Library(Namespace):
 
 class WildCard(PathElement):
 	def GetEntities(self):
-		return []
+		raise NotImplementedError()
 
 	def GetTestbenches(self, kind=TestbenchKind.All):
 		for entity in self.GetEntities():
@@ -252,6 +301,7 @@ class WildCard(PathElement):
 	def GetQuartusNetlists(self):  return self.GetNetlists(NetlistKind.QuartusNetlist)
 	def GetXSTNetlists(self):      return self.GetNetlists(NetlistKind.XstNetlist)
 	def GetCoreGenNetlists(self):  return self.GetNetlists(NetlistKind.CoreGeneratorNetlist)
+	def GetVivadoNetlists(self):   return self.GetNetlists(NetlistKind.VivadoNetlist)
 
 	@property
 	def Testbenches(self):        return [tb for tb in self.GetTestbenches()]
@@ -261,7 +311,7 @@ class WildCard(PathElement):
 	def CocoTestbenches(self):    return [tb for tb in self.GetCocoTestbenches()]
 
 	@property
-	def Netlists(self):            return [tb for tb in self.GetNetlists()]
+	def Netlists(self):           return [tb for tb in self.GetNetlists()]
 	@property
 	def LatticeNetlists(self):    return [nl for nl in self.GetLatticeNetlists()]
 	@property
@@ -270,14 +320,23 @@ class WildCard(PathElement):
 	def XSTNetlists(self):        return [nl for nl in self.GetXSTNetlists()]
 	@property
 	def CoreGenNetlists(self):    return [nl for nl in self.GetCoreGenNetlists()]
+	@property
+	def VivadoNetlists(self):     return [nl for nl in self.GetVivadoNetlists()]
 
 
 class StarWildCard(WildCard):
+	def _Load(self):
+		pass
+
 	def GetEntities(self):
 		for entity in self._parent.GetAllEntities():
 			yield entity
 
+
 class AskWildCard(WildCard):
+	def _Load(self):
+		pass
+
 	def GetEntities(self):
 		for entity in self._parent.GetEntities():
 			yield entity
@@ -293,6 +352,7 @@ class IPCore(PathElement):
 		self._quartusNetlist =  []		# OrderedDict()
 		self._xstNetlist =      []		# OrderedDict()
 		self._coreGenNetlist =  []		# OrderedDict()
+		self._vivadoNetlist =   []		# OrderedDict()
 
 		super().__init__(host, name, configSectionName, parent)
 
@@ -311,10 +371,12 @@ class IPCore(PathElement):
 	def GetTestbenches(self, kind=TestbenchKind.All):
 		if (TestbenchKind.VHDLTestbench in kind):
 			for tb in self._vhdltb:
-				yield tb
+				if tb.IsVisible:
+					yield tb
 		if (TestbenchKind.CocoTestbench in kind):
 			for tb in self._cocotb:
-				yield tb
+				if tb.IsVisible:
+					yield tb
 
 	@property
 	def LatticeNetlist(self):
@@ -340,21 +402,37 @@ class IPCore(PathElement):
 			raise ConfigurationException("No CoreGen netlist configured for '{0!s}'.".format(self))
 		return self._coreGenNetlist[0]
 
+	@property
+	def VivadoNetlist(self):
+		if (len(self._vivadoNetlist) == 0):
+			raise ConfigurationException("No Vivado netlist configured for '{0!s}'.".format(self))
+		return self._vivadoNetlist[0]
+
 	def GetNetlists(self, kind=NetlistKind.All):
 		if (NetlistKind.LatticeNetlist in kind):
 			for nl in self._latticeNetlist:
-				yield nl
+				if nl.IsVisible:
+					yield nl
 		if (NetlistKind.QuartusNetlist in kind):
 			for nl in self._quartusNetlist:
-				yield nl
+				if nl.IsVisible:
+					yield nl
 		if (NetlistKind.XstNetlist in kind):
 			for nl in self._xstNetlist:
-				yield nl
+				if nl.IsVisible:
+					yield nl
 		if (NetlistKind.CoreGeneratorNetlist in kind):
 			for nl in self._coreGenNetlist:
+				if nl.IsVisible:
+					yield nl
 				yield nl
+		if (NetlistKind.VivadoNetlist in kind):
+			for nl in self._vivadoNetlist:
+				if nl.IsVisible:
+					yield nl
 
 	def _Load(self):
+		super()._Load()
 		section = self.ConfigSection
 		for optionName in section:
 			kind = section[optionName].lower()
@@ -388,6 +466,11 @@ class IPCore(PathElement):
 				nl = CoreGeneratorNetlist(host=self._host, name=optionName, configSectionName=sectionName, parent=self)
 				self._coreGenNetlist.append(nl)
 				# self._coreGenNetlist[optionName] = nl
+			elif (kind == "vivadonetlist"):
+				sectionName = self._configSectionName.replace("IP", "VIVADO") + "." + optionName
+				nl = VivadoNetlist(host=self._host, name=optionName, configSectionName=sectionName, parent=self)
+				self._vivadoNetlist.append(nl)
+				# self._vivadoNetlist[optionName] = nl
 
 	def pprint(self, indent=0):
 		buffer = "{0}Entity: {1}\n".format("  " * indent, self.Name)
@@ -399,6 +482,8 @@ class IPCore(PathElement):
 			buffer += self._xstNetlist.pprint(indent + 1)
 		if (len(self._coreGenNetlist) > 0):
 			buffer += self._coreGenNetlist.pprint(indent + 1)
+		if (len(self._vivadoNetlist) > 0):
+			buffer += self._vivadoNetlist.pprint(indent + 1)
 		return buffer
 
 
@@ -494,12 +579,12 @@ class Netlist(LazyPathElement):
 	def __init__(self, host, name, configSectionName, parent):
 		self._kind =        NetlistKind.Unknown
 		self._moduleName =  ""
-		self._rulesFile =    None
+		self._rulesFile =   None
 		super().__init__(host, name, configSectionName, parent)
 
 	@property
 	@LazyLoadTrigger
-	def ModuleName(self):    return self._moduleName
+	def ModuleName(self):   return self._moduleName
 	@property
 	@LazyLoadTrigger
 	def RulesFile(self):    return self._rulesFile
@@ -516,12 +601,12 @@ class Netlist(LazyPathElement):
 
 class XstNetlist(Netlist):
 	def __init__(self, host, name, configSectionName, parent):
-		self._filesFile =        None
-		self._prjFile =          None
-		self._xcfFile =          None
+		self._filesFile =       None
+		self._prjFile =         None
+		self._xcfFile =         None
 		self._filterFile =      None
-		self._xstTemplateFile =  None
-		self._xstFile =          None
+		self._xstTemplateFile = None
+		self._xstFile =         None
 		super().__init__(host, name, configSectionName, parent)
 		self._kind =            NetlistKind.XstNetlist
 
@@ -533,7 +618,7 @@ class XstNetlist(Netlist):
 	def XcfFile(self):          return self._xcfFile
 	@property
 	@LazyLoadTrigger
-	def FilterFile(self):        return self._filterFile
+	def FilterFile(self):       return self._filterFile
 	@property
 	@LazyLoadTrigger
 	def XstTemplateFile(self):  return self._xstTemplateFile
@@ -558,10 +643,10 @@ class XstNetlist(Netlist):
 
 	def _LazyLoadable_Load(self):
 		super()._LazyLoadable_Load()
-		self._filesFile =        Path(self.ConfigSection["FilesFile"])
-		self._xcfFile =          Path(self.ConfigSection['XSTConstraintsFile'])
+		self._filesFile =       Path(self.ConfigSection["FilesFile"])
+		self._xcfFile =         Path(self.ConfigSection['XSTConstraintsFile'])
 		self._filterFile =      Path(self.ConfigSection['XSTFilterFile'])
-		self._xstTemplateFile =  Path(self.ConfigSection['XSTOptionsFile'])
+		self._xstTemplateFile = Path(self.ConfigSection['XSTOptionsFile'])
 
 	def __str__(self):
 		return super().__str__() + " (XST netlist)"
@@ -575,8 +660,8 @@ class XstNetlist(Netlist):
 
 class QuartusNetlist(Netlist):
 	def __init__(self, host, name, configSectionName, parent):
-		self._filesFile =        None
-		self._qsfFile =          None
+		self._filesFile =       None
+		self._qsfFile =         None
 		super().__init__(host, name, configSectionName, parent)
 		self._kind =            NetlistKind.QuartusNetlist
 
@@ -594,7 +679,7 @@ class QuartusNetlist(Netlist):
 
 	def _LazyLoadable_Load(self):
 		super()._LazyLoadable_Load()
-		self._filesFile =        Path(self.ConfigSection["FilesFile"])
+		self._filesFile = Path(self.ConfigSection["FilesFile"])
 
 	def __str__(self):
 		return super().__str__() + " (Quartus netlist)"
@@ -609,8 +694,8 @@ class QuartusNetlist(Netlist):
 
 class LatticeNetlist(Netlist):
 	def __init__(self, host, name, configSectionName, parent):
-		self._filesFile =        None
-		self._prjFile =          None
+		self._filesFile =       None
+		self._prjFile =         None
 		super().__init__(host, name, configSectionName, parent)
 		self._kind =            NetlistKind.LatticeNetlist
 
@@ -651,6 +736,9 @@ class CoreGeneratorNetlist(Netlist):
 		return super().__str__() + " (Core Generator netlist)"
 
 	@property
+	def FilesFile(self): return None
+
+	@property
 	def XcoFile(self):          return self._xcoFile
 
 	def _LazyLoadable_Load(self):
@@ -664,10 +752,44 @@ class CoreGeneratorNetlist(Netlist):
 		return buffer
 
 
+class VivadoNetlist(Netlist):
+	def __init__(self, host, name, configSectionName, parent):
+		self._filesFile =        None
+		self._tclFile =          None
+		super().__init__(host, name, configSectionName, parent)
+		self._kind =            NetlistKind.VivadoNetlist
+
+	@property
+	@LazyLoadTrigger
+	def FilesFile(self):        return self._filesFile
+
+	@property
+	def TclFile(self):          return self._tclFile
+	@TclFile.setter
+	def TclFile(self, value):
+		if isinstance(value, str):
+			value = Path(value)
+		self._tclFile = value
+
+	def _LazyLoadable_Load(self):
+		super()._LazyLoadable_Load()
+		self._filesFile =        Path(self.ConfigSection["FilesFile"])
+
+	def __str__(self):
+		return super().__str__() + " (Vivado netlist)"
+
+	def pprint(self, indent):
+		__indent = "  " * indent
+		buffer = "{0}Netlist: {1}\n".format(__indent, self._moduleName)
+		buffer += "{0}  Files: {1!s}\n".format(__indent, self._filesFile)
+		buffer += "{0}  Rules: {1!s}\n".format(__indent, self._rulesFile)
+		return buffer
+
+
 class FQN:
 	def __init__(self, host, fqn, defaultLibrary="PoC", defaultType=EntityTypes.Source):
-		self.__host =    host
-		self.__type =    None
+		self.__host =   host
+		self.__type =   None
 		self.__parts =  []
 
 		if (fqn is None):      raise ValueError("Parameter 'fqn' is None.")
@@ -676,10 +798,10 @@ class FQN:
 		# extract EntityType
 		splitList1 = fqn.split(":")
 		if (len(splitList1) == 1):
-			self.__type =  defaultType
+			self.__type = defaultType
 			entity =      fqn
 		elif (len(splitList1) == 2):
-			self.__type =  EntityTypes(splitList1[0])
+			self.__type = EntityTypes(splitList1[0])
 			entity =      splitList1[1]
 		else:
 			raise ValueError("Argument 'fqn' has to many ':' signs.")

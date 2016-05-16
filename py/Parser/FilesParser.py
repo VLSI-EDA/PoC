@@ -136,8 +136,8 @@ class FilesParserMixIn:
 		self._warnings =      []
 		
 	def _Parse(self):
-		self._ReadContent()
-		self._document = Document.parse(self._content, printChar=not True)
+		self._ReadContent() #only available via late binding
+		self._document = Document.parse(self._content, printChar=not True) #self._content only available via late binding
 		# print(Fore.LIGHTBLACK_EX + str(self._document) + Fore.RESET)
 		
 	def _Resolve(self, statements=None):
@@ -173,8 +173,8 @@ class FilesParserMixIn:
 			elif isinstance(stmt, IncludeStatement):
 				# add the include file to the fileset
 				file =            self._rootDirectory / stmt.FileName
-				includeFile =     self._classFileListFile(file)
-				self._fileSet.AddFile(includeFile)
+				includeFile =     self._classFileListFile(file) #self._classFileListFile only available via late binding
+				self._fileSet.AddFile(includeFile) #self._fileSet only available via late binding
 				includeFile.Parse()
 				
 				self._includes.append(includeFile)
@@ -208,7 +208,7 @@ class FilesParserMixIn:
 	def _Evaluate(self, expr):
 		if isinstance(expr, Identifier):
 			try:
-				return self._variables[expr.Name]
+				return self._variables[expr.Name] #self._variables only available via late binding
 			except KeyError as ex:                        raise ParserException("Identifier '{0}' not found.".format(expr.Name)) from ex
 		elif isinstance(expr, StringLiteral):
 			return expr.Value
@@ -255,5 +255,5 @@ class FilesParserMixIn:
 	@property
 	def Warnings(self):   return self._warnings
 
-	def __str__(self):    return "FILES file: '{0!s}'".format(self._file)
+	def __str__(self):    return "FILES file: '{0!s}'".format(self._file) #self._file only available via late binding
 	def __repr__(self):   return self.__str__()

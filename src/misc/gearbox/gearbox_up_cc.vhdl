@@ -71,7 +71,7 @@ end entity;
 
 
 architecture rtl of gearbox_up_cc is
-	constant C_VERBOSE				: BOOLEAN			:= TRUE;	--POC_VERBOSE;
+	constant C_VERBOSE				: BOOLEAN			:= FALSE;	--POC_VERBOSE;
 	
 	constant BITS_PER_CHUNK		: POSITIVE		:= greatestCommonDivisor(INPUT_BITS, OUTPUT_BITS);
 	constant INPUT_CHUNKS			: POSITIVE		:= INPUT_BITS / BITS_PER_CHUNK;

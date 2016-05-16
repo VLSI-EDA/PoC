@@ -107,7 +107,7 @@ begin
 		RawInput	<= '0';
 		
 		-- final assertion
-		simAssertion((EventCounter = 4), "Events counted=" & INTEGER'image(EventCounter) &	" Expected=4");
+		simAssertion((EventCounter = 6), "Events counted=" & INTEGER'image(EventCounter) &	" Expected=6");
 		
 		-- This process is finished
 		simDeactivateProcess(simProcessID);

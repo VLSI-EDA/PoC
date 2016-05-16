@@ -43,10 +43,10 @@ else:
 # load dependencies
 from pathlib                  import Path
 
-from Base.Project              import ToolChain, Tool
+from Base.Project              import ToolChain, Tool, FileTypes
 from Base.Compiler            import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
 from PoC.Entity                import WildCard
-from ToolChains.Xilinx.Vivado  import Vivado
+from ToolChains.Xilinx.Vivado  import Vivado, VivadoException
 
 
 class Compiler(BaseCompiler):
@@ -67,7 +67,7 @@ class Compiler(BaseCompiler):
 		self._PrepareCompiler()
 
 	def _PrepareCompiler(self):
-		self._LogVerbose("Preparing Xilinx Vivado Synthesis (Synth).")
+		self._LogVerbose("Preparing Xilinx Vivado Synthesis.")
 		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
 		binaryPath = Path(iseSection['BinaryDirectory'])
 		version = iseSection['Version']
@@ -77,7 +77,7 @@ class Compiler(BaseCompiler):
 		for fqn in fqnList:
 			entity = fqn.Entity
 			if (isinstance(entity, WildCard)):
-				for netlist in entity.GetVivadoNetlist():
+				for netlist in entity.GetVivadoNetlists():
 					self.TryRun(netlist, *args, **kwargs)
 			else:
 				netlist = entity.VivadoNetlist
@@ -86,8 +86,9 @@ class Compiler(BaseCompiler):
 	def Run(self, netlist, board):
 		super().Run(netlist, board)
 
-		self._device =        board.Device
-		
+		netlist.TclFile = self.Directories.Working / (netlist.ModuleName + ".tcl")
+		self._WriteTclFile(netlist,board.Device)
+
 		self._LogNormal("Executing pre-processing tasks...")
 		self._RunPreCopy(netlist)
 		self._RunPreReplace(netlist)
@@ -100,11 +101,6 @@ class Compiler(BaseCompiler):
 		self._RunPostReplace(netlist)
 		self._RunPostDelete(netlist)
 		
-	def _PrepareCompilerEnvironment(self, device):
-		self._LogNormal("Preparing synthesis environment...")
-		self.Directories.Destination = self.Directories.Netlist / str(device)
-		super()._PrepareCompilerEnvironment()
-
 	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
 		self.Host.PoCConfig['SPECIAL'] = {}
@@ -115,8 +111,29 @@ class Compiler(BaseCompiler):
 	def _RunCompile(self, netlist):
 		reportFilePath = self.Directories.Working / (netlist.ModuleName + ".log")
 
-		synth = self._toolChain.GetSynth()
-		synth.Parameters[synth.SwitchIntStyle] =    "xflow"
-		synth.Parameters[synth.SwitchSynthFile] =      netlist.ModuleName + ".synth"
-		synth.Parameters[synth.SwitchReportFile] =  str(reportFilePath)
-		synth.Compile()
+		synth = self._toolChain.GetSynthesizer()
+		synth.Parameters[synth.SwitchSourceFile] =  netlist.ModuleName + ".tcl"
+		synth.Parameters[synth.SwitchLogFile] =  str(reportFilePath)
+		try:
+			synth.Compile()
+		except VivadoException as ex:
+			raise CompilerException("Error while compiling '{0!s}'.".format(netlist)) from ex
+		if synth.HasErrors:
+			raise SkipableCompilerException("Error while compiling '{0!s}'.".format(netlist))
+
+	def _WriteTclFile(self, netlist, device):
+		buffer =""
+		for file in self.PoCProject.Files(fileType=FileTypes.VHDLSourceFile):
+			buffer += "read_vhdl -library {library} {file} \n". \
+				format(file=file.Path.as_posix(), library=file.LibraryName)
+		for file in self.PoCProject.Files(fileType=FileTypes.VerilogSourceFile):
+			buffer += "read_verilog {file} \n". \
+				format(file=file.Path.as_posix())
+
+		buffer += "synth_design -top {top} -part {part} \n".format(top=netlist.ModuleName, part=device.ShortName)
+		buffer += "write_checkpoint -noxdef {top}.dcp \n".format(top=netlist.ModuleName)
+		buffer += "catch {{ report_utilization -file {top}_synth.rpt -pb {top}_synth.pb }}\n".format(top=netlist.ModuleName)
+
+		self._LogDebug("Writing Vivado TCL file to '{0!s}'".format(netlist.TclFile))
+		with netlist.TclFile.open('w') as tclFileHandle:
+			tclFileHandle.write(buffer)

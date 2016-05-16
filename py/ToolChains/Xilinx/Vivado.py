@@ -128,6 +128,9 @@ class Vivado(VivadoMixIn):
 	def GetSimulator(self):
 		return XSim(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
 
+	def GetSynthesizer(self):
+		return Synth(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+
 
 class XElab(Executable, VivadoMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
@@ -343,6 +346,87 @@ class XSim(Executable, VivadoMixIn):
 		return simulationResult.value
 
 
+class Synth(Executable, VivadoMixIn):
+	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+		VivadoMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vivado.bat"
+		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vivado"
+		else:                                            raise PlatformNotSupportedException(self._platform)
+		super().__init__(platform, executablePath, logger=logger)
+
+		self.Parameters[self.Executable] = executablePath
+
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+
+	@property
+	def HasWarnings(self):
+		return self._hasWarnings
+
+	@property
+	def HasErrors(self):
+		return self._hasErrors
+
+	class Executable(metaclass=ExecutableArgument):
+		_value =  None
+
+	class SwitchLogFile(metaclass=ShortTupleArgument):
+		_name =    "log"
+		_value =  None
+
+	class SwitchSourceFile(metaclass=ShortTupleArgument):
+		_name =    "source"
+		_value =  None
+
+	class SwitchMode(metaclass=ShortTupleArgument):
+		_name =    "mode"
+		_value =  "batch"
+
+
+	Parameters = CommandLineArgumentList(
+		Executable,
+		SwitchLogFile,
+		SwitchSourceFile,
+		SwitchMode
+	)
+
+	def Compile(self):
+		parameterList = self.Parameters.ToArgumentList()
+		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise VivadoException("Failed to launch vivado.") from ex
+
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+		try:
+			iterator = iter(CompilerFilter(self.GetReader()))
+
+			line = next(iterator)
+			self._hasOutput = True
+			self._LogNormal("    vivado messages for '{0}'".format(self.Parameters[self.SwitchSourceFile]))
+			self._LogNormal("    " + ("-" * 76))
+
+			while True:
+				self._hasWarnings |= (line.Severity is Severity.Warning)
+				self._hasErrors |= (line.Severity is Severity.Error)
+
+				line.IndentBy(2)
+				self._Log(line)
+				line = next(iterator)
+
+		except StopIteration:
+			pass
+		finally:
+			if self._hasOutput:
+				self._LogNormal("    " + ("-" * 76))
+
+
+
 def ElaborationFilter(gen):
 	for line in gen:
 		if line.startswith("Vivado Simulator "):
@@ -415,9 +499,35 @@ def SimulatorFilter(gen):
 			yield LogEntry(line, Severity.Normal)
 		elif line.startswith("Failure: "):
 			yield LogEntry(line, Severity.Error)
+		elif line.startswith("FATAL_ERROR: "):
+			yield LogEntry(line, Severity.Error)
 		else:
 			yield LogEntry(line, Severity.Normal)
 
+def CompilerFilter(gen):
+	for line in gen:
+		if line.startswith("ERROR: "):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("WARNING: "):
+			yield LogEntry(line, Severity.Warning)
+		elif line.startswith("INFO: "):
+			yield LogEntry(line, Severity.Info)
+		elif line.startswith("Start"):
+			yield LogEntry(line, Severity.Normal)
+		elif line.startswith("Finished"):
+			yield LogEntry(line, Severity.Normal)
+		elif line.startswith("****** Vivado "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("  **** SW Build "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("  **** IP Build "):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("    ** Copyright "):
+			continue
+		elif line.startswith("# "):
+			yield LogEntry(line, Severity.Debug)
+		else:
+			yield LogEntry(line, Severity.Verbose)
 
 class VivadoProject(BaseProject):
 	def __init__(self, name):

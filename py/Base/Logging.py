@@ -4,6 +4,7 @@
 # 
 # ==============================================================================
 # Authors:          Patrick Lehmann
+#                   Thomas B. Preusser
 #
 # Python Class:      TODO
 #
@@ -44,23 +45,41 @@ from enum                    import Enum, unique
 	
 @unique
 class Severity(Enum):
-	Fatal =      30
-	Error =      25
-	Quiet =      20
-	Warning =    15
+	Fatal =     30
+	Error =     25
+	Quiet =     20
+	Warning =   15
 	Info =      10
 	Normal =     4
 	Verbose =    2
 	Debug =      1
 	All =        0
-	
+
+	def __init__(self, *_):
+		"""Patch the embedded MAP dictionary"""
+		for k,v in self.__class__.__VHDL_SEVERITY_LEVEL_MAP__.items():
+			if ((not isinstance(v, self.__class__)) and (v == self.value)):
+				self.__class__.__VHDL_SEVERITY_LEVEL_MAP__[k] = self
+				break
+
 	def __eq__(self, other):    return self.value ==  other.value
 	def __ne__(self, other):    return self.value !=  other.value
 	def __lt__(self, other):    return self.value <		other.value
 	def __le__(self, other):    return self.value <=  other.value
 	def __gt__(self, other):    return self.value >		other.value
 	def __ge__(self, other):    return self.value >=  other.value
-	
+
+	__VHDL_SEVERITY_LEVEL_MAP__ =  {
+		"failure": Fatal,
+		"error":   Error,
+		"warning": Warning,
+		"note":    Info
+	}
+
+	@classmethod
+	def ParseVHDLSeverityLevel(cls, severity, fallback=None):
+		return cls.__VHDL_SEVERITY_LEVEL_MAP__.get(severity, fallback)
+
 
 class LogEntry:
 	def __init__(self, message, severity=Severity.Normal, indent=0):

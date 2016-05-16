@@ -10,5 +10,8 @@ include				"src/comm/comm_scramble.files"							# Scrambler
 # PoC.fifo
 include				"src/fifo/fifo_ic_got.files"								# Unit Under Test
 
+# PoC.comm
+include				"src/comm/comm_scramble.files"
+
 # Testbench file(s)
 vhdl		test	"tb/fifo/fifo_ic_got_tb.vhdl"								# Testbench

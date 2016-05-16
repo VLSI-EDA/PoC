@@ -5,11 +5,11 @@
 -- ============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Module:					Carray-chain abstraction for increment by one operations
+-- Module:					Carry-chain abstraction for increment by one operations
 --
 -- Description:
 -- ------------------------------------
---	This is a generic carray-chain abstraction for increment by one operations.
+--	This is a generic carry-chain abstraction for increment by one operations.
 --
 --	Y <= X + (0...0) & Cin
 --
@@ -55,16 +55,16 @@ end entity;
 
 architecture rtl of arith_carrychain_inc is
 	-- Force Carry-chain use for pointer increments on Xilinx architectures
-  constant XILINX_FORCE_CARRAYCHAIN		: BOOLEAN		:= (not SIMULATION) and (VENDOR = VENDOR_XILINX) and (BITS > 4);
+  constant XILINX_FORCE_CARRYCHAIN		: BOOLEAN		:= (not SIMULATION) and (VENDOR = VENDOR_XILINX) and (BITS > 4);
 	
 begin
-	genGeneric : if (XILINX_FORCE_CARRAYCHAIN = FALSE) generate
+	genGeneric : if (XILINX_FORCE_CARRYCHAIN = FALSE) generate
 		signal Zero		: UNSIGNED(BITS - 1 downto 1)		:= (others => '0');
 	begin
 		Y <= std_logic_vector(unsigned(X) + (Zero & CIn));
 	end generate;
 	
-	genXilinx : if (XILINX_FORCE_CARRAYCHAIN = TRUE) generate
+	genXilinx : if (XILINX_FORCE_CARRYCHAIN = TRUE) generate
 		inc : arith_carrychain_inc_xilinx
 			generic map (
 				BITS		=> BITS

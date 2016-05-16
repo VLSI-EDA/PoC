@@ -139,9 +139,11 @@ begin
 						OPbin   <= gray2bin(OPsync);
 					end if;
 
-					tmp := unsigned(addr) - unsigned(OPbin);
-					if put = '1' and tmp(A_BITS-1 downto AN) /= 0 then
-						Fail <= '1';
+					if put = '1' then
+						tmp := unsigned(addr) - unsigned(OPbin);
+						if tmp(A_BITS-1 downto AN) /= 0 then
+							Fail <= '1';
+						end if;
 					end if;
         end if;
       end if;
@@ -150,7 +152,7 @@ begin
           unsigned(addr(AN-1 downto 0));
     di <= (1 to G_BITS => '1') & (1 to D_BITS => '-') when InitCnt(InitCnt'left) = '0' else
           addr(A_BITS-1 downto AN) & din;
-    we <= put;
+    we <= put or not InitCnt(InitCnt'left);
 
     -- Module Outputs
     base   <= OPbin;
@@ -189,7 +191,9 @@ begin
     end process;
     OPnxt <= OP+1 when vldi = '1' and got = '1' else OP;
     ra    <= OPnxt(AN-1 downto 0);
-    vldi  <= InitDelay(InitDelay'left) when unsigned(do(DN-1 downto D_BITS)) = OP(A_BITS-1 downto AN) else
+    vldi  <= '0' when InitDelay(InitDelay'left) = '0' else
+             'X' when Is_X(do(DN-1 downto D_BITS)) else
+             '1' when unsigned(do(DN-1 downto D_BITS)) = OP(A_BITS-1 downto AN) else
              '0';
 
 		-- Module Outputs

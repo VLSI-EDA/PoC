@@ -43,13 +43,13 @@ else:
 	
 # load dependencies
 import shutil
-from os                      import chdir
+from os                     import chdir
 from pathlib                import Path
-from textwrap                import dedent
+from textwrap               import dedent
 
-from Base.Project            import ToolChain, Tool
+from Base.Project           import ToolChain, Tool
 from Base.Compiler          import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
-from PoC.Entity              import WildCard
+from PoC.Entity             import WildCard
 from ToolChains.Xilinx.ISE  import ISE, ISEException
 
 
@@ -60,7 +60,6 @@ class Compiler(BaseCompiler):
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)
 
-		self._device =      None
 		self._toolChain =    None
 
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
@@ -89,14 +88,12 @@ class Compiler(BaseCompiler):
 	def Run(self, netlist, board):
 		super().Run(netlist, board)
 
-		self._device =        board.Device
-
 		self._LogNormal("Executing pre-processing tasks...")
 		self._RunPreCopy(netlist)
 		self._RunPreReplace(netlist)
 
 		self._LogNormal("Running Xilinx Core Generator...")
-		self._RunCompile(netlist)
+		self._RunCompile(netlist, board.Device)
 
 		self._LogNormal("Executing post-processing tasks...")
 		self._RunPostCopy(netlist)
@@ -110,7 +107,7 @@ class Compiler(BaseCompiler):
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =  device.Series
 		self.Host.PoCConfig['SPECIAL']['OutputDir']	=      self.Directories.Working.as_posix()
 
-	def _RunCompile(self, netlist):
+	def _RunCompile(self, netlist, device):
 		self._LogVerbose("Patching coregen.cgp and .cgc files...")
 		# read netlist settings from configuration file
 		xcoInputFilePath =    netlist.XcoFile
@@ -145,10 +142,10 @@ class Compiler(BaseCompiler):
 			SET vhdlsim = true
 			SET workingdirectory = {WorkingDirectory}
 			""".format(
-			Device=self._device.ShortName.lower(),
-			DeviceFamily=self._device.FamilyName.lower(),
-			Package=(str(self._device.Package).lower() + str(self._device.PinCount)),
-			SpeedGrade=self._device.SpeedGrade,
+			Device=device.ShortName.lower(),
+			DeviceFamily=device.FamilyName.lower(),
+			Package=(str(device.Package).lower() + str(device.PinCount)),
+			SpeedGrade=device.SpeedGrade,
 			WorkingDirectory=WorkingDirectory
 		))
 
@@ -163,10 +160,10 @@ class Compiler(BaseCompiler):
 
 		cgContentFileContent = cgContentFileContent.format(
 			name="lcd_ChipScopeVIO",
-			device=self._device.ShortName,
-			devicefamily=self._device.FamilyName,
-			package=(str(self._device.Package) + str(self._device.PinCount)),
-			speedgrade=self._device.SpeedGrade
+			device=device.ShortName,
+			devicefamily=device.FamilyName,
+			package=(str(device.Package) + str(device.PinCount)),
+			speedgrade=device.SpeedGrade
 		)
 
 		self._LogDebug("Writing CoreGen content file to '{0}'.".format(cgcFilePath))
@@ -176,11 +173,17 @@ class Compiler(BaseCompiler):
 		# copy xco file into temporary directory
 		self._LogVerbose("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
 		self._LogDebug("cp {0!s} {1!s}".format(xcoInputFilePath, self.Directories.Working))
-		shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
+		try:
+			shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
+		except OSError as ex:
+			raise CompilerException("Error while copying '{0!s}'.".format(xcoInputFilePath)) from ex
 
 		# change working directory to temporary CoreGen path
 		self._LogDebug("cd {0!s}".format(self.Directories.Working))
-		chdir(str(self.Directories.Working))
+		try:
+			chdir(str(self.Directories.Working))
+		except OSError as ex:
+			raise CompilerException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
 
 		# running CoreGen
 		# ==========================================================================

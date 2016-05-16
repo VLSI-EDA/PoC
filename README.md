@@ -172,7 +172,10 @@ cd <PoCRoot>
 **Note:** The configuration process can be re-run at every time to add, remove
 or update choices made.
 
+If you want to check your installation, you can run one of our testbenches as described in [tb/README.md][tb_readme]
 
+ [tb_readme]: tb/README.md
+ 
 ## 6 Integrating PoC into Projects
 
 **The PoC-Library** is meant to be integrated into HDL projects. Therefore it's

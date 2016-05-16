@@ -48,9 +48,6 @@ library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 use			IEEE.NUMERIC_STD.all;
 
-library UNISIM;
--- use			UNISIM.VCOMPONENTS.all;
-
 library PoC;
 use			PoC.config.all;
 use			PoC.utils.all;
@@ -97,12 +94,18 @@ architecture rtl of sort_lru_list is
 	signal MovesUp				: STD_LOGIC_VECTOR(ELEMENTS downto 0);
 	
 	signal DataOutDown 		: T_ELEMENT_VECTOR(ELEMENTS downto 0);
+
+  signal MovesUpCond   		: std_logic_vector(ELEMENTS downto 0);
+  signal MovesDownCond 		: std_logic_vector(ELEMENTS downto 0);
+  signal MovesDownCondRev : std_logic_vector(ELEMENTS downto 0);
+  signal MovesDownRev 		: std_logic_vector(ELEMENTS downto 0);
+
 begin
 	-- next element (top)
 	ElementsDown(ELEMENTS)	<= NewElementsUp(ELEMENTS);
 	ValidsDown(ELEMENTS)		<= '1';
 	
-	MovesDown(ELEMENTS)			<= Insert;
+	MovesDownCond(ELEMENTS) <= Insert;
 
 	DataOutDown(ELEMENTS) 	<= (others => '-');
 	
@@ -122,33 +125,6 @@ begin
 	begin
 		-- local movements
 		Unequal(I)				<= not Valid_d or to_sl(Element_d(KEY_BITS - 1 downto 0) /= NewElementsUp(I)(KEY_BITS - 1 downto 0));
-		
-		genXilinx : IF (VENDOR = VENDOR_XILINX) GENERATE
-			component MUXCY
-				port (
-					O			: out	STD_ULOGIC;
-					CI		: in	STD_ULOGIC;
-					DI		: in	STD_ULOGIC;
-					S			: in	STD_ULOGIC
-				);
-			end component;
-		begin
-			a : MUXCY
-				port map (
-					S		=> Unequal(I),
-					CI	=> MovesDown(I + 1),
-					DI	=> '0',
-					O		=> MovesDown(I)
-				);
-
-			b : MUXCY
-				port map (
-					S		=> Unequal(I),
-					CI	=> MovesUp(I),
-					DI	=> '0',
-					O		=> MovesUp(I + 1)
-				);
-		end generate;
 		
 		-- movements for the current element	
 		MoveDown		<= MovesDown(I + 1);
@@ -174,9 +150,31 @@ begin
 		DataOutDown(I)  <= Element_d when Valid_d = '1' else DataOutDown(I+1);
 	end generate;
 
+	-- MovesUp / MovesDown propagation
+	MovesUpCond  (ELEMENTS   downto 1) <= UnEqual;
+	MovesDownCond(ELEMENTS-1 downto 0) <= UnEqual;
+	MovesDownCondRev <= reverse(MovesDownCond);
+	MovesDown        <= reverse(MovesDownRev);
+	
+	MovesUpProp: entity poc.arith_prefix_and
+		generic map (
+			N => ELEMENTS+1)
+		port map (
+			-- Individual association of 'x' didn't work in QuestaSim
+			x => MovesUpCond,
+			y => MovesUp);
+
+	MovesDownProp: entity poc.arith_prefix_and
+		generic map (
+			N => ELEMENTS+1)
+		port map (
+			-- Individual association of 'x' didn't work in QuestaSim
+			x => MovesDownCondRev,
+			y => MovesDownRev);
+
 	-- previous element (buttom)
 	NewElementsUp(0)		<= DataIn;
-	MovesUp(0)					<= Remove and slv_nand(Unequal);
+	MovesUpCond(0)      <= Remove and slv_nand(Unequal);
 	ElementsUp(0)				<= DataIn;
 	ValidsUp(0)					<= '0';
 	

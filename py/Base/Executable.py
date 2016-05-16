@@ -155,12 +155,17 @@ class PathArgument(CommandLineArgument):
 		elif (self._PosixFormat):        return self._value.as_posix()
 		else:                            return str(self._value)
 
-class FlagArgument(CommandLineArgument):
-	_pattern =    "{0}"
+
+class NamedCommandLineArgument(CommandLineArgument):
+	_name = None  # set in sub-classes
 
 	@property
 	def Name(self):
 		return self._name
+
+
+class FlagArgument(NamedCommandLineArgument):
+	_pattern =    "{0}"
 
 	@property
 	def Value(self):
@@ -186,7 +191,7 @@ class ShortFlagArgument(FlagArgument):    _pattern =  "-{0}"
 class LongFlagArgument(FlagArgument):      _pattern =  "--{0}"
 class WindowsFlagArgument(FlagArgument):  _pattern =  "/{0}"
 
-class ValuedFlagArgument(CommandLineArgument):
+class ValuedFlagArgument(NamedCommandLineArgument):
 	_pattern = "{0}={1}"
 
 	@property
@@ -214,7 +219,7 @@ class ValuedFlagArgument(CommandLineArgument):
 class ShortValuedFlagArgument(ValuedFlagArgument):  _pattern = "-{0}={1}"
 class LongValuedFlagArgument(ValuedFlagArgument):    _pattern = "--{0}={1}"
 
-class ValuedFlagListArgument(CommandLineArgument):
+class ValuedFlagListArgument(NamedCommandLineArgument):
 	_pattern = "{0}={1}"
 
 	@property
@@ -240,7 +245,7 @@ class ValuedFlagListArgument(CommandLineArgument):
 class ShortValuedFlagListArgument(ValuedFlagListArgument):  _pattern = "-{0}={1}"
 class LongValuedFlagListArgument(ValuedFlagListArgument):    _pattern = "--{0}={1}"
 
-class TupleArgument(CommandLineArgument):
+class TupleArgument(NamedCommandLineArgument):
 	_switchPattern =  "{0}"
 	_valuePattern =    "{0}"
 
@@ -303,13 +308,13 @@ class Executable(ILogable):
 
 	def __init__(self, platform, executablePath, logger=None):
 		super().__init__(logger)
-		
+
 		self._platform =  platform
 		self._process =    None
 		
-		if isinstance(executablePath, str):              executablePath = Path(executablePath)
+		if isinstance(executablePath, str):             executablePath = Path(executablePath)
 		elif (not isinstance(executablePath, Path)):    raise ValueError("Parameter 'executablePath' is not of type str or Path.")
-		if (not executablePath.exists()):                raise CommonException("Executable '{0!s}' cannot be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
+		if (not executablePath.exists()):               raise CommonException("Executable '{0!s}' cannot be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
 		
 		# prepend the executable
 		self._executablePath =    executablePath
@@ -322,7 +327,10 @@ class Executable(ILogable):
 	def StartProcess(self, parameterList):
 		# start child process
 		# parameterList.insert(0, str(self._executablePath))
-		self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
+		try:
+			self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
+		except OSError as ex:
+			raise CommonException("Error while accessing '{0!s}'.".format(self._executablePath)) from ex
 
 	def Send(self, line, end="\n"):
 		self._process.stdin.write(line + end)
