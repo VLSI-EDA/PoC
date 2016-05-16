@@ -8,3 +8,6 @@
 	path = lib/cocotb
 	url = https://github.com/VLSI-EDA/cocotb.git
 
+[submodule "docs/_themes/sphinx_rtd_theme"]
+	path = docs/_themes/sphinx_rtd_theme
+	url = https://github.com/snide/sphinx_rtd_theme.git
