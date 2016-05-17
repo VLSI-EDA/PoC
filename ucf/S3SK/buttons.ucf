@@ -1,0 +1,11 @@
+#
+# Xilinx User Constraint File (UCF)
+#
+#  Board:  Spartan-3 Starter Kit
+#
+#  Contents: - user buttons (without reset): BTN2 - BTN0
+#
+NET "btn<*>" IOSTANDARD = LVCMOS33 ;
+NET "btn<2>" LOC = "L13" ;
+NET "btn<1>" LOC = "M14" ;
+NET "btn<0>" LOC = "M13" ;

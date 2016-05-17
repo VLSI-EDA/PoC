@@ -1,0 +1,5 @@
+NET "VGA_HSync"	LOC = "R9";
+NET "VGA_VSync"	LOC = "T10";
+NET "VGA_R"	LOC = "R12";
+NET "VGA_G"	LOC = "T12";
+NET "VGA_B"	LOC = "R11";

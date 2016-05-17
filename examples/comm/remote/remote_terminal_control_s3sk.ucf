@@ -1,0 +1,50 @@
+# Family: spartan3
+# Device: xc3s1000-4ft256
+# PROM:   xcf04s
+#-----------------------------------------------------------------------------
+# Description:  UCF for Hardware Testbench for remote_terminal_control.
+#               See DUT description for details.
+
+# Authors:      Thomas B. Preußer <thomas.preusser@utexas.edu>
+#-----------------------------------------------------------------------------
+# Copyright 2007-2014 Technische Universität Dresden - Germany
+#                     Chair for VLSI-Design, Diagnostics and Architecture
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#    http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#-----------------------------------------------------------------------------
+
+NET "clk" TNM_NET = "clk";
+TIMESPEC "TS_clk" = PERIOD "clk" 20 ns HIGH 50 %;
+
+NET "clk"  LOC = "T9" | IOSTANDARD = LVCMOS33 ;
+
+NET "rxd"  LOC = "T13" | IOSTANDARD = LVCMOS33 ;
+NET "txd"  LOC = "R13" | IOSTANDARD = LVCMOS33 ;
+
+NET "sw<0>" LOC = "F12" | IOSTANDARD = LVCMOS33 ;
+NET "sw<1>" LOC = "G12" | IOSTANDARD = LVCMOS33 ;
+NET "sw<2>" LOC = "H14" | IOSTANDARD = LVCMOS33 ;
+NET "sw<3>" LOC = "H13" | IOSTANDARD = LVCMOS33 ;
+NET "sw<4>" LOC = "J14" | IOSTANDARD = LVCMOS33 ;
+NET "sw<5>" LOC = "J13" | IOSTANDARD = LVCMOS33 ;
+NET "sw<6>" LOC = "K14" | IOSTANDARD = LVCMOS33 ;
+NET "sw<7>" LOC = "K13" | IOSTANDARD = LVCMOS33 ;
+
+NET "led<0>"  LOC = "K12" | IOSTANDARD = LVCMOS33 ;
+NET "led<1>"  LOC = "P14" | IOSTANDARD = LVCMOS33 ;
+NET "led<2>"  LOC = "L12" | IOSTANDARD = LVCMOS33 ;
+NET "led<3>"  LOC = "N14" | IOSTANDARD = LVCMOS33 ;
+NET "led<4>"  LOC = "P13" | IOSTANDARD = LVCMOS33 ;
+NET "led<5>"  LOC = "N12" | IOSTANDARD = LVCMOS33 ;
+NET "led<6>"  LOC = "P12" | IOSTANDARD = LVCMOS33 ;
+NET "led<7>"  LOC = "P11" | IOSTANDARD = LVCMOS33 ;

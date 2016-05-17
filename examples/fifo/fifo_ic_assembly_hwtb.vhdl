@@ -25,38 +25,37 @@
 -- limitations under the License.
 -- =============================================================================
 
-entity fifo_ic_assembly_tb is
-end entity fifo_ic_assembly_tb;
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity fifo_ic_assembly_hwtb is
+	generic (
+    D_BITS : positive := 9;                                                                  -- Data Width
+    A_BITS : positive := 9;                                                                  -- Address Bits
+    G_BITS : positive := 1                                                                 -- Generation Guard Bits
+	);
+  port (
+    clk : in std_logic;
+    rst : in std_logic;
+
+    leds : out std_logic_vector(7 downto 0)
+  );
+end entity fifo_ic_assembly_hwtb;
 
 
 library IEEE;
-use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 library PoC;
-use			PoC.utils.all;
-use			PoC.physical.all;
--- simulation only packages
-use			PoC.sim_types.all;
-use			PoC.simulation.all;
-use			PoC.waveform.all;
+use PoC.utils.all;
+use PoC.fifo.all;
 
-
-architecture tb of fifo_ic_assembly_tb is
-	constant CLOCK_FREQ							: FREQ					:= 100 MHz;
-
-  -- component generics
-  constant D_BITS : positive := 8;
-  constant A_BITS : positive := 8;
-  constant G_BITS : positive := 2;
-
+architecture rtl of fifo_ic_assembly_hwtb is
   constant SEQ : t_intvec := (1, 0, 2, 3, 5, 4, 7, 6, 8, 10, 9, 12, 11, 13, 15, 14);
 
-  -- component ports
-  signal clk : std_logic;
-  signal rst : std_logic;
-
+	-- DUT Connectivity
   signal base   : std_logic_vector(A_BITS-1 downto 0);
+  signal failed : std_logic;
   signal addr   : std_logic_vector(A_BITS-1 downto 0);
   signal din    : std_logic_vector(D_BITS-1 downto 0);
   signal put    : std_logic;
@@ -65,12 +64,20 @@ architecture tb of fifo_ic_assembly_tb is
   signal vld    : std_logic;
   signal got    : std_logic;
 
-begin
-  simInitialize;
-  simGenerateClock(clk, CLOCK_FREQ);
-  rst <= '0';
+  -- Writer State
+  signal Ptr : unsigned(A_BITS-1 downto 0) := (others => '0');
+  alias Seg  : unsigned(A_BITS-1 downto A_BITS-4) is Ptr(A_BITS-1 downto A_BITS-4);
+  alias Ofs  : unsigned(A_BITS-5 downto        0) is Ptr(A_BITS-5 downto        0);
 
-  DUT: entity PoC.fifo_ic_assembly
+	signal tmp : unsigned(A_BITS-1 downto 0);
+
+	-- Reader State
+	signal Count   : unsigned(A_BITS-1 downto 0) := (others => '0');
+	signal Failure : std_logic_vector(1 downto 0) := "00";
+
+begin
+
+  DUT: fifo_ic_assembly
     generic map (
       D_BITS => D_BITS,
       A_BITS => A_BITS,
@@ -80,6 +87,7 @@ begin
       clk_wr => clk,
       rst_wr => rst,
       base   => base,
+			failed => failed,
       addr   => addr,
       din    => din,
       put    => put,
@@ -92,50 +100,42 @@ begin
     );
 
 	-- Writer
-	procWriter : process
-		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Writer");
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if rst = '1' then
+				Ptr <= (others => '0');
+			elsif put = '1' then
+				Ptr <= Ptr + 1;
+			end if;
+		end if;
+	end process;
+	addr <= std_logic_vector(to_unsigned(SEQ(to_integer(Seg)), Seg'length) & Ofs);
+	din  <= not addr(D_BITS-1 downto 0);
 
-    variable t : integer;
-  begin
-    put <= '0';
-    wait until base = (base'range => '0');
-
-		for k in 0 to 2 loop
-			for i in SEQ'range loop
-				put <= '1';
-				for j in 0 to 15 loop
-					t := 16*SEQ(i) + j;
-					addr <= std_logic_vector(to_unsigned(t, addr'length));
-					din  <= not std_logic_vector(to_unsigned(t, din 'length));
-					wait until rising_edge(clk);
-				end loop;
-				put <= '0';
-				for j in 0 to i loop
-					wait until rising_edge(clk);
-				end loop;
-			end loop;
-		end loop;
-
-		-- This process is finished
-		simDeactivateProcess(simProcessID);
-		wait;  -- forever
-  end process;
+	tmp <= unsigned(addr) - unsigned(base);
+	put <= '1' when tmp(A_BITS-1 downto A_BITS-G_BITS) = 0 else '0';
 
   -- Reading Checker
-	procReader : process
-		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Reader", IsLowPriority => true);
-		variable i : integer := 0;
-  begin
-    got <= '1';
-		wait until rising_edge(clk) and vld = '1';
-		simAssertion(unsigned(not dout) = i mod 2**dout'length,
-								 "Unexpected output: "&integer'image(to_integer(unsigned(dout)))&
-								 " instead of "&integer'image(i mod 2**dout'length));
-		got <= '0';
-		for j in 0 to i/dout'length loop
-			wait until rising_edge(clk);
-		end loop;
-		i := i + 1;
-  end process;
+	got <= '1';
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if rst = '1' then
+				Count  <= (others => '0');
+				Failure <= "00";
+			elsif vld = '1' then
+				if Count /= unsigned(not dout) then
+					Failure(0) <= '1';
+				end if;
+				if failed = '1' then
+				   Failure(1) <= '1';
+				end if;
+				Count <= Count + 1;
+			end if;
+		end if;
+	end process;
 
-end tb;
+  -- Outputs
+	leds <= Failure & std_logic_vector(base(base'left downto base'left-5));
+end rtl;

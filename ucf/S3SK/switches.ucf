@@ -1,0 +1,16 @@
+#
+# Xilinx User Constraint File (UCF)
+#
+#  Board:  Spartan-3 Starter Kit
+#
+#  Contents: - slide switched
+#
+NET "sw<*>" IOSTANDARD = LVCMOS33 ;
+NET "sw<0>" LOC = "F12" ;
+NET "sw<1>" LOC = "G12" ;
+NET "sw<2>" LOC = "H14" ;
+NET "sw<3>" LOC = "H13" ;
+NET "sw<4>" LOC = "J14" ;
+NET "sw<5>" LOC = "J13" ;
+NET "sw<6>" LOC = "K14" ;
+NET "sw<7>" LOC = "K13" ;

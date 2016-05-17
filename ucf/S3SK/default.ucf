@@ -1,0 +1,13 @@
+#
+# Xilinx User Constraint File (UCF)
+#
+#  Board:  Spartan-3 Starter Kit
+#
+#  Contents: - default board clock (100 MHz)
+#            - user reset (BTN3)
+#
+NET "clk" TNM_NET = "clk";
+TIMESPEC "TS_clk" = PERIOD "clk" 20 ns HIGH 50 %;
+
+NET "clk" LOC =  "T9" | IOSTANDARD = LVCMOS33 ;
+NET "rst" LOC = "L14" | IOSTANDARD = LVCMOS33 ;
