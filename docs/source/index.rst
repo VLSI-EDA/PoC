@@ -1,38 +1,38 @@
-The PoC-Library's Documentation
-################################################################################################################################################################
-
 This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - Faculty of Computer Science, Technische Universität
 Dresden, Germany `http://vlsi-eda.inf.tu-dresden.de <http://vlsi-eda.inf.tu-dresden.de>`_
 
-.. image:: https://github.com/VLSI-EDA/PoC/wiki/images/logo_tud.gif
+.. image:: _static/logo_tud.gif
+   :scale: 60
    :alt: Logo: Technische Universität Dresden
 
-.. include:: Introduction.rst
+--------------------------------------------------------------------------------
+
+The PoC-Library's Documentation
+###############################
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+
+News
+****
+
+13.05.2016 - PoC 1.0.0 was release.
+===================================
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
 
 
-Contents:
-
-..  toctree::
-    :maxdepth: 2
-    :glob:
+.. toctree::
+   :hidden:
     
-    Download
-    Requirements
-    Dependencies
-    Configuration
-    Integration
-    Using
-    Updating
-    Changes
-    Authors
-    ThirdParty
-    Licenses/*
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
-
-.. deactivated
-   * :ref:`modindex`
+   Introduction/index
+   QuickStart/index
+   Content/index
+   PoC/index
+   Licenses/index
+   GetInvolved/index
