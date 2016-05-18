@@ -5,7 +5,7 @@
 Quick Start Guide
 #################
 
-.. contents:: Contents of this Page:
+.. contents:: Contents of this Page
 
 Download
 ********
@@ -128,3 +128,5 @@ accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki
    :hidden:
    
    Updating
+   ChangeLog
+	 

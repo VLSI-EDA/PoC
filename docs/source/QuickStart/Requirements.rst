@@ -5,7 +5,7 @@
 Requirement Details
 ===================
 
-.. contents:: Contents of this Page:
+.. contents:: Contents of this Page
 
 The PoC-Library comes with some scripts to ease most of the common tasks, like
 running testbenches or generating IP cores. We choose to use Python 3 as a

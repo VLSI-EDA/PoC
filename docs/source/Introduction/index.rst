@@ -5,7 +5,7 @@
 Introduction
 ############
 
-.. contents::
+.. contents:: Contents of this Page
 
 What is PoC?
 ************
@@ -13,24 +13,29 @@ What is PoC?
 PoC - "Pile of Cores" provides implementations for often required hardware functions such as FIFOs, RAM wrapper, and ALUs. The hardware modules are typically
 provided as VHDL or Verilog source code, so it can be easily re-used in a variety of hardware designs.
 
-
-What are our goals?
-*******************
-
-
-**The PoC-Library has the following goals:**
+.. rubric:: The PoC-Library has the following goals:
 
 * independenability
 * generics implementations
 * efficient, resource 'schonend' and fast implementations
 * optimized for several target architectures if suitable
 
-**PoC's independancies:**
+.. rubric:: PoC's independancies:
 
 * platform independenability on the host system: Darwin, Linux or Windows
 * target independenability on the device target: ASIC or FPGA
 * vendor independenability on the device vendor: Altera, Lattice, Xilinx, ...
 * tool chain independenability for simulation and synthesis tool chains
+
+
+Why should I use PoC?
+*********************
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+
 
 Which Tool Chains are supported?
 ********************************

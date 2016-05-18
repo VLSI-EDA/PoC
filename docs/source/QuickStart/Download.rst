@@ -5,7 +5,7 @@
 Download Details
 ================
 
-.. contents:: Contents of this Page:
+.. contents:: Contents of this Page
 
 Downloading the Archive from GitHub
 -----------------------------------

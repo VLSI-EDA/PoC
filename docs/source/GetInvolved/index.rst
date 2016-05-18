@@ -5,8 +5,8 @@
 Get Involved
 ############
 
-How to contribute to PoC?
-*************************
+Contribute to PoC
+*****************
 
 .. TODO:: Write this paragraph ...
 
