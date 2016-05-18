@@ -7,7 +7,7 @@
 [submodule "lib/cocotb"]
 	path = lib/cocotb
 	url = https://github.com/VLSI-EDA/cocotb.git
+[submodule "docs/source/_themes/sphinx_rtd_theme"]
+	path = docs/source/_themes/sphinx_rtd_theme
+	url = https://github.com/VLSI-EDA/sphinx_rtd_theme.git
 
-[submodule "docs/_themes/sphinx_rtd_theme"]
-	path = docs/_themes/sphinx_rtd_theme
-	url = https://github.com/snide/sphinx_rtd_theme.git
