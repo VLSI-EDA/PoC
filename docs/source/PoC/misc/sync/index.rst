@@ -7,6 +7,15 @@ synchonizer called :doc:`sync_Bits </PoC/misc/sync/sync_Bits>`. PoC has two
 platform specific implementations for Altera and Xilinx, which are choosen,
 if the appropriate ``MY_DEVICE`` constant is configured in :doc:`my_config.vhdl </PoC/common/my_config_template>`.
 
+**Decision Table:**
+
++-----------------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+
+| Signal Behavior | Flag [#f1]_                                     | Strobe [#f2]_                                     | Continuous Data    | Reset [#f3]_                                  |
++=================+=================================================+===================================================+====================+===============================================+
+|      1 Bit      | :doc:`sync_Bits </PoC/misc/sync/sync_Bits>`     | :doc:`sync_Strobe </PoC/misc/sync/sync_Strobe>`   | fifo_ic_got [#f4]_ | :doc:`sync_Reset </PoC/misc/sync/sync_Reset>` |
++-----------------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+
+|      n Bit      | :doc:`sync_Vector </PoC/misc/sync/sync_Vector>` | :doc:`sync_Command </PoC/misc/sync/sync_Command>` | fifo_ic_got [#f4]_ |                                               |
++-----------------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+
 
 Basic 2 Flip-Flop Synchronizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -28,11 +37,11 @@ Special Synchronizers
 
 Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
 
-* :doc:`sync_Strobe </PoC/misc/sync/sync_Strobe>` synchronizer ``Strobe``-signals
+* :doc:`sync_Strobe </PoC/misc/sync/sync_Strobe>` synchronizer ``strobe``-signals
   across clock-domain-boundaries. A busy signal indicates the synchronization
   status and can be used as a internal gate-signal to disallow new incoming
-  strobes. A ``Strobe``-signal is only for one clock period active.
-* :doc:`sync_Command </PoC/misc/sync/sync_Command>` like sync_Strobe, it synchronizes
+  strobes. A ``strobe``-signal is only for one clock period active.
+* :doc:`sync_Command </PoC/misc/sync/sync_Command>` like ``sync_Strobe``, it synchronizes
   a one clock period active signal across the clock-domain-boundary, but the
   input has multiple bits. After the multi bit strobe (Command) was transfered,
   the output goes to its idle value.
@@ -46,6 +55,14 @@ Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
    
    :doc:`PoC.fifo.ic_got </PoC/fifo/fifo_ic_got>`
       For a cross-clock capable FIFO.
+
+.. rubric:: Footnotes
+
+.. [#f1] A *flag* or *status* signal is a continuous, long time stable signal.
+.. [#f2] A *strobe* signal is active for only one cycle.
+.. [#f3] To be documented
+.. [#f4] See the ``PoC.fifo`` namespace for cross-clock capable FIFOs.
+
 
 .. toctree::
    :hidden:
