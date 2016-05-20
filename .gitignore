@@ -16,8 +16,12 @@ __pycache__
 !/netlist/template.cgc
 
 # ignore folders
-/temp/
-/vSim/
+docs/_build/
+/temp/*
+!/temp/.*
+!/temp/*.*
+/temp/precompiled/*
+!/temp/precompiled/.*
 
 # ignore files from PoC
 /py/config.private.ini

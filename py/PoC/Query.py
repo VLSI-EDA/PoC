@@ -41,7 +41,7 @@ else:
 from pathlib              import Path
 
 from Base.Exceptions      import NotConfiguredException, PlatformNotSupportedException
-from Base.Configuration    import ConfigurationException
+from Base.Configuration   import ConfigurationException
 
 
 class Query:
@@ -68,8 +68,11 @@ class Query:
 			parts = query.split(":")
 			if (len(parts) == 2):
 				sectionName = parts[0]
-				optionName = parts[1]
-				result =  self.PoCConfig[sectionName][optionName]
+				optionName =  parts[1]
+				try:
+					result =  self.PoCConfig[sectionName][optionName]
+				except KeyError as ex:
+					raise ConfigurationException("Requested setting '{0}:{1}' not found.".format(sectionName, optionName)) from ex
 			else:
 				raise ConfigurationException("Syntax error in query string '{0}'".format(query))
 

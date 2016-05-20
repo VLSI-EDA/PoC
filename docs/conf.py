@@ -84,7 +84,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["../../lib/cocotb", "../../lib/vunit"]
+exclude_patterns = []
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -112,6 +112,15 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# reST settings
+
+rst_prolog = """\
+.. |br| raw:: html
+
+   <br />
+
+"""
 
 
 # -- Options for HTML output ----------------------------------------------

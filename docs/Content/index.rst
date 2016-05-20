@@ -58,9 +58,3 @@ accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki
 
 Command Reference
 *****************
-
-
-Glossary
-********
-
-

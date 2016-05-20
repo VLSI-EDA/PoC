@@ -154,15 +154,12 @@ class Synth(Executable, DiamondMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		DiamondMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
 
-		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "pnwrap.exe"
+		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "synthesis.exe"
 		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "synthesis"
 		else:                          raise PlatformNotSupportedException(platform)
 		Executable.__init__(self, platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
-		if (platform == "Windows"):
-			bin2dir = (binaryDirectoryPath / "../../ispfpga/bin/nt64").resolve()
-			self.Parameters[self.SwitchExecutable] = bin2dir / "synthesis.exe"
 
 		self._hasOutput = False
 		self._hasWarnings = False
@@ -176,17 +173,12 @@ class Synth(Executable, DiamondMixIn):
 	class Executable(metaclass=ExecutableArgument):
 		pass
 
-	class SwitchExecutable(metaclass=ShortTupleArgument):
-		_name = "exec"
-		_value = None
-
 	class SwitchProjectFile(metaclass=ShortTupleArgument):
 		_name = "f"
 		_value = None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
-		SwitchExecutable,
 		SwitchProjectFile
 	)
 
@@ -212,9 +204,7 @@ class Synth(Executable, DiamondMixIn):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			if (self._platform == "Linux"): reader = self.GetReader() # parse stdout directly
-			else: reader = self.GetLogFileReader(logFile)
-			iterator = iter(CompilerFilter(reader))
+			iterator = iter(CompilerFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True

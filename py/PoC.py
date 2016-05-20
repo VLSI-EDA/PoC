@@ -33,45 +33,45 @@
 # limitations under the License.
 # ==============================================================================
 
-from argparse                        import RawDescriptionHelpFormatter
+from argparse                       import RawDescriptionHelpFormatter
 from collections                    import OrderedDict
-from configparser                    import Error as ConfigParser_Error, DuplicateOptionError
-from os                              import environ
+from configparser                   import Error as ConfigParser_Error, DuplicateOptionError
+from os                             import environ
 from pathlib                        import Path
-from platform                        import system as platform_system
+from platform                       import system as platform_system
 from sys                            import argv as sys_argv
-from textwrap                        import dedent
+from textwrap                       import dedent
 
 from Base.Compiler                  import CompilerException
-from Base.Configuration              import ConfigurationException, SkipConfigurationException
+from Base.Configuration             import ConfigurationException, SkipConfigurationException
 from Base.Exceptions                import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
-from Base.Logging                    import ILogable, Logger, Severity
-from Base.Project                    import VHDLVersion
-from Base.Simulator                  import SimulatorException
-from Base.ToolChain                  import ToolChainException
-from Compiler.LSECompiler            import Compiler as LSECompiler
-from Compiler.QuartusCompiler        import Compiler as MapCompiler
-from Compiler.XCOCompiler            import Compiler as XCOCompiler
-from Compiler.XSTCompiler            import Compiler as XSTCompiler
-from Compiler.VivadoCompiler          import Compiler as VivadoCompiler
-from PoC.Config                      import Board
-from PoC.Entity                      import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
-from PoC.Solution                    import Repository
+from Base.Logging                   import ILogable, Logger, Severity
+from Base.Project                   import VHDLVersion
+from Base.Simulator                 import SimulatorException
+from Base.ToolChain                 import ToolChainException
+from Compiler.LSECompiler           import Compiler as LSECompiler
+from Compiler.QuartusCompiler       import Compiler as MapCompiler
+from Compiler.XCOCompiler           import Compiler as XCOCompiler
+from Compiler.XSTCompiler           import Compiler as XSTCompiler
+from Compiler.VivadoCompiler        import Compiler as VivadoCompiler
+from PoC.Config                     import Board
+from PoC.Entity                     import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
+from PoC.Solution                   import Repository
 from PoC.Query                      import Query
-from Simulator.ActiveHDLSimulator    import Simulator as ActiveHDLSimulator
-from Simulator.CocotbSimulator       import Simulator as CocotbSimulator
+from Simulator.ActiveHDLSimulator   import Simulator as ActiveHDLSimulator
+from Simulator.CocotbSimulator      import Simulator as CocotbSimulator
 from Simulator.GHDLSimulator        import Simulator as GHDLSimulator
-from Simulator.ISESimulator          import Simulator as ISESimulator
+from Simulator.ISESimulator         import Simulator as ISESimulator
 from Simulator.QuestaSimulator      import Simulator as QuestaSimulator
 from Simulator.VivadoSimulator      import Simulator as VivadoSimulator
-from ToolChains                      import Configurations
+from ToolChains                     import Configurations
 from ToolChains.GHDL                import Configuration as GHDLConfiguration
-from lib.ArgParseAttributes          import ArgParseMixin
-from lib.ArgParseAttributes          import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
-from lib.ArgParseAttributes          import CommonArgumentAttribute, CommonSwitchArgumentAttribute
-from lib.ConfigParser                import ExtendedConfigParser
+from lib.ArgParseAttributes         import ArgParseMixin
+from lib.ArgParseAttributes         import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
+from lib.ArgParseAttributes         import CommonArgumentAttribute, CommonSwitchArgumentAttribute
+from lib.ConfigParser               import ExtendedConfigParser
 from lib.Functions                  import Init, Exit
-from lib.Parser                      import ParserException
+from lib.Parser                     import ParserException
 from lib.pyAttribute                import Attribute
 
 
@@ -613,10 +613,13 @@ class PoC(ILogable, ArgParseMixin):
 	def HandleQueryConfiguration(self, args):
 		self.__PrepareForConfiguration()
 		query = Query(self)
-		result = query.QueryConfiguration(args.Query)
-		print(result, end="")
-		Exit.exit()
-
+		try:
+			result = query.QueryConfiguration(args.Query)
+			print(result, end="")
+			Exit.exit()
+		except ConfigurationException as ex:
+			print(str(ex), end="")
+			Exit.exit(1)
 
 	# ============================================================================
 	# Simulation	commands

@@ -1,6 +1,3 @@
-.. |br| raw:: html
-
-   <br />
 
 Download Details
 ================

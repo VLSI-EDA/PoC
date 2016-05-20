@@ -17,8 +17,7 @@ if the appropriate ``MY_DEVICE`` constant is configured in :doc:`my_config.vhdl 
 |      n Bit      | :doc:`sync_Vector </PoC/misc/sync/sync_Vector>` | :doc:`sync_Command </PoC/misc/sync/sync_Command>` | fifo_ic_got [#f4]_ |                                               |
 +-----------------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+
 
-Basic 2 Flip-Flop Synchronizer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Basic 2 Flip-Flop Synchronizer
 
 The basic 2 flip-flop synchronizer is called :doc:`sync_Bits </PoC/misc/sync/sync_Bits>`. It's
 possible to configure the bit count of indivital bits. If a vector shall be
@@ -32,8 +31,7 @@ deassertion. The vendor specific implementations are named ``sync_Reset_Altera``
 and ``sync_Reset_Xilinx`` respectivily.
 
 
-Special Synchronizers
-^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Special Synchronizers
 
 Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
 

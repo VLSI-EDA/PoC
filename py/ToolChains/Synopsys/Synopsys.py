@@ -71,7 +71,7 @@ class Configuration(BaseConfiguration):
 		# if (synopsys is not None):
 		# 	return Path(synopsys).parent.parent
 
-		return str(self._TestDefaultInstallPath({"Windows": "Synopsys", "Linux": "Synopsys"}))
+		return self._TestDefaultInstallPath({"Windows": "Synopsys", "Linux": "Synopsys"}).as_posix()
 
 
 class SynopsysDesignConstraintFile(ConstraintFile):

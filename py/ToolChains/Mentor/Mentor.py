@@ -69,7 +69,7 @@ class Configuration(BaseConfiguration):
 	def _GetDefaultInstallationDirectory(self):
 		path = self._TestDefaultInstallPath({"Windows": "Mentor", "Linux": "Mentor"})
 		if path is None: return super()._GetDefaultInstallationDirectory()
-		return str(path)
+		return path.as_posix()
 
 
 	# 

@@ -72,15 +72,15 @@ class Configuration(BaseConfiguration):
 	def _GetDefaultInstallationDirectory(self):
 		xilinx = environ.get("XILINX")
 		if (xilinx is not None):
-			return str(Path(xilinx).parent.parent.parent)
+			return Path(xilinx).parent.parent.parent.as_posix()
 
 		xilinx = environ.get("XILINX_VIVADO")
 		if (xilinx is not None):
-			return str(Path(xilinx).parent.parent)
+			return Path(xilinx).parent.parent.as_posix()
 
 		path = self._TestDefaultInstallPath({"Windows": "Xilinx", "Linux": "Xilinx"})
 		if path is None: return super()._GetDefaultInstallationDirectory()
-		return str(path)
+		return path.as_posix()
 
 
 class XilinxProjectExportMixIn:

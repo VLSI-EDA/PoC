@@ -73,4 +73,4 @@ class Configuration(BaseConfiguration):
 
 		path = self._TestDefaultInstallPath({"Windows": "Altera", "Linux": "Altera"})
 		if path is None: return super()._GetDefaultInstallationDirectory()
-		return str(path)
+		return path.as_posix()

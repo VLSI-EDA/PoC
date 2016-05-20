@@ -112,7 +112,7 @@ class Configuration(BaseConfiguration):
 		if (self._host.Platform in ["Linux", "Darwin"]):
 			try:
 				name = check_output(["which", "ghdl"], universal_newlines=True)
-				if name != "": return str(Path(name[:-1]).parent)
+				if name != "": return Path(name[:-1]).parent.as_posix()
 			except CalledProcessError:
 				pass # `which` returns non-zero exit code if GHDL is not in PATH
 

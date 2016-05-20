@@ -31,21 +31,23 @@
 # limitations under the License.
 # ==============================================================================
 
-# configure wrapper here
-$PyWrapper_PoShScriptDir =	"py"
-$PyWrapper_Script =					"PoC.py"
-$PyWrapper_MinVersion =			"3.5.0"
+# Change this, if PoC solutions and PoC projects are used
+$PoC_RootDir_RelPath =			"."		# relative path to PoC root directory
+$PoC_Solution =							""		# solution name
 
-$PyWrapper_RelPath =				"."
-$PyWrapper_Solution =				""
+# Configure wrapper here
+$PoC_Script =								"PoC.py"
+$Python_MinVersion =				"3.5.0"
 
 # save parameters and current working directory
-$PyWrapper_Parameters =	$args
-$PyWrapper_WorkingDir =	Get-Location
-$PoC_RootDir_AbsPath =	Convert-Path (Resolve-Path ($PSScriptRoot + "\" + $PyWrapper_RelPath))
+$PyWrapper_Parameters =			$args
+$PyWrapper_WorkingDir =			Get-Location
+# 
+$PoC_RootDir =							Convert-Path (Resolve-Path ($PSScriptRoot + "\" + $PoC_RootDir_RelPath))
+$PyWrapper_WrapperScript =	"$PoC_RootDir\py\Wrapper\Wrapper.ps1"
 
 # invoke main wrapper
-. ("$PoC_RootDir_AbsPath\$PyWrapper_PoShScriptDir\Wrapper.ps1")
+. $PyWrapper_WrapperScript
 
 # restore working directory if changed
 Set-Location $PyWrapper_WorkingDir
