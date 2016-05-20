@@ -43,6 +43,20 @@ Xilinx UCF / XDC files:
   for meta stability to all ``_meta`` signals and timing ignore constraints to all
   ``_async`` signals.
 
+
+File List:
+~~~~~~~~~~
+
++--------------+------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| Version      | master (stable)                                                                                            | release (latest)                                                                                            |
++==============+============================================================================================================+=============================================================================================================+
+| Source files | `sync_Bits.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Bits.vhdl>`_               | `sync_Bits.vhdl <https://github.com/VLSI-EDA/PoC/blob/release/src/misc/sync/sync_Bits.vhdl>`_               |
++--------------+------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| Altera files | `sync_Bits_Altera.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Bits_Altera.vhdl>`_ | `sync_Bits_Altera.vhdl <https://github.com/VLSI-EDA/PoC/blob/release/src/misc/sync/sync_Bits_Altera.vhdl>`_ |
++--------------+------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| Xilinx files | `sync_Bits_Xilinx.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Bits_Xilinx.vhdl>`_ | `sync_Bits_Xilinx.vhdl <https://github.com/VLSI-EDA/PoC/blob/release/src/misc/sync/sync_Bits_Xilinx.vhdl>`_ |
++--------------+------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+
 .. seealso::
    
    :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`
