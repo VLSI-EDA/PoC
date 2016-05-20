@@ -4,10 +4,16 @@ xil
 
 These are bus entities....
 
+.. rubric::
+   Sub-Namespaces
+
 .. toctree::
    
    mig/index
    reconfig/index
+
+.. rubric::
+   Entities
 
 .. toctree::
    

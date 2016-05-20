@@ -4,9 +4,16 @@ sort
 
 These are sorting entities....
 
+.. rubric::
+   Sub-Namespaces
+
 .. toctree::
    
    sortnet/index
+
+
+.. rubric::
+   Entities
 
 .. toctree::
    
