@@ -1,13 +1,20 @@
-This is a local copy of the (revised) BSD License used in the Cocotb project.
-The original can be found in file `LICENSE` in the Cocotb source tree.
+.. Note::
+   This is a local copy of the `(Revised) BSD License <https://www.github.com/VLSI-EDA/PoC/tree/master/lib/cocotb/LICENSE>`_
+   used in the Cocotb project. The original can be found in file :file:`LICENSE` in the
+   Cocotb source tree.
+
+.. TODO:: Check link to the lib/cocotb/LICENSE file.
 
 --------------------------------------------------------------------------------
 
+BSD License for Cocotb
+######################
+
 Cocotb is licensed under the Revised BSD License.  Full license text below.
 
-Copyright (c) 2013 Potential Ventures Ltd
-Copyright (c) 2013 SolarFlare Communications Inc
-All rights reserved.
+**Copyright (c) 2013 Potential Ventures Ltd** |br|
+**Copyright (c) 2013 SolarFlare Communications Inc** |br|
+**All rights reserved.**
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -24,7 +31,7 @@ modification, are permitted provided that the following conditions are met:
   names of its contributors may be used to endorse or promote products
   derived from this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+**THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED. IN NO EVENT SHALL POTENTIAL VENTURES LTD BE LIABLE FOR ANY
@@ -33,5 +40,4 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.**

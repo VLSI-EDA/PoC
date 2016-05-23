@@ -1,14 +1,15 @@
 
 Download Details
-================
+################
 
 .. contents:: Contents of this Page
+   :local:
 
-Downloading the Archive from GitHub
------------------------------------
+Downloading from GitHub
+***********************
 
 The PoC-Library can be downloaded as a zip-file from GitHub. See the following
-table, to choose your desired branch.
+table, to choose your desired git branch.
 
 +----------+--------------------------------------------------------------------+
 | Branch   | download link                                                      |
@@ -20,15 +21,15 @@ table, to choose your desired branch.
 
 
 Downloading via ``git clone``
------------------------------
+*****************************
 
 The PoC-Library can be downloaded (cloned) with ``git clone`` from GitHub.
 GitHub offers the transfer protocols HTTPS and SSH. You should use SSH if you
 have a GitHub account and have already uploaded an OpenSSH public key to GitHub,
-otherwise use HTTPS.
+otherwise use HTTPS if you have no account or you want to use login credentials.
 
 The created folder :file:`<GitRoot>\PoC` is used as :file:`<PoCRoot>` in later
-instructions.
+instructions or on other pages in this documentation.
 
 +----------+----------------------------------------+
 | Protocol | GitHub Repository URL                  |
@@ -40,7 +41,7 @@ instructions.
 
 
 On Linux
-^^^^^^^^
+========
 
 Command line instructions to clone the PoC-Library onto a Linux machine with
 HTTPS protocol:
@@ -64,21 +65,21 @@ with SSH protocol:
 
 
 On OS X
-^^^^^^^
+=======
 
 Please see the Linux instructions.
 
 
 On Windows
-^^^^^^^^^^
+==========
 
 .. NOTE::
    
    All Windows command line instructions are intended for :program:`Windows PowerShell`,
    if not marked otherwise. So executing the following instructions in Windows
    Command Prompt (:program:`cmd.exe`) won't function or result in errors! See
-   the :doc:`Requirements section </QuickStart/index>` on where to download or
-   update PowerShell.
+   the :doc:`Requirements section </QuickStart/Requirements>` on where to
+   download or update PowerShell.
 
 Command line instructions to clone the PoC-Library onto a Windows machine with
 HTTPS protocol:
@@ -109,17 +110,17 @@ SSH protocol:
 
 
 Downloading via ``git submodule add``
--------------------------------------
+*************************************
 
 The PoC-Library is meant to be integrated into other HDL projects (preferably
 Git versioned projects). Therefore it's recommended to create a library folder
 and add the PoC-Library as a `git submodule <http://git-scm.com/book/en/v2/Git-Tools-Submodules>`_.
 
 The following command line instructions will create a library folder :file:`lib\`
-and clone PoC as a git submodule into the subfolder :file:`lib\PoC\`.
+and clone PoC as a git submodule into the subfolder :file:`<ProjectRoot>\lib\PoC\`.
 
 On Linux
-^^^^^^^^
+========
 
 Command line instructions to clone the PoC-Library onto a Linux machine with
 HTTPS protocol:
@@ -151,21 +152,21 @@ with SSH protocol:
 
 
 On OS X
-^^^^^^^
+=======
 
 Please see the Linux instructions.
 
 
 On Windows
-^^^^^^^^^^
+==========
 
 .. NOTE::
    
    All Windows command line instructions are intended for :program:`Windows PowerShell`,
    if not marked otherwise. So executing the following instructions in Windows
    Command Prompt (:program:`cmd.exe`) won't function or result in errors! See
-   the :doc:`Requirements section </QuickStart/index>` on where to download or
-   update PowerShell.
+   the :doc:`Requirements section </QuickStart/Requirements>` on where to
+   download or update PowerShell.
 
 Command line instructions to clone the PoC-Library onto a Windows machine with
 HTTPS protocol:
@@ -186,7 +187,7 @@ SSH protocol:
 
 .. code-block:: PowerShell
    
-      cd <ProjectRoot>
+   cd <ProjectRoot>
    mkdir lib | cd
    git submodule add "ssh://git@github.com:VLSI-EDA/PoC.git" PoC
    cd PoC

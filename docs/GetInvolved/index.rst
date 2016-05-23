@@ -5,7 +5,11 @@ Get Involved
 Contribute to PoC
 *****************
 
-.. TODO:: Write this paragraph ...
+.. TODO::
+   Write this paragraph ...
+   
+   Contributers License Agreement (CLA)
+   
 
 
 Discuss with us on Gitter

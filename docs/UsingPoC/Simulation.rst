@@ -1,439 +1,373 @@
-# PoC Testbenches
+Simulation
+##########
+
+The Python Infrastructure shipped with the PoC-Library can launch manual,
+half-automated and fully automated testbenches. The testbench can be run in
+command line or GUI mode. If available, the used simulator is launched with
+pre-configured waveform files. This can be done by invoking one of PoC's
+frontend script:
+
+* **poc.sh:** ``poc.sh <common options> <simulator> <module> <simulator options>`` |br|
+  Use this fronend script on Darwin, Linux and Unix platforms.
+* **poc.ps1:** ``poc.ps1 <common options> <simulator> <module> <simulator options>`` |br|
+  Use this frontend script Windows platforms. |br|
+  
+  .. ATTENTION::
+     All Windows command line instructions are intended for Windows
+     PowerShell, if not marked otherwise. So executing the following instructions
+     in Windows Command Prompt (``cmd.exe``) won't function or result in errors!
+
+.. seealso::
+   
+   :doc:`Supported Simulators </WhatIsPoC/SupportedToolChains>`
+     See the Intruction page for a list of supported simulators.
+   :doc:`PoC Configuration </QuickStart/Configuration>`
+     See the Configuration page on how to configure PoC and your installed
+     simulator tool chains. This is required to invoke the simulators.
+     
+
+Quick Example
+*************
+
+The following quick example uses the GHDL Simulator to analyze, elaborate and
+simulate a testbench for the module ``arith_prng`` (Pseudo Random Number
+Generator - PRNG). The VHDL file ``arith_prng.vhdl`` is located at
+``<PoCRoot>/src/arith/`` and virtually a member in the `PoC.arith` namespace.
+So the module can be identified by an unique name: ``PoC.arith.prng``, which is
+passed to the frontend script.
+
+.. rubric:: Example 1:
+
+.. code-block:: PowerShell
+   
+   cd <PoCRoot>
+   .\poc.ps1 ghdl PoC.arith.prng
+
+The CLI command ``ghdl`` chooses *GHDL Simulator* as the simulator and
+passes the fully qualified PoC entity name ``PoC.arith.prng`` as a parameter
+to the tool. All required source file are gathered and compiled to an
+executable. Afterwards this executable is launched in CLI mode and it's outputs
+are displayed in console:
+
+.. image:: /_static/images/ghdl/arith_prng_tb.posh.png
+   :target: /_static/images/ghdl/arith_prng_tb.posh.png
+	 :alt: PowerShell console output after running PoC.arith.prng with GHDL.
+
+Each testbench uses PoC's simulation helper packages to count asserts and to
+track active stimuli and checker processes. After a completed simulation run,
+an report is written to STDOUT or the simulator's console. Note the line
+``SIMULATION RESULT = PASSED``.
+
+For each simulated PoC entity, a line in the overall report is created. It lists
+the runtime per testbench and the simulation status (``... ERROR``, ``FAILED``,
+``NO ASSERTS`` or ``PASSED``).
+
+.. rubric:: Example 2:
+
+Passing an additional option ``--gui`` to the service tool, opens the testbench
+in GUI-mode. If a waveform configuration file is present (e.g. a ``\*.gtkw``
+file for GTKWave), then it is preloaded into the simulator's waveform viewer.
+
+.. code-block:: PowerShell
+   
+   cd <PoCRoot>
+   .\poc.ps1 ghdl PoC.arith.prng --gui
+
+The opened waveform viewer and displayed waveform should look like this:
+
+.. image:: /_static/images/gtkwave/arith_prng_tb.png
+   :target: /_static/images/gtkwave/arith_prng_tb.png
+	 :alt: GTKWave waveform view of PoC.arith.prng.
+
+
+Running a single Testbench
+**************************
+
+A testbench run is supervised by PoC's ``<PoCRoot>\py\PoC.py`` service tool,
+which offers a consistent interface to all simulators. Unfortunately, every
+platform has it's specialties, so a wrapper script is needed as abstraction from
+the host's operating system. Depending on the choosen tool chain, the wrapper
+script will source or invoke the vendor tool's environment scripts to pre-load
+the needed environment variables, paths or license file settings.
+
+The order of options to the frontend script is as following:
+``<common options> <simulator> <module> <simulator options>``
+
+The frontend offers several common options:
+
++-----------------+-------------------------------+
+| Common Option   | Description                   |
++=====+===========+===============================+
+| -q  | --quiet   | Quiet-mode (print nothing)    |
++-----+-----------+-------------------------------+
+| -v  | --verbose | Print more messages           |
++-----+-----------+-------------------------------+
+| -d  | --debug   | Debug mode (print everything) |
++-----+-----------+-------------------------------+
+|     | --dryrun  | Run in dry-run mode           |
++-----+-----------+-------------------------------+
+
+One of the following supported simulators can be choosen, if installed and
+configured in PoC:
+
++-----------+---------------------------------------------+
+| Simulator | Description                                 |
++===========+=============================================+
+| asim      | Active-HDL Simulator                        |
++-----------+---------------------------------------------+
+| cocotb    | Cocotb simulation using QuestaSim Simulator |
++-----------+---------------------------------------------+
+| ghdl      | GHDL Simulator                              |
++-----------+---------------------------------------------+
+| isim      | Xilinx ISE Simulator                        |
++-----------+---------------------------------------------+
+| vsim      | QuestaSim Simulator or ModelSim             |
++-----------+---------------------------------------------+
+| xsim      | Xilinx Vivado Simulator                     |
++-----------+---------------------------------------------+
+
+A testbench run can be interrupted by sending a keyboard interrupt to Python.
+On most operating systems this is done by pressing :kbd:`Ctrl` + :kbd:`C`. If
+PoC runs multiple testbenches at once, all finished testbenches are reported with
+there testbench result. The aborted testbench will be listed as errored.
+
+
+Aldec Active-HDL
+================
+
+The command to invoke a simulation using Active-HDL is ``asim`` followed by a list of
+PoC entities. The following options are supported for Active-HDL:
+
++--------------------------+---------------------------------------------------------+
+| Simulator Option         | Description                                             |
++====+=====================+=========================================================+
+|    | --board=<BOARD>     | Specify a target board.                                 |
++----+---------------------+---------------------------------------------------------+
+|    | --device=<DEVICE>   | Specify a target device.                                |
++----+---------------------+---------------------------------------------------------+
+|    | --std=[87|93|02|08] | Select a VHDL standard. Default: 08                     |
++----+---------------------+---------------------------------------------------------+
+
+.. NOTE::
+   GUI mode for Active-HDL is not yet supported.
+
+.. rubric:: Example:
+
+.. code-block:: PowerShell
+
+   cd <PoCRoot>
+   .\poc.ps1 asim PoC.arith.prng --std=93
+
+
+Cocotb with QuestaSim backend
+=============================
+
+The command to invoke a Cocotb simulation using QuestaSim is ``cocotb`` followed
+by a list of PoC entities. The following options are supported for Cocotb:
+
++--------------------------+---------------------------------------------------------+
+| Simulator Option         | Description                                             |
++====+=====================+=========================================================+
+|    | --board=<BOARD>     | Specify a target board.                                 |
++----+---------------------+---------------------------------------------------------+
+|    | --device=<DEVICE>   | Specify a target device.                                |
++----+---------------------+---------------------------------------------------------+
+| -g | --gui               | Start the simulation in the QuestaSim GUI.              |
++----+---------------------+---------------------------------------------------------+
 
-**The PoC-Library** can launch manual, half-automated and fully automated
-testbenches. The testbench can be run in command line or GUI mode. If available,
-the used simulator is launched with pre-configured waveform files. This can be
-done by invoking PoC's frontend script: `poc.[sh|ps1]` and passing the simulator
-command plus the entity to simulate.
+.. NOTE::
+   Cocotb is currently only on Linux with QuestaSim supported. We are working to
+   support the Windows platform and the GHDL backend.
+
+.. rubric:: Example:
+
+.. code-block:: Bash
+
+   cd <PoCRoot>
+   ./poc.sh cocotb PoC.cache.par
+
+
+GHDL (plus GTKwave)
+===================
+
+The command to invoke a simulation using GHDL is ``ghdl`` followed by a list of
+PoC entities. The following options are supported for GHDL:
 
-PoC supports the following simulators:
++--------------------------+---------------------------------------------------------+
+| Simulator Option         | Description                                             |
++====+=====================+=========================================================+
+|    | --board=<BOARD>     | Specify a target board.                                 |
++----+---------------------+---------------------------------------------------------+
+|    | --device=<DEVICE>   | Specify a target device.                                |
++----+---------------------+---------------------------------------------------------+
+| -g | --gui               | Start GTKwave, if installed. Open *.gtkw, if available. |
++----+---------------------+---------------------------------------------------------+
+|    | --std=[87|93|02|08] | Select a VHDL standard. Default: 08                     |
++----+---------------------+---------------------------------------------------------+
 
- -  Cocotb + Mentor Graphics QuestaSim
- -  GHDL + GTKWave
- -  Mentor Graphics ModellSim (vSim)
- -  Mentor Graphics QuestaSim (vSim)
- -  Mentor Graphics ModellSim Altera Edition (vSim)
- -  Xilinx ISE Simulator 14.7 (iSim)
- -  Xilinx Vivado Simulator (xSim)
+.. rubric:: Example:
 
-> All Windows command line instructions are intended for **Windows PowerShell**,
-> if not marked otherwise. So executing the following instructions in Windows
-> Command Prompt (`cmd.exe`) won't function or result in errors! See the
-> [Requirements][wiki_Requirements] wiki page on where to download or update PowerShell.
-> 
-> **Is PoC already configured on the system?** If not, run the following
-> configuration step, to tell PoC which tool chains are installed and where.
-> Follow the instructions on the screen. See the [Configuration][wiki_Configuration]
-> wiki page for more details.
-> ```PowerShell
-> cd <PoCRoot>
-> .\poc.ps1 configure
-> ```
+.. code-block:: PowerShell
 
+   cd <PoCRoot>
+   .\poc.ps1 ghdl PoC.arith.prng --board=Atlys -g
+
+
+Mentor Graphics QuestaSim
+=========================
+
+The command to invoke a simulation using QuestaSim or ModelSim is ``vsim``
+followed by a list of PoC entities. The following options are supported for
+QuestaSim:
 
-Table of Content:
---------------------------------------------------------------------------------
- - [Quick Example](#quick-example)
- - [Running a Testbench](#running-a-testbench)
- - [Xilinx ISE Simulator](#xilinx-ise-simulator)
- - [Xilinx Vivado Simulator](#xilinx-vivado-simulator)
- - [Mentor Graphics QuestaSim](#mentor-graphics-questasim)
- - [GHDL + GTKwave](#ghdl--gtkwave)
- - [Debugging](#debugging)
++--------------------------+---------------------------------------------------------+
+| Simulator Option         | Description                                             |
++====+=====================+=========================================================+
+|    | --board=<BOARD>     | Specify a target board.                                 |
++----+---------------------+---------------------------------------------------------+
+|    | --device=<DEVICE>   | Specify a target device.                                |
++----+---------------------+---------------------------------------------------------+
+| -g | --gui               | Start the simulation in the QuestaSim GUI.              |
++----+---------------------+---------------------------------------------------------+
+|    | --std=[87|93|02|08] | Select a VHDL standard. Default: 08                     |
++----+---------------------+---------------------------------------------------------+
 
---------------------------------------------------------------------------------
+.. rubric:: Example:
 
+.. code-block:: PowerShell
 
-## Quick Example
+   cd <PoCRoot>
+   .\poc.ps1 vsim PoC.arith.prng --board=DE4 --gui
 
-The following quick example uses the Xilinx ISE Simulator to compile a testbench for the module
-`arith_prng.vhdl` (Pseudo Random Number Generator - PRNG). The VHDL file is located at
-`<PoCRoot>/src/arith/` and virtually a member in the `PoC.arith` namespace. So the module can be
-identified by an unique name: `PoC.arith.prng`, which is passed to the testbench script.
 
-##### Example 1:
+Xilinx ISE Simulator
+====================
 
-```Bash
-cd <PoCRoot>
-./poc.sh isim PoC.arith.prng
-```
+The command to invoke a simulation using ISE Simulator (isim) is ``isim``
+followed by a list of PoC entities. The following options are supported for
+ISE Simulator:
 
-The CLI option switch `isim` chooses *ISE Simulator* (iSim) as the simulator and passes the module name as parameter
-to the tool. All required source file are gathered and "fused" to an executable. Afterwards this
-executable is launched in CLI mode and it's outputs are displayed in console:
++--------------------------+---------------------------------------------------------+
+| Simulator Option         | Description                                             |
++====+=====================+=========================================================+
+|    | --board=<BOARD>     | Specify a target board.                                 |
++----+---------------------+---------------------------------------------------------+
+|    | --device=<DEVICE>   | Specify a target device.                                |
++----+---------------------+---------------------------------------------------------+
+| -g | --gui               | Start the simulation in the ISE Simulator GUI (iSim).   |
++----+---------------------+---------------------------------------------------------+
 
-[![PowerShell console output for PoC.arith.prng][arith_prng_tb]][arith_prng_tb]
-(click to enlarge)
+.. rubric:: Example:
 
- [arith_prng_tb]: https://github.com/VLSI-EDA/PoC/wiki/images/arith_prng_tb.png
+.. code-block:: PowerShell
 
-##### Example 2:
+   cd <PoCRoot>
+   .\poc.ps1 isim PoC.arith.prng --board=Atlys -g
 
-Passing a second option `-g` to the testbench tool, opens the testbench in GUI-mode. If a waveform configuration file is present (e.g. \*.wcfg files for iSim), then it is preloaded into the simulator's GUI.
 
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 isim PoC.arith.prng -g
-```
+Xilinx Vivado Simulator
+=======================
 
-See the red frame in the lower left corner: If everything was ok: `SIMULATION RESULT = PASSED` is
-printed onto the simulator console.
+The command to invoke a simulation using Vivado Simulator (isim) is ``xsim``
+followed by a list of PoC entities. The following options are supported for
+Vivado Simulator:
 
-[![iSim GUI for PoC.arith.prng][arith_prng_tb_isim]][arith_prng_tb_isim]
-(click to enlarge)
++--------------------------+---------------------------------------------------------+
+| Simulator Option         | Description                                             |
++====+=====================+=========================================================+
+|    | --board=<BOARD>     | Specify a target board.                                 |
++----+---------------------+---------------------------------------------------------+
+|    | --device=<DEVICE>   | Specify a target device.                                |
++----+---------------------+---------------------------------------------------------+
+| -g | --gui               | Start Vivado in simulation mode.                        |
++----+---------------------+---------------------------------------------------------+
+|    | --std=[93|08]       | Select a VHDL standard. Default: 93                     |
++----+---------------------+---------------------------------------------------------+
 
- [arith_prng_tb_isim]: https://github.com/VLSI-EDA/PoC/wiki/images/arith_prng_tb_isim.png
+.. rubric:: Example:
 
+.. code-block:: PowerShell
 
-## Running a Testbench
+   cd <PoCRoot>
+   .\poc.ps1 xsim PoC.arith.prng --board=Atlys -g
 
-A testbench is supervised by PoC's `<PoCRoot>\py\PoC.py`, which offers a consistent interface to all
-simulators. Unfortunately, every platform has it's specialties, so a wrapper script is needed as abstraction
-from the host's system. On Windows it's `<PoCRoot>\poc.ps1`, on Linux and Darwin it's `<PoCRoot>/poc.sh`.
 
-##### Darwin (Bash):
+Running a Group of Testbenches
+******************************
 
-```Bash
-cd <PoCRoot>
-./poc.sh <common options> <simulator> <module> <simulator options>
-```
+Each simulator can be invoked with a space seperated list of PoC entiries or a
+wildcard at the end of the fully qualified entity name.
 
-##### Linux (Bash):
+Supported wildcard patterns are ``*`` and ``?``. Question mark refers to all
+entities in a PoC (sub-)namespace. Asterisk refers to all PoC entiries in the
+current namespace and all sub-namespaces.
 
-```Bash
-cd <PoCRoot>
-./poc.sh <common options> <simulator> <module> <simulator options>
-```
+**Examples for testbenches groups:**
 
-##### Windows (PowerShell):
++--------------------------------------+-----------------------------------------------------------------------------------+
+| PoC entity list                      | Description                                                                       |
++======================================+===================================================================================+
+| PoC.arith.prng                       | A single PoC entity: ``arith_prng``                                               |
++--------------------------------------+-----------------------------------------------------------------------------------+
+| PoC.*                                | All entities in the whole library                                                 |
++--------------------------------------+-----------------------------------------------------------------------------------+
+| PoC.io.ddrio.?                       | All entities in ``PoC.io.ddrio``: ``ddrio_in``, ``ddrio_inout``, ``ddrio_out``    |
++--------------------------------------+-----------------------------------------------------------------------------------+
+| PoC.fifo.* PoC.cache.* PoC.dstruct.* | All FIFO, cache and data-structure testbenches.                                   |
++--------------------------------------+-----------------------------------------------------------------------------------+
 
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 <common options> <simulator> <module> <simulator options>
-```
 
-The service tool offers several common options:
 
-    Common Option           Description
-    ----------------------------------------------------------------------
-    -h   --help             Print a short help
-    -q                      Quiet-mode (print nothing)
-    -v                      Print more messages
-    -d                      Debug mode (print everything)
-    -D                      Debug wrapper script
+.. code-block:: PowerShell
 
-One of the following supported simulators can be choosen, if installed and configured in PoC:
+   cd <PoCRoot>
+   .\poc.ps1 -q asim PoC.arith.prng PoC.io.ddrio.* PoC.sort.lru_cache
 
-    command                 Simulator
-    ----------------------------------------------------------------------
-    asim <module>           Active-HDL Simulator
-    ghdl <module>           GHDL Simulator
-    cocotb <module>         Cocotb simulation using QuestaSim Simulator
-    vsim <module>           QuestaSim Simulator
-    isim <module>           Xilinx ISE Simulator
-    xsim <module>           Xilinx Vivado Simulator
+**Resulting output:**
 
+.. image:: /_static/images/active-hdl/multiple.png
+   :target: /_static/images/active-hdl/multiple.png
+	 :alt: Report after running multiple testbenches in Active-HDL.
 
-## GHDL + GTKwave
-
-The command is named `ghdl` followed by a list of PoC entities. The following options are supported
-for GHDL:
 
-    Option(s)                 Description
-    ----------------------------------------------------------------------
-         --board=<BOARD>      Specify a target board.
-         --device=<DEVICE>    Specify a target device.
-    -g   --gui                Start GTKwave, if installed.
-                              Open *.gtkw, if available.
-         --std=[87|93|02|08]  Select a VHDL standard. Default: 08
-
-##### Example:
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 -v ghdl PoC.arith.prng --board=Atlys -g
-```
-
-## Mentor Graphics QuestaSim
-
-The command is named `vsim` followed by a list of PoC entities. The following options are supported
-for ISE Simulator:
-
-    Option(s)                 Description
-    ----------------------------------------------------------------------
-         --board=<BOARD>      Specify a target board.
-         --device=<DEVICE>    Specify a target device.
-    -g   --gui                Start in GUI-mode.
-                              Open *.wdo, if available.
-         --std=[87|93|02|08]  Select a VHDL standard. Default: 08
-
-
-##### Example:
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 -v vsim PoC.arith.prng --board=Atlys -g
-```
-
-## Xilinx ISE Simulator
-
-The command is named `isim` followed by a list of PoC entities. The following options are supported
-for ISE Simulator:
-
-    Option(s)                 Description
-    ----------------------------------------------------------------------
-         --board=<BOARD>      Specify a target board.
-         --device=<DEVICE>    Specify a target device.
-    -g   --gui                Start in GUI-mode.
-                              Open a *.wcfg, if available.
-
-##### Example:
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 -v isim PoC.arith.prng --board=Atlys -g
-```
+Continuous Integration (CI)
+***************************
 
-## Xilinx Vivado Simulator
-
-The command is named `xsim` followed by a list of PoC entities. The following options are supported
-for Vivado Simulator:
+All PoC testbenches are executed on every GitHub upload (push) via Travis-CI.
+The testsuite runs all testbenches for the virtual board ``GENERIC`` with an
+FPGA device called ``GENERIC``. We can't run vendor dependent testbenches,
+because we can't upload the vendor simulation libraries to Travis-CI.
 
-    Option(s)                 Description
-    ----------------------------------------------------------------------
-         --board=<BOARD>      Specify a target board.
-         --device=<DEVICE>    Specify a target device.
-    -g   --gui                Start in GUI-mode.
-                              Open *.wcfg, if available.
-         --std=[93|08]        Select a VHDL standard. Default: 93
+To reproduce the Travis-CI results on a local machine, run the following command.
+The ``-q`` option, launches the frontend in quiet mode to reduce the command line
+messages:
 
-##### Example:
+.. code-block:: PowerShell
 
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 -v xsim PoC.arith.prng --board=Atlys -g
-```
+   cd <PoCRoot>
+   .\poc.ps1 -q ghdl PoC.*
 
- [wiki_Requirements]:	Requirements
- [wiki_Configuration]:	Configuration
+.. image:: /_static/images/ghdl/PoC_all.png
+   :target: /_static/images/ghdl/PoC_all.png
+   :alt: Overall testbench report after running all PoC testbenches in GHDL.
 
- 
-# PoC Testbenches
+If the vendor libraries are available and pre-compiled, then it's also possible
+to run a CI flow for a specific vendor. This is an Altera example for the
+Terrasic DE4 board:
 
-**The PoC-Library** can launch manual, half-automated and fully automated
-testbenches. The testbench can be run in command line or GUI mode. If available,
-the used simulator is launched with pre-configured waveform files. This can be
-done by invoking PoC's frontend script: `poc.[sh|ps1]` and passing the simulator
-command plus the entity to simulate.
+.. code-block:: PowerShell
 
-PoC supports the following simulators:
+   cd <PoCRoot>
+   .\poc.ps1 -q vsim PoC.* --board=DE4
 
- -  Cocotb + Mentor Graphics QuestaSim
- -  GHDL + GTKWave
- -  Mentor Graphics ModellSim (vSim)
- -  Mentor Graphics QuestaSim (vSim)
- -  Mentor Graphics ModellSim Altera Edition (vSim)
- -  Xilinx ISE Simulator 14.7 (iSim)
- -  Xilinx Vivado Simulator (xSim)
 
-> All Windows command line instructions are intended for **Windows PowerShell**,
-> if not marked otherwise. So executing the following instructions in Windows
-> Command Prompt (`cmd.exe`) won't function or result in errors! See the
-> [Requirements][wiki_Requirements] wiki page on where to download or update PowerShell.
-> 
-> **Is PoC already configured on the system?** If not, run the following
-> configuration step, to tell PoC which tool chains are installed and where.
-> Follow the instructions on the screen. See the [Configuration][wiki_Configuration]
-> wiki page for more details.
-> ```PowerShell
-> cd <PoCRoot>
-> .\poc.ps1 configure
-> ```
-
-
-Table of Content:
---------------------------------------------------------------------------------
- - [Quick Example](#quick-example)
- - [Running a Testbench](#running-a-testbench)
- - [Xilinx ISE Simulator](#xilinx-ise-simulator)
- - [Xilinx Vivado Simulator](#xilinx-vivado-simulator)
- - [Mentor Graphics QuestaSim](#mentor-graphics-questasim)
- - [GHDL + GTKwave](#ghdl--gtkwave)
- - [Debugging](#debugging)
-
---------------------------------------------------------------------------------
-
-
-## Quick Example
-
-The following quick example uses the Xilinx ISE Simulator to compile a testbench for the module
-`arith_prng.vhdl` (Pseudo Random Number Generator - PRNG). The VHDL file is located at
-`<PoCRoot>/src/arith/` and virtually a member in the `PoC.arith` namespace. So the module can be
-identified by an unique name: `PoC.arith.prng`, which is passed to the testbench script.
-
-##### Example 1:
-
-```Bash
-cd <PoCRoot>
-./poc.sh isim PoC.arith.prng
-```
-
-The CLI option switch `isim` chooses *ISE Simulator* (iSim) as the simulator and passes the module name as parameter
-to the tool. All required source file are gathered and "fused" to an executable. Afterwards this
-executable is launched in CLI mode and it's outputs are displayed in console:
-
-[![PowerShell console output for PoC.arith.prng][arith_prng_tb]][arith_prng_tb]
-(click to enlarge)
-
- [arith_prng_tb]: https://github.com/VLSI-EDA/PoC/wiki/images/arith_prng_tb.png
-
-##### Example 2:
-
-Passing a second option `-g` to the testbench tool, opens the testbench in GUI-mode. If a waveform configuration file is present (e.g. \*.wcfg files for iSim), then it is preloaded into the simulator's GUI.
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 isim PoC.arith.prng -g
-```
-
-See the red frame in the lower left corner: If everything was ok: `SIMULATION RESULT = PASSED` is
-printed onto the simulator console.
-
-[![iSim GUI for PoC.arith.prng][arith_prng_tb_isim]][arith_prng_tb_isim]
-(click to enlarge)
-
- [arith_prng_tb_isim]: https://github.com/VLSI-EDA/PoC/wiki/images/arith_prng_tb_isim.png
-
-
-## Running a Testbench
-
-A testbench is supervised by PoC's `<PoCRoot>\py\PoC.py`, which offers a consistent interface to all
-simulators. Unfortunately, every platform has it's specialties, so a wrapper script is needed as abstraction
-from the host's system. On Windows it's `<PoCRoot>\poc.ps1`, on Linux and Darwin it's `<PoCRoot>/poc.sh`.
-
-##### Darwin (Bash):
-
-```Bash
-cd <PoCRoot>
-./poc.sh <common options> <simulator> <module> <simulator options>
-```
-
-##### Linux (Bash):
-
-```Bash
-cd <PoCRoot>
-./poc.sh <common options> <simulator> <module> <simulator options>
-```
-
-##### Windows (PowerShell):
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 <common options> <simulator> <module> <simulator options>
-```
-
-The service tool offers several common options:
-
-    Common Option           Description
-    ----------------------------------------------------------------------
-    -h   --help             Print a short help
-    -q                      Quiet-mode (print nothing)
-    -v                      Print more messages
-    -d                      Debug mode (print everything)
-    -D                      Debug wrapper script
-
-One of the following supported simulators can be choosen, if installed and configured in PoC:
-
-    command                 Simulator
-    ----------------------------------------------------------------------
-    asim <module>           Active-HDL Simulator
-    ghdl <module>           GHDL Simulator
-    cocotb <module>         Cocotb simulation using QuestaSim Simulator
-    vsim <module>           QuestaSim Simulator
-    isim <module>           Xilinx ISE Simulator
-    xsim <module>           Xilinx Vivado Simulator
-
-
-## GHDL + GTKwave
-
-The command is named `ghdl` followed by a list of PoC entities. The following options are supported
-for GHDL:
-
-    Option(s)                 Description
-    ----------------------------------------------------------------------
-         --board=<BOARD>      Specify a target board.
-         --device=<DEVICE>    Specify a target device.
-    -g   --gui                Start GTKwave, if installed.
-                              Open *.gtkw, if available.
-         --std=[87|93|02|08]  Select a VHDL standard. Default: 08
-
-##### Example:
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 -v ghdl PoC.arith.prng --board=Atlys -g
-```
-
-## Mentor Graphics QuestaSim
-
-The command is named `vsim` followed by a list of PoC entities. The following options are supported
-for ISE Simulator:
-
-    Option(s)                 Description
-    ----------------------------------------------------------------------
-         --board=<BOARD>      Specify a target board.
-         --device=<DEVICE>    Specify a target device.
-    -g   --gui                Start in GUI-mode.
-                              Open *.wdo, if available.
-         --std=[87|93|02|08]  Select a VHDL standard. Default: 08
-
-
-##### Example:
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 -v vsim PoC.arith.prng --board=Atlys -g
-```
-
-## Xilinx ISE Simulator
-
-The command is named `isim` followed by a list of PoC entities. The following options are supported
-for ISE Simulator:
-
-    Option(s)                 Description
-    ----------------------------------------------------------------------
-         --board=<BOARD>      Specify a target board.
-         --device=<DEVICE>    Specify a target device.
-    -g   --gui                Start in GUI-mode.
-                              Open a *.wcfg, if available.
-
-##### Example:
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 -v isim PoC.arith.prng --board=Atlys -g
-```
-
-## Xilinx Vivado Simulator
-
-The command is named `xsim` followed by a list of PoC entities. The following options are supported
-for Vivado Simulator:
-
-    Option(s)                 Description
-    ----------------------------------------------------------------------
-         --board=<BOARD>      Specify a target board.
-         --device=<DEVICE>    Specify a target device.
-    -g   --gui                Start in GUI-mode.
-                              Open *.wcfg, if available.
-         --std=[93|08]        Select a VHDL standard. Default: 93
-
-##### Example:
-
-```PowerShell
-cd <PoCRoot>
-.\poc.ps1 -v xsim PoC.arith.prng --board=Atlys -g
-```
-
-
- [wiki_Requirements]:	https://github.com/VLSI-EDA/PoC/wiki/Requirements
- [wiki_Configuration]:	https://github.com/VLSI-EDA/PoC/wiki/Configuration
+.. seealso::
+   
+   :doc:`PoC Configuration </QuickStart/Configuration>`
+     See the Configuration page on how to configure PoC and your installed
+     simulator tool chains. This is required to invoke the simulators.
+   Latest Travis-CI Report
+     .. TODO::
+        Add Travis Link
+   
+   

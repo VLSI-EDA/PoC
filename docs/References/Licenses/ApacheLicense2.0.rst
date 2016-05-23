@@ -1,8 +1,7 @@
-
 .. Note:: This is a local copy of the `Apache License Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.
 
-Apache License
-##############
+Apache License 2.0
+##################
 
 Version 2.0, January 2004
 
@@ -135,3 +134,4 @@ class name and description of purpose be included on the same "printed page" as 
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
+

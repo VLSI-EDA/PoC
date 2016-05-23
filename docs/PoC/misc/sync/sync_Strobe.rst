@@ -7,6 +7,6 @@ sync_Strobe
 	 Write content for this page...
 
 
-.. image:: /_static/images/sync_Strobe.svg
+.. image:: /_static/images/sync_strobe.svg
    :alt: PoC.misc.sync.Strobe
-   :target: /_static/images/sync_Strobe.svg
+   :target: /_static/images/sync_strobe.svg

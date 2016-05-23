@@ -1,6 +1,6 @@
 
-``*.rules`` Format
-##################
+*.rules Format
+##############
 
 .. contents:: Contents of this Page
 
