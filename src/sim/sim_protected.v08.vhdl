@@ -134,20 +134,13 @@ package body sim_protected is
 			init;
 			Max_AssertFailures		:= MaxAssertFailures;
 			Max_SimulationRuntime	:= MaxSimulationRuntime;
-			-- if (MaxSimulationRuntime /= TIME'high) then
-				-- wait until (State.IsFinalized = TRUE) for MaxSimulationRuntime;
-				-- report "initialize: TIMEOUT" severity ERROR;
-				-- finalize;
-			-- end if;
 		end procedure;
 		
 		procedure finalize is
-			variable Dummy	: BOOLEAN;
 		begin
 			if (State.IsFinalized = FALSE) then
 				if C_SIM_VERBOSE then		report "finalize: " severity NOTE;		end if;
 				State.IsFinalized		:= TRUE;
-				-- Dummy		:= finalizeDefaultTest;
 				for i in C_SIM_DEFAULT_TEST_ID to TestCount - 1 loop
 					finalizeTest(i);
 				end loop;
@@ -211,12 +204,12 @@ package body sim_protected is
 		procedure writeReport_SimulationResult is
 		  variable LineBuffer : LINE;
 	  begin
-		  write(LineBuffer,															(			STRING'("========================================")));
-			if (AssertCount = 0) then	  write(LineBuffer, (CR & STRING'("SIMULATION RESULT = NO ASSERTS")));
-		  elsif (Passed = TRUE) then  write(LineBuffer, (CR & STRING'("SIMULATION RESULT = PASSED")));
-		  else										  	write(LineBuffer, (CR & STRING'("SIMULATION RESULT = FAILED")));
+		  write(LineBuffer,																(			STRING'("========================================")));
+		  if		(Passed = FALSE) then		write(LineBuffer, (CR & STRING'("SIMULATION RESULT = FAILED")));
+			elsif (AssertCount = 0) then	write(LineBuffer, (CR & STRING'("SIMULATION RESULT = NO ASSERTS")));
+		  elsif (Passed = TRUE) then		write(LineBuffer, (CR & STRING'("SIMULATION RESULT = PASSED")));
 		  end if;
-		  write(LineBuffer,															(CR & STRING'("========================================")));
+		  write(LineBuffer,																(CR & STRING'("========================================")));
 		  writeline(output, LineBuffer);
 		end procedure;
 		
@@ -344,7 +337,7 @@ package body sim_protected is
 				ActiveTestCount				:= ActiveTestCount - 1;
 					
 				if (Tests(TestID).ActiveProcessCount > 0) then
-					report "Test " & INTEGER'image(TestID) & " '" & str_trim(Tests(TestID).Name) & "' has still active process while finalizing:" severity WARNING;
+					fail("Test " & INTEGER'image(TestID) & " '" & str_trim(Tests(TestID).Name) & "' has still active process while finalizing:");
 					for ProcIdx in 0 to Tests(TestID).ProcessCount - 1 loop
 						if (Processes(Tests(TestID).ProcessIDs(ProcIdx)).Status = SIM_PROCESS_STATUS_ACTIVE) then
 							report "  " & Processes(Tests(TestID).ProcessIDs(ProcIdx)).Name severity WARNING;

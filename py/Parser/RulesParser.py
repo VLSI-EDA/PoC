@@ -40,10 +40,10 @@ class Rule:
 class CopyRuleMixIn(Rule):
 	def __init__(self, sourcePath, destinationPath):
 		self._source =      sourcePath
-		self._destination =  destinationPath
+		self._destination = destinationPath
 
 	@property
-	def SourcePath(self):        return self._source
+	def SourcePath(self):       return self._source
 	@property
 	def DestinationPath(self):  return self._destination
 
@@ -65,24 +65,24 @@ class DeleteRuleMixIn(Rule):
 class ReplaceRuleMixIn(Rule):
 	def __init__(self, filePath, searchPattern, replacePattern, multiLine, dotAll, caseInSensitive):
 		self._filePath =        filePath
-		self._searchPattern =    searchPattern
+		self._searchPattern =   searchPattern
 		self._replacePattern =  replacePattern
-		self._multiLine =        multiLine
+		self._multiLine =       multiLine
 		self._dotAll =          dotAll
-		self._caseInsensitive =  caseInSensitive
+		self._caseInsensitive = caseInSensitive
 
 	@property
-	def FilePath(self):                      return self._filePath
+	def FilePath(self):                     return self._filePath
 	@property
 	def SearchPattern(self):                return self._searchPattern
 	@property
-	def ReplacePattern(self):                return self._replacePattern
+	def ReplacePattern(self):               return self._replacePattern
 	@property
-	def RegExpOption_MultiLine(self):        return self._multiLine
+	def RegExpOption_MultiLine(self):       return self._multiLine
 	@property
 	def RegExpOption_DotAll(self):          return self._dotAll
 	@property
-	def RegExpOption_CaseInsensitive(self):  return self._caseInsensitive
+	def RegExpOption_CaseInsensitive(self): return self._caseInsensitive
 
 	def __str__(self):
 		return "Replace rule: in '{0!s}' replace '{1}' with '{2}'".format(self._filePath, self._searchPattern, self._replacePattern)
@@ -91,18 +91,18 @@ class ReplaceRuleMixIn(Rule):
 class RulesParserMixIn:
 	_classCopyRule =            CopyRuleMixIn
 	_classDeleteRule =          DeleteRuleMixIn
-	_classReplaceRule =          ReplaceRuleMixIn
+	_classReplaceRule =         ReplaceRuleMixIn
 
 	def __init__(self):
-		self._rootDirectory =      None
+		self._rootDirectory =     None
 		self._document =          None
 		
-		self._preProcessRules =    []
+		self._preProcessRules =   []
 		self._postProcessRules =  []
 
 	def _Parse(self):
 		self._ReadContent() #only available via late binding
-		self._document = Document.parse(self._content, printChar=not True) #self._content only available via late binding
+		self._document = Document.Parse(self._content, printChar=not True) #self._content only available via late binding
 		# print("{DARK_GRAY}{0!s}{NOCOLOR}".format(self._document, **Init.Foreground))
 		
 	def _Resolve(self):
@@ -143,7 +143,7 @@ class RulesParserMixIn:
 	@property
 	def PreProcessRules(self):    return self._preProcessRules
 	@property
-	def PostProcessRules(self):    return self._postProcessRules
+	def PostProcessRules(self):   return self._postProcessRules
 
 	def __str__(self):    return "RULES file: '{0!s}'".format(self._file) #self._file only available via late binding
 	def __repr__(self):    return self.__str__()

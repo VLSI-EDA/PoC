@@ -57,11 +57,11 @@ class PlatformNotSupportedException(ExceptionBase):
 class NotConfiguredException(ExceptionBase):
 	pass
 
+class SkipableException(ExceptionBase):
+	pass
+
 class CommonException(ExceptionBase):
 	pass
 
-class TestbenchException(ExceptionBase):
-	def __init__(self, pocEntity, testbench, message):
-		super().__init__(message)
-		self.pocEntity = pocEntity
-		self.testbench = testbench
+class SkipableCommonException(CommonException, SkipableException):
+	pass

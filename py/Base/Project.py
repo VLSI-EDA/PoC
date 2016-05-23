@@ -63,23 +63,26 @@ class FileTypes(Flags):
 	SettingsFile =        ()
 	QuartusSettingsFile = ()
 
+	__FILE_EXTENSION_MAPPING__ = {
+		Text:                 "txt",
+		FileListFile:         "files",
+		RulesFile:            "rules",
+		VHDLSourceFile:       "vhdl",
+		VerilogSourceFile:    "v",
+		PythonSourceFile:     "py",
+		CocotbSourceFile:     "py",
+		UcfConstraintFile:    "ucf",
+		XdcConstraintFile:    "xdc",
+		SdcConstraintFile:    "sdc",
+		LdcConstraintFile:    "ldc",
+		QuartusSettingsFile:  "qsf"
+	}
+
 	def Extension(self):
-		if   (self == FileTypes.Unknown):             raise CommonException("Unknown file type.")
-		elif (self == FileTypes.Any):                 raise CommonException("Generic file type.")
-		elif (self == FileTypes.Text):                return "txt"
-		elif (self == FileTypes.FileListFile):        return "files"
-		elif (self == FileTypes.SourceFile):          raise CommonException("Generic file type.")
-		elif (self == FileTypes.VHDLSourceFile):      return "vhdl"
-		elif (self == FileTypes.VerilogSourceFile):   return "v"
-		elif (self == FileTypes.CocotbSourceFile):    return "py"
-		elif (self == FileTypes.ConstraintFile):      raise CommonException("Generic file type.")
-		elif (self == FileTypes.UcfConstraintFile):   return "ucf"
-		elif (self == FileTypes.XdcConstraintFile):   return "xdc"
-		elif (self == FileTypes.SdcConstraintFile):   return "sdc"
-		elif (self == FileTypes.LdcConstraintFile):   return "ldc"
-		elif (self == FileTypes.SettingsFile):        raise CommonException("Generic file type.")
-		elif (self == FileTypes.QuartusSettingsFile): return "qsf"
-		else:                                         raise CommonException("This is not an enum member.")
+		try:
+			return self.__FILE_EXTENSION_MAPPING__[self]
+		except KeyError:
+			raise CommonException("Generic file type.")
 
 	def __str__(self):
 		return self.name
@@ -93,7 +96,7 @@ class Environment(Enum):
 
 @unique
 class ToolChain(Enum):
-	Any =               0
+	Any =                0
 	Aldec_ActiveHDL =   10
 	Altera_Quartus =    20
 	Altera_ModelSim =   21
@@ -125,40 +128,47 @@ class Tool(Enum):
 
 class VHDLVersion(Enum):
 	Any =                 0
-	VHDL87 =           1987
-	VHDL93 =           1993
-	VHDL02 =           2002
-	VHDL08 =           2008
-	VHDL1987 =         1987
-	VHDL1993 =         1993
+	VHDL87 =             87
+	VHDL93 =             93
 	VHDL2002 =         2002
 	VHDL2008 =         2008
 
-	@classmethod
-	def parse(cls, value):
-		if isinstance(value, int):
-			if (value == 87):       return cls.VHDL87
-			elif (value == 93):     return cls.VHDL93
-			elif (value == 2):      return cls.VHDL02
-			elif (value == 8):      return cls.VHDL08
-			elif (value == 1987):   return cls.VHDL87
-			elif (value == 1993):   return cls.VHDL93
-			elif (value == 2002):   return cls.VHDL02
-			elif (value == 2008):   return cls.VHDL08
-		elif isinstance(value, str):
-			if (value == "87"):     return cls.VHDL87
-			elif (value == "93"):   return cls.VHDL93
-			elif (value == "02"):   return cls.VHDL02
-			elif (value == "08"):   return cls.VHDL08
-			elif (value == "1987"): return cls.VHDL87
-			elif (value == "1993"): return cls.VHDL93
-			elif (value == "2002"): return cls.VHDL02
-			elif (value == "2008"): return cls.VHDL08
-		raise ValueError("'{0!s}' is not a member of {1}.".format(value, cls.__name__))
 
-	def __lt__(self, other):    return self.value < other.value
+	def __init__(self, *_):
+		"""Patch the embedded MAP dictionary"""
+		for k, v in self.__class__.__VHDL_VERSION_MAPPINGS__.items():
+			if ((not isinstance(v, self.__class__)) and (v == self.value)):
+				self.__class__.__VHDL_VERSION_MAPPINGS__[k] = self
+
+	__VHDL_VERSION_MAPPINGS__ = {
+		87:     VHDL87,
+		93:     VHDL93,
+		2:      VHDL2002,
+		8:      VHDL2008,
+		1987:   VHDL87,
+		1993:   VHDL93,
+		2002:   VHDL2002,
+		2008:   VHDL2008,
+		"87":   VHDL87,
+		"93":   VHDL93,
+		"02":   VHDL2002,
+		"08":   VHDL2008,
+		"1987": VHDL87,
+		"1993": VHDL93,
+		"2002": VHDL2002,
+		"2008": VHDL2008
+	}
+
+	@classmethod
+	def Parse(cls, value):
+		try:
+			return cls.__VHDL_VERSION_MAPPINGS__[value]
+		except KeyError:
+			ValueError("Value '{0!s}' cannot be parsed to member of {1}.".format(value, cls.__name__))
+
+	def __lt__(self, other):    return self.value <  other.value
 	def __le__(self, other):    return self.value <= other.value
-	def __gt__(self, other):    return self.value > other.value
+	def __gt__(self, other):    return self.value >  other.value
 	def __ge__(self, other):    return self.value >= other.value
 	def __ne__(self, other):    return self.value != other.value
 	def __eq__(self, other):
@@ -168,13 +178,10 @@ class VHDLVersion(Enum):
 			return (self.value == other.value)
 
 	def __str__(self):
-		return "VHDL'" + self.__repr__()
+		return "VHDL'" + str(self.value)[-2:]
 
 	def __repr__(self):
-		if (self == VHDLVersion.VHDL87):    return "87"
-		elif (self == VHDLVersion.VHDL93):  return "93"
-		elif (self == VHDLVersion.VHDL02):  return "02"
-		elif (self == VHDLVersion.VHDL08):  return "08"
+		return str(self.value)
 
 
 class Project:
@@ -346,12 +353,12 @@ class Project:
 	
 	def GetVariables(self):
 		result = {
-			"ProjectName" :      self._name,
-			"RootDirectory" :    str(self._rootDirectory),
-			"Environment" :      self._environment.name,
-			"ToolChain" :        self._toolChain.name,
-			"Tool" :            self._tool.name,
-			"VHDL" :            self._vhdlVersion.value
+			"ProjectName":      self._name,
+			"RootDirectory":    str(self._rootDirectory),
+			"Environment":      self._environment.name,
+			"ToolChain":        self._toolChain.name,
+			"Tool":             self._tool.name,
+			"VHDLVersion":      self._vhdlVersion.value
 		}
 		return merge(result, self._board.GetVariables(), self._device.GetVariables())
 	

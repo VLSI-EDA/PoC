@@ -5,6 +5,7 @@
 # 
 # ==============================================================================
 #	Authors:				 	Patrick Lehmann
+#                   Martin Zabel
 # 
 #	Bash Script:			Wrapper Script to execute <PoC-Root>/py/PoC.py
 # 
@@ -33,7 +34,7 @@
 # ==============================================================================
 
 # configure wrapper here
-PyWrapper_BashScriptDir="py"
+PyWrapper_BashScriptDir="py/Wrapper"
 PyWrapper_Script=PoC.py
 PyWrapper_MinVersion=3.5.0
 
@@ -41,7 +42,7 @@ PyWrapper_RelPath="."
 PyWrapper_Solution=""
 
 # resolve script directory
-# solution is taken from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+# solution is from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do													# resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"

@@ -53,19 +53,15 @@ class Simulator(BaseSimulator):
 	_TOOL_CHAIN =            ToolChain.Mentor_QuestaSim
 	_TOOL =                  Tool.Mentor_vSim
 
-	def __init__(self, host, guiMode):
-		super().__init__(host)
+	def __init__(self, host, dryRun, guiMode):
+		super().__init__(host, dryRun)
 
-		self._guiMode =        guiMode
-
-		self._entity =        None
-		self._testbenchFQN =  None
-		self._vhdlVersion =    None
+		self._guiMode =       guiMode
+		self._vhdlVersion =   None
 		self._vhdlGenerics =  None
+		self._toolChain =     None
 
-		self._questa =        None
-
-		vSimSimulatorFiles = host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
+		vSimSimulatorFiles =            host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
 		self.Directories.Working =      host.Directories.Temp / vSimSimulatorFiles
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / vSimSimulatorFiles
 
@@ -85,7 +81,7 @@ class Simulator(BaseSimulator):
 		questaSection = self.Host.PoCConfig[sectionName]
 		binaryPath = Path(questaSection['BinaryDirectory'])
 		version = questaSection['Version']
-		self._questa = QuestaSim(self.Host.Platform, binaryPath, version, logger=self.Logger)
+		self._toolChain = QuestaSim(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
 		# TODO: refactor into a ModelSim module, shared by QuestaSim and Cocotb (-> MixIn class)?
@@ -105,32 +101,27 @@ class Simulator(BaseSimulator):
 
 	def _RunAnalysis(self, _):
 		# create a QuestaVHDLCompiler instance
-		vlib = self._questa.GetVHDLLibraryTool()
+		vlib = self._toolChain.GetVHDLLibraryTool()
 		for lib in self._pocProject.VHDLLibraries:
 			vlib.Parameters[vlib.SwitchLibraryName] = lib.Name
 			vlib.CreateLibrary()
 
 		# create a QuestaVHDLCompiler instance
-		vcom = self._questa.GetVHDLCompiler()
-		vcom.Parameters[vcom.FlagQuietMode] =          True
+		vcom = self._toolChain.GetVHDLCompiler()
+		vcom.Parameters[vcom.FlagQuietMode] =         True
 		vcom.Parameters[vcom.FlagExplicit] =          True
 		vcom.Parameters[vcom.FlagRangeCheck] =        True
 		vcom.Parameters[vcom.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
-
-		if (self._vhdlVersion == VHDLVersion.VHDL87):    vcom.Parameters[vcom.SwitchVHDLVersion] =  "87"
-		elif (self._vhdlVersion == VHDLVersion.VHDL93):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "93"
-		elif (self._vhdlVersion == VHDLVersion.VHDL02):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "2002"
-		elif (self._vhdlVersion == VHDLVersion.VHDL08):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "2008"
-		else:                                          raise SimulatorException("VHDL version is not supported.")
+		vcom.Parameters[vcom.SwitchVHDLVersion] =     repr(self._vhdlVersion)
 
 		# run vcom compile for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
-			if (not file.Path.exists()):                raise SimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
+			if (not file.Path.exists()):              raise SimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
 
 			vcomLogFile = self.Directories.Working / (file.Path.stem + ".vcom.log")
-			vcom.Parameters[vcom.SwitchVHDLLibrary] =  file.LibraryName
+			vcom.Parameters[vcom.SwitchVHDLLibrary] = file.LibraryName
 			vcom.Parameters[vcom.ArgLogFile] =        vcomLogFile
-			vcom.Parameters[vcom.ArgSourceFile] =      file.Path
+			vcom.Parameters[vcom.ArgSourceFile] =     file.Path
 
 			try:
 				vcom.Compile()
@@ -141,7 +132,10 @@ class Simulator(BaseSimulator):
 
 			# delete empty log files
 			if (vcomLogFile.stat().st_size == 0):
-				vcomLogFile.unlink()
+				try:
+					vcomLogFile.unlink()
+				except OSError as ex:
+					raise SimulatorException("Error while deleting '{0!s}'.".format(vcomLogFile)) from ex
 
 	def _RunSimulation(self, testbench):
 		if self._guiMode:
@@ -150,7 +144,7 @@ class Simulator(BaseSimulator):
 		tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		
 		# create a QuestaSimulator instance
-		vsim = self._questa.GetSimulator()
+		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
 		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
@@ -165,7 +159,7 @@ class Simulator(BaseSimulator):
 		tclWaveFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
 
 		# create a QuestaSimulator instance
-		vsim = self._questa.GetSimulator()
+		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
 		vsim.Parameters[vsim.FlagReportAsError] =     "3473"

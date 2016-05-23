@@ -54,21 +54,17 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =            ToolChain.Xilinx_ISE
 	_TOOL =                  Tool.Xilinx_iSim
 
-	def __init__(self, host, guiMode):
-		super().__init__(host)
+	def __init__(self, host, dryRun, guiMode):
+		super().__init__(host, dryRun)
 		XilinxProjectExportMixIn.__init__(self)
 
-		self._guiMode =        guiMode
-
-		self._entity =        None
-		self._testbenchFQN =  None
+		self._guiMode =       guiMode
 		self._vhdlGenerics =  None
+		self._toolChain =     None
 
-		self._ise =            None
-
-		iseFilesDirectoryName = host.PoCConfig['CONFIG.DirectoryNames']['ISESimulatorFiles']
-		self.Directories.Working = host.Directories.Temp / iseFilesDirectoryName
-		self.Directories.PreCompiled = host.Directories.PreCompiled / iseFilesDirectoryName
+		iseFilesDirectoryName =         host.PoCConfig['CONFIG.DirectoryNames']['ISESimulatorFiles']
+		self.Directories.Working =      host.Directories.Temp / iseFilesDirectoryName
+		self.Directories.PreCompiled =  host.Directories.PreCompiled / iseFilesDirectoryName
 
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()
@@ -79,7 +75,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.ISE']
 		version = iseSection['Version']
 		binaryPath = Path(iseSection['BinaryDirectory'])
-		self._ise = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
+		self._toolChain = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def _RunElaboration(self, testbench):
 		exeFilePath =  self.Directories.Working / (testbench.ModuleName + ".exe")
@@ -87,7 +83,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._WriteXilinxProjectFile(prjFilePath, "iSim")
 
 		# create a ISELinker instance
-		fuse = self._ise.GetFuse()
+		fuse = self._toolChain.GetFuse()
 		fuse.Parameters[fuse.FlagIncremental] =        True
 		fuse.Parameters[fuse.SwitchTimeResolution] =  "1fs"
 		fuse.Parameters[fuse.SwitchMultiThreading] =  "4"
