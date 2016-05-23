@@ -71,9 +71,9 @@ Mozilla Public License, v. 2.0
 
 1.14. "You" (or "Your")
   means an individual or a legal entity exercising rights under this License. 
-  For legal entities, “You” includes any entity that controls, is controlled 
+  For legal entities, "You" includes any entity that controls, is controlled 
   by, or is under common control with You. For purposes of this definition, 
-  “control” means (a) the power, direct or indirect, to cause the direction or 
+  "control" means (a) the power, direct or indirect, to cause the direction or 
   management of such entity, whether by contract or otherwise, or (b) 
   ownership of more than fifty percent (50%) of the outstanding shares or 
   beneficial ownership of such entity.
@@ -257,7 +257,7 @@ termination shall survive termination.
 6. Disclaimer of Warranty
 *************************
 
-  Covered Software is provided under this License on an “as is” basis, without 
+  Covered Software is provided under this License on an "as is" basis, without 
   warranty of any kind, either expressed, implied, or statutory, including, 
   without limitation, warranties that the Covered Software is free of defects, 
   merchantable, fit for a particular purpose or non-infringing. The entire risk 
@@ -355,12 +355,12 @@ relevant directory) where a recipient would be likely to look for such a notice.
 You may add additional accurate notices of copyright ownership.
 
 
-Exhibit B - “Incompatible With Secondary Licenses” Notice
+Exhibit B - "Incompatible With Secondary Licenses" Notice
 *********************************************************
 
 .. code-block:: raw
    
-   This Source Code Form is “Incompatible With Secondary Licenses”, as
+   This Source Code Form is "Incompatible With Secondary Licenses", as
    defined by the Mozilla Public License, v. 2.0.
 
 
