@@ -86,16 +86,22 @@ class Shared(ILogable):
 	def _PrepareEnvironment(self):
 		# create fresh temporary directory
 		self._LogVerbose("Creating fresh temporary directory.")
-		self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
 		if (self.Directories.Working.exists()):
+			self._LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
+			for item in self.Directories.Working.iterdir():
+				try:
+					if item.is_dir():
+						shutil.rmtree(str(item))
+					elif item.is_file():
+						item.unlink()
+				except OSError as ex:
+					raise CommonException("Error while deleting '{0!s}'.".format(item)) from ex
+		else:
+			self._LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
 			try:
-				shutil.rmtree(str(self.Directories.Working))
+				self.Directories.Working.mkdir(parents=True)
 			except OSError as ex:
-				raise CommonException("Error while deleting '{0!s}'.".format(self.Directories.Working)) from ex
-		try:
-			self.Directories.Working.mkdir(parents=True)
-		except OSError as ex:
-			raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
+				raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
 
 		# change working directory to temporary path
 		self._LogVerbose("Changing working directory to temporary directory.")

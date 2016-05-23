@@ -41,12 +41,12 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module ToolChains.Xilinx.Xilinx")
 
 
-from os                    import environ
+from os                   import environ
 from pathlib              import Path
 
-from Base.Configuration          import Configuration as BaseConfiguration
-from Base.Project                import FileTypes, VHDLVersion
-from Base.ToolChain              import ToolChainException
+from Base.Configuration   import Configuration as BaseConfiguration
+from Base.Project         import FileTypes, VHDLVersion
+from Base.ToolChain       import ToolChainException
 
 
 class XilinxException(ToolChainException):

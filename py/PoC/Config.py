@@ -43,7 +43,6 @@ else:
 from enum                 import Enum, unique
 from re                   import compile as RegExpCompile
 
-from lib.Functions        import Init
 from Base.Configuration   import ConfigurationException
 
 
@@ -57,11 +56,11 @@ class BaseEnum(Enum):
 
 @unique
 class Vendors(BaseEnum):
-	Unknown =      0
-	Generic =      1
+	Unknown =     0
+	Generic =     1
 	Altera =      2
-	Lattice =      3
-	MicroSemi =    4
+	Lattice =     3
+	MicroSemi =   4
 	Xilinx =      5
 
 	def __str__(self):
@@ -86,10 +85,10 @@ class GenericFamilies(Families):
 class XilinxFamilies(Families):
 	# Xilinx families
 	Spartan = "s"
-	Artix = "a"
-	Kintex = "k"
-	Virtex = "v"
-	Zynq = "z"
+	Artix =   "a"
+	Kintex =  "k"
+	Virtex =  "v"
+	Zynq =    "z"
 
 
 class AlteraFamilies(Families):

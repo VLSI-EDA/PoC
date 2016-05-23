@@ -290,10 +290,11 @@ class PoC(ILogable, ArgParseMixin):
 	# ============================================================================
 	# common arguments valid for all commands
 	# ----------------------------------------------------------------------------
-	@CommonSwitchArgumentAttribute("-D",							dest="DEBUG",		help="enable script wrapper debug mode")
-	@CommonSwitchArgumentAttribute("-d", "--debug",		dest="debug",		help="enable debug mode")
-	@CommonSwitchArgumentAttribute("-v", "--verbose",	dest="verbose",	help="print out detailed messages")
-	@CommonSwitchArgumentAttribute("-q", "--quiet",		dest="quiet",		help="reduce messages to a minimum")
+	@CommonSwitchArgumentAttribute("-D",              dest="DEBUG",   help="enable script wrapper debug mode")
+	@CommonSwitchArgumentAttribute(      "--dryrun",  dest="DryRun",  help="enable script wrapper debug mode")
+	@CommonSwitchArgumentAttribute("-d", "--debug",   dest="debug",   help="enable debug mode")
+	@CommonSwitchArgumentAttribute("-v", "--verbose", dest="verbose", help="print out detailed messages")
+	@CommonSwitchArgumentAttribute("-q", "--quiet",   dest="quiet",   help="reduce messages to a minimum")
 	@CommonArgumentAttribute("--sln", metavar="<SolutionID>", dest="SolutionID", help="Solution name")
 	@CommonArgumentAttribute("--prj", metavar="<ProjectID>", dest="ProjectID", help="Solution name")
 	def Run(self):
