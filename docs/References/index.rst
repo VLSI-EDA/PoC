@@ -11,4 +11,5 @@ References
    NamingConversions
    ListOfBoards
    Glossary
+   KnownIssues
    Licenses/index

@@ -38,9 +38,12 @@ See the :doc:`Requirements` page for further details.
 **PoC requires:**
 
 * The Python3 programming language and runtime.
-* Git, if you want to checkout the latest 'master' or 'release' branch.
 * A :doc:`supported synthesis tool chain </WhatIsPoC/SupportedToolChains>`, if you want to synthezise IP cores.
 * A :doc:`supported simulator too chain </WhatIsPoC/SupportedToolChains>`, if you want to simulate IP cores.
+
+**PoC optionally requires:**
+
+* Git, if you want to checkout the latest 'master' or 'release' branch.
 
 .. toctree::
    :hidden:

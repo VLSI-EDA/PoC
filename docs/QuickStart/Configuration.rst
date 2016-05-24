@@ -8,6 +8,7 @@ at any time, for example to register new tools or to update tool versions.
 
 .. contents:: Contents of this page
    :local:
+   :depth: 2
 
 
 Launching the Configuration

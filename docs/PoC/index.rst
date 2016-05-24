@@ -23,5 +23,13 @@ Namespaces for Entities:
    mem/index
    misc/index
    net/index
+   
+.. ifconfig:: buildtarget == "internal"
+   
+   .. toctree::
+      sata/index
+
+.. toctree::
+   
    sort/index
    xil/index
