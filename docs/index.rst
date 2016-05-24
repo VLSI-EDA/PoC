@@ -4,7 +4,7 @@ Germany |br|
 `http://vlsi-eda.inf.tu-dresden.de <http://vlsi-eda.inf.tu-dresden.de>`_
 
 .. image:: _static/images/logo_tud.jpg
-   :scale: 60
+   :scale: 10
    :alt: Logo: Technische Universität Dresden
 
 --------------------------------------------------------------------------------
