@@ -24,7 +24,7 @@ Namespaces for Entities:
    misc/index
    net/index
    
-.. ifconfig:: buildtarget == "internal"
+.. only:: PoCInternal
    
    .. toctree::
       sata/index
