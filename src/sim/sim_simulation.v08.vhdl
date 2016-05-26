@@ -1,13 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Thomas B. Preusser
--- 
+--
 -- Package:					Simulation constants, functions and utilities.
--- 
+--
 -- Description:
 -- ------------------------------------
 --		TODO
@@ -16,13 +16,13 @@
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,7 +52,7 @@ package simulation is
 	-- prepared aliases, if GHDL gets the aliases fixed. Reported on 08.02.2015 as Issue #38
 	-- alias simmInitialize					is globalSimulationStatus.initialize[NATURAL, TIME];
 	-- alias simmFinalize						is globalSimulationStatus.finalize[];
-	
+
 	-- alias simmCreateTest					is globalSimulationStatus.createTest[STRING return T_SIM_TEST_ID];
 	-- alias simmFinalizeTest				is globalSimulationStatus.finalizeTest[T_SIM_TEST_ID];
 	-- alias simmRegisterProcess		is globalSimulationStatus.registerProcess[T_SIM_TEST_ID, STRING, BOOLEAN return T_SIM_PROCESS_ID];
@@ -66,26 +66,26 @@ package simulation is
 	-- alias simmAssertion					is globalSimulationStatus.assertion[BOOLEAN, STRING];
   -- alias simmFail								is globalSimulationStatus.fail[STRING];
 	-- alias simmWriteMessage				is globalSimulationStatus.writeMessage[STRING];
-	
+
 	procedure				simInitialize(MaxAssertFailures : NATURAL := NATURAL'high; MaxSimulationRuntime : TIME := TIME'high);
 	procedure				simFinalize;
-	
+
 	impure function	simCreateTest(Name : STRING) return T_SIM_TEST_ID;
 	procedure				simFinalizeTest(constant TestID : T_SIM_TEST_ID);
 	impure function	simRegisterProcess(Name : STRING; constant IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID;
 	impure function	simRegisterProcess(constant TestID : T_SIM_TEST_ID; Name : STRING; constant IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID;
 	procedure				simDeactivateProcess(ProcID : T_SIM_PROCESS_ID);
-	
+
 	impure function	simIsStopped(constant TestID		: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN;
 	impure function simIsFinalized(constant TestID	: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN;
 	impure function	simIsAllFinalized return BOOLEAN;
-	
+
 	procedure				simAssertion(cond : in BOOLEAN; Message : in STRING := "");
   procedure				simFail(Message : in STRING := "");
 	procedure				simWriteMessage(Message : in STRING := "");
 
 	-- TODO: integrate VCD simulation functions and procedures from sim_value_change_dump.vhdl here
-	
+
 	-- checksum functions
 	-- ===========================================================================
 	-- TODO: move checksum functions here
@@ -106,47 +106,47 @@ package body simulation is
 			globalSimulationStatus.finalize;
 		end if;
 	end procedure;
-	
+
 	procedure simFinalize is
 	begin
 		globalSimulationStatus.finalize;
 	end procedure;
-	
+
 	impure function simCreateTest(Name : STRING) return T_SIM_TEST_ID is
 	begin
 		return globalSimulationStatus.createTest(Name);
 	end function;
-	
+
 	procedure simFinalizeTest(constant TestID : T_SIM_TEST_ID) is
 	begin
 		globalSimulationStatus.finalizeTest(TestID);
 	end procedure;
-	
+
 	impure function simRegisterProcess(Name : STRING; constant IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID is
 	begin
 		return globalSimulationStatus.registerProcess(Name, IsLowPriority);
 	end function;
-	
+
 	impure function simRegisterProcess(constant TestID : T_SIM_TEST_ID; Name : STRING; constant IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID is
 	begin
 		return globalSimulationStatus.registerProcess(TestID, Name, IsLowPriority);
 	end function;
-		
+
 	procedure simDeactivateProcess(ProcID : T_SIM_PROCESS_ID) is
 	begin
 		globalSimulationStatus.deactivateProcess(ProcID);
 	end procedure;
-	
+
 	impure function simIsStopped(constant TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN is
 	begin
 		return globalSimulationStatus.isStopped(TestID);
 	end function;
-	
+
 	impure function simIsFinalized(constant TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN is
 	begin
 		return globalSimulationStatus.isFinalized(TestID);
 	end function;
-	
+
 	impure function simIsAllFinalized return BOOLEAN is
 	begin
 		return globalSimulationStatus.isAllFinalized;
@@ -157,7 +157,7 @@ package body simulation is
 	begin
 		globalSimulationStatus.writeMessage(Message);
 	end procedure;
-	
+
   procedure simFail(Message : in STRING := "") is
   begin
 		globalSimulationStatus.fail(Message);

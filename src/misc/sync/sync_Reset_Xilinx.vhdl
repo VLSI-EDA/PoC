@@ -1,20 +1,20 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Module:				 	sync_Reset_Xilinx
--- 
+--
 -- Description:
 -- ------------------------------------
 --    This is the Xilinx specific implementation of the entity
 --    'PoC.misc.sync.sync_Reset'. See the description there on how to use this.
---		
+--
 --		CONSTRAINTS:
 --			The relative placement of the internal sites is constrained by RLOCs.
---		
+--
 --			Xilinx ISE UCF or XCF file:
 --				NET "*_async"		TIG;
 --				INST "*FF1_METASTABILITY_FFS" TNM = "METASTABILITY_FFS";
@@ -28,13 +28,13 @@
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -84,10 +84,10 @@ architecture rtl of sync_Reset_Xilinx is
 	-- Assign synchronization FF pairs to the same slice -> minimal routing delay
 	attribute RLOC of Reset_meta						: signal is "X0Y0";
 	attribute RLOC of Reset_sync						: signal is "X0Y0";
-	
+
 begin
 	assert (SYNC_DEPTH = 2) report "Xilinx synchronizer supports only 2 stages. It could be extended to 4 or 8 on new FPGA series." severity WARNING;
-	
+
 	Reset_async		<= Input;
 
 	FF2_METASTABILITY_FFS : FDP

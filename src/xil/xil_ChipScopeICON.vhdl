@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Module:				 	Generic Xilinx ChipScope ICON wrapper
--- 
+--
 -- Description:
 -- ------------------------------------
 --	This module wraps 15 ChipScope ICON IPCore netlists generated from ChipScope
@@ -28,13 +28,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,7 +70,7 @@ begin
 				CONTROL0		=> ControlBus(0)
 			);
 	end generate;
-	
+
 	genICON2 : if (PORTS = 2) generate
 		ICON : entity PoC.xil_ChipScopeICON_2
 			port map (
@@ -78,7 +78,7 @@ begin
 				CONTROL1		=> ControlBus(1)
 			);
 	end generate;
-	
+
 	genICON3 : if (PORTS = 3) generate
 		ICON : entity PoC.xil_ChipScopeICON_3
 			port map (
@@ -87,7 +87,7 @@ begin
 				CONTROL2		=> ControlBus(2)
 			);
 	end generate;
-	
+
 	genICON4 : if (PORTS = 4) generate
 		ICON : entity PoC.xil_ChipScopeICON_4
 			port map (
@@ -97,7 +97,7 @@ begin
 				CONTROL3		=> ControlBus(3)
 			);
 	end generate;
-	
+
 	genICON5 : if (PORTS = 5) generate
 		ICON : entity PoC.xil_ChipScopeICON_5
 			port map (
@@ -108,7 +108,7 @@ begin
 				CONTROL4		=> ControlBus(4)
 			);
 	end generate;
-	
+
 	genICON6 : if (PORTS = 6) generate
 		ICON : entity PoC.xil_ChipScopeICON_6
 			port map (
@@ -120,7 +120,7 @@ begin
 				CONTROL5		=> ControlBus(5)
 			);
 	end generate;
-	
+
 	genICON7 : if (PORTS = 7) generate
 		ICON : entity PoC.xil_ChipScopeICON_7
 			port map (
@@ -133,7 +133,7 @@ begin
 				CONTROL6		=> ControlBus(6)
 			);
 	end generate;
-	
+
 	genICON8 : if (PORTS = 8) generate
 		ICON : entity PoC.xil_ChipScopeICON_8
 			port map (
@@ -147,7 +147,7 @@ begin
 				CONTROL7		=> ControlBus(7)
 			);
 	end generate;
-	
+
 	genICON9 : if (PORTS = 9) generate
 		ICON : entity PoC.xil_ChipScopeICON_9
 			port map (
@@ -162,7 +162,7 @@ begin
 				CONTROL8		=> ControlBus(8)
 			);
 	end generate;
-	
+
 	genICON10 : if (PORTS = 10) generate
 		ICON : entity PoC.xil_ChipScopeICON_10
 			port map (
@@ -178,7 +178,7 @@ begin
 				CONTROL9		=> ControlBus(9)
 			);
 	end generate;
-	
+
 	genICON11 : if (PORTS = 11) generate
 		ICON : entity PoC.xil_ChipScopeICON_11
 			port map (
@@ -195,7 +195,7 @@ begin
 				CONTROL10		=> ControlBus(10)
 			);
 	end generate;
-	
+
 	genICON12 : if (PORTS = 12) generate
 		ICON : entity PoC.xil_ChipScopeICON_12
 			port map (
@@ -213,7 +213,7 @@ begin
 				CONTROL11		=> ControlBus(11)
 			);
 	end generate;
-	
+
 	genICON13 : if (PORTS = 13) generate
 		ICON : entity PoC.xil_ChipScopeICON_13
 			port map (
@@ -232,7 +232,7 @@ begin
 				CONTROL12		=> ControlBus(12)
 			);
 	end generate;
-	
+
 	genICON14 : if (PORTS = 14) generate
 		ICON : entity PoC.xil_ChipScopeICON_14
 			port map (
@@ -252,7 +252,7 @@ begin
 				CONTROL13		=> ControlBus(13)
 			);
 	end generate;
-	
+
 	genICON15 : if (PORTS = 15) generate
 		ICON : entity PoC.xil_ChipScopeICON_15
 			port map (

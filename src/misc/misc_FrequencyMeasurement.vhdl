@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
@@ -12,19 +12,19 @@
 --		This module counts 1 second in a reference timer at reference clock. This
 --		reference time is used to start and stop a timer at input clock. The counter
 --		value is the measured frequency in Hz.
---		
--- 
+--
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,15 +50,15 @@ entity misc_FrequencyMeasurement is
 	port (
 		Reference_Clock		: in	STD_LOGIC;
 		Input_Clock				: in	STD_LOGIC;
-		
+
 		Start							: in	STD_LOGIC;
 		Done							: out	STD_LOGIC;
 		Result						: out	T_SLV_32
-	); 
-end entity; 
+	);
+end entity;
 
 
-architecture rtl of misc_FrequencyMeasurement is 
+architecture rtl of misc_FrequencyMeasurement is
 	constant TIMEBASE_COUNTER_MAX			: POSITIVE																:= TimingToCycles(ite(SIMULATION, 10 us, 1 sec), REFERENCE_CLOCK_FREQ);
 	constant TIMEBASE_COUNTER_BITS		: POSITIVE																:= log2ceilnz(TIMEBASE_COUNTER_MAX);
 
@@ -74,17 +74,17 @@ architecture rtl of misc_FrequencyMeasurement is
 
 	signal Frequency_Counter_en_r			: STD_LOGIC																:= '0';
 	signal Frequency_Counter_us				: UNSIGNED(31 downto 0)										:= (others => '0');
-	
+
 	signal CaptureResult							: STD_LOGIC;
 	signal CaptureResult_d						: STD_LOGIC																:= '0';
 	signal Result_en									: STD_LOGIC;
 	signal Result_d										: T_SLV_32																:= (others => '0');
 	signal Done_r											: STD_LOGIC																:= '0';
 begin
-	
+
 	TimeBase_Counter_rst	<= Start;
 	TimeBase_Counter_nxt	<= TimeBase_Counter_s - 1;
-	
+
 	process(Reference_Clock)
 	begin
 		if rising_edge(Reference_Clock) then
@@ -98,7 +98,7 @@ begin
 
 	TimeBase_Counter_uf		<= TimeBase_Counter_s(TimeBase_Counter_s'high);
 	Stop									<= not TimeBase_Counter_s(TimeBase_Counter_s'high) and TimeBase_Counter_nxt(TimeBase_Counter_nxt'high);
-	
+
 	sync1 : entity poc.sync_Strobe
 		generic map (
 			BITS			=> 2													-- number of bit to be synchronized
@@ -107,14 +107,14 @@ begin
 			Clock1		=> Reference_Clock,						-- <Clock>	input clock
 			Clock2		=> Input_Clock,								-- <Clock>	output clock
 			Input(0)	=> Start,											-- @Clock1	input vector
-			Input(1)	=> Stop,											-- 
+			Input(1)	=> Stop,											--
 			Output(0)	=> sync_Start,								-- @Clock2:	output vector
-			Output(1)	=> sync_Stop,									-- 
+			Output(1)	=> sync_Stop,									--
 			Busy			=> sync1_Busy
 		);
-	
+
 	Frequency_Counter_en_r	<= ffrs(q => Frequency_Counter_en_r, set => sync_Start, rst => sync_Stop) when rising_edge(Input_Clock);
-	
+
 	process(Input_Clock)
 	begin
 		if rising_edge(Input_Clock) then
@@ -125,11 +125,11 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	CaptureResult		<= sync1_Busy(1);
 	CaptureResult_d	<= CaptureResult		when rising_edge(Reference_Clock);
 	Result_en				<= CaptureResult_d	and not CaptureResult;
-	
+
 	-- Result_d can becaptured from Frequency_Counter_us, because it's stable
 	-- for more than one clock cycle and will not change until the next Start
 	process(Reference_Clock)
@@ -143,7 +143,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	Done		<= Done_r;
 	Result	<= Result_d;
 end;

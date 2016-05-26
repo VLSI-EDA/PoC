@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,8 +45,8 @@ entity ipv6_TX is
 		DEBUG														: BOOLEAN							:= FALSE
 	);
 	port (
-		Clock														: in	STD_LOGIC;								-- 
-		Reset														: in	STD_LOGIC;								-- 
+		Clock														: in	STD_LOGIC;								--
+		Reset														: in	STD_LOGIC;								--
 		-- IN port
 		In_Valid												: in	STD_LOGIC;
 		In_Data													: in	T_SLV_8;
@@ -87,7 +87,7 @@ end entity;
 
 architecture rtl of ipv6_TX is
 	attribute FSM_ENCODING						: STRING;
-	
+
 	type T_STATE is (
 		ST_IDLE,
 			ST_NDP_QUERY,								ST_NDP_QUERY_WAIT,
@@ -128,15 +128,15 @@ begin
 
 	process(State, In_Valid, In_SOF, In_EOF, In_Data,
 					In_Meta_Length,
-					Out_Ack, Out_Meta_rst, Out_Meta_DestMACAddress_nxt,--Out_Meta_DestMACAddress_rev, 
-					NDP_NextHop_Valid, NDP_NextHop_IPv6Address_rst, NDP_NextHop_IPv6Address_nxt, NDP_NextHop_MACAddress_Data,--NDP_NextHop_IPv6Address_rev, 
+					Out_Ack, Out_Meta_rst, Out_Meta_DestMACAddress_nxt,--Out_Meta_DestMACAddress_rev,
+					NDP_NextHop_Valid, NDP_NextHop_IPv6Address_rst, NDP_NextHop_IPv6Address_nxt, NDP_NextHop_MACAddress_Data,--NDP_NextHop_IPv6Address_rev,
 					In_Meta_DestIPv6Address_Data, In_Meta_SrcIPv6Address_Data, In_Meta_TrafficClass, In_Meta_FlowLabel, In_Meta_NextHeader,
 					IPv6SeqCounter_us)
 	begin
 		NextState													<= State;
-		
+
 		In_Ack_i												<= '0';
-		
+
 		Out_Valid													<= '0';
 		Out_Data													<= (others => '0');
 		Out_SOF														<= '0';
@@ -148,7 +148,7 @@ begin
 		In_Meta_SrcIPv6Address_nxt				<= '0';
 		In_Meta_DestIPv6Address_nxt				<= '0';
 		NDP_NextHop_IPv6Address_Data			<= In_Meta_DestIPv6Address_Data;
-		
+
 		NDP_NextHop_MACAddress_rst				<= Out_Meta_rst;
 		NDP_NextHop_MACAddress_nxt				<= Out_Meta_DestMACAddress_nxt;
 		Out_Meta_DestMACAddress_Data			<= NDP_NextHop_MACAddress_Data;
@@ -160,11 +160,11 @@ begin
 			when ST_IDLE =>
 				In_Meta_rst										<= NDP_NextHop_IPv6Address_rst;
 				In_Meta_DestIPv6Address_nxt		<= NDP_NextHop_IPv6Address_nxt;
-				
+
 				if ((In_Valid and In_SOF) = '1') then
 					NextState										<= ST_NDP_QUERY;
 				end if;
-			
+
 			when ST_NDP_QUERY =>
 				Out_Data											<= x"6" & In_Meta_TrafficClass(7 downto 4);
 				Out_SOF												<= '1';
@@ -173,11 +173,11 @@ begin
 				In_Meta_DestIPv6Address_nxt		<= NDP_NextHop_IPv6Address_nxt;
 
 				NDP_NextHop_Query							<= '1';
-				
+
 				if (NDP_NextHop_Valid = '1') then
 					Out_Valid										<= '1';
 					In_Meta_rst									<= '1';		-- reset metadata
-					
+
 					if (Out_Ack	 = '1') then
 						NextState									<= ST_SEND_TRAFFIC_CLASS;
 					else
@@ -186,26 +186,26 @@ begin
 				else
 					NextState										<= ST_NDP_QUERY_WAIT;
 				end if;
-			
+
 			when ST_NDP_QUERY_WAIT =>
 				Out_Valid											<= '0';
 				Out_Data											<= x"6" & In_Meta_TrafficClass(7 downto 4);
 				Out_SOF												<= '1';
-			
+
 				In_Meta_rst										<= NDP_NextHop_IPv6Address_rst;
 				In_Meta_DestIPv6Address_nxt		<= NDP_NextHop_IPv6Address_nxt;
-			
+
 				if (NDP_NextHop_Valid = '1') then
 					Out_Valid										<= '1';
 					In_Meta_rst									<= '1';		-- reset metadata
-					
+
 					if (Out_Ack	 = '1') then
 						NextState									<= ST_SEND_TRAFFIC_CLASS;
 					else
 						NextState									<= ST_SEND_VERSION;
 					end if;
 				end if;
-			
+
 			when ST_SEND_VERSION =>
 				Out_Valid											<= '1';
 				Out_Data											<= x"6" & In_Meta_TrafficClass(7 downto 4);
@@ -214,11 +214,11 @@ begin
 				if (Out_Ack	 = '1') then
 					NextState										<= ST_SEND_TRAFFIC_CLASS;
 				end if;
-			
+
 			when ST_SEND_TRAFFIC_CLASS =>
 				Out_Valid											<= '1';
 				Out_Data											<= In_Meta_TrafficClass(3 downto 0) & In_Meta_FlowLabel(19 downto 16);
-				
+
 				if (Out_Ack	 = '1') then
 					NextState										<= ST_SEND_FLOW_LABEL_1;
 				end if;
@@ -226,94 +226,94 @@ begin
 			when ST_SEND_FLOW_LABEL_1 =>
 				Out_Valid											<= '1';
 				Out_Data											<= In_Meta_FlowLabel(15 downto 8);
-				
+
 				if (Out_Ack	 = '1') then
 					NextState										<= ST_SEND_FLOW_LABEL_2;
 				end if;
-				
+
 			when ST_SEND_FLOW_LABEL_2 =>
 				Out_Valid											<= '1';
 				Out_Data											<= In_Meta_FlowLabel(7 downto 0);
-				
+
 				if (Out_Ack	 = '1') then
 					NextState										<= ST_SEND_In_Meta_Length_0;
 				end if;
-				
+
 			when ST_SEND_In_Meta_Length_0 =>
 				Out_Valid											<= '1';
 				Out_Data											<= In_Meta_Length(15 downto 8);
-				
+
 				if (Out_Ack	 = '1') then
 					NextState										<= ST_SEND_In_Meta_Length_1;
 				end if;
-				
+
 			when ST_SEND_In_Meta_Length_1 =>
 				Out_Valid											<= '1';
 				Out_Data											<= In_Meta_Length(7 downto 0);
-				
+
 				if (Out_Ack	 = '1') then
 					NextState										<= ST_SEND_NEXT_HEADER;
 				end if;
-				
+
 			when ST_SEND_NEXT_HEADER =>
 				Out_Valid											<= '1';
 				Out_Data											<= In_Meta_NextHeader;
-				
+
 				if (Out_Ack	 = '1') then
 					NextState										<= ST_SEND_HOP_LIMIT;
 				end if;
-			
+
 			when ST_SEND_HOP_LIMIT =>
 				Out_Valid											<= '1';
 				Out_Data											<= x"02";		-- TODO: read from cache / routing info
-				
+
 				if (Out_Ack	 = '1') then
 					NextState										<= ST_SEND_SOURCE_ADDRESS;
 				end if;
-			
+
 			when ST_SEND_SOURCE_ADDRESS =>
 				Out_Valid											<= '1';
 				Out_Data											<= In_Meta_SrcIPv6Address_Data;
-				
+
 				if (Out_Ack	 = '1') then
 					In_Meta_SrcIPv6Address_nxt			<= '1';
 					IPv6SeqCounter_en						<= '1';
-				
+
 					if (IPv6SeqCounter_us = 15) then
 						NextState									<= ST_SEND_DESTINATION_ADDRESS;
 					end if;
 				end if;
-			
+
 			when ST_SEND_DESTINATION_ADDRESS =>
 				Out_Valid											<= '1';
 				Out_Data											<= In_Meta_DestIPv6Address_Data;
-				
+
 				if (Out_Ack	 = '1') then
 					In_Meta_DestIPv6Address_nxt	<= '1';
 					IPv6SeqCounter_en						<= '1';
-				
+
 					if (IPv6SeqCounter_us = 15) then
 						NextState									<= ST_SEND_DATA;
 					end if;
 				end if;
-			
+
 			when ST_SEND_DATA =>
 				Out_Valid												<= In_Valid;
 				Out_Data												<= In_Data;
 				Out_EOF													<= In_EOF;
 				In_Ack_i											<= Out_Ack;
-				
+
 				if ((In_EOF and Out_Ack) = '1') then
 					In_Meta_rst										<= '1';
 					NextState											<= ST_IDLE;
 				end if;
-			
+
 			when ST_DISCARD_FRAME =>
 				null;
-			
+
 			when ST_ERROR =>
 				null;
-				
+
 		end case;
 	end process;
 
@@ -329,5 +329,5 @@ begin
 	end process;
 
 	In_Ack													<= In_Ack_i;
-	
+
 end architecture;

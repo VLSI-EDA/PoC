@@ -30,7 +30,7 @@
 -- ============================================================================
 
 context Common is
-	library PoC ;  
+	library PoC ;
 	use PoC.config.all;
 	use PoC.debug.all;
 	use PoC.FileIO.all;

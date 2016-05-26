@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
--- 
+--
 -- Package:					Simulation constants, functions and utilities.
--- 
+--
 -- Description:
 -- ------------------------------------
 --		TODO
@@ -15,13 +15,13 @@
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -78,12 +78,12 @@ package waveform is
 		constant DutyCycle	: in	T_DUTYCYCLE	:= 50 percent;
 		constant Wander			: in	T_WANDER		:=	0 permil
 	);
-	
+
 	procedure simWaitUntilRisingEdge(signal Clock : in STD_LOGIC; constant Times : in POSITIVE);
 	procedure simWaitUntilRisingEdge(constant TestID : in T_SIM_TEST_ID; signal Clock : in STD_LOGIC; constant Times : in POSITIVE);
 	procedure simWaitUntilFallingEdge(signal Clock : in STD_LOGIC; constant Times : in POSITIVE);
 	procedure simWaitUntilFallingEdge(constant TestID : in T_SIM_TEST_ID; signal Clock : in STD_LOGIC; constant Times : in POSITIVE);
-	
+
 	procedure simGenerateClock2(constant TestID : in T_SIM_TEST_ID; signal Clock : out STD_LOGIC; signal Debug : out REAL; constant Period : in TIME);
 
 	-- waveform description
@@ -92,37 +92,37 @@ package waveform is
 		Delay		: TIME;
 		Value		: STD_LOGIC;
 	end record;
-	
+
 	type T_SIM_WAVEFORM_TUPLE_SLV_8 is record
 		Delay		: TIME;
 		Value		: T_SLV_8;
 	end record;
-	
+
 	type T_SIM_WAVEFORM_TUPLE_SLV_16 is record
 		Delay		: TIME;
 		Value		: T_SLV_16;
 	end record;
-	
+
 	type T_SIM_WAVEFORM_TUPLE_SLV_24 is record
 		Delay		: TIME;
 		Value		: T_SLV_24;
 	end record;
-	
+
 	type T_SIM_WAVEFORM_TUPLE_SLV_32 is record
 		Delay		: TIME;
 		Value		: T_SLV_32;
 	end record;
-	
+
 	type T_SIM_WAVEFORM_TUPLE_SLV_48 is record
 		Delay		: TIME;
 		Value		: T_SLV_48;
 	end record;
-	
+
 	type T_SIM_WAVEFORM_TUPLE_SLV_64 is record
 		Delay		: TIME;
 		Value		: T_SLV_64;
 	end record;
-	
+
 	subtype T_SIM_WAVEFORM			is T_TIMEVEC;
 	type T_SIM_WAVEFORM_SL			is array(NATURAL range <>) of T_SIM_WAVEFORM_TUPLE_SL;
 	type T_SIM_WAVEFORM_SLV_8		is array(NATURAL range <>) of T_SIM_WAVEFORM_TUPLE_SLV_8;
@@ -131,7 +131,7 @@ package waveform is
 	type T_SIM_WAVEFORM_SLV_32	is array(NATURAL range <>) of T_SIM_WAVEFORM_TUPLE_SLV_32;
 	type T_SIM_WAVEFORM_SLV_48	is array(NATURAL range <>) of T_SIM_WAVEFORM_TUPLE_SLV_48;
 	type T_SIM_WAVEFORM_SLV_64	is array(NATURAL range <>) of T_SIM_WAVEFORM_TUPLE_SLV_64;
-	
+
 	-- waveform generation procedures
 	-- ===========================================================================
 	-- TODO: get initial value from Waveform(0) if .Delay = o fs, otherwise use (others => 'U') ?
@@ -234,35 +234,35 @@ package waveform is
 		constant Waveform			: in	T_SIM_WAVEFORM_SLV_64;
 		constant InitialValue	: in	T_SLV_64				:= (others => '0')
 	);
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM; Times : NATURAL) return T_SIM_WAVEFORM;
 	function ">" (Wave : T_SIM_WAVEFORM; Offset : TIME) return T_SIM_WAVEFORM;
 	function "<" (Wave : T_SIM_WAVEFORM; Offset : TIME) return T_SIM_WAVEFORM;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_8; Times : NATURAL) return T_SIM_WAVEFORM_SLV_8;
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_8; Offset : TIME) return T_SIM_WAVEFORM_SLV_8;
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_8; Offset : TIME) return T_SIM_WAVEFORM_SLV_8;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_16; Times : NATURAL) return T_SIM_WAVEFORM_SLV_16;
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_16; Offset : TIME) return T_SIM_WAVEFORM_SLV_16;
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_16; Offset : TIME) return T_SIM_WAVEFORM_SLV_16;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_24; Times : NATURAL) return T_SIM_WAVEFORM_SLV_24;
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_24; Offset : TIME) return T_SIM_WAVEFORM_SLV_24;
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_24; Offset : TIME) return T_SIM_WAVEFORM_SLV_24;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_32; Times : NATURAL) return T_SIM_WAVEFORM_SLV_32;
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_32; Offset : TIME) return T_SIM_WAVEFORM_SLV_32;
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_32; Offset : TIME) return T_SIM_WAVEFORM_SLV_32;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_48; Times : NATURAL) return T_SIM_WAVEFORM_SLV_48;
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_48; Offset : TIME) return T_SIM_WAVEFORM_SLV_48;
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_48; Offset : TIME) return T_SIM_WAVEFORM_SLV_48;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_64; Times : NATURAL) return T_SIM_WAVEFORM_SLV_64;
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_64; Offset : TIME) return T_SIM_WAVEFORM_SLV_64;
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_64; Offset : TIME) return T_SIM_WAVEFORM_SLV_64;
-	
+
 	-- convert arrays to waveforms
 	-- TODO: optimize waveform if input data doesn't change
 	-- TODO: write single bit variant
@@ -274,10 +274,10 @@ package waveform is
 	function to_waveform(slvv : T_SLVV_32; Delay : TIME) return T_SIM_WAVEFORM_SLV_32;
 	function to_waveform(slvv : T_SLVV_48; Delay : TIME) return T_SIM_WAVEFORM_SLV_48;
 	function to_waveform(slvv : T_SLVV_64; Delay : TIME) return T_SIM_WAVEFORM_SLV_64;
-	
+
 	-- predefined common waveforms
 	function simGenerateWaveform_Reset(constant Pause : TIME := 0 ns; ResetPulse : TIME := 10 ns) return T_SIM_WAVEFORM;
-	
+
 	-- TODO: integrate VCD simulation functions and procedures from sim_value_change_dump.vhdl here
 	end package;
 
@@ -296,7 +296,7 @@ package body waveform is
 	begin
 		simGenerateClock(C_SIM_DEFAULT_TEST_ID, Clock, Period, Phase, DutyCycle, Wander);
 	end procedure;
-	
+
 	procedure simGenerateClock(
 		constant TestID			: in	T_SIM_TEST_ID;
 		signal	 Clock			: out	STD_LOGIC;
@@ -309,7 +309,7 @@ package body waveform is
 	begin
 		simGenerateClock(TestID, Clock, Period, Phase, DutyCycle, Wander);
 	end procedure;
-	
+
 	procedure simGenerateClock(
 		signal	 Clock			: out	STD_LOGIC;
 		constant Period			: in	TIME;
@@ -320,7 +320,7 @@ package body waveform is
 	begin
 		simGenerateClock(C_SIM_DEFAULT_TEST_ID, Clock, Period, Phase, DutyCycle, Wander);
 	end procedure;
-	
+
 	procedure simGenerateClock(
 		constant TestID			: in	T_SIM_TEST_ID;
 		signal	 Clock			: out	STD_LOGIC;
@@ -337,7 +337,7 @@ package body waveform is
 		constant TimeHigh						: TIME			:= Period * DutyCycleAsFactor + (Period * (WanderAsFactor / 2.0));	-- add 50% wander to the high level
 		constant TimeLow						: TIME			:= Period - TimeHigh + (Period * WanderAsFactor);						-- and 50% to the low level
 		constant ClockAfterRun_cy		: POSITIVE	:= 5;
-		
+
 		constant PROCESS_ID					: T_SIM_PROCESS_ID	:= simRegisterProcess(TestID, "simGenerateClock(freq=" & to_string(to_freq(Period), 2) & ")", IsLowPriority => TRUE);
 	begin
 		-- report "simGenerateClock: (Instance: '" & Clock'instance_name & "')" & CR &
@@ -351,7 +351,7 @@ package body waveform is
 			-- "TimeHigh: "					& TIME'image(TimeHigh) & CR &
 			-- "TimeLow: "						& TIME'image(TimeLow)
 			-- severity NOTE;
-	
+
 		if (Delay = 0 ns) then
 			null;
 		elsif (Delay <= TimeLow) then
@@ -380,13 +380,13 @@ package body waveform is
 		end loop;
 		Clock		<= '0';
 	end procedure;
-	
+
 	type T_SIM_NORMAL_DIST_PARAMETER is record
 		StandardDeviation		: REAL;
 		Mean								: REAL;
 	end record;
 	type T_JITTER_DISTRIBUTION is array (NATURAL range <>) of T_SIM_NORMAL_DIST_PARAMETER;
-	
+
 	procedure simGenerateClock2(
 		constant	TestID	: in	T_SIM_TEST_ID;
 		signal		Clock		: out	STD_LOGIC;
@@ -400,13 +400,13 @@ package body waveform is
 		constant JitterDistribution		: T_JITTER_DISTRIBUTION	:= (
 			-- 0 => (StandardDeviation => 0.2, Mean => -0.4),
 			-- 1 => (StandardDeviation => 0.2, Mean =>  0.4)
-			
+
 			-- 0 => (StandardDeviation => 0.2, Mean => -0.4),
 			-- 1 => (StandardDeviation => 0.3, Mean => -0.1),
 			-- 2 => (StandardDeviation => 0.5, Mean =>  0.0),
 			-- 3 => (StandardDeviation => 0.3, Mean =>  0.1),
 			-- 4 => (StandardDeviation => 0.2, Mean =>  0.4)
-			
+
 			0 => (StandardDeviation => 0.15,	Mean => -0.6),
 			1 => (StandardDeviation => 0.2,		Mean => -0.3),
 			2 => (StandardDeviation => 0.25,	Mean => -0.2),
@@ -419,7 +419,7 @@ package body waveform is
 		variable rand									: REAL;
 		variable Jitter								: REAL;
 		variable Index								: NATURAL;
-		
+
 		constant ClockAfterRun_cy			: POSITIVE	:= 5;
 	begin
 		Clock		<= '1';
@@ -429,10 +429,10 @@ package body waveform is
 			ieee.math_real.Uniform(Seed.Seed1, Seed.Seed2, rand);
 			Index		:= scale(rand, 0, JitterDistribution'length * 10) mod JitterDistribution'length;
 			randNormalDistributedValue(Seed, rand, JitterDistribution(Index).StandardDeviation, JitterDistribution(Index).Mean, -1.0, 1.0);
-			
+
 			Jitter := JitterAsFactor * rand;
 			Debug		<= rand;
-			
+
 			-- Debug		<= integer(rand * 256.0 + 256.0);
 			wait for TimeHigh + (Period * Jitter);
 			Clock		<= '0';
@@ -449,12 +449,12 @@ package body waveform is
 		Clock		<= '0';
 	end procedure;
 
-	
+
 	procedure simWaitUntilRisingEdge(signal Clock : in STD_LOGIC; constant Times : in POSITIVE) is
 	begin
 		simWaitUntilRisingEdge(C_SIM_DEFAULT_TEST_ID, Clock, Times);
 	end procedure;
-	
+
 	procedure simWaitUntilRisingEdge(constant	TestID : in T_SIM_TEST_ID; signal Clock : in STD_LOGIC; constant Times : in POSITIVE) is
 	begin
 		for i in 1 to Times loop
@@ -462,12 +462,12 @@ package body waveform is
 			exit when simIsStopped(TestID);
 		end loop;
 	end procedure;
-	
+
 	procedure simWaitUntilFallingEdge(signal Clock : in STD_LOGIC; constant Times : in POSITIVE) is
 	begin
 		simWaitUntilFallingEdge(C_SIM_DEFAULT_TEST_ID, Clock, Times);
 	end procedure;
-	
+
 	procedure simWaitUntilFallingEdge(constant	TestID : in T_SIM_TEST_ID; signal Clock : in STD_LOGIC; constant Times : in POSITIVE) is
 	begin
 		for i in 1 to Times loop
@@ -475,7 +475,7 @@ package body waveform is
 			exit when simIsStopped(TestID);
 		end loop;
 	end procedure;
-	
+
 	-- waveform generation
 	-- ===========================================================================
 	procedure simGenerateWaveform(
@@ -486,7 +486,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	BOOLEAN;
@@ -506,7 +506,7 @@ package body waveform is
 		end loop;
 		simDeactivateProcess(PROCESS_ID);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		signal	 Wave					: out	STD_LOGIC;
 		constant Waveform			: in	T_SIM_WAVEFORM;
@@ -515,7 +515,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	STD_LOGIC;
@@ -544,7 +544,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	STD_LOGIC;
@@ -570,7 +570,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	T_SLV_8;
@@ -596,7 +596,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	T_SLV_16;
@@ -622,7 +622,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	T_SLV_24;
@@ -648,7 +648,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	T_SLV_32;
@@ -674,7 +674,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	T_SLV_48;
@@ -700,7 +700,7 @@ package body waveform is
 	begin
 		simGenerateWaveform(C_SIM_DEFAULT_TEST_ID, Wave, Waveform, InitialValue);
 	end procedure;
-	
+
 	procedure simGenerateWaveform(
 		constant TestID				: in	T_SIM_TEST_ID;
 		signal	 Wave					: out	T_SLV_64;
@@ -717,7 +717,7 @@ package body waveform is
 		end loop;
 		simDeactivateProcess(PROCESS_ID);
 	end procedure;
-	
+
 	-- Waveform arithmetic
 	function "*" (Wave : T_SIM_WAVEFORM; Times : NATURAL) return T_SIM_WAVEFORM is
 		variable Result		: T_SIM_WAVEFORM(0 to Wave'length * Times - 1);
@@ -727,12 +727,12 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function ">" (Wave : T_SIM_WAVEFORM; Offset : TIME) return T_SIM_WAVEFORM is
 	begin
 		return (Wave(Wave'low) + Offset) & Wave(Wave'low + 1 to Wave'high);
 	end function;
-	
+
 	function "<" (Wave : T_SIM_WAVEFORM; Offset : TIME) return T_SIM_WAVEFORM is
 		variable Result		: T_SIM_WAVEFORM(Wave'range);
 		variable TimePos	: TIME;
@@ -747,7 +747,7 @@ package body waveform is
 		end loop;
 		return (0 => 0 fs);
 	end function;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_8; Times : NATURAL) return T_SIM_WAVEFORM_SLV_8 is
 		variable Result		: T_SIM_WAVEFORM_SLV_8(0 to Wave'length * Times - 1);
 	begin
@@ -756,7 +756,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_8; Offset : TIME) return T_SIM_WAVEFORM_SLV_8 is
 	begin
 		return T_SIM_WAVEFORM_TUPLE_SLV_8'(
@@ -764,12 +764,12 @@ package body waveform is
 			Value => Wave(Wave'low).Value
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
-	
+
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_8; Offset : TIME) return T_SIM_WAVEFORM_SLV_8 is
 	-- begin
 		-- report "Not implemented" severity FAILURE;
 	-- end function;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_16; Times : NATURAL) return T_SIM_WAVEFORM_SLV_16 is
 		variable Result		: T_SIM_WAVEFORM_SLV_16(0 to Wave'length * Times - 1);
 	begin
@@ -778,7 +778,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_16; Offset : TIME) return T_SIM_WAVEFORM_SLV_16 is
 	begin
 		return T_SIM_WAVEFORM_TUPLE_SLV_16'(
@@ -786,12 +786,12 @@ package body waveform is
 			Value => Wave(Wave'low).Value
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
-	
+
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_16; Offset : TIME) return T_SIM_WAVEFORM_SLV_16 is
 	-- begin
 		-- report "Not implemented" severity FAILURE;
 	-- end function;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_24; Times : NATURAL) return T_SIM_WAVEFORM_SLV_24 is
 		variable Result		: T_SIM_WAVEFORM_SLV_24(0 to Wave'length * Times - 1);
 	begin
@@ -800,7 +800,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_24; Offset : TIME) return T_SIM_WAVEFORM_SLV_24 is
 	begin
 		return T_SIM_WAVEFORM_TUPLE_SLV_24'(
@@ -808,12 +808,12 @@ package body waveform is
 			Value => Wave(Wave'low).Value
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
-	
+
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_24; Offset : TIME) return T_SIM_WAVEFORM_SLV_24 is
 	-- begin
 		-- report "Not implemented" severity FAILURE;
 	-- end function;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_32; Times : NATURAL) return T_SIM_WAVEFORM_SLV_32 is
 		variable Result		: T_SIM_WAVEFORM_SLV_32(0 to Wave'length * Times - 1);
 	begin
@@ -822,7 +822,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_32; Offset : TIME) return T_SIM_WAVEFORM_SLV_32 is
 	begin
 		return T_SIM_WAVEFORM_TUPLE_SLV_32'(
@@ -830,12 +830,12 @@ package body waveform is
 			Value => Wave(Wave'low).Value
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
-	
+
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_32; Offset : TIME) return T_SIM_WAVEFORM_SLV_32 is
 	-- begin
 		-- report "Not implemented" severity FAILURE;
 	-- end function;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_48; Times : NATURAL) return T_SIM_WAVEFORM_SLV_48 is
 		variable Result		: T_SIM_WAVEFORM_SLV_48(0 to Wave'length * Times - 1);
 	begin
@@ -844,7 +844,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_48; Offset : TIME) return T_SIM_WAVEFORM_SLV_48 is
 	begin
 		return T_SIM_WAVEFORM_TUPLE_SLV_48'(
@@ -852,12 +852,12 @@ package body waveform is
 			Value => Wave(Wave'low).Value
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
-	
+
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_48; Offset : TIME) return T_SIM_WAVEFORM_SLV_48 is
 	-- begin
 		-- report "Not implemented" severity FAILURE;
 	-- end function;
-	
+
 	function "*" (Wave : T_SIM_WAVEFORM_SLV_64; Times : NATURAL) return T_SIM_WAVEFORM_SLV_64 is
 		variable Result		: T_SIM_WAVEFORM_SLV_64(0 to Wave'length * Times - 1);
 	begin
@@ -866,7 +866,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function ">" (Wave : T_SIM_WAVEFORM_SLV_64; Offset : TIME) return T_SIM_WAVEFORM_SLV_64 is
 	begin
 		return T_SIM_WAVEFORM_TUPLE_SLV_64'(
@@ -874,13 +874,13 @@ package body waveform is
 			Value => Wave(Wave'low).Value
 		) & Wave(Wave'low + 1 to Wave'high);
 	end function;
-	
+
 	-- function "<" (Wave : T_SIM_WAVEFORM_SLV_64; Offset : TIME) return T_SIM_WAVEFORM_SLV_64 is
 	-- begin
 		-- report "Not implemented" severity FAILURE;
 	-- end function;
-	
-	
+
+
 	function to_waveform(bv : BIT_VECTOR; Delay : TIME) return T_SIM_WAVEFORM is
 		variable Result		: T_SIM_WAVEFORM(0 to bv'length - 1);
 	begin
@@ -890,7 +890,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function to_waveform(slv : STD_LOGIC_VECTOR; Delay : TIME) return T_SIM_WAVEFORM_SL is
 		variable Result		: T_SIM_WAVEFORM_SL(0 to slv'length - 1);
 	begin
@@ -900,7 +900,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function to_waveform(slvv : T_SLVV_8; Delay : TIME) return T_SIM_WAVEFORM_SLV_8 is
 		variable Result		: T_SIM_WAVEFORM_SLV_8(0 to slvv'length - 1);
 	begin
@@ -910,7 +910,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function to_waveform(slvv : T_SLVV_16; Delay : TIME) return T_SIM_WAVEFORM_SLV_16 is
 		variable Result		: T_SIM_WAVEFORM_SLV_16(0 to slvv'length - 1);
 	begin
@@ -920,7 +920,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function to_waveform(slvv : T_SLVV_24; Delay : TIME) return T_SIM_WAVEFORM_SLV_24 is
 		variable Result		: T_SIM_WAVEFORM_SLV_24(0 to slvv'length - 1);
 	begin
@@ -930,7 +930,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function to_waveform(slvv : T_SLVV_32; Delay : TIME) return T_SIM_WAVEFORM_SLV_32 is
 		variable Result		: T_SIM_WAVEFORM_SLV_32(0 to slvv'length - 1);
 	begin
@@ -940,7 +940,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function to_waveform(slvv : T_SLVV_48; Delay : TIME) return T_SIM_WAVEFORM_SLV_48 is
 		variable Result		: T_SIM_WAVEFORM_SLV_48(0 to slvv'length - 1);
 	begin
@@ -950,7 +950,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function to_waveform(slvv : T_SLVV_64; Delay : TIME) return T_SIM_WAVEFORM_SLV_64 is
 		variable Result		: T_SIM_WAVEFORM_SLV_64(0 to slvv'length - 1);
 	begin
@@ -960,7 +960,7 @@ package body waveform is
 		end loop;
 		return Result;
 	end function;
-	
+
 	-- predefined common waveforms
 	function simGenerateWaveform_Reset(constant Pause : TIME := 0 ns; ResetPulse : TIME := 10 ns) return T_SIM_WAVEFORM is
 		variable p  : TIME;

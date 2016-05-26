@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
@@ -10,18 +10,18 @@
 -- Description:
 -- ------------------------------------
 --		TODO
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,10 +47,10 @@ entity stat_Average is
 	port (
 		Clock					: in	STD_LOGIC;
 		Reset					: in	STD_LOGIC;
-		
+
 		Enable				: in	STD_LOGIC;
 		DataIn				: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-		
+
 		Count					: out	STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
 		Sum						: out	STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
 		Average				: out	STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
@@ -61,25 +61,25 @@ end entity;
 
 architecture rtl of stat_Average is
 	signal DataIn_us	: UNSIGNED(DataIn'range);
-	
+
 	signal Counter_i	: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
 	signal Counter_us	: UNSIGNED(COUNTER_BITS - 1 downto 0)						:= (others => '0');
-	
+
 	signal Sum_i			: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
 	signal Sum_us			: UNSIGNED(COUNTER_BITS - 1 downto 0)						:= (others => '0');
 
 	signal Quotient		: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
 	signal Valid_i		: STD_LOGIC;
-	
+
 	type T_SUM_VECTOR		is array(NATURAL range <>) of STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
 	type T_COUNT_VECTOR	is array(NATURAL range <>) of STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-	
+
 	constant DELAY		: POSITIVE		:= COUNTER_BITS - 1;
-	
+
 	signal Count_d		: T_COUNT_VECTOR(DELAY downto 0)		:= (others => (others => '0'));
 	signal Sum_d			: T_SUM_VECTOR(DELAY downto 0)			:= (others => (others => '0'));
 --	signal Valid_d		: STD_LOGIC_VECTOR(DELAY downto 0)	:= (others => '0');
-	
+
 begin
 	DataIn_us		<= unsigned(DataIn);
 
@@ -111,7 +111,7 @@ begin
 
       start =>	Enable,
       ready =>	Valid_i,
-			
+
       A =>			Sum_i,
       D =>			Counter_i,
       Q =>			Quotient,
@@ -122,7 +122,7 @@ begin
 	Count_d		<= Count_d(Count_d'high - 1 downto 0) & Counter_i	when rising_edge(Clock);
 	Sum_d			<= Sum_d(Sum_d'high - 1 downto 0) & Sum_i					when rising_edge(Clock);
 --	Valid_d		<= Valid_d(Valid_d'high - 1 downto 0) & Enable		when rising_edge(Clock);
-	
+
 	Count			<= Count_d(Count_d'high);
 	Sum				<= Sum_d(Sum_d'high);
 	Average		<= Quotient;

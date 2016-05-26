@@ -1,33 +1,33 @@
 -- EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================================================================================================
 -- Authors:					Thomas B. Preusser
--- 
+--
 -- Module:					This module detects whether all bit positions of a
 --									std_logic_vector have the same value.
 -- Description:
 -- ------------------------------------
 --	This circuit may, for instance, be used to detect the first sign change
 --	and, thus, the range of a two's complement number.
---	
+--
 --	These components may be chained by using the output of the predecessor as
 --	guard input. This chaining allows to have intermediate results available
 --	while still ensuring the use of a fast carry chain on supporting FPGA
 --	architectures. When chaining, make sure to overlap both vector slices by one
 --	bit position as to avoid an undetected sign change between the slices.
---	
+--
 -- ============================================================================================================================================================
 -- Copyright 2007-2015 Technische Universität Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,7 +59,7 @@ end entity;
 
 architecture rtl of arith_same is
 	constant DEV_INFO	: T_DEVICE_INFO		:= DEVICE_INFO;
-	
+
 	constant K : positive := DEV_INFO.LUT_FanIn;			-- LUT Fanin
 	constant M : positive := (N-2+1/N)/(K-1) + 1;			-- Required Stage Count
 	signal	 p : std_logic_vector(M-1 downto 0);			-- Stage Propagates
@@ -77,7 +77,7 @@ begin
 						'0';
 	end generate;
 
-	-- Compute Equivalence in Carry Chain	
+	-- Compute Equivalence in Carry Chain
 	genXLXn: if DEV_INFO.Vendor /= VENDOR_XILINX generate
 		signal	 s : std_logic_vector(M downto 0);
 	begin

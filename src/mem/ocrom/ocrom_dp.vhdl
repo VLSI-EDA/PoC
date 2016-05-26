@@ -1,11 +1,11 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Martin Zabel
 --									Patrick Lehmann
--- 
+--
 -- Module:				 	True dual-port memory.
 --
 -- Description:
@@ -14,7 +14,7 @@
 --
 -- * dual clock, clock enable,
 -- * 2 read ports.
--- 
+--
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
@@ -27,13 +27,13 @@
 -- ============================================================================
 -- Copyright 2008-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -87,7 +87,7 @@ begin
 		-- RAM can be inferred correctly only for newer FPGAs!
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		rom_t		is array(0 to DEPTH - 1) of word_t;
-		
+
 		-- Compute the initialization of a RAM array, if specified, from the passed file.
 		impure function ocrom_InitMemory(FilePath : string) return rom_t is
 			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
@@ -113,7 +113,7 @@ begin
 		constant rom		: rom_t			:= ocrom_InitMemory(FILENAME);
 		signal a1_reg		: unsigned(A_BITS-1 downto 0);
 		signal a2_reg		: unsigned(A_BITS-1 downto 0);
-		
+
 	begin
 		process(clk1)
 		begin
@@ -132,11 +132,11 @@ begin
 				end if;
 			end if;
 		end process;
-		
+
 		q1 <= rom(to_integer(a1_reg));		-- returns new data
 		q2 <= rom(to_integer(a2_reg));		-- returns new data
 	end generate gInfer;
-	
+
 	gAltera: if (VENDOR = VENDOR_ALTERA) generate
 		component ocram_tdp_altera
 			generic (
@@ -163,7 +163,7 @@ begin
 		-- Direct instantiation of altsyncram (including component
 		-- declaration above) is not sufficient for ModelSim.
 		-- That requires also usage of altera_mf library.
-		
+
 		i: ocram_tdp_altera
 			generic map (
 				A_BITS		=> A_BITS,
@@ -185,7 +185,7 @@ begin
 				q2	 => q2
 			);
 	end generate gAltera;
-	
+
 	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_XILINX))
 		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;

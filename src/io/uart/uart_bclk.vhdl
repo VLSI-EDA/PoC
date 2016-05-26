@@ -1,17 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Martin Zabel
 --									Patrick Lehmann
--- 
+--
 -- Module:				 	UART bit clock / baud rate generator
 --
 -- Description:
 -- ------------------------------------
 --	TODO
--- 
+--
 --	old comments:
 --		UART BAUD rate generator
 --		bclk_r    = bit clock is rising
@@ -22,13 +22,13 @@
 -- ============================================================================
 -- Copyright 2008-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -86,23 +86,23 @@ begin
 					 "  COUNTER_MAX="		& INTEGER'image(BAUDRATE_COUNTER_MAX) & LF &
 					 "  COUNTER_BITS="	& INTEGER'image(BAUDRATE_COUNTER_BITS)
 		severity NOTE;
-	
+
 	assert io_UART_IsTypicalBaudRate(BAUDRATE)
 		report "The baudrate " & to_string(BAUDRATE, 3) & " is not known to be a typical baudrate!"
 		severity WARNING;
 
 	x8_cnt			<= upcounter_next(cnt => x8_cnt, rst => (rst or x8_cnt_done)) when rising_edge(clk);
   x8_cnt_done <= upcounter_equal(cnt => x8_cnt, value => BAUDRATE_COUNTER_MAX - 1);
-	
+
 	x1_cnt			<= upcounter_next(cnt => x1_cnt, rst => rst, en => x8_cnt_done) when rising_edge(clk);
   x1_cnt_done <= comp_allzero(x1_cnt);
-  
+
   -- outputs
 	-- ---------------------------------------------------------------------------
 	-- only x8_cnt_done is pulsed for one clock cycle!
 	bclk_r			<= (x1_cnt_done and x8_cnt_done)	when rising_edge(clk);
 	bclk_x8_r		<= x8_cnt_done										when rising_edge(clk);
-  
+
 	bclk				<= bclk_r;
 	bclk_x8			<= bclk_x8_r;
 end;

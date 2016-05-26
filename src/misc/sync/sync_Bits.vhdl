@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
@@ -14,7 +14,7 @@
 --		synchronizer D-FFs. All bits are independent from each other. If a known
 --		vendor like Altera or Xilinx are recognized, a vendor specific
 --		implementation is choosen.
---		
+--
 --		ATTENTION:
 --			Use this synchronizer only for long time stable signals (flags).
 --
@@ -22,25 +22,25 @@
 --			General:
 --				Please add constraints for meta stability to all '_meta' signals and
 --				timing ignore constraints to all '_async' signals.
---			
+--
 --			Xilinx:
 --				In case of a Xilinx device, this module will instantiate the optimized
 --				module PoC.xil.SyncBits. Please attend to the notes of xil_SyncBits.vhdl.
---		
+--
 --			Altera sdc file:
 --				TODO
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -78,31 +78,31 @@ begin
 	genGeneric : if ((VENDOR /= VENDOR_ALTERA) and (VENDOR /= VENDOR_XILINX)) generate
 		attribute ASYNC_REG							: STRING;
 		attribute SHREG_EXTRACT					: STRING;
-		
+
 	begin
 		gen : for i in 0 to BITS - 1 generate
 			signal Data_async							: STD_LOGIC;
 			signal Data_meta							: STD_LOGIC																		:= INIT_I(i);
 			signal Data_sync							: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 1)		:= (others => INIT_I(i));
-			
+
 			-- Mark register DataSync_async's input as asynchronous and ignore timings (TIG)
 			attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
 
 			-- Prevent XST from translating two FFs into SRL plus FF
 			attribute SHREG_EXTRACT of Data_meta	: signal is "NO";
 			attribute SHREG_EXTRACT of Data_sync	: signal is "NO";
-			
+
 		begin
 			Data_async			<= Input(i);
-		
+
 			process(Clock)
 			begin
 				if rising_edge(Clock) then
 					Data_meta		<= Data_async;
 					Data_sync		<= Data_sync(Data_sync'high - 1 downto 1) & Data_meta;
 				end if;
-			end process;		
-			
+			end process;
+
 			Output(i)	<= Data_sync(Data_sync'high);
 		end generate;
 	end generate;

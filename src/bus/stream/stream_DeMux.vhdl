@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	A generic buffer module for the PoC.Stream protocol.
 --
 -- Description:
@@ -17,13 +17,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS of ANY KIND, either express or implied.
@@ -76,36 +76,36 @@ end;
 architecture rtl of stream_DeMux is
 	attribute KEEP										: BOOLEAN;
 	attribute FSM_ENCODING						: STRING;
-	
+
 	subtype T_CHANNEL_INDEX is NATURAL range 0 to PORTS - 1;
-	
+
 	type T_STATE		is (ST_IDLE, ST_DATAFLOW, ST_DISCARD_FRAME);
-	
+
 	signal State								: T_STATE					:= ST_IDLE;
 	signal NextState						: T_STATE;
-	
+
 	signal Is_SOF								: STD_LOGIC;
 	signal Is_EOF								: STD_LOGIC;
-	
+
 	signal In_Ack_i							: STD_LOGIC;
 	signal Out_Valid_i					: STD_LOGIC;
 	signal DiscardFrame					: STD_LOGIC;
-	
+
 	signal ChannelPointer_rst		: STD_LOGIC;
 	signal ChannelPointer_en		: STD_LOGIC;
 	signal ChannelPointer				: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 	signal ChannelPointer_d			: STD_LOGIC_VECTOR(PORTS - 1 downto 0)								:= (others => '0');
-	
+
 	signal ChannelPointer_bin		: UNSIGNED(log2ceilnz(PORTS) - 1 downto 0);
 	signal idx									: T_CHANNEL_INDEX;
-	
+
 	signal Out_Data_i						: T_SLM(PORTS - 1 downto 0, DATA_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal Out_Meta_i						: T_SLM(PORTS - 1 downto 0, META_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 begin
-	
+
 	In_Ack_i			<= slv_or(Out_Ack	 and ChannelPointer);
 	DiscardFrame	<= slv_nor(DeMuxControl);
-	
+
 	Is_SOF			<= In_Valid and In_SOF;
 	Is_EOF			<= In_Valid and In_EOF;
 
@@ -119,18 +119,18 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	process(State, In_Ack_i, In_Valid, Is_SOF, Is_EOF, DiscardFrame, DeMuxControl, ChannelPointer_d)
 	begin
 		NextState									<= State;
-		
+
 		ChannelPointer_rst				<= Is_EOF;
 		ChannelPointer_en					<= '0';
 		ChannelPointer						<= ChannelPointer_d;
-		
+
 		In_Ack										<= '0';
 		Out_Valid_i								<= '0';
-		
+
 		case State is
 			when ST_IDLE =>
 				ChannelPointer					<= DeMuxControl;
@@ -140,34 +140,34 @@ begin
 						ChannelPointer_en		<= '1';
 						In_Ack							<= In_Ack_i;
 						Out_Valid_i					<= '1';
-					
+
 						NextState						<= ST_DATAFLOW;
 					else
 						In_Ack							<= '1';
-						
+
 						NextState						<= ST_DISCARD_FRAME;
 					end if;
 				end if;
-			
+
 			when ST_DATAFLOW =>
 				In_Ack									<= In_Ack_i;
 				Out_Valid_i							<= In_Valid;
 				ChannelPointer					<= ChannelPointer_d;
-			
+
 				if (Is_EOF = '1') then
 					NextState							<= ST_IDLE;
 				end if;
-				
+
 			when ST_DISCARD_FRAME =>
 				In_Ack									<= '1';
-			
+
 				if (Is_EOF = '1') then
 					NextState							<= ST_IDLE;
 				end if;
 		end case;
 	end process;
-	
-	
+
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -191,8 +191,8 @@ begin
 		Out_SOF(i)				<= In_SOF;
 		Out_EOF(i)				<= In_EOF;
 	end generate;
-	
+
 	Out_Data		<= Out_Data_i;
 	Out_Meta		<= Out_Meta_i;
-	
+
 end architecture;

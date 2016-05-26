@@ -1,13 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Thomas B. Preusser
--- 
+--
 -- Package:					Simulation constants, functions and utilities.
--- 
+--
 -- Description:
 -- ------------------------------------
 --		TODO
@@ -16,13 +16,13 @@
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,26 +52,26 @@ package sim_types is
   -- Simulation Task and Status Management
 	-- ===========================================================================
 	type		T_SIM_BOOLVEC						is array(INTEGER range <>) of BOOLEAN;
-	
+
 	subtype T_SIM_TEST_ID						is INTEGER range -1 to 1023;
 	subtype T_SIM_TEST_NAME					is STRING(1 to 256);
 	subtype T_SIM_PROCESS_ID				is NATURAL range 0 to 1023;
 	subtype T_SIM_PROCESS_NAME			is STRING(1 to 64);
 	subtype T_SIM_PROCESS_INSTNAME	is STRING(1 to 256);
 	type		T_SIM_PROCESS_ID_VECTOR	is array(NATURAL range <>) of T_SIM_PROCESS_ID;
-	
+
 	type T_SIM_TEST_STATUS is (
 		SIM_TEST_STATUS_CREATED,
 		SIM_TEST_STATUS_ACTIVE,
 		SIM_TEST_STATUS_ENDED,
 		SIM_TEST_STATUS_ZOMBI
 	);
-	
+
 	type T_SIM_PROCESS_STATUS is (
 		SIM_PROCESS_STATUS_ACTIVE,
 		SIM_PROCESS_STATUS_ENDED
 	);
-	
+
 	type T_SIM_TEST is record
 		ID									: T_SIM_TEST_ID;
 		Name								: T_SIM_TEST_NAME;
@@ -81,7 +81,7 @@ package sim_types is
 		ActiveProcessCount	: T_SIM_PROCESS_ID;
 	end record;
 	type T_SIM_TEST_VECTOR	is array(INTEGER range <>) of T_SIM_TEST;
-	
+
 	type T_SIM_PROCESS is record
 		ID						: T_SIM_PROCESS_ID;
 		TestID				: T_SIM_TEST_ID;
@@ -90,10 +90,10 @@ package sim_types is
 		IsLowPriority	: BOOLEAN;
 	end record;
 	type T_SIM_PROCESS_VECTOR is array(NATURAL range <>) of T_SIM_PROCESS;
-	
+
 	constant C_SIM_DEFAULT_TEST_ID		: T_SIM_TEST_ID		:= -1;
 	constant C_SIM_DEFAULT_TEST_NAME	: STRING					:= "Default test";
-	
+
 	-- ===========================================================================
 	-- Random Numbers
 	-- ===========================================================================
@@ -110,27 +110,27 @@ package sim_types is
 	function	randInitializeSeed(SeedValue : T_SIM_RAND_SEED) return T_SIM_RAND_SEED;
 	function	randInitializeSeed(SeedVector : T_INTVEC) return T_SIM_RAND_SEED;
 	function	randInitializeSeed(SeedVector : STRING) return T_SIM_RAND_SEED;
-	
+
 	attribute pocIsSimulation of randInitializeSeed[T_SIM_RAND_SEED] : procedure is TRUE;
-	
+
 	-- Uniform distributed random values
 	-- ===========================================================================
 	procedure randUniformDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL);
 	procedure randUniformDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out INTEGER; Minimum : INTEGER; Maximum : INTEGER);
 	procedure randUniformDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; Minimum : REAL; Maximum : REAL);
-	
+
 	-- Normal / Gaussian distributed random values
 	-- ===========================================================================
 	procedure randNormalDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; StandardDeviation : REAL := 1.0; Mean : REAL := 0.0);
 	procedure randNormalDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out INTEGER; StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER);
 	procedure randNormalDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL);
-	
+
 	-- Poisson distributed random values
 	-- ===========================================================================
 	procedure randPoissonDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; Mean : in REAL);
 	procedure randPoissonDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out INTEGER; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER);
 	procedure randPoissonDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL);
-	
+
 	-- ===========================================================================
 	-- Clock Generation
 	-- ===========================================================================
@@ -144,14 +144,14 @@ package sim_types is
 	end units;
 	subtype T_WANDER		is T_PERCENT range -1 one to 1 one;
 	subtype T_DUTYCYCLE	is T_PERCENT range	0 ppb to 1 one;
-	
+
 	type T_DEGREE is range INTEGER'low to INTEGER'high units
 		second;
 		minute	= 60 second;
 		deg			= 60 minute;
 	end units;
 	subtype T_PHASE is T_DEGREE range	-360 deg to 360 deg;
-	
+
 	function ite(cond : BOOLEAN; value1 : T_DEGREE; value2 : T_DEGREE) return T_DEGREE;
 end package;
 
@@ -165,13 +165,13 @@ package body sim_types is
 			return value2;
 		end if;
 	end function;
-	
+
 	-- ===========================================================================
 	-- Random Numbers
 	-- ===========================================================================
 	constant MAX_SEED1_VALUE		: POSITIVE	:= 2147483562;
 	constant MAX_SEED2_VALUE		: POSITIVE	:= 2147483398;
-	
+
 	function randGenerateInitialSeed return T_SIM_RAND_SEED is
 	begin
 		return (
@@ -179,7 +179,7 @@ package body sim_types is
 			Seed2 => 3423
 		);
 	end function;
-	
+
 	function randBoundSeed(SeedValue : in T_SIM_RAND_SEED) return T_SIM_RAND_SEED is
 	begin
 		return (
@@ -187,17 +187,17 @@ package body sim_types is
 			Seed2	=> (SeedValue.Seed2 - 1 mod MAX_SEED2_VALUE) + 1
 		);
 	end function;
-	
+
 	procedure randInitializeSeed(Seed : inout T_SIM_RAND_SEED) is
 	begin
 		Seed	:= randGenerateInitialSeed;
 	end procedure;
-	
+
 	procedure randInitializeSeed(Seed : inout T_SIM_RAND_SEED; SeedValue : in T_SIM_RAND_SEED) is
 	begin
 		Seed	:= randBoundSeed(SeedValue);
 	end procedure;
-	
+
 	procedure randInitializeSeed(Seed : inout T_SIM_RAND_SEED; SeedVector : in T_INTVEC) is
 	begin
 		if (SeedVector'length = 0) then
@@ -218,7 +218,7 @@ package body sim_types is
 			-- Seed.Seed2	:= SeedVector(1);
 		end if;
 	end procedure;
-	
+
 	procedure randInitializeSeed(Seed : inout T_SIM_RAND_SEED; SeedVector : in STRING) is
 	begin
 		if (SeedVector'length = 0) then
@@ -239,31 +239,31 @@ package body sim_types is
 			-- Seed.Seed2	:= CHARACTER'pos(SeedVector(1));
 		end if;
 	end procedure;
-	
+
 	function randInitializeSeed return T_SIM_RAND_SEED is
 	begin
 		return randGenerateInitialSeed;
 	end function;
-	
+
 	function randInitializeSeed(SeedValue : T_SIM_RAND_SEED) return T_SIM_RAND_SEED is
 	begin
 		return randBoundSeed(SeedValue);
 	end function;
-	
+
 	function randInitializeSeed(SeedVector : T_INTVEC) return T_SIM_RAND_SEED is
 		variable Result		: T_SIM_RAND_SEED;
 	begin
 		randInitializeSeed(Result, SeedVector);
 		return Result;
 	end function;
-	
+
 	function randInitializeSeed(SeedVector : STRING) return T_SIM_RAND_SEED is
 		variable Result		: T_SIM_RAND_SEED;
 	begin
 		randInitializeSeed(Result, SeedVector);
 		return Result;
 	end function;
-	
+
 	-- ===========================================================================
 	-- Uniform distributed random values
 	-- ===========================================================================
@@ -279,7 +279,7 @@ package body sim_types is
 		ieee.math_real.Uniform(Seed.Seed1, Seed.Seed2, rand);
 		Value := scale(rand, Minimum, Maximum);
 	end procedure;
-	
+
 	procedure randUniformDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; Minimum : REAL; Maximum : REAL) is
 		variable rand : REAL;
 	begin
@@ -302,7 +302,7 @@ package body sim_types is
 		--													standard normal distribution: mean 0, variance 1
 		Value := StandardDeviation * (sqrt(-2.0 * log(rand1)) * cos(MATH_2_PI * rand2)) + Mean;
 	end procedure;
-	
+
 	procedure randNormalDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out INTEGER; StandardDeviation : in REAL; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) is
 		variable rand_real		: REAL;
 		variable rand_int			: INTEGER;
@@ -316,7 +316,7 @@ package body sim_types is
 		end loop;
 		Value := rand_int;
 	end procedure;
-	
+
 	procedure randNormalDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) is
 		variable rand		: REAL;
 	begin
@@ -328,7 +328,7 @@ package body sim_types is
 		end loop;
 		Value := rand;
 	end procedure;
-	
+
 	-- ===========================================================================
 	-- Poisson distributed random values
 	-- ===========================================================================
@@ -345,7 +345,7 @@ package body sim_types is
 			report "randPoissonDistributedValue: Mean must be greater than 0.0." severity FAILURE;
 			return;
 		end if;
-		
+
 		while (Product >= Bound) loop
 			ieee.math_real.Uniform(Seed.Seed1, Seed.Seed2, rand);
 			Product		:= Product * rand;
@@ -353,7 +353,7 @@ package body sim_types is
 		end loop;
 		Value	:= Result;
 	end procedure;
-	
+
 	procedure randPoissonDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out INTEGER; Mean : in REAL; Minimum : in INTEGER; Maximum : in INTEGER) is
 		variable rand_real		: REAL;
 		variable rand_int			: INTEGER;
@@ -366,7 +366,7 @@ package body sim_types is
 		end loop;
 		Value := rand_int;
 	end procedure;
-	
+
 	procedure randPoissonDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) is
 		variable rand		: REAL;
 	begin

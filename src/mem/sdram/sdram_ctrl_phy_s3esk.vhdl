@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Martin Zabel
--- 
+--
 -- Module:					Physical layer of SDRAM-Controller for Spartan-3E Starter Kit
 --
 -- Description:
@@ -62,13 +62,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -185,7 +185,7 @@ architecture rtl of sdram_ctrl_phy_s3esk is
 
   attribute keep : string;
   attribute keep of rden1_r : signal is "true";
-  
+
 begin  -- rtl
 
   -----------------------------------------------------------------------------
@@ -222,7 +222,7 @@ begin  -- rtl
       Q  => sd_ck_n,
       R  => '0',
       S  => '0');
-  
+
   -----------------------------------------------------------------------------
   -- SDRAM command & address
   -----------------------------------------------------------------------------
@@ -277,7 +277,7 @@ begin  -- rtl
   end process;
 
   dq_en0_n <= wren_r_n;
-  
+
   --
   -- DQS output
   -- NOTE: clock domain change. Timing is critical because destination clock
@@ -287,7 +287,7 @@ begin  -- rtl
   dqs_obuf : for i in 0 to 1 generate
     -- Both "tff" and "off" must be placed in the IOB. Thus, due to placement
     -- constraints, the "off" must be reset with rst90.
-    
+
     tff : FDRSE
       generic map (
         INIT => '1')                    -- disable output
@@ -313,7 +313,7 @@ begin  -- rtl
         S      => '0');
 
   end generate dqs_obuf;
-  
+
   sd_ldqs <= dqs_o_r(0) when dqs_en1_r_n(0) = '0' else 'Z';
   sd_udqs <= dqs_o_r(1) when dqs_en1_r_n(1) = '0' else 'Z';
 
@@ -336,13 +336,13 @@ begin  -- rtl
       wdata_fal_r <= wdata_r(31 downto 16);
     end if;
   end process;
-  
+
   dq_obuf: for i in 0 to 15 generate
     -- A reset can't be applied to the "tff" because then it must also be
     -- applied to the "iff" which is driven be another clock domain.
     -- (Applying reset to "off" is not a problem.)
     -- Thus, the "tff" is reset only due to reset of dq_en0_n.
-    
+
     tff : FDRSE
       generic map (
         INIT => '1')                    -- disable output

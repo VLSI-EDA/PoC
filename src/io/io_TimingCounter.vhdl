@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Module:				 	optimized down-counter to control timings for low speed signals
--- 
+--
 -- Description:
 -- ------------------------------------
 --		This down-counter can be configured with a TIMING_TABLE (a ROM), from which
@@ -18,13 +18,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,7 +49,7 @@ entity io_TimingCounter is
 	  Clock					: in	STD_LOGIC;																		-- clock
 		Enable				: in	STD_LOGIC;																		-- enable counter
 		Load					: in	STD_LOGIC;																		-- load Timing Value from TIMING_TABLE selected by slot
-		Slot					: in	NATURAL range 0 to (TIMING_TABLE'length - 1);	-- 
+		Slot					: in	NATURAL range 0 to (TIMING_TABLE'length - 1);	--
 		Timeout				: out STD_LOGIC																			-- timing reached
 	);
 end;
@@ -72,7 +72,7 @@ architecture rtl of io_TimingCounter is
 	constant COUNTER_BITS		: NATURAL			:= log2ceilnz(TIMING_MAX + 1);
 
 	signal Counter_s				: SIGNED(COUNTER_BITS downto 0)		:= to_signed(TIMING_TABLE2(0), COUNTER_BITS + 1);
-	
+
 begin
 	process(Clock)
 	begin
@@ -84,6 +84,6 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	Timeout <= Counter_s(Counter_s'high);
 end;

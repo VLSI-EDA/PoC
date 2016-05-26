@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Module:				 	sync_Bits_Xilinx
--- 
+--
 -- Description:
 -- ------------------------------------
 --		This is a multi-bit clock-domain-crossing circuit optimized for Xilinx FPGAs.
@@ -14,18 +14,18 @@
 --		platform independent version of this synchronizer, please use
 --		'PoC.misc.sync.sync_Flag', which internally instantiates this module if
 --		a Xilinx FPGA is detected.
---		
+--
 --		ATTENTION:
 --			Use this synchronizer only for long time stable signals (flags).
 --
 --		CONSTRAINTS:
 --			This relative placement of the internal sites is constrained by RLOCs.
---		
+--
 --			Xilinx ISE UCF or XCF file:
 --				NET "*_async"		TIG;
 --				INST "*FF1_METASTABILITY_FFS" TNM = "METASTABILITY_FFS";
 --				TIMESPEC "TS_MetaStability" = FROM FFS TO "METASTABILITY_FFS" TIG;
---			
+--
 --			Xilinx Vivado xdc file:
 --				TODO
 --				TODO
@@ -34,13 +34,13 @@
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -119,18 +119,18 @@ architecture rtl of sync_Bit_Xilinx is
 	signal Data_async				: STD_LOGIC;
 	signal Data_meta				: STD_LOGIC;
 	signal Data_sync				: STD_LOGIC;
-	
+
 	-- Mark register Data_async's input as asynchronous
 	attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
 
 	-- Prevent XST from translating two FFs into SRL plus FF
 	attribute SHREG_EXTRACT of Data_meta	: signal is "NO";
 	attribute SHREG_EXTRACT of Data_sync	: signal is "NO";
-		
+
 	-- Assign synchronization FF pairs to the same slice -> minimal routing delay
 	attribute RLOC of Data_meta						: signal is "X0Y0";
 	attribute RLOC of Data_sync						: signal is "X0Y0";
-		
+
 begin
 	assert (SYNC_DEPTH = 2) report "Xilinx synchronizer supports only 2 stages. It could be extended to 4 or 8 on new FPGA series." severity WARNING;
 
@@ -155,6 +155,6 @@ begin
 			D				=> Data_meta,
 			Q				=> Data_sync
 		);
-	
+
 	Output	<= Data_sync;
 end architecture;

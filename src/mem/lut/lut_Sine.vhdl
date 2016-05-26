@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -64,7 +64,7 @@ begin
 	genQ1 : if (QUARTERS = 1) generate
 		subtype T_RESULT	is NATURAL range 0 to MAX_AMPLITUDE;
 		type		T_LUT			is array (NATURAL range <>) of T_RESULT;
-		
+
 		function generateLUT return T_LUT is
 			variable Result : T_LUT(0 to POINTS - 1)	:= (others => 0);
 			constant STEP					: REAL		:= (90.0 / real(Result'length)) * MATH_DEG_TO_RAD;
@@ -78,7 +78,7 @@ begin
 			end loop;
 			return Result;
 		end function;
-		
+
 		constant LUT	: T_LUT := generateLUT;
 	begin
 		assert (OFFSET_DEG = 0.0) report "Offset > 0.0° is only supported in 4 quadrant mode." severity FAILURE;
@@ -91,7 +91,7 @@ begin
 	genQ12 : if (QUARTERS = 2) generate
 		subtype T_RESULT	is NATURAL range 0 to MAX_AMPLITUDE;
 		type		T_LUT			is array (NATURAL range <>) of T_RESULT;
-		
+
 		function generateLUT return T_LUT is
 			variable Result : T_LUT(0 to POINTS - 1)	:= (others => 0);
 			constant STEP					: REAL		:= (180.0 / real(Result'length)) * MATH_DEG_TO_RAD;
@@ -105,7 +105,7 @@ begin
 			end loop;
 			return Result;
 		end function;
-		
+
 		constant LUT	: T_LUT := generateLUT;
 	begin
 		assert (OFFSET_DEG = 0.0) report "Offset > 0.0° is only supported in 4 quadrant mode." severity FAILURE;
@@ -124,7 +124,7 @@ begin
 	genQ14 : if (QUARTERS = 4) generate
 		subtype T_RESULT	is INTEGER range -MAX_AMPLITUDE to MAX_AMPLITUDE;
 		type		T_LUT			is array (NATURAL range <>) of T_RESULT;
-		
+
 		function generateLUT return T_LUT is
 			variable Result : T_LUT(0 to POINTS - 1)	:= (others => 0);
 			constant STEP					: REAL		:= (360.0 / real(Result'length)) * MATH_DEG_TO_RAD;
@@ -135,12 +135,12 @@ begin
 			for i in Result'range loop
 				report "x=" & str_format(x, 3) & " y=" & str_format((sin(x) * AMPLITUDE_I), 3) severity note;
 				Result(i)	:= integer(sin(x) * AMPLITUDE_I);
-				
+
 				x := x + STEP;
 			end loop;
 			return Result;
 		end function;
-		
+
 		constant LUT	: T_LUT := generateLUT;
 	begin
 
@@ -162,7 +162,7 @@ begin
 		signal Output_d		: STD_LOGIC_VECTOR(Output'range)	:= (others => '0');
 	begin
 		Output_d	<= Output_nxt	when rising_edge(Clock);
-		
+
 		Output		<= Output_d;
 	end generate;
 end;
