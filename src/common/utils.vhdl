@@ -256,6 +256,7 @@ package utils is
 	-- generate bit masks
 	function genmask_high(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR;
 	function genmask_low(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR;
+	function genmask_alternate(len : positive; lsb : std_logic := '0') return std_logic_vector;
 
 	--+ Encodings ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -340,7 +341,7 @@ package body utils is
 
 	-- Logarithms: log*ceil*
 	-- ==========================================================================
-	-- return log2; always round-up
+	-- return log2; always rounded up
 	function log2ceil(arg : positive) return natural is
 		variable tmp : positive;
 		variable log : natural;
@@ -354,14 +355,14 @@ package body utils is
 		end loop;
 		return log;
 	end function;
-	
-	-- return log2; always round-up; the return value is >= 1
+
+	-- return log2; always rounded up; the return value is >= 1
 	function log2ceilnz(arg : positive) return positive is
 	begin
 		return imax(1, log2ceil(arg));
 	end function;
-	
-	-- return log10; always round-up
+
+	-- return log10; always rounded up
 	function log10ceil(arg : positive) return natural is
 		variable tmp : positive;
 		variable log : natural;
@@ -375,8 +376,8 @@ package body utils is
 		end loop;
 		return log;
 	end function;
-	
-	-- return log2; always round-up; the return value is >= 1
+
+	-- return log2; always rounded up; the return value is >= 1
 	function log10ceilnz(arg : positive) return positive is
 	begin
 		return imax(1, log10ceil(arg));
@@ -868,6 +869,18 @@ package body utils is
 		else	
 			return (MaskLength - 1 DOWNTO Bits => '0') & (Bits - 1 DOWNTO 0 => '1');
 		end if;
+	end function;
+
+	function genmask_alternate(len : positive; lsb : std_logic := '0') return std_logic_vector is
+		variable curr : std_logic;
+		variable res  : std_logic_vector(len-1 downto 0);
+	begin
+		curr := lsb;
+		for i in res'reverse_range loop
+			res(i) := curr;
+			curr   := not curr;
+		end loop;
+		return  res;
 	end function;
 
 	-- binary encoding conversion functions
