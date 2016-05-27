@@ -12,14 +12,18 @@ Travis badge with the current branch. Gist at[4].
 [3] https://docs.travis-ci.com/user/status-images/
 [4] https://gist.github.com/dandye/dfe0870a6a1151c89ed9
 """
-import subprocess
+import sys
 import fileinput
+from subprocess import check_output, check_call, call
 
 print "Starting pre-commit hook..."
 
+##############################################################################
+# Derive .md from .tpl
+
 # Collecting values to substitute
 substitutions = {}
-substitutions["BRANCH"] = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
+substitutions["BRANCH"] = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
 
 # Perform patch of README.md
 tpl = open('README.tpl', 'r')
@@ -30,6 +34,15 @@ for line in tpl:
 md .close()
 tpl.close()
 
-subprocess.check_output(["git", "add", "README.md" ])
+check_call(["git", "add", "README.md" ])
+
+##############################################################################
+# Abort on inroduced whitespace-error
+
+if call(["git", "diff", "--cached", "--check"]) != 0:
+    sys.stderr.write("! Commit would introduce whitespace errors. Please fix and try again.\n");
+    exit(1);
+
+##############################################################################
 
 print "Finished pre-commit hook."
