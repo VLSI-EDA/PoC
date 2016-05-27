@@ -1,8 +1,7 @@
-<!--- DO NOT EDIT! This file is generated from .tpl --->
 # The PoC-Library
 
 [![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
-[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=hooks)](https://travis-ci.org/VLSI-EDA/PoC/branches)
+[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch={@BRANCH@})](https://travis-ci.org/VLSI-EDA/PoC/branches)
 [![Documentation Status](https://readthedocs.org/projects/poc-library/badge/?version=latest)](http://poc-library.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)

@@ -1,0 +1,2 @@
+.gitattributes	merge=ours
+*.md		filter=branchify

@@ -1,0 +1,3 @@
+#!/bin/sh
+git config filter.branchify.smudge tools/git/filters/branchify
+git config filter.branchify.clean tools/git/filters/branchify --clean

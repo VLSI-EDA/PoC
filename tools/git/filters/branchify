@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -25,10 +25,28 @@
 # limitations under the License.
 # ==============================================================================
 
-import os
-from subprocess import call
+from sys import argv, stdin
+from subprocess import check_output
 
-hook = os.path.basename(__file__)
-ret  = call(['.git-hooks/run-all.py', '.git-hooks/' + hook + '.d'])
-print hook + ": " + ("PASS" if ret == 0 else "FAIL")
-exit(ret)
+# Determine checked out branch
+branch = str(check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])).strip()
+
+# Defined contexts of {@BRANCH@} replacements
+#   Make sure these strings also trigger correctly when {@BRANCH@} is
+#   actually the name of a branch.
+contexts = [ 'branch={@BRANCH@}' ]
+
+# Translate contexts into concrete replacements
+replacements = {}
+for ctx in contexts:
+	replacements[ctx] = ctx.replace('{@BRANCH@}', branch);
+
+if len(argv) > 1:
+	if argv[1] == '--clean':
+		replacements = {v: k for k, v in replacements.items()}
+
+# Transform the filtered file
+for line in stdin:
+	for key, val in replacements.items():
+		line = line.replace(key, val)
+	print(line, end='')
