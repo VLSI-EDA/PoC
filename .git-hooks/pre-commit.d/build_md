@@ -25,5 +25,32 @@
 # limitations under the License.
 # ==============================================================================
 
-from subprocess import call
-exit(call(['.git-hooks/run-all.py', '.git-hooks/pre-commit.d']))
+"""
+[http://stackoverflow.com/questions/18673694/referencing-current-branch-in-github-readme-md]
+
+Referencing current branch in github readme.md[1]
+
+This pre-commit hook[2] updates the README.md file's
+Travis badge with the current branch. Gist at[4].
+
+[1] http://stackoverflow.com/questions/18673694/referencing-current-branch-in-github-readme-md
+[2] http://www.git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+[3] https://docs.travis-ci.com/user/status-images/
+[4] https://gist.github.com/dandye/dfe0870a6a1151c89ed9
+"""
+from subprocess import check_output, check_call
+
+# Collecting values to substitute
+substitutions = {}
+substitutions["BRANCH"] = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
+
+# Perform patch of README.md
+tpl = open('README.tpl', 'r')
+md  = open('README.md', 'w')
+for line in tpl:
+	for key in substitutions:
+		md.write(line.replace("{@"+key+"@}", substitutions[key]))
+md .close()
+tpl.close()
+
+check_call(["git", "add", "README.md" ])

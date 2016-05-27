@@ -25,5 +25,15 @@
 # limitations under the License.
 # ==============================================================================
 
+import sys
+import os
 from subprocess import call
-exit(call(['.git-hooks/run-all.py', '.git-hooks/pre-commit.d']))
+
+for dir in sys.argv:
+	for root, dirs, files in os.walk(dir):
+		for file in files:
+			print("Executing '" + file + "'")
+			ret = call(os.path.join(root, file))
+			print(" -> " + str(ret))
+			if ret != 0:
+				exit(ret)

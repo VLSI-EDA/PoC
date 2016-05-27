@@ -25,5 +25,12 @@
 # limitations under the License.
 # ==============================================================================
 
+import sys
 from subprocess import call
-exit(call(['.git-hooks/run-all.py', '.git-hooks/pre-commit.d']))
+
+##############################################################################
+# Abort on inroduced whitespace-error
+
+if call(["git", "diff", "--cached", "--check"]) != 0:
+    sys.stderr.write("! Commit would introduce whitespace errors. Please fix and try again.\n");
+    exit(1);
