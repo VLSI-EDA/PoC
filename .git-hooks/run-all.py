@@ -34,6 +34,5 @@ for dir in sys.argv:
 		for file in files:
 			print("Executing '" + file + "'")
 			ret = call(os.path.join(root, file))
-			print(" -> " + str(ret))
 			if ret != 0:
 				exit(ret)

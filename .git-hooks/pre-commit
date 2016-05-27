@@ -25,5 +25,10 @@
 # limitations under the License.
 # ==============================================================================
 
+import os
 from subprocess import call
-exit(call(['.git-hooks/run-all.py', '.git-hooks/pre-commit.d']))
+
+hook = os.path.basename(__file__)
+ret  = call(['.git-hooks/run-all.py', '.git-hooks/' + hook + '.d'])
+print hook + ": " + ("PASS" if ret == 0 else "FAIL")
+exit(ret)
