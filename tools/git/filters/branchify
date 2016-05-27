@@ -29,7 +29,7 @@ from sys import argv, stdin
 from subprocess import check_output
 
 # Determine checked out branch
-branch = str(check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])).strip()
+branch = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], universal_newlines=True).strip()
 
 # Defined contexts of {@BRANCH@} replacements
 #   Make sure these strings also trigger correctly when {@BRANCH@} is
