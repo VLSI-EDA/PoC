@@ -43,13 +43,15 @@ from subprocess import check_output, check_call
 # Collecting values to substitute
 substitutions = {}
 substitutions["BRANCH"] = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
+substitutions["GENERATED_HEADER"] = '<!--- DO NOT EDIT! This file is generated from .tpl --->'
 
 # Perform patch of README.md
 tpl = open('README.tpl', 'r')
 md  = open('README.md', 'w')
 for line in tpl:
 	for key in substitutions:
-		md.write(line.replace("{@"+key+"@}", substitutions[key]))
+		line = line.replace("{@"+key+"@}", substitutions[key])
+  md.write(line)
 md .close()
 tpl.close()
 
