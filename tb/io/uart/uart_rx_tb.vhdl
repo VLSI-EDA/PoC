@@ -1,27 +1,27 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Patrick Lehmann
--- 
+--
 -- Testbench:				For PoC.io.uart.rx
 --
 -- Description:
 -- ------------------------------------
 --	TODO
--- 
+--
 -- License:
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,18 +52,18 @@ end entity;
 architecture tb of uart_rx_tb is
 	constant CLOCK_FREQ		: FREQ			:= 100 MHz;
 	constant BAUDRATE			: BAUD			:= 2.1 MBd;
-	
+
 	signal Clock					: STD_LOGIC;
 	signal Reset					: STD_LOGIC;
 
 	signal BitClock				: STD_LOGIC;
 	signal BitClock_x8		: STD_LOGIC;
-	
+
 	signal UART_RX				: STD_LOGIC;
-	
+
 	signal RX_Strobe			: STD_LOGIC;
 	signal RX_Data				: T_SLV_8;
-	
+
 	function simGenerateWaveform_UART_Word(Data : T_SLV_8; Baudrate : BAUD := 115.200 kBd) return T_SIM_WAVEFORM_SL is
 		constant BIT_TIME : TIME											:= to_time(to_freq(Baudrate));
 		variable Result		: T_SIM_WAVEFORM_SL(0 to 9)	:= (others =>	(Delay => BIT_TIME, Value => '-'));
@@ -75,7 +75,7 @@ architecture tb of uart_rx_tb is
 		Result(9).Value := '1';
 		return Result;
 	end function;
-	
+
 	function simGenerateWaveform_UART_Stream(Data : T_SLVV_8; Baudrate : BAUD := 115.200 kBd) return T_SIM_WAVEFORM_SL is
 		variable Result : T_SIM_WAVEFORM_SL(0 to (Data'length * 10) - 1);
 	begin
@@ -84,14 +84,14 @@ architecture tb of uart_rx_tb is
 		end loop;
 		return Result;
 	end function;
-	
+
 	constant DATA_STREAM	: T_SLVV_8	:= (x"12", x"45", x"FE", x"C4", x"02");
-	
+
 begin
 	simGenerateClock(Clock, CLOCK_FREQ);
 	simGenerateWaveform(Reset, simGenerateWaveform_Reset(Pause => 50 ns));
 	simGenerateWaveform(UART_RX, simGenerateWaveform_UART_Stream(DATA_STREAM, BAUDRATE), '1');
-	
+
 	bclk : entity PoC.uart_bclk
 		generic map (
 			CLOCK_FREQ	=> CLOCK_FREQ,
@@ -122,12 +122,12 @@ begin
 			-- report TIME'image(NOW) severity NOTE;
 			simAssertion((RX_Data = DATA_STREAM(i)), "Data Byte " & INTEGER'image(i) & " received: " & to_string(RX_Data, 'h') & " expected: " & to_string(DATA_STREAM(i), 'h'));
 		end loop;
-		
+
 		wait for 1 us;
-		
+
 		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		wait;  -- forever
 	end process;
-	
+
 end architecture;

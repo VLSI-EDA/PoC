@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ===========================================================================
 -- Module:					FIFO, independent clocks (ic), first-word-fall-through mode
--- 
+--
 -- Authors:					Thomas B. Preusser
 --									Steffen Koehler
 --									Martin Zabel
@@ -12,19 +12,19 @@
 -- Description:
 -- ------------------------------------
 --		Independent clocks meens that read and write clock are unrelated.
---		
+--
 --		This implementation uses dedicated block RAM for storing data.
---		
+--
 --		First-word-fall-through (FWFT) mode is implemented, so data can be read out
 --		as soon as 'valid' goes high. After the data has been captured, then the
 --		signal 'got' must be asserted.
---		
+--
 --		Synchronous reset is used. Both resets may overlap.
---		
+--
 --		DATA_REG (=true) is a hint, that distributed memory or registers should be
 --		used as data storage. The actual memory type depends on the device
 --		architecture. See implementation for details.
---		
+--
 --		*STATE_*_BITS defines the granularity of the fill state indicator
 --		'*state_*'. 'fstate_rd' is associated with the read clock domain and outputs
 --		the guaranteed number of words available in the FIFO. 'estate_wr' is
@@ -33,16 +33,16 @@
 --		that both these indicators cannot replace the 'full' or 'valid' outputs as
 --		they may be implemented as giving pessimistic bounds that are minimally off
 --		the true fill state.
---		
+--
 --		If a fill state is not of interest, set *STATE_*_BITS = 0.
---		
+--
 --		'fstate_rd' and 'estate_wr' are combinatorial outputs and include an address
 --		comparator (subtractor) in their path.
---		
+--
 --		Examples:
 --		- FSTATE_RD_BITS = 1: fstate_rd == 0 => 0/2 full
 --		                      fstate_rd == 1 => 1/2 full (half full)
---		
+--
 --		- FSTATE_RD_BITS = 2: fstate_rd == 0 => 0/4 full
 --		                      fstate_rd == 1 => 1/4 full
 --		                      fstate_rd == 2 => 2/4 full
@@ -52,13 +52,13 @@
 -- ===========================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -125,7 +125,7 @@ architecture rtl of fifo_ic_got is
   signal IPc : std_logic_vector(AN-1 downto 0) := (others => '0');  -- Copy of IP
   signal Avl : std_logic                       := '0';              -- RAM Data available
   signal Vld : std_logic                       := '0';              -- Output Valid
-  
+
   -- Memory Connectivity
   signal wa   : unsigned(A_BITS-1 downto 0);
   signal di   : std_logic_vector(D_BITS-1 downto 0);
@@ -214,7 +214,7 @@ begin
     end process;
     OP1 <= std_logic_vector(Cnt(A_BITS) & (Cnt(A_BITS-1 downto 0) xor ('0' & Cnt(A_BITS-1 downto 1))));
   end block blkOP;
-  
+
   process(clk_rd)
   begin
     if rising_edge(clk_rd) then
@@ -340,7 +340,7 @@ begin
     signal regfile : regfile_t;
     attribute ram_style            : string;  -- XST specific
     attribute ram_style of regfile : signal is "distributed";
-  
+
     -- Altera Quartus II: Allow automatic RAM type selection.
     -- For small RAMs, registers are used on Cyclone devices and the M512 type
     -- is used on Stratix devices. Pass-through logic is not required as

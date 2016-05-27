@@ -1,13 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Thomas B. Preusser
--- 
+--
 -- Package:					Simulation constants, functions and utilities.
--- 
+--
 -- Description:
 -- ------------------------------------
 --		TODO
@@ -16,13 +16,13 @@
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,7 @@ package simulation is
 	-- alias simInitialize					is work.sim_unprotected.initialize[NATURAL, TIME];
 	procedure simInitialize(MaxAssertFailures : NATURAL := NATURAL'high; MaxSimulationRuntime : TIME := TIME'high);
 	alias simFinalize						is work.sim_unprotected.finalize[];
-	
+
 	alias simCreateTest					is work.sim_unprotected.createTest[STRING return T_SIM_TEST_ID];
 	alias simFinalizeTest				is work.sim_unprotected.finalizeTest[T_SIM_TEST_ID];
 	alias simRegisterProcess		is work.sim_unprotected.registerProcess[T_SIM_TEST_ID, STRING, BOOLEAN return T_SIM_PROCESS_ID];
@@ -61,7 +61,7 @@ package simulation is
 	alias simAssertion					is work.sim_unprotected.assertion[BOOLEAN, STRING];
   alias simFail								is work.sim_unprotected.fail[STRING];
 	alias simWriteMessage				is work.sim_unprotected.writeMessage[STRING];
-	
+
 	-- checksum functions
 	-- ===========================================================================
 	-- TODO: move checksum functions here
@@ -78,7 +78,7 @@ package body simulation is
 			work.sim_unprotected.finalize;
 		end if;
 	end procedure;
-	
+
 	procedure simStopAllClocks is
 	begin
 		work.sim_unprotected.stopAllClocks;

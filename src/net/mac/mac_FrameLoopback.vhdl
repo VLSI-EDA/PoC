@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -76,12 +76,12 @@ end entity;
 architecture rtl of mac_FrameLoopback is
 	constant META_STREAMID_SRCADDR		: NATURAL					:= 0;
 	constant META_STREAMID_DESTADDR		: NATURAL					:= 1;
-	
+
 	constant META_BITS								: T_POSVEC				:= (
 		META_STREAMID_SRCADDR			=> 8,
 		META_STREAMID_DESTADDR		=> 8
 	);
-	
+
 	constant META_FIFO_DEPTHS					: T_POSVEC				:= (
 		META_STREAMID_SRCADDR			=> 6,
 		META_STREAMID_DESTADDR		=> 6
@@ -91,11 +91,11 @@ architecture rtl of mac_FrameLoopback is
 	signal LLBuf_MetaIn_Data					: STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
 	signal LLBuf_MetaOut_nxt					: STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
 	signal LLBuf_MetaOut_Data					: STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
-	
+
 begin
 	LLBuf_MetaIn_Data(high(META_BITS, META_STREAMID_SRCADDR)	downto low(META_BITS, META_STREAMID_SRCADDR))		<= In_Meta_SrcMACAddress_Data;
 	LLBuf_MetaIn_Data(high(META_BITS, META_STREAMID_DESTADDR)	downto low(META_BITS, META_STREAMID_DESTADDR))	<= In_Meta_DestMACAddress_Data;
-	
+
 	In_Meta_SrcMACAddress_nxt		<= LLBuf_MetaIn_nxt(META_STREAMID_SRCADDR);
 	In_Meta_DestMACAddress_nxt	<= LLBuf_MetaIn_nxt(META_STREAMID_DESTADDR);
 
@@ -110,7 +110,7 @@ begin
 		port map(
 			Clock													=> Clock,
 			Reset													=> Reset,
-			
+
 			In_Valid											=> In_Valid,
 			In_Data												=> In_Data,
 			In_SOF												=> In_SOF,
@@ -119,7 +119,7 @@ begin
 			In_Meta_rst										=> In_Meta_rst,
 			In_Meta_nxt										=> LLBuf_MetaIn_nxt,
 			In_Meta_Data									=> LLBuf_MetaIn_Data,
-			
+
 			Out_Valid											=> Out_Valid,
 			Out_Data											=> Out_Data,
 			Out_SOF												=> Out_SOF,
@@ -129,13 +129,13 @@ begin
 			Out_Meta_nxt									=> LLBuf_MetaOut_nxt,
 			Out_Meta_Data									=> LLBuf_MetaOut_Data
 		);
-	
+
 	-- unpack LLBuf metadata to signals
 	Out_Meta_SrcMACAddress_Data								<= LLBuf_MetaOut_Data(high(META_BITS, META_STREAMID_DESTADDR)	downto low(META_BITS, META_STREAMID_DESTADDR));			-- Crossover: Source <= Destination
 	Out_Meta_DestMACAddress_Data							<= LLBuf_MetaOut_Data(high(META_BITS, META_STREAMID_SRCADDR)	downto low(META_BITS, META_STREAMID_SRCADDR));			-- Crossover: Destination <= Source
-	
+
 	-- pack metadata nxt signals to LLBuf meta vector
 	LLBuf_MetaOut_nxt(META_STREAMID_SRCADDR)	<= Out_Meta_DestMACAddress_nxt;
 	LLBuf_MetaOut_nxt(META_STREAMID_DESTADDR)	<= Out_Meta_SrcMACAddress_nxt;
-	
+
 end architecture;

@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
@@ -10,18 +10,18 @@
 -- Description:
 -- ------------------------------------
 --		TODO
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,7 +57,7 @@ architecture tb of gearbox_up_cc_tb is
 		OutputBits		: POSITIVE;
 	end record;
 	type T_TUPLE_VECTOR is array(NATURAL range <>) of T_TUPLE;
-	
+
 	constant TB_GENERATOR_LIST	: T_TUPLE_VECTOR	:= ((8, 32), (8, 20), (8, 36), (64, 66), (12, 128));
 
 	constant CLOCK_FREQ					: FREQ						:= 100 MHz;
@@ -66,9 +66,9 @@ architecture tb of gearbox_up_cc_tb is
 begin
 	-- initialize global simulation status
 	simInitialize;
-	
+
 	simGenerateClock(Clock, CLOCK_FREQ);
-	
+
 
 	genInstances : for i in TB_GENERATOR_LIST'range generate
 		constant INPUT_BITS						: POSITIVE		:= TB_GENERATOR_LIST(i).InputBits;
@@ -76,14 +76,14 @@ begin
 		constant OUTPUT_ORDER					: T_BIT_ORDER	:= MSB_FIRST;
 		constant ADD_INPUT_REGISTERS	: BOOLEAN			:= TRUE;
 		constant ADD_OUTPUT_REGISTERS	: BOOLEAN			:= FALSE;
-		
+
 		constant BITS_PER_CHUNK				: POSITIVE		:= greatestCommonDivisor(INPUT_BITS, OUTPUT_BITS);
 		constant INPUT_CHUNKS					: POSITIVE		:= INPUT_BITS / BITS_PER_CHUNK;
 		constant OUTPUT_CHUNKS				: POSITIVE		:= OUTPUT_BITS / BITS_PER_CHUNK;
-		
+
 		subtype T_CHUNK			is STD_LOGIC_VECTOR(BITS_PER_CHUNK - 1 downto 0);
 		type T_CHUNK_VECTOR	is array(NATURAL range <>) of T_CHUNK;
-		
+
 		function to_slv(slvv : T_CHUNK_VECTOR) return STD_LOGIC_VECTOR is
 			variable slv			: STD_LOGIC_VECTOR((slvv'length * BITS_PER_CHUNK) - 1 downto 0);
 		begin
@@ -92,28 +92,28 @@ begin
 			end loop;
 			return slv;
 		end function;
-		
+
 		constant LOOP_COUNT						: POSITIVE		:= 64;
 		constant DELAY								: POSITIVE		:= 16;
-		
+
 		signal SyncIn									: STD_LOGIC;
 		signal ValidIn								: STD_LOGIC;
 		signal DataIn									: STD_LOGIC_VECTOR(INPUT_BITS - 1 downto 0);
-		
+
 		signal SyncOut								: STD_LOGIC;
 		signal ValidOut								: STD_LOGIC;
 		signal DataOut								: STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);
 		signal FirstOut								: STD_LOGIC;
 		signal LastOut								: STD_LOGIC;
-		
+
 		constant simTestID : T_SIM_TEST_ID		:= simCreateTest("Test setup for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
-		
+
 	begin
 		procGenerator : process
 			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
 			-- protected type from RandomPkg
 			variable RandomVar		: RandomPType;
-		
+
 			impure function genChunkedRandomValue return STD_LOGIC_VECTOR is
 				variable Temp			: T_CHUNK_VECTOR(INPUT_CHUNKS - 1 downto 0);
 			begin
@@ -122,7 +122,7 @@ begin
 				end loop;
 				return to_slv(Temp);
 			end function;
-			
+
 		begin
 			RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
 
@@ -132,24 +132,24 @@ begin
 			for i in 0 to 7 loop
 				wait until falling_edge(Clock);
 			end loop;
-			
+
 			SyncIn		<= '1';
 			ValidIn		<= '1';
 			DataIn		<= genChunkedRandomValue;
 			wait until falling_edge(Clock);
-			
+
 			SyncIn		<= '0';
 			for i in 0 to LOOP_COUNT - 1 loop
 				DataIn		<= genChunkedRandomValue;
 				ValidIn		<= '1';
 				wait until falling_edge(Clock);
 			end loop;
-			
+
 			SyncIn		<= '1';
 			ValidIn		<= '1';
 			DataIn		<= genChunkedRandomValue;
 			wait until falling_edge(Clock);
-			
+
 			SyncIn		<= '0';
 			for i in 0 to LOOP_COUNT - 1 loop
 				if (i mod 2 = 1) then
@@ -160,15 +160,15 @@ begin
 				end if;
 				wait until falling_edge(Clock);
 			end loop;
-			
+
 			DataIn		<= (others => '0');
 			ValidIn		<= '0';
-			
+
 			-- This process is finished
 			simDeactivateProcess(simProcessID);
 			wait;		-- forever
 		end process;
-		
+
 		gear : entity PoC.gearbox_up_cc
 			generic map (
 				INPUT_BITS						=> INPUT_BITS,
@@ -180,12 +180,12 @@ begin
 			)
 			port map (
 				Clock				=> Clock,
-				
+
 				In_Sync			=> SyncIn,
 				In_Valid		=> ValidIn,
 				In_Data			=> DataIn,
 				In_Meta			=> (others => '0'),	--MetaIn,
-				
+
 				Out_Sync		=> SyncOut,
 				Out_Valid		=> ValidOut,
 				Out_Data		=> DataOut,
@@ -193,29 +193,29 @@ begin
 				Out_First		=> FirstOut,
 				Out_Last		=> LastOut
 			);
-		
+
 		procChecker : process
 			variable simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
 			variable Check				: BOOLEAN;
 		begin
 			Check		:= TRUE;
-			
+
 			wait until rising_edge(Clock) and (FirstOut = '1');
-			
+
 			for i in 0 to LOOP_COUNT - 1 loop
 				wait until rising_edge(Clock);
 				-- simAssertion(Check, "TODO: ");
 			end loop;
-			
+
 			for i in 0 to LOOP_COUNT - 1 loop
 				wait until rising_edge(Clock);
 				-- simAssertion(Check, "TODO: ");
 			end loop;
-		
+
 			for i in 0 to DELAY - 1 loop
 				wait until rising_edge(Clock);
 			end loop;
-			
+
 			-- This process is finished
 			simDeactivateProcess(simProcessID);
 			simFinalizeTest(simTestID);

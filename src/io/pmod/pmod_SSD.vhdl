@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	Digilent Peritherial Module: Pmod_SSD
 --
 -- Description:
@@ -12,7 +12,7 @@
 --		This module drives a dual-digit 7-segment display (Pmod_SSD). The module
 --		expects two binary encoded 4-bit 'Digit<i>' signals and drives a 2x6 bit
 --		Pmod connector (7 anode bits, 1 cathode bit).
---	
+--
 --		Segment Pos./ Index
 --			 AAA      |   000
 --			F   B     |  5   1
@@ -21,18 +21,18 @@
 --			E   C     |  4   2
 --			E   C     |  4   2
 --			 DDD  DOT |   333  7
---	
+--
 -- License:
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,10 +59,10 @@ entity pmod_SSD is
 	);
 	port (
 		Clock			: in	STD_LOGIC;
-		
+
 		Digit0		: in	STD_LOGIC_VECTOR(3 downto 0);
 		Digit1		: in	STD_LOGIC_VECTOR(3 downto 0);
-			
+
 		SSD				: out	T_PMOD_SSD_PINS
 	);
 end entity;
@@ -71,13 +71,13 @@ end entity;
 architecture rtl of pmod_SSD is
 	constant REFRESHTIMER_MAX		: POSITIVE	:= TimingToCycles(to_time(REFRESH_RATE), CLOCK_FREQ) - 1;
 	constant REFRESHTIMER_BITS	: POSITIVE	:= log2ceilnz(REFRESHTIMER_MAX) + 1;
-	
+
 	signal RefreshTimer_rst	: STD_LOGIC;
 	signal RefreshTimer_s		: SIGNED(REFRESHTIMER_BITS - 1 downto 0)	:= to_signed(REFRESHTIMER_MAX, REFRESHTIMER_BITS);
 
 	signal CathodeSelect_en	: STD_LOGIC;
 	signal CathodeSelect_r	: STD_LOGIC		:= '0';
-	
+
 	signal Digit						: STD_LOGIC_VECTOR(3 downto 0);
 	signal Segments					: STD_LOGIC_VECTOR(6 downto 0);
 begin

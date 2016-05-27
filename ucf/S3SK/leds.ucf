@@ -1,0 +1,16 @@
+#
+# Xilinx User Constraint File (UCF)
+#
+#  Board:  Spartan-3 Starter Kit
+#
+#  Contents: - LEDs
+#
+NET "leds<*>" IOSTANDARD = LVCMOS33 ;
+NET "leds<0>" LOC = "K12" ;
+NET "leds<1>" LOC = "P14" ;
+NET "leds<2>" LOC = "L12" ;
+NET "leds<3>" LOC = "N14" ;
+NET "leds<4>" LOC = "P13" ;
+NET "leds<5>" LOC = "N12" ;
+NET "leds<6>" LOC = "P12" ;
+NET "leds<7>" LOC = "P11" ;

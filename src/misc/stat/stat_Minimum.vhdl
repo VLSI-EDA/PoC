@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
@@ -10,18 +10,18 @@
 -- Description:
 -- ------------------------------------
 --		TODO
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,10 +47,10 @@ entity stat_Minimum is
 	port (
 		Clock					: in	STD_LOGIC;
 		Reset					: in	STD_LOGIC;
-		
+
 		Enable				: in	STD_LOGIC;
 		DataIn				: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-		
+
 		Valids				: out	STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
 		Minimums			: out	T_SLM(DEPTH - 1 downto 0, DATA_BITS - 1 downto 0);
 		Counts				: out	T_SLM(DEPTH - 1 downto 0, COUNTER_BITS - 1 downto 0)
@@ -73,7 +73,7 @@ architecture rtl of stat_Minimum is
 		end loop;
 		return slm;
 	end function;
-	
+
 	function to_slm(usv : T_COUNTER_MEMORY) return T_SLM is
 		variable slm		: T_SLM(usv'range, COUNTER_BITS - 1 downto 0);
 	begin
@@ -93,7 +93,7 @@ architecture rtl of stat_Minimum is
 	signal CounterMemory		: T_COUNTER_MEMORY(DEPTH - 1 downto 0)	:= (others => (others => '0'));
 	signal MinimumIndex			: STD_LOGIC_VECTOR(DEPTH - 1 downto 0)	:= '1' & (DEPTH - 2 downto 0 => '0');	--((DEPTH - 1) => '1', others => '0'); -- WORKAROUND: GHDL says  not static choice exclude others choice;  non-locally static choice for an aggregate is allowed only if only choice
 	signal ValidMemory			: STD_LOGIC_VECTOR(DEPTH - 1 downto 0)	:= (others => '0');
-	
+
 begin
 	DataIn_us		<= unsigned(DataIn);
 

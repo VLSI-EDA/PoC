@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Module:				 	sync_Bits_Altera
--- 
+--
 -- Description:
 -- ------------------------------------
 --		This is a multi-bit clock-domain-crossing circuit optimized for Altera FPGAs.
@@ -14,7 +14,7 @@
 --		flip flops are synchronizer flip flops. If you need a platform independent
 --		version of this synchronizer, please use 'PoC.misc.sync.sync_Flag', which
 --		internally instantiates this module if a Altera FPGA is detected.
---		
+--
 --		ATTENTION:
 --			Use this synchronizer only for long time stable signals (flags).
 --
@@ -24,13 +24,13 @@
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -78,7 +78,7 @@ begin
 		attribute ALTERA_ATTRIBUTE of Data_meta		: signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
 	begin
 		Data_async	<= Input(i);
-	
+
 		process(Clock)
 		begin
 			if rising_edge(Clock) then
@@ -86,8 +86,8 @@ begin
 				Data_sync <= Data_sync(Data_sync'high - 1 downto 0) & Data_meta;
 			end if;
 		end process;
-			
+
 		Output(i)		<= Data_sync(Data_sync'high);
 	end generate;
-	
+
 end architecture;

@@ -42,7 +42,7 @@
 package my_config is
   constant MY_BOARD   : string  := "XUPV5";
   constant MY_DEVICE  : string  := "None";
-		
+
 	-- For internal use only
   constant MY_VERBOSE : boolean	:= false;
 end package;

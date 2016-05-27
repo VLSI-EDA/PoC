@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	Glitch Filter
 --
 -- Description:
@@ -16,13 +16,13 @@
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,7 +56,7 @@ architecture rtl of io_GlitchFilter is
 	-- Timing table ID
 	constant TTID_HIGH_SPIKE				: NATURAL		:= 0;
 	constant TTID_LOW_SPIKE					: NATURAL		:= 1;
-	
+
 	-- Timing table
 	constant TIMING_TABLE						: T_NATVEC	:= (
 		TTID_HIGH_SPIKE			=> HIGH_SPIKE_SUPPRESSION_CYCLES,
@@ -77,7 +77,7 @@ begin
 					 "HighSpikeSuppressionCycles="	& INTEGER'image(TIMING_TABLE(TTID_HIGH_SPIKE))	& "  " &
 					 "LowSpikeSuppressionCycles="		& INTEGER'image(TIMING_TABLE(TTID_LOW_SPIKE))		& "  "
 		severity NOTE;
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -88,41 +88,41 @@ begin
 	process(State, Input, TC_Timeout)
 	begin
 		NextState		<= State;
-		
+
 		TC_en				<= '0';
 		TC_Load			<= '0';
 		TC_Slot			<= 0;
-		
+
 		case State is
 			when '0' =>
 				TC_Slot			<= TTID_HIGH_SPIKE;
-			
+
 				if (Input = '1') then
 					TC_en			<= '1';
 				else
 					TC_Load		<= '1';
 				end if;
-				
+
 				if ((Input and TC_Timeout) = '1') then
 					NextState	<= '1';
 				end if;
 
 			when '1' =>
 				TC_Slot			<= TTID_LOW_SPIKE;
-			
+
 				if (Input = '0') then
 					TC_en			<= '1';
 				else
 					TC_Load		<= '1';
 				end if;
-				
+
 				if ((not Input and TC_Timeout) = '1') then
 					NextState	<= '0';
 				end if;
-			
+
 			when others =>
 				null;
-			
+
 		end case;
 	end process;
 
@@ -134,9 +134,9 @@ begin
 			Clock								=> Clock,													-- clock
 			Enable							=> TC_en,													-- enable counter
 			Load								=> TC_Load,												-- load Timing Value from TIMING_TABLE selected by slot
-			Slot								=> TC_Slot,												-- 
+			Slot								=> TC_Slot,												--
 			Timeout							=> TC_Timeout											-- timing reached
-		);	
+		);
 
 	Output <= State;
 end architecture;

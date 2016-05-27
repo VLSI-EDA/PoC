@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
@@ -13,7 +13,7 @@
 --    'Clock'. The 'Input' can be asserted and de-asserted at any time.
 --    The 'Output' is asserted asynchronously and de-asserted synchronously
 --    to the clock.
--- 
+--
 --		ATTENTION:
 --			Use this synchronizer only to asynchronously reset your design.
 --      The 'Output' should be feed by global buffer to the destination FFs, so
@@ -23,25 +23,25 @@
 --			General:
 --				Please add constraints for meta stability to all '_meta' signals and
 --				timing ignore constraints to all '_async' signals.
---			
+--
 --			Xilinx:
 --				In case of a Xilinx device, this module will instantiate the optimized
 --				module xil_SyncReset. Please attend to the notes of xil_SyncReset.
---		
+--
 --			Altera sdc file:
 --				TODO
---			
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -75,11 +75,11 @@ begin
 	genGeneric : if ((VENDOR /= VENDOR_ALTERA) and (VENDOR /= VENDOR_XILINX)) generate
 		attribute ASYNC_REG										: STRING;
 		attribute SHREG_EXTRACT								: STRING;
-		
+
 		signal Data_async											: STD_LOGIC;
 		signal Data_meta											: STD_LOGIC		:= '1';
 		signal Data_sync											: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 0)		:= (others => '1');
-		
+
 		-- Mark registers as asynchronous
 		attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
 		attribute ASYNC_REG			of Data_sync	: signal is "TRUE";
@@ -87,10 +87,10 @@ begin
 		-- Prevent XST from translating two FFs into SRL plus FF
 		attribute SHREG_EXTRACT of Data_meta	: signal is "NO";
 		attribute SHREG_EXTRACT of Data_sync	: signal is "NO";
-		
+
 	begin
 		Data_async	<= Input;
-	
+
 		process(Clock, Input)
 		begin
 			if (Data_async = '1') then
@@ -100,8 +100,8 @@ begin
 				Data_meta		<= '0';
 				Data_sync		<= Data_sync(Data_sync'high - 1 downto 0) & Data_meta;
 			end if;
-		end process;		
-				
+		end process;
+
 		Output		<= Data_sync(Data_sync'high);
 	end generate;
 
@@ -117,7 +117,7 @@ begin
 				Output			=> Output
 			);
 	end generate;
-	
+
 	-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
 	genXilinx : if (VENDOR = VENDOR_XILINX) generate
 		sync : sync_Reset_Xilinx

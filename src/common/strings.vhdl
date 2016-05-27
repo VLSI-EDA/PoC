@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Thomas B. Preusser
 --									Martin Zabel
@@ -17,13 +17,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,7 +61,7 @@ package strings is
 	-- ===========================================================================
 	subtype T_RAWCHAR				is STD_LOGIC_VECTOR(7 downto 0);
 	type		T_RAWSTRING			is array (NATURAL range <>) of T_RAWCHAR;
-	
+
 	-- testing area:
 	-- ===========================================================================
 	function to_IPStyle(str : STRING)			return T_IPSTYLE;
@@ -69,7 +69,7 @@ package strings is
 	-- to_char
 	function to_char(Value : STD_LOGIC)		return CHARACTER;
 	function to_char(rawchar : T_RAWCHAR) return CHARACTER;
-	
+
 	function to_HexChar(Value : NATURAL)	return CHARACTER;
 	function to_HexChar(Value : UNSIGNED)	return CHARACTER;
 
@@ -83,7 +83,7 @@ package strings is
 	function chr_isUpper(chr : character)					return boolean;
 	function chr_isUpperAlpha(chr : character)		return boolean;
 	function chr_isAlpha(chr : character)					return boolean;
-	
+
 	-- raw_format_* functions
 	function raw_format_bool_bin(Value : BOOLEAN)				return STRING;
 	function raw_format_bool_chr(Value : BOOLEAN)				return STRING;
@@ -96,12 +96,12 @@ package strings is
 	function raw_format_nat_oct(Value : NATURAL)				return STRING;
 	function raw_format_nat_dec(Value : NATURAL)				return STRING;
 	function raw_format_nat_hex(Value : NATURAL)				return STRING;
-	
+
 	-- str_format_* functions
 	function str_format(Value : REAL; precision : NATURAL := 3) return STRING;
-	
+
 	-- to_string
-	function to_string(Value : BOOLEAN) return STRING;	
+	function to_string(Value : BOOLEAN) return STRING;
 	function to_string(Value : INTEGER; base : POSITIVE := 10) return STRING;
 	function to_string(slv : STD_LOGIC_VECTOR; format : CHARACTER; Length : NATURAL := 0; fill : CHARACTER := '0') return STRING;
 	function to_string(rawstring : T_RAWSTRING) return STRING;
@@ -115,8 +115,8 @@ package strings is
 	subtype T_DIGIT_OCT	is INTEGER range -1 to 7;
 	subtype T_DIGIT_DEC	is INTEGER range -1 to 9;
 	subtype T_DIGIT_HEX	is INTEGER range -1 to 15;
-	
-	-- to_digit*	
+
+	-- to_digit*
 	function to_digit_bin(chr : character) return T_DIGIT_BIN;
 	function to_digit_oct(chr : character) return T_DIGIT_OCT;
 	function to_digit_dec(chr : character) return T_DIGIT_DEC;
@@ -129,11 +129,11 @@ package strings is
 	function to_natural_dec(str : STRING) return INTEGER;
 	function to_natural_hex(str : STRING) return INTEGER;
 	function to_natural(str : STRING; base : CHARACTER := 'd') return INTEGER;
-	
+
 	-- to_raw*
 	function to_RawChar(char : character) return T_RAWCHAR;
 	function to_RawString(str : string)		return T_RAWSTRING;
-	
+
 	-- resize
 	function resize(str : STRING; size : POSITIVE; FillChar : CHARACTER := C_POC_NUL)			return STRING;
 --	function resize(rawstr : T_RAWSTRING; size : POSITIVE; FillChar : T_RAWCHAR := x"00")	return T_RAWSTRING;
@@ -141,7 +141,7 @@ package strings is
 	-- Character functions
 	function chr_toLower(chr : character) return character;
 	function chr_toUpper(chr : character) return character;
-	
+
 	-- String functions
 	function str_length(str : STRING)										return NATURAL;
 	function str_equal(str1 : STRING; str2 : STRING)		return BOOLEAN;
@@ -169,7 +169,7 @@ end package;
 
 
 package body strings is
-	-- 
+	--
 	function to_IPStyle(str : STRING) return T_IPSTYLE is
 	begin
 		for i in T_IPSTYLE'pos(T_IPSTYLE'low) to T_IPSTYLE'pos(T_IPSTYLE'high) loop
@@ -177,7 +177,7 @@ package body strings is
 				return T_IPSTYLE'val(i);
 			end if;
 		end loop;
-		
+
 		report "Unknown IPStyle: '" & str & "'" severity FAILURE;
 	end function;
 
@@ -204,13 +204,13 @@ package body strings is
 		return CHARACTER'val(to_integer(unsigned(rawchar)));
 	end function;
 
-	-- 
+	--
 	function to_HexChar(Value : NATURAL) return CHARACTER is
 	  constant HEX : STRING := "0123456789ABCDEF";
 	begin
 		return ite(Value < 16, HEX(Value+1), 'X');
 	end function;
-	
+
 	function to_HexChar(Value : UNSIGNED) return CHARACTER is
 	  constant HEX : STRING := "0123456789ABCDEF";
 	begin
@@ -222,12 +222,12 @@ package body strings is
 	begin
 		return (character'pos('0') <= character'pos(chr)) and (character'pos(chr) <= character'pos('9'));
 	end function;
-	
+
 	function chr_isLowerHexDigit(chr : character) return boolean is
 	begin
 		return (character'pos('a') <= character'pos(chr)) and (character'pos(chr) <= character'pos('f'));
 	end function;
-	
+
 	function chr_isUpperHexDigit(chr : character) return boolean is
 	begin
 		return (character'pos('A') <= character'pos(chr)) and (character'pos(chr) <= character'pos('F'));
@@ -242,17 +242,17 @@ package body strings is
 	begin
 		return chr_isLowerAlpha(chr);
 	end function;
-	
+
 	function chr_isLowerAlpha(chr : character) return boolean is
 	begin
 		return (character'pos('a') <= character'pos(chr)) and (character'pos(chr) <= character'pos('z'));
 	end function;
-	
+
 	function chr_isUpper(chr : character) return boolean is
 	begin
 		return chr_isUpperAlpha(chr);
 	end function;
-	
+
 	function chr_isUpperAlpha(chr : character) return boolean is
 	begin
 		return (character'pos('A') <= character'pos(chr)) and (character'pos(chr) <= character'pos('Z'));
@@ -262,24 +262,24 @@ package body strings is
 	begin
 		return chr_isLowerAlpha(chr) or chr_isUpperAlpha(chr);
 	end function;
-	
+
 	-- raw_format_* functions
 	-- ===========================================================================
 	function raw_format_bool_bin(Value : BOOLEAN) return STRING is
 	begin
 		return ite(Value, "1", "0");
 	end function;
-	
+
 	function raw_format_bool_chr(Value : BOOLEAN) return STRING is
 	begin
 		return ite(Value, "T", "F");
 	end function;
-	
+
 	function raw_format_bool_str(Value : BOOLEAN) return STRING is
 	begin
 		return str_toUpper(boolean'image(Value));
 	end function;
-	
+
 	function raw_format_slv_bin(slv : STD_LOGIC_VECTOR) return STRING is
 		variable Value				: STD_LOGIC_VECTOR(slv'length - 1 downto 0);
 		variable Result				: STRING(1 to slv'length);
@@ -295,7 +295,7 @@ package body strings is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function raw_format_slv_oct(slv : STD_LOGIC_VECTOR) return STRING is
 		variable Value				: STD_LOGIC_VECTOR(slv'length - 1 downto 0);
 		variable Digit				: STD_LOGIC_VECTOR(2 downto 0);
@@ -311,27 +311,27 @@ package body strings is
 			Result(i)	:= to_HexChar(unsigned(Digit));
 			j					:= j + 1;
 		end loop;
-		
+
 		return Result;
 	end function;
-	
+
 	function raw_format_slv_dec(slv : STD_LOGIC_VECTOR) return STRING is
 		variable Value				: STD_LOGIC_VECTOR(slv'length - 1 downto 0);
 		variable Result				: STRING(1 to div_ceil(slv'length, 3));
-		
+
 		subtype	TT_BCD				is INTEGER range 0 to 31;
 		type		TT_BCD_VECTOR	is array(natural range <>) of TT_BCD;
-		
+
 		variable Temp		: TT_BCD_VECTOR(div_ceil(slv'length, 3) - 1 downto 0);
 		variable Carry	: T_UINT_8;
-		
+
 		variable Pos		: NATURAL;
 	begin
 		Temp	:= (others => 0);
 		Pos		:= 0;
 		-- convert input slv to a downto ranged vector
 		Value := ite(slv'ascending, descend(slv), slv);
-	
+
 		for i in Value'range loop
 			Carry		:= to_int(Value(i));
 			for j in Temp'reverse_range loop
@@ -340,7 +340,7 @@ package body strings is
 				Temp(j)	:= Temp(j) - to_int((Temp(j) > 9), 0, 10);
 			end loop;
 		end loop;
-	
+
 		for i in Result'range loop
 			Result(i)		:= to_HexChar(Temp(Temp'high - i + 1));
 			if ((Result(i) /= '0') and (Pos = 0)) then
@@ -350,7 +350,7 @@ package body strings is
 		-- trim leading zeros, except the last
 		return Result(imin(Pos, Result'high) to Result'high);
 	end function;
-	
+
 	function raw_format_slv_hex(slv : STD_LOGIC_VECTOR) return STRING is
 		variable Value				: STD_LOGIC_VECTOR(4*div_ceil(slv'length, 4) - 1 downto 0);
 		variable Digit				: STD_LOGIC_VECTOR(3 downto 0);
@@ -371,22 +371,22 @@ package body strings is
 	begin
 		return raw_format_slv_bin(to_slv(Value, log2ceilnz(Value+1)));
 	end function;
-	
+
 	function raw_format_nat_oct(Value : NATURAL) return STRING is
 	begin
 		return raw_format_slv_oct(to_slv(Value, log2ceilnz(Value+1)));
 	end function;
-	
+
 	function raw_format_nat_dec(Value : NATURAL) return STRING is
 	begin
 		return INTEGER'image(Value);
 	end function;
-	
+
 	function raw_format_nat_hex(Value : NATURAL) return STRING is
 	begin
 		return raw_format_slv_hex(to_slv(Value, log2ceilnz(Value+1)));
 	end function;
-	
+
 	-- str_format_* functions
 	-- ===========================================================================
 	function str_format(Value : REAL; precision : NATURAL := 3) return STRING is
@@ -402,7 +402,7 @@ package body strings is
 	begin
 		return ite ((s < 0.0), "-" & res, res);
 	end function;
-	
+
 	-- to_string
 	-- ===========================================================================
 	function to_string(Value : boolean) return string is
@@ -418,7 +418,7 @@ package body strings is
 		variable Result			: STRING(1 TO len);
 	begin
 		power		:= 1;
-	
+
 		if (base = 10) then
 			return INTEGER'image(Value);
 		else
@@ -450,7 +450,7 @@ package body strings is
 	begin
 		j				:= 0;
 		Result	:= (others => fill);
-	
+
 		if (format = 'b') then
 			for i in Result'reverse_range loop
 				Result(i)		:= to_char(slv(j));
@@ -472,7 +472,7 @@ package body strings is
 		else
 			report "Unknown format character: " & format & "." severity FAILURE;
 		end if;
-		
+
 		return Result;
 	end function;
 
@@ -484,7 +484,7 @@ package body strings is
 		end loop;
 		return Result;
 	end function;
-	
+
 	function to_string(Value : T_BCD_VECTOR) return STRING is
 		variable Result		: STRING(1 to Value'length);
 	begin
@@ -493,7 +493,7 @@ package body strings is
 		end loop;
 		return Result;
 	end function;
-	
+
 	-- to_slv
 	-- ===========================================================================
 	function to_slv(rawstring : T_RAWSTRING) return STD_LOGIC_VECTOR is
@@ -504,7 +504,7 @@ package body strings is
 		end loop;
 		return Result;
 	end function;
-	
+
 	-- to_digit*
 	-- ===========================================================================
 	-- convert a binary digit given as CHARACTER to a digit returned as NATURAL; return -1 on error
@@ -516,7 +516,7 @@ package body strings is
 			when others =>	return -1;
 		end case;
 	end function;
-	
+
 	-- convert an octal digit given as CHARACTER to a digit returned as NATURAL; return -1 on error
 	function to_digit_oct(chr : CHARACTER) return T_DIGIT_OCT is
 		variable dec : INTEGER;
@@ -524,7 +524,7 @@ package body strings is
 		dec := to_digit_dec(chr);
 		return ite((dec < 8), dec, -1);
 	end function;
-	
+
 	-- convert a adecimal digit given as CHARACTER to a digit returned as NATURAL; return -1 on error
 	function to_digit_dec(chr : CHARACTER) return T_DIGIT_DEC is
 	begin
@@ -534,7 +534,7 @@ package body strings is
 			return -1;
 		end if;
 	end function;
-	
+
 	-- convert a hexadecimal digit given as CHARACTER to a digit returned as NATURAL; return -1 on error
 	function to_digit_hex(chr : CHARACTER) return T_DIGIT_HEX is
 	begin
@@ -544,7 +544,7 @@ package body strings is
 		else																return -1;
 		end if;
 	end function;
-	
+
 	-- convert a digit given as CHARACTER to a digit returned as NATURAL; return -1 on error
 	function to_digit(chr : CHARACTER; base : CHARACTER := 'd') return integer is
 	begin
@@ -556,7 +556,7 @@ package body strings is
 			when others =>	report "Unknown base character: " & base & "." severity FAILURE;
 		end case;					-- return statement is explicitly missing otherwise XST won't stop
 	end function;
-	
+
 	-- to_natural*
 	-- ===========================================================================
 	-- convert a binary number given as STRING to a NATURAL; return -1 on error
@@ -574,7 +574,7 @@ package body strings is
 		end loop;
 		return Result;
 	end function;
-	
+
 	-- convert an octal number given as STRING to a NATURAL; return -1 on error
 	function to_natural_oct(str : STRING) return INTEGER is
 		variable Result			: NATURAL;
@@ -628,7 +628,7 @@ package body strings is
 		end loop;
 		return Result;
 	end function;
-	
+
 	-- convert a number given as STRING to a NATURAL; return -1 on error
 	function to_natural(str : STRING; base : CHARACTER := 'd') return INTEGER is
 	begin
@@ -648,7 +648,7 @@ package body strings is
 	begin
 		return std_logic_vector(to_unsigned(CHARACTER'pos(char), T_RAWCHAR'length));
 	end function;
-	
+
 	-- convert a STRING to a RAWSTRING
 	function to_RawString(str : STRING) return T_RAWSTRING is
 		variable Result			: T_RAWSTRING(0 to str'length - 1);
@@ -674,7 +674,7 @@ package body strings is
 		end if;
 		return Result;
 	end function;
-	
+
 --	function resize(str : T_RAWSTRING; size : POSITIVE; FillChar : T_RAWCHAR := x"00") return T_RAWSTRING is
 --		constant ConstNUL		: T_RAWSTRING(1 to 1)				:= (others => x"00");
 --		variable Result			: T_RAWSTRING(1 to size);
@@ -706,7 +706,7 @@ package body strings is
 			return chr;
 		end if;
 	end function;
-	
+
 	-- convert a lower case CHARACTER into an upper case CHARACTER
 	function chr_toUpper(chr : character) return character is
 	begin
@@ -714,9 +714,9 @@ package body strings is
 			return character'val(character'pos(chr) - character'pos('a') + character'pos('A'));
 		else
 			return chr;
-		end if;	
+		end if;
 	end function;
-	
+
 	-- String functions
 	-- ===========================================================================
 	-- count the length of a POC_NUL terminated STRING
@@ -729,7 +729,7 @@ package body strings is
 		end loop;
 		return str'length;
 	end function;
-	
+
 	-- compare two STRINGs for equality
 	-- pre-check the string lengthes to suppress warnings for unqual sized string comparisions.
 	-- QUESTION: overload "=" operator?
@@ -741,7 +741,7 @@ package body strings is
 			return (str1 = str2);
 		end if;
 	end function;
-	
+
 	-- compare two POC_NUL terminated STRINGs
 	function str_match(str1 : STRING; str2 : STRING) return BOOLEAN is
 		constant len	: NATURAL 		:= imin(str1'length, str2'length);
@@ -758,18 +758,18 @@ package body strings is
 				return TRUE;
 			end if;
 		end loop;
-		-- check special cases, 
+		-- check special cases,
 		return (((str1'length = len) and (str2'length = len)) or									-- both strings are fully consumed and equal
 						((str1'length > len) and (str1(str1'low + len) = C_POC_NUL)) or		-- str1 is longer, but str_length equals len
 						((str2'length > len) and (str2(str2'low + len) = C_POC_NUL)));		-- str2 is longer, but str_length equals len
 	end function;
-	
+
 	-- compare two POC_NUL terminated STRINGs; case insentitve
 	function str_imatch(str1 : STRING; str2 : STRING) return BOOLEAN is
 	begin
 		return str_match(str_toLower(str1), str_toLower(str2));
 	end function;
-	
+
 	-- search for chr in a STRING and return the position; return -1 on error
 	function str_pos(str : STRING; chr : CHARACTER; start : NATURAL := 0) return INTEGER is
 	begin
@@ -781,7 +781,7 @@ package body strings is
 		end loop;
 		return -1;
 	end function;
-	
+
 	-- search for pattern in a STRING and return the position; return -1 on error
 	-- QUESTION: implement KMP algorithm?
 	function str_pos(str : STRING; pattern : STRING; start : NATURAL := 0) return INTEGER is
@@ -794,19 +794,19 @@ package body strings is
 		end loop;
 		return -1;
 	end function;
-	
+
 	-- search for chr in a STRING and return the position; case insentitve; return -1 on error
 	function str_ipos(str : STRING; chr : CHARACTER; start : NATURAL := 0) return INTEGER is
 	begin
 		return str_pos(str_toLower(str), chr_toLower(chr));
 	end function;
-	
+
 	-- search for pattern in a STRING and return the position; case insentitve; return -1 on error
 	function str_ipos(str : STRING; pattern : STRING; start : NATURAL := 0) return INTEGER is
 	begin
 		return str_pos(str_toLower(str), str_toLower(pattern));
 	end function;
-	
+
 --	function str_pos(str1 : STRING; str2 : STRING) return INTEGER is
 --		variable PrefixTable	: T_INTVEC(0 to str2'length);
 --		variable j						: INTEGER;
@@ -818,18 +818,18 @@ package body strings is
 --			while ((j >= 0) and str2(j + 1) /= str2(i)) loop
 --				j		:= PrefixTable(j);
 --			end loop;
---		
+--
 --			j										:= j + 1;
 --			PrefixTable(i - 1)	:= j + 1;
 --		end loop;
---		
+--
 --		-- search pattern str2 in text str1
 --		j := 0;
 --		for i in str1'range loop
 --			while ((j >= 0) and str1(i) /= str2(j + 1)) loop
 --				j		:= PrefixTable(j);
 --			end loop;
---		
+--
 --			j := j + 1;
 --			if ((j + 1) = str2'high) then
 --				return i - str2'length + 1;
@@ -838,31 +838,31 @@ package body strings is
 --
 --		return -1;
 --	end function;
-	
+
 	-- check if chr exists in STRING str
 	function str_find(str : STRING; chr : CHARACTER) return boolean is
 	begin
 		return (str_pos(str, chr) > 0);
 	end function;
-	
+
 	-- check if pattern exists in STRING str
 	function str_find(str : STRING; pattern : STRING) return boolean is
 	begin
 		return (str_pos(str, pattern) > 0);
 	end function;
-	
+
 	-- check if chr exists in STRING str; case insentitve
 	function str_ifind(str : STRING; chr : CHARACTER) return boolean is
 	begin
 		return (str_ipos(str, chr) > 0);
 	end function;
-	
+
 	-- check if pattern exists in STRING str; case insentitve
 	function str_ifind(str : STRING; pattern : STRING) return boolean is
 	begin
 		return (str_ipos(str, pattern) > 0);
 	end function;
-	
+
 	-- replace a pattern in a STRING str by the STRING replace
 	function str_replace(str : STRING; pattern : STRING; replace : STRING) return STRING is
 		variable pos		: INTEGER;
@@ -880,7 +880,7 @@ package body strings is
 			return str;
 		end if;
 	end function;
-	
+
 	-- return a sub-string of STRING str
 	-- EXAMPLES:
 	--							  123456789ABC
@@ -910,13 +910,13 @@ package body strings is
 		else										-- Length is positive -> end substring at StartOfString + Length
 			EndOfString			:= StartOfString + Length - 1;
 		end if;
-		
+
 		if (StartOfString < str'low) then			report "StartOfString is out of str's range. (str=" & str & ")"	severity FAILURE;		end if;
 		if (EndOfString < str'high) then			report "EndOfString is out of str's range. (str=" & str & ")"		severity FAILURE;		end if;
-		
+
 		return str(StartOfString to EndOfString);
 	end function;
-	
+
 	-- left-trim the STRING str
 	function str_ltrim(str : STRING; char : CHARACTER := ' ') return STRING is
 	begin
@@ -938,13 +938,13 @@ package body strings is
 		end loop;
 		return "";
 	end function;
-	
+
 	-- remove POC_NUL string termination characters
 	function str_trim(str : STRING) return STRING is
 	begin
 		return str(str'low to str'low + str_length(str) - 1);
 	end function;
-	
+
 	-- center-align a STRING str in a FillChar filled STRING of length Length
 	function str_calign(str : STRING; Length : NATURAL; FillChar : CHARACTER := ' ') return STRING is
 		constant Start		: POSITIVE	:= (Length - str'length) / 2;
@@ -954,7 +954,7 @@ package body strings is
 		Result(Start to (Start + str'length))	:= str;
 		return Result;
 	end function;
-	
+
 	-- left-align a STRING str in a FillChar filled STRING of length Length
 	function str_lalign(str : STRING; Length : NATURAL; FillChar : CHARACTER := ' ') return STRING is
 		variable Result		: STRING(1 to Length);
@@ -963,7 +963,7 @@ package body strings is
 		Result(1 to str'length)	:= str;
 		return Result;
 	end function;
-	
+
 	-- right-align a STRING str in a FillChar filled STRING of length Length
 	function str_ralign(str : STRING; Length : NATURAL; FillChar : CHARACTER := ' ') return STRING is
 		variable Result		: STRING(1 to Length);
@@ -972,7 +972,7 @@ package body strings is
 		Result((Length - str'length + 1) to Length)	:= str;
 		return Result;
 	end function;
-	
+
 	-- convert an upper case STRING into a lower case STRING
 	function str_toLower(str : STRING) return STRING is
 		variable Result		: STRING(str'range);
@@ -982,7 +982,7 @@ package body strings is
 		end loop;
 		return Result;
 	end function;
-	
+
 	-- convert a lower case STRING into an upper case STRING
 	function str_toUpper(str : STRING) return STRING is
 		variable Result		: STRING(str'range);

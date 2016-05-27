@@ -53,7 +53,7 @@ package body debug is
 	begin
 		report "Exporting encoding of '" & Name & "' to '" & tokenFileName & "'..." severity note;
 		report "dbg_ExportEncoding: '" & encodings & "'" severity note;
-		
+
 		-- write file header
 		write(l, STRING'("# Encoding file for '" & Name & "'"));	writeline(tokenFile, l);
 		write(l, STRING'("#"));																		writeline(tokenFile, l);
@@ -63,7 +63,7 @@ package body debug is
 		write(l, STRING'("# Default token value"));								writeline(tokenFile, l);
 		write(l, STRING'("@DEFAULT_TOKEN="));											writeline(tokenFile, l);
 		write(l, STRING'("#"));																		writeline(tokenFile, l);
-		
+
 		-- write state entires
 		cnt  := 0;
 		base := encodings'left;

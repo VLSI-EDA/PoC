@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Martin Zabel
--- 
+--
 -- Module:					Controller for Micron DDR-SDRAM on Spartan-3E Starter Kit Board.
 --
 -- Description:
@@ -33,13 +33,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -103,7 +103,7 @@ entity sdram_ctrl_s3esk is
     user_got_wdata   : out std_logic;
     user_rdata       : out std_logic_vector(31 downto 0);
     user_rstb        : out std_logic;
-    
+
     sd_ck_p    : out   std_logic;
     sd_ck_n    : out   std_logic;
     sd_cke     : out   std_logic;
@@ -130,7 +130,7 @@ architecture rtl of sdram_ctrl_s3esk is
   constant C_BITS : positive := 10;     -- 1024 columns
   constant B_BITS : positive := 2;      -- 4 banks
   constant CL     : positive := 2;      -- CAS latency (req. by PHY)
-  
+
   -- Divide timings from datasheet by clock period.
   -- SDRAM device: MT46V32M16-6T
   constant T_MRD     : integer := integer(ceil(12.0/CLK_PERIOD));

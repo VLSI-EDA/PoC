@@ -91,7 +91,7 @@ architecture rtl of ocram_sdp is
   constant DEPTH : positive := 2**A_BITS;
 
 begin
-	
+
 	gInfer : if ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly
 		-- Xilinx notes:
@@ -103,9 +103,9 @@ begin
 		--	 This is the expected behaviour.
 		--	 With two different clocks, synthesis complains about an undefined
 		--	 read-write behaviour, that can be ignored.
-		
+
     attribute ramstyle : string;
-		
+
     subtype	word_t	is std_logic_vector(D_BITS - 1 downto 0);
     type		ram_t		is array(0 to DEPTH - 1) of word_t;
 
@@ -154,7 +154,7 @@ begin
 				end if;
 			end if;
 		end process;
-		
+
 		process(rclk)
 		begin
 			if rising_edge(rclk) then

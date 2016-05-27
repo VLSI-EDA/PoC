@@ -1,11 +1,11 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Patrick Lehmann
 -- 									Martin Zabel
--- 
+--
 -- Module:					Wrap different cache replacement policies.
 --
 -- Description:
@@ -40,18 +40,18 @@
 -- The output `ReplaceWay` identifies the way which will be replaced as next by
 -- a replace command. In a set-associative cache, this is the way in a specific
 -- cache set (see above).
--- 
+--
 -- License:
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -136,7 +136,7 @@ begin
 --					IF (Insert = '1') THEN
 --						OptionMemory(to_integer(Pointer_us))(VALID_BIT) <= '1';
 --					END IF;
---					
+--
 --					IF (Invalidate = '1') THEN
 --						OptionMemory(to_integer(unsigned(HitWay)))(VALID_BIT)			<= '0';
 --					END IF;
@@ -146,7 +146,7 @@ begin
 --
 --		Replace				<= Insert;
 --		ReplaceWay		<= std_logic_vector(Pointer_us);
---		
+--
 --		PROCESS(Clock)
 --		BEGIN
 --			IF rising_edge(Clock) THEN
@@ -174,7 +174,7 @@ begin
 		-- Command Decoding
 		LRU_Insert		 <= (TagAccess and not Invalidate) or Replace;
 		LRU_Invalidate <= TagAccess and Invalidate;
-		
+
 		KeyIn <= LRU_Key when Replace = '1' else HitWay;
 
 		-- Output

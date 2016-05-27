@@ -1,13 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Module:				 	VHDL package for component declarations, types and functions
 --									associated to the PoC.xil namespace
--- 
+--
 -- Description:
 -- ------------------------------------
 --		This package declares types and components for
@@ -21,13 +21,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -83,20 +83,20 @@ package xil is
 		Mask															: T_XIL_DRP_DATA;
 		Data															: T_XIL_DRP_DATA;
 	end record;
-	
+
 	-- define array indices
 	constant C_XIL_DRP_MAX_CONFIG_COUNT	: POSITIVE	:= 8;
-	
+
 	SUBtype T_XIL_DRP_CONFIG_INDEX			IS INTEGER range 0 TO C_XIL_DRP_MAX_CONFIG_COUNT - 1;
 	type		T_XIL_DRP_CONFIG_VECTOR			is array (NATURAL range <>) of T_XIL_DRP_CONFIG;
-	
+
 	type T_XIL_DRP_CONFIG_SET is record
 		Configs														: T_XIL_DRP_CONFIG_VECTOR(T_XIL_DRP_CONFIG_INDEX);
 		LastIndex													: T_XIL_DRP_CONFIG_INDEX;
 	end record;
-	
+
 	type T_XIL_DRP_CONFIG_ROM						is array (NATURAL range <>) of T_XIL_DRP_CONFIG_SET;
-	
+
 	constant C_XIL_DRP_CONFIG_EMPTY			: T_XIL_DRP_CONFIG				:= (
 		Address =>	(others => '0'),
 		Data =>			(others => '0'),
@@ -116,11 +116,11 @@ package xil is
 			ControlBus	: inout	T_XIL_CHIPSCOPE_CONTROL_VECTOR(PORTS - 1 downto 0)
 		);
 	end component;
-	
+
 	component xil_SystemMonitor_Virtex6 is
 		port (
 			Reset						: in	STD_LOGIC;				-- Reset signal for the System Monitor control logic
-			                
+
 			Alarm_UserTemp	: out	STD_LOGIC;				-- Temperature-sensor alarm output
 			Alarm_OverTemp	: out	STD_LOGIC;				-- Over-Temperature alarm output
 			Alarm						: out	STD_LOGIC;				-- OR'ed output of all the alarms
@@ -132,7 +132,7 @@ package xil is
 	component xil_SystemMonitor_Series7 is
 		port (
 			Reset						: in	STD_LOGIC;				-- Reset signal for the System Monitor control logic
-			                
+
 			Alarm_UserTemp	: out	STD_LOGIC;				-- Temperature-sensor alarm output
 			Alarm_OverTemp	: out	STD_LOGIC;				-- Over-Temperature alarm output
 			Alarm						: out	STD_LOGIC;				-- OR'ed output of all the alarms
@@ -140,5 +140,5 @@ package xil is
 			VN							: in	STD_LOGIC
 		);
 	end component;
-	
+
 end package;

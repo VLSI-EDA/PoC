@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	Pulse Width Modulated (PWM) signal generator
 --
 -- Description:
@@ -16,13 +16,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,12 +59,12 @@ architecture rtl of io_PulseWidthModulation is
 	constant PWM_STEP_FREQ							: FREQ																					:= PWM_FREQ * (PWM_STEPS - 1);
 	constant PWM_FREQUENCYCOUNTER_MAX		: POSITIVE																			:= (CLOCK_FREQ+PWM_STEP_FREQ-1 Hz) / PWM_STEP_FREQ; -- division with round-up
 	constant PWM_FREQUENCYCOUNTER_BITS	: POSITIVE																			:= log2ceilnz(PWM_FREQUENCYCOUNTER_MAX);
-	
+
 	signal PWM_FrequencyCounter_us			: UNSIGNED(PWM_FREQUENCYCOUNTER_BITS downto 0)	:= (others => '0');
 	signal PWM_FrequencyCounter_ov			: STD_LOGIC;
 	signal PWM_PulseCounter_us					: UNSIGNED(PWM_RESOLUTION - 1 downto 0)					:= (others => '0');
 	signal PWM_PulseCounter_ov					: STD_LOGIC;
-	
+
 begin
 	-- PWM frequency counter
 	process(Clock)
@@ -77,9 +77,9 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	PWM_FrequencyCounter_ov	<= to_sl(PWM_FrequencyCounter_us = PWM_FREQUENCYCOUNTER_MAX);
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -90,8 +90,8 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	PWM_PulseCounter_ov <= to_sl(PWM_PulseCounter_us = ((2**PWM_RESOLUTION) - 2)) and PWM_FrequencyCounter_ov;
-	
+
 	PWMOut		<= to_sl(PWM_PulseCounter_us < unsigned(PWMIn));
 end;

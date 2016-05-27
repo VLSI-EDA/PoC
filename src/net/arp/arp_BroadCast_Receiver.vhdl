@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,9 +46,9 @@ entity arp_BroadCast_Receiver is
 		ALLOWED_PROTOCOL_IPV6				: BOOLEAN												:= FALSE
 	);
 	port (
-		Clock												: in	STD_LOGIC;																	-- 
-		Reset												: in	STD_LOGIC;																	-- 
-		
+		Clock												: in	STD_LOGIC;																	--
+		Reset												: in	STD_LOGIC;																	--
+
 		RX_Valid										: in	STD_LOGIC;
 		RX_Data											: in	T_SLV_8;
 		RX_SOF											: in	STD_LOGIC;
@@ -59,10 +59,10 @@ entity arp_BroadCast_Receiver is
 		RX_Meta_SrcMACAddress_Data	: in	T_SLV_8;
 		RX_Meta_DestMACAddress_nxt	: out	STD_LOGIC;
 		RX_Meta_DestMACAddress_Data	: in	T_SLV_8;
-		
+
 		Clear												: in	STD_LOGIC;
 		Error												: OUT STD_LOGIC;
-		
+
 		RequestReceived							: out	STD_LOGIC;
 		Address_rst									: in	STD_LOGIC;
 		SenderMACAddress_nxt				: in	STD_LOGIC;
@@ -77,7 +77,7 @@ end entity;
 
 architecture rtl of arp_BroadCast_Receiver is
 	attribute FSM_ENCODING						: STRING;
-	
+
 	type T_STATE		is (
 		ST_IDLE,
 																	ST_RECEIVE_HARDWARE_type_1,
@@ -138,7 +138,7 @@ architecture rtl of arp_BroadCast_Receiver is
 	signal SenderProtocolAddress_en				: STD_LOGIC;
 	signal SenderProtocolAddress_us				: UNSIGNED(log2ceilnz(PROTOCOL_ADDRESS_LENGTH) - 1 downto 0);
 	signal SenderProtocolAddress_d				: T_SLVV_8(PROTOCOL_ADDRESS_LENGTH - 1 downto 0)								:= (others => (others => '0'));
-	
+
 --	signal TargetIPv4Address_Data_rst			: STD_LOGIC;
 	signal TargetProtocolAddress_en				: STD_LOGIC;
 	signal TargetProtocolAddress_us				: UNSIGNED(log2ceilnz(PROTOCOL_ADDRESS_LENGTH) - 1 downto 0);
@@ -173,12 +173,12 @@ begin
 					SenderMACAddress_nxt, SenderIPAddress_nxt, TargetIPAddress_nxt)
 	begin
 		NextState											<= State;
-		
+
 		RX_Ack												<= '0';
 
 		RequestReceived								<= '0';
 		Error													<= '0';
-		
+
 		IsIPv4_set										<= '0';
 		IsIPv6_set										<= '0';
 
@@ -194,7 +194,7 @@ begin
 		Reader_SenderIP_Counter_en		<= SenderIPAddress_nxt;
 		SenderProtocolAddress_en			<= '0';
 		SenderProtocolAddress_us			<= Writer_Counter_us(SenderProtocolAddress_us'range);
-		
+
 		Reader_TargetIP_Counter_rst		<= Clear OR Address_rst;
 		Reader_TargetIP_Counter_en		<= TargetIPAddress_nxt;
 		TargetProtocolAddress_en			<= '0';
@@ -204,7 +204,7 @@ begin
 			when ST_IDLE =>
 				if (Is_SOF = '1') then
 					RX_Ack					<= '1';
-				
+
 					if (Is_EOF = '0') then
 						if (RX_Data = x"00") then
 							NextState		<= ST_RECEIVE_HARDWARE_type_1;
@@ -215,11 +215,11 @@ begin
 						NextState		<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_HARDWARE_type_1 =>
 				if (RX_Valid = '1') then
 					RX_Ack					<= '1';
-				
+
 					if (Is_EOF = '0') then
 						if (RX_Data = x"01") then
 							NextState		<= ST_RECEIVE_PROTOCOL_type_0;
@@ -230,11 +230,11 @@ begin
 						NextState		<= ST_ERROR;
 					end if;
 				end if;
-		
+
 			when ST_RECEIVE_PROTOCOL_type_0 =>
 				if (RX_Valid = '1') then
 					RX_Ack					<= '1';
-				
+
 					if (Is_EOF = '0') then
 						if ((ALLOWED_PROTOCOL_IPV4 = TRUE) and (RX_Data = x"08")) then
 							IsIPv4_set	<= '1';
@@ -249,11 +249,11 @@ begin
 						NextState		<= ST_ERROR;
 					end if;
 				end if;
-		
+
 			when ST_RECEIVE_PROTOCOL_type_1 =>
 				if (RX_Valid = '1') then
 					RX_Ack					<= '1';
-				
+
 					if (Is_EOF = '0') then
 						if ((IsIPv4_r = '1') and (RX_Data = x"00")) then
 							NextState		<= ST_RECEIVE_HARDWARE_ADDRESS_LENGTH;
@@ -266,11 +266,11 @@ begin
 						NextState		<= ST_ERROR;
 					end if;
 				end if;
-		
+
 			when ST_RECEIVE_HARDWARE_ADDRESS_LENGTH =>
 				if (RX_Valid = '1') then
 					RX_Ack					<= '1';
-				
+
 					if (Is_EOF = '0') then
 						if (RX_Data = x"06") then
 							NextState		<= ST_RECEIVE_PROTOCOL_ADDRESS_LENGTH;
@@ -281,11 +281,11 @@ begin
 						NextState		<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_PROTOCOL_ADDRESS_LENGTH =>
 				if (RX_Valid = '1') then
 					RX_Ack					<= '1';
-				
+
 					if (Is_EOF = '0') then
 						if ((IsIPv4_r = '1') and (RX_Data = x"04")) then
 							NextState		<= ST_RECEIVE_OPERATION_0;
@@ -302,7 +302,7 @@ begin
 			when ST_RECEIVE_OPERATION_0 =>
 				if (RX_Valid = '1') then
 					RX_Ack					<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if (RX_Data = x"00") then
 							NextState		<= ST_RECEIVE_OPERATION_1;
@@ -313,11 +313,11 @@ begin
 						NextState		<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_OPERATION_1 =>
 				if (RX_Valid = '1') then
 					RX_Ack					<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if (RX_Data = x"01") then
 							NextState		<= ST_RECEIVE_SENDER_MAC;
@@ -328,13 +328,13 @@ begin
 						NextState			<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_SENDER_MAC =>
 				if (RX_Valid = '1') then
 					RX_Ack										<= '1';
 					Writer_Counter_en					<= '1';
 					SenderHardwareAddress_en	<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if (Writer_Counter_us = (HARDWARE_ADDRESS_LENGTH - 1)) then
 							Writer_Counter_rst		<= '1';
@@ -344,13 +344,13 @@ begin
 						NextState								<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_SENDER_IP =>
 				if (RX_Valid = '1') then
 					RX_Ack										<= '1';
 					Writer_Counter_en					<= '1';
 					SenderProtocolAddress_en	<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if ((IsIPv4_r = '1') and (Writer_Counter_us = (PROTOCOL_IPV4_ADDRESS_LENGTH - 1))) then
 							Writer_Counter_rst		<= '1';
@@ -363,12 +363,12 @@ begin
 						NextState								<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_TARGET_MAC =>
 				if (RX_Valid = '1') then
 					RX_Ack										<= '1';
 					Writer_Counter_en					<= '1';			-- needed to count incoming bytes
-					
+
 					if (Is_EOF = '0') then
 						if (RX_Data = x"00") then
 							if (Writer_Counter_us = (HARDWARE_ADDRESS_LENGTH - 1)) then
@@ -382,13 +382,13 @@ begin
 						NextState								<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_TARGET_IP =>
 				if (RX_Valid = '1') then
 					RX_Ack										<= '1';
 					Writer_Counter_en					<= '1';
 					TargetProtocolAddress_en	<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if ((IsIPv4_r = '1') and (Writer_Counter_us = (PROTOCOL_IPV4_ADDRESS_LENGTH - 1))) then
 							Writer_Counter_rst		<= '1';
@@ -409,39 +409,39 @@ begin
 						end if;
 					end if;
 				end if;
-			
+
 			when ST_DISCARD_ETHERNET_PADDING_BYTES =>
 				RX_Ack											<= '1';
-				
+
 				if (Is_EOF = '1') then
 					NextState									<= ST_COMPLETE;
 				end if;
-			
+
 			when ST_COMPLETE =>
 				RequestReceived							<= '1';
-				
+
 				if (Clear = '1') then
 					NextState									<= ST_IDLE;
 				end if;
-			
+
 			when ST_DISCARD_FRAME =>
 				RX_Ack											<= '1';
-				
+
 				if (Is_EOF = '1') then
 					NextState									<= ST_ERROR;
 				end if;
-				
+
 			when ST_ERROR =>
 				Error												<= '1';
-				
+
 				if (Clear = '1') then
 					NextState									<= ST_IDLE;
 				end if;
-			
+
 		end case;
 	end process;
-	
-		
+
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -452,7 +452,7 @@ begin
 				if (IsIPv4_set = '1') then
 					IsIPv4_r		<= '1';
 				end if;
-				
+
 				if (IsIPv6_set = '1') then
 					IsIPv6_r		<= '1';
 				end if;
@@ -469,19 +469,19 @@ begin
 			elsif (Writer_Counter_en = '1') then
 				Writer_Counter_us								<= Writer_Counter_us + 1;
 			end if;
-			
+
 			if (Reader_SenderMAC_Counter_rst = '1') then
 				Reader_SenderMAC_Counter_us			<= (others => '0');
 			elsif (Reader_SenderMAC_Counter_en = '1') then
 				Reader_SenderMAC_Counter_us			<= Reader_SenderMAC_Counter_us + 1;
 			end if;
-			
+
 			if (Reader_SenderIP_Counter_rst = '1') then
 				Reader_SenderIP_Counter_us			<= (others => '0');
 			elsif (Reader_SenderIP_Counter_en = '1') then
 				Reader_SenderIP_Counter_us			<= Reader_SenderIP_Counter_us + 1;
 			end if;
-			
+
 			if (Reader_TargetIP_Counter_rst = '1') then
 				Reader_TargetIP_Counter_us			<= (others => '0');
 			elsif (Reader_TargetIP_Counter_en = '1') then
@@ -497,11 +497,11 @@ begin
 			if (SenderHardwareAddress_en = '1') then
 				SenderHardwareAddress_d(to_integer(SenderHardwareAddress_us))		<= RX_Data;
 			end if;
-			
+
 			if (SenderProtocolAddress_en = '1') then
 				SenderProtocolAddress_d(to_integer(SenderProtocolAddress_us))		<= RX_Data;
 			end if;
-			
+
 			if (TargetProtocolAddress_en = '1') then
 				TargetProtocolAddress_d(to_integer(TargetProtocolAddress_us))		<= RX_Data;
 			end if;

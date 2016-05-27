@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Package:					TODO
 --
@@ -10,18 +10,18 @@
 -- Description:
 -- ------------------------------------
 --		TODO
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,9 +37,9 @@ use			PoC.utils.all;
 
 entity filter_and is
 	generic (
-		TAPS						: POSITIVE				:= 4;				-- 
-		INIT						: STD_LOGIC				:= '0';			-- 
-		ADD_OUTPUT_REG	: BOOLEAN					:= FALSE		-- 
+		TAPS						: POSITIVE				:= 4;				--
+		INIT						: STD_LOGIC				:= '0';			--
+		ADD_OUTPUT_REG	: BOOLEAN					:= FALSE		--
 	);
 	port (
 		Clock						: in	STD_LOGIC;							-- clock
@@ -52,7 +52,7 @@ end;
 architecture rtl of filter_and is
 	signal Delays			: STD_LOGIC_VECTOR(TAPS - 1 downto 0)		:= (others => INIT);
 	signal FilterOut	: STD_LOGIC;
-	
+
 begin
 	Delays					<= Delays(Delays'high - 1 downto 0) & DataIn when rising_edge(Clock);
 	FilterOut				<= slv_and(Delays);

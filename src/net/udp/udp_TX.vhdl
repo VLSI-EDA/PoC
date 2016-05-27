@@ -491,7 +491,7 @@ begin
 
 			when ST_ERROR =>
 				null;
-				
+
 		end case;
 	end process;
 

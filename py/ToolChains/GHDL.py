@@ -81,7 +81,7 @@ class Configuration(BaseConfiguration):
 		"Linux": {
 			_section: {
 				"Version":                "0.34dev",
-				"InstallationDirectory":  "/usr/bin/ghdl",
+				"InstallationDirectory":  "/usr/bin",
 				"BinaryDirectory":        "${InstallationDirectory}",
 				"Backend":                "llvm"
 			}

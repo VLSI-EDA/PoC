@@ -85,7 +85,7 @@ begin
 			Input(0)			=> rx,		-- @async:	input bits
 			Output(0)			=> rxs		-- @Clock:	output bits
 		);
-	
+
   -- Reception state
   process(clk)
   begin

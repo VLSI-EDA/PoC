@@ -1,11 +1,11 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Martin Zabel
--- 
--- Module:					Generic controller for SDRAM memory. 
+--
+-- Module:					Generic controller for SDRAM memory.
 --
 -- Description:
 -- ------------------------------------
@@ -40,7 +40,7 @@
 -- - B_BITS = log2ceil(4)   =  2
 --
 -- Set cas latency (CL, MR_CL) and  burst length (BL, MR_BL) according to
--- your needs. 
+-- your needs.
 --
 -- If you have a DDR-SDRAM then set INIT_DLL = true, otherwise false.
 --
@@ -77,13 +77,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -121,7 +121,7 @@ use poc.utils.all;
 entity sdram_ctrl_fsm is
   generic (
     SDRAM_TYPE : natural;               -- SDRAM type
-    
+
     A_BITS       : positive;            -- log2ceil(memory cell count)
     D_BITS       : positive;            -- native data width
     R_BITS       : positive;            -- log2ceil(rows)
@@ -160,7 +160,7 @@ entity sdram_ctrl_fsm is
     sd_ba_nxt  : out std_logic_vector(B_BITS-1 downto 0);
     rden_nxt   : out std_logic;
     wren_nxt   : out std_logic);
-    
+
 
 end sdram_ctrl_fsm;
 
@@ -172,9 +172,9 @@ architecture rtl of sdram_ctrl_fsm is
     if SDRAM_TYPE > 0 then return BL/2; end if;
     return BL;
   end;
-                      
+
   constant BCC : natural := burst_clock_cycles;
-  
+
   -- FSM
   type FSM_TYPE is (INIT1, INIT2, INIT3, INIT4, INIT5, INIT6, INIT7, INIT8,
                     INIT9, INIT10, INIT11,
@@ -185,7 +185,7 @@ architecture rtl of sdram_ctrl_fsm is
                     DO_PRECHARGE, DO_AUTO_REFRESH);
   signal fsm_cs : FSM_TYPE;
   signal fsm_ns : FSM_TYPE;
-  
+
   -- SDRAM Commands
   subtype  SD_CMD_TYPE is std_logic_vector(3 downto 0);
   constant SD_CMD_DESELECT        : SD_CMD_TYPE := "1---";
@@ -205,7 +205,7 @@ architecture rtl of sdram_ctrl_fsm is
   signal col_addr      : std_logic_vector(C_BITS-1 downto 0);
   signal precharge_all : std_logic;
   signal reset_dll     : std_logic;
-  
+
   type SD_A_SEL_TYPE is (SD_A_SEL_EXT_MODE_REG,
                          SD_A_SEL_MODE_REG,
                          SD_A_SEL_ROW_ADDR,
@@ -221,7 +221,7 @@ architecture rtl of sdram_ctrl_fsm is
   --   bit 1--0: normal drive strength, enable DLL
   constant EXT_MODE_REG : std_logic_vector(1 downto 0) :=
     (others => '0');
-  
+
   -- Value for Mode Register
   --   bit 6--0: CL, sequential burst, BL
   --   bit 8: reset DLL
@@ -249,7 +249,7 @@ architecture rtl of sdram_ctrl_fsm is
   signal timer_cmd_init  : signed(5 downto 0);
   signal timer_cmd_start : std_logic;
   signal timer_cmd_done  : std_logic;
-  
+
   -- Timer for ACTIVE-to-PRECHARGE.
   --   Timer counts from T_RAS-2 downto -1 for easy detection of
   --   "timer done". MSB is sign bit.
@@ -259,14 +259,14 @@ architecture rtl of sdram_ctrl_fsm is
     := to_signed(T_RAS-1 -2, timer_tRAS'length);
   signal   timer_tRAS_start : std_logic;
   signal   timer_tRAS_done  : std_logic;
-  
+
   --------
   -- Counter
   --------
 
   -- Misc down counter. Counter is "done", when value == -1.
   -- Thus, if counter is inited to n, then counter is done n+2 decrements
-  -- later. 
+  -- later.
   signal downcnt      : signed(log2ceil(INIT_WAIT-2) downto 0);
   signal downcnt_init : signed(downcnt'range);
   signal downcnt_set  : std_logic;
@@ -284,7 +284,7 @@ architecture rtl of sdram_ctrl_fsm is
   signal last_write_nxt     : std_logic;
   signal save_cmd_addr      : std_logic;
   signal same_bank_row      : std_logic;
-  
+
 begin  -- rtl
 
   -----------------------------------------------------------------------------
@@ -294,7 +294,7 @@ begin  -- rtl
   assert (D_BITS = 16) or (D_BITS = 8) or (D_BITS = 4)
     report "Data width not yet supported."
     severity failure;
-  
+
   -----------------------------------------------------------------------------
   -- Datapath not depending on FSM
   -----------------------------------------------------------------------------
@@ -303,7 +303,7 @@ begin  -- rtl
   col_addr  <= user_addr(              C_BITS-1 downto             0);
   row_addr  <= user_addr(       R_BITS+C_BITS-1 downto        C_BITS);
   bank_addr <= user_addr(B_BITS+R_BITS+C_BITS-1 downto R_BITS+C_BITS);
-  
+
   timer_tREFI_done <= timer_tREFI(timer_tREFI'left);
   timer_cmd_done   <= timer_cmd(timer_cmd'left);
   timer_tRAS_done  <= timer_tRAS(timer_tRAS'left);
@@ -315,7 +315,7 @@ begin  -- rtl
   last_bank_addr_nxt <= bank_addr;
   last_row_addr_nxt  <= row_addr;
   last_write_nxt     <= user_write;
-  
+
   -----------------------------------------------------------------------------
   -- FSM
   -----------------------------------------------------------------------------
@@ -334,22 +334,22 @@ begin  -- rtl
     reset_dll     <= '-';               -- only when load_mode_reg
     rden_nxt      <= '0';
     wren_nxt      <= '0';
-    
+
     timer_tREFI_start <= '0';
     timer_tRAS_start  <= '0';
-    
+
     timer_cmd_init <= (others => '-');
     timer_cmd_start <= '0';
-    
+
     downcnt_init <= (others => '-');
     downcnt_set  <= '0';
     downcnt_dec  <= '0';
-    
+
     user_got_cmd   <= '0';
     user_got_wdata <= '0';
 
     save_cmd_addr <= '0';
-    
+
     case fsm_cs is
       when INIT1 =>
         -- Wait for SDRAM power up. See description for INIT_WAIT in header.
@@ -362,7 +362,7 @@ begin  -- rtl
 
       when INIT2 =>
         sd_cke_nxt <= '0';
-        
+
         if timer_tREFI_done = '1' then
           if downcnt_done = '1' then
             fsm_ns <= INIT3;
@@ -371,7 +371,7 @@ begin  -- rtl
             downcnt_dec       <= '1';
           end if;
         end if;
-          
+
       when INIT3 =>
         -- Bring up sd_cke with a NOP command.
         sd_cmd_nxt <= SD_CMD_NOP;
@@ -384,7 +384,7 @@ begin  -- rtl
         precharge_all   <= '1';
         timer_cmd_init  <= to_signed(T_RP-2, timer_cmd_init'length);
         timer_cmd_start <= '1';
-        
+
         if SDRAM_TYPE >= 1 then
           fsm_ns <= INIT5;
         else
@@ -396,20 +396,20 @@ begin  -- rtl
         sd_a_sel       <= SD_A_SEL_EXT_MODE_REG;
         sd_ba_sel      <= SD_BA_SEL_EXT_MODE_REG;
         timer_cmd_init <= to_signed(T_MRD-2, timer_cmd_init'length);
-        
+
         if timer_cmd_done = '1' then
           -- Load extended mode register
           sd_cmd_nxt      <= SD_CMD_LOAD_MODE_REG;
           timer_cmd_start <= '1';
           fsm_ns          <= INIT6;
         end if;
-        
+
       when INIT6 =>
         reset_dll      <= '1';
         sd_a_sel       <= SD_A_SEL_MODE_REG;
         sd_ba_sel      <= SD_BA_SEL_MODE_REG;
         timer_cmd_init <= to_signed(T_MRD-2, timer_cmd_init'length);
-        
+
         if timer_cmd_done = '1' then
           -- Load mode register
           sd_cmd_nxt            <= SD_CMD_LOAD_MODE_REG;
@@ -425,7 +425,7 @@ begin  -- rtl
         sd_a_sel       <= SD_A_SEL_COL_ADDR;
         precharge_all  <= '1';
         timer_cmd_init <= to_signed(T_RP-2, timer_cmd_init'length);
-        
+
         if timer_cmd_done = '1' then
           -- Precharge all.
           sd_cmd_nxt      <= SD_CMD_PRECHARGE;
@@ -435,7 +435,7 @@ begin  -- rtl
 
       when INIT8 =>
         timer_cmd_init <= to_signed(T_RFC-2, timer_cmd_init'length);
-        
+
         if timer_cmd_done = '1' then
           -- First auto refresh.
           sd_cmd_nxt      <= SD_CMD_AUTO_REFRESH;
@@ -445,7 +445,7 @@ begin  -- rtl
 
       when INIT9 =>
         timer_cmd_init <= to_signed(T_RFC-2, timer_cmd_init'length);
-        
+
         if timer_cmd_done = '1' then
           -- Second auto refresh.
           sd_cmd_nxt      <= SD_CMD_AUTO_REFRESH;
@@ -458,7 +458,7 @@ begin  -- rtl
         sd_a_sel       <= SD_A_SEL_MODE_REG;
         sd_ba_sel      <= SD_BA_SEL_MODE_REG;
         timer_cmd_init <= to_signed(T_MRD-2, timer_cmd_init'length);
-        
+
         if (timer_cmd_done = '1') and (timer_tREFI_done = '1') then
           -- Now, we have waited for at least 200 cycles.
           -- Load mode register, with "reset DLL" cleared.
@@ -469,7 +469,7 @@ begin  -- rtl
 
       when INIT11 =>
         timer_cmd_init <= to_signed(T_RFC-2, timer_cmd_init'length);
-        
+
         if timer_cmd_done = '1' then
           -- Schedule another auto refresh and restart T_REFI timer.
           sd_cmd_nxt        <= SD_CMD_AUTO_REFRESH;
@@ -478,12 +478,12 @@ begin  -- rtl
           fsm_ns            <= DO_ACTIVATE;
         end if;
 
-        
+
       when DO_ACTIVATE =>
         -- For activate row.
         sd_a_sel  <= SD_A_SEL_ROW_ADDR;
         sd_ba_sel <= SD_BA_SEL_ADDR;
-        
+
         -- wait for finish of last command, before executing new one
         if timer_cmd_done = '1' then
           if user_cmd_valid = '1' then
@@ -492,13 +492,13 @@ begin  -- rtl
             timer_cmd_init  <= to_signed(T_RCD-2, timer_cmd_init'length);
             timer_cmd_start <= '1';
             timer_tRAS_start<= '1';
-            
+
             if user_write = '1' then
               fsm_ns <= DO_WRITE1;
             else
               fsm_ns <= DO_READ1;
             end if;
-            
+
           elsif timer_tREFI_done = '1' then
             -- Auto Refresh
             sd_cmd_nxt        <= SD_CMD_AUTO_REFRESH;
@@ -521,7 +521,7 @@ begin  -- rtl
 
         sd_a_sel  <= SD_A_SEL_COL_ADDR;
         sd_ba_sel <= SD_BA_SEL_ADDR;
-        
+
         if timer_cmd_done = '1' then
           -- Read first
           sd_cmd_nxt      <= SD_CMD_READ;
@@ -546,7 +546,7 @@ begin  -- rtl
           -- Read more
           downcnt_dec <= '1';
           rden_nxt    <= '1';
-          
+
           if downcnt_done = '1' then
             fsm_ns <= CHECKNXT;
           end if;
@@ -561,10 +561,10 @@ begin  -- rtl
 
         -- Additional burst cycles: BCC-1
         downcnt_init <= to_signed(BCC-1-2, downcnt_init'length);
-        
+
         sd_a_sel  <= SD_A_SEL_COL_ADDR;
         sd_ba_sel <= SD_BA_SEL_ADDR;
-        
+
         if (timer_cmd_done and user_wdata_valid) = '1' then
           -- Write first
           sd_cmd_nxt      <= SD_CMD_WRITE;
@@ -590,12 +590,12 @@ begin  -- rtl
           downcnt_dec    <= '1';
           wren_nxt       <= '1';
           user_got_wdata <= '1';
-          
+
           if downcnt_done = '1' then
             fsm_ns <= CHECKNXT;
           end if;
         end if;
-        
+
       when CHECKNXT =>
         if last_write_r = '1' then
           -- last was write
@@ -621,16 +621,16 @@ begin  -- rtl
             -- Set timer to zero.
             timer_cmd_init <= to_signed(-2, timer_cmd_init'length);
           end if;
-          
+
         end if;
-        
+
         if timer_tREFI_done = '1' then
           -- A refresh is pending.
           -- Wait here until timer_tRAS is done.
           if timer_tRAS_done = '1' then
             fsm_ns <= DO_PRECHARGE;
           end if;
-          
+
         elsif (user_cmd_valid and same_bank_row) = '1' then
           -- Access to same bank and row.
           -- Wait timer is initiated above.
@@ -640,7 +640,7 @@ begin  -- rtl
           else
             fsm_ns <= DO_READ1;
           end if;
-          
+
         elsif timer_cmd_done = '1' then
           -- Execute a precharge now for minimum latency of next access to
           -- another bank/row.
@@ -654,7 +654,7 @@ begin  -- rtl
 
       when DO_PRECHARGE =>
         timer_cmd_init  <= to_signed(T_RP-2, timer_cmd_init'length);
-        
+
         if timer_cmd_done = '1' then
           -- Precharge
           -- NOTE: It is sufficient to precharge the bank in use.
@@ -672,7 +672,7 @@ begin  -- rtl
 
       when DO_AUTO_REFRESH =>
         timer_cmd_init  <= to_signed(T_RFC-2, timer_cmd_init'length);
-        
+
         if timer_cmd_done = '1' then
           -- Auto refresh
           sd_cmd_nxt        <= SD_CMD_AUTO_REFRESH;
@@ -702,14 +702,14 @@ begin  -- rtl
     case sd_a_sel is
       when SD_A_SEL_EXT_MODE_REG =>
         sd_a_nxt(EXT_MODE_REG'range) <= EXT_MODE_REG;
-        
+
       when SD_A_SEL_MODE_REG =>
         sd_a_nxt(MODE_REG'range) <= MODE_REG;
         sd_a_nxt(MODE_REG'left)  <= reset_dll;
-        
+
       when SD_A_SEL_ROW_ADDR =>
         sd_a_nxt(R_BITS-1 downto 0) <= row_addr;
-        
+
       when SD_A_SEL_COL_ADDR =>
         sd_a_nxt  (imin(10, C_BITS)-1 downto 0)
                                      <= col_addr(imin(10, C_BITS)-1 downto 0);
@@ -725,7 +725,7 @@ begin  -- rtl
     "01"      when SD_BA_SEL_EXT_MODE_REG,
     "00"      when SD_BA_SEL_MODE_REG,
     bank_addr when others;              -- SD_BA_SEL_ADDR
-  
+
   -----------------------------------------------------------------------------
   -- Registers
   -----------------------------------------------------------------------------

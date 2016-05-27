@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,8 +45,8 @@ entity ipv4_RX is
 		DEBUG														: BOOLEAN							:= FALSE
 	);
 	port (
-		Clock														: in	STD_LOGIC;									-- 
-		Reset														: in	STD_LOGIC;									-- 
+		Clock														: in	STD_LOGIC;									--
+		Reset														: in	STD_LOGIC;									--
 		-- STATUS port
 		Error														: out	STD_LOGIC;
 		-- IN port
@@ -85,7 +85,7 @@ end entity;
 
 architecture rtl of ipv4_RX is
 	attribute FSM_ENCODING						: STRING;
-	
+
 	type T_STATE is (
 		ST_IDLE,
 																		ST_RECEIVE_TYPE_OF_SERVICE,		ST_RECEIVE_TOTAL_LENGTH_0,		ST_RECEIVE_TOTAL_LENGTH_1,
@@ -116,7 +116,7 @@ architecture rtl of ipv4_RX is
 	signal IP_ByteIndex										: T_IPV4_BYTEINDEX;
 
 	signal Register_rst										: STD_LOGIC;
-	
+
 	-- IPv4 Basic Header
 	signal HeaderLength_en								: STD_LOGIC;
 	signal TypeOfService_en								: STD_LOGIC;
@@ -133,7 +133,7 @@ architecture rtl of ipv4_RX is
 	signal HeaderChecksum_en1							: STD_LOGIC;
 	signal SourceIPv4Address_en						: STD_LOGIC;
 	signal DestIPv4Address_en							: STD_LOGIC;
-	
+
 	signal HeaderLength_d									: T_SLV_4													:= (others => '0');
 	signal TypeOfService_d								: T_SLV_8													:= (others => '0');
 	signal TotalLength_d									: T_SLV_16												:= (others => '0');
@@ -184,7 +184,7 @@ begin
 		NextState									<= State;
 
 		Error											<= '0';
-		
+
 		In_Ack_i									<= '0';
 		Out_Valid_i								<= '0';
 		Out_SOF_i									<= '0';
@@ -215,7 +215,7 @@ begin
 			when ST_IDLE =>
 				if (Is_SOF = '1') then
 					In_Ack_i								<= '1';
-				
+
 					if (Is_EOF = '0') then
 						if (In_Data(3 downto 0) = x"4") then
 							HeaderLength_en			<= '1';
@@ -227,11 +227,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_TYPE_OF_SERVICE =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						TypeOfService_en			<= '1';
 						NextState							<= ST_RECEIVE_TOTAL_LENGTH_0;
@@ -239,11 +239,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_TOTAL_LENGTH_0 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						TotalLength_en0				<= '1';
 						NextState							<= ST_RECEIVE_TOTAL_LENGTH_1;
@@ -251,11 +251,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_TOTAL_LENGTH_1 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						TotalLength_en1				<= '1';
 						NextState							<= ST_RECEIVE_IDENTIFICATION_0;
@@ -263,11 +263,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_IDENTIFICATION_0 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 --						Identification_en0		<= '1';
 						NextState							<= ST_RECEIVE_IDENTIFICATION_1;
@@ -275,11 +275,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_IDENTIFICATION_1 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 --						Identification_en1		<= '1';
 						NextState							<= ST_RECEIVE_FLAGS;
@@ -287,11 +287,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_FLAGS =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						Flags_en							<= '1';
 --						FragmentOffset_en0		<= '1';
@@ -300,11 +300,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_FRAGMENT_OFFSET_1 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 --						FragmentOffset_en1		<= '1';
 						NextState							<= ST_RECEIVE_TIME_TO_LIVE;
@@ -312,11 +312,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_TIME_TO_LIVE =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						TimeToLive_en					<= '1';
 						NextState							<= ST_RECEIVE_PROTOCOL;
@@ -324,11 +324,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_PROTOCOL =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						Protocol_en						<= '1';
 						NextState							<= ST_RECEIVE_HEADER_CHECKSUM_0;
@@ -340,7 +340,7 @@ begin
 			when ST_RECEIVE_HEADER_CHECKSUM_0 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						HeaderChecksum_en0		<= '1';
 						NextState							<= ST_RECEIVE_HEADER_CHECKSUM_1;
@@ -351,10 +351,10 @@ begin
 
 			when ST_RECEIVE_HEADER_CHECKSUM_1 =>
 				IPv4SeqCounter_rst				<= '1';
-				
+
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						HeaderChecksum_en1		<= '1';
 						NextState							<= ST_RECEIVE_SOURCE_ADDRESS;
@@ -362,14 +362,14 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_SOURCE_ADDRESS =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					SourceIPv4Address_en		<= '1';
 					IPv4SeqCounter_en				<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if (IPv4SeqCounter_us = 0) then
 							IPv4SeqCounter_rst	<= '1';
@@ -379,14 +379,14 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_DESTINATION_ADDRESS =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					DestIPv4Address_en			<= '1';
 					IPv4SeqCounter_en				<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if (IPv4SeqCounter_us = 0) then
 							IPv4SeqCounter_rst	<= '1';
@@ -396,13 +396,13 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_DATA_1 =>
 				In_Ack_i									<= Out_Ack;
 				Out_Valid_i								<= In_Valid;
 				Out_SOF_i									<= '1';
 				Out_EOF_i									<= In_EOF;
-			
+
 				if (Is_DataFlow = '1') then
 					if (Is_EOF = '0') then
 						NextState							<= ST_RECEIVE_DATA_N;
@@ -410,31 +410,31 @@ begin
 						NextState							<= ST_IDLE;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_DATA_N =>
 				In_Ack_i									<= Out_Ack;
 				Out_Valid_i								<= In_Valid;
 				Out_EOF_i									<= In_EOF;
-				
+
 				if (Is_EOF = '1') then
 					NextState								<= ST_IDLE;
 				end if;
-				
+
 			when ST_DISCARD_FRAME =>
 				In_Ack_i									<= '1';
-				
+
 				if (Is_EOF = '1') then
 					NextState								<= ST_ERROR;
 				end if;
-			
+
 			when ST_ERROR =>
 				Error											<= '1';
 				NextState									<= ST_IDLE;
-			
+
 		end case;
 	end process;
-	
-	
+
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -455,30 +455,30 @@ begin
 				if (HeaderLength_en = '1') then
 					HeaderLength_d									<= In_Data(3 downto 0);
 				end if;
-				
+
 				if (TypeOfService_en = '1') then
 					TypeOfService_d									<= In_Data;
 				end if;
-				
+
 				if (TotalLength_en0 = '1') then
 					TotalLength_d(15 downto 8)			<= In_Data;
 				end if;
 				if (TotalLength_en1 = '1') then
 					TotalLength_d(7 downto 0)				<= In_Data;
 				end if;
-				
+
 --				if (Identification_en0 = '1') then
 --					Identification_d(15 downto 8)		<= In_Data;
 --				end if;
 --				if (Identification_en1 = '1') then
 --					Identification_d(7 downto 0)		<= In_Data;
 --				end if;
-				
+
 				if (Flags_en = '1') then
 					Flag_DontFragment_d							<= In_Data(6);
 					Flag_MoreFragmenta_d						<= In_Data(5);
 				end if;
-				
+
 --				if (FragmentOffset_en0 = '1') then
 --					FragmentOffset_d(12 downto 8)		<= In_Data(4 downto 0);
 --				end if;
@@ -489,7 +489,7 @@ begin
 				if (TimeToLive_en = '1') then
 					TimeToLive_d										<= In_Data;
 				end if;
-				
+
 				if (Protocol_en = '1') then
 					Protocol_d											<= In_Data;
 				end if;
@@ -504,7 +504,7 @@ begin
 				if (SourceIPv4Address_en = '1') then
 					SourceIPv4Address_d(to_integer(IPv4SeqCounter_us))	<= In_Data;
 				end if;
-				
+
 				if (DestIPv4Address_en = '1') then
 					DestIPv4Address_d(to_integer(IPv4SeqCounter_us))		<= In_Data;
 				end if;
@@ -522,12 +522,12 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	SrcIPv4Address_Reader_rst		<= Out_Meta_rst;
 	SrcIPv4Address_Reader_en		<= Out_Meta_SrcIPv4Address_nxt;
 	DestIPv4Address_Reader_rst	<= Out_Meta_rst;
 	DestIPv4Address_Reader_en		<= Out_Meta_DestIPv4Address_nxt;
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -538,7 +538,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -549,7 +549,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	In_Meta_rst												<= Out_Meta_rst;
 	In_Meta_SrcMACAddress_nxt					<= Out_Meta_SrcMACAddress_nxt;
 	In_Meta_DestMACAddress_nxt				<= Out_Meta_DestMACAddress_nxt;
@@ -565,5 +565,5 @@ begin
 	Out_Meta_DestIPv4Address_Data			<= DestIPv4Address_d(to_integer(DestIPv4Address_Reader_us));
 	Out_Meta_Length										<= TotalLength_d;
 	Out_Meta_Protocol									<= Protocol_d;
-	
+
 end architecture;

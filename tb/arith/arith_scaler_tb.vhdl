@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width:2  -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -------------------------------------------------------------------------------
 -- Authors:      Thomas B. Preusser
 --
@@ -10,13 +10,13 @@
 -------------------------------------------------------------------------------
 -- Copyright 2007-2016 Technische Universität Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --    http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,7 +61,7 @@ architecture tb of arith_scaler_tb is
 begin
 	-- initialize global simulation status
 	simInitialize;
-	
+
   -- component instantiation
   DUT: entity PoC.arith_scaler
     generic map (
@@ -87,7 +87,7 @@ begin
       clk <= '1';
       wait for 5 ns;
     end cycle;
-		
+
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker");
   begin
     cycle;

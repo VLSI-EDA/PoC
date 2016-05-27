@@ -40,7 +40,7 @@ library PoC;
 use			PoC.utils.all;
 
 package config_private is
-	-- TODO: 
+	-- TODO:
 	-- ===========================================================================
 	subtype T_BOARD_STRING					is STRING(1 to 16);
 	subtype T_BOARD_CONFIG_STRING		is STRING(1 to 64);
@@ -53,7 +53,7 @@ package config_private is
 		BaudRate									: T_BOARD_CONFIG_STRING;		-- e.g. "115.2 kBd"
 		BaudRate_Max							: T_BOARD_CONFIG_STRING;
 	end record;
-	
+
 	-- Data structures to describe Ethernet
 	type T_BOARD_ETHERNET_DESC is record
 		IPStyle										: T_BOARD_CONFIG_STRING;
@@ -83,7 +83,7 @@ package config_private is
 	constant C_BOARD_CONFIG_STRING_EMPTY	: T_BOARD_CONFIG_STRING;
 	constant C_DEVICE_STRING_EMPTY				: T_DEVICE_STRING;
 	CONSTANT C_BOARD_INFO_LIST						: T_BOARD_INFO_VECTOR;
-	
+
 	function conf(str : string) return T_BOARD_CONFIG_STRING;
 end package;
 
@@ -104,7 +104,7 @@ package body config_private is
 		end if;
 		return Result;
 	end function;
-	
+
 	constant C_BOARD_ETHERNET_DESC_EMPTY	: T_BOARD_ETHERNET_DESC		:= (
 		IPStyle										=> C_BOARD_CONFIG_STRING_EMPTY,
 		RS_DataInterface					=> C_BOARD_CONFIG_STRING_EMPTY,
@@ -113,7 +113,7 @@ package body config_private is
 		PHY_DataInterface					=> C_BOARD_CONFIG_STRING_EMPTY,
 		PHY_ManagementInterface		=> C_BOARD_CONFIG_STRING_EMPTY
 	);
-	
+
 	-- predefined UART descriptions
 	function brd_CreateUART(IsDTE : BOOLEAN; FlowControl : STRING; BaudRate : STRING; BaudRate_Max : STRING := "") return T_BOARD_UART_DESC is
 		variable Result			: T_BOARD_UART_DESC;
@@ -124,7 +124,7 @@ package body config_private is
 		Result.BaudRate_Max	:= ite((BaudRate_Max = ""), conf(BaudRate), conf(BaudRate_Max));
 		return Result;
 	end function;
-	
+
 	--																																					IsDTE		FlowControl			BaudRate
 	constant C_BOARD_UART_EMPTY							: T_BOARD_UART_DESC	:= brd_CreateUART(TRUE,		"NONE",				"0 Bd");
 	constant C_BOARD_UART_DTE_115200_NONE		: T_BOARD_UART_DESC	:= brd_CreateUART(TRUE,		"NONE",				"115.2 kBd");
@@ -149,7 +149,7 @@ package body config_private is
 	constant C_BOARD_ETH_SOFT_GMII_88E1111	: T_BOARD_ETHERNET_DESC		:= brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "GMII", "MDIO");
 	constant C_BOARD_ETH_HARD_GMII_88E1111	: T_BOARD_ETHERNET_DESC		:= brd_CreateEthernet("HARD", "GMII", "MARVEL_88E1111", x"07", "GMII", "MDIO");
 	constant C_BOARD_ETH_SOFT_SGMII_88E1111	: T_BOARD_ETHERNET_DESC		:= brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "SGMII", "MDIO_OVER_IIC");
-	
+
 	constant C_BOARD_ETH_NONE		: T_BOARD_ETHERNET_DESC_VECTOR(T_BOARD_ETHERNET_DESC_INDEX)	:= (others => C_BOARD_ETH_EMPTY);
 
 
@@ -395,7 +395,7 @@ package config is
 		DEVICE_FAMILY_KINTEX,
 		DEVICE_FAMILY_VIRTEX
 	);
-	
+
 	type T_DEVICE_SERIES is (
 		DEVICE_SERIES_UNKNOWN,
 		DEVICE_SERIES_GENERIC,
@@ -404,7 +404,7 @@ package config is
 		DEVICE_SERIES_ULTRASCALE,
 		DEVICE_SERIES_ULTRASCALE_PLUS
 	);
-	
+
 	-- List of known devices
 	-- ---------------------------------------------------------------------------
 	type T_DEVICE is (
@@ -414,9 +414,9 @@ package config is
 		DEVICE_MAX2, DEVICE_MAX10,																					-- Altera.Max
 		DEVICE_ARRIA1, DEVICE_ARRIA2, DEVICE_ARRIA5, DEVICE_ARRIA10,				-- Altera.Arria
 		DEVICE_CYCLONE1, DEVICE_CYCLONE2, DEVICE_CYCLONE3, DEVICE_CYCLONE4,	-- Altera.Cyclone
-			DEVICE_CYCLONE5,																									-- 
+			DEVICE_CYCLONE5,																									--
 		DEVICE_STRATIX1, DEVICE_STRATIX2, DEVICE_STRATIX3, DEVICE_STRATIX4,	-- Altera.Stratix
-			DEVICE_STRATIX5, DEVICE_STRATIX10,																-- 
+			DEVICE_STRATIX5, DEVICE_STRATIX10,																--
 		-- Lattice
 		DEVICE_ICE40, DEVICE_ICE65, DEVICE_ICE5,														-- Lattice.iCE
 		DEVICE_MACHXO, DEVICE_MACHXO2,																			-- Lattice.MachXO
@@ -427,7 +427,7 @@ package config is
 		DEVICE_ARTIX7,																											-- Xilinx.Artix
 		DEVICE_KINTEX7, DEVICE_KINTEX_ULTRA, DEVICE_KINTEX_ULTRA_PLUS,			-- Xilinx.Kintex
 		DEVICE_VIRTEX5,	DEVICE_VIRTEX6, DEVICE_VIRTEX7,											-- Xilinx.Virtex
-			DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS											-- 
+			DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS											--
 	);
 
 	-- List of known device subtypes
@@ -485,7 +485,7 @@ package config is
 		DevNumber					: NATURAL;
 		DevSubType				: T_DEVICE_SUBTYPE;
 		DevSeries					: T_DEVICE_SERIES;
-		
+
 		TransceiverType		: T_TRANSCEIVER;
 		LUT_FanIn					: POSITIVE;
 	end record;
@@ -498,7 +498,7 @@ package config is
 	function BOARD_NAME(BoardConfig : STRING := C_BOARD_STRING_EMPTY) 					return STRING;
 	function BOARD_DEVICE(BoardConfig : STRING := C_BOARD_STRING_EMPTY) 				return STRING;
 	function BOARD_UART_BAUDRATE(BoardConfig : STRING := C_BOARD_STRING_EMPTY)	return STRING;
-	
+
 	-- Functions extracting device and architecture properties from "MY_DEVICE"
 	-- which is declared in package "my_config".
 	-- ===========================================================================
@@ -527,7 +527,7 @@ package body config is
 	function ite(cond : BOOLEAN; value1 : STRING; value2 : STRING) return STRING is begin
 		if cond then	return value1;	else	return value2;	end if;
 	end function;
-		
+
 	-- chr_is* function
 	function chr_isDigit(chr : CHARACTER) return boolean is
 	begin
@@ -608,10 +608,10 @@ package body config is
 
 	-- private functions required by board description
 	-- ModelSim requires that this functions is defined before it is used below.
-	-- ===========================================================================	
+	-- ===========================================================================
 	function getLocalDeviceString(DeviceString : STRING) return STRING is
 		constant ConstNUL				: STRING(1 to 1)				:= (others => C_POC_NUL);
-		constant MY_DEVICE_STR	: STRING								:= BOARD_DEVICE;		
+		constant MY_DEVICE_STR	: STRING								:= BOARD_DEVICE;
 		variable Result					: STRING(1 to T_DEVICE_STRING'length);
 	begin
 		Result := (others => C_POC_NUL);
@@ -648,17 +648,17 @@ package body config is
 		end loop;
 		-- abort if no digit can be found
 		if (low = -1) then		return 0; end if;
-		
+
 		for i in (low + 1) to str'high loop
 			if chr_isAlpha(str(i)) then
 				high := i - 1;
 				exit;
 			end if;
 		end loop;
-		
+
 		if (high = -1) then		return 0; end if;
 		-- return INTEGER'value(str(low to high));			-- 'value(...) is not supported by Vivado Synth 2014.1
-		
+
 		-- convert substring to a number
 		for i in low to high loop
 			if (chr_isDigit(str(i)) = FALSE) then
@@ -686,7 +686,7 @@ package body config is
 		report "Unknown board name in MY_BOARD = " & MY_BRD & "." severity failure;
 		return C_BOARD_INFO_LIST'high;
 	end function;
-	
+
 	function BOARD_INFO(BoardConfig : STRING := C_BOARD_STRING_EMPTY) return T_BOARD_INFO is
 		constant BRD	: NATURAL := BOARD(BoardConfig);
   begin
@@ -706,13 +706,13 @@ package body config is
   begin
 		return str_trim(C_BOARD_INFO_LIST(BRD).FPGADevice);
 	end function;
-	
+
 	function BOARD_UART_BAUDRATE(BoardConfig : STRING := C_BOARD_STRING_EMPTY) return STRING is
 		constant BRD	: NATURAL := BOARD(BoardConfig);
   begin
 		return str_trim(C_BOARD_INFO_LIST(BRD).UART.BaudRate);
 	end function;
-	
+
 	-- purpose: extract vendor from MY_DEVICE
 	function VENDOR(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_VENDOR is
 		constant MY_DEV		: string(1 to 32)	:= getLocalDeviceString(DeviceString);
@@ -733,7 +733,7 @@ package body config is
 										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
 	end function;
-	
+
 	function SYNTHESIS_TOOL(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_SYNTHESIS_TOOL is
 		constant VEN			: T_VENDOR				:= VENDOR(DeviceString);
 	begin
@@ -805,7 +805,7 @@ package body config is
 					when "7Z"	 =>		return DEVICE_ZYNQ7;
 					when others =>	report "Unknown Xilinx device in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
-				
+
 			when others => report "Unknown vendor in MY_DEVICE = " & MY_DEV & "." severity failure;
 										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
@@ -826,14 +826,14 @@ package body config is
 					when 'S' =>			return DEVICE_FAMILY_STRATIX;
 					when others =>	report "Unknown Altera device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
-				
+
 			when VENDOR_LATTICE =>
 				case FAM_CHAR is
 					--when 'M' =>		return DEVICE_FAMILY_MACHXO;
 					when 'E' =>			return DEVICE_FAMILY_ECP;
 					when others =>	report "Unknown Lattice device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
-			
+
 			when VENDOR_XILINX =>
 				case FAM_CHAR is
 					when 'A' =>			return DEVICE_FAMILY_ARTIX;
@@ -843,12 +843,12 @@ package body config is
 					when 'Z' =>			return DEVICE_FAMILY_ZYNQ;
 					when others =>	report "Unknown Xilinx device family in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end case;
-				
+
 			when others => report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
 										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
 	end function;
-	
+
 	-- some devices share some common features: e.g. XADC, BlockRAM, ...
 	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_DEVICE_SERIES is
 		constant MY_DEV	: string(1 to 32)	:= getLocalDeviceString(DeviceString);
@@ -894,7 +894,7 @@ package body config is
 															-- return statement is explicitly missing otherwise XST won't stop
 		end case;
 	end function;
-	
+
 	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_DEVICE_SUBTYPE is
 		constant MY_DEV				: string(1 to 32)	:= getLocalDeviceString(DeviceString);
 		constant DEV					: T_DEVICE				:= DEVICE(MY_DEV);
@@ -955,7 +955,7 @@ package body config is
 				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
 				else	report "Unknown Virtex-5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
-			
+
 			when DEVICE_VIRTEX5 =>
 				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
 				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
@@ -978,28 +978,28 @@ package body config is
 				if		(													(			str_find(MY_DEV(5 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
 				else	report "Unknown Artix-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
-				
+
 			when DEVICE_KINTEX7 =>
 				if		(													(			str_find(MY_DEV(5 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
 				else	report "Unknown Kintex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
-			
+
 			when DEVICE_KINTEX_ULTRA =>																															return DEVICE_SUBTYPE_NONE;
 			when DEVICE_KINTEX_ULTRA_PLUS =>																												return DEVICE_SUBTYPE_NONE;
-			
+
 			when DEVICE_VIRTEX7 =>
 				if		(														(		str_find(MY_DEV(5 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
 				elsif	((DEV_SUB_STR(1) = 'X') and (		str_find(MY_DEV(6 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_XT;
 				elsif	((DEV_SUB_STR(1) = 'H') and (		str_find(MY_DEV(6 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_HT;
 				else	report "Unknown Virtex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
-			
+
 			when DEVICE_VIRTEX_ULTRA =>																															return DEVICE_SUBTYPE_NONE;
 			when DEVICE_VIRTEX_ULTRA_PLUS =>																												return DEVICE_SUBTYPE_NONE;
-			
+
 			when DEVICE_ZYNQ7 =>																																		return DEVICE_SUBTYPE_NONE;
 			when DEVICE_ZYNQ_ULTRA_PLUS =>																													return DEVICE_SUBTYPE_NONE;
-			
+
 			when others => report "Device sub-type is unknown for the given device." severity failure;
 									-- return statement is explicitly missing otherwise XST won't stop
 		end case;
@@ -1021,9 +1021,9 @@ package body config is
 			when DEVICE_CYCLONE1 | DEVICE_CYCLONE2 | DEVICE_CYCLONE3 =>				return 4;
 			when DEVICE_STRATIX1 | DEVICE_STRATIX2 =>													return 4;
 			when DEVICE_STRATIX4 | DEVICE_STRATIX5 =>													return 6;
-			
+
 			when DEVICE_ECP5 =>																								return 4;
-			
+
 			when DEVICE_SPARTAN3 =>																						return 4;
 			when DEVICE_SPARTAN6 =>																						return 6;
 			when DEVICE_VIRTEX5 | DEVICE_VIRTEX6 =>														return 6;
@@ -1047,9 +1047,9 @@ package body config is
 			when DEVICE_STRATIX2 =>						return TRANSCEIVER_GXB;
 			when DEVICE_STRATIX4 =>						return TRANSCEIVER_GXB;
 			--when DEVICE_STRATIX5 =>						return TRANSCEIVER_GXB;
-			
+
 			when DEVICE_ECP5 =>								return TRANSCEIVER_MGT;
-			
+
 			when DEVICE_SPARTAN3 =>						return TRANSCEIVER_NONE;		-- Xilinx Spartan3 devices have no transceivers
 			when DEVICE_SPARTAN6 =>
 				case DEV_SUB is
@@ -1057,7 +1057,7 @@ package body config is
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTPE1;
 					when others =>								report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
-			
+
 			when DEVICE_VIRTEX5 =>
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_LX =>			return TRANSCEIVER_NONE;
@@ -1067,7 +1067,7 @@ package body config is
 					when DEVICE_SUBTYPE_FXT =>		return TRANSCEIVER_GTX;
 					when others =>								report "Unknown Virtex-5 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
-			
+
 			when DEVICE_VIRTEX6 =>
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_LX =>			return TRANSCEIVER_NONE;
@@ -1076,7 +1076,7 @@ package body config is
 					when DEVICE_SUBTYPE_HXT =>		return TRANSCEIVER_GTXE1;
 					when others =>								report "Unknown Virtex-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
-				
+
 			when DEVICE_ARTIX7 =>							return TRANSCEIVER_GTPE2;
 			when DEVICE_KINTEX7 =>						return TRANSCEIVER_GTXE2;
 			when DEVICE_VIRTEX7 =>
@@ -1095,7 +1095,7 @@ package body config is
 					when 15 =>										return TRANSCEIVER_GTPE2;
 					when others =>								return TRANSCEIVER_GTXE2;
 				end case;
-			
+
 			when others => report "Unknown device." severity failure;
 									-- return statement is explicitly missing otherwise XST won't stop
 		end case;
@@ -1114,7 +1114,7 @@ package body config is
 		Result.DevNumber				:= DEVICE_NUMBER(DeviceString);
 		Result.TransceiverType	:= TRANSCEIVER_TYPE(DeviceString);
 		Result.LUT_FanIn				:= LUT_FANIN(DeviceString);
-		
+
 		return Result;
 	end function;
 

@@ -151,7 +151,7 @@ begin
     wa <= InitCnt(AN-1 downto 0) when InitCnt(InitCnt'left) = '0' else
           unsigned(addr(AN-1 downto 0));
     di <= (1 to G_BITS => '1') & (1 to D_BITS => '-') when InitCnt(InitCnt'left) = '0' else
-          addr(A_BITS-1 downto AN) & din;
+          (genmask_alternate(A_BITS-AN) xor (A_BITS-1 downto AN => addr(AN))) & din;
     we <= put or not InitCnt(InitCnt'left);
 
     -- Module Outputs
@@ -193,7 +193,7 @@ begin
     ra    <= OPnxt(AN-1 downto 0);
     vldi  <= '0' when InitDelay(InitDelay'left) = '0' else
              'X' when Is_X(do(DN-1 downto D_BITS)) else
-             '1' when unsigned(do(DN-1 downto D_BITS)) = OP(A_BITS-1 downto AN) else
+             '1' when do(DN-1 downto D_BITS) = (genmask_alternate(A_BITS-AN) xor (A_BITS-1 downto AN => OP(AN))) else
              '0';
 
 		-- Module Outputs

@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
--- 
+--
 -- Testbench:				for clock generation in testbenches.
--- 
+--
 -- Description:
 -- ------------------------------------
 --	TODO
@@ -15,13 +15,13 @@
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -58,17 +58,17 @@ architecture tb of sim_ClockGenerator_tb is
 	constant NO_CLOCK_PHASE			: T_PHASE					:= 0 deg;
 
 	constant simTestID					: T_SIM_TEST_ID		:= simCreateTest("Test clock generation");
-	
+
 	signal Clock								: STD_LOGIC;
 	signal ClockIsActive				: STD_LOGIC		:= '1';
-	
+
 	signal Clock_01							: STD_LOGIC;
 	signal Clock_02							: STD_LOGIC;
 	signal Clock_03							: STD_LOGIC;
 	signal Clock_04							: STD_LOGIC;
 	signal Clock_05							: STD_LOGIC;
 	signal Clock_06							: STD_LOGIC;
-	
+
 	signal Clock_10							: STD_LOGIC;
 	signal Clock_11							: STD_LOGIC;
 	signal Clock_12							: STD_LOGIC;
@@ -79,19 +79,19 @@ architecture tb of sim_ClockGenerator_tb is
 	signal Clock_17							: STD_LOGIC;
 	signal Clock_18							: STD_LOGIC;
 	signal Clock_19							: STD_LOGIC;
-	
+
 	signal Clock_21							: STD_LOGIC;
 	signal Clock_22							: STD_LOGIC;
 	signal Clock_23							: STD_LOGIC;
 	signal Clock_24							: STD_LOGIC;
 	signal Clock_25							: STD_LOGIC;
-	
+
 	signal Clock_31							: STD_LOGIC;
 	signal Clock_32							: STD_LOGIC;
 	signal Clock_33							: STD_LOGIC;
 	signal Clock_34							: STD_LOGIC;
 	signal Clock_35							: STD_LOGIC;
-	
+
 	signal Clock_40							: STD_LOGIC;
 	signal Clock_41							: STD_LOGIC;
 	signal Clock_42							: STD_LOGIC;
@@ -106,7 +106,7 @@ architecture tb of sim_ClockGenerator_tb is
 	signal Drift_Clock_41				: SIGNED(15 downto 0);
 	signal Drift_Clock_42				: SIGNED(15 downto 0);
 	signal Drift_Clock_43				: SIGNED(15 downto 0);
-	
+
 	signal Clock_50							: STD_LOGIC;
 	signal Clock_51							: STD_LOGIC;
 	signal Counter_Clock_50_us	: UNSIGNED(15 downto 0)		:= (others => '0');
@@ -117,22 +117,22 @@ architecture tb of sim_ClockGenerator_tb is
 	signal Debug_Jitter					: REAL;
 	signal Debug2								: SIGNED(15 downto 0);
 
-	
+
 	signal Reset_1							: STD_LOGIC;
 	signal Reset_2							: STD_LOGIC;
-	
+
 begin
 	-- initialize OSVVM transcript file
 	TranscriptOpen("sim_ClockGenerator_tb.csv");
 	-- SetTranscriptMirror;
-	
+
 	-- initialize global simulation status
 	simInitialize;
-	
+
 	-- simple clock
 	simGenerateClock(Clock, CLOCK_FREQ / 2);
 	ClockIsActive		<= not to_sl(simIsStopped) when rising_edge(Clock);
-	
+
 	-- generate global testbench clock
 	simGenerateClock(Clock_01, CLOCK_FREQ, Phase =>   0 deg);
 	simGenerateClock(Clock_02, CLOCK_FREQ, Phase =>  90 deg);
@@ -140,7 +140,7 @@ begin
 	simGenerateClock(Clock_04, CLOCK_FREQ, Phase => 270 deg);
 	simGenerateClock(Clock_05, CLOCK_FREQ, Phase => 360 deg);
 	simGenerateClock(Clock_06, CLOCK_FREQ, Phase => -90 deg);
-	
+
 	simGenerateClock(Clock_10, CLOCK_FREQ, DutyCycle =>	 0 percent);
 	simGenerateClock(Clock_11, CLOCK_FREQ, DutyCycle => 10 percent);
 	simGenerateClock(Clock_12, CLOCK_FREQ, DutyCycle => 20 percent);
@@ -151,13 +151,13 @@ begin
 	simGenerateClock(Clock_17, CLOCK_FREQ, DutyCycle => 70 percent);
 	simGenerateClock(Clock_18, CLOCK_FREQ, DutyCycle => 80 percent);
 	simGenerateClock(Clock_19, CLOCK_FREQ, DutyCycle => 90 percent);
-	
+
 	simGenerateClock(Clock_21, CLOCK_FREQ, Phase =>   0 deg, DutyCycle => 25 percent);
 	simGenerateClock(Clock_22, CLOCK_FREQ, Phase =>  90 deg, DutyCycle => 25 percent);
 	simGenerateClock(Clock_23, CLOCK_FREQ, Phase => 180 deg, DutyCycle => 25 percent);
 	simGenerateClock(Clock_24, CLOCK_FREQ, Phase => 270 deg, DutyCycle => 25 percent);
 	simGenerateClock(Clock_25, CLOCK_FREQ, Phase => 360 deg, DutyCycle => 25 percent);
-	
+
 	simGenerateClock(Clock_31, CLOCK_FREQ, Phase =>   0 deg, DutyCycle => 75 percent);
 	simGenerateClock(Clock_32, CLOCK_FREQ, Phase =>  90 deg, DutyCycle => 75 percent);
 	simGenerateClock(Clock_33, CLOCK_FREQ, Phase => 180 deg, DutyCycle => 75 percent);
@@ -187,13 +187,13 @@ begin
 			wait until rising_edge(Clock_41);
 			Drift_Clock_41		<= to_signed((Clock_40'last_event - Clock_41'last_event) / 10 ps, Drift_Clock_41'length);
 		end loop;
-		
+
 		-- This process is finished
 		-- simDeactivateProcess(simProcessID);
 		-- simFinalize;
 		wait;  -- forever
 	end process;
-	
+
 	procDrift_42 : process
 		-- constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Drift_43");
 	begin
@@ -204,13 +204,13 @@ begin
 			wait until rising_edge(Clock_42);
 			Drift_Clock_42		<= to_signed((Clock_40'last_event - Clock_42'last_event) / 10 ps, Drift_Clock_42'length);
 		end loop;
-		
+
 		-- This process is finished
 		-- simDeactivateProcess(simProcessID);
 		-- simFinalize;
 		wait;  -- forever
 	end process;
-	
+
 	procDrift_43 : process
 		-- constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Drift_43");
 	begin
@@ -221,23 +221,23 @@ begin
 			wait until rising_edge(Clock_43);
 			Drift_Clock_43		<= to_signed((Clock_40'last_event - Clock_43'last_event) / 10 ps, Drift_Clock_43'length);
 		end loop;
-		
+
 		-- This process is finished
 		-- simDeactivateProcess(simProcessID);
 		-- simFinalize;
 		wait;  -- forever
 	end process;
 
-	
+
 	simGenerateClock(Clock_50, CLOCK_FREQ);
 	simGenerateClock2(-1, Clock_51, Debug_Jitter, to_time(CLOCK_FREQ));
 
 	Counter_Clock_50_us		<= upcounter_next(cnt => Counter_Clock_50_us) when rising_edge(Clock_50);
 	Counter_Clock_51_us		<= upcounter_next(cnt => Counter_Clock_51_us) when rising_edge(Clock_51);
-	
+
 	procHistogram : process
 		-- constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Histogram");
-		
+
 		variable Sum					: INTEGER;
 		variable Count				: NATURAL;
 		variable Rand					: INTEGER;
@@ -270,11 +270,11 @@ begin
 			-- log random value
 			CovBin1.ICover(Rand);
 			Debug2										<= to_signed(Rand, Debug2'length);
-			
+
 			Sum							:= Sum + Rand;
 			Count						:= Count + 1;
 			Mean_Clock_51		<= to_signed((Sum / imin(RandBuffer'length, Count + 1)), Mean_Clock_51'length);
-			
+
 		end loop;
 
 		CovBin1.WriteBin;-- This process is finished
@@ -287,23 +287,23 @@ begin
 	begin
 		Drift_Clock_51		<= (others => '0');
 		Drift_Clock_52		<= (others => '0');
-	
+
 		wait until rising_edge(Clock_50);
 		wait until rising_edge(Clock_51);
-	
+
 		while (not simIsStopped) loop
 			wait until rising_edge(Clock_50);
 			Drift_Clock_51		<= to_signed((Clock_50'last_event - Clock_51'last_event) / 100 fs, Drift_Clock_51'length);
 			-- Drift_Clock_52		<= to_signed((Clock_51'last_event - Clock_50'last_event) / 100 fs, Drift_Clock_52'length);
-		
+
 		end loop;
-	
+
 		-- This process is finished
 		-- simDeactivateProcess(simProcessID);
 		-- simFinalize;
 		wait;  -- forever
 	end process;
-	
+
 
 
 
@@ -312,23 +312,23 @@ begin
 	-- procChecker_1 : process
 		-- constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker_1");
 	-- begin
-	
+
 		-- simWaitUntilRisingEdge(Clock_01, 99);
 		-- simWaitUntilFallingEdge(Clock_01, 99);
-	
+
 		-- -- This process is finished
 		-- simDeactivateProcess(simProcessID);
 		-- simFinalize;
 		-- wait;  -- forever
 	-- end process;
-	
+
 	procChecker_2 : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker_2");
 	begin
-	
+
 		simWaitUntilRisingEdge(Clock, 5000);
 		simWaitUntilFallingEdge(Clock, 5000);
-	
+
 		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		simFinalize;
