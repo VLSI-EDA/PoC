@@ -25,14 +25,20 @@
 # limitations under the License.
 # ==============================================================================
 
-import sys
 import os
 from subprocess import call
 
-for dir in sys.argv:
+def runAll(dir):
 	for root, dirs, files in os.walk(dir):
 		for file in files:
 			print("Executing '" + file + "'")
 			ret = call(os.path.join(root, file))
 			if ret != 0:
-				exit(ret)
+				return  ret
+	return  0
+
+hook = os.path.basename(__file__)
+ret  = runAll('tools/git/hooks/' + hook + '.d')
+
+print hook + ": " + ("PASS" if ret == 0 else "FAIL")
+exit(ret)
