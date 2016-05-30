@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -24,6 +24,7 @@
 # limitations under the License.
 # ==============================================================================
 
+import sys
 import os
 from subprocess import check_output
 
@@ -34,7 +35,7 @@ hooks = [ hook[:-2] for hook in os.listdir(hook_root) if (hook.endswith('.d') an
 runner			= os.path.join(hook_root, 'run-hook.py')
 target_root	= os.path.join(git_root, '.git/hooks')
 for hook in hooks:
-	print('Creating Hook "' + hook + '" ... ', end='')
+	sys.stdout.write('Creating Hook "' + hook + '" ... ')
 	try:
 		os.symlink(runner, os.path.join(target_root, hook))
 		print('done')
