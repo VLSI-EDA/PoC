@@ -25,26 +25,30 @@
 # ==============================================================================
 
 import sys
-import os
-from subprocess import check_output
+from subprocess import check_call, call
 
-git_root  = check_output(['git', 'rev-parse', '--show-toplevel'], universal_newlines=True).strip()
-hook_root = os.path.join(git_root, 'tools/git/hooks')
-hooks = [ hook[:-2] for hook in os.listdir(hook_root) if (hook.endswith('.d') and os.path.isdir(os.path.join(hook_root, hook))) ]
+def pyup():
+    # Check version of Python interpreter and return silently if it is sufficient
+    if 0x03050000 <= sys.hexversion < 0x04000000:
+        return
 
-runner			= os.path.join(hook_root, 'run-hook.py')
-target_root	= os.path.join(git_root, '.git/hooks')
-for hook in hooks:
-	sys.stdout.write('Creating Hook "' + hook + '" ... ')
-	link =  os.path.join(target_root, hook)
-	try:
-		os.symlink(runner, link)
-		print('done')
-	except OSError as e:
-		if e.errno == 17:
-			if os.path.islink(link) and os.path.realpath(os.readlink(link)) == os.path.realpath(runner):
-				print('already set')
-			else:
-				print('OCCUPIED - NOT set')
-		else:
-			print(e)
+    # Try to find suitable interpreter and restart invocation
+    for ver in [ "3", "3.5", "3.6", "3.7", "3.8", "3.9" ]:
+        prog = 'python' + ver
+        try:
+            check_call([prog, '-c', 'import sys; sys.exit(not (0x03050000 <= sys.hexversion < 0x04000000))'])
+        except:
+            continue
+        try:
+            args = sys.argv[:]
+            args.insert(0, prog)
+            exit(call(args))
+        except Exception as e:
+            print(e)
+
+    print("No suitable python version found.")
+    exit(1)
+
+if __name__ == "__main__":
+	sys.argv = sys.argv[1:]
+	pyup()
