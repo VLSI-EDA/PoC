@@ -5,6 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
+#										Thomas B. Preusser
 #
 # Python Class:      PoC specific classes
 #
@@ -41,9 +42,9 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.PoC")
 
 
-from os                   import environ
+from os                   import environ,path
 from pathlib              import Path
-from subprocess           import check_output, CalledProcessError
+from subprocess           import check_output, check_call, call, CalledProcessError
 
 from Base.Configuration   import Configuration as BaseConfiguration
 
@@ -80,7 +81,7 @@ class Configuration(BaseConfiguration):
 
 	def __CheckForGit(self):
 		try:
-			check_output(["git", "--version"], universal_newlines=True)
+			check_call(["git", "--version"])
 			return True
 		except OSError:
 			return False
@@ -98,6 +99,9 @@ class Configuration(BaseConfiguration):
 			return response[:-1]
 		except OSError:
 			return False
+
+	def RunPostConfigurationTasks(self):
+		call([path.join(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'], 'tools/git/git-hooks.setup.py')])
 
 	# LOCAL = git rev-parse @
 	# PS G:\git\PoC> git rev-parse "@"

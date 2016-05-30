@@ -36,8 +36,15 @@ runner			= os.path.join(hook_root, 'run-hook.py')
 target_root	= os.path.join(git_root, '.git/hooks')
 for hook in hooks:
 	sys.stdout.write('Creating Hook "' + hook + '" ... ')
+	link =  os.path.join(target_root, hook)
 	try:
-		os.symlink(runner, os.path.join(target_root, hook))
+		os.symlink(runner, link)
 		print('done')
 	except OSError as e:
-		print(e)
+		if e.errno == 17:
+			if os.path.islink(link) and os.path.realpath(os.readlink(link)) == os.path.realpath(runner):
+				print('already set')
+			else:
+				print('OCCUPIED - NOT set')
+		else:
+			print(e)
