@@ -10,22 +10,22 @@ path OSVVM_Directory =  "osvvm"
 if (VHDLVersion < 2008) then
 	report "OSVVM requires VHDL-2008; See OSVVM documentation for VHDL-2002 support."
 elseif (VHDLVersion = 2008) then
-	if (Tool = "GHDL") then
-		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:GHDLFiles} / OSVVM_Directory))
-		if ?{(OSVVM_LibraryPath / "osvvm-obj08.cf")} then
-			library osvvm	OSVVM_LibraryPath
-		else
-			report "No precompiled OSVVM library for GHDL found."
-		end if
-	elseif (Tool = "Mentor_vSim") then
-		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / OSVVM_Directory))
-		if ?{ OSVVM_LibraryPath} then
-			library osvvm	OSVVM_LibraryPath
-		else
-			report "No precompiled QuestaSim/ModelSim library for GHDL found."
-		end if
-	else
-		# TODO self-compile section?
+#	if (Tool = "GHDL") then
+#		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:GHDLFiles} / OSVVM_Directory))
+#		if ?{(OSVVM_LibraryPath / "osvvm-obj08.cf")} then
+#			library osvvm	OSVVM_LibraryPath
+#		else
+#			report "No precompiled OSVVM library for GHDL found."
+#		end if
+#	elseif (Tool = "Mentor_vSim") then
+#		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / OSVVM_Directory))
+#		if ?{ OSVVM_LibraryPath} then
+#			library osvvm	OSVVM_LibraryPath
+#		else
+#			report "No precompiled QuestaSim/ModelSim library for GHDL found."
+#		end if
+#	else
+#		# TODO self-compile section?
 		vhdl	osvvm	"lib/osvvm/NamePkg.vhd"									# OSVVM 
 		vhdl	osvvm	"lib/osvvm/OsvvmGlobalPkg.vhd"					# OSVVM 
 		vhdl	osvvm	"lib/osvvm/TextUtilPkg.vhd"							# OSVVM 
@@ -38,7 +38,7 @@ elseif (VHDLVersion = 2008) then
 		vhdl	osvvm	"lib/osvvm/RandomPkg.vhd"								# OSVVM 
 		vhdl	osvvm	"lib/osvvm/CoveragePkg.vhd"							# OSVVM 
 		vhdl	osvvm	"lib/osvvm/OsvvmContext.vhd"						# OSVVM 
-	end if
+#	end if
 else
 	report "VHDL version not supported by OSVVM."
 end if
