@@ -1,7 +1,7 @@
 # The PoC-Library
 
 [![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
-[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch={@BRANCH@})](https://travis-ci.org/VLSI-EDA/PoC/branches)
+[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release)](https://travis-ci.org/VLSI-EDA/PoC/branches)
 [![Documentation Status](https://readthedocs.org/projects/poc-library/badge/?version=latest)](http://poc-library.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)
@@ -9,8 +9,8 @@
 [![Apache License 2.0](https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat)](LICENSE.md)
 
 
-This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** -
-Faculty of Computer Science, Technische Universität Dresden, Germany
+This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - 
+Faculty of Computer Science, Technische Universität Dresden, Germany  
 **http://vlsi-eda.inf.tu-dresden.de**
 
 ![Logo: Technische Universität Dresden](https://github.com/VLSI-EDA/PoC/wiki/images/logo_tud.gif)
@@ -68,12 +68,12 @@ git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC
 
 **Note:** The option `--recursive` performs a recursive clone operation for all
 linked [git submodules][git_submod]. An additional `git submodule init` and
-`git submodule update` call is not needed anymore.
+`git submodule update` call is not needed anymore. 
 
  [download]: https://github.com/VLSI-EDA/PoC/archive/master.zip
  [git_submod]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
 
-**Note:** The created folder `<GitRoot>\PoC` is used as `<PoCRoot>` in later instructions.
+**Note:** The created folder `<GitRoot>\PoC` is used as `<PoCRoot>` in later instructions. 
 
 
 ## 3 Requirements
@@ -90,8 +90,8 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 	- [Python 3][python] (&ge; 3.5):
 	     - [colorama][colorama]
 	     - [py-flags][pyflags]
-
-    All Python requirements are listed in [`requirements.txt`][pip3-req] and can be installed via:
+	  
+    All Python requirements are listed in [`requirements.txt`][pip3-req] and can be installed via:  
    `sudo python3.5 -m pip install -r requirements.txt`
  - Synthesis tool chains:
      - Altera Quartus-II &ge; 13.0 or
@@ -115,15 +115,15 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
  [pip3-req]:  requirements.txt
 
 ##### Linux specific requirements:
-
+ 
  - Debian specific:
-	- bash is configured as `/bin/sh` ([read more](https://wiki.debian.org/DashAsBinSh))
+	- bash is configured as `/bin/sh` ([read more](https://wiki.debian.org/DashAsBinSh))  
       `dpkg-reconfigure dash`
-
+ 
 ##### Windows specific requirements:
 
  - PowerShell 4.0 ([Windows Management Framework 4.0][wmf40])
-    - Allow local script execution ([read more][execpol])
+    - Allow local script execution ([read more][execpol])  
       `Set-ExecutionPolicy RemoteSigned`
     - PowerShell Community Extensions 3.2 ([pscx.codeplex.com][pscx])
 
@@ -176,7 +176,7 @@ or update choices made.
 If you want to check your installation, you can run one of our testbenches as described in [tb/README.md][tb_readme]
 
  [tb_readme]: tb/README.md
-
+ 
 ## 6 Integrating PoC into Projects
 
 **The PoC-Library** is meant to be integrated into HDL projects. Therefore it's
@@ -219,7 +219,7 @@ cd lib\PoC\
 **The PoC-Library** needs two VHDL files for it's configuration. These files are used to
 determine the most suitable implementation depending on the provided platform information.
 Copy these two template files into your project's source folder. Rename these files to
-*.vhdl and configure the VHDL constants in these files.
+*.vhdl and configure the VHDL constants in these files.  
 
 ```PowerShell
 cd <ProjectRoot>
@@ -285,7 +285,7 @@ All VHDL source files should be compiled into the VHDL library `PoC`.
 If not indicated otherwise, all source files can be compiled using the
 VHDL-93 or VHDL-2008 language version. Incompatible files are named
 `*.v93.vhdl` and `*.v08.vhdl` to denote the highest supported language
-version.
+version. 
 
 #### 7.2 Standalone
 
@@ -304,22 +304,22 @@ explore PoC's full potential. Don't forget to activate the new
 XST parser in new projects and to append the IP core search
 directory if generated netlists are used.
 
- 1. **Activating the New Parser in XST**
+ 1. **Activating the New Parser in XST**  
     PoC requires XST to use the *new* source file parser, introduced
     with the Virtex-6 FPGA family. It is backward compatible.
 
     **->** Open the *XST Process Property* window and add `-use_new_parser yes`
     to the option `Other XST Command Line Options`.
 
- 2. **Setting the IP Core Search Directory for Generated Netlists**
+ 2. **Setting the IP Core Search Directory for Generated Netlists**  
     PoC can generate netlists for bundled source files or for
     pre-configured IP cores. These netlists are copied into the
     `<PoCRoot>\netlist\<DEVICE>` folder. This folder and its subfolders
     need to be added to the IP core search directory.
-
+    
     **->** Open the *XST Process Property* window and append the directory to the `-sd` option.
     **->** Open *Translate Process Property* and append the paths here, too.
-
+    
         D:\git\PoC\netlist\XC7VX485T-2FFG1761|      ↩
         D:\git\PoC\netlist\XC7VX485T-2FFG1761\xil|  ↩
         D:\git\PoC\netlist\XC7VX485T-2FFG1761\sata
@@ -354,15 +354,15 @@ git merge
 
 ## 9 References
 
- -  [PoC-Examples][poc_ex]:
+ -  [PoC-Examples][poc_ex]:  
     A list of examples and reference implementations for the PoC-Library
- -  [The Q27 Project][q27]:
+ -  [The Q27 Project][q27]:  
     27-Queens Puzzle: Massively Parellel Enumeration and Solution Counting
- -  [PicoBlaze-Library][pb_lib]:
+ -  [PicoBlaze-Library][pb_lib]:  
     The PicoBlaze-Library offers several PicoBlaze devices and code routines
     to extend a common PicoBlaze environment to a little System on a Chip (SoC
     or SoFPGA).
- -  [PicoBlaze-Examples][pb_ex]:
+ -  [PicoBlaze-Examples][pb_ex]:  
     A SoFPGA reference implementation, based on the PoC-Library and the
     PicoBlaze-Library.
 
@@ -370,8 +370,8 @@ git merge
  [q27]:			https://github.com/preusser/q27
  [pb_lib]:  https://github.com/Paebbels/PicoBlaze-Library
  [pb_ex]:		https://github.com/Paebbels/PicoBlaze-Examples
-
-
+ 
+ 
 If you are using the PoC-Library, please let us know. We are grateful for
 your project's reference.
 
