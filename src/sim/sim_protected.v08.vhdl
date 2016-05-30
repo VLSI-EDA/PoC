@@ -354,6 +354,8 @@ package body sim_protected is
 					finalizeTest(C_SIM_DEFAULT_TEST_ID);
 				elsif (Tests(C_SIM_DEFAULT_TEST_ID).Status = SIM_TEST_STATUS_ZOMBI) then
 					stopProcesses(C_SIM_DEFAULT_TEST_ID);
+				else
+					return;
 				end if;
 				finalize;
 			end if;
