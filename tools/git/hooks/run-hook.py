@@ -39,5 +39,5 @@ def runAll(dir):
 hook = os.path.basename(__file__)
 ret  = runAll('tools/git/hooks/' + hook + '.d')
 
-print hook + ": " + ("PASS" if ret == 0 else "FAIL")
+print(hook + ": " + ("PASS" if ret == 0 else "FAIL"))
 exit(ret)
