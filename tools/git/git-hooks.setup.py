@@ -27,6 +27,7 @@
 import sys
 import os
 from subprocess import check_output
+from shutil import copyfile
 
 git_root  = check_output(['git', 'rev-parse', '--show-toplevel'], universal_newlines=True).strip()
 hook_root = os.path.join(git_root, 'tools/git/hooks')
@@ -36,15 +37,24 @@ runner			= os.path.join(hook_root, 'run-hook.py')
 target_root	= os.path.join(git_root, '.git/hooks')
 for hook in hooks:
 	sys.stdout.write('Creating Hook "' + hook + '" ... ')
-	link =  os.path.join(target_root, hook)
-	try:
-		os.symlink(runner, link)
-		print('done')
-	except OSError as e:
-		if e.errno == 17:
-			if os.path.islink(link) and os.path.realpath(os.readlink(link)) == os.path.realpath(runner):
-				print('already set')
-			else:
-				print('OCCUPIED - NOT set')
+	link = os.path.join(target_root, hook)
+	if os.path.lexists(link):
+		# Just print a message that the hook is already taken
+		if os.path.islink(link) and os.path.realpath(os.readlink(link)) == os.path.realpath(runner):
+			print('already set')
 		else:
+			print('OCCUPIED - NOT set')
+	else:
+		# Try and report installation of PoC hook
+		try:
+			# prefered symlink
+			os.symlink(runner, link)
+			print('done')
+		except OSError as e:
+			if getattr(e, 'winerror', None) == 1314:
+				try:
+					# copy as a backup solution
+					copyfile(runner, link)
+				except OSError as e2:
+					e = e2
 			print(e)
