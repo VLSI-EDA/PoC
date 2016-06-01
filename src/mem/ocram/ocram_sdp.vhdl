@@ -91,9 +91,8 @@ architecture rtl of ocram_sdp is
   constant DEPTH : positive := 2**A_BITS;
 
 begin
-	-- psl default clock is rising_edge(rclk);
 	
-	gInfer : if ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
+	gInfer : if ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly
 		-- Xilinx notes:
 		--	 WRITE_MODE is set to WRITE_FIRST, but this also means that read data
@@ -165,8 +164,9 @@ begin
 					--synthesis translate_off
 					if Is_X(std_logic_vector(ra)) then
 						q <= (others => 'X');
-					elsif ra = wa then
-						-- read data unknown when reading at write address
+					elsif wce = '1' and we = '1' and ra = wa and rising_edge(wclk) then
+						-- read data unknown when reading at write address,
+						-- and both clock-edges are at almost the same time
 						q <= (others => 'X');
 						report "ocram_sdp: Reading from address just writing: Unknown result."
 							severity warning;
@@ -181,7 +181,7 @@ begin
 		end process;
 	end generate gInfer;
 
-	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
+	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
 		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;
 end architecture;

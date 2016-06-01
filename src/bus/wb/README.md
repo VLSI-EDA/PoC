@@ -8,12 +8,7 @@ The namespace `PoC.bus.wb` offers different modules for the
 
 ## Package
 
-The package [`wb`][wb.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.wb.all;
-```
+The package [`PoC.wb`][wb.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

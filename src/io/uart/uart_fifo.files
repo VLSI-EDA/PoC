@@ -1,0 +1,18 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Common PoC packages for configuration, synthesis and simulation
+include				"src/common/common.files"										# load common packages
+
+# PoC.misc.sync
+include				"src/misc/sync/sync_Bits.files"							# 
+
+# PoC.io.uart
+vhdl		poc		"src/io/uart/uart.pkg.vhdl"									# UART Package
+vhdl		poc		"src/io/uart/uart_bclk.vhdl"								# Bit clock generator
+vhdl		poc		"src/io/uart/uart_rx.vhdl"									# Receiver
+vhdl		poc		"src/io/uart/uart_tx.vhdl"									# Transmitter
+vhdl		poc		"src/io/uart/uart_fifo.vhdl"								# Top-Level

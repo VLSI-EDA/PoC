@@ -43,7 +43,7 @@ use			PoC.vectors.all;
 
 entity stream_Mux is
 	generic (
-		portS											: POSITIVE									:= 2;
+		PORTS											: POSITIVE									:= 2;
 		DATA_BITS									: POSITIVE									:= 8;
 		META_BITS									: NATURAL										:= 8;
 		META_REV_BITS							: NATURAL										:= 2--;
@@ -53,13 +53,13 @@ entity stream_Mux is
 		Clock											: in	STD_LOGIC;
 		Reset											: in	STD_LOGIC;
 		-- IN Ports
-		In_Valid									: in	STD_LOGIC_VECTOR(portS - 1 downto 0);
-		In_Data										: in	T_SLM(portS - 1 downto 0, DATA_BITS - 1 downto 0);
-		In_Meta										: in	T_SLM(portS - 1 downto 0, META_BITS - 1 downto 0);
-		In_Meta_rev								: out	T_SLM(portS - 1 downto 0, META_REV_BITS - 1 downto 0);
-		In_SOF										: in	STD_LOGIC_VECTOR(portS - 1 downto 0);
-		In_EOF										: in	STD_LOGIC_VECTOR(portS - 1 downto 0);
-		In_Ack										: out	STD_LOGIC_VECTOR(portS - 1 downto 0);
+		In_Valid									: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		In_Data										: in	T_SLM(PORTS - 1 downto 0, DATA_BITS - 1 downto 0);
+		In_Meta										: in	T_SLM(PORTS - 1 downto 0, META_BITS - 1 downto 0);
+		In_Meta_rev								: out	T_SLM(PORTS - 1 downto 0, META_REV_BITS - 1 downto 0);
+		In_SOF										: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		In_EOF										: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		In_Ack										: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 		-- OUT Port
 		Out_Valid									: out	STD_LOGIC;
 		Out_Data									: out	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
@@ -76,7 +76,7 @@ architecture rtl of stream_Mux is
 	attribute KEEP										: BOOLEAN;
 	attribute FSM_ENCODING						: STRING;
 
-	subtype T_CHANNEL_INDEX is NATURAL range 0 to portS - 1;
+	subtype T_CHANNEL_INDEX is NATURAL range 0 to PORTS - 1;
 	
 	type T_STATE is (ST_IDLE, ST_DATAFLOW);
 	
@@ -85,19 +85,19 @@ architecture rtl of stream_Mux is
 	
 	signal FSM_Dataflow_en						: STD_LOGIC;
 	
-	signal RequestVector							: STD_LOGIC_VECTOR(portS - 1 downto 0);
+	signal RequestVector							: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 	signal RequestWithSelf						: STD_LOGIC;
 	signal RequestWithoutSelf					: STD_LOGIC;
 	
-	signal RequestLeft								: UNSIGNED(portS - 1 downto 0);
-	signal SelectLeft									: UNSIGNED(portS - 1 downto 0);
-	signal SelectRight								: UNSIGNED(portS - 1 downto 0);
+	signal RequestLeft								: UNSIGNED(PORTS - 1 downto 0);
+	signal SelectLeft									: UNSIGNED(PORTS - 1 downto 0);
+	signal SelectRight								: UNSIGNED(PORTS - 1 downto 0);
 	
 	signal ChannelPointer_en					: STD_LOGIC;
-	signal ChannelPointer							: STD_LOGIC_VECTOR(portS - 1 downto 0);
-	signal ChannelPointer_d						: STD_LOGIC_VECTOR(portS - 1 downto 0)						:= to_slv(2 ** (portS - 1), portS);
-	signal ChannelPointer_nxt					: STD_LOGIC_VECTOR(portS - 1 downto 0);
-	signal ChannelPointer_bin					: UNSIGNED(log2ceilnz(portS) - 1 downto 0);
+	signal ChannelPointer							: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+	signal ChannelPointer_d						: STD_LOGIC_VECTOR(PORTS - 1 downto 0)						:= to_slv(2 ** (PORTS - 1), PORTS);
+	signal ChannelPointer_nxt					: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+	signal ChannelPointer_bin					: UNSIGNED(log2ceilnz(PORTS) - 1 downto 0);
 	
 	signal idx												: T_CHANNEL_INDEX;
 	
@@ -153,7 +153,7 @@ begin
 	begin
 		if rising_edge(Clock) then
 			if (Reset = '1') then
-				ChannelPointer_d			<= to_slv(2 ** (portS - 1), portS);
+				ChannelPointer_d			<= to_slv(2 ** (PORTS - 1), PORTS);
 			elsif (ChannelPointer_en = '1') then
 				ChannelPointer_d		<= ChannelPointer_nxt;
 			end if;
@@ -182,9 +182,9 @@ begin
 		In_Meta_rev		<= (others => (others => '0'));
 	end generate;
 	genMetaReverse_1 : if (META_REV_BITS > 0) generate
-		signal Temp_Meta_rev : T_SLM(portS - 1 downto 0, META_REV_BITS - 1 downto 0)		:= (others => (others => 'Z'));
+		signal Temp_Meta_rev : T_SLM(PORTS - 1 downto 0, META_REV_BITS - 1 downto 0)		:= (others => (others => 'Z'));
 	begin
-		genAssign : for i in 0 to portS - 1 generate
+		genAssign : for i in 0 to PORTS - 1 generate
 			signal row	: STD_LOGIC_VECTOR(META_REV_BITS - 1 downto 0);
 		begin
 			row		<= Out_Meta_rev and (row'range => ChannelPointer(i));

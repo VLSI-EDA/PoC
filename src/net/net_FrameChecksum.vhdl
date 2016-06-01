@@ -374,10 +374,10 @@ begin
 	
 	genMeta : for i in 0 to META_BITS'length - 1 generate
 		signal MetaFIFO_put						: STD_LOGIC;
-		signal MetaFIFO_DataIn				: STD_LOGIC_VECTOR(META_BITS(I) - 1 downto 0);
+		signal MetaFIFO_DataIn				: STD_LOGIC_VECTOR(META_BITS(i) - 1 downto 0);
 		signal MetaFIFO_Full					: STD_LOGIC;
 		signal MetaFIFO_got						: STD_LOGIC;
-		signal MetaFIFO_DataOut				: STD_LOGIC_VECTOR(META_BITS(I) - 1 downto 0);
+		signal MetaFIFO_DataOut				: STD_LOGIC_VECTOR(META_BITS(i) - 1 downto 0);
 		signal MetaFIFO_Valid					: STD_LOGIC;
 		signal MetaFIFO_Commit				: STD_LOGIC;
 		signal MetaFIFO_Rollback			: STD_LOGIC;
@@ -386,7 +386,7 @@ begin
 		
 		signal Writer_Counter_rst			: STD_LOGIC;
 		signal Writer_Counter_en			: STD_LOGIC;
-		signal Writer_Counter_us			: UNSIGNED(log2ceilnz(META_FIFO_DEPTH(I) * MAX_FRAMES) - 1 downto 0)			:= (others => '0');
+		signal Writer_Counter_us			: UNSIGNED(log2ceilnz(META_FIFO_DEPTH(i) * MAX_FRAMES) - 1 downto 0)			:= (others => '0');
 	begin
 		Writer_Counter_rst		<= '0';		-- FIXME: is this correct?
 	
@@ -397,7 +397,7 @@ begin
 					Writer_CounterControl			<= '0';
 				elsif ((In_Valid AND In_SOF) = '1') then
 					Writer_CounterControl		<= '1';
-				elsif (Writer_Counter_us = (META_FIFO_DEPTH(I) - 1)) then
+				elsif (Writer_Counter_us = (META_FIFO_DEPTH(i) - 1)) then
 					Writer_CounterControl		<= '0';
 				end if;
 			end if;
@@ -416,16 +416,16 @@ begin
 			end if;
 		end process;
 		
-		Meta_rst(I)					<= NOT Writer_Counter_en;
-		In_Meta_nxt(I)			<= Writer_Counter_en;
+		Meta_rst(i)					<= NOT Writer_Counter_en;
+		In_Meta_nxt(i)			<= Writer_Counter_en;
 		
 		MetaFIFO_put				<= Writer_Counter_en;
-		MetaFIFO_DataIn			<= In_Meta_Data(high(META_BITS, I) downto low(META_BITS, I));
+		MetaFIFO_DataIn			<= In_Meta_Data(high(META_BITS, i) downto low(META_BITS, i));
 	
 		MetaFIFO : entity PoC.fifo_cc_got_tempgot
 			generic map (
 				D_BITS							=> MetaFIFO_DataIn'length,							-- Data Width
-				MIN_DEPTH						=> (META_FIFO_DEPTH(I) * MAX_FRAMES),		-- Minimum FIFO Depth
+				MIN_DEPTH						=> (META_FIFO_DEPTH(i) * MAX_FRAMES),		-- Minimum FIFO Depth
 				DATA_REG						=> TRUE,																-- Store Data Content in Registers
 				STATE_REG						=> TRUE,																-- Registered Full/Empty Indicators
 				OUTPUT_REG					=> FALSE,																-- Registered FIFO Output
@@ -450,11 +450,11 @@ begin
 				rollback						=> MetaFIFO_Rollback
 			);
 		
-		MetaFIFO_got				<= Out_Meta_nxt(I);
+		MetaFIFO_got				<= Out_Meta_nxt(i);
 		MetaFIFO_Commit			<= FrameCommit;
 		MetaFIFO_Rollback		<= Out_Meta_rst;
 	
-		Out_Meta_Data(high(META_BITS, I) downto low(META_BITS, I))	<= MetaFIFO_DataOut;
+		Out_Meta_Data(high(META_BITS, i) downto low(META_BITS, i))	<= MetaFIFO_DataOut;
 	end generate;
 
 	In_Meta_rst						<= slv_and(Meta_rst);

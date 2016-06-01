@@ -1,0 +1,17 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# PoC.comm
+include				"src/comm/comm_scramble.files"							# Scrambler
+
+# PoC.fifo
+include				"src/fifo/fifo_ic_got.files"								# Unit Under Test
+
+# PoC.comm
+include				"src/comm/comm_scramble.files"
+
+# Testbench file(s)
+vhdl		test	"tb/fifo/fifo_ic_got_tb.vhdl"								# Testbench

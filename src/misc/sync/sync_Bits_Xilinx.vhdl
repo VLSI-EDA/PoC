@@ -32,7 +32,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,11 +51,16 @@
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
+library PoC;
+use			PoC.utils.ALL;
+use			PoC.sync.all;
+
 
 entity sync_Bits_Xilinx is
 	generic (
 		BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
-		INIT					: STD_LOGIC_VECTOR		:= x"00000000"				-- initialitation bits
+		INIT					: STD_LOGIC_VECTOR		:= x"00000000";				-- initialitation bits
+		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
 		Clock					: in	STD_LOGIC;														-- Clock to be synchronized to
@@ -68,24 +73,24 @@ end entity;
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
 
+library UniSim;
+use			UniSim.vComponents.all;
+
+library PoC;
+use			PoC.sync.all;
+
 
 entity sync_Bit_Xilinx is
 	generic (
-		INIT					: BIT							-- initialitation bit
+		INIT					: BIT;												-- initialitation bit
+		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2		-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
-		Clock					: in	STD_LOGIC;	-- Clock to be synchronized to
-		Input					: in	STD_LOGIC;	-- Data to be synchronized
-		Output				: out	STD_LOGIC		-- synchronised data
+		Clock					: in	STD_LOGIC;							-- Clock to be synchronized to
+		Input					: in	STD_LOGIC;							-- Data to be synchronized
+		Output				: out	STD_LOGIC								-- synchronised data
 	);
 end entity;
-
-
-library IEEE;
-use			IEEE.STD_LOGIC_1164.all;
-
-library PoC;
-use			PoC.utils.ALL;
 
 
 architecture rtl of sync_Bits_Xilinx is
@@ -94,7 +99,8 @@ begin
 	gen : for i in 0 to BITS - 1 generate
 		Sync : entity PoC.sync_Bit_Xilinx
 			generic map (
-				INIT	=> INIT_I(i)
+				INIT				=> INIT_I(i),
+				SYNC_DEPTH	=> SYNC_DEPTH
 			)
 			port map (
 				Clock		=> Clock,
@@ -103,13 +109,6 @@ begin
 			);
 	end generate;
 end architecture;
-
-
-library IEEE;
-use			IEEE.STD_LOGIC_1164.all;
-
-library UniSim;
-use			UniSim.vComponents.all;
 
 
 architecture rtl of sync_Bit_Xilinx is
@@ -133,6 +132,8 @@ architecture rtl of sync_Bit_Xilinx is
 	attribute RLOC of Data_sync						: signal is "X0Y0";
 		
 begin
+	assert (SYNC_DEPTH = 2) report "Xilinx synchronizer supports only 2 stages. It could be extended to 4 or 8 on new FPGA series." severity WARNING;
+
 	Data_async	<= Input;
 
 	FF1_METASTABILITY_FFS : FD

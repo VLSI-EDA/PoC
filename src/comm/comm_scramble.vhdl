@@ -47,7 +47,7 @@ entity comm_scramble is
     din  : in  std_logic_vector(GEN'length-2 downto 0);
 
     step : in  std_logic;    -- Compute a Mask Output
-    mask : out std_logic_vector(BITS-1 downto 0)
+    mask : out std_logic_vector(BITS-1 downto 0) := (others => '0')
   );
 end comm_scramble;
 

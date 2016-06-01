@@ -316,7 +316,7 @@ begin
   -- Memory Instantiation
   -----------------------------------------------------------------------------
   gLarge: if not DATA_REG generate
-    ram : ocram_sdp
+    ram : entity PoC.ocram_sdp
       generic map (
         A_BITS => A_BITS,
         D_BITS => D_BITS

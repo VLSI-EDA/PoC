@@ -1,59 +1,67 @@
 [*]
-[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Tue Jun 09 18:27:05 2015
+[*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
+[*] Sat Mar 19 22:06:18 2016
 [*]
-[dumpfile] "D:\git\SATAController\lib\PoC\temp\ghdl\arith_convert_bin2bcd_tb.vcd"
-[dumpfile_mtime] "Tue Jun 09 18:22:03 2015"
-[dumpfile_size] 26233
-[savefile] "D:\git\SATAController\lib\PoC\sim\arith\arith_convert_bin2bcd_tb.gtkw"
+[dumpfile_mtime] "Sat Mar 19 22:01:58 2016"
+[dumpfile_size] 16168
 [timestart] 0
-[size] 1920 996
-[pos] -209 -209
-*-27.066833 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-[treeopen] conv1.
-[treeopen] conv2.
+[size] 1680 996
+[pos] -1 -1
+*-27.066833 171500000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.arith_convert_bin2bcd_tb.
+[treeopen] top.arith_convert_bin2bcd_tb.conv1_bcddigits.
+[treeopen] top.arith_convert_bin2bcd_tb.conv2_bcddigits.
 [sst_width] 197
-[signals_width] 227
+[signals_width] 252
 [sst_expanded] 1
 [sst_vpaned_height] 292
 @28
-clock
-reset
-start
+top.arith_convert_bin2bcd_tb.clock
+top.arith_convert_bin2bcd_tb.reset
+top.arith_convert_bin2bcd_tb.start
 @800200
 -Conv1
 @24
-conv1.binary[29:0]
+#{top.arith_convert_bin2bcd_tb.conv1_binary[29:0]} top.arith_convert_bin2bcd_tb.conv1_binary[29] top.arith_convert_bin2bcd_tb.conv1_binary[28] top.arith_convert_bin2bcd_tb.conv1_binary[27] top.arith_convert_bin2bcd_tb.conv1_binary[26] top.arith_convert_bin2bcd_tb.conv1_binary[25] top.arith_convert_bin2bcd_tb.conv1_binary[24] top.arith_convert_bin2bcd_tb.conv1_binary[23] top.arith_convert_bin2bcd_tb.conv1_binary[22] top.arith_convert_bin2bcd_tb.conv1_binary[21] top.arith_convert_bin2bcd_tb.conv1_binary[20] top.arith_convert_bin2bcd_tb.conv1_binary[19] top.arith_convert_bin2bcd_tb.conv1_binary[18] top.arith_convert_bin2bcd_tb.conv1_binary[17] top.arith_convert_bin2bcd_tb.conv1_binary[16] top.arith_convert_bin2bcd_tb.conv1_binary[15] top.arith_convert_bin2bcd_tb.conv1_binary[14] top.arith_convert_bin2bcd_tb.conv1_binary[13] top.arith_convert_bin2bcd_tb.conv1_binary[12] top.arith_convert_bin2bcd_tb.conv1_binary[11] top.arith_convert_bin2bcd_tb.conv1_binary[10] top.arith_convert_bin2bcd_tb.conv1_binary[9] top.arith_convert_bin2bcd_tb.conv1_binary[8] top.arith_convert_bin2bcd_tb.conv1_binary[7] top.arith_convert_bin2bcd_tb.conv1_binary[6] top.arith_convert_bin2bcd_tb.conv1_binary[5] top.arith_convert_bin2bcd_tb.conv1_binary[4] top.arith_convert_bin2bcd_tb.conv1_binary[3] top.arith_convert_bin2bcd_tb.conv1_binary[2] top.arith_convert_bin2bcd_tb.conv1_binary[1] top.arith_convert_bin2bcd_tb.conv1_binary[0]
 @28
-conv1.busy
-conv1.sign
-@24
-conv1.(0).digit_d[3:0]
-conv1.(1).digit_d[3:0]
-conv1.(2).digit_d[3:0]
-conv1.(3).digit_d[3:0]
-conv1.(4).digit_d[3:0]
-conv1.(5).digit_d[3:0]
-conv1.(6).digit_d[3:0]
-conv1.(7).digit_d[3:0]
+top.arith_convert_bin2bcd_tb.conv1_sign
+@22
+#{top.arith_convert_bin2bcd_tb.conv1_bcddigits[0][3:0]} top.arith_convert_bin2bcd_tb.conv1_bcddigits[0][3] top.arith_convert_bin2bcd_tb.conv1_bcddigits[0][2] top.arith_convert_bin2bcd_tb.conv1_bcddigits[0][1] top.arith_convert_bin2bcd_tb.conv1_bcddigits[0][0]
+@c00022
+#{top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][3:0]} top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][3] top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][2] top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][1] top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][0]
+@28
+top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][3]
+top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][2]
+top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][1]
+top.arith_convert_bin2bcd_tb.conv1_bcddigits[1][0]
+@1401200
+-group_end
+@22
+#{top.arith_convert_bin2bcd_tb.conv1_bcddigits[2][3:0]} top.arith_convert_bin2bcd_tb.conv1_bcddigits[2][3] top.arith_convert_bin2bcd_tb.conv1_bcddigits[2][2] top.arith_convert_bin2bcd_tb.conv1_bcddigits[2][1] top.arith_convert_bin2bcd_tb.conv1_bcddigits[2][0]
+#{top.arith_convert_bin2bcd_tb.conv1_bcddigits[3][3:0]} top.arith_convert_bin2bcd_tb.conv1_bcddigits[3][3] top.arith_convert_bin2bcd_tb.conv1_bcddigits[3][2] top.arith_convert_bin2bcd_tb.conv1_bcddigits[3][1] top.arith_convert_bin2bcd_tb.conv1_bcddigits[3][0]
+#{top.arith_convert_bin2bcd_tb.conv1_bcddigits[4][3:0]} top.arith_convert_bin2bcd_tb.conv1_bcddigits[4][3] top.arith_convert_bin2bcd_tb.conv1_bcddigits[4][2] top.arith_convert_bin2bcd_tb.conv1_bcddigits[4][1] top.arith_convert_bin2bcd_tb.conv1_bcddigits[4][0]
+#{top.arith_convert_bin2bcd_tb.conv1_bcddigits[5][3:0]} top.arith_convert_bin2bcd_tb.conv1_bcddigits[5][3] top.arith_convert_bin2bcd_tb.conv1_bcddigits[5][2] top.arith_convert_bin2bcd_tb.conv1_bcddigits[5][1] top.arith_convert_bin2bcd_tb.conv1_bcddigits[5][0]
+#{top.arith_convert_bin2bcd_tb.conv1_bcddigits[6][3:0]} top.arith_convert_bin2bcd_tb.conv1_bcddigits[6][3] top.arith_convert_bin2bcd_tb.conv1_bcddigits[6][2] top.arith_convert_bin2bcd_tb.conv1_bcddigits[6][1] top.arith_convert_bin2bcd_tb.conv1_bcddigits[6][0]
+#{top.arith_convert_bin2bcd_tb.conv1_bcddigits[7][3:0]} top.arith_convert_bin2bcd_tb.conv1_bcddigits[7][3] top.arith_convert_bin2bcd_tb.conv1_bcddigits[7][2] top.arith_convert_bin2bcd_tb.conv1_bcddigits[7][1] top.arith_convert_bin2bcd_tb.conv1_bcddigits[7][0]
 @1000200
 -Conv1
 @800200
 -Conv2
-@421
-conv2.binary[26:0]
+@420
+#{top.arith_convert_bin2bcd_tb.conv2_binary[26:0]} top.arith_convert_bin2bcd_tb.conv2_binary[26] top.arith_convert_bin2bcd_tb.conv2_binary[25] top.arith_convert_bin2bcd_tb.conv2_binary[24] top.arith_convert_bin2bcd_tb.conv2_binary[23] top.arith_convert_bin2bcd_tb.conv2_binary[22] top.arith_convert_bin2bcd_tb.conv2_binary[21] top.arith_convert_bin2bcd_tb.conv2_binary[20] top.arith_convert_bin2bcd_tb.conv2_binary[19] top.arith_convert_bin2bcd_tb.conv2_binary[18] top.arith_convert_bin2bcd_tb.conv2_binary[17] top.arith_convert_bin2bcd_tb.conv2_binary[16] top.arith_convert_bin2bcd_tb.conv2_binary[15] top.arith_convert_bin2bcd_tb.conv2_binary[14] top.arith_convert_bin2bcd_tb.conv2_binary[13] top.arith_convert_bin2bcd_tb.conv2_binary[12] top.arith_convert_bin2bcd_tb.conv2_binary[11] top.arith_convert_bin2bcd_tb.conv2_binary[10] top.arith_convert_bin2bcd_tb.conv2_binary[9] top.arith_convert_bin2bcd_tb.conv2_binary[8] top.arith_convert_bin2bcd_tb.conv2_binary[7] top.arith_convert_bin2bcd_tb.conv2_binary[6] top.arith_convert_bin2bcd_tb.conv2_binary[5] top.arith_convert_bin2bcd_tb.conv2_binary[4] top.arith_convert_bin2bcd_tb.conv2_binary[3] top.arith_convert_bin2bcd_tb.conv2_binary[2] top.arith_convert_bin2bcd_tb.conv2_binary[1] top.arith_convert_bin2bcd_tb.conv2_binary[0]
 @28
-conv2.busy
-conv2.sign
-@24
-conv2.(0).digit_d[3:0]
-conv2.(1).digit_d[3:0]
-conv2.(2).digit_d[3:0]
-conv2.(3).digit_d[3:0]
-conv2.(4).digit_d[3:0]
-conv2.(5).digit_d[3:0]
-conv2.(6).digit_d[3:0]
-conv2.(7).digit_d[3:0]
+top.arith_convert_bin2bcd_tb.conv2_sign
+@22
+#{top.arith_convert_bin2bcd_tb.conv2_bcddigits[0][3:0]} top.arith_convert_bin2bcd_tb.conv2_bcddigits[0][3] top.arith_convert_bin2bcd_tb.conv2_bcddigits[0][2] top.arith_convert_bin2bcd_tb.conv2_bcddigits[0][1] top.arith_convert_bin2bcd_tb.conv2_bcddigits[0][0]
+#{top.arith_convert_bin2bcd_tb.conv2_bcddigits[1][3:0]} top.arith_convert_bin2bcd_tb.conv2_bcddigits[1][3] top.arith_convert_bin2bcd_tb.conv2_bcddigits[1][2] top.arith_convert_bin2bcd_tb.conv2_bcddigits[1][1] top.arith_convert_bin2bcd_tb.conv2_bcddigits[1][0]
+#{top.arith_convert_bin2bcd_tb.conv2_bcddigits[2][3:0]} top.arith_convert_bin2bcd_tb.conv2_bcddigits[2][3] top.arith_convert_bin2bcd_tb.conv2_bcddigits[2][2] top.arith_convert_bin2bcd_tb.conv2_bcddigits[2][1] top.arith_convert_bin2bcd_tb.conv2_bcddigits[2][0]
+#{top.arith_convert_bin2bcd_tb.conv2_bcddigits[3][3:0]} top.arith_convert_bin2bcd_tb.conv2_bcddigits[3][3] top.arith_convert_bin2bcd_tb.conv2_bcddigits[3][2] top.arith_convert_bin2bcd_tb.conv2_bcddigits[3][1] top.arith_convert_bin2bcd_tb.conv2_bcddigits[3][0]
+#{top.arith_convert_bin2bcd_tb.conv2_bcddigits[4][3:0]} top.arith_convert_bin2bcd_tb.conv2_bcddigits[4][3] top.arith_convert_bin2bcd_tb.conv2_bcddigits[4][2] top.arith_convert_bin2bcd_tb.conv2_bcddigits[4][1] top.arith_convert_bin2bcd_tb.conv2_bcddigits[4][0]
+#{top.arith_convert_bin2bcd_tb.conv2_bcddigits[5][3:0]} top.arith_convert_bin2bcd_tb.conv2_bcddigits[5][3] top.arith_convert_bin2bcd_tb.conv2_bcddigits[5][2] top.arith_convert_bin2bcd_tb.conv2_bcddigits[5][1] top.arith_convert_bin2bcd_tb.conv2_bcddigits[5][0]
+#{top.arith_convert_bin2bcd_tb.conv2_bcddigits[6][3:0]} top.arith_convert_bin2bcd_tb.conv2_bcddigits[6][3] top.arith_convert_bin2bcd_tb.conv2_bcddigits[6][2] top.arith_convert_bin2bcd_tb.conv2_bcddigits[6][1] top.arith_convert_bin2bcd_tb.conv2_bcddigits[6][0]
+@23
+#{top.arith_convert_bin2bcd_tb.conv2_bcddigits[7][3:0]} top.arith_convert_bin2bcd_tb.conv2_bcddigits[7][3] top.arith_convert_bin2bcd_tb.conv2_bcddigits[7][2] top.arith_convert_bin2bcd_tb.conv2_bcddigits[7][1] top.arith_convert_bin2bcd_tb.conv2_bcddigits[7][0]
 @1000200
 -Conv2
 [pattern_trace] 1

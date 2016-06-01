@@ -76,7 +76,7 @@ begin
 	-- timebase counter
 	process(Clock)
 	begin
-		if rising_edge(clock) then
+		if rising_edge(Clock) then
 			if ((Reset or TimeBaseCounter_ov) = '1') then
 				TimeBaseCounter_us		<= (others => '0');
 			else

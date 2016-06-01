@@ -1,4 +1,4 @@
-# EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
+# EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
@@ -39,3 +39,8 @@ else:
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
 
 # load dependencies
+
+
+__POC_SOLUTION_KEYWORD__ =  "Solution"
+__POC_PROJECT_KEYWORD__ =    "Project"
+

@@ -13,7 +13,7 @@
 -- 
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,8 +63,8 @@ architecture rtl of stat_Minimum is
 	type T_COUNTER_MEMORY		is array(NATURAL range <>) of UNSIGNED(COUNTER_BITS - 1 downto 0);
 
 	-- create matrix from vector-vector
-	function to_slm(usv : T_TAG_MEMORY) return t_slm is
-		variable slm		: t_slm(usv'range, DATA_BITS - 1 downto 0);
+	function to_slm(usv : T_TAG_MEMORY) return T_SLM is
+		variable slm		: T_SLM(usv'range, DATA_BITS - 1 downto 0);
 	begin
 		for i in usv'range loop
 			for j in DATA_BITS - 1 downto 0 loop
@@ -74,8 +74,8 @@ architecture rtl of stat_Minimum is
 		return slm;
 	end function;
 	
-	function to_slm(usv : T_COUNTER_MEMORY) return t_slm is
-		variable slm		: t_slm(usv'range, COUNTER_BITS - 1 downto 0);
+	function to_slm(usv : T_COUNTER_MEMORY) return T_SLM is
+		variable slm		: T_SLM(usv'range, COUNTER_BITS - 1 downto 0);
 	begin
 		for i in usv'range loop
 			for j in COUNTER_BITS - 1 downto 0 loop
@@ -91,7 +91,7 @@ architecture rtl of stat_Minimum is
 	signal MinimumHit				: STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
 	signal TagMemory				: T_TAG_MEMORY(DEPTH - 1 downto 0)			:= (others => (others => '1'));
 	signal CounterMemory		: T_COUNTER_MEMORY(DEPTH - 1 downto 0)	:= (others => (others => '0'));
-	signal MinimumIndex			: STD_LOGIC_VECTOR(DEPTH - 1 downto 0)	:= ((DEPTH - 1) => '1', others => '0');
+	signal MinimumIndex			: STD_LOGIC_VECTOR(DEPTH - 1 downto 0)	:= '1' & (DEPTH - 2 downto 0 => '0');	--((DEPTH - 1) => '1', others => '0'); -- WORKAROUND: GHDL says  not static choice exclude others choice;  non-locally static choice for an aggregate is allowed only if only choice
 	signal ValidMemory			: STD_LOGIC_VECTOR(DEPTH - 1 downto 0)	:= (others => '0');
 	
 begin
@@ -103,14 +103,8 @@ begin
 	end generate;
 
 	process(Clock)
-		variable NewMinimum_nxt		: STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
-		variable NewMinimum_idx 	: NATURAL;
 		variable TagHit_idx 			: NATURAL;
 	begin
-		NewMinimum_nxt	:= MinimumIndex(MinimumIndex'high - 1 downto 0) & MinimumIndex(MinimumIndex'high);	
-		NewMinimum_idx	:= to_index(onehot2bin(NewMinimum_nxt));
-		TagHit_idx			:= to_index(onehot2bin(TagHit));
-	
 		if rising_edge(Clock) then
 			if (Reset = '1') then
 				ValidMemory										<= (others => '0');
@@ -147,7 +141,8 @@ begin
 					end if;
 				end loop;
 			elsif ((slv_or(TagHit) and Enable)= '1') then
-				CounterMemory(TagHit_idx)			<= CounterMemory(TagHit_idx) + 1;
+				TagHit_idx								:= to_index(onehot2bin(TagHit, 0));
+				CounterMemory(TagHit_idx)	<= CounterMemory(TagHit_idx) + 1;
 			end if;
 		end if;
 	end process;

@@ -78,38 +78,38 @@ package arith is
 			cry		: out std_logic														-- Carry output
 		);
 	end component;
-	
+
+	-- This function computes the latency of the sequential divider, both for the
+	-- pipelined and the regular sequential implementation. The returned value
+	-- specifies the number of cycles it takes after asserting start for the
+	-- result to become ready.
+  function arith_div_latency(a_bits, rapow : positive) return positive;
+
 	component arith_div
 		generic (
-			N						: positive;
-			RAPOW				: positive;
-			REGISTERED	: boolean);
+			A_BITS             : positive;  		    -- Dividend Width
+			D_BITS             : positive;  		    -- Divisor Width
+			RAPOW              : positive := 1;     -- Power of Compute Radix (2**RAPOW)
+			PIPELINED          : boolean  := false  -- Computation Pipeline
+		);
 		port (
-			clk					: in	std_logic;
-			rst					: in	std_logic;
-			start				: in	std_logic;
-			rdy					: out std_logic;
-			arg1, arg2	: in	std_logic_vector(N-1 downto 0);
-			res					: out std_logic_vector(N-1 downto 0));
+			-- Global Reset/Clock
+			clk : in std_logic;
+			rst : in std_logic;
+
+      -- Ready / Start
+      start : in  std_logic;
+      ready : out std_logic;
+
+			-- Arguments / Result (2's complement)
+			A : in  std_logic_vector(A_BITS-1 downto 0);  -- Dividend
+			D : in  std_logic_vector(D_BITS-1 downto 0);  -- Divisor
+			Q : out std_logic_vector(A_BITS-1 downto 0);  -- Quotient
+			R : out std_logic_vector(D_BITS-1 downto 0);  -- Remainder
+			Z : out std_logic  -- Division by Zero
+		);
 	end component;
 
-	component arith_div_pipelined
-		generic (
-			DIVIDEND_BITS		: POSITIVE;
-			DIVISOR_BITS		: POSITIVE;
-			RADIX						: POSITIVE
-		);
-		port (
-			Clock						: in	STD_LOGIC;
-			Reset						: in	STD_LOGIC;
-			Enable					: in	STD_LOGIC;
-			Dividend				: in	STD_LOGIC_VECTOR(DIVIDEND_BITS - 1 downto 0);
-			Divisor					: in	STD_LOGIC_VECTOR(DIVISOR_BITS - 1 downto 0);
-			Quotient				: out	STD_LOGIC_VECTOR(DIVIDEND_BITS - 1 downto 0);
-			Valid						: out STD_LOGIC
-		);
-	end component;
-	
 	component arith_prng
 		generic (
 			BITS		: positive;
@@ -183,6 +183,37 @@ package arith is
 		);
 	end component;
 	
+	component arith_carrychain_inc_xilinx is
+		generic (
+			BITS			: POSITIVE
+		);
+		port (
+			X		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
+			CIn	: in	STD_LOGIC															:= '1';
+			Y		: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		);
+	end component;
+	
+	component arith_prefix_and_xilinx is
+		generic (
+			N : positive
+		);
+		port (
+			x : in	std_logic_vector(N-1 downto 0);
+			y : out std_logic_vector(N-1 downto 0)
+		);
+	end component;
+	
+	component arith_prefix_or_xilinx is
+		generic (
+			N : positive
+		);
+		port (
+			x : in	std_logic_vector(N-1 downto 0);
+			y : out std_logic_vector(N-1 downto 0)
+		);
+	end component;
+	
 	component arith_inc_ovcy_xilinx is
 		generic (
 			N		: positive												 		-- Bit Width
@@ -194,3 +225,10 @@ package arith is
 		);
 	end component;
 end package;
+
+package body arith is
+  function arith_div_latency(a_bits, rapow : positive) return positive is
+	begin
+		return (a_bits+rapow-1)/rapow;
+	end;
+end package body arith;

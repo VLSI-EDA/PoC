@@ -5,12 +5,7 @@ The namespace `PoC.misc.sync` offers different clock-domain-crossing (CDC) synch
 
 ## Package(s)
 
-The package [`sync`][sync.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.sync.all;
-```
+The package [`PoC.sync`][sync.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

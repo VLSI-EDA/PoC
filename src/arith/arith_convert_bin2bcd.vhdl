@@ -149,6 +149,6 @@ begin
 			end if;
 		end process;
 		
-		BCDDigits(i)	<= t_bcd(std_logic_vector(Digit_d));
+		BCDDigits(i)	<= T_BCD(std_logic_vector(Digit_d));
 	end generate;
 end;

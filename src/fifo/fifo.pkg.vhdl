@@ -252,5 +252,40 @@ package fifo is
       rollback  : in  std_logic
     );
   end component;
-	
+
+	component fifo_ic_assembly is
+		generic (
+			D_BITS : positive;  								-- Data Width
+			A_BITS : positive;  								-- Address Bits
+			G_BITS : positive  									-- Generation Guard Bits
+		);
+		port (
+			-- Write Interface
+			clk_wr : in std_logic;
+			rst_wr : in std_logic;
+
+			-- Only write addresses in the range [base, base+2**(A_BITS-G_BITS)) are
+			-- acceptable. This is equivalent to the test
+			--   tmp(A_BITS-1 downto A_BITS-G_BITS) = 0 where tmp = addr - base.
+			-- Writes performed outside the allowable range will assert the failure
+			-- indicator, which will stick until the next reset.
+			-- No write is to be performed before base turns zero (0) for the first
+			-- time.
+			base   : out std_logic_vector(A_BITS-1 downto 0);
+			failed : out std_logic;
+
+			addr : in  std_logic_vector(A_BITS-1 downto 0);
+			din  : in  std_logic_vector(D_BITS-1 downto 0);
+			put  : in  std_logic;
+
+			-- Read Interface
+			clk_rd : in std_logic;
+			rst_rd : in std_logic;
+
+			dout : out std_logic_vector(D_BITS-1 downto 0);
+			vld  : out std_logic;
+			got  : in  std_logic
+		);
+	end component;
+
 end package;

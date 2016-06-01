@@ -1,5 +1,13 @@
 # The PoC-Library
 
+[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/Vivado/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/Vivado)
+[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=Vivado)](https://travis-ci.org/VLSI-EDA/PoC)
+[![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)
+[![Latest release](https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat)](https://github.com/VLSI-EDA/PoC/releases)
+[![Apache License 2.0](https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat)](LICENSE.md)
+
+
 This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - 
 Faculty of Computer Science, Technische Universität Dresden, Germany  
 **http://vlsi-eda.inf.tu-dresden.de**
@@ -40,13 +48,6 @@ Related repositories: [PoC-Examples][poc_ex]
 cloned with `git clone` from GitHub. GitHub offers HTTPS and SSH as transfer protocols.
 See the [Download][wiki:download] wiki page for more details.
 
-For SSH protocol use the URL `ssh://git@github.com:VLSI-EDA/PoC.git` or command
-line instruction:
-
-```PowerShell
-cd <GitRoot>
-git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC
-```
 
 For HTTPS protocol use the URL `https://github.com/VLSI-EDA/PoC.git` or command
 line instruction:
@@ -54,6 +55,14 @@ line instruction:
 ```PowerShell
 cd <GitRoot>
 git clone --recursive https://github.com/VLSI-EDA/PoC.git PoC
+```
+
+For SSH protocol use the URL `ssh://git@github.com:VLSI-EDA/PoC.git` or command
+line instruction:
+
+```PowerShell
+cd <GitRoot>
+git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC
 ```
 
 **Note:** The option `--recursive` performs a recursive clone operation for all
@@ -77,8 +86,12 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 ##### Common requirements:
 
  - Programming languages and runtimes:
-	- [Python 3][python] (&ge; 3.4):
+	- [Python 3][python] (&ge; 3.5):
 	     - [colorama][colorama]
+	     - [py-flags][pyflags]
+	  
+    All Python requirements are listed in [`requirements.txt`][pip3-req] and can be installed via:  
+   `sudo python3.5 -m pip install -r requirements.txt`
  - Synthesis tool chains:
      - Altera Quartus-II &ge; 13.0 or
      - Lattice Diamond or
@@ -89,13 +102,16 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
      - Mentor Graphics ModelSim Altera Edition or
      - Mentor Graphics QuestaSim or
      - Xilinx ISE Simulator 14.7 or
-     - Xilinx Vivado Simulator &ge; 2014.1 or
-     - [GHDL][ghdl] and [GTKWave][gtkwave]
+     - Xilinx Vivado Simulator &ge; 2016.1 or
+     - [GHDL][ghdl] &ge; 0.34dev and [GTKWave][gtkwave] &ge; 3.3.70
 
  [python]:		https://www.python.org/downloads/
  [colorama]:	https://pypi.python.org/pypi/colorama
- [ghdl]:		https://sourceforge.net/projects/ghdl-updates/
+ [pyflags]:		https://pypi.python.org/pypi/py-flags
+ [ghdl]:			https://sourceforge.net/projects/ghdl-updates/
  [gtkwave]:		http://gtkwave.sourceforge.net/
+
+ [pip3-req]:  requirements.txt
 
 ##### Linux specific requirements:
  
@@ -119,14 +135,16 @@ or Bash scripts, to hide some platform specifics of Windows or Linux. See the
 
 **The PoC-Library** depends on:
 
+ - [**Cocotb**][cocotb] - A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python
  - [**OS-VVM**][osvvm] - Open Source VHDL Verification Methodology.
- - [**VUnit**][vunit] - Unit testing framework for VHDL.
+ - [**VUnit**][vunit] - An unit testing framework for VHDL.
 
-Both dependencies are available as GitHub repositories and are linked to
+All dependencies are available as GitHub repositories and are linked to
 PoC as git submodules into the [`<PoCRoot>\lib\`][lib] directory.
 
- [osvvm]:	https://github.com/JimLewis/OSVVM
- [vunit]:	https://github.com/LarsAsplund/vunit
+ [cocotb]: https://github.com/potentialventures/cocotb
+ [osvvm]:	 https://github.com/JimLewis/OSVVM
+ [vunit]:	 https://github.com/VUnit/vunit
 
 
 ## 5 Configuring PoC on a Local System (Stand Alone)
@@ -148,13 +166,16 @@ Run the following command line instructions to configure PoC on your local syste
 
 ```PowerShell
 cd <PoCRoot>
-.\poc.ps1 --configure
+.\poc.ps1 configure
 ```
 
 **Note:** The configuration process can be re-run at every time to add, remove
 or update choices made.
 
+If you want to check your installation, you can run one of our testbenches as described in [tb/README.md][tb_readme]
 
+ [tb_readme]: tb/README.md
+ 
 ## 6 Integrating PoC into Projects
 
 **The PoC-Library** is meant to be integrated into HDL projects. Therefore it's
@@ -189,7 +210,7 @@ git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
 ```PowerShell
 cd <ProjectRoot>
 cd lib\PoC\
-.\poc.ps1 --configure
+.\poc.ps1 configure
 ```
 
 #### 6.3 Creating PoC's my_config and my_project Files
@@ -224,15 +245,15 @@ constant MY_OPERATING_SYSTEM : string := "CHANGE THIS"; -- e.g. WINDOWS, LINUX
 **The PoC-Library** is shipped with some pre-configured IP cores from Xilinx. These
 IP cores are shipped as \*.xco files and need to be compiled to netlists (\*.ngc
 files) and there auxillary files (\*.ncf files; \*.vhdl files; ...). This can be
-done by invoking PoC's `Netlist.py` through one of the provided wrapper scripts:
-netlist.[sh|ps1].
+done by invoking PoC's Service Tool through one of the provided wrapper scripts:
+`poc.[sh|ps1]`.
 
 The following example compiles `PoC.xil.ChipScopeICON_1` from `<PoCRoot>\src\xil\xil_ChipScopeICON_1.xco`
 for a Kintex-7 325T device into `<PoCRoot>/netlist/XC7K325T-2FFG900/xil/`.
 
 ```PowerShell
 cd <PoCRoot>/netlist
-.\netlist.ps1 --coregen PoC.xil.ChipScopeICON_1 --board KC705
+..\poc.ps1 coregen PoC.xil.ChipScopeICON_1 --board=KC705
 ```
 
 ## 7 Using PoC
@@ -251,6 +272,7 @@ The structure within these folders is always the same and based on PoC's
  -  [`sim`][sim] - Pre-configured waveform views for selected testbenches.
  -  [`src`][src] - PoC's source files grouped into sub-folders according to the [sub-namespace tree][wiki:subnamespacetree].
  -  [`tb`][tb] - Testbench files.
+ -  [`tcl`][tcl] - Tcl files.
  -  [`temp`][temp] - A created temporary directors for various tools used by PoC's Python scripts.
  -  [`tools`][tools] - Settings/highlighting files and helpers for supported tools.
  -  [`ucf`][ucf] - Pre-configured constraint files (\*.ucf, \*.xdc, \*.sdc) for supported FPGA boards.
@@ -358,6 +380,7 @@ your project's reference.
  [sim]:					sim
  [src]:					src
  [tb]:					tb
+ [tcl]:					tcl
  [temp]:				temp
  [tools]:				tools
  [ucf]:					ucf

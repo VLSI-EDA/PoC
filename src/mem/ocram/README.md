@@ -5,12 +5,7 @@ The namespace `PoC.mem.ocram` offers different on-chip RAM abstractions.
 
 ## Package(s)
 
-The package [`ocram`][ocram.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.ocram.all;
-```
+The package [`PoC.ocram`][ocram.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

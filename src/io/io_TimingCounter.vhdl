@@ -61,8 +61,8 @@ architecture rtl of io_TimingCounter is
   begin
 		assert (not MY_VERBOSE) report "TIMING_TABLE (transformed):" severity NOTE;
     for i in vec'range loop
-			Result(I)	 := vec(I) - 1;
-			assert (not MY_VERBOSE) report "  " & INTEGER'image(I) & " - " & INTEGER'image(Result(I)) severity NOTE;
+			Result(i)	 := vec(i) - 1;
+			assert (not MY_VERBOSE) report "  " & INTEGER'image(i) & " - " & INTEGER'image(Result(i)) severity NOTE;
 		end loop;
 		return Result;
   end;
@@ -85,5 +85,5 @@ begin
 		end if;
 	end process;
 	
-	timeout <= Counter_s(Counter_s'high);
+	Timeout <= Counter_s(Counter_s'high);
 end;

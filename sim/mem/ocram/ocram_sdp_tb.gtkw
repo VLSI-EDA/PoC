@@ -1,0 +1,69 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Mon Feb 08 22:46:43 2016
+[*]
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\ocram_sdp_tb.ghw"
+[dumpfile_mtime] "Mon Feb 08 22:45:30 2016"
+[dumpfile_size] 116720
+[savefile] "H:\Austausch\PoC\sim\mem\ocram\ocram_sdp_tb.gtkw"
+[timestart] 0
+[size] 1680 997
+[pos] -217 -217
+*-24.503962 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.ocram_sdp_tb.
+[sst_width] 197
+[signals_width] 86
+[sst_expanded] 1
+[sst_vpaned_height] 293
+@28
+top.ocram_sdp_tb.clk
+top.ocram_sdp_tb.wce
+top.ocram_sdp_tb.we
+@22
+#{top.ocram_sdp_tb.wa[9:0]} top.ocram_sdp_tb.wa[9] top.ocram_sdp_tb.wa[8] top.ocram_sdp_tb.wa[7] top.ocram_sdp_tb.wa[6] top.ocram_sdp_tb.wa[5] top.ocram_sdp_tb.wa[4] top.ocram_sdp_tb.wa[3] top.ocram_sdp_tb.wa[2] top.ocram_sdp_tb.wa[1] top.ocram_sdp_tb.wa[0]
+@c00022
+#{top.ocram_sdp_tb.d[31:0]} top.ocram_sdp_tb.d[31] top.ocram_sdp_tb.d[30] top.ocram_sdp_tb.d[29] top.ocram_sdp_tb.d[28] top.ocram_sdp_tb.d[27] top.ocram_sdp_tb.d[26] top.ocram_sdp_tb.d[25] top.ocram_sdp_tb.d[24] top.ocram_sdp_tb.d[23] top.ocram_sdp_tb.d[22] top.ocram_sdp_tb.d[21] top.ocram_sdp_tb.d[20] top.ocram_sdp_tb.d[19] top.ocram_sdp_tb.d[18] top.ocram_sdp_tb.d[17] top.ocram_sdp_tb.d[16] top.ocram_sdp_tb.d[15] top.ocram_sdp_tb.d[14] top.ocram_sdp_tb.d[13] top.ocram_sdp_tb.d[12] top.ocram_sdp_tb.d[11] top.ocram_sdp_tb.d[10] top.ocram_sdp_tb.d[9] top.ocram_sdp_tb.d[8] top.ocram_sdp_tb.d[7] top.ocram_sdp_tb.d[6] top.ocram_sdp_tb.d[5] top.ocram_sdp_tb.d[4] top.ocram_sdp_tb.d[3] top.ocram_sdp_tb.d[2] top.ocram_sdp_tb.d[1] top.ocram_sdp_tb.d[0]
+@28
+top.ocram_sdp_tb.d[31]
+top.ocram_sdp_tb.d[30]
+top.ocram_sdp_tb.d[29]
+top.ocram_sdp_tb.d[28]
+top.ocram_sdp_tb.d[27]
+top.ocram_sdp_tb.d[26]
+top.ocram_sdp_tb.d[25]
+top.ocram_sdp_tb.d[24]
+top.ocram_sdp_tb.d[23]
+top.ocram_sdp_tb.d[22]
+top.ocram_sdp_tb.d[21]
+top.ocram_sdp_tb.d[20]
+top.ocram_sdp_tb.d[19]
+top.ocram_sdp_tb.d[18]
+top.ocram_sdp_tb.d[17]
+top.ocram_sdp_tb.d[16]
+top.ocram_sdp_tb.d[15]
+top.ocram_sdp_tb.d[14]
+top.ocram_sdp_tb.d[13]
+top.ocram_sdp_tb.d[12]
+top.ocram_sdp_tb.d[11]
+top.ocram_sdp_tb.d[10]
+top.ocram_sdp_tb.d[9]
+top.ocram_sdp_tb.d[8]
+top.ocram_sdp_tb.d[7]
+top.ocram_sdp_tb.d[6]
+top.ocram_sdp_tb.d[5]
+top.ocram_sdp_tb.d[4]
+top.ocram_sdp_tb.d[3]
+top.ocram_sdp_tb.d[2]
+top.ocram_sdp_tb.d[1]
+top.ocram_sdp_tb.d[0]
+@1401200
+-group_end
+@28
+top.ocram_sdp_tb.rce
+@23
+#{top.ocram_sdp_tb.ra[9:0]} top.ocram_sdp_tb.ra[9] top.ocram_sdp_tb.ra[8] top.ocram_sdp_tb.ra[7] top.ocram_sdp_tb.ra[6] top.ocram_sdp_tb.ra[5] top.ocram_sdp_tb.ra[4] top.ocram_sdp_tb.ra[3] top.ocram_sdp_tb.ra[2] top.ocram_sdp_tb.ra[1] top.ocram_sdp_tb.ra[0]
+@22
+#{top.ocram_sdp_tb.q[31:0]} top.ocram_sdp_tb.q[31] top.ocram_sdp_tb.q[30] top.ocram_sdp_tb.q[29] top.ocram_sdp_tb.q[28] top.ocram_sdp_tb.q[27] top.ocram_sdp_tb.q[26] top.ocram_sdp_tb.q[25] top.ocram_sdp_tb.q[24] top.ocram_sdp_tb.q[23] top.ocram_sdp_tb.q[22] top.ocram_sdp_tb.q[21] top.ocram_sdp_tb.q[20] top.ocram_sdp_tb.q[19] top.ocram_sdp_tb.q[18] top.ocram_sdp_tb.q[17] top.ocram_sdp_tb.q[16] top.ocram_sdp_tb.q[15] top.ocram_sdp_tb.q[14] top.ocram_sdp_tb.q[13] top.ocram_sdp_tb.q[12] top.ocram_sdp_tb.q[11] top.ocram_sdp_tb.q[10] top.ocram_sdp_tb.q[9] top.ocram_sdp_tb.q[8] top.ocram_sdp_tb.q[7] top.ocram_sdp_tb.q[6] top.ocram_sdp_tb.q[5] top.ocram_sdp_tb.q[4] top.ocram_sdp_tb.q[3] top.ocram_sdp_tb.q[2] top.ocram_sdp_tb.q[1] top.ocram_sdp_tb.q[0]
+[pattern_trace] 1
+[pattern_trace] 0

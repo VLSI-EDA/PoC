@@ -681,8 +681,8 @@ package body net is
 	function to_net_eth_RSDataInterface(str : STRING) return T_NET_ETH_RS_DATA_INTERFACE is
 	begin
 		for i in T_NET_ETH_RS_DATA_INTERFACE'pos(T_NET_ETH_RS_DATA_INTERFACE'low) to T_NET_ETH_RS_DATA_INTERFACE'pos(T_NET_ETH_RS_DATA_INTERFACE'high) loop
-			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_RS_DATA_INTERFACE'image(T_NET_ETH_RS_DATA_INTERFACE'val(I)))) then
-				return T_NET_ETH_RS_DATA_INTERFACE'val(I);
+			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_RS_DATA_INTERFACE'image(T_NET_ETH_RS_DATA_INTERFACE'val(i)))) then
+				return T_NET_ETH_RS_DATA_INTERFACE'val(i);
 			end if;
 		end loop;
 		report "Unknown RS_DATA_INTERFACE: " & str severity FAILURE;
@@ -691,8 +691,8 @@ package body net is
 	function to_net_eth_PHYDataInterface(str : STRING) return T_NET_ETH_PHY_DATA_INTERFACE is
 	begin
 		for i in T_NET_ETH_PHY_DATA_INTERFACE'pos(T_NET_ETH_PHY_DATA_INTERFACE'low) to T_NET_ETH_PHY_DATA_INTERFACE'pos(T_NET_ETH_PHY_DATA_INTERFACE'high) loop
-			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_DATA_INTERFACE'image(T_NET_ETH_PHY_DATA_INTERFACE'val(I)))) then
-				return T_NET_ETH_PHY_DATA_INTERFACE'val(I);
+			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_DATA_INTERFACE'image(T_NET_ETH_PHY_DATA_INTERFACE'val(i)))) then
+				return T_NET_ETH_PHY_DATA_INTERFACE'val(i);
 			end if;
 		end loop;
 		report "Unknown PHY_DATA_INTERFACE: " & str severity FAILURE;
@@ -701,8 +701,8 @@ package body net is
 	function to_net_eth_PHYManagementInterface(str : STRING) return T_NET_ETH_PHY_MANAGEMENT_INTERFACE is
 	begin
 		for i in T_NET_ETH_PHY_MANAGEMENT_INTERFACE'pos(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'low) to T_NET_ETH_PHY_MANAGEMENT_INTERFACE'pos(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'high) loop
-			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'image(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'val(I)))) then
-				return T_NET_ETH_PHY_MANAGEMENT_INTERFACE'val(I);
+			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'image(T_NET_ETH_PHY_MANAGEMENT_INTERFACE'val(i)))) then
+				return T_NET_ETH_PHY_MANAGEMENT_INTERFACE'val(i);
 			end if;
 		end loop;
 		report "Unknown PHY_MANAGEMENT_INTERFACE: " & str severity FAILURE;
@@ -711,8 +711,8 @@ package body net is
 	function to_net_eth_PHYDevice(str : STRING) return T_NET_ETH_PHY_DEVICE is
 	begin
 		for i in T_NET_ETH_PHY_DEVICE'pos(T_NET_ETH_PHY_DEVICE'low) to T_NET_ETH_PHY_DEVICE'pos(T_NET_ETH_PHY_DEVICE'high) loop
-			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_DEVICE'image(T_NET_ETH_PHY_DEVICE'val(I)))) then
-				return T_NET_ETH_PHY_DEVICE'val(I);
+			if str_match(str_toUpper(str), str_toUpper(T_NET_ETH_PHY_DEVICE'image(T_NET_ETH_PHY_DEVICE'val(i)))) then
+				return T_NET_ETH_PHY_DEVICE'val(i);
 			end if;
 		end loop;
 		report "Unknown PHY_DEVICE: " & str severity FAILURE;
@@ -723,8 +723,8 @@ package body net is
 		variable count : NATURAL := 0;
 	begin
 		for i in MACConfiguration'range loop
-			for j in MACConfiguration(I).TypeSwitch'range loop
-				if (MACConfiguration(I).TypeSwitch(J) /= C_NET_MAC_ETHERNETTYPE_EMPTY) then
+			for j in MACConfiguration(i).TypeSwitch'range loop
+				if (MACConfiguration(i).TypeSwitch(j) /= C_NET_MAC_ETHERNETTYPE_EMPTY) then
 					count := count + 1;
 				end if;
 			end loop;
@@ -740,7 +740,7 @@ package body net is
 		variable mac					: T_NET_MAC_ADDRESS;
 	begin
 		for i in 0 to 5 loop
-			mac(I)	:=	slv(((I * 8) + 7) downto (I * 8));
+			mac(i)	:=	slv(((i * 8) + 7) downto (i * 8));
 		end loop;
 		return mac;
 	end function;
@@ -750,7 +750,7 @@ package body net is
 	begin
 		if (slvv'length /= 6) then report "to_net_mac_address: vector-length mismatch - slvv'length=" & INTEGER'image(slvv'length) severity ERROR; end if;
 		for i in slvv'range loop
-			mac(I)	:=	slvv(I);
+			mac(i)	:=	slvv(i);
 		end loop;
 		return mac;
 	end function;
@@ -766,16 +766,16 @@ package body net is
 	begin
 --		report "mac_split of " & str severity NOTE;
 		for i in str'reverse_range loop
---			report "  char=" & input(I) severity NOTE;
-			if (to_digit(input(I), 'h') /= -1) then
-				Segments(SegmentPointer)(CharPointer)	:= input(I);
+--			report "  char=" & input(i) severity NOTE;
+			if (to_digit(input(i), 'h') /= -1) then
+				Segments(SegmentPointer)(CharPointer)	:= input(i);
 --				report "    copy to seg=" & INTEGER'image(SegmentPointer) & "  pos=" & INTEGER'image(CharPointer) severity NOTE;
-				CharPointer					:= Charpointer - 1;
-			elsif ((input(I) = ':') OR (input(I) = '-')) then
+				CharPointer					:= CharPointer - 1;
+			elsif ((input(i) = ':') OR (input(i) = '-')) then
 				SegmentPointer		:= SegmentPointer + 1;
 				CharPointer				:= 2;
 			else
-				report "ERROR - unknown char [" & input(I) & "]" severity ERROR;
+				report "ERROR - unknown char [" & input(i) & "]" severity ERROR;
 			end if;
 		end loop;
 	
@@ -789,16 +789,16 @@ package body net is
 		variable MAC						: T_NET_MAC_ADDRESS;
 	begin
 		for i in Segments'range loop
-			MAC(I)	:= to_slv(to_natural_hex(Segments(I)), 8);
+			MAC(i)	:= to_slv(to_natural_hex(Segments(i)), 8);
 		end loop;
 		return MAC;
 	end function;
 
 	function to_net_mac_ethernettype(slv : T_SLV_16) return T_NET_MAC_ETHERNETTYPE is
-		variable Ethtype					: T_NET_MAC_ETHERNETTYPE;
+		variable EthType					: T_NET_MAC_ETHERNETTYPE;
 	begin
 		for i in 0 to 1 loop
-			EthType(I)	:=	slv(((I * 8) + 7) downto (I * 8));
+			EthType(i)	:=	slv(((i * 8) + 7) downto (i * 8));
 		end loop;
 		return EthType;
 	end function;
@@ -807,16 +807,16 @@ package body net is
 		variable slv		: T_SLV_48;
 	begin
 		for i in 0 to 5 loop
-			slv(((I * 8) + 7) downto (I * 8))		:= mac(I);
+			slv(((i * 8) + 7) downto (i * 8))		:= mac(i);
 		end loop;
 		return slv;
 	end function;
 
-	function to_slv(Ethtype : T_NET_MAC_ETHERNETTYPE) return STD_LOGIC_VECTOR is
+	function to_slv(EthType : T_NET_MAC_ETHERNETTYPE) return STD_LOGIC_VECTOR is
 		variable slv		: T_SLV_16;
 	begin
 		for i in 0 to 1 loop
-			slv(((I * 8) + 7) downto (I * 8))		:= EthType(I);
+			slv(((i * 8) + 7) downto (i * 8))		:= EthType(i);
 		end loop;
 		return slv;
 	end function;
@@ -825,16 +825,16 @@ package body net is
 		variable slvv : T_SLVV_8(mac'range);
 	begin
 		for i in mac'range loop
-			slvv(I)	:= mac(I);
+			slvv(i)	:= mac(i);
 		end loop;
 		return slvv;
 	end function;
 	
-	function to_slvv_8(Ethtype : T_NET_MAC_ETHERNETTYPE) return T_SLVV_8 is
+	function to_slvv_8(EthType : T_NET_MAC_ETHERNETTYPE) return T_SLVV_8 is
 		variable slvv : T_SLVV_8(EthType'range);
 	begin
 		for i in EthType'range loop
-			slvv(I)	:= EthType(I);
+			slvv(i)	:= EthType(i);
 		end loop;
 		return slvv;
 	end function;
@@ -843,12 +843,12 @@ package body net is
 		variable str		: STRING(1 to 18)		:= (others => ':');
 	begin
 		for i in 0 to 5 loop
-			str((I * 3) + 1 to (I * 3) + 2)	:= to_string(mac(5 - I), 'h');
+			str((i * 3) + 1 to (i * 3) + 2)	:= to_string(mac(5 - i), 'h');
 		end loop;
 		return str(1 to 17);
 	end function;
 
-	function to_string(Ethtype : T_NET_MAC_ETHERNETTYPE) return STRING is
+	function to_string(EthType : T_NET_MAC_ETHERNETTYPE) return STRING is
 	begin
 		-- TODO: replace this case-statement by substring(image(EthType), 10,0)
 		case to_slv(EthType) is
@@ -876,7 +876,7 @@ package body net is
 		variable ip					: T_NET_IPV4_ADDRESS;
 	begin
 		for i in 0 to 3 loop
-			ip(I)	:=	slv(((I * 8) + 7) downto (I * 8));
+			ip(i)	:=	slv(((i * 8) + 7) downto (i * 8));
 		end loop;
 		return ip;
 	end function;
@@ -892,12 +892,12 @@ package body net is
 	begin
 --		report "ipv4_split of " & str severity NOTE;
 		for i in str'reverse_range loop
---			report "  char=" & input(I) severity NOTE;
-			if (to_digit(input(I), 'd') /= -1) then
-				Segments(SegmentPointer)(CharPointer)	:= input(I);
+--			report "  char=" & input(i) severity NOTE;
+			if (to_digit(input(i), 'd') /= -1) then
+				Segments(SegmentPointer)(CharPointer)	:= input(i);
 --				report "    copy to seg=" & INTEGER'image(SegmentPointer) & "  pos=" & INTEGER'image(CharPointer) severity NOTE;
-				CharPointer					:= Charpointer - 1;
-			elsif (input(I) = '.') then
+				CharPointer					:= CharPointer - 1;
+			elsif (input(i) = '.') then
 				SegmentPointer		:= SegmentPointer + 1;
 				CharPointer				:= 3;
 			else
@@ -916,7 +916,7 @@ package body net is
 		variable IP							: T_NET_IPV4_ADDRESS;
 	begin
 		for i in Segments'range loop
-			IP(I) := to_slv(to_natural_dec(Segments(I)), 8);
+			IP(i) := to_slv(to_natural_dec(Segments(i)), 8);
 		end loop;
 		return IP;
 	end function;
@@ -935,7 +935,7 @@ package body net is
 		variable slv						: T_SLV_32;
 	begin
 		for i in 0 to 3 loop
-			slv(((I * 8) + 7) downto (I * 8))		:= ip(I);
+			slv(((i * 8) + 7) downto (i * 8))		:= ip(i);
 		end loop;
 		return slv;
 	end function;
@@ -962,7 +962,7 @@ package body net is
 		variable slvv						: T_SLVV_8(ip'range);
 	begin
 		for i in ip'range loop
-			slvv(I)	:= ip(I);
+			slvv(i)	:= ip(i);
 		end loop;
 		return slvv;
 	end function;
@@ -976,9 +976,9 @@ package body net is
 	begin
 --		report "converting IPv4 address" severity NOTE;
 		for i in 3 downto 0 loop
---			report "  I=" & INTEGER'image(I) & "  IP(I)=" & INTEGER'image(to_integer(unsigned(IP(I)))) & "  CP=" & INTEGER'image(CharPointer) severity NOTE;
+--			report "  I=" & INTEGER'image(i) & "  IP(i)=" & INTEGER'image(to_integer(unsigned(IP(i)))) & "  CP=" & INTEGER'image(CharPointer) severity NOTE;
 
-			str := resize(INTEGER'image(to_integer(unsigned(IP(I)))), str'length);
+			str := resize(INTEGER'image(to_integer(unsigned(IP(i)))), str'length);
 			len	:= str_length(str);
 			temp(CharPointer to CharPointer + len - 1)	:= str(1 to len);
 			CharPointer := CharPointer + len + 1;
@@ -994,7 +994,7 @@ package body net is
 		variable ip					: T_NET_IPV6_ADDRESS;
 	begin
 		for i in 0 to 15 loop
-			ip(I)	:=	slv(((I * 8) + 7) downto (I * 8));
+			ip(i)	:=	slv(((i * 8) + 7) downto (i * 8));
 		end loop;
 	
 		return ip;
@@ -1014,21 +1014,21 @@ package body net is
 --		report "ipv6_split of " & str severity NOTE;
 		
 		for i in str'reverse_range loop
---			report "  char=" & input(I) severity NOTE;
-			if (to_digit(input(I), 'h') /= -1) then
-				Segments(SegmentPointer)(CharPointer)	:= input(I);
+--			report "  char=" & input(i) severity NOTE;
+			if (to_digit(input(i), 'h') /= -1) then
+				Segments(SegmentPointer)(CharPointer)	:= input(i);
 --				report "    copy to seg=" & INTEGER'image(SegmentPointer) & "  pos=" & INTEGER'image(CharPointer) severity NOTE;
-				CharPointer					:= Charpointer - 1;
+				CharPointer					:= CharPointer - 1;
 				DelimiterPointer		:= 0;
-			elsif (input(I) = ':') then
+			elsif (input(i) = ':') then
 				if (DelimiterPointer = 0) then
 					SegmentPointer		:= SegmentPointer + 1;
 					CharPointer				:= 4;
-					DelimiterPointer	:= I;
+					DelimiterPointer	:= i;
 				else
 					-- count remaining segments-delimiters
-					for j in I - 1 downto input'low loop
-						if (input(J) = ':') then
+					for j in i - 1 downto input'low loop
+						if (input(j) = ':') then
 							RemainingDelimiters	:= RemainingDelimiters + 1;
 						end if;
 					end loop;
@@ -1051,9 +1051,9 @@ package body net is
 		variable IP							: T_NET_IPV6_ADDRESS;
 	begin
 		for i in Segments'range loop
-			Segment								:= to_slv(to_natural_hex(Segments(I)), 16);
-			IP(I * 2)							:= Segment(7 downto 0);
-			IP((I * 2) + 1)				:= Segment(15 downto 8);
+			Segment								:= to_slv(to_natural_hex(Segments(i)), 16);
+			IP(i * 2)							:= Segment(7 downto 0);
+			IP((i * 2) + 1)				:= Segment(15 downto 8);
 		end loop;
 		return IP;
 	end function;
@@ -1065,8 +1065,8 @@ package body net is
 		variable Len						: NATURAL;
 	begin
 		for i in str'reverse_range loop
-			if (str(I) = '/') then
-				Pos := I;
+			if (str(i) = '/') then
+				Pos := i;
 				EXIT;
 			end if;
 		end loop;
@@ -1088,7 +1088,7 @@ package body net is
 		variable slv						: T_SLV_128;
 	begin
 		for i in 0 to 15 loop
-			slv(((I * 8) + 7) downto (I * 8))		:= ip(I);
+			slv(((i * 8) + 7) downto (i * 8))		:= ip(i);
 		end loop;
 		return slv;
 	end function;
@@ -1097,7 +1097,7 @@ package body net is
 		variable slvv						: T_SLVV_8(ip'range);
 	begin
 		for i in ip'range loop
-			slvv(I)	:= ip(I);
+			slvv(i)	:= ip(i);
 		end loop;
 		return slvv;
 	end function;
@@ -1110,8 +1110,8 @@ package body net is
 		variable copy						: BOOLEAN							:= FALSE;
 	begin
 		for i in 7 downto 0 loop
-			temp(CharPointer + 0 to CharPointer + 1)	:= to_string(IP((I * 2) + 1), 'h');
-			temp(CharPointer + 2 to CharPointer + 3)	:= to_string(IP( I * 2), 'h');
+			temp(CharPointer + 0 to CharPointer + 1)	:= to_string(IP((i * 2) + 1), 'h');
+			temp(CharPointer + 2 to CharPointer + 3)	:= to_string(IP( i * 2), 'h');
 			CharPointer																:= CharPointer + 5;
 		end loop;
 	
@@ -1119,21 +1119,21 @@ package body net is
 --		report "compressing IPv6 address" severity NOTE;
 		CharPointer			:= 1;
 		for i in temp'range loop
---			report "  I=" & INTEGER'image(I) & "  char=" & temp(I) & "  CP=" & INTEGER'image(CharPointer) & "  copy=" & to_string(copy) severity NOTE;
+--			report "  I=" & INTEGER'image(i) & "  char=" & temp(i) & "  CP=" & INTEGER'image(CharPointer) & "  copy=" & to_string(copy) severity NOTE;
 		
 			if (copy = FALSE) then
-				if ((temp(I) = '0') AND (temp(I + 1) /= ':')) then
+				if ((temp(i) = '0') AND (temp(i + 1) /= ':')) then
 					NULL;
 				else
-					temp(CharPointer)	:= temp(I);
+					temp(CharPointer)	:= temp(i);
 					CharPointer				:= CharPointer + 1;
 					copy							:= TRUE;
 				end if;
 			else
-				if (temp(I) = ':') then
+				if (temp(i) = ':') then
 					copy							:= FALSE;
 				end if;
-				temp(CharPointer)		:= temp(I);
+				temp(CharPointer)		:= temp(i);
 				CharPointer					:= CharPointer + 1;
 			end if;
 		end loop;

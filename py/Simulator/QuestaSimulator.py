@@ -1,28 +1,27 @@
-# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-# Authors:				 	Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 # 
-# Python Class:			TODO
+# Python Class:      TODO
 # 
 # Description:
 # ------------------------------------
 #		TODO:
-#		- 
-#		- 
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+#                     Chair for VLSI-Design, Diagnostics and Architecture
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#		http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,341 +38,147 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.vSimSimulator")
 
+
 # load dependencies
-from pathlib import Path
+from pathlib                      import Path
 
-from Base.Exceptions import *
-from Simulator.Base import PoCSimulator 
-from Simulator.Exceptions import * 
+from Base.Exceptions              import NotConfiguredException
+from Base.Project                 import FileTypes, VHDLVersion, ToolChain, Tool
+from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from PoC.Config                   import Vendors
+from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaException
 
-class Simulator(PoCSimulator):
 
-	__executables =		{}
-	__vhdlStandard =	"93"
-	__guiMode =				False
+class Simulator(BaseSimulator):
+	_TOOL_CHAIN =            ToolChain.Mentor_QuestaSim
+	_TOOL =                  Tool.Mentor_vSim
 
-	def __init__(self, host, showLogs, showReport, vhdlStandard, guiMode):
-		super(self.__class__, self).__init__(host, showLogs, showReport)
+	def __init__(self, host, guiMode):
+		super().__init__(host)
 
-		self.__vhdlStandard =	vhdlStandard
-		self.__guiMode =			guiMode
+		self._guiMode =        guiMode
 
-		if (host.platform == "Windows"):
-			self.__executables['vlib'] =		"vlib.exe"
-			self.__executables['vcom'] =		"vcom.exe"
-			self.__executables['vsim'] =		"vsim.exe"
-		elif (host.platform == "Linux"):
-			self.__executables['vlib'] =		"vlib"
-			self.__executables['vcom'] =		"vcom"
-			self.__executables['vsim'] =		"vsim"
+		self._entity =        None
+		self._testbenchFQN =  None
+		self._vhdlVersion =    None
+		self._vhdlGenerics =  None
+
+		self._questa =        None
+
+		vSimSimulatorFiles = host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
+		self.Directories.Working =      host.Directories.Temp / vSimSimulatorFiles
+		self.Directories.PreCompiled =  host.Directories.PreCompiled / vSimSimulatorFiles
+
+		self._PrepareSimulationEnvironment()
+		self._PrepareSimulator()
+
+	def _PrepareSimulator(self):
+		# create the QuestaSim executable factory
+		self._LogVerbose("Preparing Mentor simulator.")
+		for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Altera.ModelSim']:
+			if (len(self.Host.PoCConfig.options(sectionName)) != 0):
+				break
 		else:
-			raise PlatformNotSupportedException(self.platform)
-		
-	def run(self, pocEntity):
-		import os
-		import re
-		import subprocess
-	
-		self.printNonQuiet(str(pocEntity))
-		self.printNonQuiet("  preparing simulation environment...")
+			raise NotConfiguredException(
+				"Neither Mentor Graphics QuestaSim nor ModelSim Altera-Edition are configured on this system.")
 
-		# create temporary directory for vSim if not existent
-		tempvSimPath = self.host.directories["vSimTemp"]
-		if not (tempvSimPath).exists():
-			self.printVerbose("Creating temporary directory for simulator files.")
-			self.printDebug("Temporary directors: %s" % str(tempvSimPath))
-			tempvSimPath.mkdir(parents=True)
+		questaSection = self.Host.PoCConfig[sectionName]
+		binaryPath = Path(questaSection['BinaryDirectory'])
+		version = questaSection['Version']
+		self._questa = QuestaSim(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
-		# setup all needed paths to execute fuse
-		vLibExecutablePath =	self.host.directories["vSimBinary"] / self.__executables['vlib']
-		vComExecutablePath =	self.host.directories["vSimBinary"] / self.__executables['vcom']
-		vSimExecutablePath =	self.host.directories["vSimBinary"] / self.__executables['vsim']
-#		gtkwExecutablePath =	self.host.directories["GTKWBinary"] / self.__executables['gtkwave']
-		
-		if not self.host.tbConfig.has_section(str(pocEntity)):
-			from configparser import NoSectionError
-			raise SimulatorException("Testbench '" + str(pocEntity) + "' not found.") from NoSectionError(str(pocEntity))
-		
-		testbenchName =				self.host.tbConfig[str(pocEntity)]['TestbenchModule']
-		fileListFilePath =		self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['fileListFile']
-		tclBatchFilePath =		self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['vSimBatchScript']
-		tclGUIFilePath =			self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['vSimGUIScript']
-		tclWaveFilePath =			self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['vSimWaveScript']
-		
-#		vcdFilePath =					tempvSimPath / (testbenchName + ".vcd")
-#		gtkwSaveFilePath =		self.host.directories["PoCRoot"] / self.host.tbConfig[str(pocEntity)]['gtkwaveSaveFile']
-		
-		# if (self.verbose):
-			# print("  Commands to be run:")
-			# print("  1. Change working directory to temporary directory")
-			# print("  2. Parse filelist file.")
-			# print("    a) For every file: Add the VHDL file to vSim's compile cache.")
-			# if (self.host.platform == "Windows"):
-				# print("  3. Compile and run simulation")
-			# elif (self.host.platform == "Linux"):
-				# print("  3. Compile simulation")
-				# print("  4. Run simulation")
-			# print("  ----------------------------------------")
-		
-		# change working directory to temporary iSim path
-		self.printVerbose('  cd "%s"' % str(tempvSimPath))
-		os.chdir(str(tempvSimPath))
+	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
+		# TODO: refactor into a ModelSim module, shared by QuestaSim and Cocotb (-> MixIn class)?
+		# select modelsim.ini
+		self._modelsimIniPath = self.Directories.PreCompiled
+		if board.Device.Vendor is Vendors.Altera:
+			self._modelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
+		elif board.Device.Vendor is Vendors.Xilinx:
+			self._modelsimIniPath  /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
-		# parse project filelist
-		filesLineRegExpStr =	r"^"																						#	start of line
-		filesLineRegExpStr =	r"(?:"																					#	open line type: empty, directive, keyword
-		filesLineRegExpStr +=		r"(?P<EmptyLine>)|"														#		empty line
-		filesLineRegExpStr +=		r"(?P<Directive>"															#		open directives:
-		filesLineRegExpStr +=			r"(?P<DirInclude>@include)|"								#			 @include
-		filesLineRegExpStr +=			r"(?P<DirLibrary>@library)"									#			 @library
-		filesLineRegExpStr +=		r")|"																					#		close directives
-		filesLineRegExpStr +=		r"(?P<Keyword>"																#		open keywords:
-		filesLineRegExpStr +=			r"(?P<KwAltera>altera)|"										#			altera
-		filesLineRegExpStr +=			r"(?P<KwXilinx>xilinx)|"										#			xilinx
-		filesLineRegExpStr +=			r"(?P<KwVHDL>vhdl"													#			vhdl[-nn]
-		filesLineRegExpStr +=				r"(?:-(?P<VHDLStandard>87|93|02|08))?)"		#				VHDL Standard Year: [-nn]
-		filesLineRegExpStr +=		r")"																					#		close keywords
-		filesLineRegExpStr +=	r")"																						#	close line type
-		filesLineRegExpStr +=	r"(?(Directive)\s+(?:"													#	open directive parameters
-		filesLineRegExpStr +=		r"(?(DirInclude)"															#		open @include directive
-		filesLineRegExpStr +=			r"\"(?P<IncludeFile>.*?\.files)\""					#			*.files filename without enclosing "-signs
-		filesLineRegExpStr +=		r")|"																					#		close @include directive
-		filesLineRegExpStr +=		r"(?(DirLibrary)"															#		open @include directive
-		filesLineRegExpStr +=			r"(?P<LibraryName>[_a-zA-Z0-9]+)"						#			VHDL library name
-		filesLineRegExpStr +=			r"\s+"																			#			delimiter
-		filesLineRegExpStr +=			r"\"(?P<LibraryPath>.*?)\""									#			VHDL library path without enclosing "-signs
-		filesLineRegExpStr +=		r")"																					#		close @library directive
-		filesLineRegExpStr +=	r"))"																						#	close directive parameters
-		filesLineRegExpStr +=	r"(?(Keyword)\s+(?:"														#	open keyword parameters
-		filesLineRegExpStr +=		r"(?P<VHDLLibrary>[_a-zA-Z0-9]+)"							#		VHDL library name
-		filesLineRegExpStr +=		r"\s+"																				#		delimiter
-		filesLineRegExpStr +=		r"\"(?P<VHDLFile>.*?\.vhdl?)\""								#		*.vhdl? filename without enclosing "-signs
-		filesLineRegExpStr +=	r"))"																						#	close keyword parameters
-		filesLineRegExpStr +=	r"\s*(?P<Comment>#.*)?"													#	optional comment until line end
-		filesLineRegExpStr +=	r"$"																						#	end of line
-		filesLineRegExp = re.compile(filesLineRegExpStr)
+		self._modelsimIniPath /= "modelsim.ini"
+		if not self._modelsimIniPath.exists():
+			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(self._modelsimIniPath)) \
+				from FileNotFoundError(str(self._modelsimIniPath))
 
-		self.printDebug("Reading filelist '%s'" % str(fileListFilePath))
-		self.printNonQuiet("  running analysis for every vhdl file...")
-		
-		# add empty line if logs are enabled
-		if self.showLogs:		print()
-		
-		vhdlLibraries = []
-		externalLibraries = []
-		
-		with fileListFilePath.open('r') as fileFileHandle:
-			for line in fileFileHandle:
-				filesLineRegExpMatch = filesLineRegExp.match(line)
-		
-				if (filesLineRegExpMatch is not None):
-					if (filesLineRegExpMatch.group('Directive') is not None):
-						if (filesLineRegExpMatch.group('DirInclude') is not None):
-							includeFile = filesLineRegExpMatch.group('IncludeFile')
-							self.printVerbose("    referencing another file: {0}".format(includeFile))
-						elif (filesLineRegExpMatch.group('DirLibrary') is not None):
-							externalLibraryName = filesLineRegExpMatch.group('LibraryName')
-							externalLibraryPath = filesLineRegExpMatch.group('LibraryPath')
-							
-							self.printVerbose("    referencing precompiled VHDL library: {0}".format(externalLibraryName))
-							externalLibraries.append(externalLibraryPath)
-						else:
-							raise SimulatorException("Unknown directive in *.files file.")
-						
-						continue
-						
-					elif (filesLineRegExpMatch.group('Keyword') is not None):
-						if (filesLineRegExpMatch.group('Keyword') == "vhdl"):
-							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
-							vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
-						elif (filesLineRegExpMatch.group('Keyword')[0:5] == "vhdl-"):
-							if (filesLineRegExpMatch.group('Keyword')[-2:] == self.__vhdlStandard):
-								vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
-								vhdlFilePath = self.host.directories["PoCRoot"] / vhdlFileName
-							else:
-								continue
-						elif (filesLineRegExpMatch.group('Keyword') == "altera"):
-							self.printVerbose("    skipped Altera specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
-						elif (filesLineRegExpMatch.group('Keyword') == "xilinx"):
-	#						self.printVerbose("    skipped Xilinx specific file: '%s'" % filesLineRegExpMatch.group('VHDLFile'))
-							# check if ISE or Vivado is configured
-							if not self.host.directories.__contains__("XilinxPrimitiveSource"):
-								raise NotConfiguredException("This testbench requires some Xilinx Primitves. Please configure Xilinx ISE or Vivado.")
-							
-							vhdlFileName = filesLineRegExpMatch.group('VHDLFile')
-							vhdlFilePath = self.host.directories["XilinxPrimitiveSource"] / vhdlFileName
-						else:
-							raise SimulatorException("Unknown keyword in *files file.")
-							
-						vhdlLibraryName = filesLineRegExpMatch.group('VHDLLibrary')
-						
-						if (not vhdlLibraries.__contains__(vhdlLibraryName)):
-							# assemble vlib command as list of parameters
-							parameterList = [str(vLibExecutablePath), vhdlLibraryName]
-							command = " ".join(parameterList)
-							
-							self.printDebug("call vlib: %s" % str(parameterList))
-							self.printVerbose("    command: %s" % command)
-							
-							try:
-								vLibLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, shell=False, universal_newlines=True)
-								vhdlLibraries.append(vhdlLibraryName)
+		super().Run(testbench, board, vhdlVersion, vhdlGenerics, guiMode)
 
-							except subprocess.CalledProcessError as ex:
-								print("ERROR while executing vlib: %s" % str(vhdlFilePath))
-								print("Return Code: %i" % ex.returncode)
-								print("-" * 80)
-								print(ex.output)
-								print("-" * 80)
-								
-								return
-		
-							if self.showLogs:
-								if (vLibLog != ""):
-									print("vlib messages for : %s" % str(vhdlFilePath))
-									print("--------------------------------------------------------------------------------")
-									print(vLibLog)
+	def _RunAnalysis(self, _):
+		# create a QuestaVHDLCompiler instance
+		vlib = self._questa.GetVHDLLibraryTool()
+		for lib in self._pocProject.VHDLLibraries:
+			vlib.Parameters[vlib.SwitchLibraryName] = lib.Name
+			vlib.CreateLibrary()
 
-						# 
-						if (not vhdlFilePath.exists()):
-							raise SimulatorException("Can not compile '" + vhdlFileName + "'.") from FileNotFoundError(str(vhdlFilePath))
-						
-						if (self.__vhdlStandard == "87"):
-							vhdlStandard = "-87"
-						elif (self.__vhdlStandard == "93"):
-							vhdlStandard = "-93"
-						elif (self.__vhdlStandard == "02"):
-							vhdlStandard = "-2002"
-						elif (self.__vhdlStandard == "08"):
-							vhdlStandard = "-2008"
-						
-						# assemble vcom command as list of parameters
-						parameterList = [
-							str(vComExecutablePath),
-							'-rangecheck',
-							'-l', 'vcom.log',
-							vhdlStandard,
-							'-work', vhdlLibraryName,
-							str(vhdlFilePath)
-						]
-						command = " ".join(parameterList)
-						
-						self.printDebug("call vcom: %s" % str(parameterList))
-						self.printVerbose("    command: %s" % command)
-						
-						try:
-							vComLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, shell=False, universal_newlines=True)
-						except subprocess.CalledProcessError as ex:
-							print("ERROR while executing vcom: %s" % str(vhdlFilePath))
-							print("Return Code: %i" % ex.returncode)
-							print("-" * 80)
-							print(ex.output)
-							print("-" * 80)
-							
-							return
+		# create a QuestaVHDLCompiler instance
+		vcom = self._questa.GetVHDLCompiler()
+		vcom.Parameters[vcom.FlagQuietMode] =          True
+		vcom.Parameters[vcom.FlagExplicit] =          True
+		vcom.Parameters[vcom.FlagRangeCheck] =        True
+		vcom.Parameters[vcom.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 
-						if self.showLogs:
-							if (vComLog != ""):
-								print("vcom messages for : %s" % str(vhdlFilePath))
-								print("--------------------------------------------------------------------------------")
-								print(vComLog)
+		if (self._vhdlVersion == VHDLVersion.VHDL87):    vcom.Parameters[vcom.SwitchVHDLVersion] =  "87"
+		elif (self._vhdlVersion == VHDLVersion.VHDL93):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "93"
+		elif (self._vhdlVersion == VHDLVersion.VHDL02):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "2002"
+		elif (self._vhdlVersion == VHDLVersion.VHDL08):  vcom.Parameters[vcom.SwitchVHDLVersion] =  "2008"
+		else:                                          raise SimulatorException("VHDL version is not supported.")
 
-		
-		# running simulation
-		# ==========================================================================
-		simulatorLog = ""
-		
-		# run vSim simulation on Windows
-		self.printNonQuiet("  running simulation...")
-	
-		parameterList = [
-			str(vSimExecutablePath),
-			'-vopt',
-			'-t', '1fs',
-		]
+		# run vcom compile for each VHDL file
+		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
+			if (not file.Path.exists()):                raise SimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
 
-		# append RUNOPTS to save simulation results to *.vcd file
-		if (self.__guiMode):
-			parameterList += ['-title', testbenchName]
-			
-			if (tclWaveFilePath.exists()):
-				self.printDebug("Found waveform script: '%s'" % str(tclWaveFilePath))
-				parameterList += ['-do', ('do {%s}; do {%s}' % (str(tclWaveFilePath), str(tclGUIFilePath)))]
-			else:
-				self.printDebug("Didn't find waveform script: '%s'. Loading default commands." % str(tclWaveFilePath))
-				parameterList += ['-do', ('add wave *; do {%s}' % str(tclGUIFilePath))]
-		else:
-			parameterList += [
-				'-c',
-				'-do', str(tclBatchFilePath)
-			]
-		
-		# append testbench name
-		parameterList += [('test.%s' % testbenchName)]
-		
-		command = " ".join(parameterList)
-	
-		self.printDebug("call vsim: %s" % str(parameterList))
-		self.printVerbose("    command: %s" % command)
-		
-		try:
-			simulatorLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, shell=False, universal_newlines=True)
-		except subprocess.CalledProcessError as ex:
-			print("ERROR while executing vsim command: %s" % command)
-			print("Return Code: %i" % ex.returncode)
-			print("-" * 80)
-			print(ex.output)
-			print("-" * 80)
-			
-			return
-#		
-		if self.showLogs:
-			if (simulatorLog != ""):
-				print("vsim messages for : %s" % str(vhdlFilePath))
-				print("--------------------------------------------------------------------------------")
-				print(simulatorLog)
+			vcomLogFile = self.Directories.Working / (file.Path.stem + ".vcom.log")
+			vcom.Parameters[vcom.SwitchVHDLLibrary] =  file.LibraryName
+			vcom.Parameters[vcom.ArgLogFile] =        vcomLogFile
+			vcom.Parameters[vcom.ArgSourceFile] =      file.Path
 
-		print()
-		
-		if (not self.__guiMode):
 			try:
-				result = self.checkSimulatorOutput(simulatorLog)
-				
-				if (result == True):
-					print("Testbench '%s': PASSED" % testbenchName)
-				else:
-					print("Testbench '%s': FAILED" % testbenchName)
-					
-			except SimulatorException as ex:
-				raise TestbenchException("PoC.ns.module", testbenchName, "'SIMULATION RESULT = [PASSED|FAILED]' not found in simulator output.") from ex
+				vcom.Compile()
+			except QuestaException as ex:
+				raise SimulatorException("Error while compiling '{0!s}'.".format(file.Path)) from ex
+			if vcom.HasErrors:
+				raise SkipableSimulatorException("Error while compiling '{0!s}'.".format(file.Path))
+
+			# delete empty log files
+			if (vcomLogFile.stat().st_size == 0):
+				vcomLogFile.unlink()
+
+	def _RunSimulation(self, testbench):
+		if self._guiMode:
+			return self._RunSimulationWithGUI(testbench)
+
+		tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		
-# 		else:	# guiMode
-# 			# run GTKWave GUI
-# 			self.printNonQuiet("  launching GTKWave...")
-# 		
-# 			parameterList = [
-# 				str(gtkwExecutablePath),
-# 				('--dump=%s' % vcdFilePath)
-# 			]
-# 
-# 			# if GTKWave savefile exists, load it's settings
-# 			if gtkwSaveFilePath.exists():
-# 				parameterList += ['--save', str(gtkwSaveFilePath)]
-# 				
-# 			command = " ".join(parameterList)
-# 		
-# 			self.printDebug("call GTKWave: %s" % str(parameterList))
-# 			self.printVerbose("    command: %s" % command)
-# 			try:
-# 				gtkwLog = subprocess.check_output(parameterList, stderr=subprocess.STDOUT, shell=False, universal_newlines=True)
-# 			except subprocess.CalledProcessError as ex:
-# 				print("ERROR while executing GTKWave command: %s" % command)
-# 				print("Return Code: %i" % ex.returncode)
-# 				print("--------------------------------------------------------------------------------")
-# 				print(ex.output)
-# #		
-# 			if self.showLogs:
-# 				if (gtkwLog != ""):
-# 					print("GTKWave messages:")
-# 					print("--------------------------------------------------------------------------------")
-# 					print(gtkwLog)
+		# create a QuestaSimulator instance
+		vsim = self._questa.GetSimulator()
+		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
+		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
+		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
+		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
+		vsim.Parameters[vsim.FlagCommandLineMode] =   True
+		vsim.Parameters[vsim.SwitchBatchCommand] =    "do {0}".format(tclBatchFilePath.as_posix())
+		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+		testbench.Result = vsim.Simulate()
+
+	def _RunSimulationWithGUI(self, testbench):
+		tclGUIFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
+		tclWaveFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
+
+		# create a QuestaSimulator instance
+		vsim = self._questa.GetSimulator()
+		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
+		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
+		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
+		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
+		vsim.Parameters[vsim.FlagGuiMode] =           True
+		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+		# vsim.Parameters[vsim.SwitchTitle] =           testbenchName
+
+		if (tclWaveFilePath.exists()):
+			self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
+			vsim.Parameters[vsim.SwitchBatchCommand] =  "do {0}; do {1}".format(tclWaveFilePath.as_posix(), tclGUIFilePath.as_posix())
+		else:
+			self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
+			vsim.Parameters[vsim.SwitchBatchCommand] =  "add wave *; do {0}".format(tclGUIFilePath.as_posix())
+
+		testbench.Result = vsim.Simulate()

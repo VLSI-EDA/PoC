@@ -70,9 +70,9 @@ architecture rtl of ocrom_sp is
 	constant DEPTH				: positive := 2**A_BITS;
 
 begin
-	assert (str_length(FileName) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
+	assert (str_length(FILENAME) /= 0) report "Do you really want to generate a block of zeros?" severity FAILURE;
 
-	gInfer: if VENDOR = VENDOR_XILINX generate
+	gInfer: if ((VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly
 		-- XST Advanced HDL Synthesis generates single-port memory as expected.
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
@@ -150,7 +150,7 @@ begin
 			);
 	end generate gAltera;
 	
-	assert VENDOR = VENDOR_XILINX or VENDOR = VENDOR_ALTERA
-		report "Vendor not yet supported."
+	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_XILINX))
+		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;
 end architecture;

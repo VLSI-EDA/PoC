@@ -95,7 +95,7 @@ BEGIN
 		begin
 			if rising_edge(Clock1) then
 				-- input delay for rising edge detection
-				D0		<= Input(I);
+				D0		<= Input(i);
 			
 				-- T-FF to converts a strobe to a flag signal
 				if (GATED_INPUT_BY_BUSY = TRUE) then
@@ -107,19 +107,19 @@ BEGIN
 		end process;
 		
 		-- D-FF for level change detection (both edges)
-		D2	<= syncClk2_Out(I) when rising_edge(Clock2);
+		D2	<= syncClk2_Out(i) when rising_edge(Clock2);
 
 		-- assign syncClk*_In signals
-		syncClk2_In(I)	<= T1;
-		syncClk1_In(I)	<= syncClk2_Out(I);	-- D2
+		syncClk2_In(i)	<= T1;
+		syncClk1_In(i)	<= syncClk2_Out(i);	-- D2
 
-		Changed_Clk1		<= not D0 and Input(I);				-- rising edge detection
-		Changed_Clk2		<= syncClk2_Out(I) xor D2;		-- level change detection; restore strobe signal from flag
-		Busy_i					<= T1 xor syncClk1_Out(I);		-- calculate busy signal
+		Changed_Clk1		<= not D0 and Input(i);				-- rising edge detection
+		Changed_Clk2		<= syncClk2_Out(i) xor D2;		-- level change detection; restore strobe signal from flag
+		Busy_i					<= T1 xor syncClk1_Out(i);		-- calculate busy signal
 
 		-- output signals
-		Output(I)				<= Changed_Clk2;
-		Busy(I)					<= Busy_i;
+		Output(i)				<= Changed_Clk2;
+		Busy(i)					<= Busy_i;
 	end generate;
 	
 	syncClk2 : entity PoC.sync_Bits

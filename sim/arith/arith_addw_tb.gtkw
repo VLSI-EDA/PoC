@@ -1,0 +1,39 @@
+[*]
+[*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
+[*] Tue Feb 09 01:50:32 2016
+[*]
+[dumpfile] "H:\Austausch\PoC\temp\ghdl\arith_addw_tb.ghw"
+[dumpfile_mtime] "Tue Feb 09 01:47:51 2016"
+[dumpfile_size] 108986677
+[savefile] "H:\Austausch\PoC\sim\arith\arith_addw_tb.gtkw"
+[timestart] 0
+[size] 1680 997
+[pos] -217 -217
+*-38.495441 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.arith_addw_tb.
+[sst_width] 197
+[signals_width] 78
+[sst_expanded] 1
+[sst_vpaned_height] 293
+@28
+top.arith_addw_tb.cin
+top.arith_addw_tb.clock
+@c00023
+#{top.arith_addw_tb.a[8:0]} top.arith_addw_tb.a[8] top.arith_addw_tb.a[7] top.arith_addw_tb.a[6] top.arith_addw_tb.a[5] top.arith_addw_tb.a[4] top.arith_addw_tb.a[3] top.arith_addw_tb.a[2] top.arith_addw_tb.a[1] top.arith_addw_tb.a[0]
+@28
+top.arith_addw_tb.a[8]
+top.arith_addw_tb.a[7]
+top.arith_addw_tb.a[6]
+top.arith_addw_tb.a[5]
+top.arith_addw_tb.a[4]
+top.arith_addw_tb.a[3]
+top.arith_addw_tb.a[2]
+top.arith_addw_tb.a[1]
+top.arith_addw_tb.a[0]
+@1401201
+-group_end
+@22
+#{top.arith_addw_tb.b[8:0]} top.arith_addw_tb.b[8] top.arith_addw_tb.b[7] top.arith_addw_tb.b[6] top.arith_addw_tb.b[5] top.arith_addw_tb.b[4] top.arith_addw_tb.b[3] top.arith_addw_tb.b[2] top.arith_addw_tb.b[1] top.arith_addw_tb.b[0]
+[pattern_trace] 1
+[pattern_trace] 0

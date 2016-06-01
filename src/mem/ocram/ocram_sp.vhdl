@@ -72,7 +72,7 @@ architecture rtl of ocram_sp is
 
 begin
 
-	gInfer : if ((VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
+	gInfer : if ((VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly
 		-- XST Advanced HDL Synthesis generates single-port memory as expected.
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
@@ -155,7 +155,7 @@ begin
 			);
 	end generate gAltera;
 	
-	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
+	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
 		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;
 end architecture;

@@ -1,15 +1,13 @@
 [*]
-[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Tue Jan 05 21:43:43 2016
+[*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
+[*] Sun Mar 20 22:40:35 2016
 [*]
-[dumpfile] "H:\Austausch\PoC\temp\ghdl\arith_prng_tb.ghw"
-[dumpfile_mtime] "Tue Jan 05 21:43:01 2016"
-[dumpfile_size] 8715
-[savefile] "H:\Austausch\PoC\sim\arith\arith_prng_tb.gtkw"
+[dumpfile_mtime] "Sun Mar 20 22:40:32 2016"
+[dumpfile_size] 8919
 [timestart] 0
 [size] 1676 996
 [pos] -1 -1
-*-28.403215 1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-28.718517 1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.arith_prng_tb.
 [sst_width] 197

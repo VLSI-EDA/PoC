@@ -43,7 +43,7 @@ use			PoC.vectors.all;
 
 entity stream_DeMux is
 	generic (
-		portS											: POSITIVE									:= 2;
+		PORTS											: POSITIVE									:= 2;
 		DATA_BITS									: POSITIVE									:= 8;
 		META_BITS									: NATURAL										:= 8;
 		META_REV_BITS							: NATURAL										:= 2
@@ -52,7 +52,7 @@ entity stream_DeMux is
 		Clock											: in	STD_LOGIC;
 		Reset											: in	STD_LOGIC;
 		-- Control interface
-		DeMuxControl							: in	STD_LOGIC_VECTOR(portS - 1 downto 0);
+		DeMuxControl							: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 		-- IN Port
 		In_Valid									: in	STD_LOGIC;
 		In_Data										: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
@@ -62,13 +62,13 @@ entity stream_DeMux is
 		In_EOF										: in	STD_LOGIC;
 		In_Ack										: out	STD_LOGIC;
 		-- OUT Ports
-		Out_Valid									: out	STD_LOGIC_VECTOR(portS - 1 downto 0);
-		Out_Data									: out	T_SLM(portS - 1 downto 0, DATA_BITS - 1 downto 0);
-		Out_Meta									: out	T_SLM(portS - 1 downto 0, META_BITS - 1 downto 0);
-		Out_Meta_rev							: in	T_SLM(portS - 1 downto 0, META_REV_BITS - 1 downto 0);
-		Out_SOF										: out	STD_LOGIC_VECTOR(portS - 1 downto 0);
-		Out_EOF										: out	STD_LOGIC_VECTOR(portS - 1 downto 0);
-		Out_Ack										: in	STD_LOGIC_VECTOR(portS - 1 downto 0)
+		Out_Valid									: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		Out_Data									: out	T_SLM(PORTS - 1 downto 0, DATA_BITS - 1 downto 0);
+		Out_Meta									: out	T_SLM(PORTS - 1 downto 0, META_BITS - 1 downto 0);
+		Out_Meta_rev							: in	T_SLM(PORTS - 1 downto 0, META_REV_BITS - 1 downto 0);
+		Out_SOF										: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		Out_EOF										: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		Out_Ack										: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0)
 	);
 end;
 
@@ -77,7 +77,7 @@ architecture rtl of stream_DeMux is
 	attribute KEEP										: BOOLEAN;
 	attribute FSM_ENCODING						: STRING;
 	
-	subtype T_CHANNEL_INDEX is NATURAL range 0 to portS - 1;
+	subtype T_CHANNEL_INDEX is NATURAL range 0 to PORTS - 1;
 	
 	type T_STATE		is (ST_IDLE, ST_DATAFLOW, ST_DISCARD_FRAME);
 	
@@ -93,14 +93,14 @@ architecture rtl of stream_DeMux is
 	
 	signal ChannelPointer_rst		: STD_LOGIC;
 	signal ChannelPointer_en		: STD_LOGIC;
-	signal ChannelPointer				: STD_LOGIC_VECTOR(portS - 1 downto 0);
-	signal ChannelPointer_d			: STD_LOGIC_VECTOR(portS - 1 downto 0)								:= (others => '0');
+	signal ChannelPointer				: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+	signal ChannelPointer_d			: STD_LOGIC_VECTOR(PORTS - 1 downto 0)								:= (others => '0');
 	
-	signal ChannelPointer_bin		: UNSIGNED(log2ceilnz(portS) - 1 downto 0);
+	signal ChannelPointer_bin		: UNSIGNED(log2ceilnz(PORTS) - 1 downto 0);
 	signal idx									: T_CHANNEL_INDEX;
 	
-	signal Out_Data_i						: T_SLM(portS - 1 downto 0, DATA_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
-	signal Out_Meta_i						: T_SLM(portS - 1 downto 0, META_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
+	signal Out_Data_i						: T_SLM(PORTS - 1 downto 0, DATA_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
+	signal Out_Meta_i						: T_SLM(PORTS - 1 downto 0, META_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 begin
 	
 	In_Ack_i			<= slv_or(Out_Ack	 and ChannelPointer);
@@ -184,7 +184,7 @@ begin
 
 	In_Meta_rev					<= get_row(Out_Meta_rev, idx);
 
-	genOutput : for i in 0 to portS - 1 generate
+	genOutput : for i in 0 to PORTS - 1 generate
 		Out_Valid(i)			<= Out_Valid_i and ChannelPointer(i);
 		assign_row(Out_Data_i, In_Data, i);
 		assign_row(Out_Meta_i, In_Meta, i);

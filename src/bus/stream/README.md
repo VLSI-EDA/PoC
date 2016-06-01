@@ -5,12 +5,7 @@ The namespace `PoC.bus.stream` offers different modules for the *PoC.Stream* bus
 
 ## Package
 
-The package [`stream`][stream.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.stream.all;
-```
+The package [`PoC.stream`][stream.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

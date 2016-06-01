@@ -1,0 +1,17 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+if ((Tool = "GHDL") and ?("temp/precompiled/ghdl/xilinx")) then
+	library unisim "temp/precompiled/ghdl/xilinx"
+elseif ((Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) and ?("temp/precompiled/vsim/xilinx")) then
+	library unisim "temp/precompiled/vsim/xilinx"
+elseif (ToolChain in ["Xilinx_ISE", "Xilinx_Vivado"]) then
+	# implicitly referenced; nothing to reference
+elseif (Tool = "Aldec_aSim") then
+	# Active-HDL is shipped with Xilinx libraries.
+else
+	report "No precompiled Xilinx primitives found."
+end if

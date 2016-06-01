@@ -11,19 +11,14 @@ The namespace `PoC.misc` offers different yet uncategorized entities.
     `INPUT_BITS` to an output stream of `OUTPUT_BITS`, while maintaining a
     constant transfer rate. This can be done by
     multipliing or dividing the clock frequency (`dc` - dependent clock
-    interface) or by using the same clock (`cc` - common clock interface
+    interface) or by using the same clock (`cc` - common clock interface)
  -  [`PoC.misc.stat`][misc_stat] - contains statistic modules.
  -  [`PoC.misc.sync`][misc_sync] - offers clock-domain-crossing (CDC) modules.
 
 
 ## Package
 
-The package [`misc`][misc.pkg] holds all component declarations for this namespace.
-
-```VHDL
-library PoC;
-use     PoC.misc.all;
-```
+The package [`PoC.misc`][misc.pkg] holds all component declarations for this namespace.
 
 
 ## Entities

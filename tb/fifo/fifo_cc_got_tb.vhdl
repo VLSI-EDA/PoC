@@ -14,7 +14,7 @@
 --
 -- License:
 -- ============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,18 +30,25 @@
 -- limitations under the License.
 -- ============================================================================
 
-entity fifo_cc_got_tb is
-end entity;
-
 library	IEEE;
 use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
 
 library	PoC;
 use			PoC.utils.all;
+use			PoC.physical.all;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
+
+
+entity fifo_cc_got_tb is
+end entity;
 
 
 architecture tb of fifo_cc_got_tb is
+	constant CLOCK_FREQ			: FREQ					:= 100 MHz;
 
   -- component generics
   constant D_BITS         : positive := 8;
@@ -51,18 +58,21 @@ architecture tb of fifo_cc_got_tb is
 
   -- Clock Control
   signal rst  : std_logic;
-  signal clk  : std_logic                := '0';
-  signal done : std_logic_vector(0 to 7) := (others => '0');
+  signal clk  : std_logic;
   
 begin
-
-  clk <= not clk after 5 ns when done /= (done'range => '1') else '0';
-  rst <= '1', '0' after 10 ns;
+	-- initialize global simulation status
+	simInitialize;
+	-- generate global testbench clock
+	simGenerateClock(clk,		CLOCK_FREQ);
+	simGenerateWaveform(rst,	simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
 
   genDUTs: for c in 0 to 7 generate
 		constant DATA_REG   : boolean :=  c mod 2 > 0;
 		constant STATE_REG  : boolean :=  c mod 4 > 1;
 		constant OUTPUT_REG : boolean :=  c mod 8 > 3;
+		
+		constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
     
     -- Local Component Ports
     signal put				: std_logic;
@@ -100,7 +110,8 @@ begin
       );
 
     -- Writer
-    process
+    procWriter : process
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Writer for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
     begin
       din <= (others => '-');
       put <= '0';
@@ -123,31 +134,30 @@ begin
 
       din <= (others => '-');
       put <= '0';
-      wait;                             -- forever
-    
+			
+      -- This process is finished
+			simDeactivateProcess(simProcessID);
+			wait;  -- forever
     end process;
 
     -- Reader
-    process
+		procReader : process
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Reader for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
     begin
       got <= '0';
       for i in 0 to 2**D_BITS-1 loop
         wait until rising_edge(clk) and valid = '1';
-        assert dout = std_logic_vector(to_unsigned(i, D_BITS))
-          report
-             "Output Failure in Configuration "&integer'image(c)&
-             " @ Pos "&integer'image(i)
-          severity failure;
+				simAssertion((dout = std_logic_vector(to_unsigned(i, D_BITS))), "Output failure in configuration " & INTEGER'image(c) & " @ Pos " & INTEGER'image(i));
         got <= '1';
         wait until rising_edge(clk);
         got <= '0';
         wait until rising_edge(clk);
       end loop;
     
-      done(c) <= '1';
-      report "Test "&integer'image(c)&" completed." severity note;
-      wait;                             -- forever
+      -- This process is finished
+			simDeactivateProcess(simProcessID);
+			simFinalizeTest(simTestID);
+			wait;  -- forever
     end process;
   end generate genDUTs;
-
-end;
+end architecture;

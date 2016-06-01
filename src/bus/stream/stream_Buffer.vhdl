@@ -223,7 +223,7 @@ begin
 			signal MetaReg_d						: STD_LOGIC_VECTOR(META_BITS(i) - 1 downto 0)		:= (others => '0');
 			signal MetaReg_DataOut			: STD_LOGIC_VECTOR(META_BITS(i) - 1 downto 0);
 		begin
-			MetaReg_DataIn		<= In_Meta_Data(high(META_BITS, I) downto low(META_BITS, I));
+			MetaReg_DataIn		<= In_Meta_Data(high(META_BITS, i) downto low(META_BITS, i));
 		
 			process(Clock)
 			begin
@@ -237,7 +237,7 @@ begin
 			end process;
 			
 			MetaReg_DataOut		<= MetaReg_d;
-			Out_Meta_Data(high(META_BITS, I) downto low(META_BITS, I))	<= MetaReg_DataOut;
+			Out_Meta_Data(high(META_BITS, i) downto low(META_BITS, i))	<= MetaReg_DataOut;
 		end generate;	-- META_FIFO_DEPTH(i) = 1
 		genFIFO : if (META_FIFO_DEPTH(i) > 1) generate
 			signal MetaFIFO_put								: STD_LOGIC;
@@ -285,7 +285,7 @@ begin
 			In_Meta_nxt(i)			<= Writer_Counter_en;
 			
 			MetaFIFO_put				<= Writer_Counter_en;
-			MetaFIFO_DataIn			<= In_Meta_Data(high(META_BITS, I) downto low(META_BITS, I));
+			MetaFIFO_DataIn			<= In_Meta_Data(high(META_BITS, i) downto low(META_BITS, i));
 		
 			MetaFIFO : entity PoC.fifo_cc_got_tempgot
 				generic map (
@@ -322,7 +322,7 @@ begin
 			MetaFIFO_Commit			<= FrameCommit;
 			MetaFIFO_Rollback		<= Out_Meta_rst;
 		
-			Out_Meta_Data(high(META_BITS, I) downto low(META_BITS, I))	<= MetaFIFO_DataOut;
+			Out_Meta_Data(high(META_BITS, i) downto low(META_BITS, i))	<= MetaFIFO_DataOut;
 		end generate;	-- (META_FIFO_DEPTH(i) > 1)
 	end generate;
 	

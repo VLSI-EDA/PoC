@@ -1,0 +1,16 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Common PoC packages for configuration, synthesis and simulation
+include				"src/common/common.files"										# load common packages
+
+# PoC.arith
+vhdl		poc   "src/arith/arith.pkg.vhdl"														# Arithmetic package
+if (DeviceVendor = "Xilinx") then
+	include			"lib/Xilinx.files"																		# 
+	vhdl	poc  "src/arith/xilinx/arith_carrychain_inc_xilinx.vhdl"		# Xilinx specific carry-chain abstraction
+end if
+vhdl		poc   "src/arith/arith_carrychain_inc.vhdl"									# Carry-chain abstraction for increment by one operations

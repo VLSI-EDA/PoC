@@ -79,8 +79,8 @@ architecture xilinx of xil_SystemMonitor_Series7 IS
 	begin
 
 	genAUXChannel : for i in 0 to 15 generate
-		aux_channel_p(I) <= '0';
-		aux_channel_n(I) <= '0';
+		aux_channel_p(i) <= '0';
+		aux_channel_n(i) <= '0';
 	end generate;
 
 	SysMonitor : XADC

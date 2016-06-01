@@ -1,0 +1,28 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+if (VHDL = 2008) then
+	if ((Tool = "GHDL") and ?("temp/precompiled/ghdl/osvvm")) then
+		library osvvm "temp/precompiled/ghdl/osvvm"
+	elseif ((Tool = "Mentor_vSim") and ?("temp/precompiled/vsim/osvvm")) then
+		library osvvm "temp/precompiled/vsim/osvvm"
+	else
+		vhdl	osvvm	"lib/osvvm/NamePkg.vhd"									# OSVVM 
+		vhdl	osvvm	"lib/osvvm/OsvvmGlobalPkg.vhd"					# OSVVM 
+		vhdl	osvvm	"lib/osvvm/TextUtilPkg.vhd"							# OSVVM 
+		vhdl	osvvm	"lib/osvvm/TranscriptPkg.vhd"						# OSVVM 
+		vhdl	osvvm	"lib/osvvm/AlertLogPkg.vhd"							# OSVVM 
+		vhdl	osvvm	"lib/osvvm/MemoryPkg.vhd"								# OSVVM 
+		vhdl	osvvm	"lib/osvvm/MessagePkg.vhd"							# OSVVM 
+		vhdl	osvvm	"lib/osvvm/SortListPkg_int.vhd"					# OSVVM 
+		vhdl	osvvm	"lib/osvvm/RandomBasePkg.vhd"						# OSVVM 
+		vhdl	osvvm	"lib/osvvm/RandomPkg.vhd"								# OSVVM 
+		vhdl	osvvm	"lib/osvvm/CoveragePkg.vhd"							# OSVVM 
+		vhdl	osvvm	"lib/osvvm/OsvvmContext.vhd"						# OSVVM 
+	end if
+else
+	report "OSVVM requires VHDL-2008"
+end if

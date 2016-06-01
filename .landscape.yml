@@ -1,0 +1,31 @@
+python-targets:
+- 3
+# requirements:
+# - colorama
+# - py-flags
+# doc-warnings: yes
+test-warnings: no
+strictness: medium
+max-line-length: 180
+pylint:
+  disable:
+  - too-many-arguments
+  # options:
+    # docstring-min-length: 10
+pep8:
+  disable:
+  - E704
+  enable:
+  options:
+    max-line-length: 180
+ignore-paths:
+- lib
+- netlist
+- prj
+- sim
+- src
+# - tb
+- temp
+# - tools
+- ucf
+- xst

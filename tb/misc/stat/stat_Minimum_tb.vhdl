@@ -1,28 +1,33 @@
--- EMACS settings: -*-  tab-width:2  -*-
+-- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- 
--------------------------------------------------------------------------------
--- Authors:      Patrick Lehmann
+-- =============================================================================
+-- Authors:					Patrick Lehmann
 --
--- Description:  Testbench for stat_Minimum.
+-- Testbench:				for PoC.misc.stat.Minimum
 --
--------------------------------------------------------------------------------
--- Copyright 2007-2015 Technische Universität Dresden - Germany
---                     Chair for VLSI-Design, Diagnostics and Architecture
+-- Description:
+-- ------------------------------------
+--	TODO
+-- 
+-- License:
+-- =============================================================================
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
+--										 Chair for VLSI-Design, Diagnostics and Architecture
 -- 
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
 -- 
---    http://www.apache.org/licenses/LICENSE-2.0
+--		http://www.apache.org/licenses/LICENSE-2.0
 -- 
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--------------------------------------------------------------------------------
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -31,6 +36,11 @@ use			IEEE.numeric_std.all;
 library	PoC;
 use			poC.utils.all;
 use			poC.vectors.all;
+use			poC.physical.all;
+-- simulation only packages
+use			PoC.sim_types.all;
+use			PoC.simulation.all;
+use			PoC.waveform.all;
 
 
 entity stat_Minimum_tb is
@@ -38,6 +48,7 @@ end entity;
 
 
 architecture tb of stat_Minimum_tb is
+	constant CLOCK_FREQ							: FREQ					:= 100 MHz;
 
   -- component generics
   constant VALUES : T_NATVEC := (
@@ -93,13 +104,14 @@ architecture tb of stat_Minimum_tb is
 		(Minimum => 13,	Count => 3)
 	);
 	
-	constant DEPTH				: POSITIVE		:= RESULT'length;
-	constant DATA_BITS		: POSITIVE		:= 8;
-	constant COUNTER_BITS	: POSITIVE		:= 16;
+	constant DEPTH				: POSITIVE				:= RESULT'length;
+	constant DATA_BITS		: POSITIVE				:= 8;
+	constant COUNTER_BITS	: POSITIVE				:= 4;
+	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DEPTH=" & INTEGER'image(DEPTH));
 	
   -- component ports
-  signal Clock		: STD_LOGIC		:= '1';
-  signal Reset		: STD_LOGIC		:= '0';
+  signal Clock		: STD_LOGIC;
+  signal Reset		: STD_LOGIC;
 	
   signal Enable		: STD_LOGIC		:= '0';
   signal DataIn		: STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
@@ -112,9 +124,15 @@ architecture tb of stat_Minimum_tb is
 	signal Counts_slvv		: T_SLVV_4(DEPTH - 1 downto 0);
 	
 begin
+	-- initialize global simulation status
+	simInitialize;
+	-- generate global testbench clock
+	simGenerateClock(simTestID,			Clock,	CLOCK_FREQ);
+	simGenerateWaveform(simTestID,	Reset,	simGenerateWaveform_Reset(Pause =>  5 ns, ResetPulse => 10 ns));
+	simGenerateWaveform(simTestID,	Enable,	simGenerateWaveform_Reset(Pause => 25 ns, ResetPulse => (VALUES'length * 10 ns)));
   
   -- component instantiation
-  DUT: entity PoC.stat_Minimum
+  UUT: entity PoC.stat_Minimum
     generic map (
       DEPTH					=> DEPTH,
 			DATA_BITS			=> DATA_BITS,
@@ -135,49 +153,31 @@ begin
 	Minimums_slvv	<= to_slvv_8(Minimums);
 	Counts_slvv		<= to_slvv_4(Counts);
 		
-	process
-		procedure cycle is
-		begin
-			Clock	<= '1';
-			wait for 5 ns;
-			Clock <= '0';
-			wait for 5 ns;
-		end cycle;
-
-		variable good		: BOOLEAN;
-		
+	procStimuli : process
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator and Checker");
+		variable good					: BOOLEAN;
 	begin
-		cycle;
-		Reset		<= '1';
-		cycle;
-		Reset		<= '0';
-		cycle;
-		cycle;
-		Enable	<= '1';
+		DataIn		<= (others => '0');
+		wait until (Enable = '1') and falling_edge(Clock);
 
 		for i in VALUES'range loop
 			--Enable	<= to_sl(VALUES(i) /= 35);
 			DataIn	<= to_slv(VALUES(i), DataIn'length);
-			cycle;
+			wait until falling_edge(Clock);
 		end loop;
 
-		cycle;
+		wait until rising_edge(Clock);
 		
 		-- test result after all cycles
 		good := (slv_and(Valids) = '1');
 		for i in RESULT'range loop
 			good	:= good and (RESULT(i).Minimum = unsigned(Minimums_slvv(i))) and (RESULT(i).Count = unsigned(Counts_slvv(i)));
 		end loop;
-		
-		assert (good = TRUE)
-			report "Test failed."
-			severity note;
+		simAssertion(good, "Test failed.");
 
-		assert (good = FALSE)
-			report "Test passed."
-			severity note;
-
-		wait;
+		-- This process is finished
+		simDeactivateProcess(simProcessID);
+		wait;  -- forever
 	end process;
 
-end;
+end architecture;

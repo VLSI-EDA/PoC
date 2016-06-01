@@ -49,7 +49,7 @@ entity icmpv4_Wrapper is
 		Clock																: in	STD_LOGIC;
 		Reset																: in	STD_LOGIC;
 		-- CSE interface
-		Command															: in	T_NET_ICMPV4_COMMand;
+		Command															: in	T_NET_ICMPV4_COMMAND;
 		Status															: out	T_NET_ICMPV4_STATUS;
 		Error																: out	T_NET_ICMPV4_ERROR;
 		-- Echo-Request destination address
@@ -111,11 +111,11 @@ architecture rtl of icmpv4_Wrapper is
 	signal FSM_NextState								: T_STATE;
 	attribute FSM_ENCODING of FSM_State	: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 	
-	signal FSM_TX_Command								: T_NET_ICMPV4_TX_COMMand;
+	signal FSM_TX_Command								: T_NET_ICMPV4_TX_COMMAND;
 	signal TX_Status										: T_NET_ICMPV4_TX_STATUS;
 	signal TX_Error											: T_NET_ICMPV4_TX_ERROR;
 
-	signal FSM_RX_Command								: T_NET_ICMPV4_RX_COMMand;
+	signal FSM_RX_Command								: T_NET_ICMPV4_RX_COMMAND;
 	signal RX_Status										: T_NET_ICMPV4_RX_STATUS;
 	signal RX_Error											: T_NET_ICMPV4_RX_ERROR;
 	
@@ -177,7 +177,7 @@ begin
 		FSM_TX_Command										<= NET_ICMPV4_TX_CMD_NONE;
 		FSM_RX_Command										<= NET_ICMPV4_RX_CMD_NONE;
 		
-		FSM_TX_Meta_Type									<= C_NET_ICMPV4_type_EMPTY;
+		FSM_TX_Meta_Type									<= C_NET_ICMPV4_TYPE_EMPTY;
 		FSM_TX_Meta_Code									<= C_NET_ICMPV4_CODE_EMPTY;
 		FSM_TX_Meta_Identification				<= x"0000";
 		FSM_TX_Meta_SequenceNumber				<= x"0000";
@@ -213,7 +213,7 @@ begin
 				IPv4Address_nxt								<= TX_Meta_IPv4Address_nxt;
 				
 				FSM_TX_Meta_IPv4Address_Data	<= IPv4Address_Data;
-				FSM_TX_Meta_Type							<= C_NET_ICMPV4_type_ECHO_REQUEST;
+				FSM_TX_Meta_Type							<= C_NET_ICMPV4_TYPE_ECHO_REQUEST;
 				FSM_TX_Meta_Code							<= C_NET_ICMPV4_CODE_ECHO_REQUEST;
 				FSM_TX_Meta_Identification		<= x"C0FE";
 				FSM_TX_Meta_SequenceNumber		<= x"BEAF";
@@ -225,7 +225,7 @@ begin
 				IPv4Address_nxt								<= TX_Meta_IPv4Address_nxt;
 				
 				FSM_TX_Meta_IPv4Address_Data	<= IPv4Address_Data;
-				FSM_TX_Meta_Type							<= C_NET_ICMPV4_type_ECHO_REQUEST;
+				FSM_TX_Meta_Type							<= C_NET_ICMPV4_TYPE_ECHO_REQUEST;
 				FSM_TX_Meta_Code							<= C_NET_ICMPV4_CODE_ECHO_REQUEST;
 				FSM_TX_Meta_Identification		<= x"C0FE";
 				FSM_TX_Meta_SequenceNumber		<= x"BEAF";
@@ -263,7 +263,7 @@ begin
 				FSM_RX_Meta_SrcIPv4Address_nxt	<= TX_Meta_IPv4Address_nxt;
 				
 				FSM_TX_Meta_IPv4Address_Data		<= RX_Meta_SrcIPv4Address_Data;
-				FSM_TX_Meta_Type								<= C_NET_ICMPV4_type_ECHO_REPLY;
+				FSM_TX_Meta_Type								<= C_NET_ICMPV4_TYPE_ECHO_REPLY;
 				FSM_TX_Meta_Code								<= C_NET_ICMPV4_CODE_ECHO_REPLY;
 				FSM_TX_Meta_Identification			<= RX_Meta_Identification;
 				FSM_TX_Meta_SequenceNumber			<= RX_Meta_SequenceNumber;
@@ -276,7 +276,7 @@ begin
 				FSM_RX_Meta_SrcIPv4Address_nxt	<= TX_Meta_IPv4Address_nxt;
 				
 				FSM_TX_Meta_IPv4Address_Data		<= RX_Meta_SrcIPv4Address_Data;
-				FSM_TX_Meta_Type								<= C_NET_ICMPV4_type_ECHO_REPLY;
+				FSM_TX_Meta_Type								<= C_NET_ICMPV4_TYPE_ECHO_REPLY;
 				FSM_TX_Meta_Code								<= C_NET_ICMPV4_CODE_ECHO_REPLY;
 				FSM_TX_Meta_Identification			<= RX_Meta_Identification;
 				FSM_TX_Meta_SequenceNumber			<= RX_Meta_SequenceNumber;

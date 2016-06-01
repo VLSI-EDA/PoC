@@ -161,7 +161,7 @@ begin
 
 	begin
 		DataInputMatrix		<= to_slm(gearup_Data, SORTNET_SIZE, SORTNET_DATA_BITS);
-		MetaInputMatric		<= 
+		-- MetaInputMatric		<= 
 		-- mux(gearup_Valid, (SORTNET_SIZE * SORTNET_DATA_BITS downto 1 => 'U'), gearup_Data)
 		
 		sort : entity PoC.sortnet_OddEvenSort

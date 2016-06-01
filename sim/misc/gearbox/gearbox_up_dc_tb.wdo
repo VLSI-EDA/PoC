@@ -1,18 +1,19 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /gearbox_up_dc_tb/StopSimulation
-add wave -noupdate -divider Inputs
-add wave -noupdate /gearbox_up_dc_tb/Clock1
-add wave -noupdate /gearbox_up_dc_tb/Align
-add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_up_dc_tb/DataIn
-add wave -noupdate -divider Outputs
-add wave -noupdate /gearbox_up_dc_tb/Clock2
-add wave -noupdate -radix hexadecimal -radixshowbase 0 /gearbox_up_dc_tb/DataOut
-add wave -noupdate /gearbox_up_dc_tb/Valid
-add wave -noupdate -divider Settings
-add wave -noupdate /gearbox_up_dc_tb/INPUT_ORDER
+add wave -noupdate -expand -group {Example 1 (8 -> 32)} /gearbox_up_dc_tb/genInstances(0)/Valid
+add wave -noupdate -expand -group {Example 1 (8 -> 32)} -radix hexadecimal -radixshowbase 0 /gearbox_up_dc_tb/genInstances(0)/DataOut
+add wave -noupdate -expand -group {Example 1 (8 -> 32)} -radix hexadecimal -radixshowbase 0 /gearbox_up_dc_tb/genInstances(0)/DataIn
+add wave -noupdate -expand -group {Example 1 (8 -> 32)} /gearbox_up_dc_tb/genInstances(0)/Clock2
+add wave -noupdate -expand -group {Example 1 (8 -> 32)} /gearbox_up_dc_tb/genInstances(0)/Clock1
+add wave -noupdate -expand -group {Example 1 (8 -> 32)} /gearbox_up_dc_tb/genInstances(0)/Align
+add wave -noupdate -expand -group {Example 2 (8 -> 128)} /gearbox_up_dc_tb/genInstances(1)/Valid
+add wave -noupdate -expand -group {Example 2 (8 -> 128)} -radix hexadecimal -radixshowbase 0 /gearbox_up_dc_tb/genInstances(1)/DataOut
+add wave -noupdate -expand -group {Example 2 (8 -> 128)} -radix hexadecimal -radixshowbase 0 /gearbox_up_dc_tb/genInstances(1)/DataIn
+add wave -noupdate -expand -group {Example 2 (8 -> 128)} /gearbox_up_dc_tb/genInstances(1)/Clock2
+add wave -noupdate -expand -group {Example 2 (8 -> 128)} /gearbox_up_dc_tb/genInstances(1)/Clock1
+add wave -noupdate -expand -group {Example 2 (8 -> 128)} /gearbox_up_dc_tb/genInstances(1)/Align
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {282596364 fs} 0}
+WaveRestoreCursors {{Cursor 1} {3145142857 fs} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 223
 configure wave -valuecolwidth 100
@@ -28,4 +29,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 fs} {819 ns}
+WaveRestoreZoom {0 fs} {10752 ns}

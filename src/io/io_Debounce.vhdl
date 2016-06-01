@@ -52,9 +52,10 @@ use			PoC.physical.all;
 
 entity io_Debounce is
   generic (
-    CLOCK_FREQ 							: freq;
+    CLOCK_FREQ 							: FREQ;
     BOUNCE_TIME							: t_time;
     BITS                    : positive := 1;
+		INIT										: STD_LOGIC_VECTOR		:= x"00000000";	-- initial state of Output
     ADD_INPUT_SYNCHRONIZERS : boolean  := true;
     COMMON_LOCK             : boolean  := false
   );
@@ -62,7 +63,7 @@ entity io_Debounce is
     Clock		: in	std_logic;
 		Reset		: in	std_logic							:= '0';
     Input		: in	std_logic_vector(BITS-1 downto 0);
-    Output	: out	std_logic_vector(BITS-1 downto 0)
+    Output	: out	std_logic_vector(BITS-1 downto 0) := resize(descend(INIT), BITS)
   );
 end;
 
@@ -85,7 +86,8 @@ begin
   genSync: if ADD_INPUT_SYNCHRONIZERS generate
     sync_i : entity PoC.sync_Bits
       generic map (
-        BITS => BITS
+        BITS => BITS,
+				INIT => INIT
       )
       port map (
         Clock  => Clock,  	-- Clock to be synchronized to

@@ -17,9 +17,9 @@ set_property PACKAGE_PIN	G2				[get_ports ZC706_GPIO_LED[2]]
 ## {OUT}	Q7; Bank 11; VCCO=VADJ_FPGA
 set_property PACKAGE_PIN	Y21				[get_ports ZC706_GPIO_LED[3]]
 # set I/O standard
-set_property IOSTANDARD		LVCMOS15	[get_ports -regexp {ZC706_GPIO_LED\[0]}]
-set_property IOSTANDARD		LVCMOS25	[get_ports -regexp {ZC706_GPIO_LED\[1]}]
-set_property IOSTANDARD		LVCMOS15	[get_ports -regexp {ZC706_GPIO_LED\[2]}]
-set_property IOSTANDARD		LVCMOS25	[get_ports -regexp {ZC706_GPIO_LED\[3]}]
+set_property IOSTANDARD		LVCMOS15	[get_ports ZC706_GPIO_LED[0]]
+set_property IOSTANDARD		LVCMOS25	[get_ports ZC706_GPIO_LED[1]]
+set_property IOSTANDARD		LVCMOS15	[get_ports ZC706_GPIO_LED[2]]
+set_property IOSTANDARD		LVCMOS25	[get_ports ZC706_GPIO_LED[3]]
 # Ignore timings on async I/O pins
 set_false_path									-to [get_ports -regexp {ZC706_GPIO_LED\[\d\]}]

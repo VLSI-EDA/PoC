@@ -1,0 +1,35 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Sat Feb 06 00:36:50 2016
+[*]
+[dumpfile_mtime] "Sat Feb 06 00:35:46 2016"
+[dumpfile_size] 8242
+[timestart] 0
+[size] 1680 997
+[pos] -217 -217
+*-28.564495 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.arith_prefix_or_tb.
+[sst_width] 197
+[signals_width] 106
+[sst_expanded] 1
+[sst_vpaned_height] 293
+@28
+top.arith_prefix_or_tb.clock
+@22
+#{top.arith_prefix_or_tb.x[7:0]} top.arith_prefix_or_tb.x[7] top.arith_prefix_or_tb.x[6] top.arith_prefix_or_tb.x[5] top.arith_prefix_or_tb.x[4] top.arith_prefix_or_tb.x[3] top.arith_prefix_or_tb.x[2] top.arith_prefix_or_tb.x[1] top.arith_prefix_or_tb.x[0]
+@800023
+#{top.arith_prefix_or_tb.y[7:0]} top.arith_prefix_or_tb.y[7] top.arith_prefix_or_tb.y[6] top.arith_prefix_or_tb.y[5] top.arith_prefix_or_tb.y[4] top.arith_prefix_or_tb.y[3] top.arith_prefix_or_tb.y[2] top.arith_prefix_or_tb.y[1] top.arith_prefix_or_tb.y[0]
+@29
+top.arith_prefix_or_tb.y[7]
+top.arith_prefix_or_tb.y[6]
+top.arith_prefix_or_tb.y[5]
+top.arith_prefix_or_tb.y[4]
+top.arith_prefix_or_tb.y[3]
+top.arith_prefix_or_tb.y[2]
+top.arith_prefix_or_tb.y[1]
+top.arith_prefix_or_tb.y[0]
+@1001201
+-group_end
+[pattern_trace] 1
+[pattern_trace] 0

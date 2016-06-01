@@ -66,7 +66,7 @@ entity mac_Wrapper is
 		TX_SOF											: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
 		TX_EOF											: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
 		TX_Ack											: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		Tx_Meta_rst									: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
+		TX_Meta_rst									: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
 		TX_Meta_DestMACAddress_nxt	: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
 		TX_Meta_DestMACAddress_Data	: in	T_SLVV_8(getPortCount(MAC_CONFIG) - 1 downto 0);
 		
@@ -90,7 +90,7 @@ architecture rtl of mac_Wrapper is
 		variable temp : T_NET_MAC_ADDRESS_VECTOR(MAC_CONFIG'range);
 	begin
 		for i in MAC_CONFIG'range loop
-			temp(I) := MAC_CONFIG(I).Interface.Address;
+			temp(i) := MAC_CONFIG(i).Interface.Address;
 		end loop;
 	
 		return temp;
@@ -100,7 +100,7 @@ architecture rtl of mac_Wrapper is
 		variable temp : T_NET_MAC_ADDRESS_VECTOR(MAC_CONFIG'range);
 	begin
 		for i in MAC_CONFIG'range loop
-			temp(I) := MAC_CONFIG(I).Interface.Mask;
+			temp(i) := MAC_CONFIG(i).Interface.Mask;
 		end loop;
 	
 		return temp;
@@ -110,7 +110,7 @@ architecture rtl of mac_Wrapper is
 		variable count : NATURAL		:= 0;
 	begin
 		for i in Interfaces'range loop
-			if ((Interfaces(I).Address /= C_NET_MAC_ADDRESS_EMPTY) OR (Interfaces(I).Mask /= C_NET_MAC_MASK_EMPTY)) then
+			if ((Interfaces(i).Address /= C_NET_MAC_ADDRESS_EMPTY) OR (Interfaces(i).Mask /= C_NET_MAC_MASK_EMPTY)) then
 				count := count + 1;
 			end if;
 		end loop;
@@ -122,7 +122,7 @@ architecture rtl of mac_Wrapper is
 		variable temp : T_NET_MAC_ADDRESS_VECTOR(Interfaces'range);
 	begin
 		for i in Interfaces'range loop
-			temp(I) := Interfaces(I).Address;
+			temp(i) := Interfaces(i).Address;
 		end loop;
 	
 		return temp;
@@ -132,7 +132,7 @@ architecture rtl of mac_Wrapper is
 		variable temp : T_NET_MAC_ADDRESS_VECTOR(Interfaces'range);
 	begin
 		for i in Interfaces'range loop
-			temp(I) := Interfaces(I).Mask;
+			temp(i) := Interfaces(i).Mask;
 		end loop;
 	
 		return temp;
@@ -142,7 +142,7 @@ architecture rtl of mac_Wrapper is
 		variable count : NATURAL		:= 0;
 	begin
 		for i in Types'range loop
-			if (Types(I) /= C_NET_MAC_ETHERNETTYPE_EMPTY) then
+			if (Types(i) /= C_NET_MAC_ETHERNETTYPE_EMPTY) then
 				count := count + 1;
 			end if;
 		end loop;
@@ -158,7 +158,7 @@ architecture rtl of mac_Wrapper is
 		end if;
 	
 		for i in 0 to CurrentInterfaceID - 1 loop
-			count := count + getTypeSwitchCount(MAC_CONFIG(I).TypeSwitch);
+			count := count + getTypeSwitchCount(MAC_CONFIG(i).TypeSwitch);
 		end loop;
 		
 		return count;
@@ -228,14 +228,14 @@ begin
 		);
 
 	genInterface : for i in MAC_CONFIG'range generate
-		constant FILTER_COUNT										: NATURAL												:= getSourceFilterCount(MAC_CONFIG(I).SourceFilter);
-		constant FILTER_ADDRESSES								: T_NET_MAC_ADDRESS_VECTOR			:= getSourceFilterAddresses(MAC_CONFIG(I).SourceFilter(0 to FILTER_COUNT - 1));
-		constant FILTER_MASKS										: T_NET_MAC_ADDRESS_VECTOR			:= getSourceFilterMasks(MAC_CONFIG(I).SourceFilter(0 to FILTER_COUNT - 1));
+		constant FILTER_COUNT										: NATURAL												:= getSourceFilterCount(MAC_CONFIG(i).SourceFilter);
+		constant FILTER_ADDRESSES								: T_NET_MAC_ADDRESS_VECTOR			:= getSourceFilterAddresses(MAC_CONFIG(i).SourceFilter(0 to FILTER_COUNT - 1));
+		constant FILTER_MASKS										: T_NET_MAC_ADDRESS_VECTOR			:= getSourceFilterMasks(MAC_CONFIG(i).SourceFilter(0 to FILTER_COUNT - 1));
 		
-		constant SWITCH_COUNT										: NATURAL												:= getTypeSwitchCount(MAC_CONFIG(I).TypeSwitch);
-		constant SWITCH_TYPES										: T_NET_MAC_ETHERNETTYPE_VECTOR	:= MAC_CONFIG(I).TypeSwitch(0 to SWITCH_COUNT - 1);
+		constant SWITCH_COUNT										: NATURAL												:= getTypeSwitchCount(MAC_CONFIG(i).TypeSwitch);
+		constant SWITCH_TYPES										: T_NET_MAC_ETHERNETTYPE_VECTOR	:= MAC_CONFIG(i).TypeSwitch(0 to SWITCH_COUNT - 1);
 		
-		constant PORT_INDEX_FROM								: NATURAL												:= calcPortIndex(MAC_CONFIG, I);
+		constant PORT_INDEX_FROM								: NATURAL												:= calcPortIndex(MAC_CONFIG, i);
 		constant PORT_INDEX_TO									: NATURAL												:= PORT_INDEX_FROM + SWITCH_COUNT - 1;
 		
 		signal SrcEth_RX_Valid									: STD_LOGIC;
@@ -267,14 +267,14 @@ begin
 				Clock													=> Clock,
 				Reset													=> Reset,
 				
-				In_Valid											=> DestEth_RX_Valid(I),
-				In_Data												=> DestEth_RX_Data(I),
-				In_SOF												=> DestEth_RX_SOF(I),
-				In_EOF												=> DestEth_RX_EOF(I),
-				In_Ack					 							=> SrcEth_RX_Ack	(I),
-				In_Meta_rst										=> SrcEth_RX_Meta_rst(I),
-				In_Meta_DestMACAddress_nxt		=> SrcEth_RX_Meta_DestMACAddress_nxt(I),
-				In_Meta_DestMACAddress_Data		=> DestEth_RX_Meta_DestMACAddress_Data(I),
+				In_Valid											=> DestEth_RX_Valid(i),
+				In_Data												=> DestEth_RX_Data(i),
+				In_SOF												=> DestEth_RX_SOF(i),
+				In_EOF												=> DestEth_RX_EOF(i),
+				In_Ack					 							=> SrcEth_RX_Ack	(i),
+				In_Meta_rst										=> SrcEth_RX_Meta_rst(i),
+				In_Meta_DestMACAddress_nxt		=> SrcEth_RX_Meta_DestMACAddress_nxt(i),
+				In_Meta_DestMACAddress_Data		=> DestEth_RX_Meta_DestMACAddress_Data(i),
 
 				Out_Valid											=> SrcEth_RX_Valid,
 				Out_Data											=> SrcEth_RX_Data,
@@ -339,14 +339,14 @@ begin
 				In_Meta_DestMACAddress_nxt		=> TX_Meta_DestMACAddress_nxt(PORT_INDEX_TO downto PORT_INDEX_FROM),
 				In_Meta_DestMACAddress_Data		=> TX_Meta_DestMACAddress_Data(PORT_INDEX_TO downto PORT_INDEX_FROM),
 				
-				Out_Valid											=> EthType_TX_Valid(I),
-				Out_Data											=> EthType_TX_Data(I),
-				Out_SOF												=> EthType_TX_SOF(I),
-				Out_EOF												=> EthType_TX_EOF(I),
-				Out_Ack												=> SrcEth_TX_Ack	(I),
-				Out_Meta_rst									=> SrcEth_TX_Meta_rst(I),
-				Out_Meta_DestMACAddress_nxt		=> SrcEth_TX_Meta_DestMACAddress_nxt(I),
-				Out_Meta_DestMACAddress_Data	=> EthType_TX_Meta_DestMACAddress_Data(I)
+				Out_Valid											=> EthType_TX_Valid(i),
+				Out_Data											=> EthType_TX_Data(i),
+				Out_SOF												=> EthType_TX_SOF(i),
+				Out_EOF												=> EthType_TX_EOF(i),
+				Out_Ack												=> SrcEth_TX_Ack	(i),
+				Out_Meta_rst									=> SrcEth_TX_Meta_rst(i),
+				Out_Meta_DestMACAddress_nxt		=> SrcEth_TX_Meta_DestMACAddress_nxt(i),
+				Out_Meta_DestMACAddress_Data	=> EthType_TX_Meta_DestMACAddress_Data(i)
 			);
 	end generate;
 

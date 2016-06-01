@@ -55,6 +55,7 @@ use			IEEE.std_logic_1164.all;
 
 library	PoC;
 use			PoC.config.all;
+use			PoC.utils.all;
 use			PoC.ddrio.all;
 
 
@@ -76,7 +77,7 @@ end entity;
 architecture rtl of ddrio_in is
   
 begin
-	assert (VENDOR = VENDOR_XILINX) or (VENDOR = VENDOR_ALTERA)
+	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.in is not implemented for given DEVICE."
 		severity FAILURE;
 	
@@ -108,5 +109,18 @@ begin
 				DataIn_low	=> DataIn_low,
 				Pad					=> Pad
 			);
+	end generate;
+	
+	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
+		signal Pad_d_fe				: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataIn_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataIn_low_d		: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+	begin
+		Pad_d_fe				<= Pad			when falling_edge(Clock)	and (ClockEnable = '1');
+		DataIn_high_d		<= Pad			when rising_edge(Clock)		and (ClockEnable = '1');
+		DataIn_low_d		<= Pad_d_fe	when rising_edge(Clock)		and (ClockEnable = '1');
+		
+		DataIn_high			<= DataIn_high_d;
+		DataIn_low			<= DataIn_low_d;
 	end generate;
 end architecture;

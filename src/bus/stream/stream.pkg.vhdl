@@ -455,7 +455,7 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 --					ASSERT (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
 
 				for j in Word'range loop
-						CRC8_Value := (CRC8_Value(CRC8_Value'high - 1 downto 0) & '0') xor (CRC8_POLYNOMIAL and (CRC8_POLYNOMIAL'range => (Word(J) xor CRC8_Value(CRC8_Value'high))));
+						CRC8_Value := (CRC8_Value(CRC8_Value'high - 1 downto 0) & '0') xor (CRC8_POLYNOMIAL and (CRC8_POLYNOMIAL'range => (Word(j) xor CRC8_Value(CRC8_Value'high))));
 				end loop;
 			end if;
 				

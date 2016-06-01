@@ -126,10 +126,10 @@ begin
 	genLLMuxIn : for i in 0 to PORTS - 1 generate
 		signal Meta		: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
 	begin
-		Meta(55 downto 48)	<= In_Meta_DestMACAddress_Data(I);
-		Meta(47 downto 0)		<= to_slv(MAC_ADDRESSES(I));
+		Meta(55 downto 48)	<= In_Meta_DestMACAddress_Data(i);
+		Meta(47 downto 0)		<= to_slv(MAC_ADDRESSES(i));
 		
-		assign_row(LLMux_In_Meta, Meta, I);
+		assign_row(LLMux_In_Meta, Meta, i);
 	end generate;
 	
 	In_Meta_rst									<= get_col(LLMux_In_Meta_rev, META_RST_BIT);
