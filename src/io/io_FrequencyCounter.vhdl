@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -58,17 +58,17 @@ architecture rtl of io_FrequencyCounter is
 	constant TIMEBASECOUNTER_BITS				: POSITIVE																		:= log2ceilnz(TIMEBASECOUNTER_MAX);
 	constant REQUENCYCOUNTER_MAX				: POSITIVE																		:= 2**RESOLUTION;
 	constant FREQUENCYCOUNTER_BITS			: POSITIVE																		:= RESOLUTION;
-	
+
 	signal TimeBaseCounter_us						: UNSIGNED(TIMEBASECOUNTER_BITS - 1 downto 0)	:= (others => '0');
 	signal TimeBaseCounter_ov						: STD_LOGIC;
 	signal FrequencyCounter_us					: UNSIGNED(FREQUENCYCOUNTER_BITS downto 0)		:= (others => '0');
 	signal FrequencyCounter_ov					: STD_LOGIC;
-	
+
 	signal FreqIn_d											: STD_LOGIC																		:= '0';
 	signal FreqIn_re										: STD_LOGIC;
-	
+
 	signal FreqOut_d										: STD_LOGIC_VECTOR(RESOLUTION - 1 downto 0)		:= (others => '0');
-	
+
 begin
 	FreqIn_d	<= FreqIn when rising_edge(Clock);
 	FreqIn_re	<= not FreqIn_d and FreqIn;
@@ -84,9 +84,9 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	TimeBaseCounter_ov	<= to_sl(TimeBaseCounter_us = TIMEBASECOUNTER_MAX);
-	
+
 	-- frequency counter
 	process(Clock)
 	begin
@@ -98,9 +98,9 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	FrequencyCounter_ov	<= FrequencyCounter_us(FrequencyCounter_us'high);
-	
+
 	-- hold counter value until next TimeBaseCounter event
 	process(Clock)
 	begin
@@ -116,6 +116,6 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	FreqOut		<= FreqOut_d;
 end;

@@ -66,12 +66,9 @@ architecture tb of fifo_ic_assembly_tb is
   signal got    : std_logic;
 
 begin
-	-- initialize global simulation status
-	simInitialize;
-	-- generate global testbench clock and reset
-	simGenerateClock(clk, 		CLOCK_FREQ);
-	-- simGenerateWaveform(rst,	simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
-	rst		<= '0';
+  simInitialize;
+  simGenerateClock(clk, CLOCK_FREQ);
+  rst <= '0';
 
   DUT: entity PoC.fifo_ic_assembly
     generic map (
@@ -102,38 +99,47 @@ begin
   begin
     put <= '0';
     wait until base = (base'range => '0');
-    put <= '1';
-    for i in SEQ'range loop
-      for j in 0 to 15 loop
-        t := 16*SEQ(i) + j;
-        addr <= std_logic_vector(to_unsigned(t, addr'length));
-        din  <= std_logic_vector(to_unsigned(t, din 'length));
-        wait until rising_edge(clk);
-      end loop;
-    end loop;
-    put <= '0';
 
-   -- This process is finished
+		for k in 0 to 2 loop
+			for i in SEQ'range loop
+				for j in 0 to 15 loop
+					t := 16*SEQ(i) + j;
+					while ((t - to_integer(unsigned(base))) mod 2**A_BITS)/(2**(A_BITS-G_BITS)) /= 0 loop
+						 wait on base;
+					end loop;
+					put  <= '1';
+					addr <= std_logic_vector(to_unsigned(t, addr'length));
+					din  <= not std_logic_vector(to_unsigned(t, din 'length));
+					wait until rising_edge(clk);
+					put <= '0';
+				end loop;
+
+				for j in 0 to i/2 loop
+					wait until rising_edge(clk);
+				end loop;
+			end loop;
+		end loop;
+
+		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		wait;  -- forever
   end process;
 
   -- Reading Checker
 	procReader : process
-		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Reader");
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Reader", IsLowPriority => true);
+		variable i : integer := 0;
   begin
     got <= '1';
-    for i in 0 to SEQ'length*16-1 loop
-      wait until rising_edge(clk) and vld = '1';
-      simAssertion(dout = std_logic_vector(to_unsigned(i, dout'length)),
-									 "Unexpected output: "&integer'image(to_integer(unsigned(dout)))&
-									 " instead of "&integer'image(i mod 2**dout'length));
-    end loop;
-    got <= '0';
-
-    -- This process is finished
-		simDeactivateProcess(simProcessID);
-		wait;  -- forever
+		wait until rising_edge(clk) and vld = '1';
+		simAssertion(unsigned(not dout) = i mod 2**dout'length,
+								 "Unexpected output: "&integer'image(to_integer(unsigned(dout)))&
+								 " instead of "&integer'image(2**dout'length-1-(i mod 2**dout'length)));
+		got <= '0';
+		for j in 0 to i/dout'length loop
+			wait until rising_edge(clk);
+		end loop;
+		i := i + 1;
   end process;
 
 end tb;

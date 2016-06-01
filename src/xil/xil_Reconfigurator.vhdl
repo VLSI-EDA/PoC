@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Module:				 	Reconfiguration engine for DRP enabled Xilinx primtives
--- 
+--
 -- Description:
 -- ------------------------------------
 --		Many complex primitives in a Xilinx device offer a Dynamic Reconfiguration
@@ -22,13 +22,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,24 +50,24 @@ use			PoC.xil.all;
 
 entity xil_Reconfigurator is
 	generic (
-		DEBUG						: BOOLEAN										:= FALSE;																				-- 
-		CLOCK_FREQ			: FREQ											:= 100 MHz;																			-- 
-		CONFIG_ROM			: in	T_XIL_DRP_CONFIG_ROM	:= (0 downto 0 => C_XIL_DRP_CONFIG_SET_EMPTY)		-- 
+		DEBUG						: BOOLEAN										:= FALSE;																				--
+		CLOCK_FREQ			: FREQ											:= 100 MHz;																			--
+		CONFIG_ROM			: in	T_XIL_DRP_CONFIG_ROM	:= (0 downto 0 => C_XIL_DRP_CONFIG_SET_EMPTY)		--
 	);
 	port (
 		Clock						: in	STD_LOGIC;
 		Reset						: in	STD_LOGIC;
-		
+
 		Reconfig				: in	STD_LOGIC;																														--
 		ReconfigDone		: out	STD_LOGIC;																														--
-		ConfigSelect		: in	STD_LOGIC_VECTOR(log2ceilnz(CONFIG_ROM'length) - 1 downto 0);					-- 
-		
-		DRP_en					: out	STD_LOGIC;																														-- 
-		DRP_Address			: out	T_XIL_DRP_ADDRESS;																										-- 
-		DRP_we					: out	STD_LOGIC;																														-- 
-		DRP_DataIn			: in	T_XIL_DRP_DATA;																												-- 
-		DRP_DataOut			: out	T_XIL_DRP_DATA;																												-- 
-		DRP_Ack					: in	STD_LOGIC																															-- 
+		ConfigSelect		: in	STD_LOGIC_VECTOR(log2ceilnz(CONFIG_ROM'length) - 1 downto 0);					--
+
+		DRP_en					: out	STD_LOGIC;																														--
+		DRP_Address			: out	T_XIL_DRP_ADDRESS;																										--
+		DRP_we					: out	STD_LOGIC;																														--
+		DRP_DataIn			: in	T_XIL_DRP_DATA;																												--
+		DRP_DataOut			: out	T_XIL_DRP_DATA;																												--
+		DRP_Ack					: in	STD_LOGIC																															--
 	);
 end;
 
@@ -83,12 +83,12 @@ architecture rtl of xil_Reconfigurator is
 		ST_WRITE_BEGIN,	ST_WRITE_WAIT,
 		ST_DONE
 	);
-	
+
 	-- DualConfiguration - Statemachine
 	signal State											: T_STATE																:= ST_IDLE;
 	signal NextState									: T_STATE;
 	attribute FSM_ENCODING	of State	: signal is ite(DEBUG, "gray", "speed1");
-	
+
 	signal DataBuffer_en							: STD_LOGIC;
 	signal DataBuffer_d								: T_XIL_DRP_DATA												:= (others => '0');
 
@@ -99,15 +99,15 @@ architecture rtl of xil_Reconfigurator is
 	signal ConfigIndex_rst						: STD_LOGIC;
 	signal ConfigIndex_en							: STD_LOGIC;
 	signal ConfigIndex_us							: UNSIGNED(CONFIGINDEX_BITS - 1 downto 0);
-	
+
 	attribute KEEP OF ROM_LastConfigWord	: signal IS DEBUG;
-	
+
 begin
 	-- configuration ROM
 	blkCONFIG_ROM : block
 		signal SetIndex 						: inTEGER range 0 to CONFIG_ROM'high;
 		signal RowIndex 						: T_XIL_DRP_CONFIG_INDEX;
-		
+
 		attribute KEEP OF SetIndex	: signal IS DEBUG;
 		attribute KEEP OF RowIndex	: signal IS DEBUG;
 	begin
@@ -116,7 +116,7 @@ begin
 		ROM_Entry							<= CONFIG_ROM(SetIndex).Configs(RowIndex);
 		ROM_LastConfigWord		<= to_sl(RowIndex = CONFIG_ROM(SetIndex).LastIndex);
 	end block;
-	
+
 	-- configuration index counter
 	process(Clock)
 	begin
@@ -130,7 +130,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	-- data buffer for DRP configuration words
 	process(Clock)
 	begin
@@ -145,7 +145,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	-- assign DRP signals
 	DRP_Address						<= ROM_Entry.Address;
 	DRP_DataOut						<= DataBuffer_d;
@@ -167,43 +167,43 @@ begin
 		NextState								<= State;
 
 		ReconfigDone						<= '0';
-		
+
 		-- Dynamic Reconfiguration Port
 		DRP_en									<= '0';
 		DRP_we									<= '0';
-		
+
 		-- internal modules
 		ConfigIndex_rst					<= '0';
 		ConfigIndex_en					<= '0';
 		DataBuffer_en						<= '0';
-		
+
 		case State is
 			when ST_IDLE =>
 				if (Reconfig = '1') then
 					ConfigIndex_rst				<= '1';
-				
+
 					NextState							<= ST_READ_BEGIN;
 				end if;
 
 			when ST_READ_BEGIN =>
 				DRP_en										<= '1';
 				DRP_we										<= '0';
-					
+
 				NextState									<= ST_READ_WAIT;
-			
+
 			when ST_READ_WAIT =>
 				if (DRP_Ack = '1') then
 					DataBuffer_en						<= '1';
-				
+
 					NextState								<= ST_WRITE_BEGIN;
 				end if;
-			
+
 			when ST_WRITE_BEGIN =>
 				DRP_en										<= '1';
 				DRP_we										<= '1';
 
 				NextState									<= ST_WRITE_WAIT;
-			
+
 			when ST_WRITE_WAIT =>
 				if (DRP_Ack = '1') then
 					if (ROM_LastConfigWord = '1') then
@@ -213,11 +213,11 @@ begin
 						NextState							<= ST_READ_BEGIN;
 					end if;
 				end if;
-			
+
 			when ST_DONE =>
 				ReconfigDone							<= '1';
 				NextState									<= ST_IDLE;
-			
+
 		end case;
 	end process;
 end;

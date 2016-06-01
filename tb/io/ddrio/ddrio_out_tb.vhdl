@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Martin Zabel
--- 
+--
 -- Testbench:				for component ddrio_out
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -140,7 +140,7 @@ begin
 		wait for OUTPUT_DELAY;
 		simAssertion(ite(NO_OUTPUT_ENABLE, Pad = to_stdlogicvector(INIT_VALUE),
 										 Pad = (Pad'range => 'Z')), "Wrong initial Pad value");
-		
+
 		-- wait until Clock is enabled from process above
 		wait until rising_edge(Clock) and ClockEnable = '1';
 		wait for OUTPUT_DELAY;
@@ -150,7 +150,7 @@ begin
 		wait for OUTPUT_DELAY;
 		simAssertion(ite(NO_OUTPUT_ENABLE, Pad = to_stdlogicvector(not INIT_VALUE),
 										 Pad = (Pad'range => 'Z')), "Wrong initial Pad value");
-		
+
 		-- wait until output is enabled from process above
 		wait until rising_edge(Clock) and OutputEnable = '1';
 
@@ -164,10 +164,10 @@ begin
 			simAssertion((Pad = ii(3 downto 2)), "Wrong Pad during clock low");
 			wait until rising_edge(Clock);
 		end loop;
-		
+
 		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		wait;  -- forever
 	end process WaveCheck_Proc;
-  
+
 end architecture;

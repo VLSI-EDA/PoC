@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
@@ -17,13 +17,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS of ANY KIND, either express or implied.
@@ -77,32 +77,32 @@ architecture rtl of stream_Mux is
 	attribute FSM_ENCODING						: STRING;
 
 	subtype T_CHANNEL_INDEX is NATURAL range 0 to PORTS - 1;
-	
+
 	type T_STATE is (ST_IDLE, ST_DATAFLOW);
-	
+
 	signal State											: T_STATE					:= ST_IDLE;
 	signal NextState									: T_STATE;
-	
+
 	signal FSM_Dataflow_en						: STD_LOGIC;
-	
+
 	signal RequestVector							: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 	signal RequestWithSelf						: STD_LOGIC;
 	signal RequestWithoutSelf					: STD_LOGIC;
-	
+
 	signal RequestLeft								: UNSIGNED(PORTS - 1 downto 0);
 	signal SelectLeft									: UNSIGNED(PORTS - 1 downto 0);
 	signal SelectRight								: UNSIGNED(PORTS - 1 downto 0);
-	
+
 	signal ChannelPointer_en					: STD_LOGIC;
 	signal ChannelPointer							: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 	signal ChannelPointer_d						: STD_LOGIC_VECTOR(PORTS - 1 downto 0)						:= to_slv(2 ** (PORTS - 1), PORTS);
 	signal ChannelPointer_nxt					: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 	signal ChannelPointer_bin					: UNSIGNED(log2ceilnz(PORTS) - 1 downto 0);
-	
+
 	signal idx												: T_CHANNEL_INDEX;
-	
+
 	signal Out_EOF_i									: STD_LOGIC;
-	
+
 begin
 	RequestVector				<= In_Valid and In_SOF;
 	RequestWithSelf			<= slv_or(RequestVector);
@@ -118,27 +118,27 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	process(State, RequestWithSelf, RequestWithoutSelf, Out_Ack, Out_EOF_i, ChannelPointer_d, ChannelPointer_nxt)
 	begin
 		NextState									<= State;
-		
+
 		FSM_Dataflow_en						<= '0';
-		
+
 		ChannelPointer_en					<= '0';
 		ChannelPointer						<= ChannelPointer_d;
-		
+
 		case State is
 			when ST_IDLE =>
 				if (RequestWithSelf = '1') then
 					ChannelPointer_en		<= '1';
-					
+
 					NextState						<= ST_DATAFLOW;
 				end if;
-			
+
 			when ST_DATAFLOW =>
 				FSM_Dataflow_en				<= '1';
-			
+
 				if ((Out_Ack and Out_EOF_i) = '1') then
 					if (RequestWithoutSelf = '0') then
 						NextState					<= ST_IDLE;
@@ -148,7 +148,7 @@ begin
 				end if;
 		end case;
 	end process;
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -164,18 +164,18 @@ begin
 	SelectLeft					<= (unsigned(not RequestLeft) + 1)		and RequestLeft;
 	SelectRight					<= (unsigned(not RequestVector) + 1)	and unsigned(RequestVector);
 	ChannelPointer_nxt	<= std_logic_vector(ite((RequestLeft = (RequestLeft'range => '0')), SelectRight, SelectLeft));
-	
+
 	ChannelPointer_bin	<= onehot2bin(ChannelPointer);
 	idx									<= to_integer(ChannelPointer_bin);
-	
+
 	Out_Data						<= get_row(In_Data, idx);
 	Out_Meta						<= get_row(In_Meta, idx);
-	
+
 	Out_SOF							<= In_SOF(to_integer(ChannelPointer_bin));
 	Out_EOF_i						<= In_EOF(to_integer(ChannelPointer_bin));
 	Out_Valid						<= In_Valid(to_integer(ChannelPointer_bin)) and FSM_Dataflow_en;
 	Out_EOF							<= Out_EOF_i;
-	
+
 	In_Ack							<= (In_Ack	'range => (Out_Ack	 and FSM_Dataflow_en)) and ChannelPointer;
 
 	genMetaReverse_0 : if (META_REV_BITS = 0) generate
@@ -192,5 +192,5 @@ begin
 		end generate;
 		In_Meta_rev		<= Temp_Meta_rev;
 	end generate;
-	
+
 end architecture;

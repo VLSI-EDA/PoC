@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Martin Zabel
--- 
+--
 -- Testbench:				On-Chip-RAM: Simple-Dual-Port (SDP).
--- 
+--
 -- Description:
 -- ------------------------------------
 --		Automated testbench for PoC.mem.ocram.sdp
@@ -15,13 +15,13 @@
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -64,7 +64,7 @@ architecture tb of ocram_sdp_tb is
 
   -- clock
   signal clk			: std_logic;
-  
+
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -100,33 +100,33 @@ begin
     wce <= '0';
     we  <= '0';
     simWaitUntilRisingEdge(clk, 2);
-    
+
     wait until falling_edge(clk);
-    
+
     d   <= x"11111111";
     we  <= '1';
     wce <= '1';
     rce <= '0';
     wait until falling_edge(clk);
-    
+
     we  <= '0';
     wce <= '1';
     rce <= '1';                         -- normal read after write
     wait until falling_edge(clk);
 		simAssertion((q = x"11111111"), "Wrong read data1");
-    
+
     d   <= x"22222222";
     we  <= '1';
     wce <= '1';
     rce <= '1';                         -- read-during-write on opposite port
     wait until falling_edge(clk);
-    
+
     we  <= '0';
     wce <= '1';
     rce <= '1';                         -- read again
     wait until falling_edge(clk);
 		simAssertion((q = x"22222222"), "Wrong read data1");
-    
+
     d   <= x"33333333";
     we  <= '1';                         -- write new value
     wce <= '1';

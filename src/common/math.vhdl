@@ -42,11 +42,11 @@ package math is
 	function squareNumber(N : POSITIVE) return POSITIVE;
 	function cubicNumber(N : POSITIVE) return POSITIVE;
 	function triangularNumber(N : NATURAL) return NATURAL;
-	
+
 	-- coefficients
 	-- binomial coefficient (N choose K)
 	function binomialCoefficient(N : POSITIVE; K : POSITIVE) return POSITIVE;
-	
+
 	-- greatest common divisor (gcd)
 	function greatestCommonDivisor(N1 : POSITIVE; N2 : POSITIVE) return POSITIVE;
 	-- least common multiple (lcm)
@@ -59,18 +59,18 @@ package body math is
 	begin
 		return N*N;
 	end function;
-	
+
 	function cubicNumber(N : POSITIVE) return POSITIVE is
 	begin
 		return N*N*N;
 	end function;
-	
+
 	function triangularNumber(N : NATURAL) return NATURAL is
 		variable T	: NATURAL;
 	begin
 		return (N * (N + 1) / 2);
 	end function;
-	
+
 	-- coefficients
 	function binomialCoefficient(N : POSITIVE; K : POSITIVE) return POSITIVE is
 		variable Result		: POSITIVE;
@@ -81,7 +81,7 @@ package body math is
 		end loop;
 		return Result;
 	end function;
-	
+
 	-- greatest common divisor (gcd)
 	function greatestCommonDivisor(N1 : POSITIVE; N2 : POSITIVE) return POSITIVE is
 		variable M1				: POSITIVE;
@@ -97,7 +97,7 @@ package body math is
 		end loop;
 		return M1;
 	end function;
-	
+
 	-- least common multiple (lcm)
 	function leastCommonMultiple(N1 : POSITIVE; N2 : POSITIVE) return POSITIVE is
 	begin

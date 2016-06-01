@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Patrick Lehmann
--- 
+--
 -- Module:					JTAG / Boundary Scan wrapper
 --
 -- Description:
@@ -14,19 +14,19 @@
 --			- Spartan-3, Spartan-6
 --			- Virtex-5, Virtex-6
 --			- Series-7
---		
+--
 --
 -- License:
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -77,7 +77,7 @@ begin
 		drck		<= drck_i(JTAG_CHAIN - 1);
 		Sel			<= sel_i(JTAG_CHAIN - 1);
 		tdo_i		<= (others => Test_DataOut);
-	
+
 		bscan : BSCAN_SPARTAN3
 			port map (
 				CAPTURE	=> Capture,				-- CAPTURE output from TAP controller
@@ -93,7 +93,7 @@ begin
 				TDO2		=> tdo_i(1)				-- Data input for USER2 function
 			);
 	end generate;
-	
+
 	genSpartan6 : if (DEV_INFO.Device = DEVICE_SPARTAN6) generate
 	begin
 		bscan : BSCAN_SPARTAN6
@@ -114,7 +114,7 @@ begin
 				TDO				=> Test_DataOut
 			);
 	end generate;
-	
+
 	genVirtex5 : if (DEV_INFO.Device = DEVICE_VIRTEX5) generate
 	begin
 		bscan : BSCAN_VIRTEX5
@@ -132,7 +132,7 @@ begin
 				TDO			=> Test_DataOut		-- Data input for USER function
 			);
 	end generate;
-	
+
 	genVirtex6 : if (DEV_INFO.Device = DEVICE_VIRTEX6) generate
 	begin
 		bscan : BSCAN_VIRTEX6
@@ -154,7 +154,7 @@ begin
 				TDO				=> Test_DataOut
 			);
 	end generate;
-	
+
 	genSeries7 : if (DEV_INFO.DevSeries = DEVICE_SERIES_7_SERIES) generate
 	begin
 		bscan : BSCANE2
@@ -177,4 +177,3 @@ begin
 			);
 	end generate;
   end;
-	

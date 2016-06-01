@@ -42,7 +42,7 @@ package uart is
 		UART_FLOWCONTROL_RTS_CTS,
 		UART_FLOWCONTROL_RTR_CTS
 	);
-	
+
 	constant C_IO_UART_TYPICAL_BAUDRATES : T_BAUDVEC := (
 		 0 =>		 300 Bd,	 1 =>		 600 Bd,	 2 =>		1200 Bd,	 3 =>		1800 Bd,	 4 =>		2400 Bd,
 		 5 =>		4000 Bd,	 6 =>		4800 Bd,	 7 =>		7200 Bd,	 8 =>		9600 Bd,	 9 =>	 14400 Bd,
@@ -51,7 +51,7 @@ package uart is
 		20 =>	128000 Bd,	21 =>	153600 Bd,	22 =>	230400 Bd,	23 =>	250000 Bd,	24 =>	256000 Bd,
 		25 =>	460800 Bd,	26 =>	500000 Bd,	27 =>	576000 Bd,	28 =>	921600 Bd
 	);
-	
+
 	function io_UART_IsTypicalBaudRate(br : BAUD) return BOOLEAN;
 
   -- Bit Clock Generator: 8 Ticks per Bit
@@ -153,7 +153,7 @@ package uart is
 	-- USB-UART
 	component ft245_uart is
 		generic (
-      CLK_FREQ : positive      
+      CLK_FREQ : positive
 		);
 		port (
       -- common signals

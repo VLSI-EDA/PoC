@@ -50,11 +50,11 @@ package FileIO is
 	-- Constant declarations
 	constant C_LINEBREAK : STRING;
 
-	
+
 	-- Log file
 	-- ===========================================================================
 	subtype T_LOGFILE_OPEN_KIND is FILE_OPEN_KIND range WRITE_MODE to APPEND_MODE;
-	
+
 	procedure				LogFile_Open(FileName : STRING; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE);
 	procedure				LogFile_Open(Status : out FILE_OPEN_STATUS; FileName : STRING; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE);
 	impure function	LogFile_IsOpen return BOOLEAN;
@@ -62,7 +62,7 @@ package FileIO is
 	procedure				LogFile_PrintLine(str : STRING := "");
 	procedure				LogFile_Flush;
 	procedure				LogFile_Close;
-	
+
 	-- StdOut
 	-- ===========================================================================
 	procedure StdOut_Print(str : STRING);
@@ -79,13 +79,13 @@ package body FileIO is
 	file						LogFile_FileHandle		: TEXT;
 	shared variable	LogFile_State_IsOpen	: BOOLEAN		:= FALSE;
 	shared variable LogFile_LineBuffer		: LINE;
-	
+
 	procedure LogFile_Open(FileName : STRING; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE) is
 		variable OpenStatus		: FILE_OPEN_STATUS;
 	begin
 		LogFile_Open(OpenStatus, FileName, OpenKind);
 	end procedure;
-	
+
 	procedure LogFile_Open(Status : out FILE_OPEN_STATUS; FileName : STRING; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE) is
 		variable OpenStatus		: FILE_OPEN_STATUS;
 	begin
@@ -93,28 +93,28 @@ package body FileIO is
 		LogFile_State_IsOpen	:= (OpenStatus = OPEN_OK);
 		Status								:= OpenStatus;
 	end procedure;
-	
+
 	impure function LogFile_IsOpen return BOOLEAN is
 	begin
 		return LogFile_State_IsOpen;
 	end function;
-	
+
 	procedure LogFile_Print(str : STRING) is
 	begin
 		write(LogFile_LineBuffer, str);
 	end procedure;
-	
+
 	procedure LogFile_PrintLine(str : STRING := "") is
 	begin
 		write(LogFile_LineBuffer, str);
 		writeline(LogFile_FileHandle, LogFile_LineBuffer);
 	end procedure;
-	
+
 	procedure LogFile_Flush is
 	begin
 		writeline(LogFile_FileHandle, LogFile_LineBuffer);
 	end procedure;
-	
+
 	procedure LogFile_Close is
 	begin
 		if (LogFile_State_IsOpen = TRUE) then
@@ -130,16 +130,16 @@ package body FileIO is
 	begin
 		write(StdOut_LineBuffer, str);
 	end procedure;
-	
+
 	procedure StdOut_PrintLine(str : STRING := "") is
 	begin
 		write(StdOut_LineBuffer, str);
 		writeline(OUTPUT, StdOut_LineBuffer);
 	end procedure;
-	
+
 	procedure StdOut_Flush is
 	begin
 		writeline(OUTPUT, StdOut_LineBuffer);
 	end procedure;
-	
+
 end package body;

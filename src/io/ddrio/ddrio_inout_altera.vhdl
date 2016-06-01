@@ -1,28 +1,28 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Martin Zabel
 --									Patrick Lehmann
--- 
+--
 -- Module:					Instantiates Chip-Specific DDR Input/Output Registers for Xilinx FPGAs.
 --
 -- Description:
 -- ------------------------------------
 --	See PoC.io.ddrio.inout for interface description.
---		
+--
 -- License:
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,15 +45,15 @@ entity ddrio_inout_altera is
 	port (
 		ClockOut				: in		STD_LOGIC;
 		ClockOutEnable	: in		STD_LOGIC;
-		OutputEnable		: in		STD_LOGIC;		
+		OutputEnable		: in		STD_LOGIC;
 		DataOut_high		: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
 		DataOut_low			: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		
+
 		ClockIn					: in		STD_LOGIC;
 		ClockInEnable		: in		STD_LOGIC;
 		DataIn_high			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
 		DataIn_low			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		
+
 		Pad							: inout	STD_LOGIC_VECTOR(BITS - 1 downto 0)
 	);
 end entity;
@@ -75,7 +75,7 @@ begin
 			oe					=> OutputEnable,
 			datain_h		=> DataOut_high,
 			datain_l		=> DataOut_low,
-			
+
 			inclock			=> ClockIn,
 			inclocken		=> ClockInEnable,
 			dataout_h		=> DataIn_high,

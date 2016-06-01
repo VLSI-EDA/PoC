@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,8 +51,8 @@ entity arp_Cache is
 		INITIAL_CACHE_CONTENT			: T_NET_ARP_ARPCACHE_VECTOR
 	);
 	port (
-		Clock											: in	STD_LOGIC;																	-- 
-		Reset											: in	STD_LOGIC;																	-- 
+		Clock											: in	STD_LOGIC;																	--
+		Reset											: in	STD_LOGIC;																	--
 
 		Command										: in	T_NET_ARP_ARPCACHE_COMMAND;
 		Status										: out	T_NET_ARP_ARPCACHE_STATUS;
@@ -62,12 +62,12 @@ entity arp_Cache is
 		NewMACAddress_rst					: out	STD_LOGIC;
 		NewMACAddress_nxt					: out	STD_LOGIC;
 		NewMACAddress_Data				: in	T_SLV_8;
-		
+
 		Lookup										: in	STD_LOGIC;
 		IPv4Address_rst						: out	STD_LOGIC;
 		IPv4Address_nxt						: out	STD_LOGIC;
 		IPv4Address_Data					: in	T_SLV_8;
-		
+
 		CacheResult								: out	T_CACHE_RESULT;
 		MACAddress_rst						: in	STD_LOGIC;
 		MACAddress_nxt						: in	STD_LOGIC;
@@ -82,11 +82,11 @@ architecture rtl of arp_Cache is
 	constant DATA_BITS								:	POSITIVE	:= 48;		-- MAC address
 	constant TAGCHUNK_BITS						: POSITIVE	:= 8;
 	constant DATACHUNK_BITS						: POSITIVE	:= 8;
-	
+
 	constant DATACHUNKS								: POSITIVE	:= div_ceil(DATA_BITS, DATACHUNK_BITS);
 	constant DATACHUNK_INDEX_BITS			: POSITIVE	:= log2ceilnz(DATACHUNKS);
 	constant CACHEMEMORY_INDEX_BITS		: POSITIVE	:= log2ceilnz(CACHE_LINES);
-	
+
 	function to_TagData(CacheContent : T_NET_ARP_ARPCACHE_VECTOR) return T_SLM is
 --		variable slvv		: T_SLVV_32(CACHE_LINES - 1 downto 0)	:= (others => (others => '0'));
 		variable slvv		: T_SLVV_32(CacheContent'high downto CacheContent'low)	:= (others => (others => '0'));
@@ -96,7 +96,7 @@ architecture rtl of arp_Cache is
 		end loop;
 		return to_slm(slvv);
 	end function;
-	
+
 	function to_CacheData_slvv_48(CacheContent : T_NET_ARP_ARPCACHE_VECTOR) return T_SLVV_48 is
 		variable slvv		: T_SLVV_48(CACHE_LINES - 1 downto 0)	:= (others => (others => '0'));
 	begin
@@ -105,7 +105,7 @@ architecture rtl of arp_Cache is
 		end loop;
 		return slvv;
 	end function;
-	
+
 	function to_CacheMemory(CacheContent : T_NET_ARP_ARPCACHE_VECTOR) return T_SLVV_8 is
 		constant BYTES_PER_LINE	: POSITIVE																				:= 6;
 		constant slvv						: T_SLVV_48(CACHE_LINES - 1 downto 0)							:= to_CacheData_slvv_48(CacheContent);
@@ -118,46 +118,46 @@ architecture rtl of arp_Cache is
 		end loop;
 		return result;
 	end function;
-	
+
 	constant INITIAL_TAGS					: T_SLM			:= to_TagData(INITIAL_CACHE_CONTENT);
 	constant INITIAL_DATALINES		: T_SLVV_8	:= to_CacheMemory(INITIAL_CACHE_CONTENT);
-	
-	
+
+
 	signal ReadWrite							: STD_LOGIC;
-	
+
 	type T_FSMREPLACE_STATE is (ST_IDLE, ST_REPLACE);
-	
+
 	signal FSMReplace_State				: T_FSMREPLACE_STATE						:= ST_IDLE;
 	signal FSMReplace_NextState		: T_FSMREPLACE_STATE;
-	
+
 	signal Insert									: STD_LOGIC;
-		
+
 	signal TU_NewTag_rst					: STD_LOGIC;
 	signal TU_NewTag_nxt					: STD_LOGIC;
 	signal NewTag_Data						: T_SLV_8;
-	
+
 	signal NewCacheLine_Data			: T_SLV_8;
-		
+
 	signal TU_Tag_rst							: STD_LOGIC;
 	signal TU_Tag_nxt							: STD_LOGIC;
 	signal TU_Tag_Data						: T_SLV_8;
 	signal CacheHit								: STD_LOGIC;
 	signal CacheMiss							: STD_LOGIC;
-	
+
 	signal TU_Index								: STD_LOGIC_VECTOR(CACHEMEMORY_INDEX_BITS - 1 downto 0);
 	signal TU_Index_d							: STD_LOGIC_VECTOR(CACHEMEMORY_INDEX_BITS - 1 downto 0);
 --	signal TU_Index_us						: UNSIGNED(CACHEMEMORY_INDEX_BITS - 1 downto 0);
-	
+
 	signal TU_NewIndex						: STD_LOGIC_VECTOR(CACHEMEMORY_INDEX_BITS - 1 downto 0);
 	signal TU_Replaced						: STD_LOGIC;
-	
+
 	signal TU_TagHit							: STD_LOGIC;
 	signal TU_TagMiss							: STD_LOGIC;
 
 	constant TICKCOUNTER_RES			: T_TIME																																		:= 10.0e-3;
 	constant TICKCOUNTER_MAX			: POSITIVE																																	:= TimingToCycles(TICKCOUNTER_RES, CLOCK_FREQ);
 	constant TICKCOUNTER_BITS			: POSITIVE																																	:= log2ceilnz(TICKCOUNTER_MAX);
-	
+
 	signal TickCounter_s					: SIGNED(TICKCOUNTER_BITS downto 0)																					:= to_signed(TICKCOUNTER_MAX, TICKCOUNTER_BITS + 1);
 	signal Tick										: STD_LOGIC;
 
@@ -172,7 +172,7 @@ architecture rtl of arp_Cache is
 	signal CacheMemory_we							: STD_LOGIC;
 	signal CacheMemory								: T_SLVV_8((CACHE_LINES * T_NET_MAC_ADDRESS'length) - 1 downto 0)						:= INITIAL_DATALINES;
 	signal Memory_ReadWrite						: STD_LOGIC;
-	
+
 begin
 	process(Clock)
 	begin
@@ -188,61 +188,61 @@ begin
 	process(FSMReplace_State, Command, TU_Replaced, TU_NewTag_rst, TU_NewTag_nxt, NewDataChunkIndex_us, NewDataChunkIndex_max_us)
 	begin
 		FSMReplace_NextState							<= FSMReplace_State;
-		
+
 		Status														<= NET_ARP_ARPCACHE_STATUS_IDLE;
-		
+
 		NewMACAddress_rst									<= '0';
 		NewMACAddress_nxt									<= '0';
 		NewIPv4Address_rst								<= TU_NewTag_rst;
 		NewIPv4Address_nxt								<= TU_NewTag_nxt;
-		
+
 		CacheMemory_we										<= '0';
 		NewDataChunkIndex_en							<= '0';
-		
+
 		Insert														<= '0';
-	
+
 		case FSMReplace_State IS
 			when ST_IDLE =>
 				NewMACAddress_rst							<= '1';
-			
+
 				case Command IS
 					when NET_ARP_ARPCACHE_CMD_NONE =>
 						null;
-						
+
 					when NET_ARP_ARPCACHE_CMD_ADD =>
 						Status										<= NET_ARP_ARPCACHE_STATUS_UPDATING;
-					
+
 						Insert										<= '1';
 						CacheMemory_we						<= '1';
 						NewMACAddress_rst					<= '0';
 						NewMACAddress_nxt					<= '1';
 						NewDataChunkIndex_en			<= '1';
-						
+
 						FSMReplace_NextState			<= ST_REPLACE;
-						
+
 					when others =>
 						null;
 				end case;
-			
+
 			when ST_REPLACE =>
 				Status												<= NET_ARP_ARPCACHE_STATUS_UPDATING;
-			
+
 				CacheMemory_we								<= '1';
 				NewMACAddress_nxt							<= '1';
 				NewDataChunkIndex_en					<= '1';
-				
+
 				if (NewDataChunkIndex_us = NewDataChunkIndex_max_us) then
 					Status											<= NET_ARP_ARPCACHE_STATUS_UPDATE_COMPLETE;
 					FSMReplace_NextState				<= ST_IDLE;
 				end if;
-				
+
 		end case;
 	end process;
 
 	ReadWrite						<= '0';
 	NewTag_Data					<= NewIPv4Address_Data;
 	NewCacheLine_Data		<= NewMACAddress_Data;
-	
+
 	IPv4Address_rst			<= TU_Tag_rst;
 	IPv4Address_nxt			<= TU_Tag_nxt;
 	TU_Tag_Data					<= IPv4Address_Data;
@@ -265,7 +265,7 @@ begin
 		port map (
 			Clock											=> Clock,
 			Reset											=> Reset,
-			
+
 			Replace										=> Insert,
 			Replaced									=> TU_Replaced,
 			Replace_NewTag_rst				=> TU_NewTag_rst,
@@ -273,7 +273,7 @@ begin
 			Replace_NewTag_nxt				=> TU_NewTag_nxt,
 			Replace_NewTag_Data				=> NewTag_Data,
 			Replace_NewIndex					=> TU_NewIndex,
-			
+
 			Request										=> Lookup,
 			Request_ReadWrite					=> '0',
 			Request_Invalidate				=> '0',--Invalidate,
@@ -297,7 +297,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	Tick			<= TickCounter_s(TickCounter_s'high);
 
 --	Exp : entity L_Global.list_expire
@@ -311,18 +311,18 @@ begin
 		port map (
 			Clock										=> Clock,
 			Reset										=> Reset,
-			
+
 			Tick										=> Tick,
-			
+
 			Insert									=> Insert,
 			KeyIn										=> TU_NewIndex,
-			
+
 			Expired									=> Exp_Expired,
 			KeyOut									=> Exp_KeyOut
 		);
-	
-	
-	
+
+
+
 	-- latch TU_Index on TagHit
 --	TU_Index_us		<= unsigned(TU_Index) when rising_edge(Clock) AND (TU_TagHit = '1');
 
@@ -347,7 +347,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	-- DataChunkIndex counter
 	process(Clock, TU_Index)
 		variable temp		: UNSIGNED(DataChunkIndex_us'range);
@@ -357,7 +357,7 @@ begin
 		else
 			temp	:= resize(unsigned(TU_Index) * 6, DataChunkIndex_us'length) + to_unsigned((DATACHUNKS - 1), DataChunkIndex_us'length);
 		end if;
-	
+
 		if rising_edge(Clock) then
 			if (TU_TagHit = '1') then
 				DataChunkIndex_us				<= temp;

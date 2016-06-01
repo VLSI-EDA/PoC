@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,8 +45,8 @@ entity ipv6_RX is
 		DEBUG														: BOOLEAN							:= FALSE
 	);
 	port (
-		Clock														: in	STD_LOGIC;									-- 
-		Reset														: in	STD_LOGIC;									-- 
+		Clock														: in	STD_LOGIC;									--
+		Reset														: in	STD_LOGIC;									--
 		-- STATUS port
 		Error														: out	STD_LOGIC;
 		-- IN port
@@ -87,10 +87,10 @@ end entity;
 
 architecture rtl of ipv6_RX is
 	attribute FSM_ENCODING						: STRING;
-	
+
 	subtype T_BYTEINDEX								is NATURAL range 0 to 1;
 	subtype T_IPV6_BYTEINDEX	 				is NATURAL range 0 to 15;
-	
+
 	type T_STATE is (
 		ST_IDLE,
 			ST_RECEIVE_TRAFFIC_CLASS,
@@ -122,7 +122,7 @@ architecture rtl of ipv6_RX is
 	signal IP_ByteIndex										: T_IP_BYTEINDEX;
 
 	signal Register_rst										: STD_LOGIC;
-	
+
 	-- IPv6 basic header fields
 	signal TrafficClass_en0								: STD_LOGIC;
 	signal TrafficClass_en1								: STD_LOGIC;
@@ -135,7 +135,7 @@ architecture rtl of ipv6_RX is
 	signal HopLimit_en										: STD_LOGIC;
 	signal SourceIPv6Address_en						: STD_LOGIC;
 	signal DestIPv6Address_en							: STD_LOGIC;
-	
+
 	signal TrafficClass_d									: T_SLV_8													:= (others => '0');
 	signal FlowLabel_d										: STD_LOGIC_VECTOR(19 downto 0)		:= (others => '0');
 	signal Length_d												: T_SLV_16												:= (others => '0');
@@ -161,9 +161,9 @@ architecture rtl of ipv6_RX is
 	-- ExtensionHeader: Fragmentation
 --	signal FragmentOffset_en0							: STD_LOGIC;
 --	signal FragmentOffset_en1							: STD_LOGIC;
-	
+
 --	signal FragmentOffset_d								: STD_LOGIC_VECTOR(12 downto 0)		:= (others => '0');
-	
+
 begin
 
 	In_Ack				<= In_Ack_i;
@@ -187,7 +187,7 @@ begin
 		NextState									<= State;
 
 		Error											<= '0';
-		
+
 		In_Ack_i								<= '0';
 		Out_Valid_i								<= '0';
 		Out_SOF_i									<= '0';
@@ -218,7 +218,7 @@ begin
 			when ST_IDLE =>
 				if (Is_SOF = '1') then
 					In_Ack_i								<= '1';
-				
+
 					if (Is_EOF = '0') then
 						if (In_Data(3 downto 0) = x"6") then
 							TrafficClass_en0		<= '1';
@@ -230,11 +230,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_TRAFFIC_CLASS =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						TrafficClass_en1			<= '1';
 						FlowLabel_en0					<= '1';
@@ -243,11 +243,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_FLOW_LABEL_1 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						FlowLabel_en1					<= '1';
 						NextState							<= ST_RECEIVE_FLOW_LABEL_2;
@@ -255,11 +255,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_FLOW_LABEL_2 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						FlowLabel_en2					<= '1';
 						NextState							<= ST_RECEIVE_LENGTH_0;
@@ -267,11 +267,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_LENGTH_0 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						Length_en0						<= '1';
 						NextState							<= ST_RECEIVE_LENGTH_1;
@@ -279,11 +279,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_LENGTH_1 =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						Length_en1						<= '1';
 						NextState							<= ST_RECEIVE_NEXT_HEADER;
@@ -291,11 +291,11 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_NEXT_HEADER =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						NextHeader_en					<= '1';
 						NextState							<= ST_RECEIVE_HOP_LIMIT;
@@ -303,13 +303,13 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_HOP_LIMIT =>
 				IPv6SeqCounter_rst				<= '1';
-				
+
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					if (Is_EOF = '0') then
 						HopLimit_en						<= '1';
 						NextState							<= ST_RECEIVE_SOURCE_ADDRESS;
@@ -317,14 +317,14 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_SOURCE_ADDRESS =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					SourceIPv6Address_en		<= '1';
 					IPv6SeqCounter_en				<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if (IPv6SeqCounter_us = 0) then
 							IPv6SeqCounter_rst	<= '1';
@@ -334,14 +334,14 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_DESTINATION_ADDRESS =>
 				if (In_Valid = '1') then
 					In_Ack_i								<= '1';
-					
+
 					DestIPv6Address_en			<= '1';
 					IPv6SeqCounter_en				<= '1';
-					
+
 					if (Is_EOF = '0') then
 						if (IPv6SeqCounter_us = 0) then
 							IPv6SeqCounter_rst	<= '1';
@@ -351,13 +351,13 @@ begin
 						NextState							<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_DATA_1 =>
 				In_Ack_i									<= Out_Ack;
 				Out_Valid_i								<= In_Valid;
 				Out_SOF_i									<= '1';
 				Out_EOF_i									<= In_EOF;
-			
+
 				if (Is_DataFlow = '1') then
 					if (Is_EOF = '0') then
 						NextState							<= ST_RECEIVE_DATA_N;
@@ -365,31 +365,31 @@ begin
 						NextState							<= ST_IDLE;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_DATA_N =>
 				In_Ack_i									<= Out_Ack;
 				Out_Valid_i								<= In_Valid;
 				Out_EOF_i									<= In_EOF;
-				
+
 				if (Is_EOF = '1') then
 					NextState								<= ST_IDLE;
 				end if;
-				
+
 			when ST_DISCARD_FRAME =>
 				In_Ack_i									<= '1';
-				
+
 				if (Is_EOF = '1') then
 					NextState								<= ST_ERROR;
 				end if;
-			
+
 			when ST_ERROR =>
 				Error											<= '1';
 				NextState									<= ST_IDLE;
-			
+
 		end case;
 	end process;
-	
-	
+
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -406,7 +406,7 @@ begin
 				if (TrafficClass_en1 = '1') then
 					TrafficClass_d(3 downto 0)			<= In_Data(3 downto 0);
 				end if;
-				
+
 				if (FlowLabel_en0 = '1') then
 					FlowLabel_d(19 downto 16)				<= In_Data(7 downto 4);
 				end if;
@@ -416,18 +416,18 @@ begin
 				if (FlowLabel_en2 = '1') then
 					FlowLabel_d(7 downto 0)					<= In_Data;
 				end if;
-				
+
 				if (Length_en0 = '1') then
 					Length_d(15 downto 8)						<= In_Data;
 				end if;
 				if (Length_en1 = '1') then
 					Length_d(7 downto 0)						<= In_Data;
 				end if;
-				
+
 				if (NextHeader_en = '1') then
 					NextHeader_d										<= In_Data;
 				end if;
-				
+
 				if (HopLimit_en = '1') then
 					HopLimit_d											<= In_Data;
 				end if;
@@ -435,7 +435,7 @@ begin
 				if (SourceIPv6Address_en = '1') then
 					SourceIPv6Address_d(to_integer(IPv6SeqCounter_us))	<= In_Data;
 				end if;
-				
+
 				if (DestIPv6Address_en = '1') then
 					DestIPv6Address_d(to_integer(IPv6SeqCounter_us))		<= In_Data;
 				end if;
@@ -453,12 +453,12 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	SrcIPv6Address_Reader_rst		<= Out_Meta_rst;
 	SrcIPv6Address_Reader_en		<= Out_Meta_SrcIPv6Address_nxt;
 	DestIPv6Address_Reader_rst	<= Out_Meta_rst;
 	DestIPv6Address_Reader_en		<= Out_Meta_DestIPv6Address_nxt;
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -469,7 +469,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -480,8 +480,8 @@ begin
 			end if;
 		end if;
 	end process;
-	
-	In_Meta_rst												<= 'X';		-- FIXME: 
+
+	In_Meta_rst												<= 'X';		-- FIXME:
 	In_Meta_SrcMACAddress_nxt					<= Out_Meta_SrcMACAddress_nxt;
 	In_Meta_DestMACAddress_nxt				<= Out_Meta_DestMACAddress_nxt;
 
@@ -498,5 +498,5 @@ begin
 	Out_Meta_FlowLabel								<= "----" & FlowLabel_d;
 	Out_Meta_Length										<= Length_d;
 	Out_Meta_NextHeader								<= NextHeader_d;
-	
+
 end architecture;

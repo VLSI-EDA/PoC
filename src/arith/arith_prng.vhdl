@@ -1,13 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ===================================================================================
 -- Authors:					Martin Zabel
 --									Patrick Lehmann
--- 
+--
 -- Module:					Pseudo-Random Number Generator (PRNG).
--- 
+--
 -- Description:
 -- ------------------------------------
 --		The number sequence includes the value all-zeros, but not all-ones.
@@ -17,13 +17,13 @@
 -- ===================================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,7 +56,7 @@ end entity;
 architecture rtl of arith_prng is
 	subtype T_TAPPOSITION				is T_NATVEC(0 TO 4);
 	type T_TAPPOSITION_VECTOR		is array (natural range <>) of T_TAPPOSITION;
-	
+
 	-- Tap positions are taken from Xilinx Application Note 052 (XAPP052)
 	constant C_TAPPOSITION_LIST : T_TAPPOSITION_VECTOR(3 to 168) := (
 		3		=> (0 => 2,												others => 0),
@@ -226,16 +226,16 @@ architecture rtl of arith_prng is
 		167	=> (0 => 161,											others => 0),
 		168	=> (0 => 166,	1 => 153,	2 => 151, others => 0)
 	);
-	
+
 	constant C_TAPPOSITIONS	: T_TAPPOSITION		:= C_TAPPOSITION_LIST(BITS);
-	
+
 	-- The current value
 	signal bit1_nxt	: std_logic;
 	signal val_r		: std_logic_vector(BITS downto 1)		:= resize(SEED, BITS);
-	
+
 begin
 	assert ((3 <= BITS) and (BITS <= 168)) report "Width not yet supported." severity failure;
-	
+
 	-----------------------------------------------------------------------------
 	-- Datapath
 	-----------------------------------------------------------------------------
@@ -265,7 +265,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	-----------------------------------------------------------------------------
 	-- Outputs
 	-----------------------------------------------------------------------------

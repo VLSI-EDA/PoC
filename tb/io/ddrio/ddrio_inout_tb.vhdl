@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Martin Zabel
--- 
+--
 -- Testbench:				for component ddrio_inout
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -66,7 +66,7 @@ architecture sim of ddrio_inout_tb is
 	-- delay from "ClockIn" input to outputs "DataIn_*" of DUT
 	-- must be less than CLOCK_PERIOD
 	constant OUTPUT_IN_DELAY : time :=  6 ns;
-	
+
 	-- period of signal "ClockOut"
 	constant CLOCK_OUT_PERIOD : time := 10 ns;
 
@@ -106,7 +106,7 @@ begin
 		-- disabled outputs on FPGA and other side
 		OutputEnable <= '0';
 		Pad					 <= (others => 'Z');
-		
+
     -- simulate waiting for clock enable
 		wait for 42 ns;
 
@@ -117,16 +117,16 @@ begin
     -- clock in ready, synchronous to ClockIn
     wait until rising_edge(ClockIn);
     ClockInEnable 	<= '1';
-		
+
 		-- input data into FPGA
 		for i in 0 to 15 loop
 			-- precondition: simulation is at a rising_edge(ClockIn)
       ii := std_logic_vector(to_unsigned(i, 4));
-			
+
 			-- input LSB first
 			Pad <= ii(1 downto 0); -- bit 0 and 1 with falling edge
 			wait until falling_edge(ClockIn);
-						 
+
 			Pad <= ii(3 downto 2); -- bit 2 and 3 with rising  edge
 			wait until rising_edge(ClockIn);
 		end loop;
@@ -163,7 +163,7 @@ begin
 	begin
 		-- wait until ClockIn is enabled from process above
 		wait until rising_edge(ClockIn) and ClockInEnable = '1';
-		
+
 		for i in 0 to 15 loop
 			-- precondition: simulation is at a rising_edge(ClockIn)
       ii := std_logic_vector(to_unsigned(i, 4));
@@ -186,10 +186,10 @@ begin
 			simAssertion((Pad = ii(3 downto 2)), "Wrong Pad during clock low");
 			wait until rising_edge(ClockOut);
 		end loop;
-		
+
 		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		wait;  -- forever
 	end process WaveCheck_Proc;
-  
+
 end architecture;

@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,8 +45,8 @@ entity icmpv4_RX is
 		DEBUG													: BOOLEAN											:= FALSE
 	);
 	port (
-		Clock													: in	STD_LOGIC;																	-- 
-		Reset													: in	STD_LOGIC;																	-- 
+		Clock													: in	STD_LOGIC;																	--
+		Reset													: in	STD_LOGIC;																	--
 		-- CSE interface
 		Command												: in	T_NET_ICMPV4_RX_COMMAND;
 		Status												: out	T_NET_ICMPV4_RX_STATUS;
@@ -91,7 +91,7 @@ end entity;
 
 architecture rtl of icmpv4_RX is
 	attribute FSM_ENCODING						: STRING;
-	
+
 	type T_STATE		is (
 		ST_IDLE,
 			ST_RECEIVE_ECHO_CODE,
@@ -112,7 +112,7 @@ architecture rtl of icmpv4_RX is
 	attribute FSM_ENCODING of State				: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
 	signal Register_rst										: STD_LOGIC;
-	
+
 	-- UDP header fields
 	signal Type_en												: STD_LOGIC;
 	signal Code_en												: STD_LOGIC;
@@ -122,7 +122,7 @@ architecture rtl of icmpv4_RX is
 	signal Identification_en1							: STD_LOGIC;
 	signal SequenceNumber_en0							: STD_LOGIC;
 	signal SequenceNumber_en1							: STD_LOGIC;
-	
+
 	signal Type_d													: T_SLV_8											:= (others => '0');
 	signal Code_d													: T_SLV_8											:= (others => '0');
 	signal Checksum_d											: T_SLV_16										:= (others => '0');
@@ -157,7 +157,7 @@ begin
 
 		Status														<= NET_ICMPV4_RX_STATUS_IDLE;
 		Error															<= NET_ICMPV4_RX_ERROR_NONE;
-		
+
 		In_Ack														<= '0';
 		In_Meta_rst												<= '0';
 		In_Meta_SrcMACAddress_nxt					<= '0';
@@ -186,10 +186,10 @@ begin
 			when ST_IDLE =>
 				if ((In_Valid and In_SOF) = '1') then
 					In_Ack											<= '1';
-				
+
 					if (In_EOF = '0') then
 						Type_en										<= '1';
-					
+
 						if (In_Data = C_NET_ICMPV4_TYPE_ECHO_REPLY) then
 							NextState								<= ST_RECEIVE_ECHO_CODE;
 						elsif (In_Data = C_NET_ICMPV4_TYPE_ECHO_REQUEST) then
@@ -201,16 +201,16 @@ begin
 						NextState									<= ST_ERROR;
 					end if;
 				end if;
-			
+
 			when ST_RECEIVE_ECHO_CODE =>
 				Status												<= NET_ICMPV4_RX_STATUS_RECEIVING;
-				
+
 				if (In_Valid = '1') then
 					In_Ack											<= '1';
-				
+
 					if (In_EOF = '0') then
 						Code_en										<= '1';
-						
+
 						if (In_Data = C_NET_ICMPV4_CODE_ECHO_REPLY) then
 							NextState								<= ST_RECEIVE_ECHO_CHECKSUM_0;
 						elsif (In_Data = C_NET_ICMPV4_CODE_ECHO_REQUEST) then
@@ -225,10 +225,10 @@ begin
 
 			when ST_RECEIVE_ECHO_CHECKSUM_0 =>
 				Status												<= NET_ICMPV4_RX_STATUS_RECEIVING;
-				
+
 				if (In_Valid = '1') then
 					In_Ack											<= '1';
-				
+
 					if (In_EOF = '0') then
 						Checksum_en0							<= '1';
 						NextState									<= ST_RECEIVE_ECHO_CHECKSUM_1;
@@ -236,13 +236,13 @@ begin
 						NextState									<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_ECHO_CHECKSUM_1 =>
 				Status												<= NET_ICMPV4_RX_STATUS_RECEIVING;
-				
+
 				if (In_Valid = '1') then
 					In_Ack											<= '1';
-				
+
 					if (In_EOF = '0') then
 						Checksum_en1							<= '1';
 						NextState									<= ST_RECEIVE_ECHO_IDENTIFIER_0;
@@ -250,13 +250,13 @@ begin
 						NextState									<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_ECHO_IDENTIFIER_0 =>
 				Status												<= NET_ICMPV4_RX_STATUS_RECEIVING;
-				
+
 				if (In_Valid = '1') then
 					In_Ack											<= '1';
-				
+
 					if (In_EOF = '0') then
 						Identification_en0				<= '1';
 						NextState									<= ST_RECEIVE_ECHO_IDENTIFIER_1;
@@ -264,13 +264,13 @@ begin
 						NextState									<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_ECHO_IDENTIFIER_1 =>
 				Status												<= NET_ICMPV4_RX_STATUS_RECEIVING;
-				
+
 				if (In_Valid = '1') then
 					In_Ack											<= '1';
-				
+
 					if (In_EOF = '0') then
 						Identification_en1				<= '1';
 						NextState									<= ST_RECEIVE_ECHO_SEQ_NUMBER_0;
@@ -278,13 +278,13 @@ begin
 						NextState									<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_ECHO_SEQ_NUMBER_0 =>
 				Status												<= NET_ICMPV4_RX_STATUS_RECEIVING;
-				
+
 				if (In_Valid = '1') then
 					In_Ack											<= '1';
-				
+
 					if (In_EOF = '0') then
 						SequenceNumber_en0				<= '1';
 						NextState									<= ST_RECEIVE_ECHO_SEQ_NUMBER_1;
@@ -292,13 +292,13 @@ begin
 						NextState									<= ST_ERROR;
 					end if;
 				end if;
-				
+
 			when ST_RECEIVE_ECHO_SEQ_NUMBER_1 =>
 				Status												<= NET_ICMPV4_RX_STATUS_RECEIVING;
-				
+
 				if (In_Valid = '1') then
 					In_Ack											<= '1';
-				
+
 					if (In_EOF = '0') then
 						SequenceNumber_en1				<= '1';
 						NextState									<= ST_RECEIVE_ECHO_DATA;
@@ -309,12 +309,12 @@ begin
 
 			when ST_RECEIVE_ECHO_DATA =>
 				Status												<= NET_ICMPV4_RX_STATUS_RECEIVING;
-				
+
 				if (In_Valid = '1') then
 					In_Ack											<= '1';
-				
+
 					MetaFIFO_put								<= '1';
-	
+
 					if (In_EOF = '1') then
 						MetaFIFO_Commit						<= '1';
 						NextState									<= ST_RECEIVE_ECHO_COMPLETE;
@@ -342,20 +342,20 @@ begin
 
 			when ST_DISCARD_FRAME =>
 				In_Ack												<= '1';
-				
+
 				if ((In_Valid and In_EOF) = '1') then
 					NextState										<= ST_ERROR;
 				end if;
-			
+
 			when ST_ERROR =>
 				Status												<= NET_ICMPV4_RX_STATUS_ERROR;
 				Error													<= NET_ICMPV4_RX_ERROR_FSM;
-				
+
 				NextState											<= ST_IDLE;
-			
+
 		end case;
 	end process;
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -372,21 +372,21 @@ begin
 				if (Code_en = '1') then
 					Code_d														<= In_Data;
 				end if;
-				
+
 				if (Checksum_en0 = '1') then
 					Checksum_d(7 downto 0)						<= In_Data;
 				end if;
 				if (Checksum_en1 = '1') then
 					Checksum_d(15 downto 8)						<= In_Data;
 				end if;
-				
+
 				if (Identification_en0 = '1') then
 					Identification_d(7 downto 0)			<= In_Data;
 				end if;
 				if (Identification_en1 = '1') then
 					Identification_d(15 downto 8)			<= In_Data;
 				end if;
-				
+
 				if (SequenceNumber_en1 = '1') then
 					SequenceNumber_d(7 downto 0)			<= In_Data;
 				end if;
@@ -396,9 +396,9 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	-- FIXME: monitor MetaFIFO_Full signal
-	
+
 	PayloadFIFO : entity PoC.fifo_cc_got_tempgot
 		generic map (
 			D_BITS							=> MetaFIFO_DataIn'length,	-- Data Width
@@ -413,7 +413,7 @@ begin
 			-- Global Reset and Clock
 			clk									=> Clock,
 			rst									=> Reset,
-			
+
 			-- Writing Interface
 			put									=> MetaFIFO_put,
 			din									=> MetaFIFO_DataIn,

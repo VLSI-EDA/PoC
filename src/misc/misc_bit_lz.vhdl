@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ===========================================================================
 -- Description:
 --
@@ -34,7 +34,7 @@
 --      number d given in its one's complement representation. The value
 --      ~d specifies the number of bits,  which this literal repeated of the
 --      preceding output. These bits must be deleted from the reconstructed
---      stream. 
+--      stream.
 --
 --
 --  Parameter Constraints
@@ -107,7 +107,7 @@ architecture rtl of misc_bit_lz is
   signal Count  : signed(COUNT_BITS downto 0)      := to_signed(-LITERAL_LEN-1, 1+COUNT_BITS);
   signal Offset : unsigned(OFFSET_BITS-1 downto 0) := (others => '-');
   signal Term   : std_logic                        := '0';
-  
+
   signal Offset_nxt : unsigned(Offset'range);
   signal ov         : X01;              -- Counter Overflow
   signal valid      : X01;              -- Still some Match available

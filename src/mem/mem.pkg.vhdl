@@ -1,11 +1,11 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Martin Zabel
 --									Patrick Lehmann
--- 
+--
 -- Package:				 	VHDL package for component declarations, types and functions
 --									associated to the PoC.mem.ocram namespace
 --
@@ -19,13 +19,13 @@
 -- ============================================================================
 -- Copyright 2008-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,15 +53,15 @@ package mem is
 		MEM_FILEFORMAT_LATTICE_MEM,
 		MEM_FILEFORMAT_XILINX_MEM
 	);
-	
+
 	type T_MEM_CONTENT is (
 		MEM_CONTENT_BINARY,
 		MEM_CONTENT_DECIMAL,
 		MEM_CONTENT_HEX
 	);
-	
+
 	function mem_FileExtension(Filename : STRING) return STRING;
-	
+
 	impure function mem_ReadMemoryFile(
 		FileName : string;
 		MemoryLines : POSITIVE;
@@ -82,7 +82,7 @@ package body mem is
 		end loop;
 		return "";
 	end function;
-	
+
 	procedure ReadHex(L : inout LINE; Value : out STD_LOGIC_VECTOR; Good : out BOOLEAN) is
 		variable ok					: BOOLEAN;
 		variable Char				: CHARACTER;
@@ -108,8 +108,8 @@ package body mem is
 		end loop;
 		Swapped	:= swap(slv, 4);
 		Value		:= Swapped(Value'length - 1 downto 0);
-	end procedure; 
-	
+	end procedure;
+
 	-- Reads a memory file and returns a 2D std_logic matrix
 	impure function mem_ReadMemoryFile(
 		FileName : string;
@@ -125,7 +125,7 @@ package body mem is
 		variable Result				: T_SLM(MemoryLines - 1 downto 0, BitsPerMemoryLine - 1 downto 0);
 	begin
 		Result := (others => (others => ite(SIMULATION, 'U', '0')));
-		
+
 		if (FORMAT = MEM_FILEFORMAT_XILINX_MEM) then
 			-- discard the first line of a mem file
 			readline(FileHandle, CurrentLine);

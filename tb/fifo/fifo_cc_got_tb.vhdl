@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Thomas B. Preusser
 --
@@ -10,19 +10,19 @@
 -- Description:
 -- ------------------------------------
 --		TODO
---		
+--
 --
 -- License:
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,7 +59,7 @@ architecture tb of fifo_cc_got_tb is
   -- Clock Control
   signal rst  : std_logic;
   signal clk  : std_logic;
-  
+
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -71,9 +71,9 @@ begin
 		constant DATA_REG   : boolean :=  c mod 2 > 0;
 		constant STATE_REG  : boolean :=  c mod 4 > 1;
 		constant OUTPUT_REG : boolean :=  c mod 8 > 3;
-		
+
 		constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
-    
+
     -- Local Component Ports
     signal put				: std_logic;
     signal din				: std_logic_vector(D_BITS-1 downto 0);
@@ -116,7 +116,7 @@ begin
       din <= (others => '-');
       put <= '0';
       wait until rising_edge(clk) and rst = '0';
-    
+
       for i in 0 to 2**(D_BITS-1)-1 loop
         din <= std_logic_vector(to_unsigned(i, D_BITS));
         put <= '1';
@@ -134,7 +134,7 @@ begin
 
       din <= (others => '-');
       put <= '0';
-			
+
       -- This process is finished
 			simDeactivateProcess(simProcessID);
 			wait;  -- forever
@@ -153,7 +153,7 @@ begin
         got <= '0';
         wait until rising_edge(clk);
       end loop;
-    
+
       -- This process is finished
 			simDeactivateProcess(simProcessID);
 			simFinalizeTest(simTestID);

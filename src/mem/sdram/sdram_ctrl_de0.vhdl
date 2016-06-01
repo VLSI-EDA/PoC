@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Martin Zabel
--- 
+--
 -- Module:					Controller for ISSI SDR-SDRAM for Altera DE0 Board
 --
 -- Description:
@@ -34,13 +34,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -96,7 +96,7 @@ entity sdram_ctrl_de0 is
     user_got_wdata   : out std_logic;
     user_rdata       : out std_logic_vector(15 downto 0);
     user_rstb        : out std_logic;
-    
+
     sd_ck      : out   std_logic;
     sd_cke     : out   std_logic;
     sd_cs      : out   std_logic;
@@ -119,7 +119,7 @@ architecture rtl of sdram_ctrl_de0 is
   constant R_BITS : positive := 12;     -- 4096 rows
   constant C_BITS : positive :=  8;     -- 256 columns
   constant B_BITS : positive :=  2;     -- 4 banks
-  
+
   -- Divide timings from datasheet by clock period.
   -- SDRAM device: IS42S16400F
   constant T_MRD     : integer := 2;    -- fix

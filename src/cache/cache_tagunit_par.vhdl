@@ -1,11 +1,11 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Patrick Lehmann
 --									Martin Zabel
--- 
+--
 -- Module:					Tag-unit with fully-parallel compare of tag.
 --
 -- Description:
@@ -13,7 +13,7 @@
 -- All inputs are synchronous to the rising-edge of the clock `clock`.
 --
 -- Command truth table:
--- 
+--
 --	Request | ReadWrite | Invalidate	| Replace | Command
 --	--------+-----------+-------------+---------+--------------------------------
 --		0			|		0				|		0					|		0			| None
@@ -45,13 +45,13 @@
 -- ============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -118,11 +118,11 @@ begin
 
 		signal Policy_ReplaceWay : std_logic_vector(WAY_BITS - 1 downto 0);
 		signal ReplaceWay_us	 	 : unsigned(WAY_BITS - 1 downto 0);
-		
+
 		signal TagHit_i	 : std_logic; -- includes Valid and Request
 		signal TagMiss_i : std_logic; -- includes Valid and Request
 	begin
-		
+
 		-- generate comparators and convert hit-vector to binary index (cache line address)
 		-- use process, so that "onehot2bin" does not report false errors in
 		-- simulation due to delta-cycles updates
@@ -199,25 +199,25 @@ begin
 
 		subtype T_TAG_LINE is std_logic_vector(TAG_BITS-1 downto 0);
 		type T_TAG_LINE_VECTOR is array(natural range <>) of T_TAG_LINE;
-		
+
 		signal Address_Tag			: T_TAG_LINE;
 		signal Address_Index		: unsigned(INDEX_BITS - 1 downto 0);
 		signal NewAddress_Tag		: T_TAG_LINE;
 		signal NewAddress_Index : unsigned(INDEX_BITS - 1 downto 0);
-		
+
 		signal DM_TagHit	  : std_logic; -- includes Valid
 
 		signal TagMemory	 : T_TAG_LINE_VECTOR(CACHE_LINES-1 downto 0);
 		signal ValidMemory : std_logic_vector(CACHE_LINES-1 downto 0) := (others => '0');
 
 		signal ValidUpdateIndex : unsigned(INDEX_BITS-1 downto 0);
-		
+
 		signal TagHit_i	 : std_logic;
 		signal TagMiss_i : std_logic;
 
   begin
 		assert CACHE_LINES = 2**INDEX_BITS report "Unsupported number of cache lines." severity failure;
-		
+
     -- Split incoming 'Address' and 'NewAddress'
     Address_Tag      <= Address(Address'left downto INDEX_BITS);
     Address_Index    <= unsigned(Address(INDEX_BITS-1 downto 0));
@@ -231,7 +231,7 @@ begin
 		-- index for writing into ValidMemory
 		ValidUpdateIndex <= NewAddress_Index when Replace = '1' else
 												Address_Index;
-		
+
 		process(Clock)
 		begin
 			if rising_edge(Clock) then
@@ -259,7 +259,7 @@ begin
 		ReplaceLineIndex <= std_logic_vector(NewAddress_Index);
 		OldAddress			 <= TagMemory(to_integer(NewAddress_Index)) & std_logic_vector(NewAddress_Index);
 	end generate;
-	
+
 	-- ===========================================================================
 	-- Set-Assoziative Cache
 	-- ===========================================================================
@@ -269,12 +269,12 @@ begin
     constant INDEX_BITS : positive := log2ceilnz(CACHE_SETS);
     constant TAG_BITS   : positive := ADDRESS_BITS - INDEX_BITS;
 		constant WAY_BITS 	: positive := log2ceilnz(ASSOCIATIVITY);
-		
+
 		subtype T_TAG_LINE is std_logic_vector(TAG_BITS-1 downto 0);
 		type T_TAG_LINE_VECTOR is array(natural range <>) of T_TAG_LINE;
 
 		type T_WAY_VECTOR is array(natural range<>) of std_logic_vector(WAY_BITS-1 downto 0);
-		
+
 		-- Splitted address
 		signal Address_Tag			: T_TAG_LINE;
 		signal Address_Index		: unsigned(INDEX_BITS - 1 downto 0);
@@ -290,18 +290,18 @@ begin
 		signal CS_Invalidate : std_logic_vector(CACHE_SETS-1 downto 0);
 		signal CS_Replace		 : std_logic_vector(CACHE_SETS-1 downto 0);
 		signal Policy_ReplaceWay : T_WAY_VECTOR(CACHE_SETS-1 downto 0);
-		
+
 		-- Way where hit occurs and way to replace
 		signal HitWay			: unsigned(WAY_BITS-1 downto 0);
 		signal ReplaceWay : unsigned(WAY_BITS-1 downto 0);
 
 		signal TagHit_i	 : std_logic;
 		signal TagMiss_i : std_logic;
-		
+
 	begin
 
 		assert CACHE_SETS = 2**INDEX_BITS report "Unsupported number of cache-sets." severity failure;
-		
+
 		----------------------------------------------------------------------------
     -- Split incoming 'Address' and 'NewAddress'
 		-- Enable only one cache-set
@@ -356,7 +356,7 @@ begin
 		LineIndex <= std_logic_vector(HitWay) & std_logic_vector(Address_Index);
 		TagHit		<= TagHit_i;
 		TagMiss		<= TagMiss_i;
-		
+
 		----------------------------------------------------------------------------
 		-- Generate policy for each cache-set
 		----------------------------------------------------------------------------
@@ -373,7 +373,7 @@ begin
 			CS_Replace															 <= (others => '0');
 			CS_Replace(to_integer(NewAddress_Index)) <= Replace;
 		end process;
-			
+
 		genSet : for cs in 0 to CACHE_SETS-1 generate
 		begin
 			Policy : entity PoC.cache_replacement_policy
@@ -396,12 +396,12 @@ begin
 		end generate genSet;
 
 		ReplaceWay <= unsigned(Policy_ReplaceWay(to_integer(NewAddress_Index)));
-		
+
 		----------------------------------------------------------------------------
 		-- Replace-specific outputs
 		----------------------------------------------------------------------------
 		ReplaceLineIndex <= std_logic_vector(ReplaceWay) & std_logic_vector(NewAddress_Index);
 		OldAddress			 <= OldTags(to_integer(ReplaceWay)) & std_logic_vector(NewAddress_Index);
-		
+
 	end generate;
 end architecture;

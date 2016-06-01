@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
@@ -10,18 +10,18 @@
 -- Description:
 -- ------------------------------------
 --	TODO
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -90,9 +90,9 @@ architecture tb of stat_Minimum_tb is
 		Minimum			: NATURAL;
 		Count				: POSITIVE;
 	end record;
-	
+
 	type T_RESULT_VECTOR	is array(NATURAL range <>) of T_RESULT;
-	
+
 	constant RESULT				: T_RESULT_VECTOR		:= (
 		(Minimum => 3,	Count => 1),
 		(Minimum => 5,	Count => 3),
@@ -103,26 +103,26 @@ architecture tb of stat_Minimum_tb is
 		(Minimum => 12,	Count => 7),
 		(Minimum => 13,	Count => 3)
 	);
-	
+
 	constant DEPTH				: POSITIVE				:= RESULT'length;
 	constant DATA_BITS		: POSITIVE				:= 8;
 	constant COUNTER_BITS	: POSITIVE				:= 4;
 	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DEPTH=" & INTEGER'image(DEPTH));
-	
+
   -- component ports
   signal Clock		: STD_LOGIC;
   signal Reset		: STD_LOGIC;
-	
+
   signal Enable		: STD_LOGIC		:= '0';
   signal DataIn		: STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
 
 	signal Valids		: STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
 	signal Minimums	: T_SLM(DEPTH - 1 downto 0, DATA_BITS - 1 downto 0);
 	signal Counts		: T_SLM(DEPTH - 1 downto 0, COUNTER_BITS - 1 downto 0);
-	
+
 	signal Minimums_slvv	: T_SLVV_8(DEPTH - 1 downto 0);
 	signal Counts_slvv		: T_SLVV_4(DEPTH - 1 downto 0);
-	
+
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -130,7 +130,7 @@ begin
 	simGenerateClock(simTestID,			Clock,	CLOCK_FREQ);
 	simGenerateWaveform(simTestID,	Reset,	simGenerateWaveform_Reset(Pause =>  5 ns, ResetPulse => 10 ns));
 	simGenerateWaveform(simTestID,	Enable,	simGenerateWaveform_Reset(Pause => 25 ns, ResetPulse => (VALUES'length * 10 ns)));
-  
+
   -- component instantiation
   UUT: entity PoC.stat_Minimum
     generic map (
@@ -141,10 +141,10 @@ begin
     port map (
       Clock			=> Clock,
       Reset			=> Reset,
-			
+
 			Enable		=> Enable,
 			DataIn		=> DataIn,
-			
+
 			Valids		=> Valids,
 			Minimums	=> Minimums,
 			Counts		=> Counts
@@ -152,7 +152,7 @@ begin
 
 	Minimums_slvv	<= to_slvv_8(Minimums);
 	Counts_slvv		<= to_slvv_4(Counts);
-		
+
 	procStimuli : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator and Checker");
 		variable good					: BOOLEAN;
@@ -167,7 +167,7 @@ begin
 		end loop;
 
 		wait until rising_edge(Clock);
-		
+
 		-- test result after all cycles
 		good := (slv_and(Valids) = '1');
 		for i in RESULT'range loop

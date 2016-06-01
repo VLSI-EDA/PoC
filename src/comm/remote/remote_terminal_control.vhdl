@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width:2  -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -------------------------------------------------------------------------------
 -- Description:  Simple terminal interface to monitor and manipulate
 --               basic IO components such as buttons, slide switches, LED
@@ -64,13 +64,13 @@
 -------------------------------------------------------------------------------
 -- Copyright 2007-2014 Technische Universität Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --    http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -161,7 +161,7 @@ architecture rtl of remote_terminal_control is
   constant RES_BITS : natural := max_count(COUNTS(tActual));
   constant ECO_BITS : natural := 4*((RES_BITS+3)/4);
 
- 
+
   function log10ceil(x : natural) return positive is
     variable scale, res : positive;
   begin
@@ -224,7 +224,7 @@ begin
 
   -- Reading the UART input stream
   blkReader: block
-    
+
     type   tState is (Idle, Command);
     signal State     : tState := Idle;
     signal NextState : tState;
@@ -236,7 +236,7 @@ begin
     signal Load   : std_logic;
     signal Shift  : std_logic;
     signal Commit : std_logic;
-    
+
     subtype tEcho is std_logic_vector(0 to ECO_BITS-1);
     type    tEchos is array(tKind range<>) of tEcho;
     signal  echos : tEchos(tKind);
@@ -380,7 +380,7 @@ begin
           switches <= Outputs;
         end generate genSwitch;
       end generate genAvail;
-      
+
     end generate genInputs;
 
     process(lights, digits)
@@ -453,7 +453,7 @@ begin
           OutCnt <= (others => '-');
           OutEco <= (others => '-');
           Locked <= '-';
-          
+
         else
           State <= NextState;
 
@@ -533,7 +533,7 @@ begin
     genHex: if not COUNT_DECIMAL generate
       NextOutCnt <= ('0'&OutCnt) - OutCntDecr;
     end generate genHex;
-    
+
     process(State, ordy, BufVld, OutCmd, OutCnt, OutEco, OutCntDone, NextLocked, NextOutCnt)
     begin
 
@@ -546,7 +546,7 @@ begin
 
       odat <= (others => '-');
       oput <= '0';
-      
+
       case State is
         when Idle =>
           if BufVld = '1' then
@@ -560,7 +560,7 @@ begin
           if ordy = '1' then
             NextState <= OutCount;
           end if;
-          
+
         when OutCount =>
           if COUNT_DECIMAL or OutCnt(OutCnt'left downto OutCnt'left-3) < 10 then
             odat <= "011" & std_logic_vector(OutCnt(OutCnt'left downto OutCnt'left-3));
@@ -601,7 +601,7 @@ begin
               NextState <= OutEOL;
             end if;
           end if;
-          
+
         when OutEOL =>
           odat <= "0001010";
           oput <= '1';
@@ -610,8 +610,8 @@ begin
           end if;
 
       end case;
-    end process;    
+    end process;
 
   end block blkWrite;
-  
+
 end rtl;

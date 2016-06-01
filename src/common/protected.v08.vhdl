@@ -46,7 +46,7 @@ package ProtectedTypes is
 		impure function	Get return BOOLEAN;
 		impure function Toggle return BOOLEAN;
 	end protected;
-	
+
 	-- protected INTEGER implementation
 	-- ===========================================================================
 	-- TODO: Mult, Div, Pow, Mod, Rem
@@ -59,7 +59,7 @@ package ProtectedTypes is
 		procedure				Sub(Value : INTEGER);
 		impure function Sub(Value : INTEGER) return INTEGER;
 	end protected;
-	
+
 	-- protected NATURAL implementation
 	-- ===========================================================================
 	-- TODO: Mult, Div, Pow, Mod, Rem
@@ -72,7 +72,7 @@ package ProtectedTypes is
 		procedure				Sub(Value : NATURAL);
 		impure function Sub(Value : NATURAL) return NATURAL;
 	end protected;
-	
+
 	-- protected POSITIVE implementation
 	-- ===========================================================================
 	-- TODO: Mult, Div, Pow, Mod, Rem
@@ -85,7 +85,7 @@ package ProtectedTypes is
 		procedure				Sub(Value : POSITIVE);
 		impure function Sub(Value : POSITIVE) return POSITIVE;
 	end protected;
-	
+
 	-- protected REAL implementation
 	-- ===========================================================================
 	-- TODO: Round, Mult, Div, Pow, Mod
@@ -106,194 +106,194 @@ package body ProtectedTypes is
 	-- ===========================================================================
 	type P_BOOLEAN is protected body
 		variable InnerValue		: BOOLEAN		:= FALSE;
-		
+
 		procedure Clear is
 		begin
 			InnerValue	:= FALSE;
 		end procedure;
-		
+
 		procedure Set(Value : BOOLEAN := TRUE) is
 		begin
 			InnerValue	:= Value;
 		end procedure;
-		
+
 		impure function Get return BOOLEAN is
 		begin
 			return InnerValue;
 		end function;
-		
+
 		impure function Toggle return BOOLEAN is
 		begin
 			InnerValue	:= not InnerValue;
 			return InnerValue;
 		end function;
 	end protected body;
-	
+
 	-- protected INTEGER implementation
 	-- ===========================================================================
 	type P_INTEGER is protected body
 		variable InnerValue		: INTEGER		:= 0;
-		
+
 		procedure Clear is
 		begin
 			InnerValue	:= 0;
 		end procedure;
-		
+
 		procedure Set(Value : INTEGER) is
 		begin
 			InnerValue	:= Value;
 		end procedure;
-		
+
 		impure function Get return INTEGER is
 		begin
 			return InnerValue;
 		end function;
-		
+
 		procedure Add(Value : INTEGER) is
 		begin
 			InnerValue	:= InnerValue + Value;
 		end procedure;
-		
+
 		impure function Add(Value : INTEGER) return INTEGER is
 		begin
 			Add(Value);
 			return InnerValue;
 		end function;
-		
+
 		procedure Sub(Value : INTEGER) is
 		begin
 			InnerValue	:= InnerValue - Value;
 		end procedure;
-		
+
 		impure function Sub(Value : INTEGER) return INTEGER is
 		begin
 			Sub(Value);
 			return InnerValue;
 		end function;
 	end protected body;
-	
+
 	-- protected NATURAL implementation
 	-- ===========================================================================
 	type P_NATURAL is protected body
 		variable InnerValue		: NATURAL		:= 0;
-		
+
 		procedure Clear is
 		begin
 			InnerValue	:= 0;
 		end procedure;
-		
+
 		procedure Set(Value : NATURAL) is
 		begin
 			InnerValue	:= Value;
 		end procedure;
-		
+
 		impure function Get return NATURAL is
 		begin
 			return InnerValue;
 		end function;
-		
+
 		procedure Add(Value : NATURAL) is
 		begin
 			InnerValue	:= InnerValue + Value;
 		end procedure;
-		
+
 		impure function Add(Value : NATURAL) return NATURAL is
 		begin
 			Add(Value);
 			return InnerValue;
 		end function;
-		
+
 		procedure Sub(Value : NATURAL) is
 		begin
 			InnerValue	:= InnerValue - Value;
 		end procedure;
-		
+
 		impure function Sub(Value : NATURAL) return NATURAL is
 		begin
 			Sub(Value);
 			return InnerValue;
 		end function;
 	end protected body;
-	
+
 	-- protected POSITIVE implementation
 	-- ===========================================================================
 	type P_POSITIVE is protected body
 		variable InnerValue		: POSITIVE		:= 1;
-		
+
 		procedure Clear is
 		begin
 			InnerValue	:= 1;
 		end procedure;
-		
+
 		procedure Set(Value : POSITIVE) is
 		begin
 			InnerValue	:= Value;
 		end procedure;
-		
+
 		impure function Get return POSITIVE is
 		begin
 			return InnerValue;
 		end function;
-		
+
 		procedure Add(Value : POSITIVE) is
 		begin
 			InnerValue	:= InnerValue + Value;
 		end procedure;
-		
+
 		impure function Add(Value : POSITIVE) return POSITIVE is
 		begin
 			Add(Value);
 			return InnerValue;
 		end function;
-		
+
 		procedure Sub(Value : POSITIVE) is
 		begin
 			InnerValue	:= InnerValue - Value;
 		end procedure;
-		
+
 		impure function Sub(Value : POSITIVE) return POSITIVE is
 		begin
 			Sub(Value);
 			return InnerValue;
 		end function;
 	end protected body;
-	
+
 	-- protected REAL implementation
 	-- ===========================================================================
 	type P_REAL is protected body
 		variable InnerValue		: REAL		:= 0.0;
-		
+
 		procedure Clear is
 		begin
 			InnerValue	:= 0.0;
 		end procedure;
-		
+
 		procedure Set(Value : REAL) is
 		begin
 			InnerValue	:= Value;
 		end procedure;
-		
+
 		impure function Get return REAL is
 		begin
 			return InnerValue;
 		end function;
-		
+
 		procedure Add(Value : REAL) is
 		begin
 			InnerValue	:= InnerValue + Value;
 		end procedure;
-		
+
 		impure function Add(Value : REAL) return REAL is
 		begin
 			Add(Value);
 			return InnerValue;
 		end function;
-		
+
 		procedure Sub(Value : REAL) is
 		begin
 			InnerValue	:= InnerValue - Value;
 		end procedure;
-		
+
 		impure function Sub(Value : REAL) return REAL is
 		begin
 			Sub(Value);

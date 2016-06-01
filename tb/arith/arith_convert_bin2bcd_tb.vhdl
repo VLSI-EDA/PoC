@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- =============================================================================
 -- Authors:					Patrick Lehmann
--- 
+--
 -- Testbench:				Converter Binary to BCD.
--- 
+--
 -- Description:
 -- ------------------------------------
 --		Automated testbench for PoC.arith_converter_bin2bcd
@@ -15,13 +15,13 @@
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,7 +54,7 @@ architecture test of arith_convert_bin2bcd_tb is
 	constant INPUT_1			: INTEGER					:= 38442113;
 	constant INPUT_2			: INTEGER					:= 78734531;
 	constant INPUT_3			: INTEGER					:= 14902385;
-	
+
 	constant CONV1_BITS		: POSITIVE				:= 30;
 	constant CONV1_DIGITS	: POSITIVE				:= 8;
 	constant CONV2_BITS		: POSITIVE				:= 27;
@@ -64,9 +64,9 @@ architecture test of arith_convert_bin2bcd_tb is
 
 	signal Clock					: STD_LOGIC;
 	signal Reset					: STD_LOGIC;
-	
+
 	signal Start					: STD_LOGIC		:= '0';
-	
+
 	signal Conv1_Binary			: STD_LOGIC_VECTOR(CONV1_BITS - 1 downto 0);
 	signal Conv1_BCDDigits	: T_BCD_VECTOR(CONV1_DIGITS - 1 DOWNTO 0);
 	signal Conv1_Sign				: STD_LOGIC;
@@ -91,7 +91,7 @@ architecture test of arith_convert_bin2bcd_tb is
 
 		return to_BCD_Vector(nat, DIGITS) = BCDDigits;
 	end function;
-		
+
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -108,10 +108,10 @@ begin
 		Conv1_Binary		<= to_slv(INPUT_1, CONV1_BITS);
 		Conv2_Binary		<= to_slv(INPUT_1, CONV2_BITS);
 		wait until rising_edge(Clock);
-		
+
 		Start						<= '0';
 		wait until rising_edge(Clock);
-		
+
 		for i in 0 to (CONV1_BITS - 1) loop
 			wait until rising_edge(Clock);
 		end loop;
@@ -121,43 +121,43 @@ begin
 								 "Conv2_BCDDigits is wrong for INPUT_1.");
 
 		----------------------------------------------------------
-		
+
 		Start						<= '1';
 		Conv1_Binary		<= to_slv(INPUT_2, CONV1_BITS);
 		Conv2_Binary		<= to_slv(INPUT_2, CONV2_BITS);
 		wait until rising_edge(Clock);
-		
+
 		Start						<= '0';
 		wait until rising_edge(Clock);
-		
+
 		for i in 0 to (CONV1_BITS - 1) loop
 			wait until rising_edge(Clock);
 		end loop;
-		
+
 		simAssertion(to_BCD_Vector(INPUT_2, CONV1_DIGITS) = Conv1_BCDDigits, "Conv1_BCDDigits is wrong for INPUT_2.");
 		simAssertion(Check_Conv2(INPUT_2, CONV2_BITS, CONV2_DIGITS, Conv2_BCDDigits, Conv2_Sign),
 								 "Conv2_BCDDigits is wrong for INPUT_2.");
-		
+
 		----------------------------------------------------------
-		
+
 		Start						<= '1';
 		Conv1_Binary		<= to_slv(INPUT_3, CONV1_BITS);
 		Conv2_Binary		<= to_slv(INPUT_3, CONV2_BITS);
 		wait until rising_edge(Clock);
-		
+
 		Start						<= '0';
 		wait until rising_edge(Clock);
-		
+
 		for i in 0 to (CONV1_BITS - 1) loop
 			wait until rising_edge(Clock);
 		end loop;
-		
+
 		simAssertion(to_BCD_Vector(INPUT_3, CONV1_DIGITS) = Conv1_BCDDigits, "Conv1_BCDDigits is wrong for INPUT_3.");
 		simAssertion(Check_Conv2(INPUT_3, CONV2_BITS, CONV2_DIGITS, Conv2_BCDDigits, Conv2_Sign),
 								 "Conv2_BCDDigits is wrong for INPUT_3.");
-		
+
 		----------------------------------------------------------
-		
+
 		-- This process is finished
 		simDeactivateProcess(simProcessID);
 		-- Report overall result
@@ -174,10 +174,10 @@ begin
 		port map (
 			Clock					=> Clock,
 			Reset					=> Reset,
-			
+
 			Start					=> Start,
 			Busy					=> open,
-			
+
 			Binary				=> Conv1_Binary,
 			IsSigned			=> '0',
 			BCDDigits			=> Conv1_BCDDigits,
@@ -193,10 +193,10 @@ begin
 		port map (
 			Clock					=> Clock,
 			Reset					=> Reset,
-			
+
 			Start					=> Start,
 			Busy					=> open,
-			
+
 			Binary				=> Conv2_Binary,
 			IsSigned			=> '1',
 			BCDDigits			=> Conv2_BCDDigits,

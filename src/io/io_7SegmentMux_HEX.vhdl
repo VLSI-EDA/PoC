@@ -1,12 +1,12 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Module:				 	time multiplexed 7 Segment Display Controller for HEX chars
--- 
+--
 -- Description:
 -- ------------------------------------
 --		This module is a 7 segment display controller that uses time multiplexing
@@ -17,13 +17,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,10 +51,10 @@ entity io_7SegmentMux_HEX is
 	);
   port (
 	  Clock						: in	STD_LOGIC;
-		
+
 		HexDigits				: in	T_SLVV_4(DIGITS - 1 downto 0);
 		HexDots					: in	STD_LOGIC_VECTOR(DIGITS - 1 downto 0);
-		
+
 		SegmentControl	: out	STD_LOGIC_VECTOR(7 downto 0);
 		DigitControl		: out	STD_LOGIC_VECTOR(DIGITS - 1 downto 0)
 	);
@@ -66,7 +66,7 @@ architecture rtl of io_7SegmentMux_HEX is
 	signal DigitCounter_en		: STD_LOGIC;
 	signal DigitCounter_us		: UNSIGNED(log2ceilnz(DIGITS) - 1 downto 0)	:= (others => '0');
 begin
-	
+
 	Strobe : entity PoC.misc_StrobeGenerator
 		generic map (
 			STROBE_PERIOD_CYCLES	=> TimingToCycles(to_time(REFRESH_RATE), CLOCK_FREQ),
@@ -76,8 +76,8 @@ begin
 			Clock		=> Clock,
 			O				=> DigitCounter_en
 		);
-	
-	-- 
+
+	--
 	DigitCounter_rst	<= upcounter_equal(DigitCounter_us, DIGITS - 1) and DigitCounter_en;
 	DigitCounter_us		<= upcounter_next(DigitCounter_us, DigitCounter_rst, DigitCounter_en) when rising_edge(Clock);
 	DigitControl			<= resize(bin2onehot(std_logic_vector(DigitCounter_us)), DigitControl'length);

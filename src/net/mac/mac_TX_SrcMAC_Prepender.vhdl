@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:				 	Patrick Lehmann
--- 
+--
 -- Module:				 	TODO
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -72,12 +72,12 @@ end entity;
 
 architecture rtl of mac_TX_SrcMAC_Prepender is
 	attribute FSM_ENCODING					: STRING;
-	
+
 	constant PORTS									: POSITIVE				:= MAC_ADDRESSES'length;
 
 	constant META_RST_BIT						: NATURAL					:= 0;
 	constant META_DEST_NXT_BIT			: NATURAL					:= 1;
-	
+
 	constant META_BITS							: POSITIVE				:= 56;
 	constant META_REV_BITS					: POSITIVE				:= 2;
 
@@ -94,7 +94,7 @@ architecture rtl of mac_TX_SrcMAC_Prepender is
 	signal State										: T_STATE																									:= ST_IDLE;
 	signal NextState								: T_STATE;
 	attribute FSM_ENCODING of State	: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
-	
+
 	signal LLMux_In_Valid						: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 	signal LLMux_In_Data						: T_SLM(PORTS - 1 downto 0, T_SLV_8'range)								:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal LLMux_In_Meta						: T_SLM(PORTS - 1 downto 0, META_BITS - 1 downto 0)				:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
@@ -114,7 +114,7 @@ architecture rtl of mac_TX_SrcMAC_Prepender is
 	signal Is_DataFlow							: STD_LOGIC;
 	signal Is_SOF										: STD_LOGIC;
 	signal Is_EOF										: STD_LOGIC;
-	
+
 begin
 
 	LLMux_In_Valid		<= In_Valid;
@@ -122,19 +122,19 @@ begin
 	LLMux_In_SOF			<= In_SOF;
 	LLMux_In_EOF			<= In_EOF;
 	In_Ack						<= LLMux_In_Ack;
-	
+
 	genLLMuxIn : for i in 0 to PORTS - 1 generate
 		signal Meta		: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
 	begin
 		Meta(55 downto 48)	<= In_Meta_DestMACAddress_Data(i);
 		Meta(47 downto 0)		<= to_slv(MAC_ADDRESSES(i));
-		
+
 		assign_row(LLMux_In_Meta, Meta, i);
 	end generate;
-	
+
 	In_Meta_rst									<= get_col(LLMux_In_Meta_rev, META_RST_BIT);
 	In_Meta_DestMACAddress_nxt	<= get_col(LLMux_In_Meta_rev, META_DEST_NXT_BIT);
-	
+
 	LLMux : entity PoC.stream_Mux
 		generic map (
 			PORTS									=> PORTS,
@@ -145,7 +145,7 @@ begin
 		port map(
 			Clock									=> Clock,
 			Reset									=> Reset,
-			
+
 			In_Valid							=> LLMux_In_Valid,
 			In_Data								=> LLMux_In_Data,
 			In_Meta								=> LLMux_In_Meta,
@@ -153,25 +153,25 @@ begin
 			In_SOF								=> LLMux_In_SOF,
 			In_EOF								=> LLMux_In_EOF,
 			In_Ack								=> LLMux_In_Ack,
-			
+
 			Out_Valid							=> LLMux_Out_Valid,
 			Out_Data							=> LLMux_Out_Data,
 			Out_Meta							=> LLMux_Out_Meta,
 			Out_Meta_rev					=> LLMux_Out_Meta_rev,
 			Out_SOF								=> LLMux_Out_SOF,
 			Out_EOF								=> LLMux_Out_EOF,
-			Out_Ack								=> LLMux_Out_Ack	
+			Out_Ack								=> LLMux_Out_Ack
 		);
-	
+
 	LLMux_Out_Meta_rev(META_RST_BIT)				<= Out_Meta_rst;
 	LLMux_Out_Meta_rev(META_DEST_NXT_BIT)		<= Out_Meta_DestMACAddress_nxt;
 
 	Out_Meta_DestMACAddress_Data						<= LLMux_Out_Meta(55 downto 48);
-	
+
 	Is_DataFlow		<= LLMux_Out_Valid and Out_Ack;
 	Is_SOF				<= LLMux_Out_Valid and LLMux_Out_SOF;
 	Is_EOF				<= LLMux_Out_Valid and LLMux_Out_EOF;
-	
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -186,21 +186,21 @@ begin
 	process(State, LLMux_Out_Valid, LLMux_Out_Data, LLMux_Out_Meta, LLMux_Out_EOF, Is_DataFlow, Is_SOF, Is_EOF, Out_Ack)
 	begin
 		NextState							<= State;
-		
+
 		Out_Valid							<= '0';
 		Out_Data							<= LLMux_Out_Data;
 		Out_SOF								<= '0';
 		Out_EOF								<= '0';
 
 		LLMux_Out_Ack				<= '0';
-	
+
 		case State is
 			when ST_IDLE =>
 				if (Is_SOF = '1') then
 					Out_Valid				<= '1';
 					Out_SOF					<= '1';
 					Out_Data				<= LLMux_Out_Meta((5 * 8) + 7 downto (5 * 8));
-					
+
 					if (Out_Ack	 = '1') then
 						NextState			<= ST_PREPEND_SRC_MAC_1;
 					end if;
@@ -209,7 +209,7 @@ begin
 			when ST_PREPEND_SRC_MAC_1 =>
 				Out_Valid					<= '1';
 				Out_Data					<= LLMux_Out_Meta((4 * 8) + 7 downto (4 * 8));
-					
+
 				if (Out_Ack	 = '1') then
 					NextState				<= ST_PREPEND_SRC_MAC_2;
 				end if;
@@ -217,23 +217,23 @@ begin
 			when ST_PREPEND_SRC_MAC_2 =>
 				Out_Valid					<= '1';
 				Out_Data					<= LLMux_Out_Meta((3 * 8) + 7 downto (3 * 8));
-					
+
 				if (Out_Ack	 = '1') then
 					NextState				<= ST_PREPEND_SRC_MAC_3;
 				end if;
-				
+
 						when ST_PREPEND_SRC_MAC_3 =>
 				Out_Valid					<= '1';
 				Out_Data					<= LLMux_Out_Meta((2 * 8) + 7 downto (2 * 8));
-					
+
 				if (Out_Ack	 = '1') then
 					NextState				<= ST_PREPEND_SRC_MAC_4;
 				end if;
-				
+
 						when ST_PREPEND_SRC_MAC_4 =>
 				Out_Valid					<= '1';
 				Out_Data					<= LLMux_Out_Meta((1 * 8) + 7 downto (1 * 8));
-					
+
 				if (Out_Ack	 = '1') then
 					NextState				<= ST_PREPEND_SRC_MAC_5;
 				end if;
@@ -241,11 +241,11 @@ begin
 			when ST_PREPEND_SRC_MAC_5 =>
 				Out_Valid					<= '1';
 				Out_Data					<= LLMux_Out_Meta((0 * 8) + 7 downto (0 * 8));
-					
+
 				if (Out_Ack	 = '1') then
 					NextState				<= ST_PAYLOAD;
 				end if;
-			
+
 			when ST_PAYLOAD =>
 				Out_Valid					<= LLMux_Out_Valid;
 				Out_EOF						<= LLMux_Out_EOF;
@@ -254,7 +254,7 @@ begin
 				if ((Is_DataFlow and Is_EOF) = '1') then
 					NextState			<= ST_IDLE;
 				end if;
-			
+
 		end case;
 	end process;
 

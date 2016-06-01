@@ -1,10 +1,10 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================
 -- Authors:					Patrick Lehmann
--- 
+--
 -- Module:					Tag-unit with sequential compare of tag.
 --
 -- Description:
@@ -15,13 +15,13 @@
 -- ============================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -448,14 +448,14 @@ begin
 --		genVectors : FOR I IN 0 TO FA_CACHE_LINES - 1 GENERATE
 --			TagHits(I)			<= to_sl(TagMemory(I) = FA_Tag);
 --		END GENERATE;
---		
+--
 --		-- convert hit-vector to binary index (cache line address)
 --		FA_MemoryIndex_us		<= onehot2bin(TagHits);
 --		FA_MemoryIndex_i		<= std_logic_vector(FA_MemoryIndex_us);
---		
+--
 --		-- Memories
 --		FA_ReplaceIndex_us	<= FA_MemoryIndex_us;
---		
+--
 --		PROCESS(Clock)
 --		BEGIN
 --			IF rising_edge(Clock) THEN
@@ -465,18 +465,18 @@ begin
 --				END IF;
 --			END IF;
 --		END PROCESS;
---		
+--
 --		-- access valid-vector
 --		ValidHit					<= ValidMemory(to_integer(FA_MemoryIndex_us));
---		
+--
 --		-- hit/miss calculation
 --		TagHit_i					<=			slv_or(TagHits) AND ValidHit	AND Request;
 --		TagMiss_i				<= NOT (slv_or(TagHits) AND ValidHit) AND Request;
---		
+--
 --		-- outputs
 --		Index					<= FA_MemoryIndex_i;
 --		TagHit				<= TagHit_i;
---		TagMiss				<= TagMiss_i;		
+--		TagMiss				<= TagMiss_i;
 --
 --		genPolicy : FOR I IN 0 TO SETS - 1 GENERATE
 --			policy : ENTITY PoC.cache_replacement_policy
@@ -488,10 +488,10 @@ begin
 --				PORT MAP (
 --					Clock											=> Clock,
 --					Reset											=> Reset,
---					
+--
 --					Replace										=> Policy_Replace(I),
 --					ReplaceIndex							=> Policy_ReplaceIndex(I),
---					
+--
 --					TagAccess									=> TagAccess(I),
 --					Request_ReadWrite									=> Request_ReadWrite(I),
 --					Invalidate								=> Invalidate(I),
@@ -523,14 +523,14 @@ begin
 --		genVectors : FOR I IN 0 TO FA_CACHE_LINES - 1 GENERATE
 --			TagHits(I)			<= to_sl(TagMemory(I) = FA_Tag);
 --		END GENERATE;
---		
+--
 --		-- convert hit-vector to binary index (cache line address)
 --		FA_MemoryIndex_us		<= onehot2bin(TagHits);
 --		FA_MemoryIndex_i		<= std_logic_vector(FA_MemoryIndex_us);
---		
+--
 --		-- Memories
 --		FA_ReplaceIndex_us	<= FA_MemoryIndex_us;
---		
+--
 --		PROCESS(Clock)
 --		BEGIN
 --			IF rising_edge(Clock) THEN
@@ -540,18 +540,18 @@ begin
 --				END IF;
 --			END IF;
 --		END PROCESS;
---		
+--
 --		-- access valid-vector
 --		ValidHit					<= ValidMemory(to_integer(FA_MemoryIndex_us));
---		
+--
 --		-- hit/miss calculation
 --		TagHit_i					<=			slv_or(TagHits) AND ValidHit	AND Request;
 --		TagMiss_i				<= NOT (slv_or(TagHits) AND ValidHit) AND Request;
---		
+--
 --		-- outputs
 --		Index					<= FA_MemoryIndex_i;
 --		TagHit				<= TagHit_i;
---		TagMiss				<= TagMiss_i;		
+--		TagMiss				<= TagMiss_i;
 --
 --		genPolicy : FOR I IN 0 TO SETS - 1 GENERATE
 --			policy : ENTITY PoC.cache_replacement_policy
@@ -563,10 +563,10 @@ begin
 --				PORT MAP (
 --					Clock											=> Clock,
 --					Reset											=> Reset,
---					
+--
 --					Replace										=> Policy_Replace(I),
 --					ReplaceIndex							=> Policy_ReplaceIndex(I),
---					
+--
 --					TagAccess									=> TagAccess(I),
 --					Request_ReadWrite									=> Request_ReadWrite(I),
 --					Invalidate								=> Invalidate(I),

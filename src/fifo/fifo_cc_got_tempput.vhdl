@@ -1,7 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- 
+--
 -- ============================================================================================================================================================
 -- Module:					FIFO, common clock (cc), pipelined interface,
 --									writes only become effective after explicit commit
@@ -14,20 +14,20 @@
 -- Description:
 -- ------------------------------------
 --		The specified depth (MIN_DEPTH) is rounded up to the next suitable value.
---		
+--
 --		As uncommitted writes populate FIFO space that is not yet available for
 --		reading, an instance of this FIFO can, indeed, report 'full' and 'not vld'
 --		at the same time. While a 'commit' would eventually make data available for
 --		reading ('vld'), a 'rollback' would free the space for subsequent writing
 --		('not ful').
---		
+--
 --		'commit' and 'rollback' are inclusive and apply to all writes ('put') since
 --		the previous 'commit' or 'rollback' up to and including a potentially
 --		simultaneous write.
---		
+--
 --		The FIFO state upon a simultaneous assertion of 'commit' and 'rollback' is
---		*undefined*! 
---		
+--		*undefined*!
+--
 --		*STATE_*_BITS defines the granularity of the fill state indicator
 --		'*state_*'. 'fstate_rd' is associated with the read clock domain and outputs
 --		the guaranteed number of words available in the FIFO. 'estate_wr' is
@@ -36,31 +36,31 @@
 --		that both these indicators cannot replace the 'full' or 'valid' outputs as
 --		they may be implemented as giving pessimistic bounds that are minimally off
 --		the true fill state.
---		
+--
 --		If a fill state is not of interest, set *STATE_*_BITS = 0.
---		
+--
 --		'fstate_rd' and 'estate_wr' are combinatorial outputs and include an address
 --		comparator (subtractor) in their path.
---		
+--
 --		Examples:
 --		- FSTATE_RD_BITS = 1: fstate_rd == 0 => 0/2 full
 --		                      fstate_rd == 1 => 1/2 full (half full)
---		
+--
 --		- FSTATE_RD_BITS = 2: fstate_rd == 0 => 0/4 full
 --		                      fstate_rd == 1 => 1/4 full
 --		                      fstate_rd == 2 => 2/4 full
 --		                      fstate_rd == 3 => 3/4 full
--- 
+--
 -- License:
 -- ============================================================================================================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany, Chair for VLSI-Design, Diagnostics and Architecture
--- 
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
--- 
+--
 --		http://www.apache.org/licenses/LICENSE-2.0
--- 
+--
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -111,7 +111,7 @@ end fifo_cc_got_tempput;
 
 
 architecture rtl of fifo_cc_got_tempput is
-  
+
   -- Address Width
   constant A_BITS : natural := log2ceil(MIN_DEPTH);
 
@@ -131,7 +131,7 @@ architecture rtl of fifo_cc_got_tempput is
 
   -- Commited Write Pointer (Commit Marker)
   signal IPm : unsigned(A_BITS-1 downto 0) := (others => '0');
-  
+
   -----------------------------------------------------------------------------
   -- Backing Memory Connectivity
 
@@ -159,7 +159,7 @@ begin
 	begin
 		IP0_slv	<= std_logic_vector(IP0);
 		OP0_slv	<= std_logic_vector(OP0);
-		
+
 		incIP : entity PoC.arith_carrychain_inc
 			generic map (
 				BITS		=> A_BITS
@@ -177,7 +177,7 @@ begin
 				X				=> OP0_slv,
 				Y				=> OP1_slv
 			);
-		
+
 		IP1			<= unsigned(IP1_slv);
 		OP1			<= unsigned(OP1_slv);
 	end block;
@@ -283,7 +283,7 @@ begin
           elsif we = '1' and re = '0' and IP1 = OP0 then
             Ful <= '1';
           end if;
-          
+
           -- Update Empty Indicator
           if commit = '1' and (we = '1' or Pnd = '1') then
             Avl <= '1';
@@ -375,7 +375,7 @@ begin
       dout  <= Buf;
       valid <= Vld(1);
     end generate genOutputReg;
-    
+
   end generate genLarge;
 
   genSmall: if DATA_REG generate
@@ -388,9 +388,9 @@ begin
 
     -- Altera Quartus II: Allow automatic RAM type selection.
     -- For small RAMs, registers are used on Cyclone devices and the M512 type
-    -- is used on Stratix devices. Pass-through logic is automatically added 
+    -- is used on Stratix devices. Pass-through logic is automatically added
     -- if required. (Warning can be ignored.)
-  
+
   begin
 
     -- Memory State
