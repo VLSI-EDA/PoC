@@ -1,7 +1,7 @@
 {@GENERATED_HEADER@}
 # The PoC-Library
 
-[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
+[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/{@branch@}/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/{@branch@})
 [![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch={@branch@})](https://travis-ci.org/VLSI-EDA/PoC/branches)
 [![Documentation Status](https://readthedocs.org/projects/poc-library/badge/?version=latest)](http://poc-library.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
