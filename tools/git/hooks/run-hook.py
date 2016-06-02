@@ -31,7 +31,7 @@ def runAll(dir):
 	for root, dirs, files in os.walk(dir):
 		for file in files:
 			print("Executing '" + file + "'")
-			ret = call(os.path.join(root, file))
+			ret = call(['python', os.path.join(root, file)])
 			if ret != 0:
 				return  ret
 	return  0

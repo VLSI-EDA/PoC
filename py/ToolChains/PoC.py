@@ -101,7 +101,7 @@ class Configuration(BaseConfiguration):
 			return False
 
 	def RunPostConfigurationTasks(self):
-		call([path.join(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'], 'tools/git/git-hooks.setup.py')])
+		call(['python', path.join(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'], 'tools/git/git-hooks.setup.py')])
 
 	# LOCAL = git rev-parse @
 	# PS G:\git\PoC> git rev-parse "@"
