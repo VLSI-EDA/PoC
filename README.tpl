@@ -1,4 +1,4 @@
-<!--- DO NOT EDIT! This file is generated from .tpl --->
+{@GENERATED_HEADER@}
 # The PoC-Library
 
 [![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/{@branch@}/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/{@branch@})
