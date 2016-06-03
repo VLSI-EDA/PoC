@@ -126,8 +126,6 @@ rst_prolog = """\
 
    <br />
 
-.. include:: <mmlalias>
-.. include:: <mmlextra>
 """
 
 # -- Options for HTML output ----------------------------------------------
