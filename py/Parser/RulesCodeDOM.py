@@ -380,7 +380,7 @@ class AppendLineStatement(Statement):
 		raise MatchingParserResult(result)
 
 	def __str__(self, indent=0):
-		return "{0}AppendLine {1} by {2}".format("  " * indent, self._appendPattern)
+		return "{0}AppendLine {1}".format("  " * indent, self._appendPattern)
 
 # ==============================================================================
 # Block Statements

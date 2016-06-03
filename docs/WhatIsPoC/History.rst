@@ -47,5 +47,5 @@ This is already exemplified by our PoC-Examples repository.
 
 .. [#f1] The PoC-Library is published and maintained by the **Chair for VLSI
    Design, Diagnostics and Architecture** - Faculty of Computer Science,
-   Technische Universit‰t Dresden, Germany |br|
-   `http://vlsi-eda.inf.tu-dresden.de <http://vlsi-eda.inf.tu-dresden.de>`_
+   Technische Universit√§t Dresden, Germany |br|
+   `http://tu-dresden.de/inf/vlsi-eda <http://tu-dresden.de/inf/vlsi-eda>`_
