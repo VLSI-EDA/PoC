@@ -398,6 +398,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__ReadPoCConfiguration()
 
 		# run post-configuration tasks
+		self._LogNormal("{CYAN}Running post configuration tasks{NOCOLOR}".format(**Init.Foreground))
 		for configurator in configurators:
 			configurator.RunPostConfigurationTasks()
 

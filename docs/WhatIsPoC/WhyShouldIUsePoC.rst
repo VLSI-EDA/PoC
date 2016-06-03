@@ -2,18 +2,22 @@
 Why should I use PoC?
 #####################
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+Here is a brief list of advantages:
+
+* We explicitly use the wording *PoC-Library* rather then *collection*, because
+  PoC's packages and IP cores build an ecosystem. Complex IP cores are build
+  on-top of basic IP cores - they are no lose set of cores. The cores offer a
+  clean interface and can be configured by many generic parameters.
+
+* PoC is target independent: It's possible to switch the target device or even
+  the device vendor without switching the IP core.
+
 
 .. TODO::
    
    Use a well tested set of packages to ease the use of VHDL
    
    Use a well tested set of simulation helpers 
-   
-   Switch targets (development board, FPGA family, FPGA vendor) without switching the IP core.
    
    Run testbenches in various simulators.
    

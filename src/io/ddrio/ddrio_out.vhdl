@@ -123,7 +123,7 @@ begin
 		DataOut_low_d		<= DataOut_low		when rising_edge(Clock) and (ClockEnable = '1');
 		OutputEnable_d	<= OutputEnable		when rising_edge(Clock) and (ClockEnable = '1');
 
-		process(Clock, OutputEnable, DataOut_high_d, DataOut_low_d)
+		process(Clock, OutputEnable_d, DataOut_high_d, DataOut_low_d)
 			type T_MUX is array(BIT) of STD_LOGIC_VECTOR(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
 		begin

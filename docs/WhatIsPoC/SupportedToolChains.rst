@@ -1,17 +1,17 @@
 
 Which Tool Chains are supported?
-********************************
+################################
 
-The PoC-Library and its Python Infrastructure currently supports the following free and commercial vendor tool chains:
+The PoC-Library and its Python-based infrastructure currently supports the following free and commercial vendor tool chains:
 
 * Synthesis Tool Chains:
 
   * **Altera Quartus** |br|
-    Tested with Quartus-II ≥13.0. |br|
-    Tested with Quartus Prime ≥15.1.
+    Tested with Quartus-II |geq| 13.0. |br|
+    Tested with Quartus Prime |geq| 15.1.
   
   * **Lattice Diamond** |br|
-    Tested with Diamond ≥3.6.
+    Tested with Diamond |geq| 3.6.
   
   * **Xilinx ISE** |br|
     Only ISE 14.7 inclusive Core Generator 14.7 is supported.
@@ -20,7 +20,7 @@ The PoC-Library and its Python Infrastructure currently supports the following f
     Only PlanAhead 14.7 is supported.
     
   * **Xilinx Vivado** |br|
-    Tested with Vivado ≥2015.4. |br|
+    Tested with Vivado |geq| 2015.4. |br|
     Due to a limited VHDL language support compared to ISE 14.7, some PoC IP cores need special work arounds. See the synthesis documention section for Vivado for more details.
 
 
@@ -42,9 +42,9 @@ The PoC-Library and its Python Infrastructure currently supports the following f
     The Python infrastructure supports isim, but PoC's simulation helper packages and testbenches rely on VHDL-2008 features, which are not supported by isim.
     
   * **Xilinx Vivado Simulator** |br|
-    Tested with Vivado Simulator (xsim) ≥2016.1. |br|
+    Tested with Vivado Simulator (xsim) |geq| 2016.1. |br|
     The Python infrastructure supports xsim, but PoC's simulation helper packages and testbenches rely on VHDL-2008 features, which are not fully supported by xsim, yet.
   	
   * **GHDL** + **GTKWave** |br|
-    Tested with `GHDL <https://sourceforge.net/projects/ghdl-updates/>`_ ≥0.34dev and `GTKWave <http://gtkwave.sourceforge.net/>`_ ≥3.3.70 |br|
+    Tested with `GHDL <https://github.com/tgingold/ghdl/>`_ |geq| 0.34dev and `GTKWave <http://gtkwave.sourceforge.net/>`_ |geq| 3.3.70 |br|
     Due to ungoing development and bugfixes, we encourage to use the newest GHDL version.

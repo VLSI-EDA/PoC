@@ -46,7 +46,7 @@ entity arith_inc_ovcy_xilinx is
 end entity;
 
 
-architecture rtl of inc_ovcy_xilinx is
+architecture rtl of arith_inc_ovcy_xilinx is
   signal c : std_logic_vector(N downto 0);  -- Carry Chain Links
 begin  -- rtl
 

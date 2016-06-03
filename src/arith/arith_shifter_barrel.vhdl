@@ -70,7 +70,7 @@ begin
 	Output									<= IntermediateResults(STAGES);
 
 	genStage : for i in 0 to STAGES - 1 generate
-		process(IntermediateResults(i), ShiftRotate, LeftRight, ArithmeticLogic)
+		process(IntermediateResults(i), ShiftRotate, LeftRight, ArithmeticLogic, ShiftAmount)
 		begin
 			if (ShiftAmount(i) = '0') then
 				IntermediateResults(i + 1) <= IntermediateResults(i);																																														-- NOP

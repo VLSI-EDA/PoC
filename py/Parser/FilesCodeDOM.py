@@ -30,7 +30,7 @@
 # limitations under the License.
 # ==============================================================================
 #
-from lib.Parser     import MismatchingParserResult, MatchingParserResult, GreedyMatchingParserResult
+from lib.Parser     import MismatchingParserResult, MatchingParserResult, GreedyMatchingParserResult, StartOfDocumentToken
 from lib.Parser     import SpaceToken, CharacterToken, StringToken, NumberToken
 from lib.CodeDOM    import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression, Literal, BinaryExpression
 from lib.CodeDOM    import EmptyLine, CommentLine, BlockedStatement as BlockedStatementBase, ExpressionChoice
@@ -1230,7 +1230,11 @@ class Document(BlockStatement):
 		result = cls()
 		parser = cls.GetRepeatParser(result.AddStatement, BlockedStatement.GetParser)
 		parser.send(None)
-		
+
+		token = yield
+		if (not isinstance(token, StartOfDocumentToken)):
+			raise MismatchingParserResult("Expected a StartOfDocumentToken, got {0!s}.".format(token))
+
 		try:
 			while True:
 				token = yield

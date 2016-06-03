@@ -30,7 +30,8 @@
 # ==============================================================================
 #
 from lib.Parser           import ParserException
-from Parser.RulesCodeDOM  import Document, PreProcessRulesStatement, PostProcessStatement, CopyStatement, ReplaceStatement, FileStatement, DeleteStatement
+from Parser.RulesCodeDOM  import Document, PreProcessRulesStatement, PostProcessStatement, CopyStatement, ReplaceStatement, FileStatement, DeleteStatement, \
+	AppendLineStatement
 
 
 class Rule:
@@ -87,11 +88,25 @@ class ReplaceRuleMixIn(Rule):
 	def __str__(self):
 		return "Replace rule: in '{0!s}' replace '{1}' with '{2}'".format(self._filePath, self._searchPattern, self._replacePattern)
 
+class AppendLineRuleMixIn(Rule):
+	def __init__(self, filePath, appendPattern):
+		self._filePath =        filePath
+		self._appendPattern =   appendPattern
+
+	@property
+	def FilePath(self):                     return self._filePath
+	@property
+	def AppendPattern(self):                return self._appendPattern
+
+	def __str__(self):
+		return "AppendLine rule: in '{0!s}' append '{1}'".format(self._filePath, self._appendPattern)
+
 
 class RulesParserMixIn:
 	_classCopyRule =            CopyRuleMixIn
 	_classDeleteRule =          DeleteRuleMixIn
 	_classReplaceRule =         ReplaceRuleMixIn
+	_classAppendLineRule =      AppendLineRuleMixIn
 
 	def __init__(self):
 		self._rootDirectory =     None
@@ -128,15 +143,18 @@ class RulesParserMixIn:
 			rule =            self._classDeleteRule(file)
 			lst.append(rule)
 		elif isinstance(ruleStatement, FileStatement):
-			# FIXME: Currently, all replace rules are stored in individual rule instances.
+			# FIXME: Currently, all replace and append rules are stored in individual rule instances.
 			# FIXME: This prevents the system from creating a single task of multiple sub-rules -> just one open/close would be required
 			filePath =        ruleStatement.FilePath
-			for replaceRule in ruleStatement.Statements:
-				if isinstance(replaceRule, ReplaceStatement):
-					rule =          self._classReplaceRule(filePath, replaceRule.SearchPattern, replaceRule.ReplacePattern, replaceRule.MultiLine, replaceRule.DotAll, replaceRule.CaseInsensitive)
+			for nestedStatement in ruleStatement.Statements:
+				if isinstance(nestedStatement, ReplaceStatement):
+					rule =          self._classReplaceRule(filePath, nestedStatement.SearchPattern, nestedStatement.ReplacePattern, nestedStatement.MultiLine, nestedStatement.DotAll, nestedStatement.CaseInsensitive)
+					lst.append(rule)
+				elif isinstance(nestedStatement, AppendLineStatement):
+					rule =          self._classAppendLineRule(filePath, nestedStatement.AppendPattern)
 					lst.append(rule)
 				else:
-					ParserException("Found unknown statement type '{0}'.".format(replaceRule.__class__.__name__))
+					ParserException("Found unknown statement type '{0}'.".format(nestedStatement.__class__.__name__))
 		else:
 			ParserException("Found unknown statement type '{0}'.".format(ruleStatement.__class__.__name__))
 

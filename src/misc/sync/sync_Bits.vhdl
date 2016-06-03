@@ -73,9 +73,9 @@ end entity;
 
 architecture rtl of sync_Bits is
 	constant INIT_I		: STD_LOGIC_VECTOR		:= resize(descend(INIT), BITS);
-
+	constant DEV_INFO : T_DEVICE_INFO				:= DEVICE_INFO;
 begin
-	genGeneric : if ((VENDOR /= VENDOR_ALTERA) and (VENDOR /= VENDOR_XILINX)) generate
+	genGeneric : if ((DEV_INFO.Vendor /= VENDOR_ALTERA) and (DEV_INFO.Vendor /= VENDOR_XILINX)) generate
 		attribute ASYNC_REG							: STRING;
 		attribute SHREG_EXTRACT					: STRING;
 
@@ -108,7 +108,7 @@ begin
 	end generate;
 
 	-- use dedicated and optimized 2 D-FF synchronizer for Altera FPGAs
-	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+	genAltera : if (DEV_INFO.Vendor = VENDOR_ALTERA) generate
 		sync : sync_Bits_Altera
 			generic map (
 				BITS				=> BITS,
@@ -123,7 +123,7 @@ begin
 	end generate;
 
 	-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+	genXilinx : if (DEV_INFO.Vendor = VENDOR_XILINX) generate
 		sync : sync_Bits_Xilinx
 			generic map (
 				BITS				=> BITS,

@@ -43,8 +43,6 @@ use			PoC.vectors.all;
 
 
 package sim_types is
-	attribute pocIsSimulation		: BOOLEAN;
-	attribute pocIsSimulation of sim_types			: package is TRUE;
 
 	constant C_SIM_VERBOSE					: BOOLEAN		:= FALSE;		-- POC_VERBOSE
 
@@ -111,7 +109,6 @@ package sim_types is
 	function	randInitializeSeed(SeedVector : T_INTVEC) return T_SIM_RAND_SEED;
 	function	randInitializeSeed(SeedVector : STRING) return T_SIM_RAND_SEED;
 
-	attribute pocIsSimulation of randInitializeSeed[T_SIM_RAND_SEED] : procedure is TRUE;
 
 	-- Uniform distributed random values
 	-- ===========================================================================

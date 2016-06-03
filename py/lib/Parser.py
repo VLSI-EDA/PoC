@@ -42,63 +42,82 @@ class GreedyMatchingParserResult(MatchingParserResult):   pass
 
 class SourceCodePosition:
 	def __init__(self, row, column, absolute):
-		self._row =       row
-		self._column =    column
-		self._absolute =  absolute
-	
-	@property
-	def Row(self):
-		return self._row
-	@Row.setter
-	def Row(self, value):
-		self._row = value
-	
-	@property
-	def Column(self):
-		return self._column
-	@Column.setter
-	def Column(self, value):
-		self._column = value
-	
-	@property
-	def Absolute(self):
-		return self._absolute
-	@Absolute.setter
-	def Absolute(self, value):
-		self._absolute = value
+		self.Row =       row
+		self.Column =    column
+		self.Absolute =  absolute
+
+	def __str__(self):
+		return "(line: {0}, col: {1})".format(self.Row, self.Column)
 
 
 class Token:
-	def __init__(self, previousToken, value, start, end=None):
-		self._previousToken =   previousToken
-		self._value =           value
-		self._start =           start
-		self._end =             end
+	def __init__(self, previousToken, start, end=None):
+		previousToken.NextToken = self
+		self._previousToken =     previousToken
+		self.NextToken =          None
+		self.Start =              start
+		self.End =                end
 
 	def __len__(self):
-		return self._end.Absolute - self._start.Absolute + 1
+		return self.End.Absolute - self.Start.Absolute + 1
 
 	@property
 	def PreviousToken(self):
 		return self._previousToken
+	@PreviousToken.setter
+	def PreviousToken(self, value):
+		self._previousToken = value
+		value.NextToken =     self
+
+	# @property
+	# def NextToken(self):
+	# 	return self._nextToken
+	# @NextToken.setter
+	# def NextToken(self, value):
+	# 	self._nextToken = value
 		
-	@property
-	def Value(self):
-		return self._value
-	
-	@property
-	def Start(self):
-		return self._start
-	
-	@property
-	def End(self):
-		return self._end
-	
 	@property
 	def Length(self):
 		return len(self)
 
-class CharacterToken(Token):
+	def __str__(self):
+		return repr(self) + " at " + str(self.Start)
+
+class SuperToken(Token):
+	def __init__(self, startToken, endToken=None):
+		super().__init__(startToken.PreviousToken, startToken.Start, endToken.End if endToken else None)
+		self.StartToken = startToken
+		self.EndToken =   endToken
+
+	def __iter__(self):
+		token = self.StartToken
+		while (token is not self.EndToken):
+			yield token
+			token = token.NextToken
+		yield self.EndToken
+
+class ValuedToken(Token):
+	def __init__(self, previousToken, value, start, end=None):
+		super().__init__(previousToken, start, end)
+		self.Value =  value
+
+
+class StartOfDocumentToken(ValuedToken):
+	def __init__(self):
+		self._previousToken =     None
+		self._nextToken =         None
+		self.Value =              None
+		self.Start =              SourceCodePosition(1, 1, 1)
+		self.End =                None
+
+	def __len__(self):
+		return 0
+
+	def __str__(self):
+		return "<StartOfDocumentToken>"
+
+
+class CharacterToken(ValuedToken):
 	def __init__(self, previousToken, value, start):
 		if (len(value) != 1):    raise ValueError()
 		super().__init__(previousToken, value, start=start, end=start)
@@ -113,32 +132,36 @@ class CharacterToken(Token):
 		" ":     "SPACE"
 	}
 
-	def __repr(self):
-		return "<CharacterToken char={char} at pos={pos}; line={line}; col={col}>".format(
-						char=self.__str__(), pos=self._start.Absolute, line=self._start.Row, col=self._start.Column)
-
 	def __str__(self):
-		if (self._value in self.__CHARACTER_TRANSLATION__):
-			return self.__CHARACTER_TRANSLATION__[self._value]
+		return "<CharacterToken '{char}' at {line}:{col}>".format(
+						char=self.__repr__(), pos=self.Start.Absolute, line=self.Start.Row, col=self.Start.Column)
+
+	def __repr__(self):
+		if (self.Value in self.__CHARACTER_TRANSLATION__):
+			return self.__CHARACTER_TRANSLATION__[self.Value]
 		else:
-			return self._value
+			return self.Value
 
 
-class SpaceToken(Token):
+class SpaceToken(ValuedToken):
 	def __str__(self):
-		return "<SpaceToken '{0}'>".format(self._value)
+		return "<SpaceToken '{value}' at {line}:{col}>".format(
+						value=self.Value, pos=self.Start.Absolute, line=self.Start.Row, col=self.Start.Column)
 
-class DelimiterToken(Token):
+class DelimiterToken(ValuedToken):
 	def __str__(self):
-		return "<DelimiterToken '{0}'>".format(self._value)
+		return "<DelimiterToken '{value}' at {line}:{col}>".format(
+						value=self.Value, pos=self.Start.Absolute, line=self.Start.Row, col=self.Start.Column)
 
-class NumberToken(Token):
+class NumberToken(ValuedToken):
 	def __str__(self):
-		return "<NumberToken '{0}'>".format(self._value)
+		return "<NumberToken '{value}' at {line}:{col}>".format(
+						value=self.Value, pos=self.Start.Absolute, line=self.Start.Row, col=self.Start.Column)
 
-class StringToken(Token):
+class StringToken(ValuedToken):
 	def __str__(self):
-		return "<StringToken '{0}'>".format(self._value)
+		return "<StringToken '{value}' at {line}:{col}>".format(
+						value=self.Value, pos=self.Start.Absolute, line=self.Start.Row, col=self.Start.Column)
 
 class Tokenizer:
 	class TokenKind(Enum):
@@ -162,91 +185,92 @@ class Tokenizer:
 			if (char == "\n"):
 				column =  0
 				row +=    1
-	
+
+	__ALPHA_CHARS__ = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	__NUMBER_CHARS__ = "0123456789"
+	__SPACE_CHARS__ = " \t"
+
 	@classmethod
-	def GetWordTokenizer(cls, iterable):
-		previousToken =  None
-		tokenKind =   cls.TokenKind.OtherChars
-		start =       SourceCodePosition(1, 1, 1)
-		end =         start
-		buffer =      ""
-		absolute =    0
-		column =      0
-		row =         1
+	def GetWordTokenizer(cls, iterable, alphaCharacters=__ALPHA_CHARS__, numberCharacters=__NUMBER_CHARS__, whiteSpaceCharacters=__SPACE_CHARS__):
+		previousToken = StartOfDocumentToken()
+		tokenKind =     cls.TokenKind.OtherChars
+		start =         SourceCodePosition(1, 1, 1)
+		buffer =        ""
+		absolute =      0
+		column =        0
+		row =           1
+
+		yield previousToken
+
 		for char in iterable:
-			absolute += 1
-			column +=   1
+			absolute +=   1
+			column +=     1
 			
 			if (tokenKind is cls.TokenKind.SpaceChars):
-				if ((char == " ") or (char == "\t")):
+				if (char in whiteSpaceCharacters):
 					buffer += char
 				else:
-					previousToken = SpaceToken(previousToken, buffer, start, end)
+					previousToken = SpaceToken(previousToken, buffer, start, SourceCodePosition(row, column, absolute))
 					yield previousToken
 					
-					if (char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"):
-						buffer = char
+					start =  SourceCodePosition(row, column, absolute)
+					buffer = char
+					if (char in alphaCharacters):
 						tokenKind = cls.TokenKind.AlphaChars
-					elif (char in "0123456789"):
-						buffer = char
+					elif (char in numberCharacters):
 						tokenKind = cls.TokenKind.NumberChars
 					else:
 						tokenKind = cls.TokenKind.OtherChars
-						previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+						previousToken = CharacterToken(previousToken, char, start)
 						yield previousToken
 			elif (tokenKind is cls.TokenKind.AlphaChars):
-				if (char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"):
+				if (char in alphaCharacters):
 					buffer += char
 				else:
-					previousToken = StringToken(previousToken, buffer, start, end)
+					previousToken = StringToken(previousToken, buffer, start, SourceCodePosition(row, column, absolute))
 					yield previousToken
-				
+
+					start = SourceCodePosition(row, column, absolute)
+					buffer = char
 					if (char in " \t"):
-						buffer = char
 						tokenKind = cls.TokenKind.SpaceChars
-					elif (char in "0123456789"):
-						buffer = char
+					elif (char in numberCharacters):
 						tokenKind = cls.TokenKind.NumberChars
 					else:
 						tokenKind = cls.TokenKind.OtherChars
-						previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+						previousToken = CharacterToken(previousToken, char, start)
 						yield previousToken
 			elif (tokenKind is cls.TokenKind.NumberChars):
-				if (char in "0123456789"):
+				if (char in numberCharacters):
 					buffer += char
 				else:
-					previousToken = NumberToken(previousToken, buffer, start, end)
+					previousToken = NumberToken(previousToken, buffer, start,SourceCodePosition(row, column, absolute))
 					yield previousToken
-				
+
+					start = SourceCodePosition(row, column, absolute)
+					buffer = char
 					if (char in " \t"):
-						buffer = char
 						tokenKind = cls.TokenKind.SpaceChars
-					elif (char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"):
-						buffer = char
+					elif (char in alphaCharacters):
 						tokenKind = cls.TokenKind.AlphaChars
 					else:
 						tokenKind = cls.TokenKind.OtherChars
-						previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+						previousToken = CharacterToken(previousToken, char, start)
 						yield previousToken
 			elif (tokenKind is cls.TokenKind.OtherChars):
+				start = SourceCodePosition(row, column, absolute)
+				buffer =      char
 				if (char in " \t"):
-					buffer = char
-					tokenKind = cls.TokenKind.SpaceChars
-				elif (char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"):
-					buffer = char
-					tokenKind = cls.TokenKind.AlphaChars
-				elif (char in "0123456789"):
-					buffer = char
-					tokenKind = cls.TokenKind.NumberChars
+					tokenKind =   cls.TokenKind.SpaceChars
+				elif (char in alphaCharacters):
+					tokenKind =   cls.TokenKind.AlphaChars
+				elif (char in numberCharacters):
+					tokenKind =   cls.TokenKind.NumberChars
 				else:
-					previousToken = CharacterToken(previousToken, char, SourceCodePosition(row, column, absolute))
+					previousToken = CharacterToken(previousToken, char, start)
 					yield previousToken
 			else:
 				raise ParserException("Unknown state.")
-			
-			end.Row =       row
-			end.Column =    column
-			end.Absolute =  absolute
 			
 			if (char == "\n"):
 				column =  0

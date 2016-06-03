@@ -91,7 +91,7 @@ begin
 	begin
 		Data_async	<= Input;
 
-		process(Clock, Input)
+		process(Clock, Data_async)
 		begin
 			if (Data_async = '1') then
 				Data_meta		<= '1';

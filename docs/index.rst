@@ -9,8 +9,8 @@ Germany |br|
 
 --------------------------------------------------------------------------------
 
-The PoC-Library's Documentation
-###############################
+The PoC-Library Documentation
+#############################
 
 PoC - "Pile of Cores" provides implementations for often required hardware
 functions such as Arithmetic Units, Caches, Clock-Domain-Crossing Circuits,

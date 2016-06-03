@@ -51,7 +51,7 @@ from lib.Parser         import ParserException
 from Base.Exceptions    import ExceptionBase, SkipableException
 from Base.Project       import VHDLVersion, Environment, FileTypes
 from Base.Shared        import Shared
-from Parser.RulesParser import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn
+from Parser.RulesParser import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn, AppendLineRuleMixIn
 from PoC.Solution       import RulesFile
 
 
@@ -70,13 +70,16 @@ class DeleteTask(DeleteRuleMixIn):
 class ReplaceTask(ReplaceRuleMixIn):
 	pass
 
+class AppendLineTask(AppendLineRuleMixIn):
+	pass
+
 
 class Compiler(Shared):
 	_ENVIRONMENT = Environment.Synthesis
 
 	class __Directories__(Shared.__Directories__):
-		Netlist = None
-		Source = None
+		Netlist =     None
+		Source =      None
 		Destination = None
 
 	def __init__(self, host, dryRun, noCleanUp):
@@ -284,6 +287,13 @@ class Compiler(Shared):
 					replacePattern =  self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.ReplacePattern, {})
 					task = ReplaceTask(Path(filePath), searchPattern, replacePattern, rule.RegExpOption_MultiLine, rule.RegExpOption_DotAll, rule.RegExpOption_CaseInsensitive)
 					preReplaceTasks.append(task)
+				elif isinstance(rule, AppendLineRuleMixIn):
+					filePath =        self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
+					appendPattern =   self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.AppendPattern, {})
+					task = AppendLineTask(Path(filePath), appendPattern)
+					preReplaceTasks.append(task)
+				else:
+					raise CompilerException("Unknown post-process rule '{0!s}'.".format(rule))
 		else:
 			preReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PreReplaceRules']
 			if (len(preReplaceRules) != 0):
@@ -306,6 +316,13 @@ class Compiler(Shared):
 					replacePattern =  self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.ReplacePattern, {})
 					task = ReplaceTask(Path(filePath), searchPattern, replacePattern, rule.RegExpOption_MultiLine, rule.RegExpOption_DotAll, rule.RegExpOption_CaseInsensitive)
 					postReplaceTasks.append(task)
+				elif isinstance(rule, AppendLineRuleMixIn):
+					filePath =        self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
+					appendPattern =   self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.AppendPattern, {})
+					task = AppendLineTask(Path(filePath), appendPattern)
+					postReplaceTasks.append(task)
+				else:
+					raise CompilerException("Unknown post-process rule '{0!s}'.".format(rule))
 		else:
 			postReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PostReplaceRules']
 			if (len(postReplaceRules) != 0):

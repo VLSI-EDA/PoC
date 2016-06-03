@@ -30,14 +30,16 @@ from subprocess import call
 def runAll(dir):
 	for root, dirs, files in os.walk(dir):
 		for file in files:
-			print("Executing '" + file + "'")
-			ret = call(['python', os.path.join(root, file)])
-			if ret != 0:
-				return  ret
+			if not file.startswith('.'):
+				print(" executing '" + file + "'")
+				ret = call(['python', os.path.join(root, file)])
+				if ret != 0:
+					return  ret
 	return  0
 
 hook = os.path.basename(__file__)
-ret  = runAll('tools/git/hooks/' + hook + '.d')
 
-print(hook + ": " + ("PASS" if ret == 0 else "FAIL"))
+print(hook + ':');
+ret = runAll('tools/git/hooks/' + hook + '.d')
+print('PASS' if ret == 0 else 'FAIL')
 exit(ret)

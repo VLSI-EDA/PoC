@@ -67,14 +67,14 @@ architecture rtl of sync_Reset_Altera is
 begin
 	Data_async	<= '0';
 
-	process(Clock)
+	process(Clock, Input)
 	begin
 		if (Input = '1') then
 			Data_meta <= '1';
 			Data_sync <= (others => '1');
 		elsif rising_edge(Clock) then
 			Data_meta <= Data_async;
-			Data_sync <= Data_sync8Data_sync'high - 1 downto 0) & Data_meta;
+			Data_sync <= Data_sync(Data_sync'high - 1 downto 0) & Data_meta;
 		end if;
 	end process;
 

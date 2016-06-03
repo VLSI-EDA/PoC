@@ -29,7 +29,7 @@
 # limitations under the License.
 # ==============================================================================
 #
-from lib.Parser     import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult
+from lib.Parser     import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult, StartOfDocumentToken
 from lib.Parser     import SpaceToken, CharacterToken, StringToken
 from lib.CodeDOM    import EmptyLine, CommentLine, BlockedStatement as BlockStatementBase, StringLiteral
 from lib.CodeDOM    import Statement, BlockStatement
@@ -325,6 +325,63 @@ class ReplaceStatement(Statement):
 	def __str__(self, indent=0):
 		return "{0}Replace {1} by {2}".format("  " * indent, self._searchPattern, self._replacePattern)
 
+class AppendLineStatement(Statement):
+	def __init__(self, appendPattern, commentText):
+		super().__init__()
+		self._appendPattern =   appendPattern
+		self._commentText =     commentText
+
+	@property
+	def AppendPattern(self):   return self._appendPattern
+	@property
+
+	@classmethod
+	def GetParser(cls):
+		# match for optional whitespace
+		token = yield
+		if isinstance(token, SpaceToken):           token = yield
+		# match for keyword: APPENDLINE
+		if (not isinstance(token, StringToken)):    raise MismatchingParserResult("AppendLineParser: Expected APPENDLINE keyword.")
+		if (token.Value.lower() != "appendline"):   raise MismatchingParserResult("AppendLineParser: Expected APPENDLINE keyword.")
+		# match for whitespace
+		token = yield
+		if (not isinstance(token, SpaceToken)):     raise MismatchingParserResult("AppendLineParser: Expected whitespace before append pattern.")
+
+		# match for string: appendPattern; use a StringLiteralParser to parse the pattern
+		parser = StringLiteral.GetParser()
+		parser.send(None)
+		appendPattern = None
+		try:
+			while True:
+				token = yield
+				parser.send(token)
+		except MatchingParserResult as ex:
+			appendPattern = ex.value.Value
+
+		# match for optional whitespace
+		token = yield
+		if isinstance(token, SpaceToken):           token = yield
+		# match for delimiter sign: \n
+		commentText = ""
+		if (not isinstance(token, CharacterToken)): raise MismatchingParserResult("AppendLineParser: Expected end of line or comment")
+		if (token.Value == "\n"):
+			pass
+		elif (token.Value == "#"):
+			# match for any until line end
+			while True:
+				token = yield
+				if (isinstance(token, CharacterToken) and (token.Value == "\n")):    break
+				commentText += token.Value
+		else:
+			raise MismatchingParserResult("AppendLineParser: Expected end of line or comment")
+
+		# construct result
+		result = cls(appendPattern, commentText)
+		raise MatchingParserResult(result)
+
+	def __str__(self, indent=0):
+		return "{0}AppendLine {1} by {2}".format("  " * indent, self._appendPattern)
+
 # ==============================================================================
 # Block Statements
 # ==============================================================================
@@ -544,7 +601,11 @@ class Document(BlockStatement):
 		result = cls()
 		parser = cls.GetRepeatParser(result.AddStatement, DocumentStatements.GetParser)
 		parser.send(None)
-		
+
+		token = yield
+		if (not isinstance(token, StartOfDocumentToken)):
+			raise MismatchingParserResult("Expected a StartOfDocumentToken, got {0!s}.".format(token))
+
 		try:
 			while True:
 				token = yield
@@ -560,6 +621,7 @@ class Document(BlockStatement):
 
 
 InFileStatements.AddChoice(ReplaceStatement)
+InFileStatements.AddChoice(AppendLineStatement)
 InFileStatements.AddChoice(CommentLine)
 InFileStatements.AddChoice(EmptyLine)
 
