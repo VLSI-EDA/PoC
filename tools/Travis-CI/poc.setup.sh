@@ -29,6 +29,3 @@ echo -e "${CYAN}Pre-compiling OSVVM with GHDL into ./temp/precompiled/ghdl/osvvm
 cd temp/precompiled
 ../../tools/precompile/compile-osvvm.sh --ghdl
 
-ls -Ahl ./temp/precompiled
-ls -Ahl ./temp/precompiled/osvvm
-ls -Ahl ./temp/precompiled/osvvm/v08
