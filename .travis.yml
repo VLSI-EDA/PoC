@@ -24,4 +24,4 @@ before_script:
   - ./tools/Travis-CI/ghdl.setup.sh
   - ./tools/Travis-CI/poc.setup.sh
 script:
-  - ./tools/Travis-CI/poc.run.sh "PoC.*"
+  - ./tools/Travis-CI/poc.run.sh -v "PoC.*"
