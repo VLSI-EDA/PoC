@@ -1,14 +1,21 @@
 -- EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================================================================================================
--- Description:	 		Iterative Square Root Extractor.
---									Its computation requires (N+1)/2 steps for an argument bit width of N.
---
+-- =============================================================================
 -- Authors:					Thomas B. Preußer
--- ============================================================================================================================================================
--- Copyright 2007-2014 Technische Universität Dresden - Germany, Chair for VLSI-Design, Diagnostics and Architecture
+-- 
+-- Entity:					Iterative Square Root Extractor.
+-- 
+-- Description:
+-- -------------------------------------
+-- Iterative Square Root Extractor.
+-- 
+-- Its computation requires (N+1)/2 steps for an argument bit width of N.
+--
+-- License:
+-- =============================================================================
+-- Copyright 2007-2014 Technische Universität Dresden - Germany,
+--										 Chair for VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -21,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================================================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.std_logic_1164.all;
@@ -45,7 +52,7 @@ entity arith_sqrt is
 		sqrt : out std_logic_vector((N-1)/2 downto 0);	-- Result
 		rdy	: out std_logic														-- Ready / Done
 	);
-end arith_sqrt;
+end entity arith_sqrt;
 
 
 architecture rtl of arith_sqrt is

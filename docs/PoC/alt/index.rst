@@ -2,5 +2,4 @@
 alt
 ===
 
-These are Altera specific entities....
-
+.. TODO:: This namespace is reserved for Altera specific entities.

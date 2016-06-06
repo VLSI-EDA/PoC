@@ -19,3 +19,6 @@ These are sorting entities....
    
    sort_lru_cache
    sort_lru_list
+   sort_ExpireList
+   sort_InsertSort
+   sort_LeastFrequentlyUsed

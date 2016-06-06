@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
--- Package:					TODO
---
 -- Authors:					Patrick Lehmann
 --
+-- Entity:					TODO
+--
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -46,7 +45,7 @@ entity filter_mean is
 		DataIn					: in	STD_LOGIC;							-- data to filter
 		DataOut					: out	STD_LOGIC								-- filtered signal
 	);
-end;
+end entity;
 
 
 architecture rtl of filter_mean is

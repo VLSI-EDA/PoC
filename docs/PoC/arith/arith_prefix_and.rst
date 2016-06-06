@@ -1,9 +1,19 @@
 
 arith_prefix_and
-^^^^^^^^^^^^^^^^
+################
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+Prefix AND computation:
+``y(i) <= '1' when x(i downto 0) = (i downto 0 => '1') else '0';``
+This implementation uses carry chains for wider implementations.
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../src/arith/arith_prefix_and.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 43-51
+
+
+	 

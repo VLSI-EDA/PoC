@@ -1,9 +1,21 @@
 
 gearbox_up_cc
-^^^^^^^^^^^^^
+#############
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+This module provides a downscaling gearbox with a common clock (cc)
+interface. It perfoems a 'byte' to 'word' collection. The default order is
+LITTLE_ENDIAN (starting at byte(0)). Input "In_Data" and output "Out_Data"
+are of the same clock domain "Clock". Optional input and output registers
+can be added by enabling (ADD_***PUT_REGISTERS = TRUE).
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../../src/misc/gearbox/gearbox_up_cc.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 46-69
+
+
+	 

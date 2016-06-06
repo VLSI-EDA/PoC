@@ -1,20 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	Digilent Peripherial Module: USB-UART (Pmod_USBUART)
+-- Entity:				 	Digilent Peripherial Module: USB-UART (Pmod_USBUART)
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This module abstracts a FTDI FT232R USB-UART bridge. The FT232R supports
 --		up to 3 MBaud. A synchronous FIFO interface (32x words) is provided.
 --		Hardware flow control (RTS_CTS) is enabled.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;

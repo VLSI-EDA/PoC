@@ -1,14 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	A downscaling gearbox module with a dependent clock (dc) interface.
+-- Entity:				 	A downscaling gearbox module with a dependent clock (dc) interface.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --	This module provides a downscaling gearbox with a dependent clock (dc)
 --	interface. It perfoems a 'word' to 'byte' splitting. The default order is
 --	LITTLE_ENDIAN (starting at byte(0)). Input "In_Data" is of clock domain
@@ -21,7 +20,7 @@
 --	- Clock1 and Clock2 MUST be phase aligned (related) to each other.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -36,7 +35,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 
 library IEEE;
@@ -69,7 +68,7 @@ architecture rtl OF gearbox_down_dc is
 	constant BIT_RATIO		: REAL			:= real(INPUT_BITS) / real(OUTPUT_BITS);
 	constant COUNTER_BITS : POSITIVE	:= log2ceil(integer(BIT_RATIO));
 
-	TYPE T_MUX_INPUT IS ARRAY (NATURAL RANGE <>) OF STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);
+	type T_MUX_INPUT IS array (NATURAL range <>) OF STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);
 
 	signal WordBoundary			: STD_LOGIC		:= '0';
 	signal WordBoundary_d		: STD_LOGIC		:= '0';

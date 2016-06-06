@@ -1,20 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	A generic buffer module for the PoC.Stream protocol.
+-- Entity:				 	A generic buffer module for the PoC.Stream protocol.
 --
 -- Description:
--- ------------------------------------
---		This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
---		It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
---		data and meta information.
+-- -------------------------------------
+-- This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
+-- It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
+-- data and meta information.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS of ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -42,32 +41,29 @@ use			PoC.vectors.all;
 
 entity stream_FrameGenerator is
   generic (
-    DATA_BITS							: POSITIVE														:= 8;
-		WORD_BITS							: POSITIVE														:= 16;
-		APPEND								: T_FRAMEGEN_APPEND										:= FRAMEGEN_APP_NONE;
-		FRAMEGROUPS						: T_FRAMEGEN_FRAMEGROUP_VECTOR_8			:= (0 => C_FRAMEGEN_FRAMEGROUP_EMPTY)
+    DATA_BITS					: POSITIVE														:= 8;
+		WORD_BITS					: POSITIVE														:= 16;
+		APPEND						: T_FRAMEGEN_APPEND										:= FRAMEGEN_APP_NONE;
+		FRAMEGROUPS				: T_FRAMEGEN_FRAMEGROUP_VECTOR_8			:= (0 => C_FRAMEGEN_FRAMEGROUP_EMPTY)
   );
 	port (
-		Clock									: in	STD_LOGIC;
-		Reset									: in	STD_LOGIC;
-
+		Clock							: in	STD_LOGIC;
+		Reset							: in	STD_LOGIC;
 		-- CSE interface
-		Command								: in	T_FRAMEGEN_COMMAND;
-		Status								: out	T_FRAMEGEN_STATUS;
-
+		Command						: in	T_FRAMEGEN_COMMAND;
+		Status						: out	T_FRAMEGEN_STATUS;
 		-- Control interface
-		Pause									: in	T_SLV_16;
-		FrameGroupIndex				: in	T_SLV_8;
-		FrameIndex						: in	T_SLV_8;
-		Sequences							: in	T_SLV_16;
-		FrameLength						: in	T_SLV_16;
-
+		Pause							: in	T_SLV_16;
+		FrameGroupIndex		: in	T_SLV_8;
+		FrameIndex				: in	T_SLV_8;
+		Sequences					: in	T_SLV_16;
+		FrameLength				: in	T_SLV_16;
 		-- OUT Port
-		Out_Valid							: out	STD_LOGIC;
-		Out_Data							: out	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-		Out_SOF								: out	STD_LOGIC;
-		Out_EOF								: out	STD_LOGIC;
-		Out_Ack								: in	STD_LOGIC
+		Out_Valid					: out	STD_LOGIC;
+		Out_Data					: out	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
+		Out_SOF						: out	STD_LOGIC;
+		Out_EOF						: out	STD_LOGIC;
+		Out_Ack						: in	STD_LOGIC
 	);
 end entity;
 

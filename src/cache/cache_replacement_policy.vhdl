@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Patrick Lehmann
 -- 									Martin Zabel
 --
--- Module:					Wrap different cache replacement policies.
+-- Entity:					Wrap different cache replacement policies.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --
 -- Policies														| supported
 -- -----------------------------------#--------------------
@@ -42,7 +41,7 @@
 -- cache set (see above).
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -57,7 +56,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -125,40 +124,40 @@ begin
 --		ValidHit		<= OptionMemory(to_integer(unsigned(HitWay)))(VALID_BIT);
 --		IsValid			<= ValidHit;
 --
---		PROCESS(Clock)
---		BEGIN
---			IF rising_edge(Clock) THEN
---				IF (Reset = '1') THEN
---					FOR I IN 0 TO CACHE_WAYS - 1 LOOP
+--		process(Clock)
+--		begin
+--			if rising_edge(Clock) then
+--				if (Reset = '1') then
+--					for i in 0 to CACHE_WAYS - 1 loop
 --						OptionMemory(I)(VALID_BIT)	<= '0';
---					END LOOP;
---				ELSE
---					IF (Insert = '1') THEN
+--					end loop;
+--				else
+--					if (Insert = '1') then
 --						OptionMemory(to_integer(Pointer_us))(VALID_BIT) <= '1';
---					END IF;
+--					end if;
 --
---					IF (Invalidate = '1') THEN
+--					if (Invalidate = '1') then
 --						OptionMemory(to_integer(unsigned(HitWay)))(VALID_BIT)			<= '0';
---					END IF;
---				END IF;
---			END IF;
---		END PROCESS;
+--					end if;
+--				end if;
+--			end if;
+--		end process;
 --
 --		Replace				<= Insert;
 --		ReplaceWay		<= std_logic_vector(Pointer_us);
 --
---		PROCESS(Clock)
---		BEGIN
---			IF rising_edge(Clock) THEN
---				IF (Reset = '1') THEN
---					Pointer_us		<= (OTHERS => '0');
---				ELSE
---					IF (Insert = '1') THEN
+--		process(Clock)
+--		begin
+--			if rising_edge(Clock) then
+--				if (Reset = '1') then
+--					Pointer_us		<= (others => '0');
+--				else
+--					if (Insert = '1') then
 --						Pointer_us	<= Pointer_us + 1;
---					END IF;
---				END IF;
---			END IF;
---		END PROCESS;
+--					end if;
+--				end if;
+--			end if;
+--		end process;
 	end generate;
 
 	-- ===========================================================================

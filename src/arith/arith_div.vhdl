@@ -1,19 +1,20 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Thomas B. Preusser
 --
--- Module:					Multi-cycle Non-Performing Restoring Divider
+-- Entity:					Multi-cycle Non-Performing Restoring Divider
 --
 -- Description:
--- ------------------------------------
---	Implementation of a Non-Performing restoring divider with a configurable radix.
---	The multi-cycle division is controlled by 'start' / 'rdy'. A new division is
---	started by asserting 'start'. The result Q = A/D is available when 'rdy'
---  returns to '1'. A division by zero is identified by output Z. The Q and R
---  outputs are undefined in this case.
+-- -------------------------------------
+-- Implementation of a Non-Performing restoring divider with a configurable radix.
+-- The multi-cycle division is controlled by 'start' / 'rdy'. A new division is
+-- started by asserting 'start'. The result Q = A/D is available when 'rdy'
+-- returns to '1'. A division by zero is identified by output Z. The Q and R
+-- outputs are undefined in this case.
+-- 
+-- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universität Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
@@ -57,7 +58,7 @@ entity arith_div is
     R : out std_logic_vector(D_BITS-1 downto 0);  -- Remainder
     Z : out std_logic  -- Division by Zero
   );
-end arith_div;
+end entity arith_div;
 
 
 library IEEE;

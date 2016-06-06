@@ -1,9 +1,19 @@
 
 arith_prefix_or
-^^^^^^^^^^^^^^^
+###############
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+Prefix OR computation:
+``y(i) <= '0' when x(i downto 0) = (i downto 0 => '0') else '1';``
+This implementation uses carry chains for wider implementations.
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../src/arith/arith_prefix_or.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 43-51
+
+
+	 

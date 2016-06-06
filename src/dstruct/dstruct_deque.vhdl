@@ -1,20 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- ============================================================================
+-- =============================================================================
 -- Authors:     Jens Voss
 --
--- Entity:      dstruct_deque
+-- Entity:      Double-ended queue
 --
 -- Description:
--- ------------
---   Implements a deque, i.e. a double-ended queue. This datastructures
---   allows two acting entities to queue data elements for the consumption
---   by the other while still being able to unqueue untaken ones in
---   LIFO fashion.
+-- -------------------------------------
+-- Implements a deque (double-ended queue). This data structure allows two
+-- acting entities to queue data elements for the consumption by the other while
+-- still being able to unqueue untaken ones in LIFO fashion.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,10 +28,11 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
-use IEEE.std_logic_1164.all;
+use			IEEE.std_logic_1164.all;
+
 
 entity dstruct_deque is
   generic (
@@ -59,7 +59,7 @@ entity dstruct_deque is
     validB : out std_logic;
     fullB  : out std_logic
   );
-end dstruct_deque;
+end entity dstruct_deque;
 
 
 library IEEE;

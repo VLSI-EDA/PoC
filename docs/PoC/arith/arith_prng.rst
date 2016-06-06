@@ -1,9 +1,24 @@
 
 arith_prng
-^^^^^^^^^^
+##########
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+This module implementes a Pseudo-Random Number Generator (PRNG) with
+configurable bit count (``BITS``). This module uses an internal list of FPGA
+optimized polynomials from 3 to 168 bits. The polynomials have at most 5 tap
+positions, so that long shift registers can be inferred instead of single
+flip-flops.
 
+The generated number sequence includes the value all-zeros, but not all-ones.
+
+
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../src/arith/arith_prng.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 46-57
+
+
+	 

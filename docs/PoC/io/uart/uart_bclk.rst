@@ -1,9 +1,21 @@
 
-uart_wrapper
-^^^^^^^^^^^^
+uart_bclk
+#########
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+.. TODO:: No documentation available.
+old comments:
+	UART BAUD rate generator
+	bclk_r    = bit clock is rising
+	bclk_x8_r = bit clock times 8 is rising
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../../src/io/uart/uart_bclk.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 50-61
+
+
+	 

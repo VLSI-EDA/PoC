@@ -1,9 +1,23 @@
 
 arith_shifter_barrel
-^^^^^^^^^^^^^^^^^^^^
+####################
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+This Barrel-Shifter supports:
 
+* shifting and rotating
+* right and left operations
+* arithmetic and logic mode (only valid for shift operations)
+
+This is equivalent to the CPU instructions: SLL, SLA, SRL, SRA, RL, RR
+
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../src/arith/arith_shifter_barrel.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 45-57
+
+
+	 

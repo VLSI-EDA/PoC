@@ -1,9 +1,20 @@
 
 arith_counter_ring
-^^^^^^^^^^^^^^^^^^
+##################
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+This module implements an up/down ring-counter with loadable initial value
+(``seed``) on reset. The counter can be configured to a Johnson counter by
+enabling ``INVERT_FEEDBACK``. The number of counter bits is configurable with
+``BITS``.
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../src/arith/arith_counter_ring.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 41-54
+
+
+	 

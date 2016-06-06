@@ -51,19 +51,13 @@ clock) refer to the write- and read-side clock relationship.
 
 
 
- [fifo.pkg]:			https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo.pkg.vhdl
- [fifo_cc_got]:			https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl
- [fifo_cc_got_tempgot]:	https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got_tempgot.vhdl
- [fifo_cc_got_tempput]:	https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got_tempput.vhdl
- [fifo_dc_got]:			https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_dc_got.vhdl
- [fifo_ic_got]:			https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_id_got.vhdl
- [fifo_glue]:			https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_glue.vhdl
- [fifo_shift]:			https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_shift.vhdl
-
 
 .. toctree::
    
    fifo_cc_got
    fifo_cc_got_tempgot
    fifo_cc_got_tempput
+   fifo_glue
+   fifo_ic_assembly
    fifo_ic_got
+   fifo_shift

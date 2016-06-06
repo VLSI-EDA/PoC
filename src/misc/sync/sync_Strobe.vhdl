@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Steffen Koehler
 --
--- Module:					Synchronizes a strobe signal across clock-domain boundaries
+-- Entity:					Synchronizes a strobe signal across clock-domain boundaries
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This module synchronizes multiple high-active bits from clock-domain
 --		'Clock1' to clock-domain 'Clock2'. The clock-domain boundary crossing is
 --		done by a T-FF, two synchronizer D-FFs and a reconstructive XOR. A busy
@@ -50,7 +49,7 @@ use			IEEE.NUMERIC_STD.all;
 library PoC;
 
 
-entity sync_Strobe IS
+entity sync_Strobe is
   generic (
 	  BITS								: POSITIVE		:= 1;														-- number of bit to be synchronized
 		GATED_INPUT_BY_BUSY	: BOOLEAN			:= TRUE													-- use gated input (by busy signal)
@@ -62,7 +61,7 @@ entity sync_Strobe IS
 		Output							: out STD_LOGIC_VECTOR(BITS - 1 downto 0);		-- @Clock2:	output bits
 		Busy								: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)			-- @Clock1:	busy bits
 	);
-end;
+end entity;
 
 
 architecture rtl of sync_Strobe is
@@ -73,7 +72,7 @@ architecture rtl of sync_Strobe is
 	signal syncClk2_In		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
 	signal syncClk2_Out		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
 
-BEGIN
+begin
 
 	gen : for i in 0 to BITS - 1 generate
 		signal D0							: STD_LOGIC			:= '0';

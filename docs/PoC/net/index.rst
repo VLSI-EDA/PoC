@@ -4,6 +4,8 @@ net
 
 These are bus entities....
 
+.. rubric:: Sub-Namespaces
+
 .. toctree::
    
    arp/index
@@ -16,3 +18,10 @@ These are bus entities....
    ndp/index
    stack/index
    udp/index
+
+.. rubric:: Entities
+
+.. toctree::
+   
+   net_FrameChecksum
+   net_FrameLoopback

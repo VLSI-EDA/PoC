@@ -1,29 +1,28 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ===========================================================================
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
 --
--- Module:					address-based FIFO stream assembly, independent clocks (ic)
+-- Entity:					Address-based FIFO stream assembly, independent clocks (ic)
 --
 -- Description:
--- ------------
---	This module assembles a FIFO stream from data blocks that may arrive
---  slightly out of order. The arriving data is ordered according to their
---  address. The streamed output starts with the data word written to
---  address zero (0) and may proceed all the way to just before the first yet
---  missing data. The association of data with addresses is used on the input
---  side for the sole purpose of reconstructing the correct order of the data.
---  It is assumed to wrap so as to allow an infinite input sequence. Addresses
---  are not actively exposed to the purely stream-based FIFO output.
---
---  The implemented functionality enables the reconstruction of streams that
---  are tunnelled across address-based transports that are allowed to reorder
---  the transmission of data blocks. This applies to many DMA implementations.
+-- -------------------------------------
+-- This module assembles a FIFO stream from data blocks that may arrive
+-- slightly out of order. The arriving data is ordered according to their
+-- address. The streamed output starts with the data word written to
+-- address zero (0) and may proceed all the way to just before the first yet
+-- missing data. The association of data with addresses is used on the input
+-- side for the sole purpose of reconstructing the correct order of the data.
+-- It is assumed to wrap so as to allow an infinite input sequence. Addresses
+-- are not actively exposed to the purely stream-based FIFO output.
+-- 
+-- The implemented functionality enables the reconstruction of streams that
+-- are tunnelled across address-based transports that are allowed to reorder
+-- the transmission of data blocks. This applies to many DMA implementations.
 --
 -- License:
--- ===========================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -38,7 +37,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ===========================================================================
+-- =============================================================================
 
 library	IEEE;
 use	IEEE.std_logic_1164.all;
@@ -76,7 +75,7 @@ entity fifo_ic_assembly is
     vld  : out std_logic;
     got  : in  std_logic
   );
-end fifo_ic_assembly;
+end entity fifo_ic_assembly;
 
 
 library IEEE;

@@ -42,8 +42,7 @@ The package `io>`[io.pkg>` holds all enum, function and component declarations f
 .. 
    [io.pkg>`:			https://github.com/VLSI-EDA/PoC/blob/master/src/io/io.pkg.vhdl
 
-
-
+.. rubric:: Sub-Namespaces
 
 .. toctree::
    
@@ -53,6 +52,22 @@ The package `io>`[io.pkg>` holds all enum, function and component declarations f
    lcd/index
    mdio/index
    ow/index
+   pio/index
+   pmod/index
    ps2/index
    uart/index
    vga/index
+
+.. rubric:: Sub-Namespaces
+
+.. toctree::
+   
+   io_7SegmentMux_BCD
+   io_7SegmentMux_HEX
+   io_Debounce
+   io_FanControl
+   io_FrequencyCounter
+   io_GlitchFilter
+   io_KeyPadScanner
+   io_PulseWidthModulation
+   io_TimingCounter

@@ -1,9 +1,33 @@
 
 sync_Reset
-^^^^^^^^^^
+##########
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+   This module synchronizes an asynchronous reset signal to the clock
+   'Clock'. The 'Input' can be asserted and de-asserted at any time.
+   The 'Output' is asserted asynchronously and de-asserted synchronously
+   to the clock.
+	ATTENTION:
+		Use this synchronizer only to asynchronously reset your design.
+     The 'Output' should be feed by global buffer to the destination FFs, so
+     that, it reaches their reset inputs within one clock cycle.
+	CONSTRAINTS:
+		General:
+			Please add constraints for meta stability to all '_meta' signals and
+			timing ignore constraints to all '_async' signals.
+		Xilinx:
+			In case of a Xilinx device, this module will instantiate the optimized
+			module xil_SyncReset. Please attend to the notes of xil_SyncReset.
+		Altera sdc file:
+			TODO
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../../src/misc/sync/sync_Reset.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 60-69
+
+
+	 

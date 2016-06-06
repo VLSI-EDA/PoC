@@ -1,9 +1,27 @@
 
 sync_Command
-^^^^^^^^^^^^
+############
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+	This module synchronizes a vector of bits from clock-domain 'Clock1' to
+	clock-domain 'Clock2'. The clock-domain boundary crossing is done by a
+	change comparator, a T-FF, two synchronizer D-FFs and a reconstructive
+	XOR indicating a value change on the input. This changed signal is used
+	to capture the input for the new output. A busy flag is additionally
+	calculated for the input clock-domain. The output has strobe character
+	and is reset to it's INIT value after one clock cycle.
+	CONSTRAINTS:
+		General:
+			This module uses sub modules which need to be constrained. Please
+			attend to the notes of the instantiated sub modules.
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../../src/misc/sync/sync_Command.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 51-64
+
+
+	 

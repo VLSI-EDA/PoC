@@ -8,5 +8,5 @@ WishBone modules ...
 	 
 .. toctree::
    wb_ocram
-   wb_fifo
-   wb_uart
+   wb_fifo_adapter
+   wb_uart_wrapper

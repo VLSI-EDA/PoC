@@ -1,9 +1,20 @@
 
 iic_BusController
-^^^^^^^^^^^^^^^^^
+#################
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+The I2C BusController transmitts bits over the I2C bus (SerialClock - SCL,
+SerialData - SDA) and also receives them.	To send/receive words over the
+I2C bus, use the I2C Controller, which utilizes this controller. This
+controller is compatible to the System Management Bus (SMBus).
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../../src/io/iic/iic_BusController.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 47-70
+
+
+	 

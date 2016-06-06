@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Thomas B. Preusser
 --
 -- Package:     		File I/O-related Functions.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --   Exploring the options for providing a more convenient API than std.textio.
 --   Not yet recommended for adoption as it depends on the VHDL generation and
 --   still is under discussion.
@@ -21,7 +20,7 @@
 --     - move C_LINEBREAK to my_config to keep platform dependency out?
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --  					 				 Chair for VLSI-Design, Diagnostics and Architecture
 --

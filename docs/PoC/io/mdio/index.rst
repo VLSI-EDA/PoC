@@ -8,3 +8,4 @@ These are MDIO entities....
    
    mdio_BusController
    mdio_Controller
+   mdio_IIC_Adapter

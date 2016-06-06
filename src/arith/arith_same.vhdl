@@ -1,24 +1,24 @@
 -- EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================================================================================================
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
 --
--- Module:					This module detects whether all bit positions of a
---									std_logic_vector have the same value.
+-- Entity:					This module detects whether all bit positions of a std_logic_vector have the same value.
+-- 
 -- Description:
--- ------------------------------------
---	This circuit may, for instance, be used to detect the first sign change
---	and, thus, the range of a two's complement number.
---
---	These components may be chained by using the output of the predecessor as
---	guard input. This chaining allows to have intermediate results available
---	while still ensuring the use of a fast carry chain on supporting FPGA
---	architectures. When chaining, make sure to overlap both vector slices by one
---	bit position as to avoid an undetected sign change between the slices.
---
--- ============================================================================================================================================================
+-- -------------------------------------
+-- This circuit may, for instance, be used to detect the first sign change
+-- and, thus, the range of a two's complement number.
+-- 
+-- These components may be chained by using the output of the predecessor as
+-- guard input. This chaining allows to have intermediate results available
+-- while still ensuring the use of a fast carry chain on supporting FPGA
+-- architectures. When chaining, make sure to overlap both vector slices by one
+-- bit position as to avoid an undetected sign change between the slices.
+-- 
+-- License:
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universität Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -33,7 +33,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================================================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.std_logic_1164.all;

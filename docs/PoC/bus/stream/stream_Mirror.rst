@@ -1,9 +1,19 @@
 
 stream_Mirror
-^^^^^^^^^^^^^
+#############
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
+It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
+data and meta information.
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../../src/bus/stream/stream_Mirror.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 43-72
+
+
+	 

@@ -18,6 +18,7 @@ Namespaces for Entities:
    bus/index
    cache/index
    comm/index
+   dstruct/index
    fifo/index
    io/index
    mem/index

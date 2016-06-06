@@ -12,3 +12,4 @@ PoC.Stream modules ...
    stream_Mirror
    stream_Sink
    stream_Source
+   stream_FrameGenerator

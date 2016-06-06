@@ -66,7 +66,7 @@ Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
    :hidden:
    
    sync_Bits
-   sync_Reset
-   sync_Vector
    sync_Command
+   sync_Reset
    sync_Strobe
+   sync_Vector

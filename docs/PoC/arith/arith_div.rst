@@ -1,9 +1,22 @@
 
 arith_div
-^^^^^^^^^
+#########
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+Implementation of a Non-Performing restoring divider with a configurable radix.
+The multi-cycle division is controlled by 'start' / 'rdy'. A new division is
+started by asserting 'start'. The result Q = A/D is available when 'rdy'
+returns to '1'. A division by zero is identified by output Z. The Q and R
+outputs are undefined in this case.
 
+
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../src/arith/arith_div.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 38-61
+
+
+	 

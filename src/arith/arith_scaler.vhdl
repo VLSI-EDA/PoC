@@ -1,16 +1,32 @@
 -- EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ===========================================================================
--- Description:			A flexible scaler for fixed-point values.
---									The scaler is implemented for a set of multiplier and
---									divider values. Each individual scaling operation can
---			 						arbitrarily select one value from each these sets.
---
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
--- ===========================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany
+--
+-- Entity:					A flexible scaler for fixed-point values.
+-- 
+-- Description:
+-- -------------------------------------
+-- A flexible scaler for fixed-point values. The scaler is implemented for a set
+-- of multiplier and divider values. Each individual scaling operation can
+-- arbitrarily select one value from each these sets.
+-- 
+-- The computation calculates: ``unsigned(arg) * MULS(msel) / DIVS(dsel)``
+-- rounded to the nearest (tie upwards) fixed-point result of the same precision
+-- as ``arg``.
+-- 
+-- The computation is started by asserting ``start`` to high for one cycle. If a
+-- computation is running, it will be restarted. The completion of a calculation
+-- is signaled via ``done``. ``done`` is high when no computation is in progress.
+-- The result of the last scaling operation is stable and can be read from
+-- ``res``. The weight of the LSB of ``res`` is the same as the LSB of ``arg``.
+-- Make sure to tap a sufficient number of result bits in accordance to the
+-- highest scaling ratio to be used in order to avoid a truncation overflow.
+--
+-- License:
+-- =============================================================================
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +40,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ===========================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -35,42 +51,22 @@ use			poc.utils.all;
 
 entity arith_scaler is
 	generic (
-		-- The set of multipliers to choose from in scaling operations.
-		MULS : T_POSVEC := (0 => 1);
-		-- The set of divisors to choose from in scaling operations.
-		DIVS : T_POSVEC := (0 => 1)
+		MULS : T_POSVEC := (0 => 1);	-- The set of multipliers to choose from in scaling operations.
+		DIVS : T_POSVEC := (0 => 1)		-- The set of divisors to choose from in scaling operations.
 	);
 	port (
-		---------------------------------------------------------------------------
-		-- System Control
 		clk	 : in	std_logic;
 		rst	 : in	std_logic;
 
-		---------------------------------------------------------------------------
-		-- Start of Computation
-		--	Strobe 'start'. If a computation is running, it will be canceled.
-		--	The initiated computation calculates:
-		--
-		--			unsigned(arg)*MULS(msel)/DIVS(dsel)
-		--
-		--	rounded to the nearest (tie upwards) fixed-point result of the same
-		--	precision as 'arg'.
-		start : in	std_logic;
-		arg	 : in	std_logic_vector;
+		start : in	std_logic;					-- Start of Computation
+		arg	 : in	std_logic_vector;			-- Fixed-point value to be scaled
 		msel	: in	std_logic_vector(log2ceil(MULS'length)-1 downto 0) := (others => '0');
 		dsel	: in	std_logic_vector(log2ceil(DIVS'length)-1 downto 0) := (others => '0');
 
-		---------------------------------------------------------------------------
-		-- Completion
-		--	'done' is '1' when no computation is in progress. The result of the
-		--	last scaling operation is stable and can be read from 'res'. The weight
-		--	of the LSB of 'res' is the same as the LSB of 'arg'. Make sure to tap
-		--	a sufficient number of result bits in accordance to the highest scaling
-		--	ratio to be used in order to avoid a truncation overflow.
-		done	: out std_logic;
-		res	 : out std_logic_vector
+		done	: out std_logic;					-- Completion
+		res		: out std_logic_vector		-- Result
 	);
-end arith_scaler;
+end entity arith_scaler;
 
 
 library	IEEE;

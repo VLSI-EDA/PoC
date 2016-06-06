@@ -1,9 +1,23 @@
 
 uart_fifo
-^^^^^^^^^
+#########
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+Small FIFOs are included in this module, if larger or asynchronous
+transmit / receive FIFOs are required, then they must be connected
+externally.
+old comments:
+	UART BAUD rate generator
+	bclk	    = bit clock is rising
+	bclk_x8		= bit clock times 8 is rising
 
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../../src/io/uart/uart_fifo.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 52-94
+
+
+	 

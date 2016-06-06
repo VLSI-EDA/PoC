@@ -1,20 +1,24 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ===================================================================================
+-- =============================================================================
 -- Authors:					Martin Zabel
 --									Patrick Lehmann
 --
--- Module:					Pseudo-Random Number Generator (PRNG).
+-- Entity:					Pseudo-Random Number Generator (PRNG).
 --
 -- Description:
--- ------------------------------------
---		The number sequence includes the value all-zeros, but not all-ones.
---		Synchronized Reset is used.
---
+-- -------------------------------------
+-- This module implementes a Pseudo-Random Number Generator (PRNG) with
+-- configurable bit count (``BITS``). This module uses an internal list of FPGA
+-- optimized polynomials from 3 to 168 bits. The polynomials have at most 5 tap
+-- positions, so that long shift registers can be inferred instead of single
+-- flip-flops.
+-- 
+-- The generated number sequence includes the value all-zeros, but not all-ones.
+-- 
 -- License:
--- ===================================================================================
+-- =============================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,7 +33,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ===================================================================================
+-- =============================================================================
 
 library ieee;
 use			ieee.std_logic_1164.all;
@@ -54,7 +58,7 @@ end entity;
 
 
 architecture rtl of arith_prng is
-	subtype T_TAPPOSITION				is T_NATVEC(0 TO 4);
+	subtype T_TAPPOSITION				is T_NATVEC(0 to 4);
 	type T_TAPPOSITION_VECTOR		is array (natural range <>) of T_TAPPOSITION;
 
 	-- Tap positions are taken from Xilinx Application Note 052 (XAPP052)

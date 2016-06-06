@@ -8,3 +8,4 @@ These are I2C entities....
    
    iic_BusController
    iic_Controller
+   iic_Switch_PCA9548A

@@ -10,5 +10,5 @@ These are eth entities....
    eth_GEMAC_RX
    eth_GEMAC_TX
    eth_PHYController
-   eth_PHYController_Marvel_88E1111
+   eth_PHYController_Marvell_88E1111
    eth_Wrapper

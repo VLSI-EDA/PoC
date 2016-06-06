@@ -11,6 +11,7 @@ These are arithmetic entities....
 
 .. toctree::
    
+   arith.pkg
    arith_addw
    arith_carrychain_inc
    arith_convert_bin2bcd
@@ -20,7 +21,7 @@ These are arithmetic entities....
    arith_counter_ring
    arith_div
    arith_firstone
-   arith_mulswide
+   arith_muls_wide
    arith_prefix_and
    arith_prefix_or
    arith_prng

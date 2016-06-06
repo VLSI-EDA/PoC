@@ -1,20 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
--- Package:					Common functions and types
---
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
 --									Martin Zabel
 --									Patrick Lehmann
 --
+-- Package:					Common functions and types
+--
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		For detailed documentation see below.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library	IEEE;
 
@@ -727,7 +726,7 @@ package body utils is
 			when 'L' =>			return 'L';
 			when 'H' =>			return 'H';
 			when '-' =>			return '-';
-			when OTHERS =>	return 'X';
+			when others =>	return 'X';
 		end case;
 	end function;
 
@@ -803,7 +802,7 @@ package body utils is
   begin
     case c is
       when 'U'|'X'|'0'|'1'|'Z'|'W'|'L'|'H'|'-' => return  true;
-      when OTHERS                              => return  false;
+      when others                              => return  false;
     end case;
   end function;
 
@@ -833,41 +832,41 @@ package body utils is
 
 	-- Swap sub vectors in vector
 	-- ==========================================================================
-	function swap(slv : STD_LOGIC_VECTOR; Size : POSITIVE) return STD_LOGIC_VECTOR IS
-		CONSTANT SegmentCount	: NATURAL													:= slv'length / Size;
+	function swap(slv : STD_LOGIC_VECTOR; Size : POSITIVE) return STD_LOGIC_VECTOR is
+		constant SegmentCount	: NATURAL													:= slv'length / Size;
 		variable FromH				: NATURAL;
 		variable FromL				: NATURAL;
 		variable ToH					: NATURAL;
 		variable ToL					: NATURAL;
-		variable Result : STD_LOGIC_VECTOR(slv'length - 1 DOWNTO 0);
+		variable Result : STD_LOGIC_VECTOR(slv'length - 1 downto 0);
 	begin
-		for i in 0 TO SegmentCount - 1 loop
+		for i in 0 to SegmentCount - 1 loop
 			FromH		:= ((i + 1) * Size) - 1;
 			FromL		:= i * Size;
 			ToH			:= ((SegmentCount - i) * Size) - 1;
 			ToL			:= (SegmentCount - i - 1) * Size;
-			Result(ToH DOWNTO ToL)	:= slv(FromH DOWNTO FromL);
+			Result(ToH downto ToL)	:= slv(FromH downto FromL);
 		end loop;
 		return Result;
 	end function;
 
 	-- generate bit masks
 	-- ==========================================================================
-	function genmask_high(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR IS
+	function genmask_high(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR is
 	begin
 		if (Bits = 0) then
-			return (MaskLength - 1 DOWNTO 0 => '0');
+			return (MaskLength - 1 downto 0 => '0');
 		else
-			return (MaskLength - 1 DOWNTO MaskLength - Bits + 1 => '1') & (MaskLength - Bits DOWNTO 0 => '0');
+			return (MaskLength - 1 downto MaskLength - Bits + 1 => '1') & (MaskLength - Bits downto 0 => '0');
 		end if;
 	end function;
 
 	function genmask_low(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR is
 	begin
 		if (Bits = 0) then
-			return (MaskLength - 1 DOWNTO 0 => '0');
+			return (MaskLength - 1 downto 0 => '0');
 		else
-			return (MaskLength - 1 DOWNTO Bits => '0') & (Bits - 1 DOWNTO 0 => '1');
+			return (MaskLength - 1 downto Bits => '0') & (Bits - 1 downto 0 => '1');
 		end if;
 	end function;
 

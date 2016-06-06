@@ -1,9 +1,24 @@
 
 arith_counter_free
-^^^^^^^^^^^^^^^^^^
+##################
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+Implements a free-running counter that generates a strobe signal every
+DIVIDER-th cycle the increment input was asserted. There is deliberately no
+output or specification of the counter value so as to allow an implementation
+to optimize as much as possible.
 
+The implementation guarantees a strobe output directly from a register. It is
+asserted exactly for one clock after DIVIDER cycles of an asserted increment
+input have been observed.
+
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../src/arith/arith_counter_free.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 41-53
+
+
+	 

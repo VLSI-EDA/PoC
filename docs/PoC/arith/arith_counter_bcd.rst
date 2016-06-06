@@ -1,9 +1,28 @@
 
 arith_counter_bcd
-^^^^^^^^^^^^^^^^^
+#################
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+Counter with output in binary coded decimal (BCD). The number of BCD digits
+is configurable by ``DIGITS``.
 
+All control signals (reset ``rst``, increment ``inc``) are high-active and
+synchronous to clock ``clk``. The output ``val`` is the current counter
+state. Groups of 4 bit represent one BCD digit. The lowest significant digit
+is specified by ``val(3 downto 0)``.
+
+.. TODO::
+   
+   * implement a ``dec`` input for decrementing
+   * implement a ``load`` input to load a value
+
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../src/arith/arith_counter_bcd.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 51-61
+
+
+	 

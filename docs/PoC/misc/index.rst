@@ -20,23 +20,10 @@ The namespace `PoC.misc` offers different yet uncathegorized entities.
 
 The package [`misc`][misc.pkg] holds all component declarations for this namespace.
 
-```VHDL
-library PoC;
-use     PoC.misc.all;
-```
-
-
-## Entities
 
 
 
- [misc.pkg]:		https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc.pkg.vhdl
-
- [misc_filter]:		src_misc_filter
- [misc_stat]:		src_misc_stat
- [misc_sync]:		src_misc_sync
-
-
+.. rubric:: Sub-Namespaces
 
 .. toctree::
    
@@ -44,3 +31,15 @@ use     PoC.misc.all;
    gearbox/index
    stat/index
    sync/index
+
+.. rubric:: Entities
+
+.. toctree::
+   
+   misc_Delay
+   misc_FrequencyMeasurement
+   misc_PulseTrain
+   misc_Sequencer
+   misc_StrobeGenerator
+   misc_StrobeLimiter
+   misc_WordAligner

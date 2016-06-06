@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	VHDL package for component declarations, types and functions
+-- Entity:				 	VHDL package for component declarations, types and functions
 --									associated to the PoC.xil namespace
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This package declares types and components for
 --			- Xilinx ChipScope Pro IPCores (ICON, ILA, VIO)
 --			- Xilinx Dynamic Reconfiguration Port (DRP) related types
@@ -18,7 +17,7 @@
 --			- Component declarations for Xilinx related modules
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -33,7 +32,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -87,7 +86,7 @@ package xil is
 	-- define array indices
 	constant C_XIL_DRP_MAX_CONFIG_COUNT	: POSITIVE	:= 8;
 
-	SUBtype T_XIL_DRP_CONFIG_INDEX			IS INTEGER range 0 TO C_XIL_DRP_MAX_CONFIG_COUNT - 1;
+	subtype T_XIL_DRP_CONFIG_INDEX			IS INTEGER range 0 to C_XIL_DRP_MAX_CONFIG_COUNT - 1;
 	type		T_XIL_DRP_CONFIG_VECTOR			is array (NATURAL range <>) of T_XIL_DRP_CONFIG;
 
 	type T_XIL_DRP_CONFIG_SET is record
