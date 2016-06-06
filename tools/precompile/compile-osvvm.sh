@@ -54,7 +54,7 @@ COLORED_SUCCESSFUL="$GREEN[SUCCESSFUL]$NOCOLOR"
 # Save working directory
 WorkingDir=$(pwd)
 ScriptDir="$(dirname $0)"
-ScriptDir="$(realpath $ScriptDir)"
+ScriptDir="$(readlink -f $ScriptDir)"
 
 # set bash options
 set -o pipefail
