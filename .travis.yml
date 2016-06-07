@@ -24,4 +24,4 @@ before_script:
   - ./tools/Travis-CI/ghdl.setup.sh
   - ./tools/Travis-CI/poc.setup.sh
 script:
-  - ./tools/Travis-CI/poc.run.sh -q "PoC.sort.sortnet.BitonicSort"
+  - ./tools/Travis-CI/poc.run.sh -d "PoC.sort.sortnet.BitonicSort"
