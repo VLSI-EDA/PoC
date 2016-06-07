@@ -11,7 +11,7 @@ if (VHDLVersion < 2008) then
 	report "OSVVM requires VHDL-2008; See OSVVM documentation for VHDL-2002 support."
 elseif (VHDLVersion = 2008) then
 	if (Tool = "GHDL") then
-		path GHDLPath = (PreCompiled / ${CONFIG.DirectoryNames:GHDLFiles)
+		path GHDLPath = (PreCompiled / ${CONFIG.DirectoryNames:GHDLFiles})
 		if ?{((GHDLPath / OSVVM_Directory) / "v08/osvvm-obj08.cf")} then
 			# needed until the next monthly GHDL build is available
 			library osvvm	((GHDLPath / OSVVM_Directory) / "v08")
@@ -21,7 +21,7 @@ elseif (VHDLVersion = 2008) then
 		end if
 	elseif (Tool = "Mentor_vSim") then
 		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / OSVVM_Directory))
-		if ?{ OSVVM_LibraryPath} then
+		if ?{OSVVM_LibraryPath} then
 			library osvvm	OSVVM_LibraryPath
 		else
 			report "No precompiled QuestaSim/ModelSim library for GHDL found."
