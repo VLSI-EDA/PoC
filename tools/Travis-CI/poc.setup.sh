@@ -30,6 +30,6 @@ cd temp/precompiled
 ../../tools/precompile/compile-osvvm.sh --ghdl
 
 pwd
-ls -Ahl
-ls -Ahl osvvm
-#ls -Ahl osvvm/v08
+ls -Ahl ghdl
+ls -Ahl ghdl/osvvm
+ls -Ahl ghdl/osvvm/v08
