@@ -26,5 +26,5 @@ if [ $? -ne 0 ]; then
 fi
 
 echo -e "${CYAN}Pre-compiling OSVVM with GHDL into ./temp/precompiled/ghdl/osvvm directory${NOCOLOR}"
-cd temp/precompiled
-../../tools/precompile/compile-osvvm.sh --ghdl
+cd tools/precompile
+./compile-osvvm.sh --ghdl
