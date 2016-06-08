@@ -13,9 +13,7 @@ elseif (VHDLVersion = 2008) then
 	if (Tool = "GHDL") then
 		path GHDLPath = (PreCompiled / ${CONFIG.DirectoryNames:GHDLFiles})
 		if ?{((GHDLPath / OSVVM_Directory) / "v08/osvvm-obj08.cf")} then
-			# needed until the next monthly GHDL build is available
-			library osvvm	((GHDLPath / OSVVM_Directory) / "v08")
-			# library osvvm	GHDLPath
+			library osvvm	GHDLPath
 		else
 			report "No precompiled OSVVM library for GHDL found."
 		end if
