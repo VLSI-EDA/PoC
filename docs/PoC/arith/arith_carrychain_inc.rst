@@ -14,5 +14,7 @@ Y <= X + (0...0) & Cin
    :linenos:
    :lines: 43-52
 
+Source file: `arith/arith_carrychain_inc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_carrychain_inc.vhdl>`_
+
 
 	 

@@ -14,5 +14,7 @@ io_PulseWidthModulation
    :linenos:
    :lines: 41-53
 
+Source file: `io/io_PulseWidthModulation.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_PulseWidthModulation.vhdl>`_
+
 
 	 

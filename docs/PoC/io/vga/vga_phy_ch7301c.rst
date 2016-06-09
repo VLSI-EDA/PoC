@@ -33,5 +33,7 @@ Register			Value				Description
    :linenos:
    :lines: 63-76
 
+Source file: `io/vga/vga_phy_ch7301c.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy_ch7301c.vhdl>`_
+
 
 	 

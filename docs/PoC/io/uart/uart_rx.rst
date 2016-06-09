@@ -13,5 +13,7 @@ UART (RS232) Receiver: 1 Start + 8 Data + 1 Stop
    :linenos:
    :lines: 38-55
 
+Source file: `io/uart/uart_rx.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_rx.vhdl>`_
+
 
 	 

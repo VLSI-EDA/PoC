@@ -13,5 +13,7 @@ mdio_IIC_Adapter
    :linenos:
    :lines: 44-80
 
+Source file: `io/mdio/mdio_IIC_Adapter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/mdio/mdio_IIC_Adapter.vhdl>`_
+
 
 	 

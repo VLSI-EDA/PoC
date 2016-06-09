@@ -15,5 +15,7 @@ data and meta information.
    :linenos:
    :lines: 42-68
 
+Source file: `bus/stream/stream_FrameGenerator.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_FrameGenerator.vhdl>`_
+
 
 	 

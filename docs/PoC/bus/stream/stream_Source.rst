@@ -15,5 +15,7 @@ for data and meta information.
    :linenos:
    :lines: 44-60
 
+Source file: `bus/stream/stream_Source.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Source.vhdl>`_
+
 
 	 

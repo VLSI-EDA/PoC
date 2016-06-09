@@ -13,5 +13,7 @@ lcd_LCDSynchronizer
    :linenos:
    :lines: 42-64
 
+Source file: `io/lcd/lcd_LCDSynchronizer.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/lcd_LCDSynchronizer.vhdl>`_
+
 
 	 

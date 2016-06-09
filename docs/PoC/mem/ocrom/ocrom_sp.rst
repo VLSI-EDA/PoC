@@ -15,5 +15,7 @@ Inferring / instantiating single-port read-only memory
    :linenos:
    :lines: 53-65
 
+Source file: `mem/ocrom/ocrom_sp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocrom/ocrom_sp.vhdl>`_
+
 
 	 

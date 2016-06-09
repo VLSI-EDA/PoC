@@ -15,5 +15,7 @@ value is the measured frequency in Hz.
    :linenos:
    :lines: 44-56
 
+Source file: `misc/misc_FrequencyMeasurement.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_FrequencyMeasurement.vhdl>`_
+
 
 	 

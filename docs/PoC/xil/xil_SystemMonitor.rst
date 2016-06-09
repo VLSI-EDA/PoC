@@ -31,5 +31,7 @@ For example the Xilinx System Monitors are configured as follows:
    :linenos:
    :lines: 62-73
 
+Source file: `xil/xil_SystemMonitor.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_SystemMonitor.vhdl>`_
+
 
 	 

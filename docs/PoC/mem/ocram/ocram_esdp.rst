@@ -38,5 +38,7 @@ TODO: implement correct behavior for RT-level simulation
    :linenos:
    :lines: 78-96
 
+Source file: `mem/ocram/ocram_esdp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_esdp.vhdl>`_
+
 
 	 

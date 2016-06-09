@@ -18,5 +18,7 @@ write-first mode or read-through-write behaviour.
    :linenos:
    :lines: 52-66
 
+Source file: `mem/ocram/ocram_sp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sp.vhdl>`_
+
 
 	 

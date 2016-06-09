@@ -13,5 +13,7 @@ Eth_GEMAC_RX
    :linenos:
    :lines: 42-62
 
+Source file: `net/eth/eth_GEMAC_RX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_RX.vhdl>`_
+
 
 	 

@@ -14,5 +14,7 @@ misc_PulseTrain
    :linenos:
    :lines: 41-51
 
+Source file: `misc/misc_PulseTrain.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_PulseTrain.vhdl>`_
+
 
 	 

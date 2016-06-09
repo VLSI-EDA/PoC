@@ -22,5 +22,7 @@ sync_Vector
    :linenos:
    :lines: 50-64
 
+Source file: `misc/sync/sync_Vector.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Vector.vhdl>`_
+
 
 	 

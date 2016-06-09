@@ -33,5 +33,7 @@ TODO: implement correct behavior for RT-level simulation
    :linenos:
    :lines: 69-86
 
+Source file: `mem/ocram/ocram_sdp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sdp.vhdl>`_
+
 
 	 

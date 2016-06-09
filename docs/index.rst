@@ -46,8 +46,9 @@ accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki
    WhatIsPoC/index
    QuickStart/index
    UsingPoC/index
-   References/index
    PoC/index
-   References/Licenses/License
+   Miscelaneous/ThirdParty
+   References/index
    GetInvolved/index
-
+   Miscelaneous/ChangeLog
+   References/Licenses/License

@@ -16,5 +16,7 @@ in use.
    :linenos:
    :lines: 43-55
 
+Source file: `io/vga/vga_phy.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy.vhdl>`_
+
 
 	 

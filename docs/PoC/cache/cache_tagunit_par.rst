@@ -36,5 +36,7 @@ must be a power of 2.
    :linenos:
    :lines: 69-93
 
+Source file: `cache/cache_tagunit_par.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_tagunit_par.vhdl>`_
+
 
 	 

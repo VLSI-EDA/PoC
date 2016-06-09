@@ -13,5 +13,7 @@ lut_Sine
    :linenos:
    :lines: 41-54
 
+Source file: `mem/lut/lut_Sine.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/lut/lut_Sine.vhdl>`_
+
 
 	 

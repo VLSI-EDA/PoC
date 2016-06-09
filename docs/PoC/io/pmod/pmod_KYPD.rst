@@ -18,5 +18,7 @@ pmod_KYPD
    :linenos:
    :lines: 46-61
 
+Source file: `io/pmod/pmod_KYPD.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_KYPD.vhdl>`_
+
 
 	 

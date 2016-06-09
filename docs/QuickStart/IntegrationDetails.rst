@@ -1,9 +1,16 @@
 Integrating PoC into Projects
 *****************************
 
-**The PoC-Library** is meant to be integrated into HDL projects. Therefore it's recommended to create a library folder and add the PoC-Library as a git
-submodule. After the repository linking is done, some short configuration steps are required to setup paths and tool chains. The following command line
-instructions show a short example on how to integrate PoC. A detailed list of steps can be found on the `Integration] page.
+The PoC-Library is meant to be integrated into other HDL projects. Therefore
+it's recommended to create a library folder and add the PoC-Library as a Git
+submodule. After the repository linking is done, some short configuration
+steps are required to setup paths and tool chains.
+
+
+ The following command line
+instructions show a short example on how to integrate PoC. A detailed list of
+steps can be found on the :doc:`Integration Details </QuickStart/IntegrationDetails>`
+page.
 
 Adding the Library as a git submodule
 =========================================
@@ -63,6 +70,7 @@ files.
    constant MY_PROJECT_DIR      : string := "CHANGE THIS"; -- e.g. d:/vhdl/myproject/, /home/me/projects/myproject/"
    constant MY_OPERATING_SYSTEM : string := "CHANGE THIS"; -- e.g. WINDOWS, LINUX
 
+Source file: `common/my_project.vhdl.template <https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_project.vhdl.template>`_
 
 Compile shipped Xilinx IP cores (*.xco files) to Netlists
 =============================================================
@@ -171,6 +179,10 @@ information.
     constant MY_BOARD   : string   := "CHANGE THIS"; -- e.g. Custom, ML505, KC705, Atlys
     constant MY_DEVICE  : string   := "CHANGE THIS"; -- e.g. None, XC5VLX50T-1FF1136, EP2SGX90FF1508C3
     ```
+
+
+Source file: `common/my_config.vhdl.template <https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_config.vhdl.template>`_
+
 
     The easiest way is to define a board name and set `MY_DEVICE` to `None`. So
     the device name is infered from the board information stored in `<PoCRoot>\src\common\board.vhdl`.

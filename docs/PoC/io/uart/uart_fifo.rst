@@ -19,5 +19,7 @@ old comments:
    :linenos:
    :lines: 52-94
 
+Source file: `io/uart/uart_fifo.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_fifo.vhdl>`_
+
 
 	 

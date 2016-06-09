@@ -21,5 +21,7 @@ completes with another strobe on ``ReconfigDone``.
    :linenos:
    :lines: 51-72
 
+Source file: `xil/xil_Reconfigurator.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_Reconfigurator.vhdl>`_
+
 
 	 

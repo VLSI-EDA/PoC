@@ -17,5 +17,7 @@ can be added by enabling (ADD_***PUT_REGISTERS = TRUE).
    :linenos:
    :lines: 46-69
 
+Source file: `misc/gearbox/gearbox_up_cc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/gearbox/gearbox_up_cc.vhdl>`_
+
 
 	 

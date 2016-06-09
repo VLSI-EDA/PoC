@@ -93,6 +93,7 @@ class Extract:
 			EntityDescription=sourceFile.Description,
 			EntityFilePath=relSourceFile.as_posix(),
 			EntityDeclarationFromTo="{0}-{1}".format(sourceFile.EntitySourceCodeRange.StartRow, sourceFile.EntitySourceCodeRange.EndRow),
+			GitHubSourceFile="`{relPath} <https://github.com/VLSI-EDA/PoC/blob/master/src/{relPath}>`_".format(relPath=relPath.as_posix()),
 			SeeAlsoBox=seeAlsoBox
 		)
 

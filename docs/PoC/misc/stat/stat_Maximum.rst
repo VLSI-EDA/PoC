@@ -13,5 +13,7 @@ stat_Maximum
    :linenos:
    :lines: 40-57
 
+Source file: `misc/stat/stat_Maximum.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/stat/stat_Maximum.vhdl>`_
+
 
 	 

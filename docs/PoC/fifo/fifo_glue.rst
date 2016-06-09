@@ -15,5 +15,7 @@ the ``ful``  and the ``vld`` indicators to be driven by registers.
    :linenos:
    :lines: 36-55
 
+Source file: `fifo/fifo_glue.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_glue.vhdl>`_
+
 
 	 

@@ -13,5 +13,7 @@ lcd_LCDController_KS0066U
    :linenos:
    :lines: 42-64
 
+Source file: `io/lcd/lcd_LCDController_KS0066U.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/lcd_LCDController_KS0066U.vhdl>`_
+
 
 	 

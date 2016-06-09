@@ -33,7 +33,7 @@
 -- ``fstate_rd`` and ``estate_wr`` are combinatorial outputs and include an address
 -- comparator (subtractor) in their path.
 -- 
--- .. rebric:: Examples:
+-- .. rubric:: Examples:
 -- 
 -- * FSTATE_RD_BITS = 1:
 --   

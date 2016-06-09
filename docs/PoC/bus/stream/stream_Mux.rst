@@ -15,5 +15,7 @@ data and meta information.
    :linenos:
    :lines: 43-71
 
+Source file: `bus/stream/stream_Mux.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Mux.vhdl>`_
+
 
 	 

@@ -13,5 +13,7 @@ sortnet_MergeSort_Streamed
    :linenos:
    :lines: 41-68
 
+Source file: `sort/sortnet/sortnet_MergeSort_Streamed.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_MergeSort_Streamed.vhdl>`_
+
 
 	 

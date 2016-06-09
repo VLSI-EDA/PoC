@@ -13,5 +13,7 @@ sort_LeastFrequentlyUsed
    :linenos:
    :lines: 36-53
 
+Source file: `sort/sort_LeastFrequentlyUsed.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_LeastFrequentlyUsed.vhdl>`_
+
 
 	 

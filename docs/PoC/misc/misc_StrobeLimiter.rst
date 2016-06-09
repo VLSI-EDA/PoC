@@ -13,5 +13,7 @@ misc_StrobeLimiter
    :linenos:
    :lines: 39-51
 
+Source file: `misc/misc_StrobeLimiter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_StrobeLimiter.vhdl>`_
+
 
 	 

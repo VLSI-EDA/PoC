@@ -12,5 +12,7 @@ pio_in
    :linenos:
    :lines: 40-55
 
+Source file: `io/pio/pio_in.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pio/pio_in.vhdl>`_
+
 
 	 

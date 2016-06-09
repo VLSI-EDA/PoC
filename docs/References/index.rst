@@ -8,7 +8,7 @@ References
    CommandReference
    FileFormats/index
    Interfaces/index
-   NamingConversions
+   NamingConventions
    ListOfBoards
    Glossary
    KnownIssues

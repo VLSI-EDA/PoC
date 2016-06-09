@@ -13,5 +13,7 @@ eth_GEMAC_GMII
    :linenos:
    :lines: 42-101
 
+Source file: `net/eth/eth_GEMAC_GMII.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_GMII.vhdl>`_
+
 
 	 

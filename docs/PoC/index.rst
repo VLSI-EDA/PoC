@@ -1,6 +1,6 @@
 
-IP Cores
-########
+IP Core Documentations
+######################
 
 Namespace for Packages:
 

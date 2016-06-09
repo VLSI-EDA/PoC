@@ -127,6 +127,17 @@ $PyWrapper_LoadEnv =		@{
 				"PostHookFile" =	"Mentor.QuestaSim.post.ps1"
 			}
 		}};
+	"Sphinx" =						@{
+		"PreHookFile" =			"";
+		"PostHookFile" =		"";
+		"Tools" =						@{
+			"Sphinx" =				@{
+				"Load" =				$false;
+				"Commands" =		@("docs");
+				"PSModule" =			"Sphinx.psm1";
+				"PreHookFile" =		"Sphinx.pre.ps1";
+				"PostHookFile" =	"Sphinx.post.ps1"}
+		}};
 	"Xilinx" =						@{
 		"PreHookFile" =			"Xilinx.pre.ps1";
 		"PostHookFile" =		"Xilinx.post.ps1";

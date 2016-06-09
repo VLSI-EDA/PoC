@@ -13,5 +13,7 @@ ipv6_RX
    :linenos:
    :lines: 42-84
 
+Source file: `net/ipv6/ipv6_RX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv6/ipv6_RX.vhdl>`_
+
 
 	 

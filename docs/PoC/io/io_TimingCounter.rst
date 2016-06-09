@@ -16,5 +16,7 @@ io_TimingCounter
    :linenos:
    :lines: 43-54
 
+Source file: `io/io_TimingCounter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_TimingCounter.vhdl>`_
+
 
 	 

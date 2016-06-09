@@ -50,5 +50,7 @@ Examples:
    :linenos:
    :lines: 80-109
 
+Source file: `fifo/fifo_cc_got_tempput.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got_tempput.vhdl>`_
+
 
 	 

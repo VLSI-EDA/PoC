@@ -33,6 +33,8 @@ Constraints:
    :linenos:
    :lines: 67-78
 
+Source file: `misc/sync/sync_Bits.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Bits.vhdl>`_
+
 .. seealso::
    
    :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`

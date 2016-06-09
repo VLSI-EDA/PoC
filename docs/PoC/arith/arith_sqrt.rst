@@ -15,5 +15,7 @@ Its computation requires (N+1)/2 steps for an argument bit width of N.
    :linenos:
    :lines: 38-55
 
+Source file: `arith/arith_sqrt.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_sqrt.vhdl>`_
+
 
 	 

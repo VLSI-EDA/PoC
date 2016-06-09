@@ -13,5 +13,7 @@ mac_FrameLoopback
    :linenos:
    :lines: 42-72
 
+Source file: `net/mac/mac_FrameLoopback.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/mac/mac_FrameLoopback.vhdl>`_
+
 
 	 

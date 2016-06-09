@@ -24,5 +24,7 @@ sync_Strobe
    :linenos:
    :lines: 52-64
 
+Source file: `misc/sync/sync_Strobe.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Strobe.vhdl>`_
+
 
 	 

@@ -32,5 +32,7 @@ IOBs.
    :linenos:
    :lines: 61-73
 
+Source file: `io/ddrio/ddrio_in.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_in.vhdl>`_
+
 
 	 

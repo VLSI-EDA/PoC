@@ -13,5 +13,7 @@ arith_counter_gray
    :linenos:
    :lines: 38-51
 
+Source file: `arith/arith_counter_gray.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_gray.vhdl>`_
+
 
 	 

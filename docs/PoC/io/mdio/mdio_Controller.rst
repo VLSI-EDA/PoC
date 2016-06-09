@@ -13,5 +13,7 @@ mdio_Controller
    :linenos:
    :lines: 44-73
 
+Source file: `io/mdio/mdio_Controller.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/mdio/mdio_Controller.vhdl>`_
+
 
 	 

@@ -13,5 +13,7 @@ udp_RX
    :linenos:
    :lines: 42-95
 
+Source file: `net/udp/udp_RX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/udp/udp_RX.vhdl>`_
+
 
 	 

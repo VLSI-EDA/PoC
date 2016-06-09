@@ -13,5 +13,7 @@ lcd_LCDBusController
    :linenos:
    :lines: 43-67
 
+Source file: `io/lcd/lcd_LCDBusController.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/lcd_LCDBusController.vhdl>`_
+
 
 	 

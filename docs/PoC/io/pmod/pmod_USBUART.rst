@@ -15,5 +15,7 @@ pmod_USBUART
    :linenos:
    :lines: 42-64
 
+Source file: `io/pmod/pmod_USBUART.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_USBUART.vhdl>`_
+
 
 	 

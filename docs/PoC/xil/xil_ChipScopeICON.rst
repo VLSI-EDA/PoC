@@ -27,6 +27,8 @@ source and netlist files on your local machine.
    :linenos:
    :lines: 58-65
 
+Source file: `xil/xil_ChipScopeICON.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ChipScopeICON.vhdl>`_
+
 .. seealso::
    
    :doc:`Using PoC -> Synthesis </UsingPoC/Synthesis>`

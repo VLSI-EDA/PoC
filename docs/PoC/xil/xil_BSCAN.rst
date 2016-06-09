@@ -18,5 +18,7 @@ module. Supported devices are:
    :linenos:
    :lines: 47-65
 
+Source file: `xil/xil_BSCAN.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_BSCAN.vhdl>`_
+
 
 	 

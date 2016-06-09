@@ -13,5 +13,7 @@ mac_TX_SrcMAC_Prepender
    :linenos:
    :lines: 42-69
 
+Source file: `net/mac/mac_TX_SrcMAC_Prepender.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/mac/mac_TX_SrcMAC_Prepender.vhdl>`_
+
 
 	 

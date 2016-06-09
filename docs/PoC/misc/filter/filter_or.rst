@@ -13,5 +13,7 @@ filter_or
    :linenos:
    :lines: 37-48
 
+Source file: `misc/filter/filter_or.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/filter/filter_or.vhdl>`_
+
 
 	 

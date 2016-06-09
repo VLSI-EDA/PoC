@@ -13,5 +13,7 @@ io_FrequencyCounter
    :linenos:
    :lines: 40-52
 
+Source file: `io/io_FrequencyCounter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_FrequencyCounter.vhdl>`_
+
 
 	 

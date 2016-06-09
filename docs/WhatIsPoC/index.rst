@@ -57,4 +57,3 @@ effectively use 6-input LUTs.
    SupportedToolChains
    WhyShouldIUsePoC
    WhoUsesPoC
-   ThirdParty

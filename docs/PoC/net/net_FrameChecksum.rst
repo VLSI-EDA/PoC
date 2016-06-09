@@ -13,5 +13,7 @@ net_FrameChecksum
    :linenos:
    :lines: 41-72
 
+Source file: `net/net_FrameChecksum.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/net_FrameChecksum.vhdl>`_
+
 
 	 

@@ -13,5 +13,7 @@ UART (RS232) Transmitter: 1 Start + 8 Data + 1 Stop
    :linenos:
    :lines: 34-49
 
+Source file: `io/uart/uart_tx.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_tx.vhdl>`_
+
 
 	 

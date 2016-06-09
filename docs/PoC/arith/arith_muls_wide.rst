@@ -15,5 +15,7 @@ For detailed documentation see below.
    :linenos:
    :lines: 38-49
 
+Source file: `arith/arith_muls_wide.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_muls_wide.vhdl>`_
+
 
 	 

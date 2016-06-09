@@ -14,5 +14,7 @@ io_GlitchFilter
    :linenos:
    :lines: 41-51
 
+Source file: `io/io_GlitchFilter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_GlitchFilter.vhdl>`_
+
 
 	 

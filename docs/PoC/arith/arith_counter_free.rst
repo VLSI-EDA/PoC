@@ -20,5 +20,7 @@ input have been observed.
    :linenos:
    :lines: 41-53
 
+Source file: `arith/arith_counter_free.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_free.vhdl>`_
+
 
 	 

@@ -17,5 +17,7 @@ io_KeyPadScanner
    :linenos:
    :lines: 46-63
 
+Source file: `io/io_KeyPadScanner.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_KeyPadScanner.vhdl>`_
+
 
 	 

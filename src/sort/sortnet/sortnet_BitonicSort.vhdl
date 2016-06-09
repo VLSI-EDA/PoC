@@ -8,7 +8,7 @@
 --
 -- Description:
 -- -------------------------------------
---		This sorting network uses the 'bitonic sort' algorithm.
+-- This sorting network uses the *bitonic sort* algorithm.
 --
 -- License:
 -- =============================================================================

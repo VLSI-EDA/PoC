@@ -24,7 +24,7 @@ the true fill state.
 ``fstate_rd`` and ``estate_wr`` are combinatorial outputs and include an address
 comparator (subtractor) in their path.
 
-.. rebric:: Examples:
+.. rubric:: Examples:
 
 * FSTATE_RD_BITS = 1:
   
@@ -58,6 +58,8 @@ comparator (subtractor) in their path.
    :tab-width: 2
    :linenos:
    :lines: 98-124
+
+Source file: `fifo/fifo_cc_got.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl>`_
 
 .. seealso::
    

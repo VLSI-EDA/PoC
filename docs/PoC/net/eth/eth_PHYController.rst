@@ -13,5 +13,7 @@ Eth_PHYController
    :linenos:
    :lines: 45-68
 
+Source file: `net/eth/eth_PHYController.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_PHYController.vhdl>`_
+
 
 	 
