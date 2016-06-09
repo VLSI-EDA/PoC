@@ -66,13 +66,12 @@ Optional Tools on Linux:
 Windows specific requirements:
 ******************************
 
-* PowerShell |geq| 4.0 (`Windows Management Framework 4.0 <http://www.microsoft.com/en-US/download/details.aspx?id=40855>`_)
+* PowerShell |geq| 4.0 [#f5]_
   
   * Allow local script execution (`read more <https://technet.microsoft.com/en-us/library/hh849812.aspx>`_) |br|
     ``Set-ExecutionPolicy RemoteSigned``
-  * PowerShell Community Extensions |geq| 3.2 (`pscx.codeplex.com <http://pscx.codeplex.com/>`_)
+  * PowerShell Community Extensions |geq| 3.2 [#f6]_
 
-.. TODO:: Link to new PSCX source.
 
 Optional Tools on Windows:
 ==========================
@@ -95,3 +94,10 @@ Optional Tools on Windows:
    the :doc:`Known Issues </References/KnownIssues>` page.
 .. [#f4] Generic Colouriser is hosted on GitHub: `https://github.com/garabik/grc <https://github.com/garabik/grc>`_ |br|
    The latest *.deb installation packages can be downloaded from `http://kassiopeia.juls.savba.sk/~garabik/software/grc/ <http://kassiopeia.juls.savba.sk/~garabik/software/grc/>`_.
+.. [#f5] PowerShell is a part if the Windows Management Framework. If not already
+   included in Windows, it can be downloaded from microsoft.com:
+   `WMF 4.0 <http://www.microsoft.com/en-US/download/details.aspx?id=40855>`_,
+   `WMF 5.0 <https://www.microsoft.com/en-US/download/details.aspx?id=50395>`_
+   (recommended).
+.. [#f6] The latest PowerShell Community Extension (PSCX) can be downloaded from
+   `PowerShellGallery <https://www.powershellgallery.com/packages/Pscx/>`_
