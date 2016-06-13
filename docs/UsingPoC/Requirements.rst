@@ -4,8 +4,8 @@
 .. include:: <mmlalias.txt>
 
 
-Requirement Details
-###################
+Requirements
+############
 
 .. contents:: Contents of this Page
    :local:
@@ -58,26 +58,45 @@ Linux specific requirements:
 Optional Tools on Linux:
 ========================
 
-* Git - The command line tools to manage Git repositories.
-* SmartGit - A Git Client to handle complex Git flows.
-* `Generic Colouriser <http://kassiopeia.juls.savba.sk/~garabik/software/grc.html>`_ (grc) |geq| 1.9 - Colorizes outputs of foreign scripts and programs. [#f4]_
+* Git
+    The command line tools to manage Git repositories. It's possible to extend
+    the shell prompt with Git information.
+
+* SmartGit
+    A Git client to handle complex Git flows in a GUI.
+
+* `Generic Colouriser <http://kassiopeia.juls.savba.sk/~garabik/software/grc.html>`_ (grc) |geq| 1.9
+    Colorizes outputs of foreign scripts and programs. GRC is hosted on `GitHub <https://github.com/garabik/grc>`_
+    The latest *.deb installation packages can be downloaded `here <http://kassiopeia.juls.savba.sk/~garabik/software/grc/>`_.
 
 
 Windows specific requirements:
 ******************************
 
-* PowerShell |geq| 4.0 [#f5]_
+* PowerShell |geq| 4.0
+    PowerShell shipped with Windows since Vista. It is a part if the Windows
+    Management Framework. If the required version not already included in
+    Windows, it can be downloaded from microsoft.com: `WMF 4.0 <http://www.microsoft.com/en-US/download/details.aspx?id=40855>`_,
+    `WMF 5.0 <https://www.microsoft.com/en-US/download/details.aspx?id=50395>`_ (recommended).
   
   * Allow local script execution (`read more <https://technet.microsoft.com/en-us/library/hh849812.aspx>`_) |br|
     ``Set-ExecutionPolicy RemoteSigned``
-  * PowerShell Community Extensions |geq| 3.2 [#f6]_
+  * PowerShell Community Extensions (PSCX) |geq| 3.2 |br|
+    The latest PSCX can be downloaded from `PowerShellGallery <https://www.powershellgallery.com/packages/Pscx/>`_
 
 
 Optional Tools on Windows:
 ==========================
 
-* `posh-git <https://github.com/dahlbyk/posh-git>`_ - PowerShell integration for Git |br|
-  Installing posh-git with `PsGet <http://psget.net/>`_ package manager: ``Install-Module posh-git``
+* Git (MSys-Git)
+    The command line tools to manage Git repositories.
+
+* SmartGit or SourceTree
+    A Git client to handle complex Git flows in a GUI.
+
+* `posh-git <https://github.com/dahlbyk/posh-git>`_
+    PowerShell integration for Git |br|
+    Installing posh-git with `PsGet <http://psget.net/>`_ package manager: ``Install-Module posh-git``
 
 
 ------------------------------------------
@@ -92,12 +111,3 @@ Optional Tools on Windows:
 .. [#f3] Due to numerous bugs in the Xilinx Simulator (incl. 2016.1), PoC can
    offer only a restricted Vivado support. The list of issues is documented on
    the :doc:`Known Issues </References/KnownIssues>` page.
-.. [#f4] Generic Colouriser is hosted on GitHub: `https://github.com/garabik/grc <https://github.com/garabik/grc>`_ |br|
-   The latest *.deb installation packages can be downloaded from `http://kassiopeia.juls.savba.sk/~garabik/software/grc/ <http://kassiopeia.juls.savba.sk/~garabik/software/grc/>`_.
-.. [#f5] PowerShell is a part if the Windows Management Framework. If not already
-   included in Windows, it can be downloaded from microsoft.com:
-   `WMF 4.0 <http://www.microsoft.com/en-US/download/details.aspx?id=40855>`_,
-   `WMF 5.0 <https://www.microsoft.com/en-US/download/details.aspx?id=50395>`_
-   (recommended).
-.. [#f6] The latest PowerShell Community Extension (PSCX) can be downloaded from
-   `PowerShellGallery <https://www.powershellgallery.com/packages/Pscx/>`_

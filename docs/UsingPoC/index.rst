@@ -2,33 +2,38 @@
 Using PoC
 #########
 
-PoC can be used in several ways:
+PoC can be used in several ways, if all :doc:`Requirements </UsingPoC/Requirements>`
+are fulfilled. Chose one of the following integration kinds:
 
 * Stand-Alone IP Core Library:
     Download PoC as archive file (\*.zip) from GitHub as latest branch copy or
     as tagged release file. IP cores can be copyed into one or more destination
     projects or the projects link to the selected IP core source files.
     
-    Advantages:
+    **Advantages:**
     
     * Simple and fast setup, configuring PoC is optional.
     * Needs less disk space than a Git repository.
     * After a configuration, PoC's additional features: simulation, synthesis,
       etc. can be used.
     
-    Disadvantages:
+    **Disadvantages:**
     
     * Manual updating via download and file overwrites.
     * Updated IP cores need to be copyed again into the destination project.
     * Using different PoC versions in different projects is not possible.
     * No possibility to contribute bugfixes and extensions via Git pull requests.
-    
+  
+    **Next steps:** |br|
+    1. See :doc:`Downloads </UsingPoC/Download>` for how to download a stand-alone version (*.zip-file) of the PoC-Library. |br|
+    2. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for how to configure PoC on a local system.
+
 * Stand-Alone IP Core Library cloned from Git:
     Download PoC via ``git clone`` from GitHub as latest branch copy. IP cores
     can be copyed into one or more destination projects or the projects link to
     the selected IP core source files.
     
-    Advantages:
+    **Advantages:**
     
     * Simple and fast setup, configuring PoC is optional.
     * Access to the newest commits on a branch: New IP cores, new features, bugfixes.
@@ -37,15 +42,19 @@ PoC can be used in several ways:
       etc. can be used.
     * Contribute bugfixes and extensions via Git pull requests.
 			
-    Disadvantages:
+    **Disadvantages:**
     
     * Updated IP cores need to be copyed again into the destination project.
     * Using different PoC versions in different projects is not possible
+  
+    **Next steps:** |br|
+    1. See :doc:`Downloads </UsingPoC/Download>` for how to download a stand-alone version (*.zip-file) of the PoC-Library. |br|
+    2. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for how to configure PoC on a local system.
 
 * Embedded IP Core Library as Git Submodule:
     Integrate PoC as a Git submodule into the destination projects Git repository.
     
-    Advantages:
+    **Advantages:**
     
     * Simple and fast setup, configuring PoC is optional, but recommended.
     * Access to the newest commits on a branch: New IP cores, new features, bugfixes.
@@ -56,11 +65,20 @@ PoC can be used in several ways:
       repository and project as well.
     * Contribute bugfixes and extensions via Git pull requests.
     * Version linking between hosting Git and PoC.
+  
+    **Next steps:** |br|
+    1. See :doc:`Integration </UsingPoC/Integration>` for how to integrate PoC as a Git submodule into an existing Git. |br|
+    2. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for how to configure PoC on a local system.
 			
 
 .. toctree::
    :hidden:
    
+   Requirements
+   Download
+   Integration
+   PoCConfiguration
+   VHDLConfiguration
    AddingIPCores
    Simulation
    Synthesis

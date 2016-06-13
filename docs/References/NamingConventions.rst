@@ -76,9 +76,8 @@ PoC uses namespaces and sub-namespaces to categorize all VHDL and Verilog
 modules. Despite VHDL doesn't support sub-namespaces yet, PoC already uses
 sub-namespaces enforced by a strict naming schema.
 
-Rules:
-
-1. Namespace names are lower-case, underscore free, valid VHDL identifiers.
+**Rules:** |br|
+1. Namespace names are lower-case, underscore free, valid VHDL identifiers. |br|
 2. A namespace name is unique, but can be part of a entity name.
 
 
@@ -88,12 +87,9 @@ Module Names
 Module names are prefixed with its parents namespace name. A module name can
 contain underscores to denote implementation variants of a module.
 
-Rules:
-
-3. Modul names are valid VHDL identifiers prefixed with its parent namespace's
-   name.
+**Rules:** |br|
+3. Modul names are valid VHDL identifiers prefixed with its parent namespace's name. |br|
 4. The first part of module name must not contain the parents namespace name. |br|
-   E.g. ``fifo_fifo`` isn't a valid name.
 
 	
 .. rubric:: Example 1 - ``PoC.fifo.cc_got``

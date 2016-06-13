@@ -1,5 +1,13 @@
+
 Simulation
 ##########
+
+.. contents:: Contents of this Page
+   :local:
+
+
+Overview
+********
 
 The Python Infrastructure shipped with the PoC-Library can launch manual,
 half-automated and fully automated testbenches. The testbench can be run in
@@ -19,11 +27,11 @@ frontend script:
 
 .. seealso::
    
-   :doc:`Supported Simulators </WhatIsPoC/SupportedToolChains>`
-     See the Intruction page for a list of supported simulators.
-   :doc:`PoC Configuration </QuickStart/Configuration>`
+   :doc:`PoC Configuration </UsingPoC/PoCConfiguration>`
      See the Configuration page on how to configure PoC and your installed
      simulator tool chains. This is required to invoke the simulators.
+   :doc:`Supported Simulators </WhatIsPoC/SupportedToolChains>`
+     See the Intruction page for a list of supported simulators.
      
 
 Quick Example
@@ -32,7 +40,7 @@ Quick Example
 The following quick example uses the GHDL Simulator to analyze, elaborate and
 simulate a testbench for the module ``arith_prng`` (Pseudo Random Number
 Generator - PRNG). The VHDL file ``arith_prng.vhdl`` is located at
-``<PoCRoot>/src/arith/`` and virtually a member in the `PoC.arith` namespace.
+``PoCRoot\src\arith`` and virtually a member in the `PoC.arith` namespace.
 So the module can be identified by an unique name: ``PoC.arith.prng``, which is
 passed to the frontend script.
 
@@ -40,7 +48,7 @@ passed to the frontend script.
 
 .. code-block:: PowerShell
    
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 ghdl PoC.arith.prng
 
 The CLI command ``ghdl`` chooses *GHDL Simulator* as the simulator and
@@ -56,21 +64,19 @@ are displayed in console:
 Each testbench uses PoC's simulation helper packages to count asserts and to
 track active stimuli and checker processes. After a completed simulation run,
 an report is written to STDOUT or the simulator's console. Note the line
-``SIMULATION RESULT = PASSED``.
-
-For each simulated PoC entity, a line in the overall report is created. It lists
-the runtime per testbench and the simulation status (``... ERROR``, ``FAILED``,
-``NO ASSERTS`` or ``PASSED``).
+``SIMULATION RESULT = PASSED``. For each simulated PoC entity, a line in the
+overall report is created. It lists the runtime per testbench and the simulation
+status (``... ERROR``, ``FAILED``, ``NO ASSERTS`` or ``PASSED``).
 
 .. rubric:: Example 2:
 
 Passing an additional option ``--gui`` to the service tool, opens the testbench
-in GUI-mode. If a waveform configuration file is present (e.g. a ``\*.gtkw``
+in GUI-mode. If a waveform configuration file is present (e.g. a ``*.gtkw``
 file for GTKWave), then it is preloaded into the simulator's waveform viewer.
 
 .. code-block:: PowerShell
    
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 ghdl PoC.arith.prng --gui
 
 The opened waveform viewer and displayed waveform should look like this:
@@ -80,10 +86,44 @@ The opened waveform viewer and displayed waveform should look like this:
 	 :alt: GTKWave waveform view of PoC.arith.prng.
 
 
-Running a single Testbench
+Vendor Specific Testbenches
+***************************
+
+PoC is shipped with a set of well known FPGA development boards. This set is
+extended by a list of generic boards, named after each supported FPGA vendor.
+These generic boards can be used in simulations to select a representative
+FPGA of a supported device vendor. If no board or device name is passed to a
+testbench run, the ``GENERIC`` board is chosen.
+
++--------------+--------------+-----------------+
+| Board Name   | Target Board | Target Device   |
++==============+==============+=================+
+| GENERIC      | GENERIC      | GENERIC         |
++--------------+--------------+-----------------+
+| Altera       | DE4          | Stratix-IV 230  |
++--------------+--------------+-----------------+
+| Lattice      | ECP5Versa    | ECP5-45UM       |
++--------------+--------------+-----------------+
+| Xilinx       | KC705        | Kintex-7 325T   |
++--------------+--------------+-----------------+
+
+A vendor specific testbench can be launched by passing either ``--board=xxx`` or
+``--device=yyy`` as an additional parameter to the PoC scripts.
+
+.. code-block:: PowerShell
+
+   # Example 1 - A Lattice board
+   .\poc.ps1 ghdl PoC.arith.prng --board=Lattice
+   # Example 2 - A Altera Stratix IV board
+   .\poc.ps1 ghdl PoC.arith.prng --board=DE4
+   # Example 3 - A Xilinx Kintex-7 325T device
+   .\poc.ps1 ghdl PoC.arith.prng --device=XC7K325T-2FFG900
+
+
+Running a Single Testbench
 **************************
 
-A testbench run is supervised by PoC's ``<PoCRoot>\py\PoC.py`` service tool,
+A testbench run is supervised by PoC's ``PoCRoot\py\PoC.py`` service tool,
 which offers a consistent interface to all simulators. Unfortunately, every
 platform has it's specialties, so a wrapper script is needed as abstraction from
 the host's operating system. Depending on the choosen tool chain, the wrapper
@@ -155,7 +195,7 @@ PoC entities. The following options are supported for Active-HDL:
 
 .. code-block:: PowerShell
 
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 asim PoC.arith.prng --std=93
 
 
@@ -183,8 +223,8 @@ by a list of PoC entities. The following options are supported for Cocotb:
 
 .. code-block:: Bash
 
-   cd <PoCRoot>
-   ./poc.sh cocotb PoC.cache.par
+   cd PoCRoot
+   .\poc.ps1 cocotb PoC.cache.par
 
 
 GHDL (plus GTKwave)
@@ -209,7 +249,7 @@ PoC entities. The following options are supported for GHDL:
 
 .. code-block:: PowerShell
 
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 ghdl PoC.arith.prng --board=Atlys -g
 
 
@@ -236,7 +276,7 @@ QuestaSim:
 
 .. code-block:: PowerShell
 
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 vsim PoC.arith.prng --board=DE4 --gui
 
 
@@ -261,7 +301,7 @@ ISE Simulator:
 
 .. code-block:: PowerShell
 
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 isim PoC.arith.prng --board=Atlys -g
 
 
@@ -288,7 +328,7 @@ Vivado Simulator:
 
 .. code-block:: PowerShell
 
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 xsim PoC.arith.prng --board=Atlys -g
 
 
@@ -320,7 +360,7 @@ current namespace and all sub-namespaces.
 
 .. code-block:: PowerShell
 
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 -q asim PoC.arith.prng PoC.io.ddrio.* PoC.sort.lru_cache
 
 **Resulting output:**
@@ -344,7 +384,7 @@ messages:
 
 .. code-block:: PowerShell
 
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 -q ghdl PoC.*
 
 .. image:: /_static/images/ghdl/PoC_all.png
@@ -357,17 +397,16 @@ Terrasic DE4 board:
 
 .. code-block:: PowerShell
 
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 -q vsim PoC.* --board=DE4
 
 
 .. seealso::
    
-   :doc:`PoC Configuration </QuickStart/Configuration>`
+   :doc:`PoC Configuration </UsingPoC/PoCConfiguration>`
      See the Configuration page on how to configure PoC and your installed
      simulator tool chains. This is required to invoke the simulators.
-   Latest Travis-CI Report
-     .. TODO::
-        Add Travis Link
+   `Latest Travis-CI Report <https://travis-ci.org/VLSI-EDA/PoC/branches>`_
+     Browse the list of branches at Travis-CI.org.
    
    

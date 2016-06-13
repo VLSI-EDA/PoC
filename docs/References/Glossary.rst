@@ -31,6 +31,18 @@ accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki
      An On-Chip RAM is a embedded memory block, mostly called BlockRAM,
      Dirstributed Memory, ...
    
+   PoC.CSE - Command-Status-Error
+     A control and monitoring protocol in a layer-based architecture.
+   
+   PoC.Stream
+     A streaming optimized, FIFO-like on-chip protocol.
+   
+   PoCRoot
+     The PoC root directory.
+   
+   ProjectRoot
+     The project's root directory, which hosts PoC.
+   
    *strobe*-signal
      No documentation available.
    

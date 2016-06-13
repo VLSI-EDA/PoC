@@ -2,49 +2,47 @@
 Miscelaneous
 ############
 
-PoC Tools
+The directory ``PoCRoot\tools\`` contains several tools and addons to ease the
+work with the PoC-Library and VHDL.
+
+
+GNU Emacs
 *********
 
-This folder contains several tools and addons to ease the work with the
-PoC-Library and VHDL.
-
-Emacs
-*****
+.. TODO:: No documentation available.
 
 
 Git
 ***
 
-* ``git-alias.setup.ps1`` registers 2 new global aliasses in
-  git, which prints the colored commit tree into the console:
-		
- [git_git-alias]:		git/git-alias.setup.ps1
-    
-  ``git tree``:
+* ``git-alias.setup.ps1``/``git-alias.setup.sh`` registers new global aliasses in Git
   
+  * ``git tree`` - Prints the colored commit tree into the console
+  * ``git treea`` - Prints the colored commit tree into the console
+    
   .. code-block:: Bash
      
      git config --global alias.tree 'log --decorate --pretty=oneline --abbrev-commit --date-order --graph'
-  
-  ``git treea``:
-  
-  .. code-block:: Bash
-     
      git config --global alias.tree 'log --decorate --pretty=oneline --abbrev-commit --date-order --graph --all'
-  
-		
+
+Browse the `Git directory <https://github.com/VLSI-EDA/PoC/tree/master/tools/git>`_.
+
+
 Notepad++
 *********
 
-This folder contains syntax highlighting rules for Notepad++. The following file types are supported:
+The PoC-Library is shipped with syntax highlighting rules for `Notepad++ <https://notepad-plus-plus.org/>`_.
+The following additional file types are supported:
 
-* Xilinx user constraint files (*.ucf): ``Syntax Highlighting - Xilinx UCF``
+* PoC Configuration Files (*.ini)
+* PoC *.Files Files (*.files)
+* PoC *.Rules Files (*.rules)
+* Xilinx User Constraint Files (*.ucf): ``Syntax Highlighting - Xilinx UCF``
 
-Notepad%2B%2B%2FSyntax%20Highlighting%20-%20Xilinx%20UCF.xml
+Browse the `Notepad++ directory <https://github.com/VLSI-EDA/PoC/tree/master/tools/Notepad%2B%2B>`_.
 
 
-PowerShell
+Precompile
 **********
 
-
-
+Scripts to pre-compile vendor libraries for PoC into ``temp\precompiled\``.

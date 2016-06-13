@@ -2,6 +2,10 @@
 Quick Start Guide
 #################
 
+This **quick start guide** gives a fast and simple introduction into PoC. All
+topics can be found in the :doc:`Using PoC </UsingPoC/index>` section with much
+more details and examples.
+
 .. contents:: Contents of this Page
    :local:
 
@@ -13,22 +17,26 @@ The PoC-Library comes with some scripts to ease most of the common tasks, like
 running testbenches or generating IP cores. PoC uses Python 3 as a platform
 independent scripting environment. All Python scripts are wrapped in Bash or
 PowerShell scripts, to hide some platform specifics of Darwin, Linux or Windows.
-See the :doc:`RequirementDetails` page for further details.
+See :doc:`/UsingPoC/Requirements` for further details.
 
 
 .. rubric:: PoC requires:
 
 * A :doc:`supported synthesis tool chain </WhatIsPoC/SupportedToolChains>`, if you want to synthezise IP cores.
 * A :doc:`supported simulator too chain </WhatIsPoC/SupportedToolChains>`, if you want to simulate IP cores.
-* The Python3 programming language and runtime.
+* The Python3 programming language and runtime, if you want to use PoC's infrastructure.
+* A shell to execute shell scripts:
+
+  * Bash on Linux and OS X
+  * PowerShell on Windows
 
 
 .. rubric:: PoC optionally requires:
 
-* Git, if you want to checkout the latest 'master' or 'release' branch.
+* Git command line tools or a Git GUI, if you want to check out the latest 'master' or 'release' branch.
 
 
-.. rubric:: Third Parts Library Dependencies
+.. rubric:: PoC depends on third parts libraries:
 
 * `Cocotb <https://github.com/potentialventures/cocotb>`_ |br|
   A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
@@ -38,13 +46,8 @@ See the :doc:`RequirementDetails` page for further details.
   An unit testing framework for VHDL.
 
 All dependencies are available as GitHub repositories and are linked to
-PoC as Git submodules into the `<PoCRoot>\\lib <https://github.com/VLSI-EDA/PoC/tree/master/lib>`_
-directory. See the :doc:`Third-Party </Miscelaneous/ThirdParty>` page for more details on these libraries.
-
-.. toctree::
-   :hidden:
-   
-   RequirementDetails
+PoC as Git submodules into the `PoCRoot\\lib <https://github.com/VLSI-EDA/PoC/tree/master/lib>`_
+directory. See :doc:`Third Party Libraries </Miscelaneous/ThirdParty>` for more details on these libraries.
 
 
 Download
@@ -53,7 +56,8 @@ Download
 The PoC-Library can be downloaded as a `zip-file <https://github.com/VLSI-EDA/PoC/archive/master.zip>`_
 (latest 'master' branch), cloned with ``git clone`` or embedded with
 ``git submodule add`` from GitHub. GitHub offers HTTPS and SSH as transfer
-protocols. See the :doc:`DownloadDetails` page for further details.
+protocols. See the :doc:`Download </UsingPoC/Download>` page for further
+details. The installation directory is referred to as ``PoCRoot``.
 
 +----------+---------------------------------------------------------------------+
 | Protocol | Git Clone Command                                                   |
@@ -63,48 +67,26 @@ protocols. See the :doc:`DownloadDetails` page for further details.
 | SSH      | ``git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC`` |
 +----------+---------------------------------------------------------------------+
 
-.. toctree::
-   :hidden:
-   
-   DownloadDetails
-
 
 Configuring PoC on a Local System
 *********************************
 
 To explore PoC's full potential, it's required to configure some paths and
 synthesis or simulation tool chains. The following commands start a guided
-configuration process. Please follow the instructions. It's possible to relaunch
-the process at any time, for example to register new tools or to update tool
-versions. See the :doc:`Configuration Details <ConfigurationDetails>` page for
-more details.
-
-Run the following command line instructions to configure PoC on your local system.
+configuration process. Please follow the instructions on screen. It's possible
+to relaunch the process at any time, for example to register new tools or to
+update tool versions. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for
+more details. Run the following command line instructions to configure PoC on
+your local system:
 
 .. code-block:: PowerShell
    
-   cd <PoCRoot>
+   cd PoCRoot
    .\poc.ps1 configure
 
 Use the keyboard buttons: :kbd:`Y` to accept, :kbd:`N` to decline, :kbd:`P` to
 skip/pass a step and :kbd:`Return` to accept a default value displayed in brackets.
 
-.. 
-   Note::
-   The configuration process can be re-run at any time to add, remove or update
-   choices made.
-
-.. seealso::
-   :doc:`Running one or more testbenches </UsingPoC/Simulation>`
-      The installation can be checked by running one or more of PoC's testbenches.
-   :doc:`Running one or more netlist generation flows </UsingPoC/Synthesis>`
-      The installation can also be checked by running one or more of PoC's
-      synthesis flows.
-
-.. toctree::
-   :hidden:
-   
-   ConfigurationDetails
 
 Integration
 ***********
@@ -114,14 +96,14 @@ it's recommended to create a library folder and add the PoC-Library as a Git
 submodule. After the repository linking is done, some short configuration
 steps are required to setup paths, tool chains and the target platform. The
 following command line instructions show a short example on how to integrate
-PoC. A detailed list of steps can be found on the :doc:`Integration Details </QuickStart/IntegrationDetails>`
-page.
+PoC.
 
 .. rubric:: 1. Adding the Library as a Git submodule
 
 The following command line instructions will create the folder ``lib\PoC\`` and
 clone the PoC-Library as a Git `submodule <http://git-scm.com/book/en/v2/Git-Tools-Submodules>`_
-into that folder. ``ProjectRoot`` is the directory of the hosting Git.
+into that folder. ``ProjectRoot`` is the directory of the hosting Git. A detailed
+list of steps can be found at :doc:`Integration </UsingPoC/Integration>`.
 
 .. code-block:: powershell
 
@@ -136,7 +118,9 @@ into that folder. ``ProjectRoot`` is the directory of the hosting Git.
 
 .. rubric:: 2. Configuring PoC
 
-The PoC-Library should be configured to explore it's full potential:
+The PoC-Library should be configured to explore it's full potential. See
+:doc:`Configuration </UsingPoC/PoCConfiguration>` for more details. The
+following command lines will start the configuration process:
 
 .. code-block:: powershell
    
@@ -158,7 +142,7 @@ in the files:
    cp lib\PoC\src\common\my_config.vhdl.template src\common\my_config.vhdl
    cp lib\PoC\src\common\my_project.vhdl.template src\common\my_project.vhdl
 
-`common/my_config.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_config.vhdl.template>`_ defines two global constants, which need to be adjusted:
+`my_config.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_config.vhdl.template>`_ defines two global constants, which need to be adjusted:
 
 .. code-block:: vhdl
    
@@ -173,13 +157,15 @@ also defines two global constants, which need to be adjusted:
    constant MY_PROJECT_DIR      : string := "CHANGE THIS"; -- e.g. d:/vhdl/myproject/, /home/me/projects/myproject/"
    constant MY_OPERATING_SYSTEM : string := "CHANGE THIS"; -- e.g. WINDOWS, LINUX
 
+Further informations are provided at
+:doc:`Creating my_config/my_project.vhdl </UsingPoC/VHDLConfiguration>`.
 
 .. rubric:: 4. Adding PoC's Common Packages to a Synthesis or Simulation Project
 
 PoC is shipped with a set of common packages, which are used by most of it's
 modules. These packages are stored in the ``PoCRoot\src\common`` directory.
-PoC also provides a VHDL ``context``, which can be used to reference all packages
-at once.
+PoC also provides a VHDL context in ``common.vhdl`` , which can be used to
+reference all packages at once.
 
 
 .. rubric:: 5. Adding PoC's Simulation Packages to a Simulation Project
@@ -194,14 +180,71 @@ incompatible among each other, PoC uses version suffixes like ``*.v93.vhdl`` or
 
 Some IP Cores are shipped are pre-configured vendor IP Cores. If such IP cores
 shall be used in a HDL project, it's recommended to use PoC to create, compile
-and if needed patch these IP cores. See the :doc:`Synthesis </UsingPoC/Synthesis>`
-page for more details.
+and if needed patch these IP cores. See :doc:`Synthesis </UsingPoC/Synthesis>`
+for more details.
 
 
-.. toctree::
-   :hidden:
+Run a Simulation
+****************
+
+The following quick example uses the GHDL Simulator to analyze, elaborate and
+simulate a testbench for the module ``arith_prng`` (Pseudo Random Number
+Generator - PRNG). The VHDL file ``arith_prng.vhdl`` is located at
+``PoCRoot\src\arith`` and virtually a member in the `PoC.arith` namespace.
+So the module can be identified by an unique name: ``PoC.arith.prng``, which is
+passed to the frontend script.
+
+.. rubric:: Example:
+
+.. code-block:: PowerShell
    
-   IntegrationDetails
+   cd PoCRoot
+   .\poc.ps1 ghdl PoC.arith.prng
+
+The CLI command ``ghdl`` chooses *GHDL Simulator* as the simulator and
+passes the fully qualified PoC entity name ``PoC.arith.prng`` as a parameter
+to the tool. All required source file are gathered and compiled to an
+executable. Afterwards this executable is launched in CLI mode and it's outputs
+are displayed in console:
+
+.. image:: /_static/images/ghdl/arith_prng_tb.posh.png
+   :target: /_static/images/ghdl/arith_prng_tb.posh.png
+	 :alt: PowerShell console output after running PoC.arith.prng with GHDL.
+
+Each testbench uses PoC's simulation helper packages to count asserts and to
+track active stimuli and checker processes. After a completed simulation run,
+an report is written to STDOUT or the simulator's console. Note the line
+``SIMULATION RESULT = PASSED``. For each simulated PoC entity, a line in the
+overall report is created. It lists the runtime per testbench and the simulation
+status (``... ERROR``, ``FAILED``, ``NO ASSERTS`` or ``PASSED``). See
+:doc:`Simulation </UsingPoC/Simulation>` for more details.
+
+
+Run a Synthesis
+***************
+
+The following quick example uses the Xilinx Systesis Tool (XST) to synthesize a
+netlist for IP core ``arith_prng`` (Pseudo Random Number Generator - PRNG). The
+VHDL file ``arith_prng.vhdl`` is located at ``PoCRoot\src\arith`` and virtually
+a member in the `PoC.arith` namespace. So the module can be identified by an
+unique name: ``PoC.arith.prng``, which is passed to the frontend script.
+
+.. rubric:: Example:
+
+.. code-block:: PowerShell
+   
+   cd PoCRoot
+   .\poc.ps1 xst PoC.arith.prng --board=KC705
+
+The CLI command ``xst`` chooses *Xilinx Synthesis Tool* as the synthesizer and
+passes the fully qualified PoC entity name ``PoC.arith.prng`` as a parameter
+to the tool. Additionally, the development board name is required to load the
+correct ``my_config.vhdl`` file. All required source file are gathered and
+synthesized to a netlist.
+
+.. image:: /_static/images/xst/arith_prng.posh.png
+   :target: /_static/images/xst/arith_prng.posh.png
+	 :alt: PowerShell console output after running PoC.arith.prng with XST.
 
 
 Updating
@@ -220,8 +263,9 @@ The PoC-Library can be updated by using ``git fetch`` and ``git merge``.
     git merge
 
 
-.. toctree::
-   :hidden:
-   
-   UpdatingDetails
-	 
+.. seealso::
+   :doc:`Running one or more testbenches </UsingPoC/Simulation>`
+      The installation can be checked by running one or more of PoC's testbenches.
+   :doc:`Running one or more netlist generation flows </UsingPoC/Synthesis>`
+      The installation can also be checked by running one or more of PoC's
+      synthesis flows.

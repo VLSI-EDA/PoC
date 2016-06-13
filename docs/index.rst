@@ -44,7 +44,7 @@ accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki
    :hidden:
     
    WhatIsPoC/index
-   QuickStart/index
+   QuickStart
    UsingPoC/index
    PoC/index
    Miscelaneous/ThirdParty
