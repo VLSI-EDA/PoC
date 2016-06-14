@@ -55,10 +55,10 @@ SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 PyWrapper_Parameters=$@
 PyWrapper_WorkingDir=$(pwd)
 PoC_RootDir_RelPath="$SCRIPT_DIR/."
-PoC_RootDir_AbsPath=$(cd "$PoC_RootDir_RelPath/$PyWrapper_RelPath" && pwd)
+PoC_RootDir=$(cd "$PoC_RootDir_RelPath/$PyWrapper_RelPath" && pwd)
 
 # invoke main wrapper
-source "$PoC_RootDir_AbsPath/$PyWrapper_BashScriptDir/wrapper.sh"
+source "$PoC_RootDir/$PyWrapper_BashScriptDir/wrapper.sh"
 
 # return exit status
 exit $PoC_ExitCode

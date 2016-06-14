@@ -36,63 +36,194 @@
 
 # script settings
 PoC_ExitCode=0
-PoC_PythonScriptDir=py
+PoC_WorkingDir=$(pwd)
+PoC_PythonScriptDir="py"
+PoC_FrontEnd="$PoC_RootDir/$PoC_PythonScriptDir/PoC.py"
+PoC_WrapperDirectory="$PoC_PythonScriptDir/Wrapper"
+PoC_HookDirectory="$PoC_WrapperDirectory/Hooks"
 
 # define color escape codes
 RED='\e[0;31m'			# Red
 YELLOW='\e[1;33m'		# Yellow
 NOCOLOR='\e[0m'			# No Color
 
-PoC_WorkingDir=$(pwd)
-
 # set default values
 PyWrapper_Debug=0
-PyWrapper_LoadEnv_Aldec_ActiveHDL=0
-# PyWrapper_LoadEnv_Aldec_RevieraPRO=0
-# PyWrapper_LoadEnv_Altera_Quartus=0
-# PyWrapper_LoadEnv_Altera_ModelSim=0
-PyWrapper_LoadEnv_GHDL_GTKWave=0
-PyWrapper_LoadEnv_Lattice_Diamond=0
-# PyWrapper_LoadEnv_Lattice_ActiveHDL=0
-PyWrapper_LoadEnv_Mentor_QuestaSim=0
-PyWrapper_LoadEnv_Xilinx_ISE=0
-PyWrapper_LoadEnv_Xilinx_Vivado=0
 
-# search for special parameters
-# TODO: restrict to first n=2? parameters
+# Aldec tools
+declare -A Env_Aldec=(
+	["PreHookFile"]="Aldec.pre.sh"
+	["PostHookFile"]="Aldec.post.sh"
+	["Tools"]="ActiveHDL RevieraPRO"
+)
+declare -A Env_Aldec_ActiveHDL=(
+	["Load"]=0
+	["Commands"]="asim"
+	["BashModule"]="Aldec.ActiveHDL.sh"
+	["PreHookFile"]="Aldec.ActiveHDL.pre.sh"
+	["PostHookFile"]="Aldec.ActiveHDL.post.sh"
+)
+declare -A Env_Aldec_RevieraPRO=(
+	["Load"]=0
+	["Commands"]="rpro"
+	["BashModule"]="Aldec.RevieraPRO.sh"
+	["PreHookFile"]="Aldec.RevieraPRO.pre.sh"
+	["PostHookFile"]="Aldec.RevieraPRO.post.sh"
+)
+# Altera tools
+declare -A Env_Altera=(
+	["PreHookFile"]="Altera.pre.sh"
+	["PostHookFile"]="Altera.post.sh"
+	["Tools"]="Quartus"
+)
+declare -A Env_Altera_Quartus=(
+	["Load"]=0
+	["Commands"]="quartus"
+	["BashModule"]="Altera.Quartus.sh"
+	["PreHookFile"]="Altera.Quartus.pre.sh"
+	["PostHookFile"]="Altera.Quartus.post.sh"
+)
+# GHDL + GTKWave
+declare -A Env_GHDL=(
+	["PreHookFile"]=""
+	["PostHookFile"]=""
+	["Tools"]="GHDL GTKWave"
+)
+declare -A Env_GHDL_GHDL=(
+	["Load"]=0
+	["Commands"]="ghdl"
+	["BashModule"]="GHDL.sh"
+	["PreHookFile"]="GHDL.pre.sh"
+	["PostHookFile"]="GHDL.post.sh"
+)
+declare -A Env_GHDL_GTKWave=(
+	["Load"]=0
+	["Commands"]="ghdl"
+	["BashModule"]="GTKWave.sh"
+	["PreHookFile"]="GTKWave.pre.sh"
+	["PostHookFile"]="GTKWave.post.sh"
+)
+# Lattice tools
+declare -A Env_Lattice=(
+	["PreHookFile"]="Lattice.pre.sh"
+	["PostHookFile"]="Lattice.post.sh"
+	["Tools"]="Diamond ActiveHDL"
+)
+declare -A Env_Lattice_Diamond=(
+	["Load"]=0
+	["Commands"]="lse"
+	["BashModule"]="Lattice.Diamond.sh"
+	["PreHookFile"]="Lattice.Diamond.pre.sh"
+	["PostHookFile"]="Lattice.Diamond.post.sh"
+)
+declare -A Env_Lattice_ActiveHDL=(
+	["Load"]=0
+	["Commands"]="asim"
+	["BashModule"]="Lattice.ActiveHDL.sh"
+	["PreHookFile"]="Lattice.ActiveHDL.pre.sh"
+	["PostHookFile"]="Lattice.ActiveHDL.post.sh"
+)
+# Mentor Graphics tools
+declare -A Env_Mentor=(
+	["PreHookFile"]="Mentor.pre.sh"
+	["PostHookFile"]="Mentor.post.sh"
+	["Tools"]="PrecisionRTL QuestaSim"
+)
+declare -A Env_Mentor_PrecisionRTL=(
+	["Load"]=0
+	["Commands"]="prtl"
+	["BashModule"]="Mentor.PrecisionRTL.sh"
+	["PreHookFile"]="Mentor.PrecisionRTL.pre.sh"
+	["PostHookFile"]="Mentor.PrecisionRTL.post.sh"
+)
+declare -A Env_Mentor_QuestaSim=(
+	["Load"]=0
+	["Commands"]="vsim"
+	["BashModule"]="Mentor.QuestaSim.sh"
+	["PreHookFile"]="Mentor.QuestaSim.pre.sh"
+	["PostHookFile"]="Mentor.QuestaSim.post.sh"
+)
+# Sphinx documentation system
+declare -A Env_Sphinx=(
+	["PreHookFile"]=""
+	["PostHookFile"]=""
+	["Tools"]="Sphinx"
+)
+declare -A Env_Sphinx_Sphinx=(
+	["Load"]=0
+	["Commands"]="docs"
+	["BashModule"]="Sphinx.sh"
+	["PreHookFile"]="Sphinx.pre.sh"
+	["PostHookFile"]="Sphinx.post.sh"
+)
+# Xilinx tools
+declare -A Env_Xilinx=(
+	["PreHookFile"]="Xilinx.pre.sh"
+	["PostHookFile"]="Xilinx.post.sh"
+	["Tools"]="ISE Vivado"
+)
+declare -A Env_Xilinx_ISE=(
+	["Load"]=0
+	["Commands"]="isim xst coregen"
+	["BashModule"]="Xilinx.ISE.sh"
+	["PreHookFile"]="Xilinx.ISE.pre.sh"
+	["PostHookFile"]="Xilinx.ISE.post.sh"
+)
+declare -A Env_Xilinx_Vivado=(
+	["Load"]=0
+	["Commands"]="xsim vivado"
+	["BashModule"]="Xilinx.Vivado.sh"
+	["PreHookFile"]="Xilinx.Vivado.pre.sh"
+	["PostHookFile"]="Xilinx.Vivado.post.sh"
+)
+
+# List all vendors
+Env_Vendors="Aldec Altera GHDL Lattice Mentor Sphinx Xilinx"
+
+# search script parameters for known commands
+BreakIt=0
 for param in $PyWrapper_Parameters; do
-	if [ "$param" = "-D" ]; then PyWrapper_Debug=1; fi
-	if [ "$param" = "asim" ];			then PyWrapper_LoadEnv_Aldec_ActiveHDL=1; fi
-	if [ "$param" = "ghdl" ];			then PyWrapper_LoadEnv_GHDL_GTKWave=1; fi
-	if [ "$param" = "isim" ];			then PyWrapper_LoadEnv_Xilinx_ISE=1; fi
-	if [ "$param" = "xsim" ];			then PyWrapper_LoadEnv_Xilinx_Vivado=1; fi
-	if [ "$param" = "vsim" ];			then PyWrapper_LoadEnv_Mentor_QuestaSim=1; fi
-	
-	if [ "$param" = "coregen" ];	then PyWrapper_LoadEnv_Xilinx_ISE=1; fi
-	if [ "$param" = "xst" ];			then PyWrapper_LoadEnv_Xilinx_ISE=1; fi
-	if [ "$param" = "vivado" ];		then PyWrapper_LoadEnv_Xilinx_Vivado=1; fi
+	if [ "$param" = "-D" ]; then
+		PyWrapper_Debug=1
+		continue
+	fi
+	# compare registered commands from all vendor tools
+	for VendorName in $Env_Vendors; do
+		declare -n VendorIndex="Env_$VendorName"
+		for ToolName in ${VendorIndex["Tools"]}; do
+			declare -n ToolIndex="Env_${VendorName}_${ToolName}"
+			for Command in ${ToolIndex["Commands"]}; do
+				if [ "$param" = "$Command" ]; then
+					ToolIndex["Load"]=1
+					BreakIt=1
+					break
+				fi
+			done	# Commands
+		done	# ToolNames
+	done	# VendorNames
+	# break is a known command was detected
+	if [ $BreakIt -eq 1 ]; then break; fi
+done	# Parameters
 
-	if [ "$param" = "lse" ];			then PyWrapper_LoadEnv_Lattice_Diamond=1; fi
-done
 
 # publish PoC directories as environment variables
-export PoCRootDirectory=$PoC_RootDir_AbsPath
+export PoCRootDirectory=$PoC_RootDir
 export PoCWorkingDirectory=$PoC_WorkingDir
 
 if [ $PyWrapper_Debug -eq 1 ]; then
 	echo -e "${YELLOW}This is the PoC Library script wrapper operating in debug mode.${NOCOLOR}"
 	echo
 	echo -e "${YELLOW}Directories:${NOCOLOR}"
-	echo -e "${YELLOW}  Script root:   $PyWrapper_ScriptDir${NOCOLOR}"
-	echo -e "${YELLOW}  PoC root:      $PoC_RootDir_AbsPath${NOCOLOR}"
-	echo -e "${YELLOW}  working:       $PoC_WorkingDir${NOCOLOR}"
+	echo -e "${YELLOW}  PoC root:        $PoC_RootDir${NOCOLOR}"
+	echo -e "${YELLOW}  working:         $PoC_WorkingDir${NOCOLOR}"
 	echo -e "${YELLOW}Script:${NOCOLOR}"
-	echo -e "${YELLOW}  Filename:      $PyWrapper_Script${NOCOLOR}"
-	echo -e "${YELLOW}  Solution:      $PyWrapper_Solution${NOCOLOR}"
-	echo -e "${YELLOW}  Parameters:    $PyWrapper_Parameters${NOCOLOR}"
-	echo -e "${YELLOW}Load Environment:${NOCOLOR}"
-	echo -e "${YELLOW}  Xilinx ISE:    $PyWrapper_LoadEnv_Xilinx_ISE${NOCOLOR}"
-	echo -e "${YELLOW}  Xilinx VIVADO: $PyWrapper_LoadEnv_Xilinx_Vivado${NOCOLOR}"
+	echo -e "${YELLOW}  Filename:        $PyWrapper_Script${NOCOLOR}"
+	echo -e "${YELLOW}  Solution:        $PyWrapper_Solution${NOCOLOR}"
+	echo -e "${YELLOW}  Parameters:      $PyWrapper_Parameters${NOCOLOR}"
+	echo -e "${YELLOW}Load Environment:  ${NOCOLOR}"
+	echo -e "${YELLOW}  Lattice Diamond: ${Env_Lattice_Diamond["Load"]}${NOCOLOR}"
+	echo -e "${YELLOW}  Xilinx ISE:      ${Env_Xilinx_ISE["Load"]}${NOCOLOR}"
+	echo -e "${YELLOW}  Xilinx VIVADO:   ${Env_Xilinx_Vivado["Load"]}${NOCOLOR}"
 	echo
 fi
 
@@ -101,7 +232,7 @@ Python_VersionTest='import sys; sys.exit(not (0x03050000 < sys.hexversion < 0x04
 python -c "$Python_VersionTest" 2>/dev/null
 if [ $? -eq 0 ]; then
 	Python_Interpreter=$(which python 2>/dev/null)
-	if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}PythonInterpreter: use standard interpreter: '$Python_Interpreter'${NOCOLOR}"; fi
+	test $PyWrapper_Debug -eq 1 && echo -e "${YELLOW}PythonInterpreter: use standard interpreter: '$Python_Interpreter'${NOCOLOR}"
 else
 	# standard python interpreter is not suitable, try to find a suitable version manually
 	for pyVersion in 3.9 3.8 3.7 3.6 3.5; do
@@ -113,7 +244,7 @@ else
 			if [ $? -eq 0 ]; then break; fi
 		fi
 	done
-	if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}PythonInterpreter: use this interpreter: '$Python_Interpreter'${NOCOLOR}"; fi
+	test $PyWrapper_Debug -eq 1 && echo -e "${YELLOW}PythonInterpreter: use this interpreter: '$Python_Interpreter'${NOCOLOR}"
 fi
 # if no interpreter was found => exit
 if [ -z "$Python_Interpreter" ]; then
@@ -122,97 +253,38 @@ if [ -z "$Python_Interpreter" ]; then
 	PoC_ExitCode=1
 fi
 
-# load Xilinx ISE environment
-if [ $PoC_ExitCode -eq 0 ]; then
-	if [ $PyWrapper_LoadEnv_Xilinx_ISE -eq 1 ]; then
-		# if $XILINX environment variable is not set
-		if [ -z "$XILINX" ]; then
-			command="$Python_Interpreter $PoC_RootDir_AbsPath/$PoC_PythonScriptDir/PoC.py query Xilinx.ISE:SettingsFile"
-			if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}getting ISE settings file: command='$command'${NOCOLOR}"; fi
-			PoC_ISE_SettingsFile=$($command)
-			if [ $? -eq 0 ]; then
-				if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}ISE settings file: '$PoC_ISE_SettingsFile'${NOCOLOR}"; fi
-				if [ -z "$PoC_ISE_SettingsFile" ]; then
-					echo 1>&2 -e "${RED}No Xilinx ISE installation found.${NOCOLOR}"
-					echo 1>&2 -e "${RED}Run 'PoC.py --configure' to configure your Xilinx ISE installation.${NOCOLOR}"
-					PoC_ExitCode=1
-				fi
-				echo -e "${YELLOW}Loading Xilinx ISE environment '$PoC_ISE_SettingsFile'${NOCOLOR}"
-				PyWrapper_RescueArgs=$@
-				set --
-				source "$PoC_ISE_SettingsFile"
-				set -- $PyWrapper_RescueArgs
-			else
-				echo 1>&2 -e "${RED}ERROR: ExitCode for '$command' was not zero. Aborting script execution.${NOCOLOR}"
-				echo 1>&2 -e "${RED}$PoC_Vivado_SettingsFile${NOCOLOR}"
-				PoC_ExitCode=1
-			fi
-		fi
-	fi
-fi
 
-# load Xilinx Vivado environment
-if [ $PoC_ExitCode -eq 0 ]; then
-	if [ $PyWrapper_LoadEnv_Xilinx_Vivado -eq 1 ]; then
-		# if $XILINX_VIVADO environment variable is not set
-		if [ -z "$XILINX_VIVADO" ]; then
-			command="$Python_Interpreter $PoC_RootDir_AbsPath/$PoC_PythonScriptDir/PoC.py query Xilinx.Vivado:SettingsFile"
-			if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}getting Vivado settings file: command='$command'${NOCOLOR}"; fi
-			PoC_Vivado_SettingsFile=$($command)
-			if [ $? -eq 0 ]; then
-				if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}Vivado settings file: '$PoC_Vivado_SettingsFile'${NOCOLOR}"; fi
-				if [ -z "$PoC_Vivado_SettingsFile" ]; then
-					echo 1>&2 -e "${RED}No Xilinx Vivado installation found.${NOCOLOR}"
-					echo 1>&2 -e "${RED}Run 'PoC.py --configure' to configure your Xilinx Vivado installation.${NOCOLOR}"
-					PoC_ExitCode=1
-				fi
-				echo -e "${YELLOW}Loading Xilinx Vivado environment '$PoC_Vivado_SettingsFile'${NOCOLOR}"
-				PyWrapper_RescueArgs=$@
-				set --
-				source "$PoC_Vivado_SettingsFile"
-				set -- $PyWrapper_RescueArgs
-			else
-				echo 1>&2 -e "${RED}ERROR: ExitCode for '$command' was not zero. Aborting script execution.${NOCOLOR}"
-				echo 1>&2 -e "${RED}$PoC_Vivado_SettingsFile${NOCOLOR}"
-				PoC_ExitCode=1
+# execute vendor and tool pre-hook files if present
+for VendorName in $Env_Vendors; do
+	declare -n VendorIndex="Env_$VendorName"
+	for ToolName in ${VendorIndex["Tools"]}; do
+		declare -n ToolIndex="Env_${VendorName}_${ToolName}"
+		if [ ${ToolIndex["Load"]} -eq 1 ]; then
+			# if exists, source the vendor pre-hook file
+			VendorPreHookFile=$PoC_RootDir/$PoC_HookDirectory/${VendorIndex["PreHookFile"]}
+			test -f $VendorPreHookFile && source $VendorPreHookFile
+			
+			# if exists, source the tool pre-hook file
+			ToolPreHookFile=$PoC_RootDir/$PoC_HookDirectory/${ToolIndex["PreHookFile"]}
+			test -f $ToolPreHookFile && source $ToolPreHookFile
+			
+			# if exists, source the BashModule file
+			ModuleFile=$PoC_RootDir/$PoC_WrapperDirectory/${ToolIndex["BashModule"]}
+			if [ -f $ModuleFile ]; then
+				source $ModuleFile
+				OpenEnvironment $Python_Interpreter $PoC_FrontEnd
+				PoC_ExitCode=$?
 			fi
+			
+			break 2
 		fi
-	fi
-fi
+	done	# ToolNames
+done	# VendorNames
 
-# load Lattice Diamond environment
-if [ $PoC_ExitCode -eq 0 ]; then
-	if [ $PyWrapper_LoadEnv_Lattice_Diamond -eq 1 ]; then
-		# if $XILINX_VIVADO environment variable is not set
-		if [ -z "$LSC_DIAMOND" ]; then
-			command="$Python_Interpreter $PoC_RootDir_AbsPath/$PoC_PythonScriptDir/PoC.py query INSTALL.Lattice.Diamond:BinaryDirectory"
-			if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}getting Lattice Diamond binary directory: command='$command'${NOCOLOR}"; fi
-			PoC_Diamond_BinDir=$($command)
-			if [ $? -eq 0 ]; then
-				if [ $PyWrapper_Debug -eq 1 ]; then echo -e "${YELLOW}Lattice Diamond binary directory: '$PoC_Diamond_BinDir'${NOCOLOR}"; fi
-				if [ -z "$PoC_Diamond_BinDir" ]; then
-					echo 1>&2 -e "${RED}No Lattice Diamond installation found.${NOCOLOR}"
-					echo 1>&2 -e "${RED}Run 'PoC.py --configure' to configure your Lattice Diamond installation.${NOCOLOR}"
-					PoC_ExitCode=1
-				fi
-				echo -e "${YELLOW}Loading Lattice Diamond environment '$PoC_Diamond_BinDir/diamond_env'${NOCOLOR}"
-				PyWrapper_RescueArgs=$@
-				set --
-				bindir=$PoC_Diamond_BinDir #variable required by diamond_env
-				source $bindir/diamond_env
-				unset bindir
-				set -- $PyWrapper_RescueArgs
-			else
-				echo 1>&2 -e "${RED}ERROR: ExitCode for '$command' was not zero. Aborting script execution.${NOCOLOR}"
-				PoC_ExitCode=1
-			fi
-		fi
-	fi
-fi
 
 # execute script with appropriate python interpreter and all given parameters
 if [ $PoC_ExitCode -eq 0 ]; then
-	Python_Script="$PoC_RootDir_AbsPath/$PoC_PythonScriptDir/$PyWrapper_Script"
+	Python_Script="$PoC_RootDir/$PoC_PythonScriptDir/$PyWrapper_Script"
 
 	if [ -z $PyWrapper_Solution ]; then
 		Python_ScriptParameters=$PyWrapper_Parameters
@@ -221,7 +293,7 @@ if [ $PoC_ExitCode -eq 0 ]; then
 	fi
 	
 	if [ $PyWrapper_Debug -eq 1 ]; then
-		echo -e "${YELLOW}launching: '$Python_Interpreter $Python_Script $Python_ScriptParameters'${NOCOLOR}"
+		echo -e "${YELLOW}Launching: '$Python_Interpreter $Python_Script $Python_ScriptParameters'${NOCOLOR}"
 		echo -e "${YELLOW}------------------------------------------------------------${NOCOLOR}"
 	fi
 	
@@ -230,6 +302,32 @@ if [ $PoC_ExitCode -eq 0 ]; then
 	$Python_Interpreter $Python_Script $Python_ScriptParameters
 	PoC_ExitCode=$?
 fi
+
+# execute vendor and tool post-hook files if present
+for VendorName in $Env_Vendors; do
+	declare -n VendorIndex="Env_$VendorName"
+	for ToolName in ${VendorIndex["Tools"]}; do
+		declare -n ToolIndex="Env_${VendorName}_${ToolName}"
+		if [ ${ToolIndex["Load"]} -eq 1 ]; then
+			# if exists, source the vendor post-hook file
+			VendorPostHookFile=$PoC_RootDir/$PoC_HookDirectory/${VendorIndex["PostHookFile"]}
+			test -f $VendorPostHookFile && source $VendorPostHookFile
+			
+			# if exists, source the tool Post-hook file
+			ToolPostHookFile=$PoC_RootDir/$PoC_HookDirectory/${ToolIndex["PostHookFile"]}
+			test -f $ToolPostHookFile && source $ToolPostHookFile
+			
+			# if exists, source the BashModule file
+			ModuleFile=$PoC_RootDir/$PoC_WrapperDirectory/${ToolIndex["BashModule"]}
+			if [ -f $ModuleFile ]; then
+				# source $ModuleFile
+				CloseEnvironment $Python_Interpreter $PoC_FrontEnd
+				PoC_ExitCode=$?
+			fi
+			break 2
+		fi
+	done	# ToolNames
+done	# VendorNames
 
 # clean up environment variables
 unset PoCRootDirectory

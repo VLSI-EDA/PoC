@@ -48,7 +48,7 @@ are fulfilled. Chose one of the following integration kinds:
     * Using different PoC versions in different projects is not possible
   
     **Next steps:** |br|
-    1. See :doc:`Downloads </UsingPoC/Download>` for how to download a stand-alone version (*.zip-file) of the PoC-Library. |br|
+    1. See :doc:`Downloads </UsingPoC/Download>` for how to clone a stand-alone version of the PoC-Library. |br|
     2. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for how to configure PoC on a local system.
 
 * Embedded IP Core Library as Git Submodule:
