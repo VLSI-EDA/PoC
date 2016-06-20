@@ -59,17 +59,6 @@ package components is
 	function fftre(q : STD_LOGIC;					t : STD_LOGIC;				rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0')												return STD_LOGIC;					-- T-FlipFlop with reset and enable
 	function fftse(q : STD_LOGIC;					t : STD_LOGIC;				set : STD_LOGIC := '0'; en : STD_LOGIC := '1')																													return STD_LOGIC;					-- T-FlipFlop with set and enable
 
-	-- adder
-	function inc(value : STD_LOGIC_VECTOR;	constant increment : NATURAL := 1) return STD_LOGIC_VECTOR;
-	function inc(value : UNSIGNED;					constant increment : NATURAL := 1) return UNSIGNED;
-	function inc(value : SIGNED;						constant increment : NATURAL := 1) return SIGNED;
-	function dec(value : STD_LOGIC_VECTOR;	constant decrement : NATURAL := 1) return STD_LOGIC_VECTOR;
-	function dec(value : UNSIGNED;					constant decrement : NATURAL := 1) return UNSIGNED;
-	function dec(value : SIGNED;						constant decrement : NATURAL := 1) return SIGNED;
-
-	-- negate
-	function neg(value : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;		-- calculate 2's complement
-
 	-- counter
 	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : NATURAL := 0) return UNSIGNED;
 	function upcounter_equal(cnt : UNSIGNED; value : NATURAL) return STD_LOGIC;
@@ -183,45 +172,6 @@ package body components is
 		return (q and not rst) or set;
 	end function;
 
-	-- Adder
-	-- ===========================================================================
-	function inc(value : STD_LOGIC_VECTOR; constant increment : NATURAL := 1) return STD_LOGIC_VECTOR is
-	begin
-		report "Incrementing a STD_LOGIC_VECTOR - implicit conversion to UNSIGNED" severity WARNING;
-		return std_logic_vector(inc(unsigned(value), increment));
-	end function;
-
-	function inc(value : UNSIGNED; constant increment : NATURAL := 1) return UNSIGNED is
-	begin
-		return value + increment;
-	end function;
-
-	function inc(value : SIGNED; constant increment : NATURAL := 1) return SIGNED is
-	begin
-		return value + increment;
-	end function;
-
-	function dec(value : STD_LOGIC_VECTOR; constant decrement : NATURAL := 1) return STD_LOGIC_VECTOR is
-	begin
-		report "Decrementing a STD_LOGIC_VECTOR - implicit conversion to UNSIGNED" severity WARNING;
-		return std_logic_vector(dec(unsigned(value), decrement));
-	end function;
-
-	function dec(value : UNSIGNED; constant decrement : NATURAL := 1) return UNSIGNED is
-	begin
-		return value - decrement;
-	end function;
-
-	function dec(value : SIGNED; constant decrement : NATURAL := 1) return SIGNED is
-	begin
-		return value - decrement;
-	end function;
-
-	-- negate
-	function neg(value : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
-	begin
-		return std_logic_vector(inc(unsigned(not value)));		-- 2's complement
-	end function;
 
 	-- Counters
 	-- ===========================================================================

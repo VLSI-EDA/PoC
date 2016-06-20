@@ -46,14 +46,14 @@ from pathlib                import Path
 from re                     import compile as RegExpCompile
 from subprocess             import check_output, CalledProcessError
 
-from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
+from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
 from Base.Exceptions        import PlatformNotSupportedException
 from Base.Executable        import Executable
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
 from Base.Executable        import ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
-from Base.Logging            import LogEntry, Severity
-from Base.Simulator          import PoCSimulationResultFilter, SimulationResult
-from Base.ToolChain          import ToolChainException
+from Base.Logging           import LogEntry, Severity
+from Base.Simulator         import PoCSimulationResultFilter, SimulationResult
+from Base.ToolChain         import ToolChainException
 from lib.Functions          import CallByRefParam
 
 
@@ -75,22 +75,25 @@ class Configuration(BaseConfiguration):
 				"Version":                "0.34dev",
 				"InstallationDirectory":  "C:/Tools/GHDL/0.34dev",
 				"BinaryDirectory":        "${InstallationDirectory}/bin",
+				"ScriptDirectory":        "${InstallationDirectory}/lib/ghdl/vendors",
 				"Backend":                "mcode"
 			}
 		},
 		"Linux": {
 			_section: {
 				"Version":                "0.34dev",
-				"InstallationDirectory":  "/usr/bin",
-				"BinaryDirectory":        "${InstallationDirectory}",
+				"InstallationDirectory":  "/usr/local",
+				"BinaryDirectory":        "${InstallationDirectory}/bin",
+				"ScriptDirectory":        "${InstallationDirectory}/lib/ghdl/vendors",
 				"Backend":                "llvm"
 			}
 		},
 		"Darwin": {
 			_section: {
 				"Version":                "0.34dev",
-				"InstallationDirectory":  None,
-				"BinaryDirectory":        "${InstallationDirectory}",
+				"InstallationDirectory":  "/usr/local",
+				"BinaryDirectory":        "${InstallationDirectory}/bin",
+				"ScriptDirectory":        "${InstallationDirectory}/lib/ghdl/vendors",
 				"Backend":                "llvm"
 			}
 		}

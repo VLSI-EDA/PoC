@@ -78,7 +78,7 @@ On Windows
    All Windows command line instructions are intended for :program:`Windows PowerShell`,
    if not marked otherwise. So executing the following instructions in Windows
    Command Prompt (:program:`cmd.exe`) won't function or result in errors! See
-   the :doc:`Requirements section </QuickStart/Requirements>` on where to
+   the :doc:`Requirements section </UsingPoC/Requirements>` on where to
    download or update PowerShell.
 
 Command line instructions to clone the PoC-Library onto a Windows machine with
@@ -165,7 +165,7 @@ On Windows
    All Windows command line instructions are intended for :program:`Windows PowerShell`,
    if not marked otherwise. So executing the following instructions in Windows
    Command Prompt (:program:`cmd.exe`) won't function or result in errors! See
-   the :doc:`Requirements section </QuickStart/Requirements>` on where to
+   the :doc:`Requirements section </UsingPoC/Requirements>` on where to
    download or update PowerShell.
 
 Command line instructions to clone the PoC-Library onto a Windows machine with

@@ -655,14 +655,14 @@ class PoC(ILogable, ArgParseMixin):
 	# TODO: move to Configuration class in ToolChains.Xilinx.Vivado
 	def _CheckVivadoEnvironment(self):
 		# check if Vivado is configure
-		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0):  raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
+		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0): raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
 		if (environ.get('XILINX_VIVADO') is None):                      raise EnvironmentException("Xilinx Vivado environment is not loaded in this shell environment.")
 
 	# TODO: move to Configuration class in ToolChains.Xilinx.ISE
 	def _CheckISEEnvironment(self):
 		# check if ISE is configure
 		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) == 0):    raise NotConfiguredException("Xilinx ISE is not configured on this system.")
-		if (environ.get('XILINX') is None):                              raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
+		if (environ.get('XILINX') is None):                             raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-testbench" command

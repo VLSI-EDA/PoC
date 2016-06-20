@@ -34,33 +34,25 @@
 # limitations under the License.
 # ==============================================================================
 
-poc_sh=../../poc.sh
+# configure script here
 OSVVMLibDir=lib/osvvm
-
-# define color escape codes
-RED="\e[0;31m"			# Red
-GREEN="\e[32m"			# Green
-YELLOW="\e[1;33m"		# Yellow
-NOCOLOR="\e[0m"			# No Color
-
-# red texts
-COLORED_ERROR="$RED[ERROR]$NOCOLOR"
-COLORED_FAILED="$RED[FAILED]$NOCOLOR"
-
-# green texts
-COLORED_DONE="$GREEN[DONE]$NOCOLOR"
-COLORED_SUCCESSFUL="$GREEN[SUCCESSFUL]$NOCOLOR"
 
 # Save working directory
 WorkingDir=$(pwd)
 ScriptDir="$(dirname $0)"
 ScriptDir="$(readlink -f $ScriptDir)"
 
+PoCRootDir="$(readlink -f $ScriptDir/../..)"
+PoC_sh=$PoCRootDir/poc.sh
+
+# source shared file from precompile directory
+source $ScriptDir/shared.sh
+
 # set bash options
 set -o pipefail
 
 # command line argument processing
-NO_COMMAND=TRUE
+NO_COMMAND=1
 while [[ $# > 0 ]]; do
 	key="$1"
 	case $key in
@@ -69,38 +61,34 @@ while [[ $# > 0 ]]; do
 		;;
 		-a|--all)
 		COMPILE_ALL=TRUE
-		NO_COMMAND=FALSE
+		NO_COMMAND=0
 		;;
 		--ghdl)
 		COMPILE_FOR_GHDL=TRUE
-		NO_COMMAND=FALSE
+		NO_COMMAND=0
 		;;
 		--questa)
 		COMPILE_FOR_VSIM=TRUE
-		NO_COMMAND=FALSE
+		NO_COMMAND=0
 		;;
 		-h|--help)
 		HELP=TRUE
-		NO_COMMAND=FALSE
+		NO_COMMAND=0
 		;;
 		*)		# unknown option
-		UNKNOWN_OPTION=TRUE
+		echo 1>&2 -e "${COLORED_ERROR} Unknown command line option '$key'.${ANSI_NOCOLOR}"
+		exit -1
 		;;
 	esac
 	shift # past argument or value
 done
 
-if [ "$NO_COMMAND" == "TRUE" ]; then
+if [ $NO_COMMAND -eq 1 ]; then
 	HELP=TRUE
 fi
 
-if [ "$UNKNOWN_OPTION" == "TRUE" ]; then
-	echo -e $COLORED_ERROR "Unknown command line option.${NOCOLOR}"
-	exit -1
-elif [ "$HELP" == "TRUE" ]; then
-	if [ "$NO_COMMAND" == "TRUE" ]; then
-		echo -e $COLORED_ERROR " No command selected."
-	fi
+if [ "$HELP" == "TRUE" ]; then
+	test $NO_COMMAND -eq 1 && echo 1>&2 -e "\n${COLORED_ERROR} No command selected.${ANSI_NOCOLOR}"
 	echo ""
 	echo "Synopsis:"
 	echo "  Script to compile the simulation library OSVVM for"
@@ -113,114 +101,74 @@ elif [ "$HELP" == "TRUE" ]; then
 	echo ""
 	echo "Common commands:"
 	echo "  -h --help             Print this help page"
-	echo "  -c --clean            Remove all generated files"
+	# echo "  -c --clean            Remove all generated files"
 	echo ""
 	echo "Tool chain:"
 	echo "  -a --all              Compile for all tool chains."
-	echo "  -g --ghdl             Compile for GHDL."
-	echo "  -v --vsim             Compile for QuestaSim/ModelSim."
+	echo "     --ghdl             Compile for GHDL."
+	echo "     --questa           Compile for QuestaSim/ModelSim."
 	echo ""
 	exit 0
 fi
 
-# Files
-Files=(
-	NamePkg.vhd
-	OsvvmGlobalPkg.vhd
-	TextUtilPkg.vhd
-	TranscriptPkg.vhd
-	AlertLogPkg.vhd
-	MemoryPkg.vhd
-	MessagePkg.vhd
-	SortListPkg_int.vhd
-	RandomBasePkg.vhd
-	RandomPkg.vhd
-	CoveragePkg.vhd
-	OsvvmContext.vhd
-)
-
-PoCRootDir=$($poc_sh query INSTALL.PoC:InstallationDirectory 2>/dev/null)
-if [ $? -ne 0 ]; then
-	echo 1>&2 -e "${RED}ERROR: Cannot get PoC installation dir.${NOCOLOR}"
-	echo 1>&2 -e "${RED}$PoCRootDir${NOCOLOR}"
-	exit -1;
-fi
-
-PrecompiledDir=$($poc_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
-if [ $? -ne 0 ]; then
-	echo 1>&2 -e "${RED}ERROR: Cannot get precompiled dir.${NOCOLOR}"
-	echo 1>&2 -e "${RED}$PrecompiledDir${NOCOLOR}"
-	exit -1;
-fi
-
-# Setup destination directory
-SourceDir=$PoCRootDir/$OSVVMLibDir
 
 if [ "$COMPILE_ALL" == "TRUE" ]; then
 	COMPILE_FOR_GHDL=TRUE
 	COMPILE_FOR_VSIM=TRUE
 fi
 
+PrecompiledDir=$($PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${COLORED_ERROR} Cannot get precompiled dir.${ANSI_NOCOLOR}"
+	echo 1>&2 -e "${ANSI_RED}$PrecompiledDir${ANSI_NOCOLOR}"
+	exit -1;
+fi
+
+
 # GHDL
 # ==============================================================================
 ERRORCOUNT=0
 if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
-	DestDir=$PoCRootDir/$PrecompiledDir/ghdl/osvvm/v08
-	
-	# Get GHDL binary
-	BinDir=$($poc_sh query INSTALL.GHDL:BinaryDirectory 2>/dev/null)	# Path to the simulators bin directory
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${RED}ERROR: Cannot get GHDL binary dir.${NOCOLOR}"
-		echo 1>&2 -e "${RED}$BinDir${NOCOLOR}"
-		exit -1;
-	fi
-	
-	# Cleanup
-	if [ "$CLEAN" == "TRUE" ]; then
-		echo -e "${YELLOW}Cleaning library 'osvvm' ...${NOCOLOR}"
-		rm -Rf $DestDir 2> /dev/null
-	fi
-	
+	# Get GHDL directories
+	# <= $GHDLBinDir
+	# <= $GHDLScriptDir
+	# <= $GHDLDirName
+	GetGHDLDirectories $PoC_sh
+
+	# Assemble output directory
+	DestDir=$PoCRootDir/$PrecompiledDir/$GHDLDirName
 	# Create and change to destination directory
-	mkdir -p $DestDir
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${RED}ERROR: Cannot create output directory.${NOCOLOR}"
+	# -> $DestinationDirectory
+	CreateDestinationDirectory $DestDir
+	
+	# Assemble Altera compile script path
+	GHDLOSVVMScript="$(readlink -f $GHDLScriptDir/compile-osvvm.sh)"
+	if [ ! -x $GHDLAlteraScript ]; then
+		echo 1>&2 -e "${COLORED_ERROR} OSVVM compile script from GHDL is not executable.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
-	cd $DestDir
+	
+	# Get OSVVM installation directory
+	OSVVMInstallDir=$PoCRootDir/$OSVVMLibDir
+	SourceDir=$OSVVMInstallDir
+
+	# export GHDL binary dir if not allready set
+	if [ -z $GHDL ]; then
+		export GHDL=$GHDLBinDir/ghdl
+	fi
+	
+	# compile all architectures, skip existing and large files, no wanrings
+	$GHDLOSVVMScript --all -n --src $SourceDir --out "."
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${RED}ERROR: Cannot change to output directory.${NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
 	
-	if [ -z "$(which grcat)" ]; then
-		# if grcat (generic colourizer) is not installed, use a dummy pipe command like 'cat'
-		GRC_COMMAND="cat"
-	else
-		# if [ "$SUPPRESS_WARNINGS" == "TRUE" ]; then
-			GRC_COMMAND="grcat $ScriptDir/ghdl.skipwarning.grcrules"
-		# else
-			# GRC_COMMAND="grcat $ScriptDir/ghdl.grcrules"
-		# fi
-	fi
-	
-	# Analyze each VHDL source file.
-	echo -e "${YELLOW}Compiling library 'osvvm' with GHDL ...${NOCOLOR}"
-	for file in ${Files[@]}; do
-		echo "  Compiling $file..."
-		$BinDir/ghdl -a -fexplicit -frelaxed-rules --no-vital-checks --warn-binding --mb-comments --std=08 --work=osvvm $SourceDir/$file 2>&1 | $GRC_COMMAND
-		if [ $? -ne 0 ]; then
-			let ERRORCOUNT++
-		fi
-	done
-	
-	# print overall result
-	echo -n "Compiling library 'osvvm' with GHDL "
-	if [ $ERRORCOUNT -gt 0 ]; then
-		echo -e $COLORED_FAILED
-	else
-		echo -e $COLORED_SUCCESSFUL
-	fi
+	# # Cleanup
+	# if [ "$CLEAN" == "TRUE" ]; then
+		# echo -e "${YELLOW}Cleaning library 'osvvm' ...${ANSI_NOCOLOR}"
+		# rm -Rf $DestDir 2> /dev/null
+	# fi
 	
 	cd $WorkingDir
 fi
@@ -229,39 +177,54 @@ fi
 # ==============================================================================
 ERRORCOUNT=0
 if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
-	DestDir=$PoCRootDir/$PrecompiledDir/vsim
-	
-	# Get QuestaSim/ModelSim binary
-	BinDir=$($poc_sh query ModelSim:BinaryDirectory 2>/dev/null)	# Path to the simulators bin directory
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${RED}ERROR: Cannot get QuestaSim/ModelSim binary dir.${NOCOLOR}"
-		echo 1>&2 -e "${RED}$BinDir${NOCOLOR}"
-		exit -1;
-	fi
-	
+	# Get GHDL directories
+	# <= $VSimBinDir
+	# <= $VSimDirName
+	GetVSimDirectories $PoC_sh
+
+	# Assemble output directory
+	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName
 	# Create and change to destination directory
-	mkdir -p $DestDir
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${RED}ERROR: Cannot create output directory.${NOCOLOR}"
-		exit -1;
+	# -> $DestinationDirectory
+	CreateDestinationDirectory $DestDir
+
+
+	# clean osvvm directory
+	if [ -d $DestDir/osvvm ]; then
+		echo -e "${YELLOW}Cleaning library 'osvvm' ...${ANSI_NOCOLOR}"
+		rm -rf osvvm
 	fi
-	cd $DestDir
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${RED}ERROR: Cannot change to output directory.${NOCOLOR}"
-		exit -1;
-	fi
+	
+	# Get OSVVM installation directory
+	OSVVMInstallDir=$PoCRootDir/$OSVVMLibDir
+	SourceDir=$OSVVMInstallDir
+	
+	# Files
+	Files=(
+		NamePkg.vhd
+		OsvvmGlobalPkg.vhd
+		TextUtilPkg.vhd
+		TranscriptPkg.vhd
+		AlertLogPkg.vhd
+		MemoryPkg.vhd
+		MessagePkg.vhd
+		SortListPkg_int.vhd
+		RandomBasePkg.vhd
+		RandomPkg.vhd
+		CoveragePkg.vhd
+		OsvvmContext.vhd
+	)
 	
 	# Compile libraries with vcom, executed in destination directory
-	echo -e "${YELLOW}Cleaning library 'osvvm' ...${NOCOLOR}"
-	rm -rf osvvm
-	echo -e "${YELLOW}Creating library 'osvvm' with vlib/vmap ...${NOCOLOR}"
-	$BinDir/vlib osvvm
-	$BinDir/vmap -del osvvm
-	$BinDir/vmap osvvm $DestDir/osvvm
-	echo -e "${YELLOW}Compiling library 'osvvm' with vcom ...${NOCOLOR}"
-	for file in ${Files[@]}; do
+	echo -e "${YELLOW}Creating library 'osvvm' with vlib/vmap ...${ANSI_NOCOLOR}"
+	$VSimBinDir/vlib osvvm
+	$VSimBinDir/vmap -del osvvm
+	$VSimBinDir/vmap osvvm $DestDir/osvvm
+	
+	echo -e "${YELLOW}Compiling library 'osvvm' with vcom ...${ANSI_NOCOLOR}"
+	for File in ${Files[@]}; do
 		echo "  Compiling $file..."
-		$BinDir/vcom -2008 -work osvvm $SourceDir/$file
+		$VSimBinDir/vcom -2008 -work osvvm $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi
@@ -277,3 +240,4 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	
 	cd $WorkingDir
 fi
+

@@ -273,21 +273,21 @@ if ($PoC_ExitCode -eq 0) {
 foreach ($VendorName in $PyWrapper_LoadEnv.Keys)
 {	foreach ($ToolName in $PyWrapper_LoadEnv[$VendorName]['Tools'].Keys)
 	{	if ($PyWrapper_LoadEnv[$VendorName]['Tools'][$ToolName]['Load'])
-		{	# if exists, source the vendor pre-hook file
-			$VendorPostHookFile = "$PoC_RootDir\$PoC_HookDirectory\$($PyWrapper_LoadEnv[$VendorName]['PostHookFile'])"
-			if (Test-Path $VendorPostHookFile -PathType Leaf)
-			{	. ($VendorPostHookFile)	}
-			# if exists, source the tool pre-hook file
+		{	# if exists, source the tool pre-hook file
 			$ToolPostHookFile = "$PoC_RootDir\$PoC_HookDirectory\$($PyWrapper_LoadEnv[$VendorName]['Tools'][$ToolName]['PostHookFile'])"
 			if (Test-Path $ToolPostHookFile -PathType Leaf)
 			{	. ($ToolPostHookFile)		}
+			
+			# if exists, source the vendor pre-hook file
+			$VendorPostHookFile = "$PoC_RootDir\$PoC_HookDirectory\$($PyWrapper_LoadEnv[$VendorName]['PostHookFile'])"
+			if (Test-Path $VendorPostHookFile -PathType Leaf)
+			{	. ($VendorPostHookFile)	}
 			
 			$ModuleFile = "$PoC_RootDir\$PoC_WrapperDirectory\$($PyWrapper_LoadEnv[$VendorName]['Tools'][$ToolName]['PSModule'])"
 			if (Test-Path $ModuleFile -PathType Leaf)
 			{	$ModuleName = (Get-Item $ModuleFile).BaseName
 				if (Get-Module $ModuleName)
-				{ 
-					$PoC_ExitCode = Close-Environment
+				{ $PoC_ExitCode = Close-Environment
 					Remove-Module $ModuleName
 				}
 			}

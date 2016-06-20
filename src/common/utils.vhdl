@@ -125,8 +125,8 @@ package utils is
 	function ite(cond : BOOLEAN; value1 : STRING; value2 : STRING) return STRING;
 
 	-- conditional increment / decrement
-	function inc(cond : BOOLEAN; value : INTEGER; increment : INTEGER := 1) return INTEGER;
-	function dec(cond : BOOLEAN; value : INTEGER; decrement : INTEGER := 1) return INTEGER;
+	function inc_if(cond : BOOLEAN; value : INTEGER; increment : INTEGER := 1) return INTEGER;
+	function dec_if(cond : BOOLEAN; value : INTEGER; decrement : INTEGER := 1) return INTEGER;
 
   --+ Max / Min / Sum ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	function imin(arg1 : integer; arg2 : integer) return integer;		-- Calculates: min(arg1, arg2) for integers
@@ -468,7 +468,7 @@ package body utils is
 	-- conditional increment / decrement
 	-- ===========================================================================
 	-- return the by increment incremented Value if cond is true else passthrough Value
-	function inc(cond : BOOLEAN; Value : INTEGER; increment : INTEGER := 1) return INTEGER is
+	function inc_if(cond : BOOLEAN; Value : INTEGER; increment : INTEGER := 1) return INTEGER is
 	begin
 		if cond then
 			return Value + increment;
@@ -478,7 +478,7 @@ package body utils is
 	end function;
 
 	-- return the by decrement decremented Value if cond is true else passthrough Value
-	function dec(cond : BOOLEAN; Value : INTEGER; decrement : INTEGER := 1) return INTEGER is
+	function dec_if(cond : BOOLEAN; Value : INTEGER; decrement : INTEGER := 1) return INTEGER is
 	begin
 		if cond then
 			return Value - decrement;

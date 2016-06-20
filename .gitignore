@@ -16,7 +16,9 @@ __pycache__
 !/netlist/template.cgc
 
 # ignore folders
-docs/_build/
+/docs/_build/
+/py/Wrapper/Hooks/*
+!/py/Wrapper/Hooks/README.md
 /temp/*
 !/temp/.*
 !/temp/*.*

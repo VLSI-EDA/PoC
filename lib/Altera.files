@@ -11,19 +11,19 @@ if (VHDLVersion < 2002) then
 		path GHDL_Directory =   (PreCompiled / ${CONFIG.DirectoryNames:GHDLFiles})
 		path Altera_Directory = (GHDL_Directory / ${CONFIG.DirectoryNames:AlteraSpecificFiles})
 		if ?{Altera_Directory} then
-			if ?{(Altera_Directory / "lpm-obj93.cf")} then
+			if ?{(Altera_Directory / "lpm/v93/lpm-obj93.cf")} then
 				library lpm						Altera_Directory
 			end if
-			if ?{(Altera_Directory / "sgate-obj93.cf")} then
+			if ?{(Altera_Directory / "sgate/v93/sgate-obj93.cf")} then
 				library sgate					Altera_Directory
 			end if
-			if ?{(Altera_Directory / "altera-obj93.cf")} then
+			if ?{(Altera_Directory / "altera/v93/altera-obj93.cf")} then
 				library altera				Altera_Directory
 			end if
-			if ?{(Altera_Directory / "altera_mf-obj93.cf")} then
+			if ?{(Altera_Directory / "altera_mf/v93/altera_mf-obj93.cf")} then
 				library altera_mf			Altera_Directory
 			end if
-			if ?{(Altera_Directory / "altera_lnsim-obj93.cf")} then
+			if ?{(Altera_Directory / "altera_lnsim/v93/altera_lnsim-obj93.cf")} then
 				library altera_lnsim	Altera_Directory
 			end if
 			# TODO: add device libraries if needed
@@ -50,5 +50,5 @@ if (VHDLVersion < 2002) then
 		report "No precompiled Altera primitives found."
 	end if
 else
-	report "VHDL version not supported by Altera primitives."
+	report "VHDL version >= 2002 not supported by Altera primitives."
 end if

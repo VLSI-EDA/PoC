@@ -211,7 +211,6 @@ package body strings is
 	end function;
 
 	function to_HexChar(Value : UNSIGNED) return CHARACTER is
-	  constant HEX : STRING := "0123456789ABCDEF";
 	begin
 		return to_HexChar(to_integer(Value));
 	end function;

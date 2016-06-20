@@ -346,12 +346,12 @@ package body sim_unprotected is
 			-- add process to list
 			globalSim_Processes(Proc.ID)	:= Proc;
 			globalSim_ProcessCount				:= globalSim_ProcessCount + 1;
-			globalSim_ActiveProcessCount	:= inc(not IsLowPriority, globalSim_ActiveProcessCount);
+			globalSim_ActiveProcessCount	:= inc_if(not IsLowPriority, globalSim_ActiveProcessCount);
 			-- add process to test
 			TestProcID																			:= globalSim_Tests(TestID).ProcessCount;
 			globalSim_Tests(TestID).ProcessIDs(TestProcID)	:= Proc.ID;
 			globalSim_Tests(TestID).ProcessCount						:= TestProcID + 1;
-			globalSim_Tests(TestID).ActiveProcessCount			:= inc(not IsLowPriority, globalSim_Tests(TestID).ActiveProcessCount);
+			globalSim_Tests(TestID).ActiveProcessCount			:= inc_if(not IsLowPriority, globalSim_Tests(TestID).ActiveProcessCount);
 			-- return the process ID
 			return Proc.ID;
 		else
@@ -369,8 +369,8 @@ package body sim_unprotected is
 			if (globalSim_Processes(ProcID).Status = SIM_PROCESS_STATUS_ACTIVE) then
 				if C_SIM_VERBOSE then		report "deactivateProcess(ProcID=" & T_SIM_PROCESS_ID'image(ProcID) & "): TestID=" & T_SIM_TEST_ID'image(TestID) & "  Name=" & str_trim(globalSim_Processes(ProcID).Name) severity NOTE;		end if;
 				globalSim_Processes(ProcID).Status					:= SIM_PROCESS_STATUS_ENDED;
-				globalSim_ActiveProcessCount								:= dec(not globalSim_Processes(ProcID).IsLowPriority, globalSim_ActiveProcessCount);
-				globalSim_Tests(TestID).ActiveProcessCount	:= dec(not globalSim_Processes(ProcID).IsLowPriority, globalSim_Tests(TestID).ActiveProcessCount);
+				globalSim_ActiveProcessCount								:= dec_if(not globalSim_Processes(ProcID).IsLowPriority, globalSim_ActiveProcessCount);
+				globalSim_Tests(TestID).ActiveProcessCount	:= dec_if(not globalSim_Processes(ProcID).IsLowPriority, globalSim_Tests(TestID).ActiveProcessCount);
 				if (globalSim_Tests(TestID).ActiveProcessCount = 0) then
 					finalizeTest(TestID);
 				end if;

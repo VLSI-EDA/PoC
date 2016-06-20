@@ -47,7 +47,7 @@ OpenEnvironment() {
 			echo 1>&2 -e "${RED}$Vivado_SettingsFile${NOCOLOR}"
 			return 1
 		fi
-		 $Debug -eq 1 && echo 1>&2 -e "${YELLOW}Vivado settings file: '$Vivado_SettingsFile'${NOCOLOR}"
+		test $Debug -eq 1 && echo 1>&2 -e "${YELLOW}Vivado settings file: '$Vivado_SettingsFile'${NOCOLOR}"
 		if [ -z "$Vivado_SettingsFile" ]; then
 			echo 1>&2 -e "${RED}No Xilinx Vivado installation found.${NOCOLOR}"
 			echo 1>&2 -e "${RED}Run 'PoC.py configure' to configure your Xilinx Vivado installation.${NOCOLOR}"

@@ -7,11 +7,11 @@
 #	Authors:         	Martin Zabel
 #                   Patrick Lehmann
 # 
-#	Bash Script:			Compile Xilinx's simulation libraries
+#	Bash Script:			Compile Lattice's simulation libraries
 # 
 # Description:
 # ------------------------------------
-#	This is a bash script compiles Xilinx's simulation libraries into a local
+#	This is a bash script compiles Lattice's simulation libraries into a local
 #	directory.
 #
 # License:
@@ -62,10 +62,10 @@ while [[ $# > 0 ]]; do
 		COMPILE_FOR_GHDL=TRUE
 		NO_COMMAND=0
 		;;
-		--questa)
-		COMPILE_FOR_VSIM=TRUE
-		NO_COMMAND=0
-		;;
+		# --questa)
+		# COMPILE_FOR_VSIM=TRUE
+		# NO_COMMAND=0
+		# ;;
 		-h|--help)
 		HELP=TRUE
 		NO_COMMAND=0
@@ -86,13 +86,13 @@ if [ "$HELP" == "TRUE" ]; then
 	test $NO_COMMAND -eq 1 && echo 1>&2 -e "\n${COLORED_ERROR} No command selected.${ANSI_NOCOLOR}"
 	echo ""
 	echo "Synopsis:"
-	echo "  Script to compile the Xilinx ISE simulation libraries for"
+	echo "  Script to compile the Lattice Diamond simulation libraries for"
 	echo "  - GHDL"
-	echo "  - QuestaSim/ModelSim"
+	# echo "  - QuestaSim/ModelSim"
 	echo "  on Linux."
 	echo ""
 	echo "Usage:"
-	echo "  compile-xilinx-ise.sh [-c] [--help|--all|--ghdl|--vsim]"
+	echo "  compile-lattice.sh [-c] [--help|--all|--ghdl|--vsim]"
 	echo ""
 	echo "Common commands:"
 	echo "  -h --help             Print this help page"
@@ -101,7 +101,7 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "Tool chain:"
 	echo "  -a --all              Compile for all tool chains."
 	echo "     --ghdl             Compile for GHDL."
-	echo "     --questa           Compile for QuestaSim/ModelSim."
+	# echo "     --questa           Compile for QuestaSim/ModelSim."
 	echo ""
 	exit 0
 fi
@@ -109,7 +109,7 @@ fi
 
 if [ "$COMPILE_ALL" == "TRUE" ]; then
 	COMPILE_FOR_GHDL=TRUE
-	COMPILE_FOR_VSIM=TRUE
+	# COMPILE_FOR_VSIM=TRUE
 fi
 
 PrecompiledDir=$($PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
@@ -119,13 +119,12 @@ if [ $? -ne 0 ]; then
 	exit -1;
 fi
 
-XilinxDirName=$($PoC_sh query CONFIG.DirectoryNames:XilinxSpecificFiles 2>/dev/null)
+LatticeDirName=$($PoC_sh query CONFIG.DirectoryNames:LatticeSpecificFiles 2>/dev/null)
 if [ $? -ne 0 ]; then
-	echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx directory.${ANSI_NOCOLOR}"
-	echo 1>&2 -e "${ANSI_RED}$XilinxDirName${ANSI_NOCOLOR}"
+	echo 1>&2 -e "${COLORED_ERROR} Cannot get Lattice directory.${ANSI_NOCOLOR}"
+	echo 1>&2 -e "${ANSI_RED}$LatticeDirName${ANSI_NOCOLOR}"
 	exit -1;
 fi
-XilinxDirName2=$XilinxDirName-ise
 
 # GHDL
 # ==============================================================================
@@ -143,22 +142,22 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
 	
-	# Assemble Xilinx compile script path
-	GHDLXilinxScript="$(readlink -f $GHDLScriptDir/compile-xilinx-ise.sh)"
-	if [ ! -x $GHDLXilinxScript ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Xilinx compile script from GHDL is not executable.${ANSI_NOCOLOR}"
+	# Assemble Lattice compile script path
+	GHDLLatticeScript="$(readlink -f $GHDLScriptDir/compile-lattice.sh)"
+	if [ ! -x $GHDLLatticeScript ]; then
+		echo 1>&2 -e "${COLORED_ERROR} Lattice compile script from GHDL is not executable.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
 	
-	# Get Xilinx installation directory
-	ISEInstallDir=$($PoC_sh query INSTALL.Xilinx.ISE:InstallationDirectory 2>/dev/null)
+	# Get Lattice installation directory
+	DiamondInstallDir=$($PoC_sh query INSTALL.Lattice.Diamond:InstallationDirectory 2>/dev/null)
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx ISE installation directory.${ANSI_NOCOLOR}"
-		echo 1>&2 -e "${COLORED_MESSAGE} $ISEInstallDir${ANSI_NOCOLOR}"
-		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Cannot get Lattice Diamond installation directory.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_MESSAGE} $DiamondInstallDir${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Lattice Diamond installation.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
-	SourceDir=$ISEInstallDir/ISE/vhdl/src
+	SourceDir=$DiamondInstallDir/cae_library/simulation/vhdl
 
 	# export GHDL binary dir if not allready set
 	if [ -z $GHDL ]; then
@@ -166,15 +165,11 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	fi
 	
 	# compile all architectures, skip existing and large files, no wanrings
-	$GHDLXilinxScript --all -s -S -n --src $SourceDir --out $XilinxDirName2
+	$GHDLLatticeScript --all -s -n --src $SourceDir --out $LatticeDirName
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
-	
-	# create "xilinx" symlink
-	rm -f $XilinxDirName
-	ln -s $XilinxDirName2 $XilinxDirName
 fi
 
 # QuestaSim/ModelSim
@@ -187,37 +182,39 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	GetVSimDirectories $PoC_sh
 
 	# Assemble output directory
-	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName/$XilinxDirName2
+	LatticeDirName2=$LatticeDirName-diamond
+	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName/$LatticeDirName2
+	
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
 
-	# if XILINX environment variable is not set, load ISE environment
-	if [ -z "$XILINX" ]; then
-		ISE_SettingsFile=$($PoC_sh query Xilinx.ISE:SettingsFile)
+	# if XILINX_VIVADO environment variable is not set, load Diamond environment
+	if [ -z "$XILINX_VIVADO" ]; then
+		Diamond_SettingsFile=$($PoC_sh query Lattice.Diamond:SettingsFile)
 		if [ $? -ne 0 ]; then
-			echo 1>&2 -e "${COLORED_ERROR} No Xilinx ISE installation found.${ANSI_NOCOLOR}"
-			echo 1>&2 -e "${COLORED_MESSAGE} $ISE_SettingsFile${ANSI_NOCOLOR}"
-			echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
+			echo 1>&2 -e "${COLORED_ERROR} No Lattice Diamond installation found.${ANSI_NOCOLOR}"
+			echo 1>&2 -e "${COLORED_MESSAGE} $Diamond_SettingsFile${ANSI_NOCOLOR}"
+			echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Lattice Diamond installation.${ANSI_NOCOLOR}"
 			exit -1
 		fi
-		echo -e "${YELLOW}Loading Xilinx ISE environment '$ISE_SettingsFile'${ANSI_NOCOLOR}"
+		echo -e "${YELLOW}Loading Lattice Diamond environment '$Diamond_SettingsFile'${ANSI_NOCOLOR}"
 		RescueArgs=$@
 		set --
-		source "$ISE_SettingsFile"
+		source "$Diamond_SettingsFile"
 		set -- $RescueArgs
 	fi
 	
-	ISEBinDir=$($PoC_sh query INSTALL.Xilinx.ISE:BinaryDirectory 2>/dev/null)
+	DiamondBinDir=$($PoC_sh query INSTALL.Lattice.Diamond:BinaryDirectory 2>/dev/null)
   if [ $? -ne 0 ]; then
-	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx ISE binary directory.${ANSI_NOCOLOR}"
-	  echo 1>&2 -e "${COLORED_MESSAGE} $ISEBinDir${ANSI_NOCOLOR}"
-		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
+	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Lattice Diamond binary directory.${ANSI_NOCOLOR}"
+	  echo 1>&2 -e "${COLORED_MESSAGE} $DiamondBinDir${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Lattice Diamond installation.${ANSI_NOCOLOR}"
 		exit -1;
   fi
-	ISE_compxlib=$ISEBinDir/compxlib
+	Diamond_tcl=$DiamondBinDir/diamond
 	
-	# create an empty modelsim.ini in the 'xilinx-ise' directory and add reference to parent modelsim.ini
+	# create an empty modelsim.ini in the altera directory and add reference to parent modelsim.ini
 	CreateLocalModelsim_ini
 
 	Simulator=questa
@@ -225,15 +222,10 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	TargetArchitecture=all			# all, virtex5, virtex6, virtex7, ...
 	
 	# compile common libraries
-	$ISE_compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $VSimBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise
+	compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $QuestaBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib latticecorelib -intstyle diamond
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Error while compiling Xilinx ISE libraries.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Error while compiling common libraries.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
-	
-	# create "xilinx" symlink
-	cd ..
-	rm -f $XilinxDirName
-	ln -s $XilinxDirName2 $XilinxDirName
 fi
 

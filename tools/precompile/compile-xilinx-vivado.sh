@@ -86,13 +86,13 @@ if [ "$HELP" == "TRUE" ]; then
 	test $NO_COMMAND -eq 1 && echo 1>&2 -e "\n${COLORED_ERROR} No command selected.${ANSI_NOCOLOR}"
 	echo ""
 	echo "Synopsis:"
-	echo "  Script to compile the Xilinx ISE simulation libraries for"
+	echo "  Script to compile the Xilinx Vivado simulation libraries for"
 	echo "  - GHDL"
 	echo "  - QuestaSim/ModelSim"
 	echo "  on Linux."
 	echo ""
 	echo "Usage:"
-	echo "  compile-xilinx-ise.sh [-c] [--help|--all|--ghdl|--vsim]"
+	echo "  compile-xilinx-vivado.sh [-c] [--help|--all|--ghdl|--vsim]"
 	echo ""
 	echo "Common commands:"
 	echo "  -h --help             Print this help page"
@@ -125,7 +125,7 @@ if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${ANSI_RED}$XilinxDirName${ANSI_NOCOLOR}"
 	exit -1;
 fi
-XilinxDirName2=$XilinxDirName-ise
+XilinxDirName2=$XilinxDirName-vivado
 
 # GHDL
 # ==============================================================================
@@ -144,21 +144,21 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	CreateDestinationDirectory $DestDir
 	
 	# Assemble Xilinx compile script path
-	GHDLXilinxScript="$(readlink -f $GHDLScriptDir/compile-xilinx-ise.sh)"
+	GHDLXilinxScript="$(readlink -f $GHDLScriptDir/compile-xilinx-vivado.sh)"
 	if [ ! -x $GHDLXilinxScript ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Xilinx compile script from GHDL is not executable.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
 	
 	# Get Xilinx installation directory
-	ISEInstallDir=$($PoC_sh query INSTALL.Xilinx.ISE:InstallationDirectory 2>/dev/null)
+	VivadoInstallDir=$($PoC_sh query INSTALL.Xilinx.Vivado:InstallationDirectory 2>/dev/null)
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx ISE installation directory.${ANSI_NOCOLOR}"
-		echo 1>&2 -e "${COLORED_MESSAGE} $ISEInstallDir${ANSI_NOCOLOR}"
-		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx Vivado installation directory.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_MESSAGE} $VivadoInstallDir${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx Vivado installation.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
-	SourceDir=$ISEInstallDir/ISE/vhdl/src
+	SourceDir=$VivadoInstallDir/data/vhdl/src
 
 	# export GHDL binary dir if not allready set
 	if [ -z $GHDL ]; then
@@ -188,46 +188,57 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 
 	# Assemble output directory
 	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName/$XilinxDirName2
+	
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
 
-	# if XILINX environment variable is not set, load ISE environment
-	if [ -z "$XILINX" ]; then
-		ISE_SettingsFile=$($PoC_sh query Xilinx.ISE:SettingsFile)
+	# if XILINX_VIVADO environment variable is not set, load Vivado environment
+	if [ -z "$XILINX_VIVADO" ]; then
+		Vivado_SettingsFile=$($PoC_sh query Xilinx.Vivado:SettingsFile)
 		if [ $? -ne 0 ]; then
-			echo 1>&2 -e "${COLORED_ERROR} No Xilinx ISE installation found.${ANSI_NOCOLOR}"
-			echo 1>&2 -e "${COLORED_MESSAGE} $ISE_SettingsFile${ANSI_NOCOLOR}"
-			echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
+			echo 1>&2 -e "${COLORED_ERROR} No Xilinx Vivado installation found.${ANSI_NOCOLOR}"
+			echo 1>&2 -e "${COLORED_MESSAGE} $Vivado_SettingsFile${ANSI_NOCOLOR}"
+			echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx Vivado installation.${ANSI_NOCOLOR}"
 			exit -1
 		fi
-		echo -e "${YELLOW}Loading Xilinx ISE environment '$ISE_SettingsFile'${ANSI_NOCOLOR}"
+		echo -e "${YELLOW}Loading Xilinx Vivado environment '$Vivado_SettingsFile'${ANSI_NOCOLOR}"
 		RescueArgs=$@
 		set --
-		source "$ISE_SettingsFile"
+		source "$Vivado_SettingsFile"
 		set -- $RescueArgs
 	fi
 	
-	ISEBinDir=$($PoC_sh query INSTALL.Xilinx.ISE:BinaryDirectory 2>/dev/null)
+	VivadoBinDir=$($PoC_sh query INSTALL.Xilinx.Vivado:BinaryDirectory 2>/dev/null)
   if [ $? -ne 0 ]; then
-	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx ISE binary directory.${ANSI_NOCOLOR}"
-	  echo 1>&2 -e "${COLORED_MESSAGE} $ISEBinDir${ANSI_NOCOLOR}"
-		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
+	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx Vivado binary directory.${ANSI_NOCOLOR}"
+	  echo 1>&2 -e "${COLORED_MESSAGE} $VivadoBinDir${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx Vivado installation.${ANSI_NOCOLOR}"
 		exit -1;
   fi
-	ISE_compxlib=$ISEBinDir/compxlib
+	Vivado_tcl=$VivadoBinDir/vivado
 	
-	# create an empty modelsim.ini in the 'xilinx-ise' directory and add reference to parent modelsim.ini
+	# create an empty modelsim.ini in the 'xilinx-vivado' directory and add reference to parent modelsim.ini
 	CreateLocalModelsim_ini
 
 	Simulator=questa
 	Language=vhdl
-	TargetArchitecture=all			# all, virtex5, virtex6, virtex7, ...
+	Library=all
+	Family=all			# all, virtex5, virtex6, virtex7, ...
 	
-	# compile common libraries
-	$ISE_compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $VSimBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise
+	CommandFile=vivado.tcl
+	
+	echo "compile_simlib -force -library $Library -family $Family -language $Language -simulator $Simulator -simulator_exec_path $VSimBinDir -directory $DestDir" > $CommandFile
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Error while compiling Xilinx ISE libraries.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Cannot create temporary tcl script.${ANSI_NOCOLOR}"
+		exit -1;
+	fi
+	echo "exit" >> $CommandFile
+
+	# compile common libraries
+	$Vivado_tcl -mode tcl -source $CommandFile
+	if [ $? -ne 0 ]; then
+		echo 1>&2 -e "${COLORED_ERROR} Error while compiling Xilinx Vivado libraries.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
 	

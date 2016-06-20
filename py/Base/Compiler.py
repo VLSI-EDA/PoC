@@ -292,8 +292,10 @@ class Compiler(Shared):
 					appendPattern =   self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.AppendPattern, {})
 					task = AppendLineTask(Path(filePath), appendPattern)
 					preReplaceTasks.append(task)
+				elif isinstance(rule, CopyRuleMixIn):
+					pass
 				else:
-					raise CompilerException("Unknown post-process rule '{0!s}'.".format(rule))
+					raise CompilerException("Unknown pre-process rule '{0!s}'.".format(rule))
 		else:
 			preReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PreReplaceRules']
 			if (len(preReplaceRules) != 0):
@@ -321,6 +323,8 @@ class Compiler(Shared):
 					appendPattern =   self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.AppendPattern, {})
 					task = AppendLineTask(Path(filePath), appendPattern)
 					postReplaceTasks.append(task)
+				elif isinstance(rule, CopyRuleMixIn):
+					pass
 				else:
 					raise CompilerException("Unknown post-process rule '{0!s}'.".format(rule))
 		else:

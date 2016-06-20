@@ -44,7 +44,7 @@ On Windows
    All Windows command line instructions are intended for :program:`Windows PowerShell`,
    if not marked otherwise. So executing the following instructions in Windows
    Command Prompt (:program:`cmd.exe`) won't function or result in errors! See
-   the :doc:`Requirements section </QuickStart/Requirements>` on where to
+   the :doc:`Requirements section </UsingPoC/Requirements>` on where to
    download or update PowerShell.
 
 .. code-block:: powershell
@@ -59,9 +59,9 @@ On Windows
    git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
 
 .. seealso::
-   :doc:`Configuring PoC on a Local System </UsingPoC/Configuration>`
+   :doc:`Configuring PoC on a Local System </UsingPoC/PoCConfiguration>`
      
-   :doc:`Create PoC's VHDL Configuration Files </UsingPoC/Configuration>`
+   :doc:`Create PoC's VHDL Configuration Files </UsingPoC/VHDLConfiguration>`
      
 
 	 

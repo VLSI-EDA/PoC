@@ -585,13 +585,13 @@ class ProcessRulesBlockStatement(BlockStatement):
 
 class PreProcessRulesStatement(ProcessRulesBlockStatement):
 	__PARSER_NAME__ =       "PreProcessRulesParser"
-	__PARSER_BLOCK_NAME =   "preprocessrules"
+	__PARSER_BLOCK_NAME__ = "preprocessrules"
 	__PARSER_STATEMENTS__ = PreProcessStatements
 
 
 class PostProcessStatement(ProcessRulesBlockStatement):
 	__PARSER_NAME__ =       "PreProcessRulesParser"
-	__PARSER_BLOCK_NAME =   "preprocessrules"
+	__PARSER_BLOCK_NAME__ = "preprocessrules"
 	__PARSER_STATEMENTS__ = PostProcessStatements
 
 

@@ -1,4 +1,3 @@
-#! /bin/bash
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -177,8 +176,24 @@ declare -A Env_Xilinx_Vivado=(
 	["PostHookFile"]="Xilinx.Vivado.post.sh"
 )
 
+
+# Cocotb
+declare -A Env_Cocotb=(
+	["PreHookFile"]="Cocotb.pre.sh"
+	["PostHookFile"]="Cocotb.post.sh"
+	["Tools"]="QuestaSim"
+)
+declare -A Env_Cocotb_QuestaSim=(
+	["Load"]=0
+	["Commands"]="cocotb"
+	["BashModule"]="Cocotb.QuestaSim.sh"
+	["PreHookFile"]="Cocotb.QuestaSim.pre.sh"
+	["PostHookFile"]="Cocotb.QuestaSim.post.sh"
+)
+
+
 # List all vendors
-Env_Vendors="Aldec Altera GHDL Lattice Mentor Sphinx Xilinx"
+Env_Vendors="Aldec Altera GHDL Lattice Mentor Sphinx Xilinx Cocotb"
 
 # search script parameters for known commands
 BreakIt=0
@@ -309,13 +324,13 @@ for VendorName in $Env_Vendors; do
 	for ToolName in ${VendorIndex["Tools"]}; do
 		declare -n ToolIndex="Env_${VendorName}_${ToolName}"
 		if [ ${ToolIndex["Load"]} -eq 1 ]; then
-			# if exists, source the vendor post-hook file
-			VendorPostHookFile=$PoC_RootDir/$PoC_HookDirectory/${VendorIndex["PostHookFile"]}
-			test -f $VendorPostHookFile && source $VendorPostHookFile
-			
 			# if exists, source the tool Post-hook file
 			ToolPostHookFile=$PoC_RootDir/$PoC_HookDirectory/${ToolIndex["PostHookFile"]}
 			test -f $ToolPostHookFile && source $ToolPostHookFile
+			
+			# if exists, source the vendor post-hook file
+			VendorPostHookFile=$PoC_RootDir/$PoC_HookDirectory/${VendorIndex["PostHookFile"]}
+			test -f $VendorPostHookFile && source $VendorPostHookFile
 			
 			# if exists, source the BashModule file
 			ModuleFile=$PoC_RootDir/$PoC_WrapperDirectory/${ToolIndex["BashModule"]}

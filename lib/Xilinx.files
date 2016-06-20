@@ -8,38 +8,37 @@ path PreCompiled = ${CONFIG.DirectoryNames:PrecompiledFiles}
 
 if (Tool = "GHDL") then
 	path GHDL_Directory = (PreCompiled / ${CONFIG.DirectoryNames:GHDLFiles})
+	path Xilinx_Directory = (GHDL_Directory / ${CONFIG.DirectoryNames:XilinxSpecificFiles})
 	if (VHDLVersion < 2002) then
-		path Xilinx93_Directory = (GHDL_Directory / (${CONFIG.DirectoryNames:XilinxSpecificFiles} & ".v93"))
-		if ?{Xilinx93_Directory} then
-			if ?{(Xilinx93_Directory / "unisim-obj93.cf")} then
-				library unisim		Xilinx93_Directory
+		if ?{Xilinx_Directory} then
+			if ?{(Xilinx_Directory / "unisim/v93/unisim-obj93.cf")} then
+				library unisim		Xilinx_Directory
 			end if
-			if ?{(Xilinx93_Directory / "unimacro-obj93.cf")} then
-				library unimacro	Xilinx93_Directory
+			if ?{(Xilinx_Directory / "unimacro/v93/unimacro-obj93.cf")} then
+				library unimacro	Xilinx_Directory
 			end if
-			if ?{(Xilinx93_Directory / "secureip-obj93.cf")} then
-				library secureip	Xilinx93_Directory
+			if ?{(Xilinx_Directory / "secureip/v93/secureip-obj93.cf")} then
+				library secureip	Xilinx_Directory
 			end if
-			if ?{(Xilinx93_Directory / "simprim-obj93.cf")} then
-				library simprim		Xilinx93_Directory
+			if ?{(Xilinx_Directory / "simprim/v93/simprim-obj93.cf")} then
+				library simprim		Xilinx_Directory
 			end if
 		else
 			report "No precompiled Xilinx primitives for GHDL and VHDL-93 found."
 		end if
 	elseif (VHDLVersion <= 2008) then
-		path Xilinx08_Directory = (GHDL_Directory / (${CONFIG.DirectoryNames:XilinxSpecificFiles} & ".v08"))
-		if ?{Xilinx08_Directory} then
-			if ?{(Xilinx08_Directory / "unisim-obj08.cf")} then
-				library unisim		Xilinx08_Directory
+		if ?{Xilinx_Directory} then
+			if ?{(Xilinx_Directory / "unisim/v08/unisim-obj08.cf")} then
+				library unisim		Xilinx_Directory
 			end if
-			if ?{(Xilinx08_Directory / "unimacro-obj08.cf")} then
-				library unimacro	Xilinx08_Directory
+			if ?{(Xilinx_Directory / "unimacro/v08/unimacro-obj08.cf")} then
+				library unimacro	Xilinx_Directory
 			end if
-			if ?{(Xilinx08_Directory / "secureip-obj08.cf")} then
-				library secureip	Xilinx08_Directory
+			if ?{(Xilinx_Directory / "secureip/v08/secureip-obj08.cf")} then
+				library secureip	Xilinx_Directory
 			end if
-			if ?{(Xilinx08_Directory / "simprim-obj08.cf")} then
-				library simprim		Xilinx08_Directory
+			if ?{(Xilinx_Directory / "simprim/v08/simprim-obj08.cf")} then
+				library simprim		Xilinx_Directory
 			end if
 		else
 			report "No precompiled Xilinx primitives for GHDL and VHDL-2008 found."

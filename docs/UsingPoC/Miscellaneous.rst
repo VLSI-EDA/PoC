@@ -1,6 +1,6 @@
 
-Miscelaneous
-############
+Miscellaneous
+#############
 
 The directory ``PoCRoot\tools\`` contains several tools and addons to ease the
 work with the PoC-Library and VHDL.
