@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 # configure variables in the section below
 GHDL_BACKEND="llvm"

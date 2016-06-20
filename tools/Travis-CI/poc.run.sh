@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 POC_GHDL_DIR="temp/ghdl"
 

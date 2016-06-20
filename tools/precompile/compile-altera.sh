@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -32,12 +32,15 @@
 # limitations under the License.
 # ==============================================================================
 
+# work around for Darwin (Mac OS)
+READLINK=readlink; if [[ $(uname) == "Darwin" ]]; then READLINK=greadlink; fi
+
 # Save working directory
 WorkingDir=$(pwd)
 ScriptDir="$(dirname $0)"
-ScriptDir="$(readlink -f $ScriptDir)"
+ScriptDir="$($READLINK -f $ScriptDir)"
 
-PoCRootDir="$(readlink -f $ScriptDir/../..)"
+PoCRootDir="$($READLINK -f $ScriptDir/../..)"
 PoC_sh=$PoCRootDir/poc.sh
 
 # source shared file from precompile directory
@@ -143,7 +146,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	CreateDestinationDirectory $DestDir
 	
 	# Assemble Altera compile script path
-	GHDLAlteraScript="$(readlink -f $GHDLScriptDir/compile-altera.sh)"
+	GHDLAlteraScript="$($READLINK -f $GHDLScriptDir/compile-altera.sh)"
 	if [ ! -x $GHDLAlteraScript ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Altera compile script from GHDL is not executable.${ANSI_NOCOLOR}"
 		exit -1;

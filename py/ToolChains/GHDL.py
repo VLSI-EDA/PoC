@@ -75,7 +75,7 @@ class Configuration(BaseConfiguration):
 				"Version":                "0.34dev",
 				"InstallationDirectory":  "C:/Tools/GHDL/0.34dev",
 				"BinaryDirectory":        "${InstallationDirectory}/bin",
-				"ScriptDirectory":        "${InstallationDirectory}/lib/ghdl/vendors",
+				"ScriptDirectory":        "${InstallationDirectory}/scripts",
 				"Backend":                "mcode"
 			}
 		},
@@ -121,6 +121,21 @@ class Configuration(BaseConfiguration):
 
 		return super()._GetDefaultInstallationDirectory()
 
+	def _ConfigureBinaryDirectory(self):
+		"""Updates section with value from _template and returns directory as Path object."""
+		self._ConfigureScriptDirectory()
+		return super()._ConfigureBinaryDirectory()
+		
+	def _ConfigureScriptDirectory(self):
+		"""Updates section with value from _template and returns directory as Path object."""
+		unresolved = self._template[self._host.Platform][self._section]['ScriptDirectory']
+		self._host.PoCConfig[self._section]['ScriptDirectory'] = unresolved  # create entry
+		scriptPath = Path(self._host.PoCConfig[self._section]['ScriptDirectory'])  # resolve entry
+
+		if (not scriptPath.exists()):
+			raise ConfigurationException("{0!s} script directory '{1!s}' does not exist.".format(self, scriptPath)) \
+				from NotADirectoryError(str(scriptPath))
+
 	def __WriteGHDLSection(self, binPath):
 		if (self._host.Platform == "Windows"):
 			ghdlPath = binPath / "ghdl.exe"
@@ -156,8 +171,8 @@ class Configuration(BaseConfiguration):
 
 class GHDL(Executable):
 	def __init__(self, platform, binaryDirectoryPath, version, backend, logger=None):
-		if (platform == "Windows"):      executablePath = binaryDirectoryPath/ "ghdl.exe"
-		elif (platform == "Linux"):      executablePath = binaryDirectoryPath/ "ghdl"
+		if (platform == "Windows"):     executablePath = binaryDirectoryPath/ "ghdl.exe"
+		elif (platform == "Linux"):     executablePath = binaryDirectoryPath/ "ghdl"
 		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath/ "ghdl"
 		else:                                            raise PlatformNotSupportedException(platform)
 		super().__init__(platform, executablePath, logger=logger)
@@ -168,9 +183,9 @@ class GHDL(Executable):
 		if (platform == "Windows"):
 			if (backend not in ["mcode"]):                raise GHDLException("GHDL for Windows does not support backend '{0}'.".format(backend))
 		elif (platform == "Linux"):
-			if (backend not in ["gcc", "llvm", "mcode"]):  raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
+			if (backend not in ["gcc", "llvm", "mcode"]): raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
 		elif (platform == "Darwin"):
-			if (backend not in ["gcc", "llvm", "mcode"]):  raise GHDLException("GHDL for OS X does not support backend '{0}'.".format(backend))
+			if (backend not in ["gcc", "llvm", "mcode"]): raise GHDLException("GHDL for OS X does not support backend '{0}'.".format(backend))
 
 		self._binaryDirectoryPath =  binaryDirectoryPath
 		self._backend =              backend

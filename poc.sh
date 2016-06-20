@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -41,12 +41,15 @@ PyWrapper_MinVersion=3.5.0
 PyWrapper_RelPath="."
 PyWrapper_Solution=""
 
+# work around for Darwin (Mac OS)
+READLINK=readlink; if [[ $(uname) == "Darwin" ]]; then READLINK=greadlink; fi
+
 # resolve script directory
 # solution is from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do													# resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
+  SOURCE="$($READLINK "$SOURCE")"
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"			# if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"

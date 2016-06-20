@@ -70,6 +70,34 @@ Optional Tools on Linux:
     The latest *.deb installation packages can be downloaded `here <http://kassiopeia.juls.savba.sk/~garabik/software/grc/>`_.
 
 
+Mac OS specific requirements:
+*****************************
+
+* Bash |geq| 4.3
+    Mac OS is shipped with Bash 3.2. Use Homebrew to install an up-to-date Bash |br|
+    ``brew install bash``
+  
+* coreutils
+    Mac OS' ``readlink`` program has a different behavior than the Linux version.
+    The ``coreutils`` package installs a GNU readlink clone called ``greadlink``. |br|
+    ``brew install coreutils``
+
+
+Optional Tools on Mac OS:
+=========================
+
+* Git
+    The command line tools to manage Git repositories. It's possible to extend
+    the shell prompt with Git information.
+
+* SmartGit or SourceTree
+    A Git client to handle complex Git flows in a GUI.
+
+* `Generic Colouriser <http://kassiopeia.juls.savba.sk/~garabik/software/grc.html>`_ (grc) |geq| 1.9
+    Colorizes outputs of foreign scripts and programs. GRC is hosted on `GitHub <https://github.com/garabik/grc>`_ |br|
+    ``brew install Grc``
+
+
 Windows specific requirements:
 ******************************
 

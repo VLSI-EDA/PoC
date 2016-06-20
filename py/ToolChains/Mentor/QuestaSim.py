@@ -128,15 +128,14 @@ class Configuration(BaseConfiguration):
 				fileContent = dedent("""\
 								[Library]
 								others = $MODEL_TECH/../modelsim.ini
-								osvvm = osvvm
 								""")
 				fileHandle.write(fileContent)
 
 class QuestaSimMixIn:
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		self._platform =            platform
-		self._binaryDirectoryPath =  binaryDirectoryPath
-		self._version =              version
+		self._binaryDirectoryPath = binaryDirectoryPath
+		self._version =             version
 		self._logger =              logger
 
 class QuestaSim(QuestaSimMixIn):

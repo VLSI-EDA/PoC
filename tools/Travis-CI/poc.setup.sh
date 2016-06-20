@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 # define color escape codes
 RED='\e[0;31m'			# Red

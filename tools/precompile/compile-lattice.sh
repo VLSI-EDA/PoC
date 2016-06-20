@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -32,12 +32,15 @@
 # limitations under the License.
 # ==============================================================================
 
+# work around for Darwin (Mac OS)
+READLINK=readlink; if [[ $(uname) == "Darwin" ]]; then READLINK=greadlink; fi
+
 # Save working directory
 WorkingDir=$(pwd)
 ScriptDir="$(dirname $0)"
-ScriptDir="$(readlink -f $ScriptDir)"
+ScriptDir="$($READLINK -f $ScriptDir)"
 
-PoCRootDir="$(readlink -f $ScriptDir/../..)"
+PoCRootDir="$($READLINK -f $ScriptDir/../..)"
 PoC_sh=$PoCRootDir/poc.sh
 
 # source shared file from precompile directory
@@ -143,7 +146,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	CreateDestinationDirectory $DestDir
 	
 	# Assemble Lattice compile script path
-	GHDLLatticeScript="$(readlink -f $GHDLScriptDir/compile-lattice.sh)"
+	GHDLLatticeScript="$($READLINK -f $GHDLScriptDir/compile-lattice.sh)"
 	if [ ! -x $GHDLLatticeScript ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Lattice compile script from GHDL is not executable.${ANSI_NOCOLOR}"
 		exit -1;
@@ -182,29 +185,12 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	GetVSimDirectories $PoC_sh
 
 	# Assemble output directory
-	LatticeDirName2=$LatticeDirName-diamond
-	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName/$LatticeDirName2
+	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName/$LatticeDirName
 	
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
 
-	# if XILINX_VIVADO environment variable is not set, load Diamond environment
-	if [ -z "$XILINX_VIVADO" ]; then
-		Diamond_SettingsFile=$($PoC_sh query Lattice.Diamond:SettingsFile)
-		if [ $? -ne 0 ]; then
-			echo 1>&2 -e "${COLORED_ERROR} No Lattice Diamond installation found.${ANSI_NOCOLOR}"
-			echo 1>&2 -e "${COLORED_MESSAGE} $Diamond_SettingsFile${ANSI_NOCOLOR}"
-			echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Lattice Diamond installation.${ANSI_NOCOLOR}"
-			exit -1
-		fi
-		echo -e "${YELLOW}Loading Lattice Diamond environment '$Diamond_SettingsFile'${ANSI_NOCOLOR}"
-		RescueArgs=$@
-		set --
-		source "$Diamond_SettingsFile"
-		set -- $RescueArgs
-	fi
-	
 	DiamondBinDir=$($PoC_sh query INSTALL.Lattice.Diamond:BinaryDirectory 2>/dev/null)
   if [ $? -ne 0 ]; then
 	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Lattice Diamond binary directory.${ANSI_NOCOLOR}"
@@ -212,19 +198,19 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Lattice Diamond installation.${ANSI_NOCOLOR}"
 		exit -1;
   fi
-	Diamond_tcl=$DiamondBinDir/diamond
+	Diamond_tcl=$DiamondBinDir/pnmainc
 	
 	# create an empty modelsim.ini in the altera directory and add reference to parent modelsim.ini
 	CreateLocalModelsim_ini
 
-	Simulator=questa
+	Simulator=mentor
 	Language=vhdl
-	TargetArchitecture=all			# all, virtex5, virtex6, virtex7, ...
+	Device=all			# all, machxo, ecp, ...
 	
 	# compile common libraries
-	compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $QuestaBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib latticecorelib -intstyle diamond
+	$Diamond_tcl < "cmpl_libs -lang $Language -sim_vendor $Simulator -sim_path $VSimBinDir -device $Device -target_path $LatticeDirName; exit"
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Error while compiling common libraries.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Error while compiling Lattice libraries.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
 fi
