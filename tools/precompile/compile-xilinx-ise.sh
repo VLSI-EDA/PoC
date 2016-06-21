@@ -204,7 +204,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 			echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
 			exit -1
 		fi
-		echo -e "${YELLOW}Loading Xilinx ISE environment '$ISE_SettingsFile'${ANSI_NOCOLOR}"
+		echo -e "${ANSI_YELLOW}Loading Xilinx ISE environment '$ISE_SettingsFile'${ANSI_NOCOLOR}"
 		RescueArgs=$@
 		set --
 		source "$ISE_SettingsFile"

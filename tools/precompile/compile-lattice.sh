@@ -65,10 +65,10 @@ while [[ $# > 0 ]]; do
 		COMPILE_FOR_GHDL=TRUE
 		NO_COMMAND=0
 		;;
-		# --questa)
-		# COMPILE_FOR_VSIM=TRUE
-		# NO_COMMAND=0
-		# ;;
+		--questa)
+		COMPILE_FOR_VSIM=TRUE
+		NO_COMMAND=0
+		;;
 		-h|--help)
 		HELP=TRUE
 		NO_COMMAND=0
@@ -91,7 +91,7 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "Synopsis:"
 	echo "  Script to compile the Lattice Diamond simulation libraries for"
 	echo "  - GHDL"
-	# echo "  - QuestaSim/ModelSim"
+	echo "  - QuestaSim/ModelSim"
 	echo "  on Linux."
 	echo ""
 	echo "Usage:"
@@ -104,7 +104,7 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "Tool chain:"
 	echo "  -a --all              Compile for all tool chains."
 	echo "     --ghdl             Compile for GHDL."
-	# echo "     --questa           Compile for QuestaSim/ModelSim."
+	echo "     --questa           Compile for QuestaSim/ModelSim."
 	echo ""
 	exit 0
 fi
@@ -198,7 +198,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Lattice Diamond installation.${ANSI_NOCOLOR}"
 		exit -1;
   fi
-	Diamond_tcl=$DiamondBinDir/pnmainc
+	Diamond_tcl=$DiamondBinDir/diamondc
 	
 	# create an empty modelsim.ini in the altera directory and add reference to parent modelsim.ini
 	CreateLocalModelsim_ini
@@ -208,7 +208,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	Device=all			# all, machxo, ecp, ...
 	
 	# compile common libraries
-	$Diamond_tcl < "cmpl_libs -lang $Language -sim_vendor $Simulator -sim_path $VSimBinDir -device $Device -target_path $LatticeDirName; exit"
+	echo -e "cmpl_libs -lang $Language -sim_vendor $Simulator -sim_path $VSimBinDir -device $Device\nexit" | $Diamond_tcl
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Error while compiling Lattice libraries.${ANSI_NOCOLOR}"
 		exit -1;
