@@ -38,16 +38,16 @@ use			IEEE.std_logic_1164.all;
 entity comm_scramble is
   generic (
     GEN  : bit_vector;       -- Generator Polynomial (little endian)
-    BITS : positive          -- Width of Mask Bits to be computed in parallel
+    BITS : positive          -- Width of Mask Bits to be computed in parallel in each step
   );
   port (
     clk  : in  std_logic;    -- Clock
 
-    set  : in  std_logic;    -- Set LFSR to provided Value
-    din  : in  std_logic_vector(GEN'length-2 downto 0);
+    set  : in  std_logic;    -- Set LFSR to value provided on din
+    din  : in  std_logic_vector(GEN'length-2 downto 0) := (others => '0');
 
     step : in  std_logic;    -- Compute a Mask Output
-    mask : out std_logic_vector(BITS-1 downto 0) := (others => '0')
+    mask : out std_logic_vector(BITS-1 downto 0)
   );
 end comm_scramble;
 
