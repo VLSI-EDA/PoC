@@ -21,4 +21,4 @@ outputs are undefined in this case.
 Source file: `arith/arith_div.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_div.vhdl>`_
 
 
-	 
+ 

@@ -17,4 +17,4 @@ the Wishbone interface. Synchronized reset is used.
 Source file: `bus/wb/wb_uart_wrapper.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/wb/wb_uart_wrapper.vhdl>`_
 
 
-	 
+ 

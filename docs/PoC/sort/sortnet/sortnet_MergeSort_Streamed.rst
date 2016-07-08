@@ -16,4 +16,4 @@ sortnet_MergeSort_Streamed
 Source file: `sort/sortnet/sortnet_MergeSort_Streamed.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_MergeSort_Streamed.vhdl>`_
 
 
-	 
+ 

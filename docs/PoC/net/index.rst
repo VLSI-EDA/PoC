@@ -7,7 +7,7 @@ These are bus entities....
 .. rubric:: Sub-Namespaces
 
 .. toctree::
-   
+ 
    arp/index
    eth/index
    icmpv4/index
@@ -22,6 +22,6 @@ These are bus entities....
 .. rubric:: Entities
 
 .. toctree::
-   
+ 
    net_FrameChecksum
    net_FrameLoopback

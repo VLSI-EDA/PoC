@@ -14,18 +14,18 @@ Here is a brief list of advantages:
 
 
 .. TODO::
-   
+ 
    Use a well tested set of packages to ease the use of VHDL
-   
+ 
    Use a well tested set of simulation helpers 
-   
+ 
    Run testbenches in various simulators.
-   
+ 
    Run synthesis tests in varous synthesis tools.
-   
+ 
    Compare hardware usage for different target platfroms.
-   
+ 
    Supports simulation with vendor primitive libraries, ships with script to pre-compile vendor libraries.
-   
+ 
    Vendor tools have bugs, check you IP cores when a new tool release is available, before changing code base
-   
+ 

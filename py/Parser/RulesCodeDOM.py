@@ -65,7 +65,7 @@ class CopyStatement(Statement):
 	def SourcePath(self):       return self._sourcePath
 	@property
 	def DestinationPath(self):  return self._destinationPath
-	
+
 	@classmethod
 	def GetParser(cls):
 		# match for optional whitespacex
@@ -129,11 +129,11 @@ class CopyStatement(Statement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("CopyParser: Expected end of line or comment")
-		
+
 		# construct result
 		result = cls(sourceFile, destinationDirectory, commentText)
 		raise MatchingParserResult(result)
-	
+
 	def __str__(self, indent=0):
 		if (self._commentText != ""):
 			return "{0}Copy \"{1!s}\" To \"{2!s}\"    # {3}".format(("  " * indent), self._sourcePath, self._destinationPath, self._commentText)
@@ -220,13 +220,13 @@ class ReplaceStatement(Statement):
 	def MultiLine(self):        return self._multiLine
 	@property
 	def DotAll(self):           return self._dotAll
-	
+
 	@classmethod
 	def GetParser(cls):
 		multiLine =       False
 		dotAll =          False
 		caseInsensitive = False
-		
+
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -303,7 +303,7 @@ class ReplaceStatement(Statement):
 						continue
 					else:
 						break
-					
+
 		# match for delimiter sign: \n or #
 		commentText = ""
 		if (not isinstance(token, CharacterToken)): raise MismatchingParserResult("ReplaceParser: Expected end of line or comment")
@@ -436,7 +436,7 @@ class FileStatement(BlockStatement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("FileParser: Expected end of line or comment")
-		
+
 		# match for inner statements
 		# ==========================================================================
 		# construct result
@@ -452,7 +452,7 @@ class FileStatement(BlockStatement):
 			print("ERROR in *.rules file -> fix me")
 		except MatchingParserResult:
 			pass
-		
+
 		# match for END FILE clause
 		# ==========================================================================
 		# match for optional whitespace
@@ -612,7 +612,7 @@ class Document(BlockStatement):
 				parser.send(token)
 		except MatchingParserResult:
 			raise MatchingParserResult(result)
-	
+
 	def __str__(self, indent=0):
 		buffer = "  " * indent + "Document"
 		for stmt in self._statements:

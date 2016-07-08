@@ -5,7 +5,7 @@ eth
 These are eth entities....
 
 .. toctree::
-   
+ 
    eth_GEMAC_GMII
    eth_GEMAC_RX
    eth_GEMAC_TX

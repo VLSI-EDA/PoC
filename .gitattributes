@@ -1,2 +1,5 @@
 *.tpl		-whitespace
 *.md		-whitespace
+*.rst		-whitespace
+*.vhdl	filter=whiteindent
+*.py	filter=whiteindent

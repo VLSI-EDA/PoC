@@ -28,4 +28,4 @@ References:
 Source file: `arith/arith_addw.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_addw.vhdl>`_
 
 
-	 
+ 

@@ -229,13 +229,13 @@ class Configuration:    #(ISubClassRegistration):
 		unresolved = self._template[self._host.Platform][self._section]['BinaryDirectory']
 		self._host.PoCConfig[self._section]['BinaryDirectory'] = unresolved # create entry
 		defaultPath = Path(self._host.PoCConfig[self._section]['BinaryDirectory'])  # resolve entry
-		
+
 		binPath = defaultPath # may be more complex in the future
 
 		if (not binPath.exists()):
 			raise ConfigurationException("{0!s} binary directory '{1!s}' does not exist.".format(self, binPath)) \
 				from NotADirectoryError(str(binPath))
-		
+
 		return binPath
 
 	def RunPostConfigurationTasks(self):

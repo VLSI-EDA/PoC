@@ -14,12 +14,12 @@
 -- of type ``T_XIL_CHIPSCOPE_CONTROL`` and of mode ``inout``.
 --
 -- ..rubric:: Compile required CoreGenerator IP Cores to Netlists with PoC:
--- 
+--
 -- Please use the provided netlist compile command in PoC to recreate the needed
 -- source and netlist files on your local machine.
--- 
+--
 -- .. code-block:: vhdl
---    
+--
 --    cd <PoCRoot>
 --    .\poc.ps1 coregen PoC.xil.ChipScopeICON_1 --board=KC705
 --    [...]
@@ -28,7 +28,7 @@
 -- SeeAlso:
 -- :doc:`Using PoC -> Synthesis </UsingPoC/Synthesis>`
 --   For how to run synthesis with PoC and CoreGenerator.
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany

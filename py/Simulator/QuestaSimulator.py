@@ -142,7 +142,7 @@ class Simulator(BaseSimulator):
 			return self._RunSimulationWithGUI(testbench)
 
 		tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
-		
+
 		# create a QuestaSimulator instance
 		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()

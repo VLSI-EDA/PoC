@@ -5,7 +5,7 @@ mac
 These are mac entities....
 
 .. toctree::
-   
+ 
    mac_RX_DestMAC_Switch
    mac_RX_SrcMAC_Filter
    mac_RX_Type_Switch

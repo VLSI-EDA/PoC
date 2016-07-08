@@ -11,7 +11,7 @@ The namespace ``PoC.io`` offers different general purpose I/O (GPIO) implementat
 as well as low-speed bus protocol controllers.
 
 .. ## Sub-Namespace(s)
-   
+ 
    - :doc:`PoC.io.ddrio <io_ddrio>` - Double-Data-Rate (DDR) input/output abstraction layer. 
    - :doc:`PoC.io.iic <io_iic>` - I²C bus controllers
    - :doc:`PoC.io.jtag <io_jtag>` - JTAG implementations
@@ -29,7 +29,7 @@ The package `io>`[io.pkg>` holds all enum, function and component declarations f
 
 
 .. ## Entities
-   
+ 
    -  ``io_Debounce``
    -  ``io_7SegmentMux_BCD``
    -  ``io_7SegmentMux_HEX``
@@ -45,7 +45,7 @@ The package `io>`[io.pkg>` holds all enum, function and component declarations f
 .. rubric:: Sub-Namespaces
 
 .. toctree::
-   
+ 
    ddrio/index
    iic/index
    jtag/index
@@ -61,7 +61,7 @@ The package `io>`[io.pkg>` holds all enum, function and component declarations f
 .. rubric:: Sub-Namespaces
 
 .. toctree::
-   
+ 
    io_7SegmentMux_BCD
    io_7SegmentMux_HEX
    io_Debounce

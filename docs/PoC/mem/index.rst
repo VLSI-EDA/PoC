@@ -37,7 +37,7 @@ implementations.
 
 
 .. toctree::
-   
+ 
    is61lv/index
    is61nlp/index
    lut/index

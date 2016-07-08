@@ -25,4 +25,4 @@ sync_Vector
 Source file: `misc/sync/sync_Vector.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Vector.vhdl>`_
 
 
-	 
+ 

@@ -10,7 +10,7 @@ These are arithmetic entities....
 **List of IP cores in the namespace PoC.arith:**
 
 .. toctree::
-   
+ 
    arith.pkg
    arith_addw
    arith_carrychain_inc

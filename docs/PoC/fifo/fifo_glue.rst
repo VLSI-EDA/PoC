@@ -18,4 +18,4 @@ the ``ful``  and the ``vld`` indicators to be driven by registers.
 Source file: `fifo/fifo_glue.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_glue.vhdl>`_
 
 
-	 
+ 

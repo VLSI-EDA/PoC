@@ -122,7 +122,7 @@ class ISEMixIn:
 class ISE(ISEMixIn):
 	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
 		ISEMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
-		
+
 	def GetVHDLCompiler(self):
 		raise NotImplementedError("ISE.GetVHDLCompiler")
 		# return ISEVHDLCompiler(self._platform, self._binaryDirectoryPath, self._version, logger=self.__logger)

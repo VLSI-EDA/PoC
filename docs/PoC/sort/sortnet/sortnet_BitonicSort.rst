@@ -16,4 +16,4 @@ This sorting network uses the *bitonic sort* algorithm.
 Source file: `sort/sortnet/sortnet_BitonicSort.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_BitonicSort.vhdl>`_
 
 
-	 
+ 

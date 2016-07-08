@@ -9,10 +9,10 @@ Change Log
 ****************************************************************************************************************************************************************
 
 ..  This is a comment block. Copy this block for a new release version.
-    
+ 
     New in 1.x (upcomming)
     =======================
-    
+ 
     Already documented changes are available on the ``release`` branch at GitHub.
 
     * Python Infrastructure
@@ -46,53 +46,53 @@ Already documented changes are available on the ``release`` branch at GitHub.
 * Python Infrastructure
 
   * Common changes
-	
+ 
     * The classes ``Simulator`` and ``Compiler`` now share common methods in base class called ``Shared``.
-		
+ 
   * ``*.files`` Parser
-	
+ 
     * Implemented path expressions: sub-directory expression, concatenate expression
     * Implemented InterpolateLiteral: access database keys in ``*.files`` files
     * New Path statement, which defines a path constant calculated from a path expression
     * Replaced string arguments in statements with path expressions if the desired string was a path
     * Replaced simple StringToken matches with Identifier expressions
-		
+ 
   * All Simulators
-	
+ 
     * 
-		
+ 
   * All Compilers
-	
+ 
     * 
-		
+ 
   * GHDL
-	
+ 
     * Reduced ``-P<path>`` parameters: Removed doublings
-		
+ 
 * Documentation
 
   * 
-	
+ 
 * VHDL common packages
 
-  *   
-	
+  * 
+ 
 * VHDL Simulation helpers
 
   * Mark a testbench as failed if (registered) processes are active while finilize is called
-      
+ 
 * New Entities
 
   * 
-	
+ 
 * New Testbenches
 
   * 
-	
+ 
 * New Constraints
 
   * 
-	
+ 
 * Shipped Tool and Helper Scripts
 
   * Updated and new Notepad++ syntax files
@@ -104,7 +104,7 @@ New in 1.0 (13.05.2016)
 * Python Infrastructure (Completely Reworked)
 
   * New Requirements
-	
+ 
     * Python 3.5
     * py-flags
 
@@ -113,93 +113,93 @@ New in 1.0 (13.05.2016)
     * Synopsis: ``poc.sh|ps1 [common options] <command> <entity> [options]``
     * Removed task specific wrapper scripts: ``testbench.sh|ps1``, ``netlist.sh|ps1``, ...
     * Updated ``wrapper.ps1`` and ``wrapper.sh`` files
-  
+ 
   * New ini-file database
-	
+ 
     * 
     * Added a new config.boards.ini file to list known boards (real and virtual ones)
-		
+ 
   * New parser for ``*.files`` files
-	
+ 
     * conditional compiling (if-then-elseif-else)
     * include statement - include other ``*.files`` files
     * library statement - reference external VHDL libraries
     * prepared for Cocotb testbenches
-		
+ 
   * New parser for ``*.rules`` files
-	
+ 
     * 
-  
+ 
   * All Tool Flows
-	
+ 
     * Unbuffered outputs from vendor tools (realtime output to stdout from subprocess)
     * Output filtering from vendor tools
-		
+ 
       * verbose message suppression
       * error and warning message highlighting
       * abort flow on vendor tool errors
-			
+ 
   * All Simulators
-	
+ 
     * Run testbenches for different board or device configurations (see ``--board`` and ``--device`` command line options)
-		
+ 
   * New Simulators
-	
+ 
     * Aldec Active-HDL support (no GUI support)
-		
+ 
       * Tested with Active-HDL from Lattice Diamond
       * Tested with Active-HDL Student Edition
-			
+ 
     * Cocotb (with QuestaSim backend on Linux)
-		
+ 
   * New Synthesizers
-	
+ 
     * Altera Quartus II and Quartus Prime
-		
+ 
       * Command: ``quartus``
-			
+ 
     * Lattice Synthesis Engine (LSE) from Diamond
-		
+ 
       * Command: ``lse``
-			
+ 
     * Xilinx Vivado
-		
+ 
       * Command: ``vivado``
-			
+ 
   * GHDL
-	
+ 
     * GHDLSimulator can distinguish different backends (mcode, gcc, llvm)
     * Pre-compiled library support for GHDL
-		
+ 
   * QuestaSim / ModelSim Altera Edition
-	
+ 
     * Pre-compiled library support for GHDL
-		
+ 
   * Vivado Simulator
-	
+ 
     * Tested Vivado Simulator 2016.1 (xSim) with PoC -> still produces errors or false results
 
 * New Entities
 
     * 
-		
+ 
 * New Testbenches
 
     * 
-		
+ 
 * New Constraints
 
     * 
-		
+ 
 * New dependencies
 
     * Embedded Cocotb in ``<PoCRoot>/lib/cocotb``
-		
+ 
 * Shipped Tool and Helper Scripts
 
     * Updated and new Notepad++ syntax files
     * Pre-compiled vendor library support
-		
+ 
         * Added a new ``<PoCRoot>/temp/precompiled`` folder for precompiled vendor libraries
         * QuestaSim supports Altera QuartusII, Xilinx ISE and Xilinx Vivado libraries
         * GHDL supports Altera QuartusII, Xilinx ISE and Xilinx Vivado libraries
@@ -255,7 +255,7 @@ New in 0.11 (07.08.2015)
 New in 0.10 (23.07.2015)
 ================================================================================================================================================================
 
-      
+ 
 New in 0.9 (21.07.2015)
 ================================================================================================================================================================
 
@@ -283,12 +283,12 @@ New in 0.5 (27.05.2015)
   * sync_Strobe_tb
   * sync_Vector_tb
   * sync_Command_tb
-	
+ 
 * Updated modules:
 
   * sync_Vector
   * sync_Command
-	
+ 
 * Updated packages:
 
   * physical
@@ -302,26 +302,26 @@ New in 0.4 (29.04.2015)
 * New Python infrastructure
 
   * Added simulators for:
-	
+ 
     * GHDL + GTKWave
     * Mentor Graphic QuestaSim
     * Xilinx ISE Simulator
     * Xilinx Vivado Simulator
-		
+ 
 * New packages:
 
   * simulation
-	
+ 
 * New modules:
 
   * PoC.comm - communication modules
-	
+ 
     * comm_crc
-		
+ 
   * PoC.comm.remote - remote communication modules
-	
+ 
     * remote_terminal_control
-		
+ 
 * New testbenches:
 
   * arith_addw_tb
@@ -329,7 +329,7 @@ New in 0.4 (29.04.2015)
   * arith_prefix_and_tb
   * arith_prefix_or_tb
   * arith_prng_tb
-	
+ 
 * Updated packages:
 
   * board
@@ -337,14 +337,14 @@ New in 0.4 (29.04.2015)
   * physical
   * strings
   * utils
-	
+ 
 * Updated modules:
 
   * io_Debounce
   * misc_FrequencyMeasurement
   * sync_Bits
   * sync_Reset
-      
+ 
 New in 0.3 (31.03.20015)
 ================================================================================================================================================================
 
@@ -352,26 +352,26 @@ New in 0.3 (31.03.20015)
 
   * Added platform wrapper scripts (\*.sh, \*.ps1)
   * Added IP-core compiler scripts Netlist.py
-	
+ 
 * Added Tools
 
   * Notepad++ syntax file for Xilinx UCF/XCF files
   * Git configuration script to register global aliases
-	
+ 
 * New packages:
 
   * components - hardware described as functions
   * physical - physical types like frequency, memory and baudrate
   * io
-	
+ 
 * New modules:
 
   * PoC.misc
-	
+ 
     * misc_FrequencyMeasurement
-		
+ 
   * PoC.io - Low-speed I/O interfaces
-	
+ 
     * io_7SegmentMux_BCD
     * io_7SegmentMux_HEX
     * io_FanControl
@@ -379,11 +379,11 @@ New in 0.3 (31.03.20015)
     * io_TimingCounter
     * io_Debounce
     * io_GlitchFilter
-		
+ 
 * New IP-cores:
 
   * PoC.xil - Xilinx specific modules
-	
+ 
     * xil_ChipScopeICON_1
     * xil_ChipScopeICON_2
     * xil_ChipScopeICON_3
@@ -398,7 +398,7 @@ New in 0.3 (31.03.20015)
     * xil_ChipScopeICON_13
     * xil_ChipScopeICON_14
     * xil_ChipScopeICON_15
-		
+ 
 * New constraint files:
 
   * ML605
@@ -406,16 +406,16 @@ New in 0.3 (31.03.20015)
   * VC707
   * MetaStability
   * xil_Sync
-	
+ 
 * Updated packages:
 
   * board
   * config
-	
+ 
 * Updated modules:
 
   * xil_BSCAN
-          
+ 
 New in 0.2 (09.03.2015)
 ================================================================================================================================================================
 
@@ -423,39 +423,39 @@ New in 0.2 (09.03.2015)
 
   * xil
   * stream
-	
+ 
 * New modules:
 
   * PoC.bus - Modules for busses
-	
+ 
     * bus_Arbiter
-		
+ 
   * PoC.bus.stream - Modules for the PoC.Stream protocol
-	
+ 
     * stream_Buffer
     * stream_DeMux
     * stream_FrameGenerator
     * stream_Mirror
     * stream_Mux
     * stream_Source
-		
+ 
   * PoC.misc.sync - Cross-Clock Synchronizers
-	
+ 
     * sync_Reset
     * sync_Flag
     * sync_Strobe
     * sync_Vector
     * sync_Command
-		
+ 
   * PoC.xil - Xilinx specific modules
-	
+ 
     * xil_SyncBits
     * xil_SyncReset
     * xil_BSCAN
     * xil_Reconfigurator
     * xil_SystemMonitor_Virtex6
     * xil_SystemMonitor_Series7
-		
+ 
 * Updated packages:
 
   * utils
@@ -473,11 +473,11 @@ New in 0.1 (19.02.2015)
   * vectors - a helper package for std_logic_vector and std_logic_matrix
   * arith
   * fifo
-	
+ 
 * New modules
 
   * PoC.arith - arithmetic modules
-	
+ 
     * arith_counter_gray
     * arith_counter_ring
     * arith_div
@@ -486,18 +486,18 @@ New in 0.1 (19.02.2015)
     * arith_prng
     * arith_scaler
     * arith_sqrt
-		
+ 
   * PoC.fifo - FIFOs
-	
+ 
     * fifo_cc_got
     * fifo_cc_got_tempgot
     * fifo_cc_got_tempput
     * fifo_ic_got
     * fifo_glue
     * fifo_shift
-		
+ 
   * PoC.mem.ocram - On-Chip RAMs
-	
+ 
     * ocram_sp
     * ocram_sdp
     * ocram_esdp

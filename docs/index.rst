@@ -42,7 +42,7 @@ accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki
 
 .. toctree::
    :hidden:
-    
+ 
    WhatIsPoC/index
    QuickStart
    UsingPoC/index

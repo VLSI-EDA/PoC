@@ -63,7 +63,7 @@ class Simulator(BaseSimulator):
 		activeHDLFilesDirectoryName =   host.PoCConfig['CONFIG.DirectoryNames']['ActiveHDLFiles']
 		self.Directories.Working =      host.Directories.Temp / activeHDLFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / activeHDLFilesDirectoryName
-		
+
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()
 
@@ -117,7 +117,7 @@ class Simulator(BaseSimulator):
 			return self._RunSimulationWithGUI(testbench)
 
 		# tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimBatchScript']
-		
+
 		# create a ActiveHDLSimulator instance
 		aSim = self._toolChain.GetSimulator()
 		aSim.Parameters[aSim.SwitchBatchCommand] = "asim -lib {0} {1}; run -all; bye".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)

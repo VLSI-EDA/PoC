@@ -22,7 +22,7 @@ and :kbd:`Return` to accept a default value displayed in brackets.
 **On Linux:**
 
 .. code-block:: Bash
-   
+ 
    cd ProjectRoot
    ./lib/PoC/poc.sh configure
 
@@ -35,7 +35,7 @@ Please see the Linux instructions.
 **On Windows**
 
 .. NOTE::
-   
+ 
    All Windows command line instructions are intended for :program:`Windows PowerShell`,
    if not marked otherwise. So executing the following instructions in Windows
    Command Prompt (:program:`cmd.exe`) won't function or result in errors! See
@@ -43,7 +43,7 @@ Please see the Linux instructions.
    download or update PowerShell.
 
 .. code-block:: PowerShell
-   
+ 
    cd ProjectRoot
    .\lib\PoC\poc.ps1 configure
 
@@ -51,7 +51,7 @@ Please see the Linux instructions.
 **Introduction screen:**
 
 .. code-block:: none
-   
+ 
    PS D:\git\PoC> .\poc.ps1 configure
    ================================================================================
                             The PoC-Library - Service Tool
@@ -61,7 +61,7 @@ Please see the Linux instructions.
      n - no
      p - pass (jump to next question)
    Upper case means default value
-   
+ 
    Configuring PoC
      PoC version: v1.0.1 (found in git)
      Installation directory: D:\git\PoC (found in environment variable)
@@ -90,7 +90,7 @@ ModelSim Altera Edition
 -----------------------
 
 Lattice
-=======
+========
 
 Diamond
 -------
@@ -118,7 +118,7 @@ ISE
 .. TODO::
    If an Xilinx ISE environment is available and shall be configured in PoC, then answer the
    following questions:
-   
+ 
      Is Xilinx ISE installed on your system? [Y/n/p]: y
      Xilinx Installation Directory [C:\Xilinx]: C:\Xilinx
      Xilinx ISE Version Number [14.7]: 14.7
@@ -140,7 +140,7 @@ GHDL
    GHDL Version Number [0.31]: 0.33
 
 GTKWave
-=======
+========
 
 .. TODO::
    Is GTKWave installed on your system? [Y/n/p]: y

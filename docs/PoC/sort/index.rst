@@ -8,7 +8,7 @@ These are sorting entities....
    Sub-Namespaces
 
 .. toctree::
-   
+ 
    sortnet/index
 
 
@@ -16,7 +16,7 @@ These are sorting entities....
    Entities
 
 .. toctree::
-   
+ 
    sort_lru_cache
    sort_lru_list
    sort_ExpireList

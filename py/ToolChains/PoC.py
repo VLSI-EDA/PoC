@@ -101,16 +101,24 @@ class Configuration(BaseConfiguration):
 			return False
 
 	def RunPostConfigurationTasks(self):
+
+		# Setup Git Mechanisms
 		if self.__IsUnderGitControl():
-			self._host._LogNormal("Registering Git hooks in .git/hooks", indent=1)
-
 			pocInstallationPath = Path(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
-			gitHooksSetupScript = pocInstallationPath / "tools/git/git-hooks.setup.py"
+			gitToolsPath = pocInstallationPath / 'tools/git'
 
-			try:
-				call(["python", str(gitHooksSetupScript)])
-			except OSError as ex:
-				raise ConfigurationException("Error while executing '{0!s}'.".format(gitHooksSetupScript)) from ex
+			def call_setup(section):
+				self._host._LogNormal("Setting up Git " + section, indent=1)
+				script = str(gitToolsPath / ('git-' + section + '.setup.py'))
+				try:
+					check_call(["python", script])
+				except CalledProcessError as ex:
+					# We do not want this to be fatal
+					self._host._LogWarning("Could not setup '{}': {}".format(section, script))
+
+			# Setting up Hooks & Filters
+			for section in ['hooks', 'filters']:
+				call_setup(section)
 
 	# LOCAL = git rev-parse @
 	# PS G:\git\PoC> git rev-parse "@"

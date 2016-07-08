@@ -16,4 +16,4 @@ stat_Average
 Source file: `misc/stat/stat_Average.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/stat/stat_Average.vhdl>`_
 
 
-	 
+ 

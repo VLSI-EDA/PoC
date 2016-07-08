@@ -21,7 +21,7 @@ systems. ``my_config.vhdl`` defines three global constants, which need to be
 adjusted:
 
 .. code-block:: VHDL
-   
+ 
    constant MY_BOARD   : string  := "CHANGE THIS"; -- e.g. Custom, ML505, KC705, Atlys
    constant MY_DEVICE  : string  := "CHANGE THIS"; -- e.g. None, XC5VLX50T-1FF1136, EP2SGX90FF1508C3
    constant MY_VERBOSE : boolean := FALSE;         -- activate report statements in VHDL subprograms
@@ -34,14 +34,14 @@ If the requested board is not known to PoC or it's custom made, then set
 **Example 1: A "Stratix II GX Audio Video Development Kit" board:**
 
 .. code-block:: VHDL
-   
+ 
    constant MY_BOARD  : string := "S2GXAV";  -- Stratix II GX Audio Video Development Kit
    constant MY_DEVICE : string := "None";    -- infer from MY_BOARD
 
 **Example 2: A custom made Spartan-6 LX45 board:**
 
 .. code-block:: VHDL
-   
+ 
    constant MY_BOARD  : string := "Custom";
    constant MY_DEVICE : string := "XC6SLX45-3CSG324";
 
@@ -58,21 +58,21 @@ control systems -- it's private to a computer. ``my_project.vhdl`` defines two
 global constants, which need to be adjusted:
 
 .. code-block:: VHDL
-   
+ 
    constant MY_PROJECT_DIR      : string := "CHANGE THIS"; -- e.g. "d:/vhdl/myproject/", "/home/me/projects/myproject/"
    constant MY_OPERATING_SYSTEM : string := "CHANGE THIS"; -- e.g. "WINDOWS", "LINUX"
 
 **Example 1: A Windows System:**
 
 .. code-block:: VHDL
-   
+ 
    constant MY_PROJECT_DIR      : string := "D:/git/GitHub/PoC/";
    constant MY_OPERATING_SYSTEM : string := "WINDOWS";
 
 **Example 2: A Debian System:**
 
 .. code-block:: VHDL
-   
+ 
    constant MY_PROJECT_DIR      : string := "/home/paebbels/git/GitHub/PoC/";
    constant MY_OPERATING_SYSTEM : string := "LINUX";
 

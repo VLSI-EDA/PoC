@@ -13,7 +13,7 @@
 -- started by asserting 'start'. The result Q = A/D is available when 'rdy'
 -- returns to '1'. A division by zero is identified by output Z. The Q and R
 -- outputs are undefined in this case.
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universität Dresden - Germany,

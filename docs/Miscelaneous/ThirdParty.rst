@@ -83,7 +83,7 @@ On Linux
 ========
 
 .. code-block:: Bash
-   
+ 
    cd PoCRoot
    git submodule init
    git submodule update
@@ -92,13 +92,13 @@ We recommend to rename the default remote repository name from 'origin' to
 'github'.
 
 .. code-block:: Bash
-   
+ 
    cd PoCRoot\lib\
 
 .. todo:: write Bash code for Linux
 
 On OS X
-=======
+========
 
 Please see the Linux instructions.
 
@@ -107,7 +107,7 @@ On Windows
 
 
 .. code-block:: PowerShell
-   
+ 
    cd PoCRoot
    git submodule init
    git submodule update
@@ -116,7 +116,7 @@ We recommend to rename the default remote repository name from 'origin' to
 'github'.
 
 .. code-block:: PowerShell
-   
+ 
    cd PoCRoot\lib\
    foreach($dir in (dir -Directory)) {
      cd $dir

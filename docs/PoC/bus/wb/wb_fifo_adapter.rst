@@ -24,4 +24,4 @@ old comments:
 Source file: `bus/wb/wb_fifo_adapter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/wb/wb_fifo_adapter.vhdl>`_
 
 
-	 
+ 

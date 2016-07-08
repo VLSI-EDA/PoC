@@ -39,7 +39,7 @@
 class Attribute:
 	__AttributesMemberName__ =  "__pyattr__"
 	_debug =                    False
-	
+
 	def __call__(self, func):
 		self._AppendAttribute(func, self)
 		return func
@@ -51,7 +51,7 @@ class Attribute:
 			func.__dict__[Attribute.__AttributesMemberName__].append(attribute)
 		else:
 			func.__setattr__(Attribute.__AttributesMemberName__, [attribute])
-	
+
 	def __str__(self):
 		return self.__name__
 
@@ -67,7 +67,7 @@ class Attribute:
 							if isinstance(attribute, cls):
 								methods[funcname] = func
 		return methods.items()
-		
+
 	@classmethod
 	def GetAttributes(cls, method):
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
@@ -91,7 +91,7 @@ class AttributeHelperMixin:
 			return (isinstance(attributeList, list) and (len(attributeList) != 0))
 		else:
 			return False
-				
+
 	def GetAttributes(self, method):
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
 			attributeList = method.__dict__[Attribute.__AttributesMemberName__]

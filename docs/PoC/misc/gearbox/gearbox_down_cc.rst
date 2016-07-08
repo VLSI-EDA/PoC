@@ -20,4 +20,4 @@ can be added by enabling (ADD_***PUT_REGISTERS = TRUE).
 Source file: `misc/gearbox/gearbox_down_cc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/gearbox/gearbox_down_cc.vhdl>`_
 
 
-	 
+ 

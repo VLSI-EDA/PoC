@@ -12,7 +12,7 @@ Please use the provided netlist compile command in PoC to recreate the needed
 source and netlist files on your local machine.
 
 .. code-block:: vhdl
-   
+ 
    cd <PoCRoot>
    .\poc.ps1 coregen PoC.xil.ChipScopeICON_1 --board=KC705
    [...]
@@ -30,9 +30,9 @@ source and netlist files on your local machine.
 Source file: `xil/xil_ChipScopeICON.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ChipScopeICON.vhdl>`_
 
 .. seealso::
-   
+ 
    :doc:`Using PoC -> Synthesis </UsingPoC/Synthesis>`
      For how to run synthesis with PoC and CoreGenerator.
-   
+ 
 
-	 
+ 

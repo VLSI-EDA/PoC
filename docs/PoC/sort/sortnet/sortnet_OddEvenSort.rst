@@ -16,4 +16,4 @@ sortnet_OddEvenSort
 Source file: `sort/sortnet/sortnet_OddEvenSort.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_OddEvenSort.vhdl>`_
 
 
-	 
+ 

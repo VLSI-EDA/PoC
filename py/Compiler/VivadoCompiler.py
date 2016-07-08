@@ -100,7 +100,7 @@ class Compiler(BaseCompiler):
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
 		self._RunPostDelete(netlist)
-		
+
 	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
 		self.Host.PoCConfig['SPECIAL'] = {}

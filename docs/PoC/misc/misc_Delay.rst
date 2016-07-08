@@ -16,4 +16,4 @@ misc_Delay
 Source file: `misc/misc_Delay.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_Delay.vhdl>`_
 
 
-	 
+ 

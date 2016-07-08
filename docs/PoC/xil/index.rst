@@ -7,14 +7,14 @@ This namespace is for Xilinx specific modules.
 .. rubric:: Sub-Namespaces
 
 .. toctree::
-   
+ 
    mig/index
    reconfig/index
 
 .. rubric:: Entities
 
 .. toctree::
-   
+ 
    xil_BSCAN
    xil_ChipScopeICON
    xil_DRP_BusMux

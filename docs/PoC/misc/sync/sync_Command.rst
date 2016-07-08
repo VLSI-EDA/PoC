@@ -26,4 +26,4 @@ sync_Command
 Source file: `misc/sync/sync_Command.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Command.vhdl>`_
 
 
-	 
+ 

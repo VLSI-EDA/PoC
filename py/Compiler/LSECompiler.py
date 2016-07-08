@@ -66,7 +66,7 @@ class Compiler(BaseCompiler):
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working = host.Directories.Temp / configSection['LatticeSynthesisFiles']
 		self.Directories.Netlist = host.Directories.Root / configSection['NetlistFiles']
-		
+
 		self._PrepareCompiler()
 
 	def _PrepareCompiler(self):

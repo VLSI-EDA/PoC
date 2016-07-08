@@ -36,7 +36,7 @@ Constraints:
 Source file: `misc/sync/sync_Bits.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Bits.vhdl>`_
 
 .. seealso::
-   
+ 
    :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`
      For a special 2 D-FF synchronizer for *reset*-signals.
    :doc:`PoC.misc.sync.Strobe </PoC/misc/sync/sync_Strobe>`
@@ -44,4 +44,4 @@ Source file: `misc/sync/sync_Bits.vhdl <https://github.com/VLSI-EDA/PoC/blob/mas
    :doc:`PoC.misc.sync.Vector </PoC/misc/sync/sync_Vector>`
      For a multiple bits capable synchronizer.
 
-	 
+ 

@@ -7,9 +7,9 @@ Contribute to PoC
 
 .. TODO::
    Write this paragraph ...
-   
+ 
    Contributers License Agreement (CLA)
-   
+ 
 
 
 Discuss with us on Gitter
@@ -33,7 +33,7 @@ Give us Feedback
 
 Please send us feedback about the PoC documentation, our IP cores or your user story on how you use PoC.
 
-	
+ 
 List of Contributers
 ********************
 

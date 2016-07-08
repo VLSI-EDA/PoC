@@ -16,4 +16,4 @@ UART (RS232) Transmitter: 1 Start + 8 Data + 1 Stop
 Source file: `io/uart/uart_tx.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_tx.vhdl>`_
 
 
-	 
+ 

@@ -16,4 +16,4 @@ stat_Minimum
 Source file: `misc/stat/stat_Minimum.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/stat/stat_Minimum.vhdl>`_
 
 
-	 
+ 
