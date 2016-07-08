@@ -1,20 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
--- Module:				 	Gray-Code counter.
---
+-- =============================================================================
 -- Authors:				 	Thomas B. Preusser
 --									Martin Zabel
 --									Steffen Koehler
 --
+-- Entity:				 	Gray-Code counter.
+--
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library	ieee;
 use			ieee.std_logic_1164.all;
@@ -49,7 +48,7 @@ entity arith_counter_gray is
 		val : out std_logic_vector(BITS-1 downto 0);	-- Value output
 		cry : out std_logic														-- Carry output
 	);
-end arith_counter_gray;
+end entity arith_counter_gray;
 
 
 architecture rtl of arith_counter_gray is

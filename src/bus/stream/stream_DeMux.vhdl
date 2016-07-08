@@ -1,20 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	A generic buffer module for the PoC.Stream protocol.
+-- Entity:				 	A generic buffer module for the PoC.Stream protocol.
 --
 -- Description:
--- ------------------------------------
---		This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
---		It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
---		data and meta information.
+-- -------------------------------------
+-- This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
+-- It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
+-- data and meta information.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS of ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -43,34 +42,34 @@ use			PoC.vectors.all;
 
 entity stream_DeMux is
 	generic (
-		PORTS											: POSITIVE									:= 2;
-		DATA_BITS									: POSITIVE									:= 8;
-		META_BITS									: NATURAL										:= 8;
-		META_REV_BITS							: NATURAL										:= 2
+		PORTS							: POSITIVE									:= 2;
+		DATA_BITS					: POSITIVE									:= 8;
+		META_BITS					: NATURAL										:= 8;
+		META_REV_BITS			: NATURAL										:= 2
 	);
 	port (
-		Clock											: in	STD_LOGIC;
-		Reset											: in	STD_LOGIC;
+		Clock							: in	STD_LOGIC;
+		Reset							: in	STD_LOGIC;
 		-- Control interface
-		DeMuxControl							: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		DeMuxControl			: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
 		-- IN Port
-		In_Valid									: in	STD_LOGIC;
-		In_Data										: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-		In_Meta										: in	STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
-		In_Meta_rev								: out	STD_LOGIC_VECTOR(META_REV_BITS - 1 downto 0);
-		In_SOF										: in	STD_LOGIC;
-		In_EOF										: in	STD_LOGIC;
-		In_Ack										: out	STD_LOGIC;
+		In_Valid					: in	STD_LOGIC;
+		In_Data						: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
+		In_Meta						: in	STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+		In_Meta_rev				: out	STD_LOGIC_VECTOR(META_REV_BITS - 1 downto 0);
+		In_SOF						: in	STD_LOGIC;
+		In_EOF						: in	STD_LOGIC;
+		In_Ack						: out	STD_LOGIC;
 		-- OUT Ports
-		Out_Valid									: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
-		Out_Data									: out	T_SLM(PORTS - 1 downto 0, DATA_BITS - 1 downto 0);
-		Out_Meta									: out	T_SLM(PORTS - 1 downto 0, META_BITS - 1 downto 0);
-		Out_Meta_rev							: in	T_SLM(PORTS - 1 downto 0, META_REV_BITS - 1 downto 0);
-		Out_SOF										: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
-		Out_EOF										: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
-		Out_Ack										: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0)
+		Out_Valid					: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		Out_Data					: out	T_SLM(PORTS - 1 downto 0, DATA_BITS - 1 downto 0);
+		Out_Meta					: out	T_SLM(PORTS - 1 downto 0, META_BITS - 1 downto 0);
+		Out_Meta_rev			: in	T_SLM(PORTS - 1 downto 0, META_REV_BITS - 1 downto 0);
+		Out_SOF						: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		Out_EOF						: out	STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+		Out_Ack						: in	STD_LOGIC_VECTOR(PORTS - 1 downto 0)
 	);
-end;
+end entity;
 
 
 architecture rtl of stream_DeMux is

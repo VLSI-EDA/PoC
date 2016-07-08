@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
 -- Entity:					Converter binary numbers to BCD encoded numbers.
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -30,8 +29,8 @@
 -- =============================================================================
 
 library IEEE;
-use			IEEE.STD_LOGIC_1164.ALL;
-use			IEEE.NUMERIC_STD.ALL;
+use			IEEE.STD_LOGIC_1164.all;
+use			IEEE.NUMERIC_STD.all;
 
 library	PoC;
 use			PoC.utils.all;
@@ -56,7 +55,7 @@ entity arith_convert_bin2bcd is
 		BCDDigits			: out	T_BCD_VECTOR(DIGITS - 1 downto 0);
 		Sign					: out STD_LOGIC
 	);
-end;
+end entity;
 
 
 architecture rtl of arith_convert_bin2bcd is
@@ -104,7 +103,7 @@ begin
 			elsif (Binary_en = '1') then
 				Binary_d(Binary_d'high downto Binary'high)	<= (others => '0');
 				if ((IsSigned and Binary(Binary'high)) = '1') then
-					Binary_d(Binary'high downto 0)						<= inc(not(Binary));
+					Binary_d(Binary'high downto 0)						<= std_logic_vector(-signed(Binary));
 					Sign_d																		<= '1';
 				else
 					Binary_d(Binary'high downto 0)						<= Binary;
@@ -142,7 +141,7 @@ begin
 		begin
 			if rising_edge(Clock) then
 				if (Digit_Shift_rst = '1') then
-					Digit_d		<= "0000";
+					Digit_d	<= "0000";
 				elsif (Digit_Shift_en = '1') then
 					Digit_d	<= Digit_nxt(Digit_d'range);
 				end if;

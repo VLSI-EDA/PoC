@@ -42,19 +42,16 @@ else:
 
 
 # load dependencies
-import shutil
-from datetime          import datetime
-from enum              import Enum, unique
-from os                import chdir
+from datetime           import datetime
+from enum               import Enum, unique
 
-from lib.Functions     import Init
-from lib.Parser        import ParserException
-from Base.Exceptions   import ExceptionBase, CommonException
-from Base.Logging      import ILogable, LogEntry
-from Base.Project      import Environment, ToolChain, Tool, VHDLVersion
-from PoC.Entity        import WildCard
-from PoC.Solution      import VirtualProject, FileListFile
-from PoC.TestCase      import TestSuite, TestCase, Status
+from lib.Functions      import Init
+from Base.Exceptions    import ExceptionBase, SkipableException
+from Base.Logging       import LogEntry
+from Base.Project       import Environment, VHDLVersion
+from Base.Shared        import Shared
+from PoC.Entity         import WildCard
+from PoC.TestCase       import TestSuite, TestCase, Status
 
 
 VHDL_TESTBENCH_LIBRARY_NAME = "test"
@@ -63,7 +60,7 @@ VHDL_TESTBENCH_LIBRARY_NAME = "test"
 class SimulatorException(ExceptionBase):
 	pass
 
-class SkipableSimulatorException(SimulatorException):
+class SkipableSimulatorException(SimulatorException, SkipableException):
 	pass
 
 
@@ -91,26 +88,17 @@ def to_time(seconds):
 	seconds = seconds - (minutes * 60)
 	return "{min}:{sec:02}".format(min=minutes, sec=seconds)
 
-class Simulator(ILogable):
-	_TOOL_CHAIN =  ToolChain.Any
-	_TOOL =        Tool.Any
 
-	class __Directories__:
-		Working = None
-		PoCRoot = None
+class Simulator(Shared):
+	_ENVIRONMENT = Environment.Simulation
+
+	class __Directories__(Shared.__Directories__):
 		PreCompiled = None
 
-	def __init__(self, host):
-		if isinstance(host, ILogable):
-			ILogable.__init__(self, host.Logger)
-		else:
-			ILogable.__init__(self, None)
-
-		self.__host =       host
+	def __init__(self, host, dryRun):
+		super().__init__(host, dryRun)
 
 		self._vhdlVersion = VHDLVersion.VHDL2008
-		self._directories = self.__Directories__()
-		self._pocProject =  None
 		self._testSuite =   TestSuite()			# TODO: This includes not the read ini files phases ...
 
 		self._state =           SimulationState.Prepare
@@ -126,12 +114,6 @@ class Simulator(ILogable):
 	# class properties
 	# ============================================================================
 	@property
-	def Host(self):           return self.__host
-	@property
-	def Directories(self):    return self._directories
-	@property
-	def PoCProject(self):     return self._pocProject
-	@property
 	def TestSuite(self):      return self._testSuite
 
 	def _GetTimeDeltaSinceLastEvent(self):
@@ -142,27 +124,7 @@ class Simulator(ILogable):
 
 	def _PrepareSimulationEnvironment(self):
 		self._LogNormal("Preparing simulation environment...")
-
-		# create fresh temporary directory
-		self._LogVerbose("Creating fresh temporary directory for simulator files.")
-		self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
-		if (self.Directories.Working.exists()):
-			try:
-				shutil.rmtree(str(self.Directories.Working))
-			except OSError as ex:
-				raise SimulatorException("Error while deleting '{0!s}'.".format(self.Directories.Working)) from ex
-		try:
-			self.Directories.Working.mkdir(parents=True)
-		except OSError as ex:
-			raise SimulatorException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
-
-		# change working directory to temporary path
-		self._LogVerbose("Changing working directory to temporary directory.")
-		self._LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
-		try:
-			chdir(str(self.Directories.Working))
-		except OSError as ex:
-			raise SimulatorException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
+		self._PrepareEnvironment()
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		"""Run a list of testbenches. Expand wildcards to all selected testbenches."""
@@ -225,11 +187,11 @@ class Simulator(ILogable):
 		"""Write the Testbench message line, create a PoCProject and add the first *.files file to it."""
 		self._LogQuiet("{CYAN}Testbench:{NOCOLOR} {0!s}".format(testbench.Parent, **Init.Foreground))
 
-		self._vhdlVersion = vhdlVersion
+		self._vhdlVersion =  vhdlVersion
 		self._vhdlGenerics = vhdlGenerics
 
 		# setup all needed paths to execute fuse
-		self._CreatePoCProject(testbench, board)
+		self._CreatePoCProject(testbench.ModuleName, board)
 		self._AddFileListFile(testbench.FilesFile)
 
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
@@ -255,44 +217,6 @@ class Simulator(ILogable):
 			self._RunView(testbench)
 
 		self._endAt = datetime.now()
-
-	def _CreatePoCProject(self, testbench, board):
-		# create a PoCProject and read all needed files
-		self._LogVerbose("Creating a PoC project '{0}'".format(testbench.ModuleName))
-		pocProject = VirtualProject(testbench.ModuleName)
-
-		# configure the project
-		pocProject.RootDirectory = self.Host.Directories.Root
-		pocProject.Environment = Environment.Simulation
-		pocProject.ToolChain = self._TOOL_CHAIN
-		pocProject.Tool = self._TOOL
-		pocProject.VHDLVersion = self._vhdlVersion
-		pocProject.Board = board
-
-		self._pocProject = pocProject
-
-	def _AddFileListFile(self, fileListFilePath):
-		self._LogVerbose("Reading filelist '{0!s}'".format(fileListFilePath))
-		# add the *.files file, parse and evaluate it
-		# if (not fileListFilePath.exists()):    raise SimulatorException("Files file '{0!s}' not found.".format(fileListFilePath)) from FileNotFoundError(str(fileListFilePath))
-
-		try:
-			fileListFile = self._pocProject.AddFile(FileListFile(fileListFilePath))
-			fileListFile.Parse()
-			fileListFile.CopyFilesToFileSet()
-			fileListFile.CopyExternalLibraries()
-			self._pocProject.ExtractVHDLLibrariesFromVHDLSourceFiles()
-		except (ParserException, CommonException) as ex:
-			raise SkipableSimulatorException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
-
-		self._LogDebug("=" * 78)
-		self._LogDebug("Pretty printing the PoCProject...")
-		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("=" * 78)
-		if (len(fileListFile.Warnings) > 0):
-			for warn in fileListFile.Warnings:
-				self._LogWarning(warn)
-			raise SkipableSimulatorException("Found critical warnings while parsing '{0!s}'".format(fileListFilePath))
 
 	def _RunAnalysis(self, testbench):
 		pass

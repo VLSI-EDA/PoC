@@ -30,7 +30,8 @@
 # ==============================================================================
 #
 from lib.Parser           import ParserException
-from Parser.RulesCodeDOM  import Document, PreProcessRulesStatement, PostProcessStatement, CopyStatement, ReplaceStatement, FileStatement, DeleteStatement
+from Parser.RulesCodeDOM  import Document, PreProcessRulesStatement, PostProcessStatement, CopyStatement, ReplaceStatement, FileStatement, DeleteStatement, \
+	AppendLineStatement
 
 
 class Rule:
@@ -40,10 +41,10 @@ class Rule:
 class CopyRuleMixIn(Rule):
 	def __init__(self, sourcePath, destinationPath):
 		self._source =      sourcePath
-		self._destination =  destinationPath
+		self._destination = destinationPath
 
 	@property
-	def SourcePath(self):        return self._source
+	def SourcePath(self):       return self._source
 	@property
 	def DestinationPath(self):  return self._destination
 
@@ -65,46 +66,60 @@ class DeleteRuleMixIn(Rule):
 class ReplaceRuleMixIn(Rule):
 	def __init__(self, filePath, searchPattern, replacePattern, multiLine, dotAll, caseInSensitive):
 		self._filePath =        filePath
-		self._searchPattern =    searchPattern
+		self._searchPattern =   searchPattern
 		self._replacePattern =  replacePattern
-		self._multiLine =        multiLine
+		self._multiLine =       multiLine
 		self._dotAll =          dotAll
-		self._caseInsensitive =  caseInSensitive
+		self._caseInsensitive = caseInSensitive
 
 	@property
-	def FilePath(self):                      return self._filePath
+	def FilePath(self):                     return self._filePath
 	@property
 	def SearchPattern(self):                return self._searchPattern
 	@property
-	def ReplacePattern(self):                return self._replacePattern
+	def ReplacePattern(self):               return self._replacePattern
 	@property
-	def RegExpOption_MultiLine(self):        return self._multiLine
+	def RegExpOption_MultiLine(self):       return self._multiLine
 	@property
 	def RegExpOption_DotAll(self):          return self._dotAll
 	@property
-	def RegExpOption_CaseInsensitive(self):  return self._caseInsensitive
+	def RegExpOption_CaseInsensitive(self): return self._caseInsensitive
 
 	def __str__(self):
 		return "Replace rule: in '{0!s}' replace '{1}' with '{2}'".format(self._filePath, self._searchPattern, self._replacePattern)
+
+class AppendLineRuleMixIn(Rule):
+	def __init__(self, filePath, appendPattern):
+		self._filePath =        filePath
+		self._appendPattern =   appendPattern
+
+	@property
+	def FilePath(self):                     return self._filePath
+	@property
+	def AppendPattern(self):                return self._appendPattern
+
+	def __str__(self):
+		return "AppendLine rule: in '{0!s}' append '{1}'".format(self._filePath, self._appendPattern)
 
 
 class RulesParserMixIn:
 	_classCopyRule =            CopyRuleMixIn
 	_classDeleteRule =          DeleteRuleMixIn
-	_classReplaceRule =          ReplaceRuleMixIn
+	_classReplaceRule =         ReplaceRuleMixIn
+	_classAppendLineRule =      AppendLineRuleMixIn
 
 	def __init__(self):
-		self._rootDirectory =      None
+		self._rootDirectory =     None
 		self._document =          None
-		
-		self._preProcessRules =    []
+
+		self._preProcessRules =   []
 		self._postProcessRules =  []
 
 	def _Parse(self):
 		self._ReadContent() #only available via late binding
-		self._document = Document.parse(self._content, printChar=not True) #self._content only available via late binding
+		self._document = Document.Parse(self._content, printChar=not True) #self._content only available via late binding
 		# print("{DARK_GRAY}{0!s}{NOCOLOR}".format(self._document, **Init.Foreground))
-		
+
 	def _Resolve(self):
 		# print("Resolving {0}".format(str(self._file)))
 		for stmt in self._document.Statements:
@@ -128,22 +143,25 @@ class RulesParserMixIn:
 			rule =            self._classDeleteRule(file)
 			lst.append(rule)
 		elif isinstance(ruleStatement, FileStatement):
-			# FIXME: Currently, all replace rules are stored in individual rule instances.
+			# FIXME: Currently, all replace and append rules are stored in individual rule instances.
 			# FIXME: This prevents the system from creating a single task of multiple sub-rules -> just one open/close would be required
 			filePath =        ruleStatement.FilePath
-			for replaceRule in ruleStatement.Statements:
-				if isinstance(replaceRule, ReplaceStatement):
-					rule =          self._classReplaceRule(filePath, replaceRule.SearchPattern, replaceRule.ReplacePattern, replaceRule.MultiLine, replaceRule.DotAll, replaceRule.CaseInsensitive)
+			for nestedStatement in ruleStatement.Statements:
+				if isinstance(nestedStatement, ReplaceStatement):
+					rule =          self._classReplaceRule(filePath, nestedStatement.SearchPattern, nestedStatement.ReplacePattern, nestedStatement.MultiLine, nestedStatement.DotAll, nestedStatement.CaseInsensitive)
+					lst.append(rule)
+				elif isinstance(nestedStatement, AppendLineStatement):
+					rule =          self._classAppendLineRule(filePath, nestedStatement.AppendPattern)
 					lst.append(rule)
 				else:
-					ParserException("Found unknown statement type '{0}'.".format(replaceRule.__class__.__name__))
+					ParserException("Found unknown statement type '{0}'.".format(nestedStatement.__class__.__name__))
 		else:
 			ParserException("Found unknown statement type '{0}'.".format(ruleStatement.__class__.__name__))
 
 	@property
 	def PreProcessRules(self):    return self._preProcessRules
 	@property
-	def PostProcessRules(self):    return self._postProcessRules
+	def PostProcessRules(self):   return self._postProcessRules
 
 	def __str__(self):    return "RULES file: '{0!s}'".format(self._file) #self._file only available via late binding
 	def __repr__(self):    return self.__str__()

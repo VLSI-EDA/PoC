@@ -45,21 +45,20 @@ else:
 import re
 import shutil
 from pathlib            import Path
-from os                 import chdir
 
 from lib.Functions      import Init
 from lib.Parser         import ParserException
-from Base.Exceptions    import ExceptionBase
-from Base.Logging       import ILogable
-from Base.Project       import ToolChain, Tool, VHDLVersion, Environment, FileTypes
-from Parser.RulesParser import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn
-from PoC.Solution       import VirtualProject, FileListFile, RulesFile
+from Base.Exceptions    import ExceptionBase, SkipableException
+from Base.Project       import VHDLVersion, Environment, FileTypes
+from Base.Shared        import Shared
+from Parser.RulesParser import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn, AppendLineRuleMixIn
+from PoC.Solution       import RulesFile
 
 
 class CompilerException(ExceptionBase):
 	pass
 
-class SkipableCompilerException(CompilerException):
+class SkipableCompilerException(CompilerException, SkipableException):
 	pass
 
 class CopyTask(CopyRuleMixIn):
@@ -71,41 +70,23 @@ class DeleteTask(DeleteRuleMixIn):
 class ReplaceTask(ReplaceRuleMixIn):
 	pass
 
+class AppendLineTask(AppendLineRuleMixIn):
+	pass
 
-class Compiler(ILogable):
-	_TOOL_CHAIN =  ToolChain.Any
-	_TOOL =        Tool.Any
 
-	class __Directories__:
-		Working = None
-		PoCRoot = None
-		Netlist = None
-		Source = None
+class Compiler(Shared):
+	_ENVIRONMENT = Environment.Synthesis
+
+	class __Directories__(Shared.__Directories__):
+		Netlist =     None
+		Source =      None
 		Destination = None
 
 	def __init__(self, host, dryRun, noCleanUp):
-		if isinstance(host, ILogable):
-			ILogable.__init__(self, host.Logger)
-		else:
-			ILogable.__init__(self, None)
+		super().__init__(host, dryRun)
 
-		self.__host =        host
 		self._noCleanUp =    noCleanUp
-		self._dryRun =      dryRun
-
 		self._vhdlVersion =  VHDLVersion.VHDL93
-		self._pocProject =  None
-
-		self._directories = self.__Directories__()
-
-	# class properties
-	# ============================================================================
-	@property
-	def Host(self):            return self.__host
-	@property
-	def PoCProject(self):      return self._pocProject
-	@property
-	def Directories(self):    return self._directories
 
 	def TryRun(self, netlist, *args, **kwargs):
 		try:
@@ -127,7 +108,7 @@ class Compiler(ILogable):
 		self._PrepareCompilerEnvironment(board.Device)
 		self._WriteSpecialSectionIntoConfig(board.Device)
 
-		self._CreatePoCProject(netlist, board)
+		self._CreatePoCProject(netlist.ModuleName, board)
 		if netlist.FilesFile is not None: self._AddFileListFile(netlist.FilesFile)
 		if (netlist.RulesFile is not None):
 			self._AddRulesFiles(netlist.RulesFile)
@@ -136,75 +117,23 @@ class Compiler(ILogable):
 		self._LogNormal("Preparing synthesis environment...")
 		self.Directories.Destination = self.Directories.Netlist / str(device)
 
-		# create temporary directory for the compiler if not existent
-		self._LogVerbose("Creating temporary directory for synthesizer files.")
-		self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
-		if (self.Directories.Working.exists()):
-			try:
-				shutil.rmtree(str(self.Directories.Working))
-			except OSError as ex:
-				raise CompilerException("Error while deleting '{0!s}'.".format(self.Directories.Working)) from ex
-		try:
-			self.Directories.Working.mkdir(parents=True)
-		except OSError as ex:
-			raise CompilerException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
-
-		# change working directory to temporary iSim path
-		self._LogVerbose("Changing working directory to temporary directory.")
-		self._LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
-		try:
-			chdir(str(self.Directories.Working))
-		except OSError as ex:
-			raise CompilerException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
+		self._PrepareEnvironment()
 
 		# create output directory for CoreGen if not existent
 		if (not self.Directories.Destination.exists()) :
 			self._LogVerbose("Creating output directory for generated files.")
 			self._LogDebug("Output directory: {0!s}.".format(self.Directories.Destination))
-			self.Directories.Destination.mkdir(parents=True)
+			try:
+				self.Directories.Destination.mkdir(parents=True)
+			except OSError as ex:
+				raise CompilerException("Error while creating '{0!s}'.".format(self.Directories.Destination)) from ex
 
 	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
 		self.Host.PoCConfig['SPECIAL'] = {}
 		self.Host.PoCConfig['SPECIAL']['Device'] =        device.ShortName
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =  device.Series
-		self.Host.PoCConfig['SPECIAL']['OutputDir']	=      self.Directories.Working.as_posix()
-
-	def _CreatePoCProject(self, netlist, board):
-		# create a PoCProject and read all needed files
-		self._LogVerbose("Creating a PoC project '{0}'".format(netlist.ModuleName))
-		pocProject = VirtualProject(netlist.ModuleName)
-
-		# configure the project
-		pocProject.RootDirectory =  self.Host.Directories.Root
-		pocProject.Environment =    Environment.Synthesis
-		pocProject.ToolChain =      self._TOOL_CHAIN
-		pocProject.Tool =            self._TOOL
-		pocProject.VHDLVersion =    self._vhdlVersion
-		pocProject.Board =          board
-
-		self._pocProject =          pocProject
-
-	def _AddFileListFile(self, fileListFilePath):
-		self._LogVerbose("Reading filelist '{0!s}'".format(fileListFilePath))
-		# add the *.files file, parse and evaluate it
-		try:
-			fileListFile = self._pocProject.AddFile(FileListFile(fileListFilePath))
-			fileListFile.Parse()
-			fileListFile.CopyFilesToFileSet()
-			fileListFile.CopyExternalLibraries()
-			self._pocProject.ExtractVHDLLibrariesFromVHDLSourceFiles()
-		except ParserException as ex:
-			raise CompilerException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
-
-		self._LogDebug("=" * 78)
-		self._LogDebug("Pretty printing the PoCProject...")
-		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("=" * 78)
-		if (len(fileListFile.Warnings) > 0):
-			for warn in fileListFile.Warnings:
-				self._LogWarning(warn)
-			raise CompilerException("Found critical warnings while parsing '{0!s}'".format(fileListFilePath))
+		self.Host.PoCConfig['SPECIAL']['OutputDir']	=     self.Directories.Working.as_posix()
 
 	def _AddRulesFiles(self, rulesFilePath):
 		self._LogVerbose("Reading rules from '{0!s}'".format(rulesFilePath))
@@ -270,9 +199,9 @@ class Compiler(ILogable):
 			rawList = rawList.split("\n")
 			self._LogDebug("Copy tasks from config file:\n  " + ("\n  ".join(rawList)))
 
-			copyRegExpStr = r"^\s*(?P<SourceFilename>.*?)"  # Source filename
-			copyRegExpStr += r"\s->\s"  # Delimiter signs
-			copyRegExpStr += r"(?P<DestFilename>.*?)$"  # Destination filename
+			copyRegExpStr  = r"^\s*(?P<SourceFilename>.*?)" # Source filename
+			copyRegExpStr += r"\s->\s"                      # Delimiter signs
+			copyRegExpStr += r"(?P<DestFilename>.*?)$"      # Destination filename
 			copyRegExp = re.compile(copyRegExpStr)
 
 			for item in rawList:
@@ -287,7 +216,10 @@ class Compiler(ILogable):
 			if not task.SourcePath.exists(): raise CompilerException("Cannot {0}-copy '{1!s}' to destination.".format(text, task.SourcePath)) from FileNotFoundError(str(task.SourcePath))
 
 			if not task.DestinationPath.parent.exists():
-				task.DestinationPath.parent.mkdir(parents=True)
+				try:
+					task.DestinationPath.parent.mkdir(parents=True)
+				except OSError as ex:
+					raise CompilerException("Error while creating '{0!s}'.".format(task.DestinationPath.parent)) from ex
 
 			self._LogDebug("{0}-copying '{1!s}'.".format(text, task.SourcePath))
 			try:
@@ -338,7 +270,10 @@ class Compiler(ILogable):
 			if not task.FilePath.exists(): raise CompilerException("Cannot {0}-delete '{1!s}'.".format(text, task.FilePath)) from FileNotFoundError(str(task.FilePath))
 
 			self._LogDebug("{0}-deleting '{1!s}'.".format(text, task.FilePath))
-			task.FilePath.unlink()
+			try:
+				task.FilePath.unlink()
+			except OSError as ex:
+				raise CompilerException("Error while deleting '{0!s}'.".format(task.FilePath)) from ex
 
 	def _RunPreReplace(self, netlist):
 		self._LogVerbose("patching files in temporary directory...")
@@ -348,10 +283,19 @@ class Compiler(ILogable):
 			for rule in rulesFiles[0].PreProcessRules:
 				if isinstance(rule, ReplaceRuleMixIn):
 					filePath =        self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
-					searchPattern =    self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.SearchPattern, {})
+					searchPattern =   self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.SearchPattern, {})
 					replacePattern =  self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.ReplacePattern, {})
 					task = ReplaceTask(Path(filePath), searchPattern, replacePattern, rule.RegExpOption_MultiLine, rule.RegExpOption_DotAll, rule.RegExpOption_CaseInsensitive)
 					preReplaceTasks.append(task)
+				elif isinstance(rule, AppendLineRuleMixIn):
+					filePath =        self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
+					appendPattern =   self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.AppendPattern, {})
+					task = AppendLineTask(Path(filePath), appendPattern)
+					preReplaceTasks.append(task)
+				elif isinstance(rule, CopyRuleMixIn):
+					pass
+				else:
+					raise CompilerException("Unknown pre-process rule '{0!s}'.".format(rule))
 		else:
 			preReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PreReplaceRules']
 			if (len(preReplaceRules) != 0):
@@ -370,10 +314,19 @@ class Compiler(ILogable):
 			for rule in rulesFiles[0].PostProcessRules:
 				if isinstance(rule, ReplaceRuleMixIn):
 					filePath =        self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
-					searchPattern =    self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.SearchPattern, {})
+					searchPattern =   self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.SearchPattern, {})
 					replacePattern =  self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.ReplacePattern, {})
 					task = ReplaceTask(Path(filePath), searchPattern, replacePattern, rule.RegExpOption_MultiLine, rule.RegExpOption_DotAll, rule.RegExpOption_CaseInsensitive)
 					postReplaceTasks.append(task)
+				elif isinstance(rule, AppendLineRuleMixIn):
+					filePath =        self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.FilePath, {})
+					appendPattern =   self.Host.PoCConfig.Interpolation.interpolate(self.Host.PoCConfig, netlist.ConfigSectionName, "RulesFile", rule.AppendPattern, {})
+					task = AppendLineTask(Path(filePath), appendPattern)
+					postReplaceTasks.append(task)
+				elif isinstance(rule, CopyRuleMixIn):
+					pass
+				else:
+					raise CompilerException("Unknown post-process rule '{0!s}'.".format(rule))
 		else:
 			postReplaceRules = self.Host.PoCConfig[netlist.ConfigSectionName]['PostReplaceRules']
 			if (len(postReplaceRules) != 0):
@@ -417,8 +370,8 @@ class Compiler(ILogable):
 			self._LogDebug("{0}-replace in file '{1!s}': search for '{2}' replace by '{3}'.".format(text, task.FilePath, task.SearchPattern, task.ReplacePattern))
 
 			regExpFlags = 0
-			if task.RegExpOption_CaseInsensitive:  regExpFlags |= re.IGNORECASE
-			if task.RegExpOption_MultiLine:        regExpFlags |= re.MULTILINE
+			if task.RegExpOption_CaseInsensitive: regExpFlags |= re.IGNORECASE
+			if task.RegExpOption_MultiLine:       regExpFlags |= re.MULTILINE
 			if task.RegExpOption_DotAll:          regExpFlags |= re.DOTALL
 
 			# compile regexp

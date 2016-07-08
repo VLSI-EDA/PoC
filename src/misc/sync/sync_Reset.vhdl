@@ -1,14 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Module:					Synchronizes a reset signal across clock-domain boundaries
+-- Entity:					Synchronizes a reset signal across clock-domain boundaries
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --    This module synchronizes an asynchronous reset signal to the clock
 --    'Clock'. The 'Input' can be asserted and de-asserted at any time.
 --    The 'Output' is asserted asynchronously and de-asserted synchronously
@@ -91,7 +90,7 @@ begin
 	begin
 		Data_async	<= Input;
 
-		process(Clock, Input)
+		process(Clock, Data_async)
 		begin
 			if (Data_async = '1') then
 				Data_meta		<= '1';

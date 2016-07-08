@@ -16,8 +16,14 @@ __pycache__
 !/netlist/template.cgc
 
 # ignore folders
-/temp/
-/vSim/
+/docs/_build/
+/py/Wrapper/Hooks/*
+!/py/Wrapper/Hooks/README.md
+/temp/*
+!/temp/.*
+!/temp/*.*
+/temp/precompiled/*
+!/temp/precompiled/.*
 
 # ignore files from PoC
 /py/config.private.ini
@@ -74,3 +80,4 @@ __pycache__
 !.git*
 !.publish
 !.README.md
+docs/_build/

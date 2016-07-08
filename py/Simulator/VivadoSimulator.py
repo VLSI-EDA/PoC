@@ -55,22 +55,18 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =            ToolChain.Xilinx_Vivado
 	_TOOL =                  Tool.Xilinx_xSim
 
-	def __init__(self, host, guiMode):
-		super().__init__(host)
+	def __init__(self, host, dryRun, guiMode):
+		super().__init__(host, dryRun)
 		XilinxProjectExportMixIn.__init__(self)
 
-		self._guiMode =        guiMode
-
-		self._entity =        None
-		self._testbenchFQN =  None
-		self._vhdlVersion =    None
+		self._guiMode =       guiMode
+		self._vhdlVersion =   None
 		self._vhdlGenerics =  None
+		self._toolChain =     None
 
-		self._vivado =        None
-
-		vivadoFilesDirectoryName = host.PoCConfig['CONFIG.DirectoryNames']['VivadoSimulatorFiles']
-		self.Directories.Working = host.Directories.Temp / vivadoFilesDirectoryName
-		self.Directories.PreCompiled = host.Directories.PreCompiled / vivadoFilesDirectoryName
+		vivadoFilesDirectoryName =      host.PoCConfig['CONFIG.DirectoryNames']['VivadoSimulatorFiles']
+		self.Directories.Working =      host.Directories.Temp / vivadoFilesDirectoryName
+		self.Directories.PreCompiled =  host.Directories.PreCompiled / vivadoFilesDirectoryName
 
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()
@@ -81,7 +77,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		vivadoSection = self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
 		version =  vivadoSection['Version']
 		binaryPath = Path(vivadoSection['BinaryDirectory'])
-		self._vivado = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
+		self._toolChain = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def _RunElaboration(self, testbench):
 		xelabLogFilePath =  self.Directories.Working / (testbench.ModuleName + ".xelab.log")
@@ -89,7 +85,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._WriteXilinxProjectFile(prjFilePath, "xSim", self._vhdlVersion)
 
 		# create a VivadoLinker instance
-		xelab = self._vivado.GetElaborator()
+		xelab = self._toolChain.GetElaborator()
 		xelab.Parameters[xelab.SwitchTimeResolution] =  "1fs"	# set minimum time precision to 1 fs
 		xelab.Parameters[xelab.SwitchMultiThreading] =  "off" if self.Logger.LogLevel is Severity.Debug else "auto"		# disable multithreading support in debug mode
 		xelab.Parameters[xelab.FlagRangeCheck] =        True
@@ -117,7 +113,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		wcfgFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimWaveformConfigFile']
 
 		# create a VivadoSimulator instance
-		xSim = self._vivado.GetSimulator()
+		xSim = self._toolChain.GetSimulator()
 		xSim.Parameters[xSim.SwitchLogFile] =          str(xSimLogFilePath)
 
 		if (not self._guiMode):

@@ -70,7 +70,7 @@ class Configuration(BaseConfiguration):
 	def _GetDefaultInstallationDirectory(self):
 		path = self._TestDefaultInstallPath({"Windows": "Lattice", "Linux": "lattice"})
 		if path is None: return super()._GetDefaultInstallationDirectory()
-		return str(path)
+		return path.as_posix()
 
 
 class LatticeDesignConstraintFile(ConstraintFile):

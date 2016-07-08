@@ -1,16 +1,16 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Patrick Lehmann
 -- 									Martin Zabel
+--									Thomas B. Preusser
 --
 -- Package:					This VHDL package declares new physical types and their
 --									conversion functions.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		For detailed documentation see below.
 --
 --		NAMING CONVENTION:
@@ -37,7 +37,7 @@
 --				- Xilinx Vivado Simulator (xSim) 2014.4
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -52,7 +52,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.math_real.all;
@@ -100,6 +100,12 @@ package physical is
 	function to_freq(p : TIME)	return FREQ;
 	function to_freq(br : BAUD)	return FREQ;
 	function to_baud(str : STRING)	return BAUD;
+
+	-- inter-type arithmetic
+	function "/"(x : real; t : time) return FREQ;
+	function "/"(x : real; f : FREQ) return time;
+	function "*"(t : time; f : FREQ) return real;
+	function "*"(f : FREQ; t : time) return real;
 
 	-- if-then-else
 	function ite(cond : BOOLEAN; value1 : TIME;	value2 : TIME)			return TIME;
@@ -352,6 +358,25 @@ package body physical is
 		else
 			report "to_baud: Unknown format" severity FAILURE;
 		end if;
+	end function;
+
+	-- inter-type arithmetic
+	-- ===========================================================================
+	function "/"(x : real; t : time) return FREQ is
+	begin
+		return  x*div(1 ms, t) * 1 kHz;
+	end function;
+	function "/"(x : real; f : FREQ) return time is
+	begin
+		return  x*div(1 kHz, f) * 1 ms;
+	end function;
+	function "*"(t : time; f : FREQ) return real is
+	begin
+		return  div(t, 1.0/f);
+	end function;
+	function "*"(f : FREQ; t : time) return real is
+	begin
+		return  div(f, 1.0/t);
 	end function;
 
 	-- if-then-else

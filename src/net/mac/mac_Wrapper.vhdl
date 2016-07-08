@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -86,7 +85,7 @@ end entity;
 
 
 architecture rtl of mac_Wrapper is
-	function getInterfaceAddresses(MAC_CONFIG : T_NET_MAC_CONFIGURATION_VECTOR) return T_NET_MAC_ADDRESS_VECTOR IS
+	function getInterfaceAddresses(MAC_CONFIG : T_NET_MAC_CONFIGURATION_VECTOR) return T_NET_MAC_ADDRESS_VECTOR is
 		variable temp : T_NET_MAC_ADDRESS_VECTOR(MAC_CONFIG'range);
 	begin
 		for i in MAC_CONFIG'range loop
@@ -96,7 +95,7 @@ architecture rtl of mac_Wrapper is
 		return temp;
 	end function;
 
-	function getInterfaceMasks(MAC_CONFIG : T_NET_MAC_CONFIGURATION_VECTOR) return T_NET_MAC_ADDRESS_VECTOR IS
+	function getInterfaceMasks(MAC_CONFIG : T_NET_MAC_CONFIGURATION_VECTOR) return T_NET_MAC_ADDRESS_VECTOR is
 		variable temp : T_NET_MAC_ADDRESS_VECTOR(MAC_CONFIG'range);
 	begin
 		for i in MAC_CONFIG'range loop
@@ -106,7 +105,7 @@ architecture rtl of mac_Wrapper is
 		return temp;
 	end function;
 
-	function getSourceFilterCount(Interfaces : T_NET_MAC_INTERFACE_VECTOR) return NATURAL IS
+	function getSourceFilterCount(Interfaces : T_NET_MAC_INTERFACE_VECTOR) return NATURAL is
 		variable count : NATURAL		:= 0;
 	begin
 		for i in Interfaces'range loop
@@ -118,7 +117,7 @@ architecture rtl of mac_Wrapper is
 		return count;
 	end function;
 
-	function getSourceFilterAddresses(Interfaces : T_NET_MAC_INTERFACE_VECTOR) return T_NET_MAC_ADDRESS_VECTOR IS
+	function getSourceFilterAddresses(Interfaces : T_NET_MAC_INTERFACE_VECTOR) return T_NET_MAC_ADDRESS_VECTOR is
 		variable temp : T_NET_MAC_ADDRESS_VECTOR(Interfaces'range);
 	begin
 		for i in Interfaces'range loop
@@ -128,7 +127,7 @@ architecture rtl of mac_Wrapper is
 		return temp;
 	end function;
 
-	function getSourceFilterMasks(Interfaces : T_NET_MAC_INTERFACE_VECTOR) return T_NET_MAC_ADDRESS_VECTOR IS
+	function getSourceFilterMasks(Interfaces : T_NET_MAC_INTERFACE_VECTOR) return T_NET_MAC_ADDRESS_VECTOR is
 		variable temp : T_NET_MAC_ADDRESS_VECTOR(Interfaces'range);
 	begin
 		for i in Interfaces'range loop
@@ -138,7 +137,7 @@ architecture rtl of mac_Wrapper is
 		return temp;
 	end function;
 
-	function getTypeSwitchCount(Types : T_NET_MAC_ETHERNETTYPE_VECTOR) return NATURAL IS
+	function getTypeSwitchCount(Types : T_NET_MAC_ETHERNETTYPE_VECTOR) return NATURAL is
 		variable count : NATURAL		:= 0;
 	begin
 		for i in Types'range loop
@@ -150,7 +149,7 @@ architecture rtl of mac_Wrapper is
 		return count;
 	end function;
 
-	function calcPortIndex(MAC_CONFIG : T_NET_MAC_CONFIGURATION_VECTOR; CurrentInterfaceID : NATURAL) return NATURAL IS
+	function calcPortIndex(MAC_CONFIG : T_NET_MAC_CONFIGURATION_VECTOR; CurrentInterfaceID : NATURAL) return NATURAL is
 		variable count : NATURAL		:= 0;
 	begin
 		if (CurrentInterfaceID = 0) then

@@ -1,35 +1,34 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	XADC wrapper for temperature supervision applications
+-- Entity:				 	XADC wrapper for temperature supervision applications
 --
 -- Description:
--- ------------------------------------
---		This module wraps a Series-7 XADC to report if preconfigured temperature values
---		are overrun. The XADC was formerly known as "System Monitor".
+-- -------------------------------------
+-- This module wraps a Series-7 XADC to report if preconfigured temperature values
+-- are overrun. The XADC was formerly known as "System Monitor".
 --
---		Temperature curve:
---		------------------
+-- .. rubric:: Temperature Curve
 --
---										|											 /-----\
---		Temp_ov	 on=80	|	-	-	-	-	-	-	/-------/				\
---										|						 /				|				 \
---		Temp_ov	off=60	|	-	-	-	-	-	/	-	-	-	-	|	-	-	-	-	\----\
---										|					 /					|								\
---										|					/						|							 | \
---		Temp_us	 on=35	|	-	 /---/						|							 |	\
---		Temp_us	off=30	|	-	/	-	-|-	-	-	-	-	-	|	-	-	-	-	-	-	-|-  \------\
---										|  /		 |						|							 |					 \
---		----------------|--------|------------|--------------|----------|---------
---		pwm =						|		min	 |	medium		|		max				 |	medium	|	min
+-- .. code-block:: None
 --
+--                    |                      /-----\
+--    Temp_ov   on=80 | - - - - - - /-------/       \
+--                    |            /        |        \
+--    Temp_ov  off=60 | - - - - - / - - - - | - - - - \----\
+--                    |          /          |              |\
+--                    |         /           |              | \
+--    Temp_us   on=35 | -  /---/            |              |  \
+--    Temp_us  off=30 | - / - -|- - - - - - |- - - - - - - |- -\------\
+--                    |  /     |            |              |           \
+--    ----------------|--------|------------|--------------|-----------|--------
+--    pwm =           |   min  |  medium    |   max        |   medium  |  min
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -44,7 +43,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -64,17 +63,17 @@ entity xil_SystemMonitor_Series7 is
 		VP									: in	STD_LOGIC;				-- Dedicated Analog Input Pair
 		VN									: in	STD_LOGIC
 	);
-end;
+end entity;
 
 
-architecture xilinx of xil_SystemMonitor_Series7 IS
-	SIGNAL FLOAT_VCCAUX_ALARM		: STD_LOGIC;
-	SIGNAL FLOAT_VCCINT_ALARM		: STD_LOGIC;
-	SIGNAL FLOAT_VBRAM_ALARM		: STD_LOGIC;
-	SIGNAL FLOAT_MUXADDR				: STD_LOGIC_VECTOR(4 DOWNTO 0);
-	SIGNAL aux_channel_p				: STD_LOGIC_VECTOR(15 DOWNTO 0);
-	SIGNAL aux_channel_n				: STD_LOGIC_VECTOR(15 DOWNTO 0);
-	SIGNAL XADC_Alarm						: STD_LOGIC_VECTOR(7 DOWNTO 0);
+architecture xilinx of xil_SystemMonitor_Series7 is
+	signal FLOAT_VCCAUX_ALARM		: STD_LOGIC;
+	signal FLOAT_VCCINT_ALARM		: STD_LOGIC;
+	signal FLOAT_VBRAM_ALARM		: STD_LOGIC;
+	signal FLOAT_MUXADDR				: STD_LOGIC_VECTOR(4 downto 0);
+	signal aux_channel_p				: STD_LOGIC_VECTOR(15 downto 0);
+	signal aux_channel_n				: STD_LOGIC_VECTOR(15 downto 0);
+	signal XADC_Alarm						: STD_LOGIC_VECTOR(7 downto 0);
 
 	begin
 

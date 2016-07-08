@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Steffen Koehler
 --									Patrick Lehmann
 --
--- Module:					Synchronizes a signal vector across clock-domain boundaries
+-- Entity:					Synchronizes a signal vector across clock-domain boundaries
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This module synchronizes a vector of bits from clock-domain 'Clock1' to
 --		clock-domain 'Clock2'. The clock-domain boundary crossing is done by a
 --		change comparator, a T-FF, two synchronizer D-FFs and a reconstructive
@@ -48,13 +47,13 @@ library PoC;
 use			PoC.utils.all;
 
 
-entity sync_Vector IS
+entity sync_Vector is
   generic (
 	  MASTER_BITS					: POSITIVE					:= 8;											-- number of bit to be synchronized
 		SLAVE_BITS					: NATURAL						:= 0;
 		INIT								: STD_LOGIC_VECTOR	:= x"00000000"						--
 	);
-  PORT (
+  port (
 		Clock1							: in	STD_LOGIC;																									-- <Clock>	input clock
 		Clock2							: in	STD_LOGIC;																									-- <Clock>	output clock
 		Input								: in	STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0);	-- @Clock1:	input vector
@@ -62,7 +61,7 @@ entity sync_Vector IS
 		Busy								: out	STD_LOGIC;																									-- @Clock1:	busy bit
 		Changed							: out	STD_LOGIC																										-- @Clock2:	changed bit
 	);
-end;
+end entity;
 
 
 architecture rtl of sync_Vector is

@@ -1,18 +1,16 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Package:					measures a input frequency relativ to a reference frequency
+-- Entity:					measures a input frequency relativ to a reference frequency
 --
 -- Description:
--- ------------------------------------
---		This module counts 1 second in a reference timer at reference clock. This
---		reference time is used to start and stop a timer at input clock. The counter
---		value is the measured frequency in Hz.
---
+-- -------------------------------------
+-- This module counts 1 second in a reference timer at reference clock. This
+-- reference time is used to start and stop a timer at input clock. The counter
+-- value is the measured frequency in Hz.
 --
 -- License:
 -- =============================================================================

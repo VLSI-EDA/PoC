@@ -1,19 +1,18 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Package:				 	VHDL package for component declarations, types and functions
 --									associated to the PoC.bus.stream namespace
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -28,7 +27,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS of ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -452,7 +451,7 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 			if (words(i).Valid = '1') then
 				Word	:= to_01(unsigned(words(i).Data));
 
---					ASSERT (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
+--					assert (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
 
 				for j in Word'range loop
 						CRC8_Value := (CRC8_Value(CRC8_Value'high - 1 downto 0) & '0') xor (CRC8_POLYNOMIAL and (CRC8_POLYNOMIAL'range => (Word(j) xor CRC8_Value(CRC8_Value'high))));
@@ -483,15 +482,15 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 --
 ----			report Frames(i).Name severity NOTE;
 --
---			FOR J IN 1 to Frames(i).Count - 1 loop
+--			for j in 1 to Frames(i).Count - 1 loop
 --				Pattern		:= Frames(i).DataFifOPatterns(J);
 --
 --				if (Pattern.Valid = '1') then
 --					Word	:= to_01(Pattern.Data);
 --
-----					ASSERT (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
+----					assert (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
 --
---					FOR K IN Word'range loop
+--					for k in Word'range loop
 --						CRC16_Value := (CRC16_Value(CRC16_Value'high - 1 downto 0) & '0') XOR (CRC16_POLYNOMIAL AND (CRC16_POLYNOMIAL'range => (Word(K) XOR CRC16_Value(CRC16_Value'high))));
 --					end loop;
 --				end if;

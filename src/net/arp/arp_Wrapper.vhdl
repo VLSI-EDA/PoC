@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -108,7 +107,7 @@ architecture rtl of arp_Wrapper is
 	signal IPPool_Announce_l											: STD_LOGIC							:= '0';
 	signal IPPool_Announced_i											: STD_LOGIC;
 
-	type T_FSMPOOL_STATE IS (
+	type T_FSMPOOL_STATE is (
 		ST_IDLE,
 		ST_IPPOOL_WAIT,
 		ST_SEND_RESPONSE,
@@ -176,7 +175,7 @@ architecture rtl of arp_Wrapper is
 	signal UCRsp_TX_Meta_DestMACAddress_nxt				: STD_LOGIC;
 	signal UCRsp_TX_Meta_DestMACAddress_Data			: T_SLV_8;
 
-	type T_FSMCACHE_STATE IS (
+	type T_FSMCACHE_STATE is (
 		ST_IDLE,
 			ST_CACHE, ST_CACHE_WAIT, ST_READ_CACHE,
 			ST_SEND_BROADCAST_REQUEST, ST_SEND_BROADCAST_REQUEST_WAIT, ST_WAIT_FOR_UNICAST_RESPONSE,
@@ -269,9 +268,9 @@ begin
 	-- FIXME: assign correct value
 	IPPool_Insert		<= '0';
 
--- ============================================================================================================================================================
+-- =============================================================================
 -- Responder Path
--- ============================================================================================================================================================
+-- =============================================================================
 	MACSeq1 : entity PoC.misc_Sequencer
 		generic map (
 			INPUT_BITS						=> 48,
@@ -336,7 +335,7 @@ begin
 		FSMPool_UCRsp_TargetMACAddress_Data		<= BCRcv_SenderMACAddress_Data;
 		FSMPool_UCRsp_TargetIPv4Address_Data	<= BCRcv_SenderIPv4Address_Data;
 
-		case FSMPool_State IS
+		case FSMPool_State is
 			when ST_IDLE =>
 				if (BCRcv_RequestReceived = '1') then
 					FSMPool_IPPool_Lookup									<= '1';
@@ -473,9 +472,9 @@ begin
 			TX_Meta_DestMACAddress_nxt		=> UCRsp_TX_Meta_DestMACAddress_nxt,
 			TX_Meta_DestMACAddress_Data		=> UCRsp_TX_Meta_DestMACAddress_Data
 		);
--- ============================================================================================================================================================
+-- =============================================================================
 -- ARPCache Path
--- ============================================================================================================================================================
+-- =============================================================================
 	MACSeq2 : entity PoC.misc_Sequencer
 		generic map (
 			INPUT_BITS						=> 48,
@@ -565,7 +564,7 @@ begin
 		FSMCache_UCRcv_TargetMACAddress_nxt					<= '0';		-- default assignment for unsed metadata TargetMACAddress
 		FSMCache_UCRcv_TargetIPv4Address_nxt				<= '0';		-- default assignment for unsed metadata TargetIPv4Address
 
-		case FSMCache_State IS
+		case FSMCache_State is
 			when ST_IDLE =>
 				IPCache_IPv4Address_rst									<= '1';
 

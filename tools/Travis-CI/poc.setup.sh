@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 # define color escape codes
 RED='\e[0;31m'			# Red
@@ -24,3 +24,7 @@ if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${RED}Copy of ./tools/Travis-CI/my_project.vhdl [FAILED]${NOCOLOR}"
 	exit 1
 fi
+
+echo -e "${CYAN}Pre-compiling OSVVM with GHDL into ./temp/precompiled/ghdl/osvvm directory${NOCOLOR}"
+cd tools/precompile
+./compile-osvvm.sh --ghdl

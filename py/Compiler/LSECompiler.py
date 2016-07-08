@@ -66,16 +66,16 @@ class Compiler(BaseCompiler):
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working = host.Directories.Temp / configSection['LatticeSynthesisFiles']
 		self.Directories.Netlist = host.Directories.Root / configSection['NetlistFiles']
-		
+
 		self._PrepareCompiler()
 
 	def _PrepareCompiler(self):
 		self._LogVerbose("Preparing Lattice Synthesis Engine (LSE).")
 		diamondSection = self.Host.PoCConfig['INSTALL.Lattice.Diamond']
 		if (self.Host.Platform == "Linux"):
-			binaryPath = Path(diamondSection['BinaryDirectory2'])
+			binaryPath = Path(diamondSection['BinaryDirectory2'])		# ispFPGA directory
 		elif (self.Host.Platform == "Windows"):
-			binaryPath = Path(diamondSection['BinaryDirectory'])
+			binaryPath = Path(diamondSection['BinaryDirectory2'])		# ispFPGA directory
 		else:
 			raise PlatformNotSupportedException(self.Host.Platform)
 

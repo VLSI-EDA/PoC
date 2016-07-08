@@ -1,9 +1,9 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 # configure variables in the section below
 GHDL_BACKEND="llvm"
 GHDL_VERSION="0.34dev"
-RELEASE_DATE="2016-05-03"
+RELEASE_DATE="2016-06-07"
 
 GITHUB_SERVER="https://github.com"
 GITHUB_SLUG="tgingold/ghdl"
@@ -79,3 +79,9 @@ else
 	echo 1>&2 -e "${RED}GHDL test [FAILED]${NOCOLOR}"
 	exit 1
 fi
+
+# WORKAROUND:
+echo -e "${YELLOW}WORKAROUND: needed until GHDL ships vendor compile scripts in the monthly build${NOCOLOR}"
+mkdir -p ./lib/ghdl/vendors
+cp $POCROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
+cp $POCROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors

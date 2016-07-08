@@ -5,6 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
+#										Thomas B. Preusser
 #
 # Python Class:      PoC specific classes
 #
@@ -43,9 +44,9 @@ else:
 
 from os                   import environ
 from pathlib              import Path
-from subprocess           import check_output, CalledProcessError
+from subprocess           import check_output, check_call, call, CalledProcessError
 
-from Base.Configuration   import Configuration as BaseConfiguration
+from Base.Configuration   import Configuration as BaseConfiguration, ConfigurationException
 
 
 class Configuration(BaseConfiguration):
@@ -54,7 +55,7 @@ class Configuration(BaseConfiguration):
 	_template =    {
 		"ALL": {
 			"INSTALL.PoC": {
-				"Version":                "0.0.0",
+				"Version":                "1.0.0",
 				"InstallationDirectory":  None
 			},
 			"SOLUTION.Solutions": {}
@@ -80,7 +81,7 @@ class Configuration(BaseConfiguration):
 
 	def __CheckForGit(self):
 		try:
-			check_output(["git", "--version"], universal_newlines=True)
+			check_call(["git", "--version"])
 			return True
 		except OSError:
 			return False
@@ -98,6 +99,26 @@ class Configuration(BaseConfiguration):
 			return response[:-1]
 		except OSError:
 			return False
+
+	def RunPostConfigurationTasks(self):
+
+		# Setup Git Mechanisms
+		if self.__IsUnderGitControl():
+			pocInstallationPath = Path(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
+			gitToolsPath = pocInstallationPath / 'tools/git'
+
+			def call_setup(section):
+				self._host._LogNormal("Setting up Git " + section, indent=1)
+				script = str(gitToolsPath / ('git-' + section + '.setup.py'))
+				try:
+					check_call(["python", script])
+				except CalledProcessError as ex:
+					# We do not want this to be fatal
+					self._host._LogWarning("Could not setup '{}': {}".format(section, script))
+
+			# Setting up Hooks & Filters
+			for section in ['hooks', 'filters']:
+				call_setup(section)
 
 	# LOCAL = git rev-parse @
 	# PS G:\git\PoC> git rev-parse "@"

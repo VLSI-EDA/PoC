@@ -1,14 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Package:				 	Common primitives described as a function
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This packages describes common primitives like flip flops and multiplexers
 --		as a function to use them as one-liners.
 --
@@ -18,7 +17,7 @@
 --		this value MUST be set via signal declaration!
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -33,7 +32,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -59,17 +58,6 @@ package components is
 	-- T-FlipFlops (Toggle)
 	function fftre(q : STD_LOGIC;					t : STD_LOGIC;				rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0')												return STD_LOGIC;					-- T-FlipFlop with reset and enable
 	function fftse(q : STD_LOGIC;					t : STD_LOGIC;				set : STD_LOGIC := '0'; en : STD_LOGIC := '1')																													return STD_LOGIC;					-- T-FlipFlop with set and enable
-
-	-- adder
-	function inc(value : STD_LOGIC_VECTOR;	constant increment : NATURAL := 1) return STD_LOGIC_VECTOR;
-	function inc(value : UNSIGNED;					constant increment : NATURAL := 1) return UNSIGNED;
-	function inc(value : SIGNED;						constant increment : NATURAL := 1) return SIGNED;
-	function dec(value : STD_LOGIC_VECTOR;	constant decrement : NATURAL := 1) return STD_LOGIC_VECTOR;
-	function dec(value : UNSIGNED;					constant decrement : NATURAL := 1) return UNSIGNED;
-	function dec(value : SIGNED;						constant decrement : NATURAL := 1) return SIGNED;
-
-	-- negate
-	function neg(value : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;		-- calculate 2's complement
 
 	-- counter
 	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : NATURAL := 0) return UNSIGNED;
@@ -184,45 +172,6 @@ package body components is
 		return (q and not rst) or set;
 	end function;
 
-	-- Adder
-	-- ===========================================================================
-	function inc(value : STD_LOGIC_VECTOR; constant increment : NATURAL := 1) return STD_LOGIC_VECTOR is
-	begin
-		report "Incrementing a STD_LOGIC_VECTOR - implicit conversion to UNSIGNED" severity WARNING;
-		return std_logic_vector(inc(unsigned(value), increment));
-	end function;
-
-	function inc(value : UNSIGNED; constant increment : NATURAL := 1) return UNSIGNED is
-	begin
-		return value + increment;
-	end function;
-
-	function inc(value : SIGNED; constant increment : NATURAL := 1) return SIGNED is
-	begin
-		return value + increment;
-	end function;
-
-	function dec(value : STD_LOGIC_VECTOR; constant decrement : NATURAL := 1) return STD_LOGIC_VECTOR is
-	begin
-		report "Decrementing a STD_LOGIC_VECTOR - implicit conversion to UNSIGNED" severity WARNING;
-		return std_logic_vector(dec(unsigned(value), decrement));
-	end function;
-
-	function dec(value : UNSIGNED; constant decrement : NATURAL := 1) return UNSIGNED is
-	begin
-		return value - decrement;
-	end function;
-
-	function dec(value : SIGNED; constant decrement : NATURAL := 1) return SIGNED is
-	begin
-		return value - decrement;
-	end function;
-
-	-- negate
-	function neg(value : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
-	begin
-		return std_logic_vector(inc(unsigned(not value)));		-- 2's complement
-	end function;
 
 	-- Counters
 	-- ===========================================================================

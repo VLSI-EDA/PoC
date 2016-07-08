@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 POC_GHDL_DIR="temp/ghdl"
 
@@ -29,7 +29,12 @@ if grcat $TRAVIS_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
 fi
 
 echo -e "Running all testbenches..."
-$POCROOT/poc.sh -q ghdl $1
+mode=-q
+if [ "x$1" = 'x-d' -o "x$1" = 'x-v' ]; then
+  mode=$1
+  shift
+fi
+$POCROOT/poc.sh $mode ghdl "$@"
 ret=$?
 
 # Cleanup and exit

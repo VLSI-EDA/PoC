@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Package:					TODO
+-- Entity:					TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -48,7 +47,7 @@ entity misc_Delay is
 		DataIn				: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);								-- data to delay
 		DataOut				: out	T_SLM(TAPS'length - 1 downto 0, BITS - 1 downto 0)	-- delayed ouputs, tapped at TAPS(i)
 	);
-end;
+end entity;
 
 
 architecture rtl of misc_Delay is

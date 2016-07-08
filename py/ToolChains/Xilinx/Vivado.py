@@ -65,14 +65,14 @@ class Configuration(BaseConfiguration):
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "2016.1",
+				"Version":                "2016.2",
 				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
 				"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "2016.1",
+				"Version":                "2016.2",
 				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
 				"BinaryDirectory":        "${InstallationDirectory}/bin"
 			}

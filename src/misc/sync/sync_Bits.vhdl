@@ -1,34 +1,41 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Module:					Synchronizes a flag signal across clock-domain boundaries
+-- Entity:					Synchronizes a flag signal across clock-domain boundaries
 --
 -- Description:
--- ------------------------------------
---		This module synchronizes multiple flag bits from clock-domain 'Clock1' to
---		clock-domain 'Clock'. The clock-domain boundary crossing is done by two
---		synchronizer D-FFs. All bits are independent from each other. If a known
---		vendor like Altera or Xilinx are recognized, a vendor specific
---		implementation is choosen.
+-- -------------------------------------
+-- This module synchronizes multiple flag bits from clock-domain ``Clock1`` to
+-- clock-domain ``Clock``. The clock-domain boundary crossing is done by two
+-- synchronizer D-FFs. All bits are independent from each other. If a known
+-- vendor like Altera or Xilinx are recognized, a vendor specific
+-- implementation is choosen.
 --
---		ATTENTION:
---			Use this synchronizer only for long time stable signals (flags).
+-- .. ATTENTION::
+--    Use this synchronizer only for long time stable signals (flags).
 --
---		CONSTRAINTS:
---			General:
---				Please add constraints for meta stability to all '_meta' signals and
---				timing ignore constraints to all '_async' signals.
+-- Constraints:
+-- 	General:
+-- 		Please add constraints for meta stability to all '_meta' signals and
+-- 		timing ignore constraints to all '_async' signals.
 --
---			Xilinx:
---				In case of a Xilinx device, this module will instantiate the optimized
---				module PoC.xil.SyncBits. Please attend to the notes of xil_SyncBits.vhdl.
+-- 	Xilinx:
+-- 		In case of a Xilinx device, this module will instantiate the optimized
+-- 		module PoC.xil.SyncBits. Please attend to the notes of xil_SyncBits.vhdl.
 --
---			Altera sdc file:
---				TODO
+-- 	Altera sdc file:
+-- 		TODO
+--
+-- SeeAlso:
+-- :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`
+--   For a special 2 D-FF synchronizer for *reset*-signals.
+-- :doc:`PoC.misc.sync.Strobe </PoC/misc/sync/sync_Strobe>`
+--   For a synchronizer for *strobe*-signals.
+-- :doc:`PoC.misc.sync.Vector </PoC/misc/sync/sync_Vector>`
+--   For a multiple bits capable synchronizer.
 --
 -- License:
 -- =============================================================================
@@ -73,9 +80,9 @@ end entity;
 
 architecture rtl of sync_Bits is
 	constant INIT_I		: STD_LOGIC_VECTOR		:= resize(descend(INIT), BITS);
-
+	constant DEV_INFO : T_DEVICE_INFO				:= DEVICE_INFO;
 begin
-	genGeneric : if ((VENDOR /= VENDOR_ALTERA) and (VENDOR /= VENDOR_XILINX)) generate
+	genGeneric : if ((DEV_INFO.Vendor /= VENDOR_ALTERA) and (DEV_INFO.Vendor /= VENDOR_XILINX)) generate
 		attribute ASYNC_REG							: STRING;
 		attribute SHREG_EXTRACT					: STRING;
 
@@ -108,7 +115,7 @@ begin
 	end generate;
 
 	-- use dedicated and optimized 2 D-FF synchronizer for Altera FPGAs
-	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+	genAltera : if (DEV_INFO.Vendor = VENDOR_ALTERA) generate
 		sync : sync_Bits_Altera
 			generic map (
 				BITS				=> BITS,
@@ -123,7 +130,7 @@ begin
 	end generate;
 
 	-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+	genXilinx : if (DEV_INFO.Vendor = VENDOR_XILINX) generate
 		sync : sync_Bits_Xilinx
 			generic map (
 				BITS				=> BITS,

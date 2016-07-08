@@ -1,8 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ===========================================================================
+-- =============================================================================
 -- Description:
 --
 --  An LZ77-based bit stream compressor.
@@ -41,10 +40,10 @@
 --
 --   COUNT_BITS <= OFFSET_BITS < 2**COUNT_BITS - COUNT_BITS
 --
--- ===========================================================================
+-- =============================================================================
 -- Authors:     Thomas B. Preusser <thomas.preusser@utexas.edu>
 --
--- ===========================================================================
+-- =============================================================================
 -- References:
 --
 --   Original Study
@@ -63,7 +62,7 @@
 --       arbeitenden LZ77-Woerterbuchansatzes",
 --      Fehlertolerante und energieeffiziente eingebettete Systeme:
 --      Methoden und Anwendungen (FEES 2015), Oct, 2015.
--- ===========================================================================
+-- =============================================================================
 library IEEE;
 use IEEE.std_logic_1164.all;
 

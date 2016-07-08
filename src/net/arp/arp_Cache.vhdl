@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -201,11 +200,11 @@ begin
 
 		Insert														<= '0';
 
-		case FSMReplace_State IS
+		case FSMReplace_State is
 			when ST_IDLE =>
 				NewMACAddress_rst							<= '1';
 
-				case Command IS
+				case Command is
 					when NET_ARP_ARPCACHE_CMD_NONE =>
 						null;
 
@@ -250,7 +249,7 @@ begin
 	CacheResult					<= to_Cache_Result(CacheHit, CacheMiss);
 
 	-- Cache TagUnit
---	TU : entity L_Global.Cache_TagUnit_seq
+--	TU : entity PoC.Cache_TagUnit_seq
 	TU : entity PoC.cache_TagUnit_seq
 		generic map (
 			REPLACEMENT_POLICY				=> REPLACEMENT_POLICY,
@@ -300,7 +299,7 @@ begin
 
 	Tick			<= TickCounter_s(TickCounter_s'high);
 
---	Exp : entity L_Global.list_expire
+--	Exp : entity PoC.list_expire
 	Exp : entity PoC.list_expire
 		generic map (
 			CLOCK_CYCLE_TICKS				=> 65536,

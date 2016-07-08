@@ -1,17 +1,16 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Thomas B. Preusser
 --
--- Module:					Computes XOR masks for stream scrambling from an LFSR generator.
+-- Entity:					Computes XOR masks for stream scrambling from an LFSR generator.
 --
 -- Description:
--- ------------------------------------
---		The LFSR computation is unrolled to generate an arbitrary number of mask
---		bits in parallel. The mask are output in little endian. The generated bit
---		sequence is independent from the chosen output width.
+-- -------------------------------------
+-- The LFSR computation is unrolled to generate an arbitrary number of mask
+-- bits in parallel. The mask are output in little endian. The generated bit
+-- sequence is independent from the chosen output width.
 --
 -- License:
 -- =============================================================================
@@ -49,7 +48,7 @@ entity comm_scramble is
     step : in  std_logic;    -- Compute a Mask Output
     mask : out std_logic_vector(BITS-1 downto 0)
   );
-end comm_scramble;
+end entity comm_scramble;
 
 
 architecture rtl of comm_scramble is
@@ -97,4 +96,4 @@ begin
     end if;
   end process;
 
-end rtl;
+end architecture;

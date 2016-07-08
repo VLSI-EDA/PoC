@@ -59,16 +59,12 @@ class Simulator(BaseSimulator):
 	class __Directories__(BaseSimulator.__Directories__):
 		GTKWBinary = None
 
-	def __init__(self, host, guiMode):
-		super().__init__(host)
+	def __init__(self, host, dryRun, guiMode):
+		super().__init__(host, dryRun)
 
-		self._guiMode =        guiMode
-
-		self._entity =        None
-		self._testbenchFQN =  None
+		self._guiMode =       guiMode
 		self._vhdlGenerics =  None
-
-		self._toolChain =      None
+		self._toolChain =     None
 
 		ghdlFilesDirectoryName =        host.PoCConfig['CONFIG.DirectoryNames']['GHDLFiles']
 		self.Directories.Working =      host.Directories.Temp / ghdlFilesDirectoryName
@@ -97,30 +93,18 @@ class Simulator(BaseSimulator):
 	def _RunAnalysis(self, testbench):
 		# create a GHDLAnalyzer instance
 		ghdl = self._toolChain.GetGHDLAnalyze()
-		ghdl.Parameters[ghdl.FlagVerbose] =            (self.Logger.LogLevel is Severity.Debug)
+		ghdl.Parameters[ghdl.FlagVerbose] =           (self.Logger.LogLevel is Severity.Debug)
 		ghdl.Parameters[ghdl.FlagExplicit] =          True
 		ghdl.Parameters[ghdl.FlagRelaxedRules] =      True
-		ghdl.Parameters[ghdl.FlagWarnBinding] =        True
-		ghdl.Parameters[ghdl.FlagNoVitalChecks] =      True
-		ghdl.Parameters[ghdl.FlagMultiByteComments] =  True
+		ghdl.Parameters[ghdl.FlagWarnBinding] =       True
+		ghdl.Parameters[ghdl.FlagNoVitalChecks] =     True
+		ghdl.Parameters[ghdl.FlagMultiByteComments] = True
 		ghdl.Parameters[ghdl.FlagSynBinding] =        True
-		ghdl.Parameters[ghdl.FlagPSL] =                True
+		ghdl.Parameters[ghdl.FlagPSL] =               True
 
-		if (self._vhdlVersion == VHDLVersion.VHDL87):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =    "87"
-			ghdl.Parameters[ghdl.SwitchIEEEFlavor] =    "synopsys"
-		elif (self._vhdlVersion == VHDLVersion.VHDL93):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =    "93c"
-			ghdl.Parameters[ghdl.SwitchIEEEFlavor] =    "synopsys"
-		elif (self._vhdlVersion == VHDLVersion.VHDL02):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =    "02"
-		elif (self._vhdlVersion == VHDLVersion.VHDL08):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =    "08"
-		else:                                          raise SimulatorException("VHDL version is not supported.")
+		self._SetVHDLVersionAndIEEEFlavor(ghdl)
+		self._SetExternalLibraryReferences(ghdl)
 
-		# add external library references
-		ghdl.Parameters[ghdl.ArgListLibraryReferences] = [str(extLibrary.Path) for extLibrary in self._pocProject.ExternalVHDLLibraries]
-		
 		# run GHDL analysis for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
 			if (not file.Path.exists()):                  raise SkipableSimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
@@ -136,6 +120,24 @@ class Simulator(BaseSimulator):
 			if ghdl.HasErrors:
 				raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(file.Path))
 
+	def _SetVHDLVersionAndIEEEFlavor(self, ghdl):
+		if (self._vhdlVersion <= VHDLVersion.VHDL93):
+			ghdl.Parameters[ghdl.SwitchIEEEFlavor] =  "synopsys"
+
+		if (self._vhdlVersion is VHDLVersion.VHDL93):
+			ghdl.Parameters[ghdl.SwitchVHDLVersion] = "93c"
+		else:
+			ghdl.Parameters[ghdl.SwitchVHDLVersion] = repr(self._vhdlVersion)[-2:]
+
+	def _SetExternalLibraryReferences(self, ghdl):
+		# add external library references
+		externalLibraryReferences = []
+		for extLibrary in self._pocProject.ExternalVHDLLibraries:
+			path = str(extLibrary.Path)
+			if (path not in externalLibraryReferences):
+				externalLibraryReferences.append(path)
+		ghdl.Parameters[ghdl.ArgListLibraryReferences] = externalLibraryReferences
+
 	# running elaboration
 	# ==========================================================================
 	def _RunElaboration(self, testbench):
@@ -144,26 +146,14 @@ class Simulator(BaseSimulator):
 
 		# create a GHDLElaborate instance
 		ghdl = self._toolChain.GetGHDLElaborate()
-		ghdl.Parameters[ghdl.FlagVerbose] =            (self.Logger.LogLevel is Severity.Debug)
-		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =      VHDL_TESTBENCH_LIBRARY_NAME
-		ghdl.Parameters[ghdl.ArgTopLevel] =            testbench.ModuleName
+		ghdl.Parameters[ghdl.FlagVerbose] =           (self.Logger.LogLevel is Severity.Debug)
+		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =     VHDL_TESTBENCH_LIBRARY_NAME
+		ghdl.Parameters[ghdl.ArgTopLevel] =           testbench.ModuleName
 		ghdl.Parameters[ghdl.FlagExplicit] =          True
 
-		# add external library references
-		ghdl.Parameters[ghdl.ArgListLibraryReferences] = [str(extLibrary.Path) for extLibrary in self._pocProject.ExternalVHDLLibraries]
+		self._SetVHDLVersionAndIEEEFlavor(ghdl)
+		self._SetExternalLibraryReferences(ghdl)
 
-		if (self._vhdlVersion == VHDLVersion.VHDL87):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =    "87"
-			ghdl.Parameters[ghdl.SwitchIEEEFlavor] =    "synopsys"
-		elif (self._vhdlVersion == VHDLVersion.VHDL93):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =    "93c"
-			ghdl.Parameters[ghdl.SwitchIEEEFlavor] =    "synopsys"
-		elif (self._vhdlVersion == VHDLVersion.VHDL02):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =    "02"
-		elif (self._vhdlVersion == VHDLVersion.VHDL08):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =    "08"
-		else:                                          raise SimulatorException("VHDL version is not supported.")
-		
 		try:
 			ghdl.Elaborate()
 		except GHDLException as ex:
@@ -185,20 +175,8 @@ class Simulator(BaseSimulator):
 		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =       VHDL_TESTBENCH_LIBRARY_NAME
 		ghdl.Parameters[ghdl.ArgTopLevel] =             testbench.ModuleName
 
-		if (self._vhdlVersion == VHDLVersion.VHDL87):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =     "87"
-			ghdl.Parameters[ghdl.SwitchIEEEFlavor] =      "synopsys"
-		elif (self._vhdlVersion == VHDLVersion.VHDL93):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =     "93c"
-			ghdl.Parameters[ghdl.SwitchIEEEFlavor] =      "synopsys"
-		elif (self._vhdlVersion == VHDLVersion.VHDL02):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =     "02"
-		elif (self._vhdlVersion == VHDLVersion.VHDL08):
-			ghdl.Parameters[ghdl.SwitchVHDLVersion] =     "08"
-		else:                                           raise SimulatorException("VHDL version is not supported.")
-
-		# add external library references
-		ghdl.Parameters[ghdl.ArgListLibraryReferences] = [str(extLibrary.Path) for extLibrary in self._pocProject.ExternalVHDLLibraries]
+		self._SetVHDLVersionAndIEEEFlavor(ghdl)
+		self._SetExternalLibraryReferences(ghdl)
 
 		# configure RUNOPTS
 		ghdl.RunOptions[ghdl.SwitchIEEEAsserts] = "disable-at-0"		# enable, disable, disable-at-0
@@ -218,7 +196,7 @@ class Simulator(BaseSimulator):
 				waveformFilePath = self.Directories.Working / (testbench.ModuleName + ".ghw")
 				ghdl.RunOptions[ghdl.SwitchGHDLWaveform] =  waveformFilePath
 			else:                                            raise SimulatorException("Unknown waveform file format for GHDL.")
-		
+
 		testbench.Result = ghdl.Run()
 
 	def _RunView(self, testbench):
@@ -233,11 +211,11 @@ class Simulator(BaseSimulator):
 		elif (waveformFileFormat == "ghw"):
 			waveformFilePath = self.Directories.Working / (testbench.ModuleName + ".ghw")
 		else:                                            raise SimulatorException("Unknown waveform file format for GHDL.")
-		
+
 		if (not waveformFilePath.exists()):
 			raise SkipableSimulatorException("Waveform file '{0!s}' not found.".format(waveformFilePath)) \
 				from FileNotFoundError(str(waveformFilePath))
-		
+
 		gtkwBinaryPath =    self.Directories.GTKWBinary
 		gtkwVersion =       self.Host.PoCConfig['INSTALL.GTKWave']['Version']
 		gtkw = GTKWave(self.Host.Platform, gtkwBinaryPath, gtkwVersion)
@@ -250,10 +228,10 @@ class Simulator(BaseSimulator):
 			gtkw.Parameters[gtkw.SwitchSaveFile] = str(gtkwSaveFilePath)
 		else:
 			self._LogDebug("Didn't find waveform save file: '{0!s}'".format(gtkwSaveFilePath))
-		
+
 		# run GTKWave GUI
 		gtkw.View()
-		
+
 		# clean-up *.gtkw files
 		if gtkwSaveFilePath.exists():
 			self._LogNormal("  Cleaning up GTKWave save file...")

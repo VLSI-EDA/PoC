@@ -1,0 +1,5 @@
+formats:
+  - pdf
+requirements_file: requirements.txt
+python:
+  version: 3

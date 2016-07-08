@@ -1,22 +1,21 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Thomas B. Preusser
 --									Patrick Lehmann
 --
--- Module:					Computes the Cyclic Redundancy Check (CRC)
+-- Entity:					Computes the Cyclic Redundancy Check (CRC)
 --
 -- Description:
--- ------------------------------------
---		Computes the Cyclic Redundancy Check (CRC) for a data packet as remainder
---		of the polynomial division of the message by the given generator
---		polynomial (GEN).
+-- -------------------------------------
+-- Computes the Cyclic Redundancy Check (CRC) for a data packet as remainder
+-- of the polynomial division of the message by the given generator
+-- polynomial (GEN).
 --
---		The computation is unrolled so as to process an arbitrary number of
---		message bits per step. The generated CRC is independent from the chosen
---		processing width.
+-- The computation is unrolled so as to process an arbitrary number of
+-- message bits per step. The generated CRC is independent from the chosen
+-- processing width.
 --
 -- License:
 -- =============================================================================
@@ -62,7 +61,7 @@ entity comm_crc is
 		rmd	: out std_logic_vector(abs(mssb_idx(GEN)-GEN'right)-1 downto 0);	-- Remainder
 		zero : out std_logic																-- Remainder is Zero
 	);
-end comm_crc;
+end entity comm_crc;
 
 
 architecture rtl of comm_crc is
@@ -124,4 +123,4 @@ begin
 	rmd	<= lfso;
 	zero <= '1' when lfso = (lfso'range => '0') else '0';
 
-end rtl;
+end architecture;

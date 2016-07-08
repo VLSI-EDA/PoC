@@ -46,14 +46,14 @@ from pathlib                import Path
 from re                     import compile as RegExpCompile
 from subprocess             import check_output, CalledProcessError
 
-from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
+from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
 from Base.Exceptions        import PlatformNotSupportedException
 from Base.Executable        import Executable
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
 from Base.Executable        import ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
-from Base.Logging            import LogEntry, Severity
-from Base.Simulator          import PoCSimulationResultFilter, SimulationResult
-from Base.ToolChain          import ToolChainException
+from Base.Logging           import LogEntry, Severity
+from Base.Simulator         import PoCSimulationResultFilter, SimulationResult
+from Base.ToolChain         import ToolChainException
 from lib.Functions          import CallByRefParam
 
 
@@ -75,22 +75,25 @@ class Configuration(BaseConfiguration):
 				"Version":                "0.34dev",
 				"InstallationDirectory":  "C:/Tools/GHDL/0.34dev",
 				"BinaryDirectory":        "${InstallationDirectory}/bin",
+				"ScriptDirectory":        "${InstallationDirectory}/scripts",
 				"Backend":                "mcode"
 			}
 		},
 		"Linux": {
 			_section: {
 				"Version":                "0.34dev",
-				"InstallationDirectory":  "/usr/bin",
-				"BinaryDirectory":        "${InstallationDirectory}",
+				"InstallationDirectory":  "/usr/local",
+				"BinaryDirectory":        "${InstallationDirectory}/bin",
+				"ScriptDirectory":        "${InstallationDirectory}/lib/ghdl/vendors",
 				"Backend":                "llvm"
 			}
 		},
 		"Darwin": {
 			_section: {
 				"Version":                "0.34dev",
-				"InstallationDirectory":  None,
-				"BinaryDirectory":        "${InstallationDirectory}",
+				"InstallationDirectory":  "/usr/local",
+				"BinaryDirectory":        "${InstallationDirectory}/bin",
+				"ScriptDirectory":        "${InstallationDirectory}/lib/ghdl/vendors",
 				"Backend":                "llvm"
 			}
 		}
@@ -112,11 +115,26 @@ class Configuration(BaseConfiguration):
 		if (self._host.Platform in ["Linux", "Darwin"]):
 			try:
 				name = check_output(["which", "ghdl"], universal_newlines=True)
-				if name != "": return str(Path(name[:-1]).parent)
+				if name != "": return Path(name[:-1]).parent.as_posix()
 			except CalledProcessError:
 				pass # `which` returns non-zero exit code if GHDL is not in PATH
 
 		return super()._GetDefaultInstallationDirectory()
+
+	def _ConfigureBinaryDirectory(self):
+		"""Updates section with value from _template and returns directory as Path object."""
+		self._ConfigureScriptDirectory()
+		return super()._ConfigureBinaryDirectory()
+
+	def _ConfigureScriptDirectory(self):
+		"""Updates section with value from _template and returns directory as Path object."""
+		unresolved = self._template[self._host.Platform][self._section]['ScriptDirectory']
+		self._host.PoCConfig[self._section]['ScriptDirectory'] = unresolved  # create entry
+		scriptPath = Path(self._host.PoCConfig[self._section]['ScriptDirectory'])  # resolve entry
+
+		if (not scriptPath.exists()):
+			raise ConfigurationException("{0!s} script directory '{1!s}' does not exist.".format(self, scriptPath)) \
+				from NotADirectoryError(str(scriptPath))
 
 	def __WriteGHDLSection(self, binPath):
 		if (self._host.Platform == "Windows"):
@@ -134,7 +152,7 @@ class Configuration(BaseConfiguration):
 		backend = None
 		versionRegExpStr = r"^GHDL (.+?) "
 		versionRegExp = RegExpCompile(versionRegExpStr)
-		backendRegExpStr = r" (\w+) code generator"
+		backendRegExpStr = r"(?i).*(mcode|gcc|llvm).* code generator"
 		backendRegExp = RegExpCompile(backendRegExpStr)
 		for line in output.split('\n'):
 			if version is None:
@@ -145,16 +163,16 @@ class Configuration(BaseConfiguration):
 			if backend is None:
 				match = backendRegExp.match(line)
 				if match is not None:
-					backend = match.group(1)
+					backend = match.group(1).lower()
 
-		self._host.PoCConfig[self._section]['Version'] = version
-		self._host.PoCConfig[self._section]['Backend'] = backend
+		self._host.PoCConfig[self._section]['Version'] = '<unknown>' if version is None else version
+		self._host.PoCConfig[self._section]['Backend'] = '<unknown>' if backend is None else backend
 
 
 class GHDL(Executable):
 	def __init__(self, platform, binaryDirectoryPath, version, backend, logger=None):
-		if (platform == "Windows"):      executablePath = binaryDirectoryPath/ "ghdl.exe"
-		elif (platform == "Linux"):      executablePath = binaryDirectoryPath/ "ghdl"
+		if (platform == "Windows"):     executablePath = binaryDirectoryPath/ "ghdl.exe"
+		elif (platform == "Linux"):     executablePath = binaryDirectoryPath/ "ghdl"
 		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath/ "ghdl"
 		else:                                            raise PlatformNotSupportedException(platform)
 		super().__init__(platform, executablePath, logger=logger)
@@ -165,9 +183,9 @@ class GHDL(Executable):
 		if (platform == "Windows"):
 			if (backend not in ["mcode"]):                raise GHDLException("GHDL for Windows does not support backend '{0}'.".format(backend))
 		elif (platform == "Linux"):
-			if (backend not in ["gcc", "llvm", "mcode"]):  raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
+			if (backend not in ["gcc", "llvm", "mcode"]): raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
 		elif (platform == "Darwin"):
-			if (backend not in ["gcc", "llvm", "mcode"]):  raise GHDLException("GHDL for OS X does not support backend '{0}'.".format(backend))
+			if (backend not in ["gcc", "llvm", "mcode"]): raise GHDLException("GHDL for OS X does not support backend '{0}'.".format(backend))
 
 		self._binaryDirectoryPath =  binaryDirectoryPath
 		self._backend =              backend

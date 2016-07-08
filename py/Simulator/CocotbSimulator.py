@@ -59,15 +59,12 @@ class Simulator(BaseSimulator):
 	_TOOL =                  Tool.Cocotb_QuestaSim
 	_COCOTB_SIMBUILD_DIRECTORY = "sim_build"
 
-	def __init__(self, host, guiMode):
-		super().__init__(host)
+	def __init__(self, host, dryRun, guiMode):
+		super().__init__(host, dryRun)
 
-		self._guiMode =        guiMode
+		self._guiMode =       guiMode
 
-		self._entity =        None
-		self._testbenchFQN =  None
-
-		configSection =                  host.PoCConfig['CONFIG.DirectoryNames']
+		configSection =                 host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working =      host.Directories.Temp / configSection['CocotbFiles']
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / configSection['QuestaSimFiles']
 
@@ -117,11 +114,19 @@ class Simulator(BaseSimulator):
 		if (not (simBuildPath).exists()):
 			self._LogVerbose("Creating build directory for simulator files.")
 			self._LogDebug("Build directory: {0!s}".format(simBuildPath))
-			simBuildPath.mkdir(parents=True)
+			try:
+				simBuildPath.mkdir(parents=True)
+			except OSError as ex:
+				raise SimulatorException("Error while creating '{0!s}'.".format(simBuildPath)) from ex
 
 		# write local modelsim.ini
 		modelsimIniPath = simBuildPath / "modelsim.ini"
-		if modelsimIniPath.exists(): modelsimIniPath.unlink()
+		if modelsimIniPath.exists():
+			try:
+				modelsimIniPath.unlink()
+			except OSError as ex:
+				raise SimulatorException("Error while deleting '{0!s}'.".format(modelsimIniPath)) from ex
+
 		with modelsimIniPath.open('w') as fileHandle:
 			fileContent = dedent("""\
 				[Library]

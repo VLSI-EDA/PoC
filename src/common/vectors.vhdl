@@ -1,8 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
 --									Martin Zabel
 --									Patrick Lehmann
@@ -10,11 +9,11 @@
 -- Package:					Common functions and types
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		For detailed documentation see below.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -110,6 +109,15 @@ package vectors is
 	function slm_slice(slm : T_SLM; RowIndex : NATURAL; ColIndex : NATURAL; Height : NATURAL; Width : NATURAL) return T_SLM;						-- get submatrix in boundingbox RowIndex,ColIndex,Height,Width
 	function slm_slice_rows(slm : T_SLM; High : NATURAL; Low : NATURAL) return T_SLM;																										-- get submatrix / all rows in RowIndex range high:low
 	function slm_slice_cols(slm : T_SLM; High : NATURAL; Low : NATURAL) return T_SLM;																										-- get submatrix / all columns in ColIndex range high:low
+
+	-- Boolean Operators
+	function "not" (a    : t_slm) return t_slm;
+	function "and" (a, b : t_slm) return t_slm;
+	function "or"  (a, b : t_slm) return t_slm;
+	function "xor" (a, b : t_slm) return t_slm;
+	function "nand"(a, b : t_slm) return t_slm;
+	function "nor" (a, b : t_slm) return t_slm;
+	function "xnor"(a, b : t_slm) return t_slm;
 
 	-- Matrix concatenation: slm_merge_*
 	function slm_merge_rows(slm1 : T_SLM; slm2 : T_SLM) return T_SLM;
@@ -283,6 +291,69 @@ package body vectors is
 			end loop;
 		end loop;
 		return Result;
+	end function;
+
+	-- Boolean Operators
+	function "not"(a : t_slm) return t_slm is
+		variable  res : t_slm(a'range(1), a'range(2));
+	begin
+		for i in res'range(1) loop
+			for j in res'range(2) loop
+				res(i, j) := not a(i, j);
+			end loop;
+		end loop;
+		return  res;
+	end function;
+
+	function "and"(a, b : t_slm) return t_slm is
+		variable  bb, res : t_slm(a'range(1), a'range(2));
+	begin
+		bb := b;
+		for i in res'range(1) loop
+			for j in res'range(2) loop
+				res(i, j) := a(i, j) and bb(i, j);
+			end loop;
+		end loop;
+		return  res;
+	end function;
+
+	function "or"(a, b : t_slm) return t_slm is
+		variable  bb, res : t_slm(a'range(1), a'range(2));
+	begin
+		bb := b;
+		for i in res'range(1) loop
+			for j in res'range(2) loop
+				res(i, j) := a(i, j) or bb(i, j);
+			end loop;
+		end loop;
+		return  res;
+	end function;
+
+	function "xor"(a, b : t_slm) return t_slm is
+		variable  bb, res : t_slm(a'range(1), a'range(2));
+	begin
+		bb := b;
+		for i in res'range(1) loop
+			for j in res'range(2) loop
+				res(i, j) := a(i, j) xor bb(i, j);
+			end loop;
+		end loop;
+		return  res;
+	end function;
+
+	function "nand"(a, b : t_slm) return t_slm is
+	begin
+		return  not(a and b);
+	end function;
+
+  function "nor"(a, b : t_slm) return t_slm is
+	begin
+		return  not(a or b);
+	end function;
+
+	function "xnor"(a, b : t_slm) return t_slm is
+	begin
+		return  not(a xor b);
 	end function;
 
 	-- Matrix concatenation: slm_merge_*

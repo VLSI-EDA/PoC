@@ -33,45 +33,45 @@
 # limitations under the License.
 # ==============================================================================
 
-from argparse                        import RawDescriptionHelpFormatter
+from argparse                       import RawDescriptionHelpFormatter
 from collections                    import OrderedDict
-from configparser                    import Error as ConfigParser_Error, DuplicateOptionError
-from os                              import environ
+from configparser                   import Error as ConfigParser_Error, DuplicateOptionError
+from os                             import environ
 from pathlib                        import Path
-from platform                        import system as platform_system
+from platform                       import system as platform_system
 from sys                            import argv as sys_argv
-from textwrap                        import dedent
+from textwrap                       import dedent
 
 from Base.Compiler                  import CompilerException
-from Base.Configuration              import ConfigurationException, SkipConfigurationException
+from Base.Configuration             import ConfigurationException, SkipConfigurationException
 from Base.Exceptions                import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
-from Base.Logging                    import ILogable, Logger, Severity
-from Base.Project                    import VHDLVersion
-from Base.Simulator                  import SimulatorException
-from Base.ToolChain                  import ToolChainException
-from Compiler.LSECompiler            import Compiler as LSECompiler
-from Compiler.QuartusCompiler        import Compiler as MapCompiler
-from Compiler.XCOCompiler            import Compiler as XCOCompiler
-from Compiler.XSTCompiler            import Compiler as XSTCompiler
-from Compiler.VivadoCompiler          import Compiler as VivadoCompiler
-from PoC.Config                      import Board
-from PoC.Entity                      import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
-from PoC.Solution                    import Repository
+from Base.Logging                   import ILogable, Logger, Severity
+from Base.Project                   import VHDLVersion
+from Base.Simulator                 import SimulatorException
+from Base.ToolChain                 import ToolChainException
+from Compiler.LSECompiler           import Compiler as LSECompiler
+from Compiler.QuartusCompiler       import Compiler as MapCompiler
+from Compiler.XCOCompiler           import Compiler as XCOCompiler
+from Compiler.XSTCompiler           import Compiler as XSTCompiler
+from Compiler.VivadoCompiler        import Compiler as VivadoCompiler
+from PoC.Config                     import Board
+from PoC.Entity                     import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
+from PoC.Solution                   import Repository
 from PoC.Query                      import Query
-from Simulator.ActiveHDLSimulator    import Simulator as ActiveHDLSimulator
-from Simulator.CocotbSimulator       import Simulator as CocotbSimulator
+from Simulator.ActiveHDLSimulator   import Simulator as ActiveHDLSimulator
+from Simulator.CocotbSimulator      import Simulator as CocotbSimulator
 from Simulator.GHDLSimulator        import Simulator as GHDLSimulator
-from Simulator.ISESimulator          import Simulator as ISESimulator
+from Simulator.ISESimulator         import Simulator as ISESimulator
 from Simulator.QuestaSimulator      import Simulator as QuestaSimulator
 from Simulator.VivadoSimulator      import Simulator as VivadoSimulator
-from ToolChains                      import Configurations
+from ToolChains                     import Configurations
 from ToolChains.GHDL                import Configuration as GHDLConfiguration
-from lib.ArgParseAttributes          import ArgParseMixin
-from lib.ArgParseAttributes          import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
-from lib.ArgParseAttributes          import CommonArgumentAttribute, CommonSwitchArgumentAttribute
-from lib.ConfigParser                import ExtendedConfigParser
+from lib.ArgParseAttributes         import ArgParseMixin
+from lib.ArgParseAttributes         import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
+from lib.ArgParseAttributes         import CommonArgumentAttribute, CommonSwitchArgumentAttribute
+from lib.ConfigParser               import ExtendedConfigParser
 from lib.Functions                  import Init, Exit
-from lib.Parser                      import ParserException
+from lib.Parser                     import ParserException
 from lib.pyAttribute                import Attribute
 
 
@@ -174,7 +174,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__repo =         None
 		self.__directories =  {}
 
-		self.__SimulationDefaultVHDLVersion = VHDLVersion.VHDL08
+		self.__SimulationDefaultVHDLVersion = VHDLVersion.VHDL2008
 		self.__SimulationDefaultBoard =       None
 
 		self._directories =             self.__Directories__()
@@ -290,10 +290,11 @@ class PoC(ILogable, ArgParseMixin):
 	# ============================================================================
 	# common arguments valid for all commands
 	# ----------------------------------------------------------------------------
-	@CommonSwitchArgumentAttribute("-D",							dest="DEBUG",		help="enable script wrapper debug mode")
-	@CommonSwitchArgumentAttribute("-d", "--debug",		dest="debug",		help="enable debug mode")
-	@CommonSwitchArgumentAttribute("-v", "--verbose",	dest="verbose",	help="print out detailed messages")
-	@CommonSwitchArgumentAttribute("-q", "--quiet",		dest="quiet",		help="reduce messages to a minimum")
+	@CommonSwitchArgumentAttribute("-D",              dest="DEBUG",   help="enable script wrapper debug mode")
+	@CommonSwitchArgumentAttribute(      "--dryrun",  dest="DryRun",  help="enable script wrapper debug mode")
+	@CommonSwitchArgumentAttribute("-d", "--debug",   dest="debug",   help="enable debug mode")
+	@CommonSwitchArgumentAttribute("-v", "--verbose", dest="verbose", help="print out detailed messages")
+	@CommonSwitchArgumentAttribute("-q", "--quiet",   dest="quiet",   help="reduce messages to a minimum")
 	@CommonArgumentAttribute("--sln", metavar="<SolutionID>", dest="SolutionID", help="Solution name")
 	@CommonArgumentAttribute("--prj", metavar="<ProjectID>", dest="ProjectID", help="Solution name")
 	def Run(self):
@@ -397,6 +398,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__ReadPoCConfiguration()
 
 		# run post-configuration tasks
+		self._LogNormal("{CYAN}Running post configuration tasks{NOCOLOR}".format(**Init.Foreground))
 		for configurator in configurators:
 			configurator.RunPostConfigurationTasks()
 
@@ -453,7 +455,10 @@ class PoC(ILogable, ArgParseMixin):
 			elif (createPath not in ['y', 'Y']):
 				raise ConfigurationException("Unsupported choice '{0}'".format(createPath))
 
-			solutionRootPath.mkdir(parents=True)
+			try:
+				solutionRootPath.mkdir(parents=True)
+			except OSError as ex:
+				raise ConfigurationException("Error while creating '{0!s}'.".format(solutionRootPath)) from ex
 
 			self.__repo.AddSolution(solutionID, solutionName, solutionRootPath)
 		self.__WritePoCConfiguration()
@@ -515,7 +520,7 @@ class PoC(ILogable, ArgParseMixin):
 	# def HandleAddProject(self, args):
 	# 	self.PrintHeadline()
 	# 	self.__PrepareForConfiguration()
-	
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-project" command
 	# ----------------------------------------------------------------------------
@@ -537,7 +542,7 @@ class PoC(ILogable, ArgParseMixin):
 				self._LogNormal("  {id: <10}{name}".format(id=project.ID, name=project.Name))
 		else:
 			self._LogNormal("  {RED}No registered projects found.{NOCOLOR}".format(**Init.Foreground))
-	
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-project" command
 	# ----------------------------------------------------------------------------
@@ -547,7 +552,7 @@ class PoC(ILogable, ArgParseMixin):
 	# def HandleRemoveProject(self, args):
 	# 	self.PrintHeadline()
 	# 	self.__PrepareForConfiguration()
-		
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "add-ipcore" command
 	# ----------------------------------------------------------------------------
@@ -556,7 +561,7 @@ class PoC(ILogable, ArgParseMixin):
 	# def HandleAddIPCore(self, args):
 	# 	self.PrintHeadline()
 	# 	self.__PrepareForConfiguration()
-	
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-ipcore" command
 	# ----------------------------------------------------------------------------
@@ -571,7 +576,7 @@ class PoC(ILogable, ArgParseMixin):
 	# 	self._LogNormal("Registered ipcores in PoC:")
 	# 	for ipcoreName in ipcore.GetIPCoreNames():
 	# 		print("  {0}".format(ipcoreName))
-	
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-ipcore" command
 	# ----------------------------------------------------------------------------
@@ -590,7 +595,7 @@ class PoC(ILogable, ArgParseMixin):
 	# def HandleAddTestbench(self, args):
 	# 	self.PrintHeadline()
 	# 	self.__PrepareForConfiguration()
-	
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-testbench" command
 	# ----------------------------------------------------------------------------
@@ -610,10 +615,13 @@ class PoC(ILogable, ArgParseMixin):
 	def HandleQueryConfiguration(self, args):
 		self.__PrepareForConfiguration()
 		query = Query(self)
-		result = query.QueryConfiguration(args.Query)
-		print(result, end="")
-		Exit.exit()
-
+		try:
+			result = query.QueryConfiguration(args.Query)
+			print(result, end="")
+			Exit.exit()
+		except ConfigurationException as ex:
+			print(str(ex), end="")
+			Exit.exit(1)
 
 	# ============================================================================
 	# Simulation	commands
@@ -642,19 +650,19 @@ class PoC(ILogable, ArgParseMixin):
 	def _ExtractVHDLVersion(self, vhdlVersion, defaultVersion=None):
 		if (defaultVersion is None):    defaultVersion = self.__SimulationDefaultVHDLVersion
 		if (vhdlVersion is None):        return defaultVersion
-		else:                            return VHDLVersion.parse(vhdlVersion)
+		else:                            return VHDLVersion.Parse(vhdlVersion)
 
 	# TODO: move to Configuration class in ToolChains.Xilinx.Vivado
 	def _CheckVivadoEnvironment(self):
 		# check if Vivado is configure
-		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0):  raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
+		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0): raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
 		if (environ.get('XILINX_VIVADO') is None):                      raise EnvironmentException("Xilinx Vivado environment is not loaded in this shell environment.")
 
 	# TODO: move to Configuration class in ToolChains.Xilinx.ISE
 	def _CheckISEEnvironment(self):
 		# check if ISE is configure
 		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) == 0):    raise NotConfiguredException("Xilinx ISE is not configured on this system.")
-		if (environ.get('XILINX') is None):                              raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
+		if (environ.get('XILINX') is None):                             raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-testbench" command
@@ -736,7 +744,7 @@ class PoC(ILogable, ArgParseMixin):
 				print(str(testbench))
 
 		Exit.exit()
-	
+
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "asim" command
@@ -756,11 +764,11 @@ class PoC(ILogable, ArgParseMixin):
 		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
 		# create a GHDLSimulator instance and prepare it
-		simulator = ActiveHDLSimulator(self, args.GUIMode)
+		simulator = ActiveHDLSimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
-	
+
 
 # ----------------------------------------------------------------------------
 	# create the sub-parser for the "ghdl" command
@@ -783,7 +791,7 @@ class PoC(ILogable, ArgParseMixin):
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
-		simulator = GHDLSimulator(self, args.GUIMode)
+		simulator = GHDLSimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion, guiMode=args.GUIMode)		#, vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -801,11 +809,11 @@ class PoC(ILogable, ArgParseMixin):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 		self._CheckISEEnvironment()
-		
+
 		fqnList =      self._ExtractFQNs(args.FQN)
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 
-		simulator = ISESimulator(self, args.GUIMode)
+		simulator = ISESimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL93)		#, vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -828,11 +836,11 @@ class PoC(ILogable, ArgParseMixin):
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
-		simulator = QuestaSimulator(self, args.GUIMode)
+		simulator = QuestaSimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
-	
+
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "xsim" command
@@ -848,13 +856,13 @@ class PoC(ILogable, ArgParseMixin):
 		self.__PrepareForSimulation()
 
 		self._CheckVivadoEnvironment()
-		
+
 		fqnList =      self._ExtractFQNs(args.FQN)
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 		# FIXME: VHDL-2008 is broken in Vivado 2016.1 -> use VHDL-93 by default
 		vhdlVersion = self._ExtractVHDLVersion(args.VHDLVersion, defaultVersion=VHDLVersion.VHDL93)
 
-		simulator = VivadoSimulator(self, args.GUIMode)
+		simulator = VivadoSimulator(self, self.DryRun, args.GUIMode)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
@@ -880,8 +888,8 @@ class PoC(ILogable, ArgParseMixin):
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName)
 
 		# create a CocotbSimulator instance and prepare it
-		simulator = CocotbSimulator(self, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL08)
+		simulator = CocotbSimulator(self, self.DryRun, args.GUIMode)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL2008)
 
 		Exit.exit(0 if allPassed else 1)
 
@@ -935,7 +943,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
 		self._CheckISEEnvironment()
-		
+
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 
@@ -1038,9 +1046,9 @@ class PoC(ILogable, ArgParseMixin):
 # main program
 def main():
 	dryRun =  "-D" in sys_argv
-	debug =    "-d" in sys_argv
-	verbose =  "-v" in sys_argv
-	quiet =    "-q" in sys_argv
+	debug =   "-d" in sys_argv
+	verbose = "-v" in sys_argv
+	quiet =   "-q" in sys_argv
 
 	# configure Exit class
 	Exit.quiet = quiet
@@ -1086,10 +1094,10 @@ def main():
 
 	except EnvironmentException as ex:          Exit.printEnvironmentException(ex)
 	except NotConfiguredException as ex:        Exit.printNotConfiguredException(ex)
-	except PlatformNotSupportedException as ex:  Exit.printPlatformNotSupportedException(ex)
-	except ExceptionBase as ex:                  Exit.printExceptionbase(ex)
-	except NotImplementedError as ex:            Exit.printNotImplementedError(ex)
-	# except Exception as ex:                      Exit.printException(ex)
+	except PlatformNotSupportedException as ex: Exit.printPlatformNotSupportedException(ex)
+	except ExceptionBase as ex:                 Exit.printExceptionbase(ex)
+	except NotImplementedError as ex:           Exit.printNotImplementedError(ex)
+	except Exception as ex:                     Exit.printException(ex)
 
 # entry point
 if __name__ == "__main__":

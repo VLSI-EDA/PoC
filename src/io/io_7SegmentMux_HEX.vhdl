@@ -1,20 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	time multiplexed 7 Segment Display Controller for HEX chars
+-- Entity:				 	time multiplexed 7 Segment Display Controller for HEX chars
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This module is a 7 segment display controller that uses time multiplexing
 --		to control a common anode for each digit in the display. The shown characters
 --		are HEX encoded. A dot per digit is optional.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -58,7 +57,7 @@ entity io_7SegmentMux_HEX is
 		SegmentControl	: out	STD_LOGIC_VECTOR(7 downto 0);
 		DigitControl		: out	STD_LOGIC_VECTOR(DIGITS - 1 downto 0)
 	);
-end;
+end entity;
 
 
 architecture rtl of io_7SegmentMux_HEX is

@@ -47,7 +47,7 @@ from lru_dict import LeastRecentlyUsedDict
 class InputDriver(BusDriver):
 	"""Drives inputs of DUT."""
 	_signals = [ "Insert", "Free", "KeyIn" ]
-	
+
 	def __init__(self, dut):
 		BusDriver.__init__(self, dut, None, dut.Clock)
 
@@ -57,16 +57,16 @@ class InputTransaction(object):
 		self.Insert = BinaryValue(insert, 1)
 		self.Free = BinaryValue(invalidate, 1)
 		self.KeyIn = BinaryValue(keyin, 5, False)
-		
+
 # ==============================================================================
 class InputMonitor(BusMonitor):
 	"""Observes inputs of DUT."""
 	_signals = [ "Insert", "Free", "KeyIn" ]
-	
+
 	def __init__(self, dut, callback=None, event=None):
 		BusMonitor.__init__(self, dut, None, dut.Clock, dut.Reset, callback=callback, event=event)
 		self.name = "in"
-        
+
 	@coroutine
 	def _monitor_recv(self):
 		clkedge = RisingEdge(self.clock)
@@ -85,7 +85,7 @@ class OutputMonitor(BusMonitor):
 	def __init__(self, dut, callback=None, event=None):
 		BusMonitor.__init__(self, dut, None, dut.Clock, dut.Reset, callback=callback, event=event)
 		self.name = "out"
-        
+
 	@coroutine
 	def _monitor_recv(self):
 		clkedge = RisingEdge(self.clock)
@@ -109,10 +109,10 @@ class Testbench(object):
 			self.lru[keyin] = 1
 
 		init_val = elements-1
-		
+
 		self.input_drv = InputDriver(dut)
 		self.output_mon = OutputMonitor(dut)
-		
+
 		# Create a scoreboard on the outputs
 		self.expected_output = [ init_val ]
 		self.scoreboard = Scoreboard(dut)
@@ -136,7 +136,7 @@ class Testbench(object):
 			keyout = self.lru.iterkeys().next()
 			#print "=== model: KeyOut=%d" % keyout
 			self.expected_output.append(keyout)
-			
+
 	def stop(self):
 		"""
 		Stop generation of expected output transactions.
@@ -176,7 +176,7 @@ def run_test(dut):
 	dut.Reset <= 0
 
 	input_gen = random_input_gen()
-	
+
 	# Issue first transaction immediately.
 	yield tb.input_drv.send(input_gen.next(), False)
 
@@ -190,7 +190,7 @@ def run_test(dut):
 	yield tb.input_drv.send(InputTransaction(0, 0, 0))
 	tb.stop()
 	yield RisingEdge(dut.Clock)
-	
+
 	# Print result of scoreboard.
 	raise tb.scoreboard.result
 

@@ -1,7 +1,6 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Thomas B. Preusser
@@ -9,8 +8,8 @@
 -- Package:					Simulation constants, functions and utilities.
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -43,8 +42,6 @@ use			PoC.vectors.all;
 
 
 package sim_types is
-	attribute pocIsSimulation		: BOOLEAN;
-	attribute pocIsSimulation of sim_types			: package is TRUE;
 
 	constant C_SIM_VERBOSE					: BOOLEAN		:= FALSE;		-- POC_VERBOSE
 
@@ -111,7 +108,6 @@ package sim_types is
 	function	randInitializeSeed(SeedVector : T_INTVEC) return T_SIM_RAND_SEED;
 	function	randInitializeSeed(SeedVector : STRING) return T_SIM_RAND_SEED;
 
-	attribute pocIsSimulation of randInitializeSeed[T_SIM_RAND_SEED] : procedure is TRUE;
 
 	-- Uniform distributed random values
 	-- ===========================================================================

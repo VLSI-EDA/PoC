@@ -1,21 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ===========================================================================
--- Module:					minimal FIFO, common clock (cc),
---                  pipelined interface, first-word-fall-through mode
---
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
 --
+-- Entity:					Minimal FIFO, common clock (cc), pipelined interface, first-word-fall-through mode
+--
 -- Description:
--- ------------------------------------
---		Its primary use is the decoupling of enable domains in a processing
---		pipeline. Data storage is limited to two words only so as to allow both
---		the 'ful'  and the 'vld' indicators to be driven by registers.
+-- -------------------------------------
+-- Its primary use is the decoupling of enable domains in a processing
+-- pipeline. Data storage is limited to two words only so as to allow both
+-- the ``ful``  and the ``vld`` indicators to be driven by registers.
 --
 -- License:
--- ===========================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -30,7 +28,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ===========================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -54,7 +52,7 @@ entity fifo_glue is
     do  : out std_logic_vector(D_BITS-1 downto 0);  -- Data Output
     got : in  std_logic                             -- Data Consumed
   );
-end fifo_glue;
+end entity fifo_glue;
 
 
 architecture rtl of fifo_glue is
@@ -111,4 +109,4 @@ begin
   vld <= Avail;
   do  <= B;
 
-end rtl;
+end architecture;

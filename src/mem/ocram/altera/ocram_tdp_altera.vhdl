@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Martin Zabel
 --									Patrick Lehmann
 --
--- Module:				 	Instantiate true dual-port memory on Altera FPGAs.
+-- Entity:				 	Instantiate true dual-port memory on Altera FPGAs.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 -- Quartus synthesis does not infer this RAM type correctly.
 -- Instead, altsyncram is instantiated directly.
 --
@@ -17,7 +16,7 @@
 -- (src/mem/ocram/ocram_tdp.vhdl).
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2008-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -32,7 +31,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -99,18 +98,18 @@ architecture rtl of ocram_tdp_altera is
 			wrcontrol_aclr_b					: STRING;
 			wrcontrol_wraddress_reg_b : STRING);
 		port (
-			clocken0	: IN	STD_LOGIC;
-			clocken1	: IN	STD_LOGIC;
-			wren_a		: IN	STD_LOGIC;
-			clock0		: IN	STD_LOGIC;
-			wren_b		: IN	STD_LOGIC;
-			clock1		: IN	STD_LOGIC;
-			address_a : IN	STD_LOGIC_VECTOR (widthad_a-1 DOWNTO 0);
-			address_b : IN	STD_LOGIC_VECTOR (widthad_b-1 DOWNTO 0);
-			q_a			 : OUT STD_LOGIC_VECTOR (width_a-1 DOWNTO 0);
-			q_b			 : OUT STD_LOGIC_VECTOR (width_b-1 DOWNTO 0);
-			data_a		: IN	STD_LOGIC_VECTOR (width_a-1 DOWNTO 0);
-			data_b		: IN	STD_LOGIC_VECTOR (width_b-1 DOWNTO 0)
+			clocken0	: in	STD_LOGIC;
+			clocken1	: in	STD_LOGIC;
+			wren_a		: in	STD_LOGIC;
+			clock0		: in	STD_LOGIC;
+			wren_b		: in	STD_LOGIC;
+			clock1		: in	STD_LOGIC;
+			address_a : in	STD_LOGIC_VECTOR (widthad_a-1 downto 0);
+			address_b : in	STD_LOGIC_VECTOR (widthad_b-1 downto 0);
+			q_a			 : out STD_LOGIC_VECTOR (width_a-1 downto 0);
+			q_b			 : out STD_LOGIC_VECTOR (width_b-1 downto 0);
+			data_a		: in	STD_LOGIC_VECTOR (width_a-1 downto 0);
+			data_b		: in	STD_LOGIC_VECTOR (width_b-1 downto 0)
 		);
 	end component;
 
