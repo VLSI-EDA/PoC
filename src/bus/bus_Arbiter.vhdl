@@ -112,14 +112,14 @@ begin
 
 		-- generate ChannelPointer register and registered outputs
 		genREG1 : if (OUTPUT_REG = TRUE) generate
-			signal ChannelPointer_bin_d				: STD_LOGIC_VECTOR(log2ceilnz(PORTS) - 1 downto 0)		:= to_slv(0, log2ceilnz(PORTS) - 1);
+			signal ChannelPointer_bin_d				: STD_LOGIC_VECTOR(log2ceilnz(PORTS) - 1 downto 0)		:= (others => '0');
 		begin
 			process(Clock)
 			begin
 				if rising_edge(Clock) then
 					if (Reset = '1') then
 						ChannelPointer_d			<= to_slv(1, PORTS);
-						ChannelPointer_bin_d	<= to_slv(0, log2ceilnz(PORTS) - 1);
+						ChannelPointer_bin_d	<=  (others => '0');
 					elsif (ChannelPointer_en = '1') then
 						ChannelPointer_d			<= ChannelPointer_nxt;
 						ChannelPointer_bin_d	<= std_logic_vector(onehot2bin(ChannelPointer_nxt));
