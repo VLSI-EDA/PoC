@@ -65,21 +65,21 @@ use			PoC.ddrio.all;
 
 entity ddrio_inout is
 	generic (
-		BITS					: POSITIVE
+		BITS					: positive
 	);
 	port (
-		ClockOut				: in		STD_LOGIC;
-		ClockOutEnable	: in		STD_LOGIC;
-		OutputEnable		: in		STD_LOGIC;
-		DataOut_high		: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataOut_low			: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		ClockOut				: in		std_logic;
+		ClockOutEnable	: in		std_logic;
+		OutputEnable		: in		std_logic;
+		DataOut_high		: in		std_logic_vector(BITS - 1 downto 0);
+		DataOut_low			: in		std_logic_vector(BITS - 1 downto 0);
 
-		ClockIn					: in		STD_LOGIC;
-		ClockInEnable		: in		STD_LOGIC;
-		DataIn_high			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataIn_low			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		ClockIn					: in		std_logic;
+		ClockInEnable		: in		std_logic;
+		DataIn_high			: out		std_logic_vector(BITS - 1 downto 0);
+		DataIn_low			: out		std_logic_vector(BITS - 1 downto 0);
 
-		Pad							: inout	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		Pad							: inout	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
 
@@ -130,21 +130,21 @@ begin
 	end generate;
 
 	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
-		signal DataOut_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		signal DataOut_low_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		signal OutputEnable_d	: STD_LOGIC;
-		signal Pad_o					: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		signal DataOut_high_d	: std_logic_vector(BITS - 1 downto 0);
+		signal DataOut_low_d	: std_logic_vector(BITS - 1 downto 0);
+		signal OutputEnable_d	: std_logic;
+		signal Pad_o					: std_logic_vector(BITS - 1 downto 0);
 
-		signal Pad_d_fe				: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		signal DataIn_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		signal DataIn_low_d		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		signal Pad_d_fe				: std_logic_vector(BITS - 1 downto 0);
+		signal DataIn_high_d	: std_logic_vector(BITS - 1 downto 0);
+		signal DataIn_low_d		: std_logic_vector(BITS - 1 downto 0);
 	begin
 		DataOut_high_d	<= DataOut_high		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 		DataOut_low_d		<= DataOut_low		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 		OutputEnable_d	<= OutputEnable		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 
 		process(ClockOut, OutputEnable_d, DataOut_high_d, DataOut_low_d)
-			type T_MUX is array(BIT) of STD_LOGIC_VECTOR(BITS - 1 downto 0);
+			type T_MUX is array(bit) of std_logic_vector(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
 		begin
 			MuxInput('1')	:= DataOut_high_d;

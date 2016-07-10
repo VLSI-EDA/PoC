@@ -51,9 +51,9 @@ architecture tb of arith_firstone_tb is
 
   -- component generics
   constant N : positive := 8;
-	constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for N=" & INTEGER'image(N));
+	constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for N=" & integer'image(N));
 
-	signal Clock	: STD_LOGIC;
+	signal Clock	: std_logic;
 
   -- component ports
   signal tin  : std_logic;
@@ -82,7 +82,7 @@ begin
     );
 
   procStimuli : process
-		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & INTEGER'image(N) & " bits");
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & integer'image(N) & " bits");
   begin
 		-- Exhaustive Testing
     for i in natural range 0 to 2**N-1 loop

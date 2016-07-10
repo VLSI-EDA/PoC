@@ -39,14 +39,14 @@ package cache is
 	-- cache-lookup Result
 	type T_CACHE_RESULT	is (CACHE_RESULT_NONE, CACHE_RESULT_HIT, CACHE_RESULT_MISS);
 
-	function to_Cache_Result(CacheHit : STD_LOGIC; CacheMiss : STD_LOGIC) return T_CACHE_RESULT;
+	function to_Cache_Result(CacheHit : std_logic; CacheMiss : std_logic) return T_CACHE_RESULT;
 
 end package;
 
 
 package body cache is
 
-	function to_cache_Result(CacheHit : STD_LOGIC; CacheMiss : STD_LOGIC) return T_CACHE_RESULT is
+	function to_cache_Result(CacheHit : std_logic; CacheMiss : std_logic) return T_CACHE_RESULT is
 	begin
 		if (CacheMiss = '1') then
 			return CACHE_RESULT_MISS;

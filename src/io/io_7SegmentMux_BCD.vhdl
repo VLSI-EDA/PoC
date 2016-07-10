@@ -46,24 +46,24 @@ entity io_7SegmentMux_BCD is
 	generic (
 		CLOCK_FREQ			: FREQ				:= 100 MHz;
 		REFRESH_RATE		: FREQ				:= 1 kHz;
-		DIGITS					: POSITIVE		:= 4
+		DIGITS					: positive		:= 4
 	);
   port (
-	  Clock						: in	STD_LOGIC;
+	  Clock						: in	std_logic;
 
 		BCDDigits				: in	T_BCD_VECTOR(DIGITS - 1 downto 0);
-		BCDDots					: in	STD_LOGIC_VECTOR(DIGITS - 1 downto 0);
+		BCDDots					: in	std_logic_vector(DIGITS - 1 downto 0);
 
-		SegmentControl	: out	STD_LOGIC_VECTOR(7 downto 0);
-		DigitControl		: out	STD_LOGIC_VECTOR(DIGITS - 1 downto 0)
+		SegmentControl	: out	std_logic_vector(7 downto 0);
+		DigitControl		: out	std_logic_vector(DIGITS - 1 downto 0)
 	);
 end entity;
 
 
 architecture rtl of io_7SegmentMux_BCD is
-	signal DigitCounter_rst		: STD_LOGIC;
-	signal DigitCounter_en		: STD_LOGIC;
-	signal DigitCounter_us		: UNSIGNED(log2ceilnz(DIGITS) - 1 downto 0)	:= (others => '0');
+	signal DigitCounter_rst		: std_logic;
+	signal DigitCounter_en		: std_logic;
+	signal DigitCounter_us		: unsigned(log2ceilnz(DIGITS) - 1 downto 0)	:= (others => '0');
 begin
 
 	Strobe : entity PoC.misc_StrobeGenerator
@@ -83,7 +83,7 @@ begin
 
 	process(BCDDigits, BCDDots, DigitCounter_us)
 		variable BCDDigit : T_BCD;
-		variable BCDDot 	: STD_LOGIC;
+		variable BCDDot 	: std_logic;
 	begin
 		BCDDigit	:= BCDDigits(to_index(DigitCounter_us, BCDDigits'length));
 		BCDDot		:= BCDDots(to_index(DigitCounter_us, BCDDigits'length));

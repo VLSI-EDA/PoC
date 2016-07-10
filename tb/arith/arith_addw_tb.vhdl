@@ -62,7 +62,7 @@ architecture tb of arith_addw_tb is
   type word_vector is array(tArch_test, tSkip_test, boolean) of word;
   type carry_vector is array(tArch_test, tSkip_test, boolean) of std_logic;
 
-	signal Clock	: STD_LOGIC;
+	signal Clock	: std_logic;
   signal a, b : word;
   signal cin  : std_logic;
   signal s    : word_vector;
@@ -81,7 +81,7 @@ begin
 				constant simTestID : T_SIM_TEST_ID		:= simCreateTest("Test setup: " &
 					"ARCH=" &					str_lalign(TARCH'image(i), 5) &
 					"SKIPPING=" &			str_lalign(TSKIPPING'image(j), 8) &
-					"P_INCLUSIVE=" &	str_lalign(BOOLEAN'image(p), 7));
+					"P_INCLUSIVE=" &	str_lalign(boolean'image(p), 7));
 			begin
         DUT : entity PoC.arith_addw
           generic map (

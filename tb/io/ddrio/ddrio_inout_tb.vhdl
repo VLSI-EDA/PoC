@@ -46,19 +46,19 @@ end entity;
 
 architecture sim of ddrio_inout_tb is
   -- component generics
-  constant BITS : POSITIVE := 2;
+  constant BITS : positive := 2;
 
 	-- component ports
-	signal ClockOut				: STD_LOGIC := '1';
-	signal ClockOutEnable : STD_LOGIC := '0';
-	signal OutputEnable		: STD_LOGIC;
-	signal DataOut_high		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	signal DataOut_low		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	signal ClockIn				: STD_LOGIC := '1';
-	signal ClockInEnable	: STD_LOGIC := '0';
-	signal DataIn_high		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	signal DataIn_low			: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	signal Pad						: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+	signal ClockOut				: std_logic := '1';
+	signal ClockOutEnable : std_logic := '0';
+	signal OutputEnable		: std_logic;
+	signal DataOut_high		: std_logic_vector(BITS - 1 downto 0);
+	signal DataOut_low		: std_logic_vector(BITS - 1 downto 0);
+	signal ClockIn				: std_logic := '1';
+	signal ClockInEnable	: std_logic := '0';
+	signal DataIn_high		: std_logic_vector(BITS - 1 downto 0);
+	signal DataIn_low			: std_logic_vector(BITS - 1 downto 0);
+	signal Pad						: std_logic_vector(BITS - 1 downto 0);
 
 	-- period of signal "ClockIn"
 	constant CLOCK_IN_PERIOD : time := 12 ns;

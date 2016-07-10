@@ -70,7 +70,7 @@ entity ocram_sdp is
 	generic (
 		A_BITS		: positive;
 		D_BITS		: positive;
-		FILENAME	: STRING		:= ""
+		FILENAME	: string		:= ""
 	);
 	port (
 		rclk	: in	std_logic;														-- read clock

@@ -40,19 +40,19 @@ use			Unisim.VComponents.all;
 
 entity arith_carrychain_inc_xilinx is
 	generic (
-		BITS			: POSITIVE
+		BITS			: positive
 	);
 	port (
-		X		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		CIn	: in	STD_LOGIC															:= '1';
-		Y		: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		X		: in	std_logic_vector(BITS - 1 downto 0);
+		CIn	: in	std_logic															:= '1';
+		Y		: out	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
 
 
 architecture rtl of arith_carrychain_inc_xilinx is
-	signal ci		: STD_LOGIC_VECTOR(BITS downto 0);
-	signal co		: STD_LOGIC_VECTOR(BITS downto 0);
+	signal ci		: std_logic_vector(BITS downto 0);
+	signal co		: std_logic_vector(BITS downto 0);
 
 begin
 	ci(0) <= CIn;

@@ -151,10 +151,10 @@ begin
   -----------------------------------------------------------------------------
   -- Pointer Logic
 	blkPointer : block
-		signal IP0_slv		: STD_LOGIC_VECTOR(IP0'range);
-		signal IP1_slv		: STD_LOGIC_VECTOR(IP0'range);
-		signal OP0_slv		: STD_LOGIC_VECTOR(IP0'range);
-		signal OP1_slv		: STD_LOGIC_VECTOR(IP0'range);
+		signal IP0_slv		: std_logic_vector(IP0'range);
+		signal IP1_slv		: std_logic_vector(IP0'range);
+		signal OP0_slv		: std_logic_vector(IP0'range);
+		signal OP1_slv		: std_logic_vector(IP0'range);
 	begin
 		IP0_slv	<= std_logic_vector(IP0);
 		OP0_slv	<= std_logic_vector(OP0);
@@ -397,7 +397,7 @@ begin
     begin
       if rising_edge(clk) then
         --synthesis translate_off
-        if SIMULATION AND (rst = '1') then
+        if SIMULATION and (rst = '1') then
           regfile <= (others => (others => '-'));
         else
         --synthesis translate_on

@@ -54,7 +54,7 @@ entity uart_fifo is
 		-- Communication Parameters
 		CLOCK_FREQ							: FREQ;
 		BAUDRATE								: BAUD;
-		ADD_INPUT_SYNCHRONIZERS	: BOOLEAN												:= TRUE;
+		ADD_INPUT_SYNCHRONIZERS	: boolean												:= TRUE;
 
 		-- Buffer Dimensioning
 		TX_MIN_DEPTH 						: positive											:= 16;
@@ -74,47 +74,47 @@ entity uart_fifo is
 		Reset					: in	std_logic;
 
 		-- FIFO interface
-		TX_put				: in	STD_LOGIC;
-		TX_Data				: in	STD_LOGIC_VECTOR(7 downto 0);
-		TX_Full				: out	STD_LOGIC;
-		TX_EmptyState	: out	STD_LOGIC_VECTOR(imax(0, TX_ESTATE_BITS-1) downto 0);
+		TX_put				: in	std_logic;
+		TX_Data				: in	std_logic_vector(7 downto 0);
+		TX_Full				: out	std_logic;
+		TX_EmptyState	: out	std_logic_vector(imax(0, TX_ESTATE_BITS-1) downto 0);
 
-		RX_Valid			: out	STD_LOGIC;
-		RX_Data				: out	STD_LOGIC_VECTOR(7 downto 0);
-		RX_got				: in	STD_LOGIC;
-		RX_FullState	: out	STD_LOGIC_VECTOR(imax(0, RX_FSTATE_BITS-1) downto 0);
+		RX_Valid			: out	std_logic;
+		RX_Data				: out	std_logic_vector(7 downto 0);
+		RX_got				: in	std_logic;
+		RX_FullState	: out	std_logic_vector(imax(0, RX_FSTATE_BITS-1) downto 0);
 		RX_Overflow		: out	std_logic;
 
 		-- External pins
 		UART_TX				: out	std_logic;
 		UART_RX				: in	std_logic;
-		UART_RTS			: out	STD_LOGIC;
-		UART_CTS			: in	STD_LOGIC
+		UART_RTS			: out	std_logic;
+		UART_CTS			: in	std_logic
 	);
 end entity;
 
 
 architecture rtl of uart_fifo is
 
-	signal FC_TX_Strobe		: STD_LOGIC;
+	signal FC_TX_Strobe		: std_logic;
 	signal FC_TX_Data			: T_SLV_8;
-	signal FC_TX_got			: STD_LOGIC;
-	signal FC_RX_put			: STD_LOGIC;
+	signal FC_TX_got			: std_logic;
+	signal FC_RX_put			: std_logic;
 	signal FC_RX_Data			: T_SLV_8;
 
-	signal TXFIFO_Valid		: STD_LOGIC;
+	signal TXFIFO_Valid		: std_logic;
 	signal TXFIFO_Data		: T_SLV_8;
 
-	signal RXFIFO_Full		: STD_LOGIC;
+	signal RXFIFO_Full		: std_logic;
 
-	signal TXUART_Full		: STD_LOGIC;
-	signal RXUART_Strobe	: STD_LOGIC;
+	signal TXUART_Full		: std_logic;
+	signal RXUART_Strobe	: std_logic;
 	signal RXUART_Data		: T_SLV_8;
 
-	signal BitClock				: STD_LOGIC;
-	signal BitClock_x8		: STD_LOGIC;
+	signal BitClock				: std_logic;
+	signal BitClock_x8		: std_logic;
 
-	signal UART_RX_sync		: STD_LOGIC;
+	signal UART_RX_sync		: std_logic;
 
 begin
 	assert FALSE report "uart_fifo: BAUDRATE=: " & to_string(BAUDRATE, 3)						severity NOTE;

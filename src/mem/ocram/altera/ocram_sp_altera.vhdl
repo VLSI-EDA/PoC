@@ -49,7 +49,7 @@ entity ocram_sp_altera is
 	generic (
 		A_BITS		: positive;
 		D_BITS		: positive;
-		FILENAME	: STRING		:= ""
+		FILENAME	: string		:= ""
 	);
 	port (
 		clk : in	std_logic;
@@ -65,34 +65,34 @@ end entity;
 architecture rtl of ocram_sp_altera is
 	component altsyncram
 		generic (
-			address_aclr_a					: STRING;
-			indata_aclr_a						: STRING;
-			init_file								: STRING;
-			intended_device_family	: STRING;
-			lpm_hint								: STRING;
-			lpm_type								: STRING;
-			numwords_a							: NATURAL;
-			operation_mode					: STRING;
-			outdata_aclr_a					: STRING;
-			outdata_reg_a						: STRING;
-			power_up_uninitialized	: STRING;
-			widthad_a								: NATURAL;
-			width_a									: NATURAL;
-			width_byteena_a					: NATURAL;
-			wrcontrol_aclr_a				: STRING
+			address_aclr_a					: string;
+			indata_aclr_a						: string;
+			init_file								: string;
+			intended_device_family	: string;
+			lpm_hint								: string;
+			lpm_type								: string;
+			numwords_a							: natural;
+			operation_mode					: string;
+			outdata_aclr_a					: string;
+			outdata_reg_a						: string;
+			power_up_uninitialized	: string;
+			widthad_a								: natural;
+			width_a									: natural;
+			width_byteena_a					: natural;
+			wrcontrol_aclr_a				: string
 			);
 		port (
-			clocken0	: in	STD_LOGIC;
-			wren_a		: in	STD_LOGIC;
-			clock0		: in	STD_LOGIC;
-			address_a : in	STD_LOGIC_VECTOR(widthad_a-1 downto 0);
-			q_a				: out STD_LOGIC_VECTOR(width_a-1 downto 0);
-			data_a		: in	STD_LOGIC_VECTOR(width_a-1 downto 0)
+			clocken0	: in	std_logic;
+			wren_a		: in	std_logic;
+			clock0		: in	std_logic;
+			address_a : in	std_logic_vector(widthad_a-1 downto 0);
+			q_a				: out std_logic_vector(width_a-1 downto 0);
+			data_a		: in	std_logic_vector(width_a-1 downto 0)
 			);
 	end component;
 
 	constant DEPTH			: positive	:= 2**A_BITS;
-	constant INIT_FILE	: STRING		:= ite((str_length(FILENAME) = 0), "UNUSED", FILENAME);
+	constant INIT_FILE	: string		:= ite((str_length(FILENAME) = 0), "UNUSED", FILENAME);
 
 	signal a_sl : std_logic_vector(A_BITS-1 downto 0);
 

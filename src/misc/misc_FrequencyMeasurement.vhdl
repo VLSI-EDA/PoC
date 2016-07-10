@@ -46,38 +46,38 @@ entity misc_FrequencyMeasurement is
 		REFERENCE_CLOCK_FREQ	: FREQ			:= 100 MHz
 	);
 	port (
-		Reference_Clock		: in	STD_LOGIC;
-		Input_Clock				: in	STD_LOGIC;
+		Reference_Clock		: in	std_logic;
+		Input_Clock				: in	std_logic;
 
-		Start							: in	STD_LOGIC;
-		Done							: out	STD_LOGIC;
+		Start							: in	std_logic;
+		Done							: out	std_logic;
 		Result						: out	T_SLV_32
 	);
 end entity;
 
 
 architecture rtl of misc_FrequencyMeasurement is
-	constant TIMEBASE_COUNTER_MAX			: POSITIVE																:= TimingToCycles(ite(SIMULATION, 10 us, 1 sec), REFERENCE_CLOCK_FREQ);
-	constant TIMEBASE_COUNTER_BITS		: POSITIVE																:= log2ceilnz(TIMEBASE_COUNTER_MAX);
+	constant TIMEBASE_COUNTER_MAX			: positive																:= TimingToCycles(ite(SIMULATION, 10 us, 1 sec), REFERENCE_CLOCK_FREQ);
+	constant TIMEBASE_COUNTER_BITS		: positive																:= log2ceilnz(TIMEBASE_COUNTER_MAX);
 
-	signal TimeBase_Counter_rst				: STD_LOGIC;
-	signal TimeBase_Counter_s					: SIGNED(TIMEBASE_COUNTER_BITS downto 0)	:= to_signed(-1, TIMEBASE_COUNTER_BITS + 1);
-	signal TimeBase_Counter_nxt				: SIGNED(TIMEBASE_COUNTER_BITS downto 0);
-	signal TimeBase_Counter_uf				: STD_LOGIC;
+	signal TimeBase_Counter_rst				: std_logic;
+	signal TimeBase_Counter_s					: signed(TIMEBASE_COUNTER_BITS downto 0)	:= to_signed(-1, TIMEBASE_COUNTER_BITS + 1);
+	signal TimeBase_Counter_nxt				: signed(TIMEBASE_COUNTER_BITS downto 0);
+	signal TimeBase_Counter_uf				: std_logic;
 
-	signal Stop												: STD_LOGIC;
-	signal sync_Start									: STD_LOGIC;
-	signal sync_Stop									: STD_LOGIC;
+	signal Stop												: std_logic;
+	signal sync_Start									: std_logic;
+	signal sync_Stop									: std_logic;
 	signal sync1_Busy									: T_SLV_2;
 
-	signal Frequency_Counter_en_r			: STD_LOGIC																:= '0';
-	signal Frequency_Counter_us				: UNSIGNED(31 downto 0)										:= (others => '0');
+	signal Frequency_Counter_en_r			: std_logic																:= '0';
+	signal Frequency_Counter_us				: unsigned(31 downto 0)										:= (others => '0');
 
-	signal CaptureResult							: STD_LOGIC;
-	signal CaptureResult_d						: STD_LOGIC																:= '0';
-	signal Result_en									: STD_LOGIC;
+	signal CaptureResult							: std_logic;
+	signal CaptureResult_d						: std_logic																:= '0';
+	signal Result_en									: std_logic;
 	signal Result_d										: T_SLV_32																:= (others => '0');
-	signal Done_r											: STD_LOGIC																:= '0';
+	signal Done_r											: std_logic																:= '0';
 begin
 
 	TimeBase_Counter_rst	<= Start;

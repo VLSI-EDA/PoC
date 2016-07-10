@@ -41,33 +41,33 @@ use			PoC.net.all;
 
 entity ipv4_FrameLoopback is
 	generic (
-		MAX_FRAMES										: POSITIVE						:= 4
+		MAX_FRAMES										: positive						:= 4
 	);
 	port (
-		Clock													: in	STD_LOGIC;
-		Reset													: in	STD_LOGIC;
+		Clock													: in	std_logic;
+		Reset													: in	std_logic;
 		-- IN port
-		In_Valid											: in	STD_LOGIC;
+		In_Valid											: in	std_logic;
 		In_Data												: in	T_SLV_8;
-		In_SOF												: in	STD_LOGIC;
-		In_EOF												: in	STD_LOGIC;
-		In_Ack												: out	STD_LOGIC;
-		In_Meta_rst										: out	STD_LOGIC;
-		In_Meta_SrcIPv4Address_nxt		: out	STD_LOGIC;
+		In_SOF												: in	std_logic;
+		In_EOF												: in	std_logic;
+		In_Ack												: out	std_logic;
+		In_Meta_rst										: out	std_logic;
+		In_Meta_SrcIPv4Address_nxt		: out	std_logic;
 		In_Meta_SrcIPv4Address_Data		: in	T_SLV_8;
-		In_Meta_DestIPv4Address_nxt		: out	STD_LOGIC;
+		In_Meta_DestIPv4Address_nxt		: out	std_logic;
 		In_Meta_DestIPv4Address_Data	: in	T_SLV_8;
 		In_Meta_Length								: in	T_SLV_16;
 		-- OUT port
-		Out_Valid											: out	STD_LOGIC;
+		Out_Valid											: out	std_logic;
 		Out_Data											: out	T_SLV_8;
-		Out_SOF												: out	STD_LOGIC;
-		Out_EOF												: out	STD_LOGIC;
-		Out_Ack												: in	STD_LOGIC;
-		Out_Meta_rst									: in	STD_LOGIC;
-		Out_Meta_SrcIPv4Address_nxt		: in	STD_LOGIC;
+		Out_SOF												: out	std_logic;
+		Out_EOF												: out	std_logic;
+		Out_Ack												: in	std_logic;
+		Out_Meta_rst									: in	std_logic;
+		Out_Meta_SrcIPv4Address_nxt		: in	std_logic;
 		Out_Meta_SrcIPv4Address_Data	: out	T_SLV_8;
-		Out_Meta_DestIPv4Address_nxt	: in	STD_LOGIC;
+		Out_Meta_DestIPv4Address_nxt	: in	std_logic;
 		Out_Meta_DestIPv4Address_Data	: out	T_SLV_8;
 		Out_Meta_Length								: out	T_SLV_16
 	);
@@ -75,9 +75,9 @@ end entity;
 
 
 architecture rtl of ipv4_FrameLoopback is
-	constant META_STREAMID_SRCADDR		: NATURAL					:= 0;
-	constant META_STREAMID_DESTADDR		: NATURAL					:= 1;
-	constant META_STREAMID_LENGTH			: NATURAL					:= 2;
+	constant META_STREAMID_SRCADDR		: natural					:= 0;
+	constant META_STREAMID_DESTADDR		: natural					:= 1;
+	constant META_STREAMID_LENGTH			: natural					:= 2;
 
 	constant META_BITS								: T_POSVEC				:= (
 		META_STREAMID_SRCADDR			=> 8,
@@ -91,10 +91,10 @@ architecture rtl of ipv4_FrameLoopback is
 		META_STREAMID_LENGTH			=> 1
 	);
 
-	signal StmBuf_MetaIn_nxt					: STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
-	signal StmBuf_MetaIn_Data					: STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
-	signal StmBuf_MetaOut_nxt					: STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
-	signal StmBuf_MetaOut_Data				: STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
+	signal StmBuf_MetaIn_nxt					: std_logic_vector(META_BITS'length - 1 downto 0);
+	signal StmBuf_MetaIn_Data					: std_logic_vector(isum(META_BITS) - 1 downto 0);
+	signal StmBuf_MetaOut_nxt					: std_logic_vector(META_BITS'length - 1 downto 0);
+	signal StmBuf_MetaOut_Data				: std_logic_vector(isum(META_BITS) - 1 downto 0);
 
 begin
 	StmBuf_MetaIn_Data(high(META_BITS, META_STREAMID_SRCADDR)		downto low(META_BITS, META_STREAMID_SRCADDR))		<= In_Meta_SrcIPv4Address_Data;

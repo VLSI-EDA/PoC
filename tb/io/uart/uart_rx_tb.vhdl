@@ -53,19 +53,19 @@ architecture tb of uart_rx_tb is
 	constant CLOCK_FREQ		: FREQ			:= 100 MHz;
 	constant BAUDRATE			: BAUD			:= 2.1 MBd;
 
-	signal Clock					: STD_LOGIC;
-	signal Reset					: STD_LOGIC;
+	signal Clock					: std_logic;
+	signal Reset					: std_logic;
 
-	signal BitClock				: STD_LOGIC;
-	signal BitClock_x8		: STD_LOGIC;
+	signal BitClock				: std_logic;
+	signal BitClock_x8		: std_logic;
 
-	signal UART_RX				: STD_LOGIC;
+	signal UART_RX				: std_logic;
 
-	signal RX_Strobe			: STD_LOGIC;
+	signal RX_Strobe			: std_logic;
 	signal RX_Data				: T_SLV_8;
 
 	function simGenerateWaveform_UART_Word(Data : T_SLV_8; Baudrate : BAUD := 115.200 kBd) return T_SIM_WAVEFORM_SL is
-		constant BIT_TIME : TIME											:= to_time(to_freq(Baudrate));
+		constant BIT_TIME : time											:= to_time(to_freq(Baudrate));
 		variable Result		: T_SIM_WAVEFORM_SL(0 to 9)	:= (others =>	(Delay => BIT_TIME, Value => '-'));
 	begin
 		Result(0).Value := '0';
@@ -120,7 +120,7 @@ begin
 		for i in DATA_STREAM'range loop
 			wait until rising_edge(Clock) and (RX_Strobe = '1');
 			-- report TIME'image(NOW) severity NOTE;
-			simAssertion((RX_Data = DATA_STREAM(i)), "Data Byte " & INTEGER'image(i) & " received: " & to_string(RX_Data, 'h') & " expected: " & to_string(DATA_STREAM(i), 'h'));
+			simAssertion((RX_Data = DATA_STREAM(i)), "Data Byte " & integer'image(i) & " received: " & to_string(RX_Data, 'h') & " expected: " & to_string(DATA_STREAM(i), 'h'));
 		end loop;
 
 		wait for 1 us;

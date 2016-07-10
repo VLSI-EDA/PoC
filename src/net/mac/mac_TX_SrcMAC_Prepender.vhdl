@@ -41,44 +41,44 @@ use			PoC.net.all;
 
 entity mac_TX_SrcMAC_Prepender is
 	generic (
-		DEBUG													: BOOLEAN													:= FALSE;
+		DEBUG													: boolean													:= FALSE;
 		MAC_ADDRESSES									: T_NET_MAC_ADDRESS_VECTOR				:= (0 => C_NET_MAC_ADDRESS_EMPTY)
 	);
 	port (
-		Clock													: in	STD_LOGIC;
-		Reset													: in	STD_LOGIC;
+		Clock													: in	std_logic;
+		Reset													: in	std_logic;
 		-- IN Port
-		In_Valid											: in	STD_LOGIC_VECTOR(MAC_ADDRESSES'length - 1 downto 0);
+		In_Valid											: in	std_logic_vector(MAC_ADDRESSES'length - 1 downto 0);
 		In_Data												: in	T_SLVV_8(MAC_ADDRESSES'length - 1 downto 0);
-		In_SOF												: in	STD_LOGIC_VECTOR(MAC_ADDRESSES'length - 1 downto 0);
-		In_EOF												: in	STD_LOGIC_VECTOR(MAC_ADDRESSES'length - 1 downto 0);
-		In_Ack												: out	STD_LOGIC_VECTOR(MAC_ADDRESSES'length - 1 downto 0);
-		In_Meta_rst										: out STD_LOGIC_VECTOR(MAC_ADDRESSES'length - 1 downto 0);
-		In_Meta_DestMACAddress_nxt		: out STD_LOGIC_VECTOR(MAC_ADDRESSES'length - 1 downto 0);
+		In_SOF												: in	std_logic_vector(MAC_ADDRESSES'length - 1 downto 0);
+		In_EOF												: in	std_logic_vector(MAC_ADDRESSES'length - 1 downto 0);
+		In_Ack												: out	std_logic_vector(MAC_ADDRESSES'length - 1 downto 0);
+		In_Meta_rst										: out std_logic_vector(MAC_ADDRESSES'length - 1 downto 0);
+		In_Meta_DestMACAddress_nxt		: out std_logic_vector(MAC_ADDRESSES'length - 1 downto 0);
 		In_Meta_DestMACAddress_Data		: in	T_SLVV_8(MAC_ADDRESSES'length - 1 downto 0);
 		-- OUT Port
-		Out_Valid											: out	STD_LOGIC;
+		Out_Valid											: out	std_logic;
 		Out_Data											: out	T_SLV_8;
-		Out_SOF												: out	STD_LOGIC;
-		Out_EOF												: out	STD_LOGIC;
-		Out_Ack												: in	STD_LOGIC;
-		Out_Meta_rst									: in	STD_LOGIC;
-		Out_Meta_DestMACAddress_nxt		: in	STD_LOGIC;
+		Out_SOF												: out	std_logic;
+		Out_EOF												: out	std_logic;
+		Out_Ack												: in	std_logic;
+		Out_Meta_rst									: in	std_logic;
+		Out_Meta_DestMACAddress_nxt		: in	std_logic;
 		Out_Meta_DestMACAddress_Data	: out	T_SLV_8
 	);
 end entity;
 
 
 architecture rtl of mac_TX_SrcMAC_Prepender is
-	attribute FSM_ENCODING					: STRING;
+	attribute FSM_ENCODING					: string;
 
-	constant PORTS									: POSITIVE				:= MAC_ADDRESSES'length;
+	constant PORTS									: positive				:= MAC_ADDRESSES'length;
 
-	constant META_RST_BIT						: NATURAL					:= 0;
-	constant META_DEST_NXT_BIT			: NATURAL					:= 1;
+	constant META_RST_BIT						: natural					:= 0;
+	constant META_DEST_NXT_BIT			: natural					:= 1;
 
-	constant META_BITS							: POSITIVE				:= 56;
-	constant META_REV_BITS					: POSITIVE				:= 2;
+	constant META_BITS							: positive				:= 56;
+	constant META_REV_BITS					: positive				:= 2;
 
 	type T_STATE is (
 		ST_IDLE,
@@ -94,25 +94,25 @@ architecture rtl of mac_TX_SrcMAC_Prepender is
 	signal NextState								: T_STATE;
 	attribute FSM_ENCODING of State	: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
-	signal LLMux_In_Valid						: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+	signal LLMux_In_Valid						: std_logic_vector(PORTS - 1 downto 0);
 	signal LLMux_In_Data						: T_SLM(PORTS - 1 downto 0, T_SLV_8'range)								:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal LLMux_In_Meta						: T_SLM(PORTS - 1 downto 0, META_BITS - 1 downto 0)				:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal LLMux_In_Meta_rev				: T_SLM(PORTS - 1 downto 0, META_REV_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
-	signal LLMux_In_SOF							: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
-	signal LLMux_In_EOF							: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
-	signal LLMux_In_Ack							: STD_LOGIC_VECTOR(PORTS - 1 downto 0);
+	signal LLMux_In_SOF							: std_logic_vector(PORTS - 1 downto 0);
+	signal LLMux_In_EOF							: std_logic_vector(PORTS - 1 downto 0);
+	signal LLMux_In_Ack							: std_logic_vector(PORTS - 1 downto 0);
 
-	signal LLMux_Out_Valid					: STD_LOGIC;
+	signal LLMux_Out_Valid					: std_logic;
 	signal LLMux_Out_Data						: T_SLV_8;
-	signal LLMux_Out_Meta						: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
-	signal LLMux_Out_Meta_rev				: STD_LOGIC_VECTOR(META_REV_BITS - 1 downto 0);
-	signal LLMux_Out_SOF						: STD_LOGIC;
-	signal LLMux_Out_EOF						: STD_LOGIC;
-	signal LLMux_Out_Ack						: STD_LOGIC;
+	signal LLMux_Out_Meta						: std_logic_vector(META_BITS - 1 downto 0);
+	signal LLMux_Out_Meta_rev				: std_logic_vector(META_REV_BITS - 1 downto 0);
+	signal LLMux_Out_SOF						: std_logic;
+	signal LLMux_Out_EOF						: std_logic;
+	signal LLMux_Out_Ack						: std_logic;
 
-	signal Is_DataFlow							: STD_LOGIC;
-	signal Is_SOF										: STD_LOGIC;
-	signal Is_EOF										: STD_LOGIC;
+	signal Is_DataFlow							: std_logic;
+	signal Is_SOF										: std_logic;
+	signal Is_EOF										: std_logic;
 
 begin
 
@@ -123,7 +123,7 @@ begin
 	In_Ack						<= LLMux_In_Ack;
 
 	genLLMuxIn : for i in 0 to PORTS - 1 generate
-		signal Meta		: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+		signal Meta		: std_logic_vector(META_BITS - 1 downto 0);
 	begin
 		Meta(55 downto 48)	<= In_Meta_DestMACAddress_Data(i);
 		Meta(47 downto 0)		<= to_slv(MAC_ADDRESSES(i));

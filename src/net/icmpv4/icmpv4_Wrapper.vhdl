@@ -41,47 +41,47 @@ use			PoC.net.all;
 
 entity icmpv4_Wrapper is
 	generic (
-		DEBUG																: BOOLEAN								:= FALSE;
+		DEBUG																: boolean								:= FALSE;
 		SOURCE_IPV4ADDRESS									: T_NET_IPV4_ADDRESS		:= C_NET_IPV4_ADDRESS_EMPTY
 	);
 	port (
-		Clock																: in	STD_LOGIC;
-		Reset																: in	STD_LOGIC;
+		Clock																: in	std_logic;
+		Reset																: in	std_logic;
 		-- CSE interface
 		Command															: in	T_NET_ICMPV4_COMMAND;
 		Status															: out	T_NET_ICMPV4_STATUS;
 		Error																: out	T_NET_ICMPV4_ERROR;
 		-- Echo-Request destination address
-		IPv4Address_rst											: out	STD_LOGIC;
-		IPv4Address_nxt											: out	STD_LOGIC;
+		IPv4Address_rst											: out	std_logic;
+		IPv4Address_nxt											: out	std_logic;
 		IPv4Address_Data										: in	T_SLV_8;
 		-- to IPv4 layer
-		IP_TX_Valid													: out	STD_LOGIC;
+		IP_TX_Valid													: out	std_logic;
 		IP_TX_Data													: out	T_SLV_8;
-		IP_TX_SOF														: out	STD_LOGIC;
-		IP_TX_EOF														: out	STD_LOGIC;
-		IP_TX_Ack														: in	STD_LOGIC;
-		IP_TX_Meta_rst											: in	STD_LOGIC;
-		IP_TX_Meta_SrcIPv4Address_nxt				: in	STD_LOGIC;
+		IP_TX_SOF														: out	std_logic;
+		IP_TX_EOF														: out	std_logic;
+		IP_TX_Ack														: in	std_logic;
+		IP_TX_Meta_rst											: in	std_logic;
+		IP_TX_Meta_SrcIPv4Address_nxt				: in	std_logic;
 		IP_TX_Meta_SrcIPv4Address_Data			: out	T_SLV_8;
-		IP_TX_Meta_DestIPv4Address_nxt			: in	STD_LOGIC;
+		IP_TX_Meta_DestIPv4Address_nxt			: in	std_logic;
 		IP_TX_Meta_DestIPv4Address_Data			: out	T_SLV_8;
 		IP_TX_Meta_Length										: out	T_SLV_16;
 		-- from IPv4 layer
-		IP_RX_Valid													: in	STD_LOGIC;
+		IP_RX_Valid													: in	std_logic;
 		IP_RX_Data													: in	T_SLV_8;
-		IP_RX_SOF														: in	STD_LOGIC;
-		IP_RX_EOF														: in	STD_LOGIC;
-		IP_RX_Ack														: out	STD_LOGIC;
-		IP_RX_Meta_rst											: out	STD_LOGIC;
-		IP_RX_Meta_SrcMACAddress_nxt				: out	STD_LOGIC;
+		IP_RX_SOF														: in	std_logic;
+		IP_RX_EOF														: in	std_logic;
+		IP_RX_Ack														: out	std_logic;
+		IP_RX_Meta_rst											: out	std_logic;
+		IP_RX_Meta_SrcMACAddress_nxt				: out	std_logic;
 		IP_RX_Meta_SrcMACAddress_Data				: in	T_SLV_8;
-		IP_RX_Meta_DestMACAddress_nxt				: out	STD_LOGIC;
+		IP_RX_Meta_DestMACAddress_nxt				: out	std_logic;
 		IP_RX_Meta_DestMACAddress_Data			: in	T_SLV_8;
 --		IP_RX_Meta_EthType									: in	T_SLV_16;
-		IP_RX_Meta_SrcIPv4Address_nxt				: out	STD_LOGIC;
+		IP_RX_Meta_SrcIPv4Address_nxt				: out	std_logic;
 		IP_RX_Meta_SrcIPv4Address_Data			: in	T_SLV_8;
-		IP_RX_Meta_DestIPv4Address_nxt			: out	STD_LOGIC;
+		IP_RX_Meta_DestIPv4Address_nxt			: out	std_logic;
 		IP_RX_Meta_DestIPv4Address_Data			: in	T_SLV_8;
 --		IP_RX_Meta_TrafficClass							: in	T_SLV_8;
 --		IP_RX_Meta_FlowLabel								: in	T_SLV_24;
@@ -92,7 +92,7 @@ end entity;
 
 
 architecture rtl of icmpv4_Wrapper is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
 	type T_STATE		is (
 		ST_IDLE,
@@ -118,34 +118,34 @@ architecture rtl of icmpv4_Wrapper is
 	signal RX_Status										: T_NET_ICMPV4_RX_STATUS;
 	signal RX_Error											: T_NET_ICMPV4_RX_ERROR;
 
-	signal TX_Meta_rst									: STD_LOGIC;
-	signal TX_Meta_IPv4Address_nxt			: STD_LOGIC;
+	signal TX_Meta_rst									: std_logic;
+	signal TX_Meta_IPv4Address_nxt			: std_logic;
 	signal FSM_TX_Meta_IPv4Address_Data	: T_SLV_8;
 	signal FSM_TX_Meta_Type							: T_SLV_8;
 	signal FSM_TX_Meta_Code							: T_SLV_8;
 	signal FSM_TX_Meta_Identification		: T_SLV_16;
 	signal FSM_TX_Meta_SequenceNumber		: T_SLV_16;
-	signal TX_Meta_Payload_nxt					: STD_LOGIC;
-	signal FSM_TX_Meta_Payload_last			: STD_LOGIC;
+	signal TX_Meta_Payload_nxt					: std_logic;
+	signal FSM_TX_Meta_Payload_last			: std_logic;
 	signal FSM_TX_Meta_Payload_Data			: T_SLV_8;
 
-	signal RX_Meta_rst											: STD_LOGIC;
-	signal FSM_RX_Meta_rst									: STD_LOGIC;
-	signal FSM_RX_Meta_SrcMACAddress_nxt		: STD_LOGIC;
+	signal RX_Meta_rst											: std_logic;
+	signal FSM_RX_Meta_rst									: std_logic;
+	signal FSM_RX_Meta_SrcMACAddress_nxt		: std_logic;
 	signal RX_Meta_SrcMACAddress_Data				: T_SLV_8;
-	signal FSM_RX_Meta_DestMACAddress_nxt		: STD_LOGIC;
+	signal FSM_RX_Meta_DestMACAddress_nxt		: std_logic;
 	signal RX_Meta_DestMACAddress_Data			: T_SLV_8;
-	signal FSM_RX_Meta_SrcIPv4Address_nxt		: STD_LOGIC;
+	signal FSM_RX_Meta_SrcIPv4Address_nxt		: std_logic;
 	signal RX_Meta_SrcIPv4Address_Data			: T_SLV_8;
-	signal FSM_RX_Meta_DestIPv4Address_nxt	: STD_LOGIC;
+	signal FSM_RX_Meta_DestIPv4Address_nxt	: std_logic;
 	signal RX_Meta_DestIPv4Address_Data			: T_SLV_8;
 	signal RX_Meta_Length										: T_SLV_16;
 	signal RX_Meta_Type											: T_SLV_8;
 	signal RX_Meta_Code											: T_SLV_8;
 	signal RX_Meta_Identification						: T_SLV_16;
 	signal RX_Meta_SequenceNumber						: T_SLV_16;
-	signal FSM_RX_Meta_Payload_nxt					: STD_LOGIC;
-	signal RX_Meta_Payload_last							: STD_LOGIC;
+	signal FSM_RX_Meta_Payload_nxt					: std_logic;
+	signal RX_Meta_Payload_last							: std_logic;
 	signal RX_Meta_Payload_Data							: T_SLV_8;
 
 begin

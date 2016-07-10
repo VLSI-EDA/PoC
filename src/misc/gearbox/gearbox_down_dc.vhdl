@@ -49,38 +49,38 @@ use			PoC.components.all;
 
 entity gearbox_down_dc is
   generic (
-		INPUT_BITS						: POSITIVE				:= 32;													-- input bits ('words')
-		OUTPUT_BITS						: POSITIVE				:= 8;														-- output bits ('byte')
+		INPUT_BITS						: positive				:= 32;													-- input bits ('words')
+		OUTPUT_BITS						: positive				:= 8;														-- output bits ('byte')
 		OUTPUT_ORDER					: T_BIT_ORDER			:= LSB_FIRST;										-- LSB_FIRST: start at byte(0), MSB_FIRST: start at byte(n-1)
-		ADD_INPUT_REGISTERS		: BOOLEAN					:= FALSE;												-- add input register @Clock1
-	  ADD_OUTPUT_REGISTERS	: BOOLEAN					:= FALSE												-- add output register @Clock2
+		ADD_INPUT_REGISTERS		: boolean					:= FALSE;												-- add input register @Clock1
+	  ADD_OUTPUT_REGISTERS	: boolean					:= FALSE												-- add output register @Clock2
 	);
   port (
-	  Clock1								: in	STD_LOGIC;																	-- input clock domain
-		Clock2								: in	STD_LOGIC;																	-- output clock domain
-		In_Data								: in	STD_LOGIC_VECTOR(INPUT_BITS - 1 downto 0);	-- input word
-		Out_Data							: out STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0)	-- output word
+	  Clock1								: in	std_logic;																	-- input clock domain
+		Clock2								: in	std_logic;																	-- output clock domain
+		In_Data								: in	std_logic_vector(INPUT_BITS - 1 downto 0);	-- input word
+		Out_Data							: out std_logic_vector(OUTPUT_BITS - 1 downto 0)	-- output word
 	);
 end entity;
 
 
-architecture rtl OF gearbox_down_dc is
+architecture rtl of gearbox_down_dc is
 	constant BIT_RATIO		: REAL			:= real(INPUT_BITS) / real(OUTPUT_BITS);
-	constant COUNTER_BITS : POSITIVE	:= log2ceil(integer(BIT_RATIO));
+	constant COUNTER_BITS : positive	:= log2ceil(integer(BIT_RATIO));
 
-	type T_MUX_INPUT IS array (NATURAL range <>) OF STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);
+	type T_MUX_INPUT is array (natural range <>) of std_logic_vector(OUTPUT_BITS - 1 downto 0);
 
-	signal WordBoundary			: STD_LOGIC		:= '0';
-	signal WordBoundary_d		: STD_LOGIC		:= '0';
-	signal Align						: STD_LOGIC;
+	signal WordBoundary			: std_logic		:= '0';
+	signal WordBoundary_d		: std_logic		:= '0';
+	signal Align						: std_logic;
 
-	signal Data_d						: STD_LOGIC_VECTOR(INPUT_BITS - 1 downto 0)		:= (others => '0');
-	signal DataIn						: STD_LOGIC_VECTOR(INPUT_BITS - 1 downto 0);
-	signal DataOut_d				: STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0)	:= (others => '0');
+	signal Data_d						: std_logic_vector(INPUT_BITS - 1 downto 0)		:= (others => '0');
+	signal DataIn						: std_logic_vector(INPUT_BITS - 1 downto 0);
+	signal DataOut_d				: std_logic_vector(OUTPUT_BITS - 1 downto 0)	:= (others => '0');
 	signal MuxInput					: T_MUX_INPUT(2**COUNTER_BITS - 1 downto 0);
-	signal MuxOutput				: STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);
-	signal MuxCounter_us		: UNSIGNED(COUNTER_BITS - 1 downto 0)					:= (others => '0');
-	signal MuxSelect_us			: UNSIGNED(COUNTER_BITS - 1 downto 0);
+	signal MuxOutput				: std_logic_vector(OUTPUT_BITS - 1 downto 0);
+	signal MuxCounter_us		: unsigned(COUNTER_BITS - 1 downto 0)					:= (others => '0');
+	signal MuxSelect_us			: unsigned(COUNTER_BITS - 1 downto 0);
 
 begin
 	assert (INPUT_BITS > OUTPUT_BITS) report "OUTPUT_BITS must be less than INPUT_BITS, otherwise it's no down-sizing gearbox." severity FAILURE;

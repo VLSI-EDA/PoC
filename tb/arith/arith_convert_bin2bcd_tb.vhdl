@@ -51,30 +51,30 @@ end entity;
 architecture test of arith_convert_bin2bcd_tb is
 	constant CLOCK_FREQ		: FREQ						:= 100 MHz;
 
-	constant INPUT_1			: INTEGER					:= 38442113;
-	constant INPUT_2			: INTEGER					:= 78734531;
-	constant INPUT_3			: INTEGER					:= 14902385;
+	constant INPUT_1			: integer					:= 38442113;
+	constant INPUT_2			: integer					:= 78734531;
+	constant INPUT_3			: integer					:= 14902385;
 
-	constant CONV1_BITS		: POSITIVE				:= 30;
-	constant CONV1_DIGITS	: POSITIVE				:= 8;
-	constant CONV2_BITS		: POSITIVE				:= 27;
-	constant CONV2_DIGITS	: POSITIVE				:= 8;
-	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for CONV1_BITS=" & INTEGER'image(CONV1_BITS) & "; INPUT_1=" & INTEGER'image(INPUT_1));
+	constant CONV1_BITS		: positive				:= 30;
+	constant CONV1_DIGITS	: positive				:= 8;
+	constant CONV2_BITS		: positive				:= 27;
+	constant CONV2_DIGITS	: positive				:= 8;
+	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for CONV1_BITS=" & integer'image(CONV1_BITS) & "; INPUT_1=" & INTEGER'image(INPUT_1));
 
 
-	signal Clock					: STD_LOGIC;
-	signal Reset					: STD_LOGIC;
+	signal Clock					: std_logic;
+	signal Reset					: std_logic;
 
-	signal Start					: STD_LOGIC		:= '0';
+	signal Start					: std_logic		:= '0';
 
-	signal Conv1_Binary			: STD_LOGIC_VECTOR(CONV1_BITS - 1 downto 0);
-	signal Conv1_BCDDigits	: T_BCD_VECTOR(CONV1_DIGITS - 1 DOWNTO 0);
-	signal Conv1_Sign				: STD_LOGIC;
-	signal Conv2_Binary			: STD_LOGIC_VECTOR(CONV2_BITS - 1 downto 0);
-	signal Conv2_BCDDigits	: T_BCD_VECTOR(CONV2_DIGITS - 1 DOWNTO 0);
-	signal Conv2_Sign				: STD_LOGIC;
+	signal Conv1_Binary			: std_logic_vector(CONV1_BITS - 1 downto 0);
+	signal Conv1_BCDDigits	: T_BCD_VECTOR(CONV1_DIGITS - 1 downto 0);
+	signal Conv1_Sign				: std_logic;
+	signal Conv2_Binary			: std_logic_vector(CONV2_BITS - 1 downto 0);
+	signal Conv2_BCDDigits	: T_BCD_VECTOR(CONV2_DIGITS - 1 downto 0);
+	signal Conv2_Sign				: std_logic;
 
-	function Check_Conv2(INPUT : INTEGER; BITS : POSITIVE; DIGITS : POSITIVE; BCDDigits : T_BCD_VECTOR; Sign : STD_LOGIC) return BOOLEAN is
+	function Check_Conv2(INPUT : integer; BITS : positive; DIGITS : positive; BCDDigits : T_BCD_VECTOR; Sign : std_logic) return boolean is
 		variable nat : natural;
 	begin
 		if INPUT >= 2**(BITS-1) then
@@ -100,7 +100,7 @@ begin
 	simGenerateWaveform(simTestID,	Reset, simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
 
 	procStimuli : process
-		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Stimuli for " & INTEGER'image(CONV1_BITS) & " bits");
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Stimuli for " & integer'image(CONV1_BITS) & " bits");
 	begin
 		simWaitUntilRisingEdge(Clock, 4);
 

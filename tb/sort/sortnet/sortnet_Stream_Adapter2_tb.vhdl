@@ -37,7 +37,7 @@ library PoC;
 use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.physical.all;
-use			PoC.sortnet.ALL;
+use			PoC.sortnet.all;
 -- simulation only packages
 use			PoC.sim_types.all;
 use			PoC.simulation.all;
@@ -52,51 +52,51 @@ end entity;
 
 
 architecture tb of sortnet_Stream_Adapter2_tb is
-	constant DEBUG									: BOOLEAN			:= TRUE;
+	constant DEBUG									: boolean			:= TRUE;
 
-	constant TAG_BITS								: POSITIVE		:= 4;
+	constant TAG_BITS								: positive		:= 4;
 
-	constant STREAM_DATA_BITS				: POSITIVE		:= ite(DEBUG, 16,	 32);
-	constant STREAM_META_BITS				: POSITIVE		:= TAG_BITS;
+	constant STREAM_DATA_BITS				: positive		:= ite(DEBUG, 16,	 32);
+	constant STREAM_META_BITS				: positive		:= TAG_BITS;
 
-	constant DATA_COLUMNS						: POSITIVE		:= 2;
+	constant DATA_COLUMNS						: positive		:= 2;
 
-	constant SORTNET_SIZE						: POSITIVE		:= ite(DEBUG, 8,	 32);	--128);
-	constant SORTNET_KEY_BITS				: POSITIVE		:= ite(DEBUG, 8,	 32);
-	constant SORTNET_DATA_BITS			: POSITIVE		:= ite(DEBUG, 16,	 64);
-	constant SORTNET_REG_AFTER			: POSITIVE		:= 2;
+	constant SORTNET_SIZE						: positive		:= ite(DEBUG, 8,	 32);	--128);
+	constant SORTNET_KEY_BITS				: positive		:= ite(DEBUG, 8,	 32);
+	constant SORTNET_DATA_BITS			: positive		:= ite(DEBUG, 16,	 64);
+	constant SORTNET_REG_AFTER			: positive		:= 2;
 
-	constant MERGENET_STAGES				: POSITIVE		:= ite(DEBUG, 2,	 4);
+	constant MERGENET_STAGES				: positive		:= ite(DEBUG, 2,	 4);
 
-	constant LOOP_COUNT							: POSITIVE		:= 2;
-	constant SORTNET_BLOCK_COUNT		: POSITIVE		:= 2**MERGENET_STAGES * DATA_COLUMNS * LOOP_COUNT;	--ite(DEBUG, 10,	 32);	--1024);
+	constant LOOP_COUNT							: positive		:= 2;
+	constant SORTNET_BLOCK_COUNT		: positive		:= 2**MERGENET_STAGES * DATA_COLUMNS * LOOP_COUNT;	--ite(DEBUG, 10,	 32);	--1024);
 
 	-- constant STAGES									: POSITIVE		:= SORTNET_SIZE;
-	constant DELAY									: NATURAL			:= 3 * 2**MERGENET_STAGES * SORTNET_SIZE + 50;	--STAGES / PIPELINE_STAGE_AFTER;
+	constant DELAY									: natural			:= 3 * 2**MERGENET_STAGES * SORTNET_SIZE + 50;	--STAGES / PIPELINE_STAGE_AFTER;
 
 	constant CLOCK_FREQ							: FREQ				:= 100 MHz;
-	signal Clock										: STD_LOGIC		:= '1';
+	signal Clock										: std_logic		:= '1';
 
-	signal Generator_Valid					: STD_LOGIC;
-	signal Generator_Data						: STD_LOGIC_VECTOR(STREAM_DATA_BITS - 1 downto 0);
-	signal Generator_SOF						: STD_LOGIC;
-	signal Generator_IsKey					: STD_LOGIC;
-	signal Generator_EOF						: STD_LOGIC;
-	signal Generator_Meta						: STD_LOGIC_VECTOR(TAG_BITS - 1 downto 0);
+	signal Generator_Valid					: std_logic;
+	signal Generator_Data						: std_logic_vector(STREAM_DATA_BITS - 1 downto 0);
+	signal Generator_SOF						: std_logic;
+	signal Generator_IsKey					: std_logic;
+	signal Generator_EOF						: std_logic;
+	signal Generator_Meta						: std_logic_vector(TAG_BITS - 1 downto 0);
 
-	signal Sort_Out_Valid						: STD_LOGIC;
-	signal Sort_Out_Data						: STD_LOGIC_VECTOR(STREAM_DATA_BITS - 1 downto 0);
-	signal Sort_Out_IsKey						: STD_LOGIC;
+	signal Sort_Out_Valid						: std_logic;
+	signal Sort_Out_Data						: std_logic_vector(STREAM_DATA_BITS - 1 downto 0);
+	signal Sort_Out_IsKey						: std_logic;
 
-	signal Tester_Ack								: STD_LOGIC;
+	signal Tester_Ack								: std_logic;
 
 begin
 	-- initialize global simulation status
 	simInitialize;
 
 	simWriteMessage("SETTINGS");
-	simWriteMessage("  SORTNET_BLOCK_COUNT: " & INTEGER'image(SORTNET_BLOCK_COUNT));
-	simWriteMessage("  BYTES TRANSFERED:    " & INTEGER'image(SORTNET_BLOCK_COUNT * SORTNET_SIZE * SORTNET_DATA_BITS / 8));
+	simWriteMessage("  SORTNET_BLOCK_COUNT: " & integer'image(SORTNET_BLOCK_COUNT));
+	simWriteMessage("  BYTES TRANSFERED:    " & integer'image(SORTNET_BLOCK_COUNT * SORTNET_SIZE * SORTNET_DATA_BITS / 8));
 
 	-- generate global testbench clock
 	simGenerateClock(Clock, CLOCK_FREQ);
@@ -105,9 +105,9 @@ begin
 		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Generator");
 		variable RandomVar		: RandomPType;					-- protected type from RandomPkg
 
-		variable KeyInput		: STD_LOGIC_VECTOR(SORTNET_KEY_BITS - 1 downto 0);
-		variable DataInput	: STD_LOGIC_VECTOR(SORTNET_DATA_BITS - SORTNET_KEY_BITS - 1 downto 0);
-		variable TagInput		: STD_LOGIC_VECTOR(TAG_BITS - 1 downto 0);
+		variable KeyInput		: std_logic_vector(SORTNET_KEY_BITS - 1 downto 0);
+		variable DataInput	: std_logic_vector(SORTNET_DATA_BITS - SORTNET_KEY_BITS - 1 downto 0);
+		variable TagInput		: std_logic_vector(TAG_BITS - 1 downto 0);
 
 	begin
 		RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
@@ -187,9 +187,9 @@ begin
 	procChecker : process
 		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Checker");
 
-		variable Check				: BOOLEAN;
-		variable CurValue			: UNSIGNED(SORTNET_KEY_BITS - 1 downto 0);
-		variable LastValue		: UNSIGNED(SORTNET_KEY_BITS - 1 downto 0);
+		variable Check				: boolean;
+		variable CurValue			: unsigned(SORTNET_KEY_BITS - 1 downto 0);
+		variable LastValue		: unsigned(SORTNET_KEY_BITS - 1 downto 0);
 	begin
 		Tester_Ack		<= '0';
 

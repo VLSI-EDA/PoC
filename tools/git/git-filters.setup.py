@@ -26,5 +26,7 @@
 
 from subprocess import check_call
 
-check_call(['git', 'config', 'filter.whiteindent.clean',  'tools/git/filters/whiteindent clean'])
-check_call(['git', 'config', 'filter.whiteindent.smudge', 'tools/git/filters/whiteindent smudge'])
+check_call(['git', 'config', 'filter.normalize.clean',  'tools/git/filters/normalize clean'])
+check_call(['git', 'config', 'filter.normalize.smudge', 'tools/git/filters/normalize smudge'])
+check_call(['git', 'config', 'filter.normalize_vhdl.clean',  'tools/git/filters/normalize clean vhdl'])
+check_call(['git', 'config', 'filter.normalize_vhdl.smudge', 'tools/git/filters/normalize smudge vhdl'])

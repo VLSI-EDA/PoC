@@ -42,27 +42,27 @@ entity io_PulseWidthModulation is
 	generic (
 		CLOCK_FREQ								: FREQ									:= 100 MHz;
 		PWM_FREQ									: FREQ									:= 1 kHz;
-		PWM_RESOLUTION						: POSITIVE							:= 8
+		PWM_RESOLUTION						: positive							:= 8
 	);
 	port (
-		Clock				: in	STD_LOGIC;
-		Reset				: in	STD_LOGIC;
-    PWMIn				: in	STD_LOGIC_VECTOR(PWM_RESOLUTION - 1 downto 0);
-		PWMOut			: out	STD_LOGIC
+		Clock				: in	std_logic;
+		Reset				: in	std_logic;
+    PWMIn				: in	std_logic_vector(PWM_RESOLUTION - 1 downto 0);
+		PWMOut			: out	std_logic
 	);
 end entity;
 
 
 architecture rtl of io_PulseWidthModulation is
-	constant PWM_STEPS									: POSITIVE																			:= 2**PWM_RESOLUTION;
+	constant PWM_STEPS									: positive																			:= 2**PWM_RESOLUTION;
 	constant PWM_STEP_FREQ							: FREQ																					:= PWM_FREQ * (PWM_STEPS - 1);
-	constant PWM_FREQUENCYCOUNTER_MAX		: POSITIVE																			:= (CLOCK_FREQ+PWM_STEP_FREQ-1 Hz) / PWM_STEP_FREQ; -- division with round-up
-	constant PWM_FREQUENCYCOUNTER_BITS	: POSITIVE																			:= log2ceilnz(PWM_FREQUENCYCOUNTER_MAX);
+	constant PWM_FREQUENCYCOUNTER_MAX		: positive																			:= (CLOCK_FREQ+PWM_STEP_FREQ-1 Hz) / PWM_STEP_FREQ; -- division with round-up
+	constant PWM_FREQUENCYCOUNTER_BITS	: positive																			:= log2ceilnz(PWM_FREQUENCYCOUNTER_MAX);
 
-	signal PWM_FrequencyCounter_us			: UNSIGNED(PWM_FREQUENCYCOUNTER_BITS downto 0)	:= (others => '0');
-	signal PWM_FrequencyCounter_ov			: STD_LOGIC;
-	signal PWM_PulseCounter_us					: UNSIGNED(PWM_RESOLUTION - 1 downto 0)					:= (others => '0');
-	signal PWM_PulseCounter_ov					: STD_LOGIC;
+	signal PWM_FrequencyCounter_us			: unsigned(PWM_FREQUENCYCOUNTER_BITS downto 0)	:= (others => '0');
+	signal PWM_FrequencyCounter_ov			: std_logic;
+	signal PWM_PulseCounter_us					: unsigned(PWM_RESOLUTION - 1 downto 0)					:= (others => '0');
+	signal PWM_PulseCounter_ov					: std_logic;
 
 begin
 	-- PWM frequency counter

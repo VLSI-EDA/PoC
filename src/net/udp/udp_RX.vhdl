@@ -41,49 +41,49 @@ use			PoC.net.all;
 
 entity udp_RX is
 	generic (
-		DEBUG														: BOOLEAN						:= FALSE;
-		IP_VERSION											: POSITIVE					:= 6
+		DEBUG														: boolean						:= FALSE;
+		IP_VERSION											: positive					:= 6
 	);
 	port (
-		Clock														: in	STD_LOGIC;								--
-		Reset														: in	STD_LOGIC;								--
+		Clock														: in	std_logic;								--
+		Reset														: in	std_logic;								--
 		-- STATUS port
-		Error														: out	STD_LOGIC;
+		Error														: out	std_logic;
 		-- IN port
-		In_Valid												: in	STD_LOGIC;
+		In_Valid												: in	std_logic;
 		In_Data													: in	T_SLV_8;
-		In_SOF													: in	STD_LOGIC;
-		In_EOF													: in	STD_LOGIC;
-		In_Ack													: out	STD_LOGIC;
-		In_Meta_rst											: out	STD_LOGIC;
-		In_Meta_SrcMACAddress_nxt				: out	STD_LOGIC;
+		In_SOF													: in	std_logic;
+		In_EOF													: in	std_logic;
+		In_Ack													: out	std_logic;
+		In_Meta_rst											: out	std_logic;
+		In_Meta_SrcMACAddress_nxt				: out	std_logic;
 		In_Meta_SrcMACAddress_Data			: in	T_SLV_8;
-		In_Meta_DestMACAddress_nxt			: out	STD_LOGIC;
+		In_Meta_DestMACAddress_nxt			: out	std_logic;
 		In_Meta_DestMACAddress_Data			: in	T_SLV_8;
 		In_Meta_EthType									: in	T_SLV_16;
-		In_Meta_SrcIPAddress_nxt				: out	STD_LOGIC;
+		In_Meta_SrcIPAddress_nxt				: out	std_logic;
 		In_Meta_SrcIPAddress_Data				: in	T_SLV_8;
-		In_Meta_DestIPAddress_nxt				: out	STD_LOGIC;
+		In_Meta_DestIPAddress_nxt				: out	std_logic;
 		In_Meta_DestIPAddress_Data			: in	T_SLV_8;
 --		In_Meta_TrafficClass						: in	T_SLV_8;
 --		In_Meta_FlowLabel								: in	T_SLV_24;
 		In_Meta_Length									: in	T_SLV_16;
 		In_Meta_Protocol								: in	T_SLV_8;
 		-- OUT port
-		Out_Valid												: out	STD_LOGIC;
+		Out_Valid												: out	std_logic;
 		Out_Data												: out	T_SLV_8;
-		Out_SOF													: out	STD_LOGIC;
-		Out_EOF													: out	STD_LOGIC;
-		Out_Ack													: in	STD_LOGIC;
-		Out_Meta_rst										: in	STD_LOGIC;
-		Out_Meta_SrcMACAddress_nxt			: in	STD_LOGIC;
+		Out_SOF													: out	std_logic;
+		Out_EOF													: out	std_logic;
+		Out_Ack													: in	std_logic;
+		Out_Meta_rst										: in	std_logic;
+		Out_Meta_SrcMACAddress_nxt			: in	std_logic;
 		Out_Meta_SrcMACAddress_Data			: out	T_SLV_8;
-		Out_Meta_DestMACAddress_nxt			: in	STD_LOGIC;
+		Out_Meta_DestMACAddress_nxt			: in	std_logic;
 		Out_Meta_DestMACAddress_Data		: out	T_SLV_8;
 		Out_Meta_EthType								: out	T_SLV_16;
-		Out_Meta_SrcIPAddress_nxt				: in	STD_LOGIC;
+		Out_Meta_SrcIPAddress_nxt				: in	std_logic;
 		Out_Meta_SrcIPAddress_Data			: out	T_SLV_8;
-		Out_Meta_DestIPAddress_nxt			: in	STD_LOGIC;
+		Out_Meta_DestIPAddress_nxt			: in	std_logic;
 		Out_Meta_DestIPAddress_Data			: out	T_SLV_8;
 --		Out_Meta_TrafficClass						: out	T_SLV_8;
 --		Out_Meta_FlowLabel							: out	T_SLV_24;
@@ -161,7 +161,7 @@ end entity;
 
 
 architecture rtl of udp_RX is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
 	type T_STATE is (
 		ST_IDLE,
@@ -176,26 +176,26 @@ architecture rtl of udp_RX is
 
 	signal State													: T_STATE				:= ST_IDLE;
 	signal NextState											: T_STATE;
-	attribute FSM_ENCODING of State				: signal IS ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
+	attribute FSM_ENCODING of State				: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
-	signal In_Ack_i											: STD_LOGIC;
-	signal Is_DataFlow										: STD_LOGIC;
-	signal Is_SOF													: STD_LOGIC;
-	signal Is_EOF													: STD_LOGIC;
+	signal In_Ack_i											: std_logic;
+	signal Is_DataFlow										: std_logic;
+	signal Is_SOF													: std_logic;
+	signal Is_EOF													: std_logic;
 
-	signal Out_Valid_i										: STD_LOGIC;
-	signal Out_SOF_i											: STD_LOGIC;
-	signal Out_EOF_i											: STD_LOGIC;
+	signal Out_Valid_i										: std_logic;
+	signal Out_SOF_i											: std_logic;
+	signal Out_EOF_i											: std_logic;
 
-	signal Register_rst										: STD_LOGIC;
+	signal Register_rst										: std_logic;
 
 	-- UDP header fields
-	signal SourcePort_en0									: STD_LOGIC;
-	signal SourcePort_en1									: STD_LOGIC;
-	signal DestinationPort_en0						: STD_LOGIC;
-	signal DestinationPort_en1						: STD_LOGIC;
-	signal Length_en0											: STD_LOGIC;
-	signal Length_en1											: STD_LOGIC;
+	signal SourcePort_en0									: std_logic;
+	signal SourcePort_en1									: std_logic;
+	signal DestinationPort_en0						: std_logic;
+	signal DestinationPort_en1						: std_logic;
+	signal Length_en0											: std_logic;
+	signal Length_en1											: std_logic;
 
 	signal SourcePort_d										: T_SLV_16			:= (others => '0');
 	signal DestinationPort_d							: T_SLV_16			:= (others => '0');
@@ -204,9 +204,9 @@ architecture rtl of udp_RX is
 begin
 
 	In_Ack				<= In_Ack_i;
-	Is_DataFlow		<= In_Valid AND In_Ack_i;
-	Is_SOF				<= In_Valid AND In_SOF;
-	Is_EOF				<= In_Valid AND In_EOF;
+	Is_DataFlow		<= In_Valid and In_Ack_i;
+	Is_SOF				<= In_Valid and In_SOF;
+	Is_EOF				<= In_Valid and In_EOF;
 
 	process(Clock)
 	begin
@@ -374,7 +374,7 @@ begin
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset OR Register_rst) = '1') then
+			if ((Reset or Register_rst) = '1') then
 				SourcePort_d												<= (others => '0');
 				DestinationPort_d										<= (others => '0');
 				Length_d														<= (others => '0');

@@ -40,32 +40,32 @@ use			PoC.components.all;
 
 entity sortnet_Transform is
 	generic (
-		ROWS				: POSITIVE		:= 16;
-		COLUMNS			: POSITIVE		:= 4;
-		DATA_BITS		: POSITIVE		:= 8
+		ROWS				: positive		:= 16;
+		COLUMNS			: positive		:= 4;
+		DATA_BITS		: positive		:= 8
 	);
 	port (
-		Clock			: in	STD_LOGIC;
-		Reset			: in	STD_LOGIC;
+		Clock			: in	std_logic;
+		Reset			: in	std_logic;
 
-		In_Valid	: in	STD_LOGIC;
+		In_Valid	: in	std_logic;
 		In_Data		: in	T_SLM(ROWS - 1 downto 0, DATA_BITS - 1 downto 0);
-		In_SOF		: in	STD_LOGIC;
-		In_EOF		: in	STD_LOGIC;
+		In_SOF		: in	std_logic;
+		In_EOF		: in	std_logic;
 
-		Out_Valid	: out	STD_LOGIC;
+		Out_Valid	: out	std_logic;
 		Out_Data	: out	T_SLM(COLUMNS - 1 downto 0, DATA_BITS - 1 downto 0);
-		Out_SOF		: out	STD_LOGIC;
-		Out_EOF		: out	STD_LOGIC
+		Out_SOF		: out	std_logic;
+		Out_EOF		: out	std_logic
 	);
 end entity;
 
 
 architecture rtl of sortnet_Transform is
 
-	subtype	T_DATA					is STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-	type		T_DATA_VECTOR		is array(NATURAL range <>) of T_DATA;
-	type		T_DATA_MATRIX		is array(NATURAL range <>) of T_DATA_VECTOR(ROWS - 1 downto 0);
+	subtype	T_DATA					is std_logic_vector(DATA_BITS - 1 downto 0);
+	type		T_DATA_VECTOR		is array(natural range <>) of T_DATA;
+	type		T_DATA_MATRIX		is array(natural range <>) of T_DATA_VECTOR(ROWS - 1 downto 0);
 
 	function to_dv(slm : T_SLM) return T_DATA_VECTOR is
 		variable Result	: T_DATA_VECTOR(slm'range(1));
@@ -80,18 +80,18 @@ architecture rtl of sortnet_Transform is
 
 	signal DataIn				: T_DATA_VECTOR(ROWS - 1 downto 0);
 
-	signal ColumnWriter_rst		: STD_LOGIC;
-	signal ColumnWriter_us		: UNSIGNED(log2ceilnz(COLUMNS) - 1 downto 0)	:= (others => '0');
-	signal ColumnWriter_ov		: STD_LOGIC;
+	signal ColumnWriter_rst		: std_logic;
+	signal ColumnWriter_us		: unsigned(log2ceilnz(COLUMNS) - 1 downto 0)	:= (others => '0');
+	signal ColumnWriter_ov		: std_logic;
 
 	signal InputBuffer				: T_DATA_MATRIX(COLUMNS - 1 downto 0)					:= (others => (others => (others => '0')));
 
-	signal RowReader_en_r			: STD_LOGIC																		:= '0';
+	signal RowReader_en_r			: std_logic																		:= '0';
 
-	signal RowReader_rst			: STD_LOGIC;
-	signal RowReader_en				: STD_LOGIC;
-	signal RowReader_us				: UNSIGNED(log2ceilnz(ROWS) - 1 downto 0)			:= (others => '0');
-	signal RowReader_ov				: STD_LOGIC;
+	signal RowReader_rst			: std_logic;
+	signal RowReader_en				: std_logic;
+	signal RowReader_us				: unsigned(log2ceilnz(ROWS) - 1 downto 0)			:= (others => '0');
+	signal RowReader_ov				: std_logic;
 begin
 
 	DataIn	<= to_dv(In_Data);

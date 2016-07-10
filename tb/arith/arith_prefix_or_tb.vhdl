@@ -49,10 +49,10 @@ end entity;
 architecture tb of arith_prefix_or_tb is
 	constant CLOCK_FREQ	: FREQ						:= 100 MHz;
 
-  constant BITS				: POSITIVE				:= 8;
-	constant simTestID	: T_SIM_TEST_ID		:= simCreateTest("Test setup for BITS=" & INTEGER'image(BITS));
+  constant BITS				: positive				:= 8;
+	constant simTestID	: T_SIM_TEST_ID		:= simCreateTest("Test setup for BITS=" & integer'image(BITS));
 
-	signal Clock				: STD_LOGIC;
+	signal Clock				: std_logic;
 
   signal x	: std_logic_vector(BITS - 1 downto 0);
   signal y	: std_logic_vector(BITS - 1 downto 0);
@@ -74,13 +74,13 @@ begin
     );
 
   procChecker : process
-		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & INTEGER'image(BITS) & " bits");
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & integer'image(BITS) & " bits");
 	begin
 		x		<= (others => '0');
 		wait until rising_edge(Clock);
 
 		-- Exhaustive Testing
-    for i in NATURAL range 0 to 2**BITS - 1 loop
+    for i in natural range 0 to 2**BITS - 1 loop
       x <= std_logic_vector(to_unsigned(i, BITS));
 			wait until rising_edge(Clock);
       for j in 0 to BITS - 1 loop

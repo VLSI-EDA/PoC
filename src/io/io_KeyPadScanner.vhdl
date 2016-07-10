@@ -47,18 +47,18 @@ entity io_KeyPadScanner is
 	generic (
 		CLOCK_FREQ							: FREQ				:= 100 MHz;
 		SCAN_FREQ								: FREQ				:= 1 kHz;
-		ROWS										: POSITIVE		:= 4;
-		COLUMNS									: POSITIVE		:= 4;
-		ADD_INPUT_SYNCHRONIZERS	: BOOLEAN			:= TRUE
+		ROWS										: positive		:= 4;
+		COLUMNS									: positive		:= 4;
+		ADD_INPUT_SYNCHRONIZERS	: boolean			:= TRUE
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		Reset					: in	STD_LOGIC;
+		Clock					: in	std_logic;
+		Reset					: in	std_logic;
 		-- Matrix interface
 		KeyPadMatrix	: out T_SLM(COLUMNS - 1 downto 0, ROWS - 1 downto 0);
 		-- KeyPad interface
-		ColumnVector	: out	STD_LOGIC_VECTOR(COLUMNS - 1 downto 0);
-		RowVector			: in	STD_LOGIC_VECTOR(ROWS - 1 downto 0)
+		ColumnVector	: out	std_logic_vector(COLUMNS - 1 downto 0);
+		RowVector			: in	std_logic_vector(ROWS - 1 downto 0)
 	);
 end entity;
 
@@ -66,16 +66,16 @@ end entity;
 architecture rtl of io_KeyPadScanner is
 	constant SHIFT_FREQ				: FREQ			:= SCAN_FREQ * COLUMNS;
 
-	constant COLUMNTIMER_MAX	: POSITIVE	:= TimingToCycles(to_time(SHIFT_FREQ), CLOCK_FREQ) - 1;
-	constant COLUMNTIMER_BITS	: POSITIVE	:= log2ceilnz(COLUMNTIMER_MAX) + 1;
+	constant COLUMNTIMER_MAX	: positive	:= TimingToCycles(to_time(SHIFT_FREQ), CLOCK_FREQ) - 1;
+	constant COLUMNTIMER_BITS	: positive	:= log2ceilnz(COLUMNTIMER_MAX) + 1;
 
-	signal ColumnTimer_rst	: STD_LOGIC;
-	signal ColumnTimer_s		: SIGNED(COLUMNTIMER_BITS - 1 downto 0)	:= to_signed(COLUMNTIMER_MAX, COLUMNTIMER_BITS);
+	signal ColumnTimer_rst	: std_logic;
+	signal ColumnTimer_s		: signed(COLUMNTIMER_BITS - 1 downto 0)	:= to_signed(COLUMNTIMER_MAX, COLUMNTIMER_BITS);
 
-	signal ColumnSelect_en	: STD_LOGIC;
-	signal ColumnSelect_d		: STD_LOGIC_VECTOR(COLUMNS - 1 downto 0)	:= (0 => '1', others => '0');
+	signal ColumnSelect_en	: std_logic;
+	signal ColumnSelect_d		: std_logic_vector(COLUMNS - 1 downto 0)	:= (0 => '1', others => '0');
 
-	signal Rows_sync				: STD_LOGIC_VECTOR(ROWS - 1 downto 0);
+	signal Rows_sync				: std_logic_vector(ROWS - 1 downto 0);
 	signal KeyPadMatrix_r		: T_SLM(COLUMNS - 1 downto 0, ROWS - 1 downto 0)	:= (others => (others => '0'));
 begin
 	-- generate a < 100 kHz shift enable to 'clock' the ColumnSelect shift register

@@ -41,43 +41,43 @@ use			PoC.net.all;
 
 entity mac_Wrapper is
 	generic (
-		DEBUG												: BOOLEAN															:= FALSE;
+		DEBUG												: boolean															:= FALSE;
 		MAC_CONFIG									: T_NET_MAC_CONFIGURATION_VECTOR
 	);
 	port (
-		Clock												: in	STD_LOGIC;
-		Reset												: in	STD_LOGIC;
+		Clock												: in	std_logic;
+		Reset												: in	std_logic;
 
-		Eth_TX_Valid								: out	STD_LOGIC;
+		Eth_TX_Valid								: out	std_logic;
 		Eth_TX_Data									: out	T_SLV_8;
-		Eth_TX_SOF									: out	STD_LOGIC;
-		Eth_TX_EOF									: out	STD_LOGIC;
-		Eth_TX_Ack									: in	STD_LOGIC;
+		Eth_TX_SOF									: out	std_logic;
+		Eth_TX_EOF									: out	std_logic;
+		Eth_TX_Ack									: in	std_logic;
 
-		Eth_RX_Valid								: in	STD_LOGIC;
+		Eth_RX_Valid								: in	std_logic;
 		Eth_RX_Data									: in	T_SLV_8;
-		Eth_RX_SOF									: in	STD_LOGIC;
-		Eth_RX_EOF									: in	STD_LOGIC;
-		Eth_RX_Ack									: out	STD_LOGIC;
+		Eth_RX_SOF									: in	std_logic;
+		Eth_RX_EOF									: in	std_logic;
+		Eth_RX_Ack									: out	std_logic;
 
-		TX_Valid										: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
+		TX_Valid										: in	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
 		TX_Data											: in	T_SLVV_8(getPortCount(MAC_CONFIG) - 1 downto 0);
-		TX_SOF											: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		TX_EOF											: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		TX_Ack											: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		TX_Meta_rst									: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		TX_Meta_DestMACAddress_nxt	: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
+		TX_SOF											: in	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
+		TX_EOF											: in	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
+		TX_Ack											: out	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
+		TX_Meta_rst									: out	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
+		TX_Meta_DestMACAddress_nxt	: out	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
 		TX_Meta_DestMACAddress_Data	: in	T_SLVV_8(getPortCount(MAC_CONFIG) - 1 downto 0);
 
-		RX_Valid										: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
+		RX_Valid										: out	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
 		RX_Data											: out	T_SLVV_8(getPortCount(MAC_CONFIG) - 1 downto 0);
-		RX_SOF											: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		RX_EOF											: out	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		RX_Ack											: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		RX_Meta_rst									: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
-		RX_Meta_SrcMACAddress_nxt		: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
+		RX_SOF											: out	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
+		RX_EOF											: out	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
+		RX_Ack											: in	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
+		RX_Meta_rst									: in	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
+		RX_Meta_SrcMACAddress_nxt		: in	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
 		RX_Meta_SrcMACAddress_Data	: out	T_SLVV_8(getPortCount(MAC_CONFIG) - 1 downto 0);
-		RX_Meta_DestMACAddress_nxt	: in	STD_LOGIC_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0);
+		RX_Meta_DestMACAddress_nxt	: in	std_logic_vector(getPortCount(MAC_CONFIG) - 1 downto 0);
 		RX_Meta_DestMACAddress_Data	: out	T_SLVV_8(getPortCount(MAC_CONFIG) - 1 downto 0);
 		RX_Meta_EthType							: out	T_NET_MAC_ETHERNETTYPE_VECTOR(getPortCount(MAC_CONFIG) - 1 downto 0)
 	);
@@ -105,11 +105,11 @@ architecture rtl of mac_Wrapper is
 		return temp;
 	end function;
 
-	function getSourceFilterCount(Interfaces : T_NET_MAC_INTERFACE_VECTOR) return NATURAL is
-		variable count : NATURAL		:= 0;
+	function getSourceFilterCount(Interfaces : T_NET_MAC_INTERFACE_VECTOR) return natural is
+		variable count : natural		:= 0;
 	begin
 		for i in Interfaces'range loop
-			if ((Interfaces(i).Address /= C_NET_MAC_ADDRESS_EMPTY) OR (Interfaces(i).Mask /= C_NET_MAC_MASK_EMPTY)) then
+			if ((Interfaces(i).Address /= C_NET_MAC_ADDRESS_EMPTY) or (Interfaces(i).Mask /= C_NET_MAC_MASK_EMPTY)) then
 				count := count + 1;
 			end if;
 		end loop;
@@ -137,8 +137,8 @@ architecture rtl of mac_Wrapper is
 		return temp;
 	end function;
 
-	function getTypeSwitchCount(Types : T_NET_MAC_ETHERNETTYPE_VECTOR) return NATURAL is
-		variable count : NATURAL		:= 0;
+	function getTypeSwitchCount(Types : T_NET_MAC_ETHERNETTYPE_VECTOR) return natural is
+		variable count : natural		:= 0;
 	begin
 		for i in Types'range loop
 			if (Types(i) /= C_NET_MAC_ETHERNETTYPE_EMPTY) then
@@ -149,8 +149,8 @@ architecture rtl of mac_Wrapper is
 		return count;
 	end function;
 
-	function calcPortIndex(MAC_CONFIG : T_NET_MAC_CONFIGURATION_VECTOR; CurrentInterfaceID : NATURAL) return NATURAL is
-		variable count : NATURAL		:= 0;
+	function calcPortIndex(MAC_CONFIG : T_NET_MAC_CONFIGURATION_VECTOR; CurrentInterfaceID : natural) return natural is
+		variable count : natural		:= 0;
 	begin
 		if (CurrentInterfaceID = 0) then
 			return 0;
@@ -164,39 +164,39 @@ architecture rtl of mac_Wrapper is
 	end function;
 
 
-	constant PORTS															: POSITIVE												:= getPortCount(MAC_CONFIG);
-	constant INTERFACE_COUNT										: POSITIVE												:= MAC_CONFIG'length;
+	constant PORTS															: positive												:= getPortCount(MAC_CONFIG);
+	constant INTERFACE_COUNT										: positive												:= MAC_CONFIG'length;
 	constant INTERFACE_ADDRESSES								: T_NET_MAC_ADDRESS_VECTOR				:= getInterfaceAddresses(MAC_CONFIG);
 	constant INTERFACE_MASKS										: T_NET_MAC_ADDRESS_VECTOR				:= getInterfaceMasks(MAC_CONFIG);
 
-	signal DestEth_RX_Valid											: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
+	signal DestEth_RX_Valid											: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
 	signal DestEth_RX_Data											: T_SLVV_8(INTERFACE_COUNT - 1 downto 0);
-	signal DestEth_RX_SOF												: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
-	signal DestEth_RX_EOF												: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
+	signal DestEth_RX_SOF												: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
+	signal DestEth_RX_EOF												: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
 	signal DestEth_RX_Meta_DestMACAddress_Data	: T_SLVV_8(INTERFACE_COUNT - 1 downto 0);
 
-	signal SrcEth_RX_Ack												: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
-	signal SrcEth_RX_Meta_rst										: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
-	signal SrcEth_RX_Meta_DestMACAddress_nxt		: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
+	signal SrcEth_RX_Ack												: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
+	signal SrcEth_RX_Meta_rst										: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
+	signal SrcEth_RX_Meta_DestMACAddress_nxt		: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
 
-	signal EthType_TX_Valid											: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
+	signal EthType_TX_Valid											: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
 	signal EthType_TX_Data											: T_SLVV_8(INTERFACE_COUNT - 1 downto 0);
-	signal EthType_TX_SOF												: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
-	signal EthType_TX_EOF												: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
+	signal EthType_TX_SOF												: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
+	signal EthType_TX_EOF												: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
 	signal EthType_TX_Meta_DestMACAddress_Data	: T_SLVV_8(INTERFACE_COUNT - 1 downto 0);
 
-	signal SrcEth_TX_Valid											: STD_LOGIC;
+	signal SrcEth_TX_Valid											: std_logic;
 	signal SrcEth_TX_Data												: T_SLV_8;
-	signal SrcEth_TX_SOF												: STD_LOGIC;
-	signal SrcEth_TX_EOF												: STD_LOGIC;
-	signal SrcEth_TX_Ack												: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
-	signal SrcEth_TX_Meta_rst										: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
-	signal SrcEth_TX_Meta_DestMACAddress_nxt		: STD_LOGIC_VECTOR(INTERFACE_COUNT - 1 downto 0);
+	signal SrcEth_TX_SOF												: std_logic;
+	signal SrcEth_TX_EOF												: std_logic;
+	signal SrcEth_TX_Ack												: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
+	signal SrcEth_TX_Meta_rst										: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
+	signal SrcEth_TX_Meta_DestMACAddress_nxt		: std_logic_vector(INTERFACE_COUNT - 1 downto 0);
 	signal SrcEth_TX_Meta_DestMACAddress_Data		: T_SLV_8;
 
-	signal DestEth_TX_Ack												: STD_LOGIC;
-	signal DestEth_TX_Meta_rst									: STD_LOGIC;
-	signal DestEth_TX_Meta_DestMACAddress_nxt		: STD_LOGIC;
+	signal DestEth_TX_Ack												: std_logic;
+	signal DestEth_TX_Meta_rst									: std_logic;
+	signal DestEth_TX_Meta_DestMACAddress_nxt		: std_logic;
 
 begin
 
@@ -227,30 +227,30 @@ begin
 		);
 
 	genInterface : for i in MAC_CONFIG'range generate
-		constant FILTER_COUNT										: NATURAL												:= getSourceFilterCount(MAC_CONFIG(i).SourceFilter);
+		constant FILTER_COUNT										: natural												:= getSourceFilterCount(MAC_CONFIG(i).SourceFilter);
 		constant FILTER_ADDRESSES								: T_NET_MAC_ADDRESS_VECTOR			:= getSourceFilterAddresses(MAC_CONFIG(i).SourceFilter(0 to FILTER_COUNT - 1));
 		constant FILTER_MASKS										: T_NET_MAC_ADDRESS_VECTOR			:= getSourceFilterMasks(MAC_CONFIG(i).SourceFilter(0 to FILTER_COUNT - 1));
 
-		constant SWITCH_COUNT										: NATURAL												:= getTypeSwitchCount(MAC_CONFIG(i).TypeSwitch);
+		constant SWITCH_COUNT										: natural												:= getTypeSwitchCount(MAC_CONFIG(i).TypeSwitch);
 		constant SWITCH_TYPES										: T_NET_MAC_ETHERNETTYPE_VECTOR	:= MAC_CONFIG(i).TypeSwitch(0 to SWITCH_COUNT - 1);
 
-		constant PORT_INDEX_FROM								: NATURAL												:= calcPortIndex(MAC_CONFIG, i);
-		constant PORT_INDEX_TO									: NATURAL												:= PORT_INDEX_FROM + SWITCH_COUNT - 1;
+		constant PORT_INDEX_FROM								: natural												:= calcPortIndex(MAC_CONFIG, i);
+		constant PORT_INDEX_TO									: natural												:= PORT_INDEX_FROM + SWITCH_COUNT - 1;
 
-		signal SrcEth_RX_Valid									: STD_LOGIC;
+		signal SrcEth_RX_Valid									: std_logic;
 		signal SrcEth_RX_Data										: T_SLV_8;
-		signal SrcEth_RX_SOF										: STD_LOGIC;
-		signal SrcEth_RX_EOF										: STD_LOGIC;
+		signal SrcEth_RX_SOF										: std_logic;
+		signal SrcEth_RX_EOF										: std_logic;
 
 --		signal SrcEth_RX_Meta_SrcMACAddress_rst			: STD_LOGIC;
 --		signal SrcEth_RX_Meta_SrcMACAddress_nxt			: STD_LOGIC;
 		signal SrcEth_RX_Meta_DestMACAddress_Data		: T_SLV_8;
 		signal SrcEth_RX_Meta_SrcMACAddress_Data		: T_SLV_8;
 
-		signal EthEth_RX_Ack												: STD_LOGIC;
-		signal EthEth_RX_Meta_rst										: STD_LOGIC;
-		signal EthEth_RX_Meta_DestMACAddress_nxt		: STD_LOGIC;
-		signal EthEth_RX_Meta_SrcMACAddress_nxt			: STD_LOGIC;
+		signal EthEth_RX_Ack												: std_logic;
+		signal EthEth_RX_Meta_rst										: std_logic;
+		signal EthEth_RX_Meta_DestMACAddress_nxt		: std_logic;
+		signal EthEth_RX_Meta_SrcMACAddress_nxt			: std_logic;
 
 	begin
 --		assert FALSE report "Filter:      Count=" & INTEGER'image(FILTER_COUNT) severity NOTE;

@@ -41,40 +41,40 @@ use			PoC.net.all;
 
 entity arp_BroadCast_Requester is
 	generic (
-		ALLOWED_PROTOCOL_IPV4					: BOOLEAN												:= TRUE;
-		ALLOWED_PROTOCOL_IPV6					: BOOLEAN												:= FALSE
+		ALLOWED_PROTOCOL_IPV4					: boolean												:= TRUE;
+		ALLOWED_PROTOCOL_IPV6					: boolean												:= FALSE
 	);
 	port (
-		Clock													: in	STD_LOGIC;																	--
-		Reset													: in	STD_LOGIC;																	--
+		Clock													: in	std_logic;																	--
+		Reset													: in	std_logic;																	--
 
-		SendRequest										: in	STD_LOGIC;
-		Complete											: out	STD_LOGIC;
+		SendRequest										: in	std_logic;
+		Complete											: out	std_logic;
 
-		Address_rst										: out	STD_LOGIC;
-		SenderMACAddress_nxt					: out	STD_LOGIC;
+		Address_rst										: out	std_logic;
+		SenderMACAddress_nxt					: out	std_logic;
 		SenderMACAddress_Data					: in	T_SLV_8;
-		SenderIPv4Address_nxt					: out	STD_LOGIC;
+		SenderIPv4Address_nxt					: out	std_logic;
 		SenderIPv4Address_Data				: in	T_SLV_8;
-		TargetMACAddress_nxt					: out	STD_LOGIC;
+		TargetMACAddress_nxt					: out	std_logic;
 		TargetMACAddress_Data					: in	T_SLV_8;
-		TargetIPv4Address_nxt					: out	STD_LOGIC;
+		TargetIPv4Address_nxt					: out	std_logic;
 		TargetIPv4Address_Data				: in	T_SLV_8;
 
-		TX_Valid											: out	STD_LOGIC;
+		TX_Valid											: out	std_logic;
 		TX_Data												: out	T_SLV_8;
-		TX_SOF												: out	STD_LOGIC;
-		TX_EOF												: out	STD_LOGIC;
-		TX_Ack												: in	STD_LOGIC;
-		TX_Meta_DestMACAddress_rst		: in	STD_LOGIC;
-		TX_Meta_DestMACAddress_nxt		: in	STD_LOGIC;
+		TX_SOF												: out	std_logic;
+		TX_EOF												: out	std_logic;
+		TX_Ack												: in	std_logic;
+		TX_Meta_DestMACAddress_rst		: in	std_logic;
+		TX_Meta_DestMACAddress_nxt		: in	std_logic;
 		TX_Meta_DestMACAddress_Data		: out	T_SLV_8
 	);
 end entity;
 
 
 architecture rtl of arp_BroadCast_Requester is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
 	type T_STATE		is (
 		ST_IDLE,
@@ -91,18 +91,18 @@ architecture rtl of arp_BroadCast_Requester is
 	signal NextState											: T_STATE;
 	attribute FSM_ENCODING of State				: signal is "gray";
 
-	constant HARDWARE_ADDRESS_LENGTH			: POSITIVE																											:= 6;			-- MAC -> 6 bytes
-	constant PROTOCOL_IPV4_ADDRESS_LENGTH	: POSITIVE																											:= 4;			-- IPv4 -> 4 bytes
-	constant PROTOCOL_IPV6_ADDRESS_LENGTH	: POSITIVE																											:= 16;		-- IPv6 -> 16 bytes
-	constant PROTOCOL_ADDRESS_LENGTH			: POSITIVE																											:= ite((ALLOWED_PROTOCOL_IPV6 = FALSE), PROTOCOL_IPV4_ADDRESS_LENGTH, PROTOCOL_IPV6_ADDRESS_LENGTH);		-- IPv4 -> 4 bytes; IPv6 -> 16 bytes
+	constant HARDWARE_ADDRESS_LENGTH			: positive																											:= 6;			-- MAC -> 6 bytes
+	constant PROTOCOL_IPV4_ADDRESS_LENGTH	: positive																											:= 4;			-- IPv4 -> 4 bytes
+	constant PROTOCOL_IPV6_ADDRESS_LENGTH	: positive																											:= 16;		-- IPv6 -> 16 bytes
+	constant PROTOCOL_ADDRESS_LENGTH			: positive																											:= ite((ALLOWED_PROTOCOL_IPV6 = FALSE), PROTOCOL_IPV4_ADDRESS_LENGTH, PROTOCOL_IPV6_ADDRESS_LENGTH);		-- IPv4 -> 4 bytes; IPv6 -> 16 bytes
 
-	signal IsIPv4_l												: STD_LOGIC																											:= '1';
-	signal IsIPv6_l												: STD_LOGIC																											:= '0';
+	signal IsIPv4_l												: std_logic																											:= '1';
+	signal IsIPv6_l												: std_logic																											:= '0';
 
-	constant READER_COUNTER_BITS					: POSITIVE																											:= log2ceilnz(imax(HARDWARE_ADDRESS_LENGTH, PROTOCOL_ADDRESS_LENGTH));
-	signal Reader_Counter_rst							: STD_LOGIC;
-	signal Reader_Counter_en							: STD_LOGIC;
-	signal Reader_Counter_us							: UNSIGNED(READER_COUNTER_BITS - 1 downto 0)										:= (others => '0');
+	constant READER_COUNTER_BITS					: positive																											:= log2ceilnz(imax(HARDWARE_ADDRESS_LENGTH, PROTOCOL_ADDRESS_LENGTH));
+	signal Reader_Counter_rst							: std_logic;
+	signal Reader_Counter_en							: std_logic;
+	signal Reader_Counter_us							: unsigned(READER_COUNTER_BITS - 1 downto 0)										:= (others => '0');
 
 begin
 	IsIPv4_l		<= '1';
@@ -259,10 +259,10 @@ begin
 					SenderIPv4Address_nxt		<= '1';
 					Reader_Counter_en				<= '1';
 
-					if ((IsIPv4_l = '1') AND (Reader_Counter_us = (PROTOCOL_IPV4_ADDRESS_LENGTH - 1))) then
+					if ((IsIPv4_l = '1') and (Reader_Counter_us = (PROTOCOL_IPV4_ADDRESS_LENGTH - 1))) then
 						Reader_Counter_rst		<= '1';
 						NextState							<= ST_SEND_TARGET_MAC;
-					elsif ((IsIPv6_l = '1') AND (Reader_Counter_us = (PROTOCOL_IPV6_ADDRESS_LENGTH - 1))) then
+					elsif ((IsIPv6_l = '1') and (Reader_Counter_us = (PROTOCOL_IPV6_ADDRESS_LENGTH - 1))) then
 						Reader_Counter_rst		<= '1';
 						NextState							<= ST_SEND_TARGET_MAC;
 					end if;
@@ -290,11 +290,11 @@ begin
 					TargetIPv4Address_nxt	<= '1';
 					Reader_Counter_en				<= '1';
 
-					if ((IsIPv4_l = '1') AND (Reader_Counter_us = (PROTOCOL_IPV4_ADDRESS_LENGTH - 1))) then
+					if ((IsIPv4_l = '1') and (Reader_Counter_us = (PROTOCOL_IPV4_ADDRESS_LENGTH - 1))) then
 						TX_EOF								<= '1';
 						Reader_Counter_rst		<= '1';
 						NextState							<= ST_COMPLETE;
-					elsif ((IsIPv6_l = '1') AND (Reader_Counter_us = (PROTOCOL_IPV6_ADDRESS_LENGTH - 1))) then
+					elsif ((IsIPv6_l = '1') and (Reader_Counter_us = (PROTOCOL_IPV6_ADDRESS_LENGTH - 1))) then
 						TX_EOF								<= '1';
 						Reader_Counter_rst		<= '1';
 						NextState							<= ST_COMPLETE;
@@ -312,7 +312,7 @@ begin
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset OR Reader_Counter_rst) = '1') then
+			if ((Reset or Reader_Counter_rst) = '1') then
 				Reader_Counter_us					<= (others => '0');
 			elsif (Reader_Counter_en = '1') then
 				Reader_Counter_us					<= Reader_Counter_us + 1;

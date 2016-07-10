@@ -40,17 +40,17 @@ use poc.utils.all;
 
 entity ddrio_out_altera is
 	generic (
-		NO_OUTPUT_ENABLE		: BOOLEAN			:= false;
-		BITS								: POSITIVE;
-		INIT_VALUE					: BIT_VECTOR	:= x"FFFFFFFF"
+		NO_OUTPUT_ENABLE		: boolean			:= false;
+		BITS								: positive;
+		INIT_VALUE					: bit_vector	:= x"FFFFFFFF"
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		ClockEnable		: in	STD_LOGIC;
-		OutputEnable	: in	STD_LOGIC;
-		DataOut_high	: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataOut_low		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		Pad						: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		Clock					: in	std_logic;
+		ClockEnable		: in	std_logic;
+		OutputEnable	: in	std_logic;
+		DataOut_high	: in	std_logic_vector(BITS - 1 downto 0);
+		DataOut_low		: in	std_logic_vector(BITS - 1 downto 0);
+		Pad						: out	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
 

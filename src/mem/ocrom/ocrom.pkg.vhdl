@@ -43,7 +43,7 @@ package ocrom is
 		generic (
 			A_BITS		: positive;
 			D_BITS		: positive;
-			FILENAME	: STRING		:= ""
+			FILENAME	: string		:= ""
 		);
 		port (
 			clk	: in	std_logic;
@@ -58,7 +58,7 @@ package ocrom is
 		generic (
 			A_BITS		: positive;
 			D_BITS		: positive;
-			FILENAME	: STRING		:= ""
+			FILENAME	: string		:= ""
 		);
 		port (
 			clk1 : in	std_logic;

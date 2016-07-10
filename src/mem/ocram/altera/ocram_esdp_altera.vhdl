@@ -50,7 +50,7 @@ entity ocram_esdp_altera is
 	generic (
 		A_BITS		: positive;
 		D_BITS		: positive;
-		FILENAME	: STRING		:= ""
+		FILENAME	: string		:= ""
 	);
 	port (
 		clk1 : in	std_logic;
@@ -70,51 +70,51 @@ end ocram_esdp_altera;
 architecture rtl of ocram_esdp_altera is
 	component altsyncram
 		generic (
-			address_aclr_a						: STRING;
-			address_aclr_b						: STRING;
-			address_reg_b							: STRING;
-			indata_aclr_a							: STRING;
-			indata_aclr_b							: STRING;
-			indata_reg_b							: STRING;
-			init_file									: STRING;
-			intended_device_family		: STRING;
-			lpm_type									: STRING;
-			numwords_a								: NATURAL;
-			numwords_b								: NATURAL;
-			operation_mode						: STRING;
-			outdata_aclr_a						: STRING;
-			outdata_aclr_b						: STRING;
-			outdata_reg_a							: STRING;
-			outdata_reg_b							: STRING;
-			power_up_uninitialized		: STRING;
-			widthad_a									: NATURAL;
-			widthad_b									: NATURAL;
-			width_a										: NATURAL;
-			width_b										: NATURAL;
-			width_byteena_a						: NATURAL;
-			width_byteena_b						: NATURAL;
-			wrcontrol_aclr_a					: STRING;
-			wrcontrol_aclr_b					: STRING;
-			wrcontrol_wraddress_reg_b : STRING
+			address_aclr_a						: string;
+			address_aclr_b						: string;
+			address_reg_b							: string;
+			indata_aclr_a							: string;
+			indata_aclr_b							: string;
+			indata_reg_b							: string;
+			init_file									: string;
+			intended_device_family		: string;
+			lpm_type									: string;
+			numwords_a								: natural;
+			numwords_b								: natural;
+			operation_mode						: string;
+			outdata_aclr_a						: string;
+			outdata_aclr_b						: string;
+			outdata_reg_a							: string;
+			outdata_reg_b							: string;
+			power_up_uninitialized		: string;
+			widthad_a									: natural;
+			widthad_b									: natural;
+			width_a										: natural;
+			width_b										: natural;
+			width_byteena_a						: natural;
+			width_byteena_b						: natural;
+			wrcontrol_aclr_a					: string;
+			wrcontrol_aclr_b					: string;
+			wrcontrol_wraddress_reg_b : string
 		);
 		port (
-			clocken0	: in	STD_LOGIC;
-			clocken1	: in	STD_LOGIC;
-			wren_a		: in	STD_LOGIC;
-			clock0		: in	STD_LOGIC;
-			wren_b		: in	STD_LOGIC;
-			clock1		: in	STD_LOGIC;
-			address_a : in	STD_LOGIC_VECTOR (widthad_a-1 downto 0);
-			address_b : in	STD_LOGIC_VECTOR (widthad_b-1 downto 0);
-			q_a				: out STD_LOGIC_VECTOR (width_a-1 downto 0);
-			q_b				: out STD_LOGIC_VECTOR (width_b-1 downto 0);
-			data_a		: in	STD_LOGIC_VECTOR (width_a-1 downto 0);
-			data_b		: in	STD_LOGIC_VECTOR (width_b-1 downto 0)
+			clocken0	: in	std_logic;
+			clocken1	: in	std_logic;
+			wren_a		: in	std_logic;
+			clock0		: in	std_logic;
+			wren_b		: in	std_logic;
+			clock1		: in	std_logic;
+			address_a : in	std_logic_vector (widthad_a-1 downto 0);
+			address_b : in	std_logic_vector (widthad_b-1 downto 0);
+			q_a				: out std_logic_vector (width_a-1 downto 0);
+			q_b				: out std_logic_vector (width_b-1 downto 0);
+			data_a		: in	std_logic_vector (width_a-1 downto 0);
+			data_b		: in	std_logic_vector (width_b-1 downto 0)
 		);
 	end component;
 
 	constant DEPTH			: positive	:= 2**A_BITS;
-	constant INIT_FILE	: STRING		:= ite((str_length(FILENAME) = 0), "UNUSED", FILENAME);
+	constant INIT_FILE	: string		:= ite((str_length(FILENAME) = 0), "UNUSED", FILENAME);
 
 	signal a1_sl : std_logic_vector(A_BITS-1 downto 0);
 	signal a2_sl : std_logic_vector(A_BITS-1 downto 0);

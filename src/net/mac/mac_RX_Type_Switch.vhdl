@@ -41,33 +41,33 @@ use			PoC.net.all;
 
 entity mac_RX_Type_Switch is
 	generic (
-		DEBUG													: BOOLEAN													:= FALSE;
+		DEBUG													: boolean													:= FALSE;
 		ETHERNET_TYPES								: T_NET_MAC_ETHERNETTYPE_VECTOR		:= (0 => C_NET_MAC_ETHERNETTYPE_EMPTY)
 	);
 	port (
-		Clock													: in	STD_LOGIC;
-		Reset													: in	STD_LOGIC;
+		Clock													: in	std_logic;
+		Reset													: in	std_logic;
 
-		In_Valid											: in	STD_LOGIC;
+		In_Valid											: in	std_logic;
 		In_Data												: in	T_SLV_8;
-		In_SOF												: in	STD_LOGIC;
-		In_EOF												: in	STD_LOGIC;
-		In_Ack												: out	STD_LOGIC;
-		In_Meta_rst										: out	STD_LOGIC;
-		In_Meta_SrcMACAddress_nxt			: out	STD_LOGIC;
+		In_SOF												: in	std_logic;
+		In_EOF												: in	std_logic;
+		In_Ack												: out	std_logic;
+		In_Meta_rst										: out	std_logic;
+		In_Meta_SrcMACAddress_nxt			: out	std_logic;
 		In_Meta_SrcMACAddress_Data		: in	T_SLV_8;
-		In_Meta_DestMACAddress_nxt		: out	STD_LOGIC;
+		In_Meta_DestMACAddress_nxt		: out	std_logic;
 		In_Meta_DestMACAddress_Data		: in	T_SLV_8;
 
-		Out_Valid											: out	STD_LOGIC_VECTOR(ETHERNET_TYPES'length - 1 downto 0);
+		Out_Valid											: out	std_logic_vector(ETHERNET_TYPES'length - 1 downto 0);
 		Out_Data											: out	T_SLVV_8(ETHERNET_TYPES'length - 1 downto 0);
-		Out_SOF												: out	STD_LOGIC_VECTOR(ETHERNET_TYPES'length - 1 downto 0);
-		Out_EOF												: out	STD_LOGIC_VECTOR(ETHERNET_TYPES'length - 1 downto 0);
-		Out_Ack												: in	STD_LOGIC_VECTOR(ETHERNET_TYPES'length - 1 downto 0);
-		Out_Meta_rst									: in	STD_LOGIC_VECTOR(ETHERNET_TYPES'length - 1 downto 0);
-		Out_Meta_SrcMACAddress_nxt		: in	STD_LOGIC_VECTOR(ETHERNET_TYPES'length - 1 downto 0);
+		Out_SOF												: out	std_logic_vector(ETHERNET_TYPES'length - 1 downto 0);
+		Out_EOF												: out	std_logic_vector(ETHERNET_TYPES'length - 1 downto 0);
+		Out_Ack												: in	std_logic_vector(ETHERNET_TYPES'length - 1 downto 0);
+		Out_Meta_rst									: in	std_logic_vector(ETHERNET_TYPES'length - 1 downto 0);
+		Out_Meta_SrcMACAddress_nxt		: in	std_logic_vector(ETHERNET_TYPES'length - 1 downto 0);
 		Out_Meta_SrcMACAddress_Data		: out	T_SLVV_8(ETHERNET_TYPES'length - 1 downto 0);
-		Out_Meta_DestMACAddress_nxt		: in	STD_LOGIC_VECTOR(ETHERNET_TYPES'length - 1 downto 0);
+		Out_Meta_DestMACAddress_nxt		: in	std_logic_vector(ETHERNET_TYPES'length - 1 downto 0);
 		Out_Meta_DestMACAddress_Data	: out	T_SLVV_8(ETHERNET_TYPES'length - 1 downto 0);
 		Out_Meta_EthType							: out	T_NET_MAC_ETHERNETTYPE_VECTOR(ETHERNET_TYPES'length - 1 downto 0)
 	);
@@ -75,9 +75,9 @@ end entity;
 
 
 architecture rtl of mac_RX_Type_Switch is
-	attribute FSM_ENCODING					: STRING;
+	attribute FSM_ENCODING					: string;
 
-	constant PORTS									: POSITIVE																			:= ETHERNET_TYPES'length;
+	constant PORTS									: positive																			:= ETHERNET_TYPES'length;
 	constant ETHERNET_TYPES_I				: T_NET_MAC_ETHERNETTYPE_VECTOR(0 to PORTS - 1)	:= ETHERNET_TYPES;
 
 	type T_STATE is (
@@ -88,32 +88,32 @@ architecture rtl of mac_RX_Type_Switch is
 		ST_DISCARD_FRAME
 	);
 
-	subtype T_ETHERNETTYPE_BYTEINDEX	 is NATURAL range 0 to 1;
+	subtype T_ETHERNETTYPE_BYTEINDEX	 is natural range 0 to 1;
 
 	signal State													: T_STATE																	:= ST_IDLE;
 	signal NextState											: T_STATE;
 	attribute FSM_ENCODING of State				: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
-	signal In_Ack_i												: STD_LOGIC;
-	signal Is_DataFlow										: STD_LOGIC;
-	signal Is_SOF													: STD_LOGIC;
-	signal Is_EOF													: STD_LOGIC;
+	signal In_Ack_i												: std_logic;
+	signal Is_DataFlow										: std_logic;
+	signal Is_SOF													: std_logic;
+	signal Is_EOF													: std_logic;
 
-	signal New_Valid_i										: STD_LOGIC;
-	signal New_SOF_i											: STD_LOGIC;
-	signal Out_Ack_i											: STD_LOGIC;
+	signal New_Valid_i										: std_logic;
+	signal New_SOF_i											: std_logic;
+	signal Out_Ack_i											: std_logic;
 
 	signal EthernetType_CompareIndex			: T_ETHERNETTYPE_BYTEINDEX;
 
-	signal CompareRegister_rst						: STD_LOGIC;
-	signal CompareRegister_init						: STD_LOGIC;
-	signal CompareRegister_clear					: STD_LOGIC;
-	signal CompareRegister_en							: STD_LOGIC;
-	signal CompareRegister_d							: STD_LOGIC_VECTOR(PORTS - 1 downto 0)		:= (others => '1');
-	signal NoHits													: STD_LOGIC;
+	signal CompareRegister_rst						: std_logic;
+	signal CompareRegister_init						: std_logic;
+	signal CompareRegister_clear					: std_logic;
+	signal CompareRegister_en							: std_logic;
+	signal CompareRegister_d							: std_logic_vector(PORTS - 1 downto 0)		:= (others => '1');
+	signal NoHits													: std_logic;
 
-	signal EthernetType_rst								: STD_LOGIC;
-	signal EthernetType_en								: STD_LOGIC;
+	signal EthernetType_rst								: std_logic;
+	signal EthernetType_en								: std_logic;
 	signal EthernetType_sel								: T_ETHERNETTYPE_BYTEINDEX;
 	signal EthernetType_d									: T_NET_MAC_ETHERNETTYPE									:= C_NET_MAC_ETHERNETTYPE_EMPTY;
 
@@ -229,14 +229,14 @@ begin
 
 
 	gen0 : for i in 0 to PORTS - 1 generate
-		signal Hit								: STD_LOGIC;
+		signal Hit								: std_logic;
 	begin
 		Hit <= to_sl(In_Data = ETHERNET_TYPES_I(i)(EthernetType_CompareIndex));
 
 		process(Clock)
 		begin
 			if rising_edge(Clock) then
-				if ((Reset OR CompareRegister_rst) = '1') then
+				if ((Reset or CompareRegister_rst) = '1') then
 					CompareRegister_d(i)				<= '0';
 				elsif (CompareRegister_init	= '1') then
 					CompareRegister_d(i)			<= Hit;

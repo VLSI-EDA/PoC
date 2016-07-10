@@ -87,11 +87,11 @@ architecture tb of stat_Maximum_tb is
 	);
 
 	type T_RESULT is record
-		Maximum			: NATURAL;
-		Count				: POSITIVE;
+		Maximum			: natural;
+		Count				: positive;
 	end record;
 
-	type T_RESULT_VECTOR	is array(NATURAL range <>) of T_RESULT;
+	type T_RESULT_VECTOR	is array(natural range <>) of T_RESULT;
 
 	constant RESULT				: T_RESULT_VECTOR		:= (
 		(Maximum => 249,	Count => 2),
@@ -104,19 +104,19 @@ architecture tb of stat_Maximum_tb is
 		(Maximum => 240,	Count => 2)
 	);
 
-	constant DEPTH				: POSITIVE				:= RESULT'length;
-	constant DATA_BITS		: POSITIVE				:= 8;
-	constant COUNTER_BITS	: POSITIVE				:= 4;
-	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DEPTH=" & INTEGER'image(DEPTH));
+	constant DEPTH				: positive				:= RESULT'length;
+	constant DATA_BITS		: positive				:= 8;
+	constant COUNTER_BITS	: positive				:= 4;
+	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DEPTH=" & integer'image(DEPTH));
 
   -- component ports
-  signal Clock		: STD_LOGIC;
-  signal Reset		: STD_LOGIC;
+  signal Clock		: std_logic;
+  signal Reset		: std_logic;
 
-  signal Enable		: STD_LOGIC		:= '0';
-  signal DataIn		: STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
+  signal Enable		: std_logic		:= '0';
+  signal DataIn		: std_logic_vector(DATA_BITS - 1 downto 0);
 
-	signal Valids		: STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
+	signal Valids		: std_logic_vector(DEPTH - 1 downto 0);
 	signal Maximums	: T_SLM(DEPTH - 1 downto 0, DATA_BITS - 1 downto 0);
 	signal Counts		: T_SLM(DEPTH - 1 downto 0, COUNTER_BITS - 1 downto 0);
 
@@ -155,7 +155,7 @@ begin
 
 	procStimuli : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator and Checker");
-		variable good					: BOOLEAN;
+		variable good					: boolean;
 	begin
 		DataIn		<= (others => '0');
 		wait until (Enable = '1') and falling_edge(Clock);

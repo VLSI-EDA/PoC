@@ -62,10 +62,10 @@ end entity;
 
 
 architecture rtl of uart_bclk is
-	constant UART_OVERSAMPLING_RATE		: POSITIVE					:= 8;
-	constant TIME_UNIT_INTERVAL				: TIME							:= 1 sec / (to_real(BAUDRATE, 1 Bd) * real(UART_OVERSAMPLING_RATE));
-	constant BAUDRATE_COUNTER_MAX			: POSITIVE					:= TimingToCycles(TIME_UNIT_INTERVAL, CLOCK_FREQ);
-	constant BAUDRATE_COUNTER_BITS		: POSITIVE					:= log2ceilnz(BAUDRATE_COUNTER_MAX + 1);
+	constant UART_OVERSAMPLING_RATE		: positive					:= 8;
+	constant TIME_UNIT_INTERVAL				: time							:= 1 sec / (to_real(BAUDRATE, 1 Bd) * real(UART_OVERSAMPLING_RATE));
+	constant BAUDRATE_COUNTER_MAX			: positive					:= TimingToCycles(TIME_UNIT_INTERVAL, CLOCK_FREQ);
+	constant BAUDRATE_COUNTER_BITS		: positive					:= log2ceilnz(BAUDRATE_COUNTER_MAX + 1);
 
   -- registers
   signal x8_cnt : unsigned(BAUDRATE_COUNTER_BITS - 1 downto 0)	:= (others => '0');
@@ -75,15 +75,15 @@ architecture rtl of uart_bclk is
   signal x8_cnt_done : std_logic;
   signal x1_cnt_done : std_logic;
 
-	signal bclk_r			: STD_LOGIC		:= '0';
-	signal bclk_x8_r	: STD_LOGIC		:= '0';
+	signal bclk_r			: std_logic		:= '0';
+	signal bclk_x8_r	: std_logic		:= '0';
 begin
 	assert FALSE		-- LF works in QuartusII
 		report "uart_bclk:" & LF &
 					 "  CLOCK_FREQ="		& to_string(CLOCK_FREQ, 3) & LF &
 					 "  BAUDRATE="			& to_string(BAUDRATE, 3) & LF &
-					 "  COUNTER_MAX="		& INTEGER'image(BAUDRATE_COUNTER_MAX) & LF &
-					 "  COUNTER_BITS="	& INTEGER'image(BAUDRATE_COUNTER_BITS)
+					 "  COUNTER_MAX="		& integer'image(BAUDRATE_COUNTER_MAX) & LF &
+					 "  COUNTER_BITS="	& integer'image(BAUDRATE_COUNTER_BITS)
 		severity NOTE;
 
 	assert io_UART_IsTypicalBaudRate(BAUDRATE)

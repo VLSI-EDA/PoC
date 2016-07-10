@@ -36,30 +36,30 @@ use			PoC.sim_types.all;
 package sim_global is
 	-- The default global status objects.
 	-- ===========================================================================
-	shared variable globalSim_StateIsInitialized		: BOOLEAN																	:= FALSE;
-	shared variable globalSim_StateIsFinalized			: BOOLEAN																	:= FALSE;
+	shared variable globalSim_StateIsInitialized		: boolean																	:= FALSE;
+	shared variable globalSim_StateIsFinalized			: boolean																	:= FALSE;
 
-	shared variable globalSim_MaxAssertFailures			: NATURAL																	:= NATURAL'high;
-	shared variable globalSim_MaxSimulationRuntime	: TIME																		:= TIME'high;
+	shared variable globalSim_MaxAssertFailures			: natural																	:= natural'high;
+	shared variable globalSim_MaxSimulationRuntime	: time																		:= time'high;
 
 	-- Internal state variable to log a failure condition for final reporting.
 	-- Once de-asserted, this variable will never return to a value of true.
-	shared variable globalSim_Passed								: BOOLEAN																	:= TRUE;
-	shared variable globalSim_AssertCount						: NATURAL																	:= 0;
-	shared variable globalSim_FailedAssertCount			: NATURAL																	:= 0;
+	shared variable globalSim_Passed								: boolean																	:= TRUE;
+	shared variable globalSim_AssertCount						: natural																	:= 0;
+	shared variable globalSim_FailedAssertCount			: natural																	:= 0;
 
 	-- Clock Management
 	shared variable globalSim_MainProcessEnables		: T_SIM_BOOLVEC(T_SIM_TEST_ID)						:= (others => TRUE);
 	shared variable globalSim_MainClockEnables			: T_SIM_BOOLVEC(T_SIM_TEST_ID)						:= (others => TRUE);
 
 	-- Process Management
-	shared variable globalSim_ProcessCount					: NATURAL																	:= 0;
-	shared variable globalSim_ActiveProcessCount		: NATURAL																	:= 0;
+	shared variable globalSim_ProcessCount					: natural																	:= 0;
+	shared variable globalSim_ActiveProcessCount		: natural																	:= 0;
 	shared variable globalSim_Processes							: T_SIM_PROCESS_VECTOR(T_SIM_PROCESS_ID);
 
 	-- Test Management
-	shared variable globalSim_TestCount							: NATURAL																	:= 0;
-	shared variable globalSim_ActiveTestCount				: NATURAL																	:= 0;
+	shared variable globalSim_TestCount							: natural																	:= 0;
+	shared variable globalSim_ActiveTestCount				: natural																	:= 0;
 	shared variable globalSim_Tests									: T_SIM_TEST_VECTOR(T_SIM_TEST_ID);
 
 end package;

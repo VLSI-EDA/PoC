@@ -59,12 +59,12 @@ package mem is
 		MEM_CONTENT_HEX
 	);
 
-	function mem_FileExtension(Filename : STRING) return STRING;
+	function mem_FileExtension(Filename : string) return string;
 
 	impure function mem_ReadMemoryFile(
 		FileName : string;
-		MemoryLines : POSITIVE;
-		BitsPerMemoryLine : POSITIVE;
+		MemoryLines : positive;
+		BitsPerMemoryLine : positive;
 		FORMAT : T_MEM_FILEFORMAT;
 		CONTENT : T_MEM_CONTENT := MEM_CONTENT_HEX
 	) return T_SLM;
@@ -72,7 +72,7 @@ end package;
 
 
 package body mem is
-	function mem_FileExtension(FileName : STRING) return STRING is
+	function mem_FileExtension(FileName : string) return string is
 	begin
 		for i in FileName'high downto FileName'low loop
 			if (FileName(i) = '.') then
@@ -82,13 +82,13 @@ package body mem is
 		return "";
 	end function;
 
-	procedure ReadHex(L : inout LINE; Value : out STD_LOGIC_VECTOR; Good : out BOOLEAN) is
-		variable ok					: BOOLEAN;
-		variable Char				: CHARACTER;
+	procedure ReadHex(L : inout LINE; Value : out std_logic_vector; Good : out boolean) is
+		variable ok					: boolean;
+		variable Char				: character;
 		variable Digit			: T_DIGIT_HEX;
-		constant DigitCount	: POSITIVE			:= div_ceil(Value'length, 4);
-		variable slv				: STD_LOGIC_VECTOR((DigitCount * 4) - 1 downto 0);
-		variable Swapped		: STD_LOGIC_VECTOR((DigitCount * 4) - 1 downto 0);
+		constant DigitCount	: positive			:= div_ceil(Value'length, 4);
+		variable slv				: std_logic_vector((DigitCount * 4) - 1 downto 0);
+		variable Swapped		: std_logic_vector((DigitCount * 4) - 1 downto 0);
 	begin
 		Good		:= TRUE;
 		for i in 0 to DigitCount - 1 loop
@@ -112,15 +112,15 @@ package body mem is
 	-- Reads a memory file and returns a 2D std_logic matrix
 	impure function mem_ReadMemoryFile(
 		FileName : string;
-		MemoryLines : POSITIVE;
-		BitsPerMemoryLine : POSITIVE;
+		MemoryLines : positive;
+		BitsPerMemoryLine : positive;
 		FORMAT : T_MEM_FILEFORMAT;
 		CONTENT : T_MEM_CONTENT := MEM_CONTENT_HEX
 	) return T_SLM is
 		file FileHandle				: TEXT open READ_MODE is FileName;
 		variable CurrentLine	: LINE;
-		variable Good					: BOOLEAN;
-		variable TempWord			: STD_LOGIC_VECTOR((div_ceil(BitsPerMemoryLine, 4) * 4) - 1 downto 0);
+		variable Good					: boolean;
+		variable TempWord			: std_logic_vector((div_ceil(BitsPerMemoryLine, 4) * 4) - 1 downto 0);
 		variable Result				: T_SLM(MemoryLines - 1 downto 0, BitsPerMemoryLine - 1 downto 0);
 	begin
 		Result := (others => (others => ite(SIMULATION, 'U', '0')));

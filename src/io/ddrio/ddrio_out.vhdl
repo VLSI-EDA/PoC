@@ -56,17 +56,17 @@ use			PoC.ddrio.all;
 
 entity ddrio_out is
 	generic (
-		NO_OUTPUT_ENABLE		: BOOLEAN			:= false;
-		BITS								: POSITIVE;
-		INIT_VALUE					: BIT_VECTOR	:= x"FFFFFFFF"
+		NO_OUTPUT_ENABLE		: boolean			:= false;
+		BITS								: positive;
+		INIT_VALUE					: bit_vector	:= x"FFFFFFFF"
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		ClockEnable		: in	STD_LOGIC := '1';
-		OutputEnable	: in	STD_LOGIC := '1';
-		DataOut_high	: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataOut_low		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		Pad						: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		Clock					: in	std_logic;
+		ClockEnable		: in	std_logic := '1';
+		OutputEnable	: in	std_logic := '1';
+		DataOut_high	: in	std_logic_vector(BITS - 1 downto 0);
+		DataOut_low		: in	std_logic_vector(BITS - 1 downto 0);
+		Pad						: out	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
 
@@ -113,17 +113,17 @@ begin
 	end generate;
 
 	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
-		signal DataOut_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
-		signal DataOut_low_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
-		signal OutputEnable_d	: STD_LOGIC;
-		signal Pad_o					: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataOut_high_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataOut_low_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal OutputEnable_d	: std_logic;
+		signal Pad_o					: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 	begin
 		DataOut_high_d	<= DataOut_high		when rising_edge(Clock) and (ClockEnable = '1');
 		DataOut_low_d		<= DataOut_low		when rising_edge(Clock) and (ClockEnable = '1');
 		OutputEnable_d	<= OutputEnable		when rising_edge(Clock) and (ClockEnable = '1');
 
 		process(Clock, OutputEnable_d, DataOut_high_d, DataOut_low_d)
-			type T_MUX is array(BIT) of STD_LOGIC_VECTOR(BITS - 1 downto 0);
+			type T_MUX is array(bit) of std_logic_vector(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
 		begin
 			MuxInput('1')	:= DataOut_high_d;

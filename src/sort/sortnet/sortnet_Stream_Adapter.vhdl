@@ -41,54 +41,54 @@ use			PoC.sortnet.all;
 
 entity sortnet_Stream_Adapter is
 	generic (
-		STREAM_DATA_BITS			: POSITIVE				:= 32;
-		STREAM_META_BITS			: POSITIVE				:= 2;
+		STREAM_DATA_BITS			: positive				:= 32;
+		STREAM_META_BITS			: positive				:= 2;
 		SORTNET_IMPL					: T_SORTNET_IMPL	:= SORT_SORTNET_IMPL_ODDEVEN_MERGESORT;
-		SORTNET_SIZE					: POSITIVE				:= 32;
-		SORTNET_KEY_BITS			: POSITIVE				:= 32;
-		SORTNET_DATA_BITS			: NATURAL					:= 32;
-		INVERSE								: BOOLEAN					:= FALSE
+		SORTNET_SIZE					: positive				:= 32;
+		SORTNET_KEY_BITS			: positive				:= 32;
+		SORTNET_DATA_BITS			: natural					:= 32;
+		INVERSE								: boolean					:= FALSE
 	);
 	port (
-		Clock				: in	STD_LOGIC;
-		Reset				: in	STD_LOGIC;
+		Clock				: in	std_logic;
+		Reset				: in	std_logic;
 
-		In_Valid		: in	STD_LOGIC;
-		In_IsKey		: in	STD_LOGIC;
-		In_Data			: in	STD_LOGIC_VECTOR(STREAM_DATA_BITS - 1 downto 0);
-		In_Meta			: in	STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
-		In_Ack			: out	STD_LOGIC;
+		In_Valid		: in	std_logic;
+		In_IsKey		: in	std_logic;
+		In_Data			: in	std_logic_vector(STREAM_DATA_BITS - 1 downto 0);
+		In_Meta			: in	std_logic_vector(STREAM_META_BITS - 1 downto 0);
+		In_Ack			: out	std_logic;
 
-		Out_Valid		: out	STD_LOGIC;
-		Out_IsKey		: out	STD_LOGIC;
-		Out_Data		: out	STD_LOGIC_VECTOR(STREAM_DATA_BITS - 1 downto 0);
-		Out_Meta		: out	STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
-		Out_Ack			: in	STD_LOGIC
+		Out_Valid		: out	std_logic;
+		Out_IsKey		: out	std_logic;
+		Out_Data		: out	std_logic_vector(STREAM_DATA_BITS - 1 downto 0);
+		Out_Meta		: out	std_logic_vector(STREAM_META_BITS - 1 downto 0);
+		Out_Ack			: in	std_logic
 	);
 end entity;
 
 
 architecture rtl of sortnet_Stream_Adapter is
-	constant C_VERBOSE							: BOOLEAN			:= FALSE;
+	constant C_VERBOSE							: boolean			:= FALSE;
 
-	constant GEARBOX_BITS						: POSITIVE		:= SORTNET_SIZE * SORTNET_DATA_BITS;
-	constant PIPELINE_STAGE_AFTER		: NATURAL			:= 2;
+	constant GEARBOX_BITS						: positive		:= SORTNET_SIZE * SORTNET_DATA_BITS;
+	constant PIPELINE_STAGE_AFTER		: natural			:= 2;
 
-	constant META_ISKEY_BIT					: NATURAL			:= 0;
-	constant META_BITS							: POSITIVE		:= STREAM_META_BITS + 1;
+	constant META_ISKEY_BIT					: natural			:= 0;
+	constant META_BITS							: positive		:= STREAM_META_BITS + 1;
 
-	signal MetaIn										: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+	signal MetaIn										: std_logic_vector(META_BITS - 1 downto 0);
 
-	signal gearup_Valid							: STD_LOGIC;
-	signal gearup_Data							: STD_LOGIC_VECTOR(GEARBOX_BITS - 1 downto 0);
-	signal gearup_Meta							: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+	signal gearup_Valid							: std_logic;
+	signal gearup_Data							: std_logic_vector(GEARBOX_BITS - 1 downto 0);
+	signal gearup_Meta							: std_logic_vector(META_BITS - 1 downto 0);
 
-	signal sort_Valid								: STD_LOGIC;
-	signal sort_IsKey								: STD_LOGIC;
-	signal sort_Data								: STD_LOGIC_VECTOR(GEARBOX_BITS - 1 downto 0);
-	signal sort_Meta								: STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
+	signal sort_Valid								: std_logic;
+	signal sort_IsKey								: std_logic;
+	signal sort_Data								: std_logic_vector(GEARBOX_BITS - 1 downto 0);
+	signal sort_Meta								: std_logic_vector(STREAM_META_BITS - 1 downto 0);
 
-	signal geardown_nxt							: STD_LOGIC;
+	signal geardown_nxt							: std_logic;
 begin
 
 	In_Ack	<= '1';

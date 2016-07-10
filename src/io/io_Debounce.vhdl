@@ -54,7 +54,7 @@ entity io_Debounce is
     CLOCK_FREQ 							: FREQ;
     BOUNCE_TIME							: time;
     BITS                    : positive := 1;
-		INIT										: STD_LOGIC_VECTOR		:= x"00000000";	-- initial state of Output
+		INIT										: std_logic_vector		:= x"00000000";	-- initial state of Output
     ADD_INPUT_SYNCHRONIZERS : boolean  := true;
     COMMON_LOCK             : boolean  := false
   );

@@ -62,9 +62,9 @@ entity sync_Reset is
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2	-- generate SYNC_DEPTH many stages, at least 2
 	);
   port (
-		Clock					: in	STD_LOGIC;						-- <Clock>	output clock domain
-		Input					: in	STD_LOGIC;						-- @async:	reset input
-		Output				: out STD_LOGIC							-- @Clock:	reset output
+		Clock					: in	std_logic;						-- <Clock>	output clock domain
+		Input					: in	std_logic;						-- @async:	reset input
+		Output				: out std_logic							-- @Clock:	reset output
 	);
 end entity;
 
@@ -72,12 +72,12 @@ end entity;
 architecture rtl of sync_Reset is
 begin
 	genGeneric : if ((VENDOR /= VENDOR_ALTERA) and (VENDOR /= VENDOR_XILINX)) generate
-		attribute ASYNC_REG										: STRING;
-		attribute SHREG_EXTRACT								: STRING;
+		attribute ASYNC_REG										: string;
+		attribute SHREG_EXTRACT								: string;
 
-		signal Data_async											: STD_LOGIC;
-		signal Data_meta											: STD_LOGIC		:= '1';
-		signal Data_sync											: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 0)		:= (others => '1');
+		signal Data_async											: std_logic;
+		signal Data_meta											: std_logic		:= '1';
+		signal Data_sync											: std_logic_vector(SYNC_DEPTH - 1 downto 0)		:= (others => '1');
 
 		-- Mark registers as asynchronous
 		attribute ASYNC_REG			of Data_meta	: signal is "TRUE";

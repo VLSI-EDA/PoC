@@ -40,16 +40,16 @@ use			PoC.utils.all;
 
 entity arith_counter_ring is
 	generic (
-		BITS						: POSITIVE;
-		INVERT_FEEDBACK	: BOOLEAN		:= FALSE																	-- FALSE -> ring counter;		TRUE -> johnson counter
+		BITS						: positive;
+		INVERT_FEEDBACK	: boolean		:= FALSE																	-- FALSE -> ring counter;		TRUE -> johnson counter
 	);
 	port (
-		Clock		: in	STD_LOGIC;																							-- Clock
-		Reset		: in	STD_LOGIC;																							-- Reset
-		seed		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0)	:= (others => '0');	-- initial counter vector / load value
-		inc			: in	STD_LOGIC														:= '0';							-- increment counter
-		dec			: in	STD_LOGIC														:= '0';							-- decrement counter
-		value		: out STD_LOGIC_VECTOR(BITS - 1 downto 0)											-- counter value
+		Clock		: in	std_logic;																							-- Clock
+		Reset		: in	std_logic;																							-- Reset
+		seed		: in	std_logic_vector(BITS - 1 downto 0)	:= (others => '0');	-- initial counter vector / load value
+		inc			: in	std_logic														:= '0';							-- increment counter
+		dec			: in	std_logic														:= '0';							-- decrement counter
+		value		: out std_logic_vector(BITS - 1 downto 0)											-- counter value
 	);
 end entity;
 

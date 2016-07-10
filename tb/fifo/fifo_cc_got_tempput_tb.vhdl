@@ -78,7 +78,7 @@ begin
 		constant STATE_REG  : boolean :=  c mod 4 > 1;
 		constant OUTPUT_REG : boolean :=  c mod 8 > 3;
 
-		constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
+		constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for DATA_REG=" & boolean'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & boolean'image(OUTPUT_REG));
 
     signal put  : std_logic;
     signal putx : std_logic;
@@ -112,7 +112,7 @@ begin
 
 		-- Writer
     procWriter : process
-			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Writer for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Writer for DATA_REG=" & boolean'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & boolean'image(OUTPUT_REG));
     begin
       wait until rising_edge(clk);
 
@@ -187,7 +187,7 @@ begin
 
 		-- Reader
 		procReader : process
-			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Reader for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Reader for DATA_REG=" & boolean'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & boolean'image(OUTPUT_REG));
     begin
       for i in OSPEC'range loop
         case OSPEC(i) is
@@ -198,7 +198,7 @@ begin
           when 'g' =>
             got <= '1';
             wait until rising_edge(clk) and vld = '1';
-						simAssertion((do = dox), "Test #" & INTEGER'image(c) & ": Output Mismatch.");
+						simAssertion((do = dox), "Test #" & integer'image(c) & ": Output Mismatch.");
 
           when 'G' =>
             got <= '1';
