@@ -4,7 +4,7 @@
 -- =============================================================================
 -- Authors:					Paul Genssler
 --
--- Entity:					ICAP Dini PCIe Controller
+-- Entity:					Simple ICAP wrapper with a fifo interface and a few status signals
 --
 -- Description:
 -- -------------------------------------
@@ -40,51 +40,39 @@ use UNISIM.vcomponents.all;
 library poc;
 use poc.utils.all;
 
-
-entity icap_dini is
+entity reconfig_icap_wrapper is
 	generic (
-		CLKIN1_PERIOD	  : real := 8.0;		-- divide input clk
-		CLKOUT0_DIVIDE_F  : real := 6.25;		-- multiply to get 100 MHz
 		MIN_DEPTH_OUT     : positive := 256;
 		MIN_DEPTH_IN      : positive := 256
 	);
 	port (
 		clk 			: in	std_logic;
-		res				: in	std_logic;
+		reset			: in	std_logic;
+		clk_icap		: in	std_logic;		-- clock signal for ICAP, max 100 MHz (double check with manual) 
 				
-		---- external clock ---- 
-		status_in		: in	std_logic_vector(31 downto 0);	
-		status_out		: out	std_logic_vector(31 downto 0);
+		icap_busy		: out	std_logic;		-- the ICAP is processing the data
+		icap_readback	: out	std_logic;		-- high during a readback
+		icap_partial_res: out	std_logic;		-- high during reconfiguration
 		
 		-- data in
 		write_put		: in	std_logic;
 		write_full		: out	std_logic;
 		write_data		: in	std_logic_vector(31 DOWNTO 0);
+		write_done		: in	std_logic;		-- high pulse/edge after all data was written
 		
 		-- data out
-		read_got		: in		std_logic;
-		read_full 		: out		std_logic;
-		read_data 		: out		std_logic_vector(31 DOWNTO 0)
+		read_got		: in	std_logic;
+		read_valid 		: out	std_logic;
+		read_data 		: out	std_logic_vector(31 DOWNTO 0)
 	);
-end icap_dini;
+end reconfig_icap_wrapper;
 
-architecture Behavioral of icap_dini is
-	signal reset					: std_logic;
-	signal icap_clk					: std_logic;
-	signal icap_clk_locked			: std_logic;
-	signal icap_clk_feedback		: std_logic;
+architecture Behavioral of reconfig_icap_wrapper is
+	signal reset_icap				: std_logic;
 	
-	signal status_write_done		: std_logic;
-	signal status_write_done_d		: std_logic;
-	signal status_write_done_flank	: std_logic;
-	signal status_write_done_icapclk: std_logic;
-
-	constant STATUS_PLACES_WRITE_DONE		: natural := 0;
-	constant STATUS_PLACES_RESET			: natural := 1;
-	constant STATUS_PLACES_PARTIAL_RESET	: natural := 2;
-	constant STATUS_PLACES_READBACK			: natural := 3;
-	constant STATUS_PLACES_ICAP_ERROR		: natural := 4;
-	constant STATUS_PLACES_FSM_IDLE			: natural := 5;
+	signal write_done_d				: std_logic;
+	signal write_done_edge			: std_logic;
+	signal write_done_icapclk		: std_logic;
 
 	signal in_data_valid			: std_logic;
 	constant STATE_BITS 			: positive := 2;
@@ -92,7 +80,7 @@ architecture Behavioral of icap_dini is
 	signal in_data_fill_state		: std_logic_vector(STATE_BITS -1 downto 0);
 	signal in_data_rden				: std_logic;
 	signal in_data_start			: std_logic;		-- high after enough data was written into the pci->icap fifo
-														--  or write done (status register)
+														-- or write done (status register)
 	signal icap_rden				: std_logic;		-- icap wants some yummy data
 	signal in_data					: std_logic_vector(31 downto 0);
 	
@@ -115,29 +103,25 @@ architecture Behavioral of icap_dini is
 	signal fsm_ready				: std_logic;
 	signal fsm_ready_d				: std_logic;
 begin
-	reset <= res or status_in(STATUS_PLACES_RESET) or not icap_clk_locked;
-	status_write_done <= status_in(STATUS_PLACES_WRITE_DONE);
-	status_write_done_d <= status_write_done when rising_edge(clk);
-	status_write_done_flank <= to_sl(status_write_done = '1' and status_write_done_d = '0');
+	write_done_d <= write_done when rising_edge(clk);
+	write_done_edge <= to_sl(write_done = '1' and write_done_d = '0');
 	
-	status_out <= (STATUS_PLACES_PARTIAL_RESET	=> fsm_status_clk(0),
-					STATUS_PLACES_READBACK		=> fsm_status_clk(1),
-					STATUS_PLACES_ICAP_ERROR	=> fsm_status_clk(2),
-					STATUS_PLACES_FSM_IDLE		=> fsm_status_clk(3),
-					others => '0');
+	icap_busy			<= not fsm_status_clk(3);
+	icap_readback		<= fsm_status_clk(1);
+	icap_partial_res	<= fsm_status_clk(0);
 					
 	fsm_ready <= fsm_status(3);
-	fsm_ready_d <= fsm_ready when rising_edge(icap_clk);
+	fsm_ready_d <= fsm_ready when rising_edge(clk_icap);
 
 	-- buffer some data before starting the icap, icap needs to be sync'ed before it can be paused
-	in_data_buffer_p : process (icap_clk) begin
-		if (rising_edge(icap_clk)) then
-			if (reset = '1') then
+	in_data_buffer_p : process (clk_icap) begin
+		if (rising_edge(clk_icap)) then
+			if (reset_icap = '1') then
 				in_data_start <= '0';
 			else
 				if fsm_ready = '1' and fsm_ready_d = '0' then	-- reset after icap is done
 					in_data_start <= '0';
-				elsif in_data_fill_state = state_almost_full or status_write_done_icapclk = '1' then	-- set when fifo almost full or write already done
+				elsif in_data_fill_state = state_almost_full or write_done_icapclk = '1' then	-- set when fifo almost full or write already done
 					in_data_start <= '1';
 				end if;
 			end if;
@@ -164,8 +148,8 @@ begin
 			full   			=> write_full,
 			estate_wr		=> open,
 
-			clk_rd 			=> icap_clk,
-			rst_rd 			=> reset,
+			clk_rd 			=> clk_icap,
+			rst_rd 			=> reset_icap,
 			got    			=> in_data_rden,
 			valid  			=> in_data_valid,
 			dout   			=> in_data,
@@ -182,8 +166,8 @@ begin
 			OUTPUT_REG		=> false
 		)
 		port map(
-			clk_wr 			=> icap_clk,
-			rst_wr 			=> reset,
+			clk_wr 			=> clk_icap,
+			rst_wr 			=> reset_icap,
 			put    			=> out_data_put,
 			din    			=> out_data,
 			full   			=> out_data_full,
@@ -191,13 +175,13 @@ begin
 			clk_rd 			=> clk,
 			rst_rd 			=> reset,
 			got    			=> read_got,
-			valid  			=> read_full,
+			valid  			=> read_valid,
 			dout   			=> read_data
 		);
 		
-	icap_fsm_inst: entity work.icap_fsm PORT MAP(
-		clk => icap_clk,
-		reset => reset,
+	icap_fsm_inst: entity poc.reconfig_icap_fsm PORT MAP(
+		clk => clk_icap,
+		reset => reset_icap,
 		icap_in => icap_data_config_r,
 		icap_out => icap_data_readback_r,
 		icap_csb => icap_csb_r,
@@ -212,8 +196,8 @@ begin
 	);
 	
 	-- icap
-	icap_reg_p : process (icap_clk) begin
-		if rising_edge(icap_clk) then
+	icap_reg_p : process (clk_icap) begin
+		if rising_edge(clk_icap) then
 			icap_data_readback_r <= icap_data_readback;
 			icap_csb <= icap_csb_r;
 			icap_rw <= icap_rw_r;
@@ -223,7 +207,7 @@ begin
 	
 	icap_inst : entity poc.xil_ICAP
 	port map (
-		clk			=> icap_clk,
+		clk			=> clk_icap,
 		disable		=> icap_csb,
 		busy		=> open,
 		data_in		=> icap_data_config,
@@ -231,52 +215,27 @@ begin
 		rd_wr		=> icap_rw
 	);
 	
-	-- icap clock generation
-   MMCME2_BASE_inst : MMCME2_BASE
-   generic map (
-      BANDWIDTH => "OPTIMIZED",  -- OPTIMIZED, HIGH, LOW
-      CLKIN1_PERIOD => CLKIN1_PERIOD,      -- Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
-      CLKOUT0_DIVIDE_F => CLKOUT0_DIVIDE_F
-   )
-   port map (
-      -- Clock Outputs: 1-bit (each) output: User configurable clock outputs
-      CLKOUT0 => icap_clk,   -- 1-bit output: CLKOUT0
-      CLKOUT0B => open,   -- 1-bit output: Inverted CLKOUT0
-      CLKOUT1 => open,     -- 1-bit output: CLKOUT1
-      CLKOUT1B => open,   -- 1-bit output: Inverted CLKOUT1
-      CLKOUT2 => open,     -- 1-bit output: CLKOUT2
-      CLKOUT2B => open,   -- 1-bit output: Inverted CLKOUT2
-      CLKOUT3 => open,     -- 1-bit output: CLKOUT3
-      CLKOUT3B => open,   -- 1-bit output: Inverted CLKOUT3
-      CLKOUT4 => open,     -- 1-bit output: CLKOUT4
-      CLKOUT5 => open,     -- 1-bit output: CLKOUT5
-      CLKOUT6 => open,     -- 1-bit output: CLKOUT6
-      -- Feedback Clocks: 1-bit (each) output: Clock feedback ports
-      CLKFBOUT => icap_clk_feedback, -- 1-bit output: Feedback clock
-      CLKFBOUTB => open,
-      LOCKED => icap_clk_locked,     -- 1-bit output: LOCK
-      CLKIN1 => clk,     -- 1-bit input: Input clock
-      -- Control Ports: 1-bit (each) input: PLL control ports
-      PWRDWN => '0',     -- 1-bit input: Power-down
-      RST => '0',           -- 1-bit input: Reset
-      -- Feedback Clocks: 1-bit (each) input: Clock feedback ports
-      CLKFBIN => icap_clk_feedback    -- 1-bit input: Feedback clock
-   );
-	
-	bit_sync : entity poc.sync_Strobe
+	strobe_sync : entity poc.sync_Strobe
 	port map (
 		clock1 => clk,
-		clock2 => icap_clk,
-		input(0) => status_write_done_flank,
-		output(0) => status_write_done_icapclk,
+		clock2 => clk_icap,
+		input(0) => write_done_edge,
+		output(0) => write_done_icapclk,
 		busy => open
+	);
+	
+	reset_sync : entity poc.sync_Bits
+	port map (
+		clock => clk_icap,
+		input(0) => reset,
+		output(0) => reset_icap
 	);
 	
 	fsm_status_sync : entity poc.sync_vector
 	generic map (
 		master_bits => 32
 	) port map (
-		clock1 => icap_clk,
+		clock1 => clk_icap,
 		clock2 => clk,
 		input => fsm_status,
 		output => fsm_status_clk,

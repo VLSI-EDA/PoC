@@ -39,7 +39,7 @@ library poc;
 use POC.utils.all;
 use POC.vectors.all;
 
-entity icap_fsm is
+entity reconfig_icap_fsm is
 	port  (
 		clk				: in	std_logic;
 		reset			: in	std_logic;						-- high-active reset
@@ -60,9 +60,9 @@ entity icap_fsm is
 		-- control structures
 		status			: out	std_logic_vector(31 downto 0)	-- status vector
 	);
-end icap_fsm;
+end reconfig_icap_fsm;
 
-architecture arch of icap_fsm is
+architecture arch of reconfig_icap_fsm is
 
 	type t_state is (ready, abort0, abort1, abort2, abort3, write, writing, pre_reg_read0, pre_reg_read1, pre_stream_read0, read, reading, post_read);
 	signal cur_state : t_state := ready;
@@ -87,18 +87,18 @@ architecture arch of icap_fsm is
 	CONSTANT cmd_reg_wcfg		: std_logic_vector(4 downto 0) := "00001";	-- write cfg data prior to write
 	CONSTANT reg_fdro		: std_logic_vector(4 downto 0) := "00011";	-- read cfg data register
 	
-	signal icap_enable			: boolean;
-	signal icap_read			: boolean;
+	signal icap_enable			: boolean := false;
+	signal icap_read			: boolean := false;
 	signal icap_in_r			: std_logic_vector(31 downto 0);
 	-- icap bit switching
 	signal in_data_swap			: std_logic_vector(31 downto 0);
 	signal icap_out_swap		: std_logic_vector(31 downto 0);
 	
 	-- icap status word signals
-	signal icap_error			: std_logic;
-	signal icap_sync			: std_logic;
-	signal icap_abort			: std_logic;
-	signal icap_status_valid	: std_logic;
+	signal icap_error			: std_logic := '0';
+	signal icap_sync			: std_logic := '0';
+	signal icap_abort			: std_logic := '0';
+	signal icap_status_valid	: std_logic := '0';
 	
 	signal readback_cnt			: unsigned(26 downto 0) := (others=>'0');
 	signal readback_cnt_en		: boolean;
@@ -305,19 +305,8 @@ begin
 		end if;
 	end process;
 	
-	bit_swap_in : entity work.bitSwapper 
-	port map(
-		en	=> '1',
-		i	=> in_data,
-		o	=> in_data_swap
-	);  
-
-	bit_swap_out : entity work.bitSwapper 
-	port map(
-		en	=> '1',
-		i	=> icap_out,
-		o	=> icap_out_swap
-	);  
+	in_data_swap <= bit_swap(in_data, 32, 8);
+	icap_out_swap <= bit_swap(icap_out, 32, 8);
 
 end arch;
 
