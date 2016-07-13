@@ -5,6 +5,7 @@
 -- Authors:					Thomas B. Preusser
 --									Martin Zabel
 --									Patrick Lehmann
+--									Paul Genssler										
 --
 -- Package:					Common functions and types
 --
