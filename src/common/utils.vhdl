@@ -5,6 +5,7 @@
 -- Authors:					Thomas B. Preusser
 --									Martin Zabel
 --									Patrick Lehmann
+--									Paul Genssler										
 --
 -- Package:					Common functions and types
 --
@@ -251,6 +252,9 @@ package utils is
 
 	-- Swap sub vectors in vector (endian reversal)
 	function swap(slv : STD_LOGIC_VECTOR; Size : POSITIVE) return STD_LOGIC_VECTOR;
+
+	-- Swap the bits in a chunk
+	function bit_swap(slv : STD_LOGIC_VECTOR; Chunksize : POSITIVE) return STD_LOGIC_VECTOR;
 
 	-- generate bit masks
 	function genmask_high(Bits : NATURAL; MaskLength : POSITIVE) return STD_LOGIC_VECTOR;
@@ -849,6 +853,24 @@ package body utils is
 		end loop;
 		return Result;
 	end function;
+
+
+	-- Swap the bits in a chunk
+	-- ==========================================================================
+	function bit_swap(slv : STD_LOGIC_VECTOR; Chunksize : POSITIVE) return STD_LOGIC_VECTOR is
+		constant SegmentCount	: NATURAL	:= slv'length / Chunksize;
+		variable FromH				: NATURAL;
+		variable FromL				: NATURAL;
+		variable Result			: STD_LOGIC_VECTOR(slv'length - 1 downto 0);
+	begin
+		for i in 0 to SegmentCount - 1 loop
+			FromH		:= ((i + 1) * Chunksize) - 1;
+			FromL		:= i * Chunksize;
+			Result(FromH downto FromL)	:= reverse(slv(FromH downto FromL));
+		end loop;
+		return Result;
+	end function;
+
 
 	-- generate bit masks
 	-- ==========================================================================

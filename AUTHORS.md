@@ -2,6 +2,7 @@
 
 Contributor       | Contact E-Mail
 ------------------|------------------------------------------------------------
+Genßler, Paul     | paul.genssler@tu-dresden.de
 Köhler, Steffen   | steffen.koehler@tu-dresden.de
 Lehmann, Patrick  | patrick.lehmann@tu-dresden.de; paebbels@gmail.com
 Preußer, Thomas B.| thomas.preusser@tu-dresden.de; thomas.preusser@utexas.edu
