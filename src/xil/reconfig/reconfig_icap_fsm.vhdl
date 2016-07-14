@@ -305,8 +305,8 @@ begin
 		end if;
 	end process;
 	
-	in_data_swap <= bit_swap(in_data, 32, 8);
-	icap_out_swap <= bit_swap(icap_out, 32, 8);
+	in_data_swap <= bit_swap(in_data, 8);
+	icap_out_swap <= bit_swap(icap_out, 8);
 
 end arch;
 
