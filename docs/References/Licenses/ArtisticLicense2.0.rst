@@ -26,42 +26,42 @@ Definitions
 ===========
 
 **"Copyright Holder"** means the individual(s) or organization(s) named in the 
-copyright notice for the entire Package. 
+copyright notice for the entire Package.  
 
 **"Contributor"** means any party that has contributed code or other material 
-to the Package, in accordance with the Copyright Holder's procedures. 
+to the Package, in accordance with the Copyright Holder's procedures.  
 
 **"You"** and **"your"** means any person who would like to copy, distribute, 
-or modify the Package. 
+or modify the Package.  
 
 **"Package"** means the collection of files distributed by the Copyright 
 Holder, and derivatives of that collection and/or of those files. A given 
-Package may consist of either the Standard Version, or a Modified Version. 
+Package may consist of either the Standard Version, or a Modified Version.  
 
 **"Distribute"** means providing a copy of the Package or making it accessible 
 to anyone else, or in the case of a company or organization, to others outside 
-of your company or organization. 
+of your company or organization.  
 
 **"Distributor Fee"** means any fee that you charge for Distributing this 
 Package or providing support for this Package to another party. It does not 
-mean licensing fees. 
+mean licensing fees.  
 
 **"Standard Version"** refers to the Package if it has not been modified, or 
-has been modified only in ways explicitly requested by the Copyright Holder. 
+has been modified only in ways explicitly requested by the Copyright Holder.  
 
 **"Modified Version"** means the Package, if it has been changed, and such 
-changes were not explicitly requested by the Copyright Holder. 
+changes were not explicitly requested by the Copyright Holder.  
 
 **"Original License"** means this Artistic License as Distributed with the 
 Standard Version of the Package, in its current version or as it may be 
-modified by The Perl Foundation in the future. 
+modified by The Perl Foundation in the future.  
 
 **"Source"** form means the source code, documentation source, and 
-configuration files for the Package. 
+configuration files for the Package.  
 
 **"Compiled"** form means the compiled bytecode, object code, binary, or any 
 other form resulting from mechanical transformation or translation of the 
-Source form. 
+Source form.  
 
 Permission for Use and Modification Without Distribution
 ========================================================
@@ -175,7 +175,7 @@ any party alleging that the Package constitutes direct or contributory patent
 infringement, then this Artistic License to you shall terminate on the date 
 that such litigation is filed.
 
-(14) Disclaimer of Warranty: 
+(14) Disclaimer of Warranty:  
 
 **THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS "AS IS' AND 
 WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES. THE IMPLIED WARRANTIES OF 

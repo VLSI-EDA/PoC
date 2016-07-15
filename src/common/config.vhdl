@@ -425,7 +425,7 @@ package config is
 		DEVICE_ZYNQ7, DEVICE_ZYNQ_ULTRA_PLUS,																-- Xilinx.Zynq
 		DEVICE_ARTIX7,																											-- Xilinx.Artix
 		DEVICE_KINTEX7, DEVICE_KINTEX_ULTRA, DEVICE_KINTEX_ULTRA_PLUS,			-- Xilinx.Kintex
-		DEVICE_VIRTEX5,	DEVICE_VIRTEX6, DEVICE_VIRTEX7,											-- Xilinx.Virtex
+		DEVICE_VIRTEX4, DEVICE_VIRTEX5,	DEVICE_VIRTEX6, DEVICE_VIRTEX7,			-- Xilinx.Virtex
 			DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS											--
 	);
 
@@ -797,6 +797,7 @@ package body config is
 					when "KU"	 =>		return DEVICE_KINTEX_ULTRA;
 					when "3S"	 =>		return DEVICE_SPARTAN3;
 					when "6S"	 =>		return DEVICE_SPARTAN6;
+					when "4V"	 =>		return DEVICE_VIRTEX4;
 					when "5V"	 =>		return DEVICE_VIRTEX5;
 					when "6V"	 =>		return DEVICE_VIRTEX6;
 					when "7V"	 =>		return DEVICE_VIRTEX7;
@@ -954,6 +955,9 @@ package body config is
 				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
 				else	report "Unknown Virtex-5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
+		
+		  when DEVICE_VIRTEX4 =>
+		    report "Unkown Virtex 4" severity failure;
 
 			when DEVICE_VIRTEX5 =>
 				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
@@ -1025,7 +1029,7 @@ package body config is
 
 			when DEVICE_SPARTAN3 =>																						return 4;
 			when DEVICE_SPARTAN6 =>																						return 6;
-			when DEVICE_VIRTEX5 | DEVICE_VIRTEX6 =>														return 6;
+			when DEVICE_VIRTEX4 | DEVICE_VIRTEX5 | DEVICE_VIRTEX6 =>					return 6;
 
 			when others => report "LUT fan-in is unknown for the given device." severity failure;
 									-- return statement is explicitly missing otherwise XST won't stop
@@ -1056,6 +1060,9 @@ package body config is
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTPE1;
 					when others =>								report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
+
+			when DEVICE_VIRTEX4 =>
+					report "Unknown Virtex-4" severity failure;
 
 			when DEVICE_VIRTEX5 =>
 				case DEV_SUB is

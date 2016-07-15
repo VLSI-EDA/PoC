@@ -42,7 +42,7 @@ def log2ceil(arg):
 	while arg > tmp:
 		tmp = tmp * 2
 		log = log + 1
-
+		
 	return log
 
 def log2ceilnz(arg):

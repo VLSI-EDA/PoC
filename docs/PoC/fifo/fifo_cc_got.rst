@@ -27,7 +27,7 @@ comparator (subtractor) in their path.
 .. rubric:: Examples:
 
 * FSTATE_RD_BITS = 1:
- 
+  
   +-----------+----------------------+
   | fstate_rd | filled (at least)    |
   +===========+======================+
@@ -62,7 +62,7 @@ comparator (subtractor) in their path.
 Source file: `fifo/fifo_cc_got.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl>`_
 
 .. seealso::
- 
+   
    :doc:`PoC.fifo.dc_got </PoC/fifo/fifo_dc_got>`
      For a FIFO with dependent clocks.
    :doc:`PoC.fifo.ic_got </PoC/fifo/fifo_ic_got>`
@@ -70,4 +70,4 @@ Source file: `fifo/fifo_cc_got.vhdl <https://github.com/VLSI-EDA/PoC/blob/master
    :doc:`PoC.fifo.glue </PoC/fifo/fifo_glue>`
      For a minimal FIFO / pipeline decoupling.
 
- 
+	 

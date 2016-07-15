@@ -18,4 +18,4 @@ value is the measured frequency in Hz.
 Source file: `misc/misc_FrequencyMeasurement.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_FrequencyMeasurement.vhdl>`_
 
 
- 
+	 

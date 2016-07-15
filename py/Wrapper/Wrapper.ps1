@@ -1,12 +1,12 @@
 ﻿# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-#
+# 
 # ==============================================================================
 #	Authors:						Patrick Lehmann
-#
+# 
 #	PowerShell Script:	Wrapper Script to execute a given Python script
-#
+# 
 # Description:
 # ------------------------------------
 #	This is a bash script (callable) which:
@@ -17,13 +17,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-#
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
+# 
 #   http://www.apache.org/licenses/LICENSE-2.0
-#
+# 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -127,6 +127,17 @@ $PyWrapper_LoadEnv =		@{
 				"PostHookFile" =	"Mentor.QuestaSim.post.ps1"
 			}
 		}};
+	"PowerShell" =				@{
+		"PreHookFile" =			"";
+		"PostHookFile" =		"";
+		"Tools" =						@{
+			"Sphinx" =				@{
+				"Load" =				$false;
+				"Commands" =		@("ps");
+				"PSModule" =			"PowerShell.psm1";
+				"PreHookFile" =		"PowerShell.pre.ps1";
+				"PostHookFile" =	"PowerShell.post.ps1"}
+		}};
 	"Sphinx" =						@{
 		"PreHookFile" =			"";
 		"PostHookFile" =		"";
@@ -225,12 +236,12 @@ foreach ($VendorName in $PyWrapper_LoadEnv.Keys)
 			$VendorPreHookFile = "$PoC_RootDir\$PoC_HookDirectory\$($PyWrapper_LoadEnv[$VendorName]['PreHookFile'])"
 			if (Test-Path $VendorPreHookFile -PathType Leaf)
 			{	. ($VendorPreHookFile)	}
-
+			
 			# if exists, source the tool pre-hook file
 			$ToolPreHookFile = "$PoC_RootDir\$PoC_HookDirectory\$($PyWrapper_LoadEnv[$VendorName]['Tools'][$ToolName]['PreHookFile'])"
 			if (Test-Path $ToolPreHookFile -PathType Leaf)
 			{	. ($ToolPreHookFile)		}
-
+			
 			$ModuleFile = "$PoC_RootDir\$PoC_WrapperDirectory\$($PyWrapper_LoadEnv[$VendorName]['Tools'][$ToolName]['PSModule'])"
 			if (Test-Path $ModuleFile -PathType Leaf)
 			{	$ModuleName = (Get-Item $ModuleFile).BaseName
@@ -242,7 +253,7 @@ foreach ($VendorName in $PyWrapper_LoadEnv.Keys)
 				# invoke Open-Environment hook
 				$PoC_ExitCode = Open-Environment $Python_Interpreter $Python_Parameters $PoC_FrontEnd
 			}
-
+			
 			$breakIt = $true
 			break
 		}
@@ -277,12 +288,12 @@ foreach ($VendorName in $PyWrapper_LoadEnv.Keys)
 			$ToolPostHookFile = "$PoC_RootDir\$PoC_HookDirectory\$($PyWrapper_LoadEnv[$VendorName]['Tools'][$ToolName]['PostHookFile'])"
 			if (Test-Path $ToolPostHookFile -PathType Leaf)
 			{	. ($ToolPostHookFile)		}
-
+			
 			# if exists, source the vendor pre-hook file
 			$VendorPostHookFile = "$PoC_RootDir\$PoC_HookDirectory\$($PyWrapper_LoadEnv[$VendorName]['PostHookFile'])"
 			if (Test-Path $VendorPostHookFile -PathType Leaf)
 			{	. ($VendorPostHookFile)	}
-
+			
 			$ModuleFile = "$PoC_RootDir\$PoC_WrapperDirectory\$($PyWrapper_LoadEnv[$VendorName]['Tools'][$ToolName]['PSModule'])"
 			if (Test-Path $ModuleFile -PathType Leaf)
 			{	$ModuleName = (Get-Item $ModuleFile).BaseName

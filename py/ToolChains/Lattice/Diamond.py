@@ -50,7 +50,7 @@ from Base.Configuration            import Configuration as BaseConfiguration, Co
 from Base.Exceptions              import PlatformNotSupportedException
 from Base.Executable              import Executable, CommandLineArgumentList, ExecutableArgument, ShortTupleArgument
 from Base.Logging                  import Severity, LogEntry
-from Base.Project                  import File, FileTypes
+from Base.Project                  import File, FileTypes, VHDLVersion
 from ToolChains.Lattice.Lattice    import LatticeException
 
 
@@ -241,6 +241,8 @@ class SynthesisArgumentFile(File):
 		self._package =       None
 		self._topLevel =      None
 		self._logfile =       None
+		self._vhdlVersion =		VHDLVersion.Any
+		self._hdlParams =			[]
 
 	@property
 	def Architecture(self):
@@ -284,6 +286,17 @@ class SynthesisArgumentFile(File):
 	def LogFile(self, value):
 		self._logfile = value
 
+	@property
+	def VHDLVersion(self):
+		return self._vhdlVersion
+	@VHDLVersion.setter
+	def VHDLVersion(self, value):
+		self._vhdlVersion = value
+
+	@property
+	def HDLParams(self):
+		return self._hdlParams
+
 	def Write(self, project):
 		if (self._file is None):    raise DiamondException("No file path for SynthesisArgumentFile provided.")
 
@@ -298,8 +311,13 @@ class SynthesisArgumentFile(File):
 		buffer += "-t {0}\n".format(self._package)
 		if (self._topLevel is None):      raise DiamondException("Argument 'TopLevel' (-top) is not set.")
 		buffer += "-top {0}\n".format(self._topLevel)
+		if (self._vhdlVersion is VHDLVersion.VHDL2008):
+			buffer += "-vh2008\n"
 		if (self._logfile is not None):
 			buffer += "-logfile {0}\n".format(self._logfile)
+		if (len(self._hdlParams) > 0):
+			for keyValuePair in self._hdlParams:
+				buffer += "-hdl_param {Key} {Value}\n".format(Key=keyValuePair[0].strip(), Value=keyValuePair[1].strip())
 
 		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
 			buffer += "-lib {library}\n-vhd {file}\n".format(file=file.Path.as_posix(), library=file.LibraryName)

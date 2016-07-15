@@ -69,7 +69,7 @@ class Configuration(BaseConfiguration):
 class Make(Executable):
 	def __init__(self, platform, logger=None):
 		if (platform == "Linux"):      executablePath = "/usr/bin/make"
-		else:                          raise PlatformNotSupportedException(self._platform)
+		else:                          raise PlatformNotSupportedException(platform)
 		super().__init__(platform, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath

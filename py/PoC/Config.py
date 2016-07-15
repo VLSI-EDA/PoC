@@ -65,7 +65,7 @@ class Vendors(BaseEnum):
 
 	def __str__(self):
 		return self.name
-
+	
 	def __repr__(self):
 		return str(self).lower()
 
@@ -159,7 +159,7 @@ class Devices(BaseEnum):
 	# Xilinx.Zynq devices
 	Zynq7000 =                350
 
-
+		
 class SubTypes(BaseEnum):
 	Unknown =    None
 	Generic =    1
@@ -195,20 +195,20 @@ class SubTypes(BaseEnum):
 	def Groups(self):
 		return self.value
 
-
+		
 @unique
 class Packages(BaseEnum):
 	Unknown = 0
 	Generic = 1
-
+	
 	TQG =     10
-
+	
 	CLG =     20
 	CPG =     21
 	CSG =     22
 
 	CABGA =   25
-
+	
 	FBG =     30
 	FF =      31
 	FFG =     32
@@ -242,12 +242,12 @@ class Device:
 		self.__package =      Packages.Unknown
 		self.__pinCount =     0
 		self.__deviceString = deviceString
-
+		
 		if (not isinstance(deviceString, str)):
 			raise ValueError("Parameter 'deviceString' is not of type str.")
 		if ((deviceString is None) or (deviceString == "")):
 			raise ValueError("Parameter 'deviceString' is empty.")
-
+		
 		# vendor = GENERIC
 		# ==========================================================================
 		if   (deviceString[0:2].lower() == "ge"):   self._DecodeGeneric()									# ge - Generic FPGA device
@@ -414,7 +414,7 @@ class Device:
 			return "{0!s}{1!s}{2!s}-{3!s}F".format(self.__family.value, self.__generation, self.__subtype, self.__number)
 		else:
 			raise NotImplementedError("Device.ShortName() not implemented for vendor {0!s}".format(self.__vendor))
-
+	
 	# @CachedReadOnlyProperty
 	@property
 	def FullName(self):
@@ -450,7 +450,7 @@ class Device:
 			return str(self.__family)
 		else:
 			return str(self.__family) + str(self.__generation)
-
+	
 	# @CachedReadOnlyProperty
 	@property
 	def Series(self):
@@ -466,7 +466,7 @@ class Device:
 				return "{0!s}-{1}".format(self.__family, self.__generation)
 		elif self.__vendor is Vendors.Lattice:
 			return "{0!s}{1!s}".format(self.__device, self.__subtype)
-
+	
 	def GetVariables(self):
 		result = {
 			"DeviceShortName":    self.ShortName,
@@ -481,7 +481,7 @@ class Device:
 			"DevicePinCount":     self.PinCount
 		}
 		return result
-
+	
 	def __str__(self):
 		return self.FullName
 
@@ -523,15 +523,15 @@ class Board:
 	def Name(self):      return self.__boardName
 	@property
 	def Device(self):    return self.__device
-
+	
 	def GetVariables(self):
 		result = {
 			"BoardName" : self.__boardName
 		}
 		return result
-
+	
 	def __str__(self):
 		return self.__boardName
-
+	
 	def __repr__(self):
 		return str(self).lower()

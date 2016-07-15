@@ -75,7 +75,7 @@ class Token:
 	# @NextToken.setter
 	# def NextToken(self, value):
 	# 	self._nextToken = value
-
+		
 	@property
 	def Length(self):
 		return len(self)
@@ -205,14 +205,14 @@ class Tokenizer:
 		for char in iterable:
 			absolute +=   1
 			column +=     1
-
+			
 			if (tokenKind is cls.TokenKind.SpaceChars):
 				if (char in whiteSpaceCharacters):
 					buffer += char
 				else:
 					previousToken = SpaceToken(previousToken, buffer, start, SourceCodePosition(row, column, absolute))
 					yield previousToken
-
+					
 					start =  SourceCodePosition(row, column, absolute)
 					buffer = char
 					if (char in alphaCharacters):
@@ -271,7 +271,7 @@ class Tokenizer:
 					yield previousToken
 			else:
 				raise ParserException("Unknown state.")
-
+			
 			if (char == "\n"):
 				column =  0
 				row +=    1

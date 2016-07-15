@@ -10,11 +10,11 @@
 -- -------------------------------------
 -- This module wraps a Virtex-6 System Monitor primitive to report if preconfigured
 -- temperature values are overrun.
---
+-- 
 -- .. rubric:: Temperature Curve
---
+-- 
 -- .. code-block:: None
---
+--    
 --                    |                      /-----\
 --    Temp_ov   on=80 | - - - - - - /-------/       \
 --                    |            /        |        \

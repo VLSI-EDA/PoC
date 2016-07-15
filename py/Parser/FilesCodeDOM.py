@@ -325,11 +325,11 @@ class VHDLStatement(Statement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("VHDLParser: Expected end of line or comment")
-
+		
 		# construct result
 		result = cls(library, pathExpression, commentText)
 		raise MatchingParserResult(result)
-
+	
 	def __str__(self, indent=0):
 		if (self._commentText != ""):
 			return "{0}VHDL {1} {2!s} # {3}".format(("  " * indent), self._libraryName, self._pathExpression, self._commentText)
@@ -342,11 +342,11 @@ class VerilogStatement(Statement):
 		super().__init__()
 		self._pathExpression =  pathExpression
 		self._commentText =     commentText
-
+	
 	@property
 	def PathExpression(self):
 		return self._pathExpression
-
+	
 	@classmethod
 	def GetParser(cls):
 		# match for optional whitespace
@@ -388,11 +388,11 @@ class VerilogStatement(Statement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("VerilogParser: Expected end of line or comment")
-
+		
 		# construct result
 		result = cls(pathExpression, commentText)
 		raise MatchingParserResult(result)
-
+		
 	def __str__(self, indent=0):
 		return "{0}Verilog {1!s}".format("  " * indent, self._pathExpression)
 
@@ -402,11 +402,11 @@ class CocotbStatement(Statement):
 		super().__init__()
 		self._pathExpression =  pathExpression
 		self._commentText =     commentText
-
+	
 	@property
 	def PathExpression(self):
 		return self._pathExpression
-
+		
 	@classmethod
 	def GetParser(cls):
 		# match for optional whitespace
@@ -448,11 +448,11 @@ class CocotbStatement(Statement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("CocotbParser: Expected end of line or comment")
-
+		
 		# construct result
 		result = cls(pathExpression, commentText)
 		raise MatchingParserResult(result)
-
+		
 	def __str__(self, indent=0):
 		return "{0}Cocotb {1!s}".format("  " * indent, self._pathExpression)
 
@@ -706,11 +706,11 @@ class ReportStatement(Statement):
 		super().__init__()
 		self._message =     message
 		self._commentText = commentText
-
+	
 	@property
 	def Message(self):
 		return self._message
-
+	
 	@classmethod
 	def GetParser(cls):
 		# match for optional whitespace
@@ -751,11 +751,11 @@ class ReportStatement(Statement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("ReportParser: Expected end of line or comment")
-
+		
 		# construct result
 		result = cls(message, commentText)
 		raise MatchingParserResult(result)
-
+		
 	def __str__(self, indent=0):
 		return "{0}Report \"{1}\"".format("  " * indent, self._message)
 
@@ -766,15 +766,15 @@ class LibraryStatement(Statement):
 		self._library =         library
 		self._pathExpression =  pathExpression
 		self._commentText =     commentText
-
+	
 	@property
 	def Library(self):
 		return self._library
-
+		
 	@property
 	def PathExpression(self):
 		return self._pathExpression
-
+	
 	@classmethod
 	def GetParser(cls):
 		# match for optional whitespace
@@ -830,11 +830,11 @@ class LibraryStatement(Statement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("LibraryParser: Expected end of line or comment")
-
+		
 		# construct result
 		result = cls(library, pathExpression, commentText)
 		raise MatchingParserResult(result)
-
+	
 	def __str__(self, indent=0):
 		return "{0}Library {1} {2!s}".format("  " * indent, self._library, self._pathExpression)
 
@@ -844,11 +844,11 @@ class IncludeStatement(Statement):
 		super().__init__()
 		self._pathExpression =  pathExpression
 		self._commentText =     commentText
-
+		
 	@property
 	def PathExpression(self):
 		return self._pathExpression
-
+	
 	@classmethod
 	def GetParser(cls):
 		# match for optional whitespace
@@ -890,11 +890,11 @@ class IncludeStatement(Statement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("IncludeParser: Expected end of line or comment")
-
+		
 		# construct result
 		result = cls(pathExpression, commentText)
 		raise MatchingParserResult(result)
-
+	
 	def __str__(self, indent=0):
 		return "{0}Include {1!s}".format("  " * indent, self._pathExpression)
 
@@ -919,12 +919,12 @@ class IfStatement(ConditionalBlockStatement):
 		# match for whitespace
 		token = yield
 		if (not isinstance(token, SpaceToken)):     raise MismatchingParserResult()
-
+		
 		# match for expression
 		# ==========================================================================
 		parser = IfThenElseExpressions.GetParser()
 		parser.send(None)
-
+		
 		expressionRoot = None
 		try:
 			while True:
@@ -932,7 +932,7 @@ class IfStatement(ConditionalBlockStatement):
 				parser.send(token)
 		except MatchingParserResult as ex:
 			expressionRoot = ex.value
-
+		
 		# match for whitespace
 		token = yield
 		if (not isinstance(token, SpaceToken)):     raise MismatchingParserResult()
@@ -956,14 +956,14 @@ class IfStatement(ConditionalBlockStatement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("IfStatementParser: Expected end of line or comment")
-
+		
 		# match for inner statements
 		# ==========================================================================
 		# construct result
 		result = cls(expressionRoot, commentText)
 		parser = cls.GetRepeatParser(result.AddStatement, BlockedStatement.GetParser)
 		parser.send(None)
-
+		
 		try:
 			while True:
 				token = yield
@@ -996,12 +996,12 @@ class ElseIfStatement(ConditionalBlockStatement):
 		# match for whitespace
 		token = yield
 		if (not isinstance(token, SpaceToken)):     raise MismatchingParserResult()
-
+		
 		# match for expression
 		# ==========================================================================
 		parser = IfThenElseExpressions.GetParser()
 		parser.send(None)
-
+		
 		expressionRoot = None
 		try:
 			while True:
@@ -1009,7 +1009,7 @@ class ElseIfStatement(ConditionalBlockStatement):
 				parser.send(token)
 		except MatchingParserResult as ex:
 			expressionRoot = ex.value
-
+		
 		# match for whitespace
 		token = yield
 		if (not isinstance(token, SpaceToken)):     raise MismatchingParserResult()
@@ -1033,14 +1033,14 @@ class ElseIfStatement(ConditionalBlockStatement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("ElseIfStatementParser: Expected end of line or comment")
-
+		
 		# match for inner statements
 		# ==========================================================================
 		# construct result
 		result = cls(expressionRoot, commentText)
 		parser = cls.GetRepeatParser(result.AddStatement, BlockedStatement.GetParser)
 		parser.send(None)
-
+		
 		try:
 			while True:
 				token = yield
@@ -1086,14 +1086,14 @@ class ElseStatement(BlockStatement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("ElseStatementParser: Expected end of line or comment")
-
+		
 		# match for inner statements
 		# ==========================================================================
 		# construct result
 		result = cls(commentText)
 		parser = cls.GetRepeatParser(result.AddStatement, BlockedStatement.GetParser)
 		parser.send(None)
-
+		
 		try:
 			while True:
 				token = yield
@@ -1132,7 +1132,7 @@ class IfElseIfElseStatement(Statement):
 	def GetParser(cls):
 		# construct result
 		result = cls()
-
+	
 		# match for IF clause
 		# ==========================================================================
 		parser = IfStatement.GetParser()
@@ -1143,14 +1143,14 @@ class IfElseIfElseStatement(Statement):
 				parser.send(token)
 		except MatchingParserResult as ex:
 			result.IfClause = ex.value
-
+		
 		# match for multiple ELSEIF clauses
 		# ==========================================================================
 		try:
 			while True:
 				parser = ElseIfStatement.GetParser()
 				parser.send(None)
-
+				
 				try:
 					parser.send(token)
 					while True:
@@ -1168,7 +1168,7 @@ class IfElseIfElseStatement(Statement):
 		# match for inner statements
 		parser = ElseStatement.GetParser()
 		parser.send(None)
-
+			
 		try:
 			parser.send(token)
 			while True:
@@ -1209,9 +1209,9 @@ class IfElseIfElseStatement(Statement):
 				# commentText += token.Value
 		else:
 			raise MismatchingParserResult("IfElseIfElseStatementParser: Expected end of line or comment")
-
+		
 		raise MatchingParserResult(result)
-
+	
 	def __str__(self, indent=0):
 		_indent = "  " * indent
 		buffer = _indent + "IfElseIfElseStatement\n"
@@ -1223,7 +1223,7 @@ class IfElseIfElseStatement(Statement):
 			buffer += "\n" + self.ElseClause.__str__(indent + 1)
 		return buffer
 
-
+		
 class Document(BlockStatement):
 	@classmethod
 	def GetParser(cls):
@@ -1241,7 +1241,7 @@ class Document(BlockStatement):
 				parser.send(token)
 		except MatchingParserResult:
 			raise MatchingParserResult(result)
-
+	
 	def __str__(self, indent=0):
 		buffer = "  " * indent + "Document"
 		for stmt in self._statements:

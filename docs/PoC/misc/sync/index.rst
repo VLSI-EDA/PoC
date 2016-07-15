@@ -50,7 +50,7 @@ Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
   but in the new clock domain. 
 
 .. seealso::
- 
+   
    :doc:`PoC.fifo.ic_got </PoC/fifo/fifo_ic_got>`
       For a cross-clock capable FIFO.
 
@@ -64,7 +64,7 @@ Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
 
 .. toctree::
    :hidden:
- 
+   
    sync_Bits
    sync_Command
    sync_Reset

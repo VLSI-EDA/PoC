@@ -56,7 +56,7 @@ class ExecutableException(BaseException):
 
 class CommandLineArgument(type):
 	_value = None
-
+	
 	# def __new__(mcls, name, bases, nmspc):
 	# 	print("CommandLineArgument.new: %s - %s" % (name, nmspc))
 	# 	return super(CommandLineArgument, mcls).__new__(mcls, name, bases, nmspc)
@@ -205,12 +205,12 @@ class ValuedFlagArgument(NamedCommandLineArgument):
 		else:
 			try:                        self._value = str(value)
 			except Exception as ex:      raise ValueError("Parameter 'value' cannot be converted to type str.") from ex
-
+	
 	def __str__(self):
 		if (self._value is None):      return ""
 		elif self._value:              return self._pattern.format(self._name, self._value)
 		else:                          return ""
-
+	
 	def AsArgument(self):
 		if (self._value is None):      return None
 		elif self._value:              return self._pattern.format(self._name, self._value)
@@ -260,12 +260,12 @@ class TupleArgument(NamedCommandLineArgument):
 		else:
 			try:                        self._value = str(value)
 			except TypeError as ex:      raise ValueError("Parameter 'value' cannot be converted to type str.") from ex
-
+	
 	def __str__(self):
 		if (self._value is None):      return ""
 		elif self._value:              return self._switchPattern.format(self._name) + " \"" + self._valuePattern.format(self._value) + "\""
 		else:                          return ""
-
+	
 	def AsArgument(self):
 		if (self._value is None):      return None
 		elif self._value:              return [self._switchPattern.format(self._name), self._valuePattern.format(self._value)]
@@ -283,15 +283,15 @@ class CommandLineArgumentList(list):
 	def __getitem__(self, key):
 		i = self.index(key)
 		return super().__getitem__(i).Value
-
+	
 	def __setitem__(self, key, value):
 		i = self.index(key)
 		super().__getitem__(i).Value = value
-
+	
 	def __delitem__(self, key):
 		i = self.index(key)
 		super().__getitem__(i).Value = None
-
+	
 	def ToArgumentList(self):
 		result = []
 		for item in self:
@@ -311,11 +311,11 @@ class Executable(ILogable):
 
 		self._platform =  platform
 		self._process =    None
-
+		
 		if isinstance(executablePath, str):             executablePath = Path(executablePath)
 		elif (not isinstance(executablePath, Path)):    raise ValueError("Parameter 'executablePath' is not of type str or Path.")
 		if (not executablePath.exists()):               raise CommonException("Executable '{0!s}' cannot be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
-
+		
 		# prepend the executable
 		self._executablePath =    executablePath
 		self._iterator =          None

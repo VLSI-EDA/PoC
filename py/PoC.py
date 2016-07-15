@@ -362,10 +362,10 @@ class PoC(ILogable, ArgParseMixin):
 
 		self._LogVerbose("starting manual configuration...")
 		print("Explanation of abbreviations:")
-		print("  y - yes")
-		print("  n - no")
-		print("  p - pass (jump to next question)")
-		print("Upper case means default value")
+		print("  {YELLOW}Y{NOCOLOR} - yes      {YELLOW}P{NOCOLOR}        - pass (jump to next question)".format(**Init.Foreground))
+		print("  {YELLOW}N{NOCOLOR} - no       {YELLOW}Ctrl + C{NOCOLOR} - abort (nothing changes are saved)".format(**Init.Foreground))
+		print("Upper case or value in '[...]' means default value")
+		print("-"*80)
 		print()
 
 		# configure each vendor or tool of a tool chain
@@ -520,7 +520,7 @@ class PoC(ILogable, ArgParseMixin):
 	# def HandleAddProject(self, args):
 	# 	self.PrintHeadline()
 	# 	self.__PrepareForConfiguration()
-
+	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-project" command
 	# ----------------------------------------------------------------------------
@@ -542,7 +542,7 @@ class PoC(ILogable, ArgParseMixin):
 				self._LogNormal("  {id: <10}{name}".format(id=project.ID, name=project.Name))
 		else:
 			self._LogNormal("  {RED}No registered projects found.{NOCOLOR}".format(**Init.Foreground))
-
+	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-project" command
 	# ----------------------------------------------------------------------------
@@ -552,7 +552,7 @@ class PoC(ILogable, ArgParseMixin):
 	# def HandleRemoveProject(self, args):
 	# 	self.PrintHeadline()
 	# 	self.__PrepareForConfiguration()
-
+		
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "add-ipcore" command
 	# ----------------------------------------------------------------------------
@@ -561,7 +561,7 @@ class PoC(ILogable, ArgParseMixin):
 	# def HandleAddIPCore(self, args):
 	# 	self.PrintHeadline()
 	# 	self.__PrepareForConfiguration()
-
+	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-ipcore" command
 	# ----------------------------------------------------------------------------
@@ -576,7 +576,7 @@ class PoC(ILogable, ArgParseMixin):
 	# 	self._LogNormal("Registered ipcores in PoC:")
 	# 	for ipcoreName in ipcore.GetIPCoreNames():
 	# 		print("  {0}".format(ipcoreName))
-
+	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-ipcore" command
 	# ----------------------------------------------------------------------------
@@ -595,7 +595,7 @@ class PoC(ILogable, ArgParseMixin):
 	# def HandleAddTestbench(self, args):
 	# 	self.PrintHeadline()
 	# 	self.__PrepareForConfiguration()
-
+	
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-testbench" command
 	# ----------------------------------------------------------------------------
@@ -744,7 +744,7 @@ class PoC(ILogable, ArgParseMixin):
 				print(str(testbench))
 
 		Exit.exit()
-
+	
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "asim" command
@@ -768,7 +768,7 @@ class PoC(ILogable, ArgParseMixin):
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
-
+	
 
 # ----------------------------------------------------------------------------
 	# create the sub-parser for the "ghdl" command
@@ -809,7 +809,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 		self._CheckISEEnvironment()
-
+		
 		fqnList =      self._ExtractFQNs(args.FQN)
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 
@@ -840,7 +840,7 @@ class PoC(ILogable, ArgParseMixin):
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
-
+	
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "xsim" command
@@ -856,7 +856,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__PrepareForSimulation()
 
 		self._CheckVivadoEnvironment()
-
+		
 		fqnList =      self._ExtractFQNs(args.FQN)
 		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
 		# FIXME: VHDL-2008 is broken in Vivado 2016.1 -> use VHDL-93 by default
@@ -882,7 +882,8 @@ class PoC(ILogable, ArgParseMixin):
 
 		# check if QuestaSim is configured
 		if (len(self.PoCConfig.options("INSTALL.Mentor.QuestaSim")) == 0):
-			raise NotConfiguredException("Mentor QuestaSim is not configured on this system.")
+			if (len(self.PoCConfig.options("INSTALL.Altera.ModelSim")) == 0):
+				raise NotConfiguredException("Neither Mentor QuestaSim nor Altera ModelSim is not configured on this system.")
 
 		fqnList =  self._ExtractFQNs(args.FQN)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -943,7 +944,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
 		self._CheckISEEnvironment()
-
+		
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
 

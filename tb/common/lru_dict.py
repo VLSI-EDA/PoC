@@ -40,7 +40,7 @@ class LeastRecentlyUsedDict(OrderedDict):
 	The entries in this dictionary are ordered by the last addition or update 
 	of key:value pairs. The maximum size of the dictionary can be specified 
 	during object creation. 
-
+	
 	Based on this StackOverflow answer: http://stackoverflow.com/a/2437645/5466118
 	and the example on: https://docs.python.org/2/library/collections.html#ordereddict-examples-and-recipes
 	"""
@@ -69,7 +69,7 @@ class LeastRecentlyUsedDict(OrderedDict):
 	def size_limit(self):
 		"""Get the size limit."""
 		return self._size_limit
-
+	
 	def moveLRU(self, key, value=None):
 		"""
 		Mark key as least-recently used. 

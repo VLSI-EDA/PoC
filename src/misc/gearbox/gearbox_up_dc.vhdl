@@ -92,6 +92,7 @@ architecture rtl of gearbox_up_dc is
 	signal Select_us					: unsigned(COUNTER_BITS - 1 downto 0);
 
 	signal In_Data_d					: std_logic_vector(INPUT_BITS - 1 downto 0)		:= (others => '0');
+	signal In_Align_d					: STD_LOGIC;
 	signal Data_d							: T_CHUNK_VECTOR(INPUT_CHUNKS - 2 downto 0)		:= (others => (others => '0'));
 	signal Collected					: std_logic_vector(OUTPUT_BITS - 1 downto 0);
 	signal Collected_swapped	: std_logic_vector(OUTPUT_BITS - 1 downto 0);
@@ -105,13 +106,14 @@ begin
 	assert (INPUT_BITS < OUTPUT_BITS) report "INPUT_BITS must be less than OUTPUT_BITS, otherwise it's no up-sizing gearbox." severity FAILURE;
 
 	-- input register @Clock1
-	In_Data_d	<= In_Data when registered(Clock1, ADD_INPUT_REGISTERS);
+	In_Align_d	<= In_Align	when registered(Clock1, ADD_INPUT_REGISTERS);
+	In_Data_d		<= In_Data	when registered(Clock1, ADD_INPUT_REGISTERS);
 
 	-- byte alignment counter @Clock1
 	process(Clock1)
 	begin
 		if rising_edge(Clock1) then
-			if (In_Align = '1') then
+			if (In_Align_d = '1') then
 				Counter_us		<= to_unsigned(1, Counter_us'length);
 				Valid_r				<= '0';
 			elsif (upcounter_equal(cnt => Counter_us, value => COUNTER_MAX) = '1') then
@@ -123,7 +125,7 @@ begin
 		end if;
 	end process;
 
-	Select_us		<= mux(In_Align, Counter_us, (Counter_us'range => '0'));
+	Select_us		<= mux(In_Align_d, Counter_us, (Counter_us'range => '0'));
 
 	-- delay registers @Clock1
 	process(Clock1)

@@ -10,11 +10,11 @@
 -- -------------------------------------
 -- This module wraps a Series-7 XADC to report if preconfigured temperature values
 -- are overrun. The XADC was formerly known as "System Monitor".
---
+-- 
 -- .. rubric:: Temperature Curve
---
+-- 
 -- .. code-block:: None
---
+--    
 --                    |                      /-----\
 --    Temp_ov   on=80 | - - - - - - /-------/       \
 --                    |            /        |        \

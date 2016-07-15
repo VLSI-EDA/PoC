@@ -3,13 +3,13 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- =============================================================================
 -- Authors:					Thomas B. Preußer
---
+-- 
 -- Entity:					Iterative Square Root Extractor.
---
+-- 
 -- Description:
 -- -------------------------------------
 -- Iterative Square Root Extractor.
---
+-- 
 -- Its computation requires (N+1)/2 steps for an argument bit width of N.
 --
 -- License:

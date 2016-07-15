@@ -11,8 +11,9 @@
 # 
 # Description:
 # ------------------------------------
-#	This is a bash script compiles Lattice's simulation libraries into a local
-#	directory.
+#	This is a Bash script (executable) which:
+#		- creates a subdirectory in the current working directory
+#		- compiles all Lattice libraries
 #
 # License:
 # ==============================================================================
@@ -46,11 +47,11 @@ PoC_sh=$PoCRootDir/poc.sh
 # source shared file from precompile directory
 source $ScriptDir/shared.sh
 
-# set bash options
-set -o pipefail
 
 # command line argument processing
 NO_COMMAND=1
+VHDL93=0
+VHDL2008=0
 while [[ $# > 0 ]]; do
 	key="$1"
 	case $key in
@@ -72,6 +73,12 @@ while [[ $# > 0 ]]; do
 		-h|--help)
 		HELP=TRUE
 		NO_COMMAND=0
+		;;
+		--vhdl93)
+		VHDL93=1
+		;;
+		--vhdl2008)
+		VHDL2008=1
 		;;
 		*)		# unknown option
 		echo 1>&2 -e "${COLORED_ERROR} Unknown command line option '$key'.${ANSI_NOCOLOR}"
@@ -95,7 +102,7 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  on Linux."
 	echo ""
 	echo "Usage:"
-	echo "  compile-lattice.sh [-c] [--help|--all|--ghdl|--vsim]"
+	echo "  compile-lattice.sh [-c] [--help|--all|--ghdl|--vsim] [<Options>]"
 	echo ""
 	echo "Common commands:"
 	echo "  -h --help             Print this help page"
@@ -106,6 +113,10 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "     --ghdl             Compile for GHDL."
 	echo "     --questa           Compile for QuestaSim/ModelSim."
 	echo ""
+	echo "Options:"
+	echo "     --vhdl93           Compile for VHDL-93."
+	echo "     --vhdl2008         Compile for VHDL-2008."
+	echo ""
 	exit 0
 fi
 
@@ -113,6 +124,10 @@ fi
 if [ "$COMPILE_ALL" == "TRUE" ]; then
 	COMPILE_FOR_GHDL=TRUE
 	# COMPILE_FOR_VSIM=TRUE
+fi
+if [ \( $VHDL93 -eq 0 \) -a \( $VHDL2008 -eq 0 \) ]; then
+	VHDL93=1
+	VHDL2008=1
 fi
 
 PrecompiledDir=$($PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
@@ -131,7 +146,6 @@ fi
 
 # GHDL
 # ==============================================================================
-ERRORCOUNT=0
 if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# Get GHDL directories
 	# <= $GHDLBinDir
@@ -147,10 +161,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	
 	# Assemble Lattice compile script path
 	GHDLLatticeScript="$($READLINK -f $GHDLScriptDir/compile-lattice.sh)"
-	if [ ! -x $GHDLLatticeScript ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Lattice compile script from GHDL is not executable.${ANSI_NOCOLOR}"
-		exit -1;
-	fi
+
 	
 	# Get Lattice installation directory
 	DiamondInstallDir=$($PoC_sh query INSTALL.Lattice.Diamond:InstallationDirectory 2>/dev/null)
@@ -167,17 +178,27 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 		export GHDL=$GHDLBinDir/ghdl
 	fi
 	
+	BASH=$(which bash)
+	
 	# compile all architectures, skip existing and large files, no wanrings
-	$GHDLLatticeScript --all -s -n --src $SourceDir --out $LatticeDirName
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
-		exit -1;
+	if [ $VHDL93 -eq 1 ]; then
+		$BASH $GHDLLatticeScript --all --vhdl93 -s -n --src $SourceDir --out $LatticeDirName
+		if [ $? -ne 0 ]; then
+			echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
+			exit -1;
+		fi
+	fi
+	if [ $VHDL2008 -eq 1 ]; then
+		$BASH $GHDLLatticeScript --all --vhdl2008 -s -n --src $SourceDir --out $LatticeDirName
+		if [ $? -ne 0 ]; then
+			echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
+			exit -1;
+		fi
 	fi
 fi
 
 # QuestaSim/ModelSim
 # ==============================================================================
-ERRORCOUNT=0
 if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Get GHDL directories
 	# <= $VSimBinDir

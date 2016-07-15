@@ -41,9 +41,9 @@ use			PoC.components.all;
 
 entity sortnet_BitonicSort is
 	generic (
-		INPUTS								: positive	:= 8;				-- input count
+		INPUTS								: positive	:= 32;			-- input count
 		KEY_BITS							: positive	:= 32;			-- the first KEY_BITS of In_Data are used as a sorting critera (key)
-		DATA_BITS							: positive	:= 32;			-- inclusive KEY_BITS
+		DATA_BITS							: positive	:= 64;			-- inclusive KEY_BITS
 		META_BITS							: natural		:= 2;				-- additional bits, not sorted but delayed as long as In_Data
 		PIPELINE_STAGE_AFTER	: natural		:= 2;				-- add a pipline stage after n sorting stages
 		ADD_INPUT_REGISTERS		: boolean		:= FALSE;		--
@@ -121,7 +121,7 @@ architecture rtl of sortnet_BitonicSort is
 
 begin
 	assert (not C_VERBOSE)
-		report "sortnet_BitonicSort:" & CR &
+		report "sortnet_BitonicSort:" & LF &
 					 "  DATA_BITS=" & integer'image(DATA_BITS) &
 					 "  KEY_BITS=" & integer'image(KEY_BITS) &
 					 "  META_BITS=" & integer'image(META_BITS)

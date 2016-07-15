@@ -41,26 +41,26 @@ from .pyAttribute import Attribute, AttributeHelperMixin
 
 class CommandGroupAttribute(Attribute):
 	__groupName = ""
-
+	
 	def __init__(self, groupName):
 		super().__init__()
 		self.__groupName = groupName
-
+	
 	@property
 	def GroupName(self):
 		return self.__groupName
 
 class DefaultAttribute(Attribute):
 	__handler =  None
-
+	
 	def __call__(self, func):
 		self.__handler = func
 		return super().__call__(func)
-
+	
 	@property
 	def Handler(self):
 		return self.__handler
-
+		
 class CommandAttribute(Attribute):
 	__command =  ""
 	__handler =  None
@@ -70,23 +70,23 @@ class CommandAttribute(Attribute):
 		super().__init__()
 		self.__command =  command
 		self.__kwargs =    kwargs
-
+	
 	def __call__(self, func):
 		self.__handler = func
 		return super().__call__(func)
-
+	
 	@property
 	def Command(self):
 		return self.__command
-
+		
 	@property
 	def Handler(self):
 		return self.__handler
-
+	
 	@property
 	def KWArgs(self):
 		return self.__kwargs
-
+		
 class ArgumentAttribute(Attribute):
 	__args =    None
 	__kwargs =  None
@@ -95,15 +95,15 @@ class ArgumentAttribute(Attribute):
 		super().__init__()
 		self.__args =    args
 		self.__kwargs =  kwargs
-
+	
 	@property
 	def Args(self):
 		return self.__args
-
+	
 	@property
 	def KWArgs(self):
 		return self.__kwargs
-
+		
 class SwitchArgumentAttribute(ArgumentAttribute):
 	def __init__(self, *args, **kwargs):
 		kwargs['action'] =  "store_const"
@@ -116,7 +116,7 @@ class CommonArgumentAttribute(ArgumentAttribute):
 
 class CommonSwitchArgumentAttribute(SwitchArgumentAttribute):
 	pass
-
+	
 class ArgParseMixin(AttributeHelperMixin):
 	__mainParser =   None
 	__subParser =    None
@@ -124,49 +124,49 @@ class ArgParseMixin(AttributeHelperMixin):
 
 	def __init__(self, **kwargs):
 		super().__init__()
-
+		
 		# create a commandline argument parser
 		import argparse
 		self.__mainParser = argparse.ArgumentParser(**kwargs)
 		self.__subParser = self.__mainParser.add_subparsers(help='sub-command help')
-
+		
 		for _,func in CommonArgumentAttribute.GetMethods(self):
 			for comAttribute in CommonArgumentAttribute.GetAttributes(func):
 				self.__mainParser.add_argument(*(comAttribute.Args), **(comAttribute.KWArgs))
-
+				
 		for _,func in CommonSwitchArgumentAttribute.GetMethods(self):
 			for comAttribute in CommonSwitchArgumentAttribute.GetAttributes(func):
 				self.__mainParser.add_argument(*(comAttribute.Args), **(comAttribute.KWArgs))
-
+		
 		for _,func in self.GetMethods():
 			defAttributes = DefaultAttribute.GetAttributes(func)
 			if (len(defAttributes) != 0):
 				defAttribute = defAttributes[0]
 				self.__mainParser.set_defaults(func=defAttribute.Handler)
 				continue
-
+			
 			cmdAttributes = CommandAttribute.GetAttributes(func)
 			if (len(cmdAttributes) != 0):
 				cmdAttribute = cmdAttributes[0]
 				subParser = self.__subParser.add_parser(cmdAttribute.Command, **(cmdAttribute.KWArgs))
 				subParser.set_defaults(func=cmdAttribute.Handler)
-
+				
 				for argAttribute in ArgumentAttribute.GetAttributes(func):
 					subParser.add_argument(*(argAttribute.Args), **(argAttribute.KWArgs))
 
 				self.__subParsers[cmdAttribute.Command] = subParser
 				continue
-
+	
 	def Run(self):
 		# parse command line options and process splitted arguments in callback functions
 		args = self.__mainParser.parse_args()
 		# because func is a function (unbound to an object), it MUST be called with self as a first parameter
 		args.func(self, args)
-
+	
 	@property
 	def MainParser(self):
 		return self.__mainParser
-
+	
 	@property
 	def SubParsers(self):
 		return self.__subParsers

@@ -40,4 +40,4 @@ IOBs.
 Source file: `io/ddrio/ddrio_inout.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_inout.vhdl>`_
 
 
- 
+	 

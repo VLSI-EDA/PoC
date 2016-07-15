@@ -1,14 +1,14 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-#
+# 
 # ==============================================================================
 #	Authors:				Patrick Lehmann
 #							Thomas B. Preusser
 #							Martin Zabel
-#
+# 
 #	Bash Script:			Wrapper Script to execute a given Python script
-#
+# 
 # Description:
 # ------------------------------------
 #	This is a bash script (callable) which:
@@ -19,13 +19,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-#
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
+# 
 #   http://www.apache.org/licenses/LICENSE-2.0
-#
+# 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -278,11 +278,11 @@ for VendorName in $Env_Vendors; do
 			# if exists, source the vendor pre-hook file
 			VendorPreHookFile=$PoC_RootDir/$PoC_HookDirectory/${VendorIndex["PreHookFile"]}
 			test -f $VendorPreHookFile && source $VendorPreHookFile
-
+			
 			# if exists, source the tool pre-hook file
 			ToolPreHookFile=$PoC_RootDir/$PoC_HookDirectory/${ToolIndex["PreHookFile"]}
 			test -f $ToolPreHookFile && source $ToolPreHookFile
-
+			
 			# if exists, source the BashModule file
 			ModuleFile=$PoC_RootDir/$PoC_WrapperDirectory/${ToolIndex["BashModule"]}
 			if [ -f $ModuleFile ]; then
@@ -290,7 +290,7 @@ for VendorName in $Env_Vendors; do
 				OpenEnvironment $Python_Interpreter $PoC_FrontEnd
 				PoC_ExitCode=$?
 			fi
-
+			
 			break 2
 		fi
 	done	# ToolNames
@@ -306,15 +306,15 @@ if [ $PoC_ExitCode -eq 0 ]; then
 	else
 		Python_ScriptParameters="--sln=$PyWrapper_Solution $PyWrapper_Parameters"
 	fi
-
+	
 	if [ $PyWrapper_Debug -eq 1 ]; then
 		echo -e "${YELLOW}Launching: '$Python_Interpreter $Python_Script $Python_ScriptParameters'${NOCOLOR}"
 		echo -e "${YELLOW}------------------------------------------------------------${NOCOLOR}"
 	fi
-
+	
 	# launching python script
 	set -f
-	$Python_Interpreter $Python_Script $Python_ScriptParameters
+	"$Python_Interpreter" $Python_Script $Python_ScriptParameters
 	PoC_ExitCode=$?
 fi
 
@@ -327,11 +327,11 @@ for VendorName in $Env_Vendors; do
 			# if exists, source the tool Post-hook file
 			ToolPostHookFile=$PoC_RootDir/$PoC_HookDirectory/${ToolIndex["PostHookFile"]}
 			test -f $ToolPostHookFile && source $ToolPostHookFile
-
+			
 			# if exists, source the vendor post-hook file
 			VendorPostHookFile=$PoC_RootDir/$PoC_HookDirectory/${VendorIndex["PostHookFile"]}
 			test -f $VendorPostHookFile && source $VendorPostHookFile
-
+			
 			# if exists, source the BashModule file
 			ModuleFile=$PoC_RootDir/$PoC_WrapperDirectory/${ToolIndex["BashModule"]}
 			if [ -f $ModuleFile ]; then

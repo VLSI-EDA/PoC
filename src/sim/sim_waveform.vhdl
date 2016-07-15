@@ -339,15 +339,15 @@ package body waveform is
 
 		constant PROCESS_ID					: T_SIM_PROCESS_ID	:= simRegisterProcess(TestID, "simGenerateClock(freq=" & to_string(to_freq(Period), 2) & ")", IsLowPriority => TRUE);
 	begin
-		-- report "simGenerateClock: (Instance: '" & Clock'instance_name & "')" & CR &
-			-- "Period: "						& TIME'image(Period) & CR &
-			-- "Phase: "							& T_PHASE'image(Phase) & CR &
-			-- "DutyCycle: "					& T_DUTYCYCLE'image(DutyCycle) & CR &
-			-- "PhaseAsFactor: "			& REAL'image(PhaseAsFactor) & CR &
-			-- "WanderAsFactor: "		& REAL'image(WanderAsFactor) & CR &
-			-- "DutyCycleAsFactor: "	& REAL'image(DutyCycleAsFactor) & CR &
-			-- "Delay: "							& TIME'image(Delay) & CR &
-			-- "TimeHigh: "					& TIME'image(TimeHigh) & CR &
+		-- report "simGenerateClock: (Instance: '" & Clock'instance_name & "')" & LF &
+			-- "Period: "						& TIME'image(Period) & LF &
+			-- "Phase: "							& T_PHASE'image(Phase) & LF &
+			-- "DutyCycle: "					& T_DUTYCYCLE'image(DutyCycle) & LF &
+			-- "PhaseAsFactor: "			& REAL'image(PhaseAsFactor) & LF &
+			-- "WanderAsFactor: "		& REAL'image(WanderAsFactor) & LF &
+			-- "DutyCycleAsFactor: "	& REAL'image(DutyCycleAsFactor) & LF &
+			-- "Delay: "							& TIME'image(Delay) & LF &
+			-- "TimeHigh: "					& TIME'image(TimeHigh) & LF &
 			-- "TimeLow: "						& TIME'image(TimeLow)
 			-- severity NOTE;
 

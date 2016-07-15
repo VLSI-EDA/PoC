@@ -109,18 +109,18 @@ class VHDLLibraryReference:
 	def __init__(self, name, path):
 		self._name = name.lower()
 		self._path = path
-
+	
 	@property
 	def Name(self):
 		return self._name
-
+		
 	@property
 	def Path(self):
 		return self._path
-
+	
 	def __str__(self):
 		return "VHDL library: {0} in '{1}'".format(self._name, str(self._path))
-
+	
 	__repr__ = __str__
 
 
@@ -137,12 +137,12 @@ class FilesParserMixIn:
 	def __init__(self):
 		self._rootDirectory = None
 		self._document =      None
-
+		
 		self._files =         []
 		self._includes =      []
 		self._libraries =     []
 		self._warnings =      []
-
+		
 	def _Parse(self):
 		self._ReadContent() #only available via late binding
 		self._document = Document.Parse(self._content, printChar=not True) #self._content only available via late binding
@@ -156,7 +156,7 @@ class FilesParserMixIn:
 	def _Resolve(self, host, statements=None):
 		if (statements is None):
 			statements = self._document.Statements
-
+		
 		for stmt in statements:
 			if isinstance(stmt, VHDLStatement):
 				path = self._EvaluatePath(host, stmt.PathExpression)
@@ -200,7 +200,7 @@ class FilesParserMixIn:
 				includeFile =     self._classFileListFile(file) #self._classFileListFile only available via late binding
 				self._fileSet.AddFile(includeFile) #self._fileSet only available via late binding
 				includeFile.Parse(host)
-
+				
 				self._includes.append(includeFile)
 				for srcFile in includeFile.Files:
 					self._files.append(srcFile)
@@ -232,7 +232,7 @@ class FilesParserMixIn:
 				self._warnings.append("WARNING: {0}".format(stmt.Message))
 			else:
 				ParserException("Found unknown statement type '{0!s}'.".format(type(stmt)))
-
+	
 	def _Evaluate(self, host, expr):
 		if isinstance(expr, Identifier):
 			try:

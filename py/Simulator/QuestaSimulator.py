@@ -89,6 +89,8 @@ class Simulator(BaseSimulator):
 		self._modelsimIniPath = self.Directories.PreCompiled
 		if board.Device.Vendor is Vendors.Altera:
 			self._modelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
+		elif board.Device.Vendor is Vendors.Lattice:
+			self._modelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
 		elif board.Device.Vendor is Vendors.Xilinx:
 			self._modelsimIniPath  /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
@@ -142,7 +144,7 @@ class Simulator(BaseSimulator):
 			return self._RunSimulationWithGUI(testbench)
 
 		tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
-
+		
 		# create a QuestaSimulator instance
 		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()

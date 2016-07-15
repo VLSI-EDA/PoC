@@ -9,7 +9,7 @@ monitors (normal, user temperature, over temperature).
 For example the Xilinx System Monitors are configured as follows:
 
 .. code-block:: None
- 
+   
                    |                      /-----\
    Temp_ov   on=80 | - - - - - - /-------/       \
                    |            /        |        \
@@ -34,4 +34,4 @@ For example the Xilinx System Monitors are configured as follows:
 Source file: `xil/xil_SystemMonitor.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_SystemMonitor.vhdl>`_
 
 
- 
+	 

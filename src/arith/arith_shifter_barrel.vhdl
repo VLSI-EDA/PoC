@@ -9,11 +9,11 @@
 -- Description:
 -- -------------------------------------
 -- This Barrel-Shifter supports:
---
+-- 
 -- * shifting and rotating
 -- * right and left operations
 -- * arithmetic and logic mode (only valid for shift operations)
---
+-- 
 -- This is equivalent to the CPU instructions: SLL, SLA, SRL, SRA, RL, RR
 --
 -- License:

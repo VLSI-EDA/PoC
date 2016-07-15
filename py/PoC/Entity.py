@@ -832,7 +832,7 @@ class FQN:
 
 	def Root(self):
 		return self.__host.Root
-
+	
 	@property
 	def Entity(self):
 		return self.__parts[-1]

@@ -48,7 +48,7 @@ from lru_dict import LeastRecentlyUsedDict
 class InputDriver(BusDriver):
 	"""Drives inputs of DUT."""
 	_signals = [ "Insert", "Remove", "DataIn" ]
-
+	
 	def __init__(self, dut):
 		BusDriver.__init__(self, dut, None, dut.Clock)
 
@@ -58,16 +58,16 @@ class InputTransaction(object):
 		self.Insert = BinaryValue(insert, 1)
 		self.Remove = BinaryValue(remove, 1)
 		self.DataIn  = BinaryValue(datain, 8, False)
-
+		
 # ==============================================================================
 class InputMonitor(BusMonitor):
 	"""Observes inputs of DUT."""
 	_signals = [ "Insert", "Remove", "DataIn" ]
-
+	
 	def __init__(self, dut, callback=None, event=None):
 		BusMonitor.__init__(self, dut, None, dut.Clock, dut.Reset, callback=callback, event=event)
 		self.name = "in"
-
+        
 	@coroutine
 	def _monitor_recv(self):
 		clkedge = RisingEdge(self.clock)
@@ -86,7 +86,7 @@ class OutputMonitor(BusMonitor):
 	def __init__(self, dut, callback=None, event=None):
 		BusMonitor.__init__(self, dut, None, dut.Clock, dut.Reset, callback=callback, event=event)
 		self.name = "out"
-
+        
 	@coroutine
 	def _monitor_recv(self):
 		clkedge = RisingEdge(self.clock)
@@ -111,7 +111,7 @@ class Testbench(object):
 				log.warning("Expected: Valid=%d.\nReceived: Valid=%d." % (exp_valid, got_valid))
 				if self._imm:
 					raise TestFailure("Received transaction differed from expected transaction.")
-
+				
 			elif got_valid == 1:
 				if got_elem != exp_elem: 
 					self.errors += 1
@@ -121,8 +121,8 @@ class Testbench(object):
 											(exp_valid, exp_elem, got_valid, got_elem))
 					if self._imm:
 						raise TestFailure("Received transaction differed from expected transaction.")
-
-
+					
+			
 	def __init__(self, dut, init_val):
 		self.dut = dut
 		self.stopped = False
@@ -134,7 +134,7 @@ class Testbench(object):
 
 		self.input_drv = InputDriver(dut)
 		self.output_mon = OutputMonitor(dut)
-
+		
 		# Create a scoreboard on the outputs
 		self.expected_output = [ init_val ]
 		self.scoreboard = Testbench.MyScoreboard(dut)
@@ -165,7 +165,7 @@ class Testbench(object):
 				dataout = self.lru.itervalues().next()
 				#print "=== model: LRU element=%d" % dataout
 				self.expected_output.append( (1, dataout) )
-
+			
 	def stop(self):
 		"""
 		Stop generation of expected output transactions.
@@ -205,7 +205,7 @@ def run_test(dut):
 	dut.Reset <= 0
 
 	input_gen = random_input_gen()
-
+	
 	# Issue first transaction immediately.
 	yield tb.input_drv.send(input_gen.next(), False)
 
@@ -219,7 +219,7 @@ def run_test(dut):
 	yield tb.input_drv.send(InputTransaction(0, 0, 0))
 	tb.stop()
 	yield RisingEdge(dut.Clock)
-
+	
 	# Print result of scoreboard.
 	raise tb.scoreboard.result
 

@@ -111,7 +111,7 @@ class RulesParserMixIn:
 	def __init__(self):
 		self._rootDirectory =     None
 		self._document =          None
-
+		
 		self._preProcessRules =   []
 		self._postProcessRules =  []
 
@@ -119,7 +119,7 @@ class RulesParserMixIn:
 		self._ReadContent() #only available via late binding
 		self._document = Document.Parse(self._content, printChar=not True) #self._content only available via late binding
 		# print("{DARK_GRAY}{0!s}{NOCOLOR}".format(self._document, **Init.Foreground))
-
+		
 	def _Resolve(self):
 		# print("Resolving {0}".format(str(self._file)))
 		for stmt in self._document.Statements:

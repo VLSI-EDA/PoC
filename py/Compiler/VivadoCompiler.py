@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 # 
-# Python Class:      This SynthCompiler compiles VHDL source files to design checkpoints
+# Python Class:     This SynthCompiler compiles VHDL source files to design checkpoints
 # 
 # Description:
 # ------------------------------------
@@ -57,12 +57,12 @@ class Compiler(BaseCompiler):
 		super().__init__(host, dryRun, noCleanUp)
 
 		self._device =      None
-		self._toolChain =    None
+		self._toolChain =   None
 
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
-		self.Directories.Working = host.Directories.Temp / configSection['VivadoSynthesisFiles']
+		self.Directories.Working =  host.Directories.Temp / configSection['VivadoSynthesisFiles']
 		self.Directories.XSTFiles = host.Directories.Root / configSection['VivadoSynthesisFiles']
-		self.Directories.Netlist = host.Directories.Root / configSection['NetlistFiles']
+		self.Directories.Netlist =  host.Directories.Root / configSection['NetlistFiles']
 
 		self._PrepareCompiler()
 
@@ -71,7 +71,7 @@ class Compiler(BaseCompiler):
 		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
 		binaryPath = Path(iseSection['BinaryDirectory'])
 		version = iseSection['Version']
-		self._toolChain =    Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
+		self._toolChain = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		for fqn in fqnList:
@@ -100,20 +100,20 @@ class Compiler(BaseCompiler):
 		self._RunPostCopy(netlist)
 		self._RunPostReplace(netlist)
 		self._RunPostDelete(netlist)
-
+		
 	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
 		self.Host.PoCConfig['SPECIAL'] = {}
 		self.Host.PoCConfig['SPECIAL']['Device'] =        device.FullName
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =  device.Series
-		self.Host.PoCConfig['SPECIAL']['OutputDir']	=      self.Directories.Working.as_posix()
+		self.Host.PoCConfig['SPECIAL']['OutputDir']	=     self.Directories.Working.as_posix()
 
 	def _RunCompile(self, netlist):
 		reportFilePath = self.Directories.Working / (netlist.ModuleName + ".log")
 
 		synth = self._toolChain.GetSynthesizer()
 		synth.Parameters[synth.SwitchSourceFile] =  netlist.ModuleName + ".tcl"
-		synth.Parameters[synth.SwitchLogFile] =  str(reportFilePath)
+		synth.Parameters[synth.SwitchLogFile] =     str(reportFilePath)
 		try:
 			synth.Compile()
 		except VivadoException as ex:
@@ -130,7 +130,25 @@ class Compiler(BaseCompiler):
 			buffer += "read_verilog {file} \n". \
 				format(file=file.Path.as_posix())
 
-		buffer += "synth_design -top {top} -part {part} \n".format(top=netlist.ModuleName, part=device.ShortName)
+		topLevelGenerics =  ""
+		topLevelDefines =   ""
+
+		vhdlGenerics = self.Host.PoCConfig[netlist.ConfigSectionName]['VHDLGenerics']
+		if (len(vhdlGenerics) > 0):
+			for keyValuePair in vhdlGenerics.split(";"):
+				topLevelGenerics += " -generic {kvp}".format(kvp=keyValuePair.strip())
+
+		verilogGenerics = self.Host.PoCConfig[netlist.ConfigSectionName]['VerilogDefines']
+		if (len(verilogGenerics) > 0):
+			for keyValuePair in verilogGenerics.split(";"):
+				topLevelDefines += " -verilog_define {kvp}".format(kvp=keyValuePair.strip())
+
+		buffer += "synth_design -top {top} -part {part}{TopLevelGenerics}{TopLevelDefines}\n".format(
+			top=netlist.ModuleName,
+			part=device.ShortName,
+			TopLevelGenerics=topLevelGenerics,
+			TopLevelDefines=topLevelDefines
+		)
 		buffer += "write_checkpoint -noxdef {top}.dcp \n".format(top=netlist.ModuleName)
 		buffer += "catch {{ report_utilization -file {top}_synth.rpt -pb {top}_synth.pb }}\n".format(top=netlist.ModuleName)
 

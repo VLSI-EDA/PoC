@@ -4,17 +4,16 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 # 
 # ==============================================================================
-#	Authors:						Patrick Lehmann
-#                     Martin Zabel
+#	Authors:					Patrick Lehmann
+#                   Martin Zabel
 # 
-#	Bash Script:				Script to compile the OSVVM library for Questa / ModelSim
-#                     on Linux
+#	Bash Script:			Compile OSVVM simulation packages
 # 
 # Description:
 # ------------------------------------
 #	This is a Bash script (executable) which:
 #		- creates a subdirectory in the current working directory
-#		- compiles all OSVVM packages 
+#		- compiles all OSVVM packages
 #
 # License:
 # ==============================================================================
@@ -51,8 +50,6 @@ PoC_sh=$PoCRootDir/poc.sh
 # source shared file from precompile directory
 source $ScriptDir/shared.sh
 
-# set bash options
-set -o pipefail
 
 # command line argument processing
 NO_COMMAND=1
@@ -130,7 +127,6 @@ fi
 
 # GHDL
 # ==============================================================================
-ERRORCOUNT=0
 if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# Get GHDL directories
 	# <= $GHDLBinDir
@@ -146,10 +142,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	
 	# Assemble Altera compile script path
 	GHDLOSVVMScript="$($READLINK -f $GHDLScriptDir/compile-osvvm.sh)"
-	if [ ! -x $GHDLAlteraScript ]; then
-		echo 1>&2 -e "${COLORED_ERROR} OSVVM compile script from GHDL is not executable.${ANSI_NOCOLOR}"
-		exit -1;
-	fi
+
 	
 	# Get OSVVM installation directory
 	OSVVMInstallDir=$PoCRootDir/$OSVVMLibDir
@@ -160,8 +153,10 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 		export GHDL=$GHDLBinDir/ghdl
 	fi
 	
+	BASH=$(which bash)
+	
 	# compile all architectures, skip existing and large files, no wanrings
-	$GHDLOSVVMScript --all -n --src $SourceDir --out "."
+	$BASH $GHDLOSVVMScript --all -n --src $SourceDir --out "."
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
 		exit -1;
@@ -178,7 +173,6 @@ fi
 
 # QuestaSim/ModelSim
 # ==============================================================================
-ERRORCOUNT=0
 if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Get GHDL directories
 	# <= $VSimBinDir
@@ -203,6 +197,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	SourceDir=$OSVVMInstallDir
 	
 	# Files
+	Library=osvvm
 	Files=(
 		NamePkg.vhd
 		OsvvmGlobalPkg.vhd
@@ -219,22 +214,23 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	)
 	
 	# Compile libraries with vcom, executed in destination directory
-	echo -e "${YELLOW}Creating library 'osvvm' with vlib/vmap ...${ANSI_NOCOLOR}"
-	$VSimBinDir/vlib osvvm
-	$VSimBinDir/vmap -del osvvm
-	$VSimBinDir/vmap osvvm $DestDir/osvvm
+	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
+	$VSimBinDir/vlib $Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
 	
-	echo -e "${YELLOW}Compiling library 'osvvm' with vcom ...${ANSI_NOCOLOR}"
+	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
+	ERRORCOUNT=0
 	for File in ${Files[@]}; do
-		echo "  Compiling $file..."
-		$VSimBinDir/vcom -2008 -work osvvm $SourceDir/$File
+		echo "  Compiling '$File'..."
+		$VSimBinDir/vcom -2008 -work $Library $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi
 	done
 	
 	# print overall result
-	echo -n "Compiling library 'osvvm' with vcom "
+	echo -n "Compiling library '$Library' with vcom "
 	if [ $ERRORCOUNT -gt 0 ]; then
 		echo -e $COLORED_FAILED
 	else

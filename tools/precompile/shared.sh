@@ -6,14 +6,11 @@
 #	Authors:						Patrick Lehmann
 #                     Martin Zabel
 # 
-#	Bash Script:				Script to compile the OSVVM library for Questa / ModelSim
-#                     on Linux
+#	Bash include file:	Common constants and functions for all compile scripts.
 # 
 # Description:
 # ------------------------------------
-#	This is a Bash script (executable) which:
-#		- creates a subdirectory in the current working directory
-#		- compiles all OSVVM packages 
+#	
 #
 # License:
 # ==============================================================================
@@ -39,6 +36,7 @@ ANSI_YELLOW="\e[33m"
 ANSI_BLUE="\e[34m"
 ANSI_MAGENTA="\e[35m"
 ANSI_CYAN="\e[36;1m"
+ANSI_DARKCYAN="\e[36m"
 ANSI_NOCOLOR="\e[0m"
 
 # red texts
@@ -73,12 +71,12 @@ CreateDestinationDirectory() {
 	
 	mkdir -p $DestinationDirectory
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Cannot create output directory.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Cannot create output directory '$DestinationDirectory'.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
 	cd $DestinationDirectory
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Cannot change to output directory.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Cannot change to output directory '$DestinationDirectory'.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
 }
@@ -112,7 +110,7 @@ GetGHDLDirectories() {
 	# 
 	GHDLDirName=$($PoC_sh query CONFIG.DirectoryNames:GHDLFiles 2>/dev/null)
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Cannot get GHDL dir.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Cannot get GHDL directory name.${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${COLORED_MESSAGE} $GHDLDirName${ANSI_NOCOLOR}"
 		exit -1;
 	fi
@@ -134,7 +132,7 @@ GetVSimDirectories() {
 	
 	VSimDirName=$($PoC_sh query CONFIG.DirectoryNames:QuestaSimFiles 2>/dev/null)
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Cannot get QuestaSim directory.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} Cannot get QuestaSim directory name.${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${COLORED_MESSAGE} $VSimDirName${ANSI_NOCOLOR}"
 		exit -1;
 	fi

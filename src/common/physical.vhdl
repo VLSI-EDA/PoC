@@ -206,8 +206,22 @@ end package;
 
 package body physical is
 
-	-- iSim 14.7 does not support fs in simulation (fs values are converted to 0 ps)
-	function MinimalTimeResolutionInSimulation return time is
+	-- WORKAROUND: for simulators with a "Minimal Time Resolution" > 1 fs
+	--	Version:	all
+	--	Vendors:	all
+	--	Issue:
+	--		Some simulators use a lower minimal time resolution (MTR) than the VHDL
+	--		standard (LRM) defines (1 fs). Usually, the MTR is set to 1 ps or 1 ns.
+	--		Most simulators allow the user to specify a higher MTR -> check the
+	--		simulator documentation.
+	--	Solution:
+	--		The currently set MTR can be calculated in VHDL. Using the correct MTR
+	--		can prevent cleared intermediate values and division by zero errors.
+	--	Examples:
+	--		Mentor Graphics QuestaSim/ModelSim (vSim): default MTR = ? ??
+	--		Xilinx ISE Simulator (iSim):               default MTR = 1 ps
+	--		Xilinx Vivado Simulator (xSim):            default MTR = 1 ps
+	function MinimalTimeResolutionInSimulation return TIME is
 	begin
 		if		(1 fs > 0 sec) then	return 1 fs;
 		elsif	(1 ps > 0 sec) then	return 1 ps;
@@ -225,7 +239,14 @@ package body physical is
 		variable a_real : real;
 		variable b_real : real;
 	begin
-		-- Quartus-II work-around
+		-- WORKAROUND: for Altera Quartus
+		--	Version:	all
+		--	Issue:
+		--		Results of TIME arithmetic must be in 32-bit integer range, because
+		--		the internally used 64-bit integer for type TIME can not be
+		--		represented in VHDL.
+		--	Solution:
+		--		Pre- and post-scale all values to stay in the integer range.
 	  if    a < 1 us  then
 			a_real  := real(a / MTRIS);
 		elsif a < 1 ms  then
@@ -855,7 +876,7 @@ package body physical is
 	-- ===========================================================================
 	--	@param Timing					A given timing or delay, which should be achived
 	--	@param Clock_Period		The period of the circuits clock
-	--	@RoundingStyle				Default = round to nearest; other choises: ROUND_UP, ROUND_DOWN
+	--	@RoundingStyle				Default = ROUND_UP; other choises: ROUND_UP, ROUND_DOWN, ROUND_TO_NEAREST
 	function TimingToCycles(Timing : time; Clock_Period : time; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return natural is
 		variable res_real	: REAL;
 		variable res_nat	: natural;
@@ -873,20 +894,20 @@ package body physical is
 		res_dev		:= (div(res_time, Timing) - 1.0) * 100.0;
 
 		if (POC_VERBOSE = TRUE) then
-			report "TimingToCycles: " & 	CR &
-						 "  Timing: " &					to_string(Timing, 3) & CR &
-						 "  Clock_Period: " &		to_string(Clock_Period, 3) & CR &
-						 "  RoundingStyle: " &	str_substr(T_ROUNDING_STYLE'image(RoundingStyle), 7) & CR &
-						 "  res_real = " &			str_format(res_real, 3) & CR &
+			report "TimingToCycles: " & 	LF &
+						 "  Timing: " &					to_string(Timing, 3) & LF &
+						 "  Clock_Period: " &		to_string(Clock_Period, 3) & LF &
+						 "  RoundingStyle: " &	str_substr(T_ROUNDING_STYLE'image(RoundingStyle), 7) & LF &
+						 "  res_real = " &			str_format(res_real, 3) & LF &
 						 "  => " &							integer'image(res_nat)
 			severity note;
 		end if;
 
 		if (C_PHYSICAL_REPORT_TIMING_DEVIATION = TRUE) then
-			report "TimingToCycles (timing deviation report): " & CR &
-						 "  timing to achieve: " & to_string(Timing, 3) & CR &
-						 "  calculated cycles: " & integer'image(res_nat) & " cy" & CR &
-						 "  resulting timing:  " & to_string(res_time, 3) & CR &
+			report "TimingToCycles (timing deviation report): " & LF &
+						 "  timing to achieve: " & to_string(Timing, 3) & LF &
+						 "  calculated cycles: " & INTEGER'image(res_nat) & " cy" & LF &
+						 "  resulting timing:  " & to_string(res_time, 3) & LF &
 						 "  deviation:         " & to_string(res_time - Timing, 3) & " (" & str_format(res_dev, 2) & "%)"
 			severity note;
 		end if;

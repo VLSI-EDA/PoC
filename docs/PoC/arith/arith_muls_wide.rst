@@ -18,4 +18,4 @@ For detailed documentation see below.
 Source file: `arith/arith_muls_wide.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_muls_wide.vhdl>`_
 
 
- 
+	 

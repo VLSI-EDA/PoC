@@ -101,6 +101,8 @@ class Simulator(BaseSimulator):
 		device_vendor = self._pocProject.Board.Device.Vendor
 		if device_vendor is Vendors.Altera:
 			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
+		elif device_vendor is Vendors.Lattice:
+			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
 		elif device_vendor is Vendors.Xilinx:
 			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
