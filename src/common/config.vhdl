@@ -955,7 +955,7 @@ package body config is
 				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
 				else	report "Unknown Virtex-5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
-
+		
 		  when DEVICE_VIRTEX4 =>
 		    report "Unkown Virtex 4" severity failure;
 
