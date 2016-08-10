@@ -61,7 +61,7 @@ function Exit-PrecompileScript
 	cd $Module_WorkingDir
 	
 	# unload modules
-	Remove-Module precompile
+	Remove-Module precompile -Verbose:$false
 	
 	if ($ExitCode -eq 0)
 	{	exit 0	}
@@ -116,8 +116,8 @@ function Resolve-VHDLVersion
 		[Parameter(Mandatory=$true)][bool]$VHDL93,
 		[Parameter(Mandatory=$true)][bool]$VHDL2008
 	)
-	if (-not ($VHDL93 -and $VHDL2008))
-	{	return $true, $true	}
+	if (-not $VHDL93 -and -not $VHDL2008)		# no Version selected
+	{	return $true, $true	}									# => compile all versions
 	elseif ($VHDL93 -and -not $VHDL2008)
 	{	return $true, $false	}
 	elseif (-not $VHDL93 -and $VHDL2008)

@@ -131,35 +131,38 @@ class Configuration(BaseConfiguration):
 								""")
 				fileHandle.write(fileContent)
 
+
 class QuestaSimMixIn:
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
 		self._platform =            platform
+		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
 		self._logger =              logger
 
+
 class QuestaSim(QuestaSimMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuestaSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuestaSimMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetVHDLCompiler(self):
-		return QuestaVHDLCompiler(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return QuestaVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 	def GetSimulator(self):
-		return QuestaSimulator(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return QuestaSimulator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 	def GetVHDLLibraryTool(self):
-		return QuestaVHDLLibraryTool(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return QuestaVHDLLibraryTool(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 
 class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuestaSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuestaSimMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vcom.exe"
 		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vcom"
 		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, executablePath, logger=logger)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -230,6 +233,10 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 		parameterList = self.Parameters.ToArgumentList()
 		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
+		if (self._dryrun):
+			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
+
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -242,10 +249,10 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 			iterator = iter(QuestaVComFilter(self.GetReader()))
 
 			line = next(iterator)
-			line.IndentBy(2)
+			line.IndentBy(self.Logger.BaseIndent + 1)
 			self._hasOutput = True
-			self._LogNormal("    vcom messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
-			self._LogNormal("    " + ("-" * 76))
+			self._LogNormal("  vcom messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
+			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 			self._Log(line)
 
 			while True:
@@ -253,23 +260,23 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.IndentBy(2)
+				line.IndentBy(self.Logger.BaseIndent + 1)
 				self._Log(line)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 class QuestaSimulator(Executable, QuestaSimMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuestaSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuestaSimMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vsim.exe"
 		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vsim"
 		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, executablePath, logger=logger)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -373,10 +380,10 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 			iterator = iter(PoCSimulationResultFilter(QuestaVSimFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
-			line.IndentBy(2)
+			line.IndentBy(self.Logger.BaseIndent + 1)
 			self._hasOutput = True
-			self._LogNormal("    vsim messages for '{0}'".format(self.Parameters[self.SwitchTopLevel]))
-			self._LogNormal("    " + ("-" * 76))
+			self._LogNormal("  vsim messages for '{0}'".format(self.Parameters[self.SwitchTopLevel]))
+			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 			self._Log(line)
 
 			while True:
@@ -384,25 +391,25 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.IndentBy(2)
+				line.IndentBy(self.Logger.BaseIndent + 1)
 				self._Log(line)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 		return simulationResult.value
 
 class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuestaSimMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuestaSimMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vlib.exe"
 		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vlib"
 		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, executablePath, logger=logger)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -442,10 +449,10 @@ class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 			iterator = iter(QuestaVLibFilter(self.GetReader()))
 
 			line = next(iterator)
-			line.IndentBy(2)
+			line.IndentBy(self.Logger.BaseIndent + 1)
 			self._hasOutput = True
-			self._LogNormal("    vlib messages for '{0}'".format(self.Parameters[self.SwitchLibraryName]))
-			self._LogNormal("    " + ("-" * 76))
+			self._LogNormal("  vlib messages for '{0}'".format(self.Parameters[self.SwitchLibraryName]))
+			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 			self._Log(line)
 
 			while True:
@@ -453,14 +460,14 @@ class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.IndentBy(2)
+				line.IndentBy(self.Logger.BaseIndent + 1)
 				self._Log(line)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
 def QuestaVComFilter(gen):

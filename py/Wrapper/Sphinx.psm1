@@ -29,15 +29,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
+#
 function Open-Environment
-{	[CmdletBinding()]
-	param(
-		[String]		$Py_Interpreter,
-		[String[]]	$Py_Parameters,
-		[String]		$PoC_Query
-	)
-	$Debug = $false
+{	$Debug = $false
 	
 	$DocumentationDirectory =	"docs"
 	$BuildDirectory = "_build"

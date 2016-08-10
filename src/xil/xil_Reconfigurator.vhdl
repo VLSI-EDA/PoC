@@ -11,7 +11,7 @@
 -- Many complex primitives in a Xilinx device offer a Dynamic Reconfiguration
 -- Port (DRP) to reconfigure a primitive at runtime without reconfiguring the
 -- whole FPGA.
--- 
+--
 -- This module is a DRP master that can be pre-configured at compile time with
 -- different configuration sets. The configuration sets are mapped into a ROM.
 -- The user can select a stored configuration with ``ConfigSelect``. Sending a

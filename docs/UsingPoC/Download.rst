@@ -51,7 +51,7 @@ HTTPS protocol:
    cd GitRoot
    git clone --recursive "https://github.com/VLSI-EDA/PoC.git" PoC
    cd PoC
-   git remote rename origion github
+   git remote rename origin github
 
 Command line instructions to clone the PoC-Library onto a Linux machine machine
 with SSH protocol:
@@ -61,7 +61,7 @@ with SSH protocol:
    cd GitRoot
    git clone --recursive "ssh://git@github.com:VLSI-EDA/PoC.git" PoC
    cd PoC
-   git remote rename origion github
+   git remote rename origin github
 
 
 On OS X
@@ -89,7 +89,7 @@ HTTPS protocol:
    cd GitRoot
    git clone --recursive "https://github.com/VLSI-EDA/PoC.git" PoC
    cd PoC
-   git remote rename origion github
+   git remote rename origin github
 
 Command line instructions to clone the PoC-Library onto a Windows machine with
 SSH protocol:
@@ -99,7 +99,7 @@ SSH protocol:
    cd GitRoot
    git clone --recursive "ssh://git@github.com:VLSI-EDA/PoC.git" PoC
    cd PoC
-   git remote rename origion github
+   git remote rename origin github
 
 
 .. NOTE::

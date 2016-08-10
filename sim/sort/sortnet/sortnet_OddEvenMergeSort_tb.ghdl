@@ -1,0 +1,35 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/sortnet_oddevenmergesort_tb/clock
+/sortnet_oddevenmergesort_tb/generator_valid
+/sortnet_oddevenmergesort_tb/generator_iskey
+/sortnet_oddevenmergesort_tb/generator_data
+/sortnet_oddevenmergesort_tb/generator_meta
+/sortnet_oddevenmergesort_tb/sort_valid
+/sortnet_oddevenmergesort_tb/sort_iskey
+/sortnet_oddevenmergesort_tb/sort_data
+/sortnet_oddevenmergesort_tb/sort_meta
+/sortnet_oddevenmergesort_tb/datainputmatrix
+/sortnet_oddevenmergesort_tb/dataoutputmatrix
+/sortnet_oddevenmergesort_tb/sort/clock
+/sortnet_oddevenmergesort_tb/sort/reset
+/sortnet_oddevenmergesort_tb/sort/inverse
+/sortnet_oddevenmergesort_tb/sort/in_valid
+/sortnet_oddevenmergesort_tb/sort/in_iskey
+/sortnet_oddevenmergesort_tb/sort/in_data
+/sortnet_oddevenmergesort_tb/sort/in_meta
+/sortnet_oddevenmergesort_tb/sort/out_valid
+/sortnet_oddevenmergesort_tb/sort/out_iskey
+/sortnet_oddevenmergesort_tb/sort/out_data
+/sortnet_oddevenmergesort_tb/sort/out_meta
+/sortnet_oddevenmergesort_tb/sort/in_valid_d
+/sortnet_oddevenmergesort_tb/sort/in_iskey_d
+/sortnet_oddevenmergesort_tb/sort/in_data_d
+/sortnet_oddevenmergesort_tb/sort/in_meta_d
+/sortnet_oddevenmergesort_tb/sort/metavector
+/sortnet_oddevenmergesort_tb/sort/datamatrix
+/sortnet_oddevenmergesort_tb/sort/metaoutputs_d
+/sortnet_oddevenmergesort_tb/sort/dataoutputs_d

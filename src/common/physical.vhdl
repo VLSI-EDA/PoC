@@ -221,7 +221,7 @@ package body physical is
 	--		Mentor Graphics QuestaSim/ModelSim (vSim): default MTR = ? ??
 	--		Xilinx ISE Simulator (iSim):               default MTR = 1 ps
 	--		Xilinx Vivado Simulator (xSim):            default MTR = 1 ps
-	function MinimalTimeResolutionInSimulation return TIME is
+	function MinimalTimeResolutionInSimulation return time is
 	begin
 		if		(1 fs > 0 sec) then	return 1 fs;
 		elsif	(1 ps > 0 sec) then	return 1 ps;
@@ -906,7 +906,7 @@ package body physical is
 		if (C_PHYSICAL_REPORT_TIMING_DEVIATION = TRUE) then
 			report "TimingToCycles (timing deviation report): " & LF &
 						 "  timing to achieve: " & to_string(Timing, 3) & LF &
-						 "  calculated cycles: " & INTEGER'image(res_nat) & " cy" & LF &
+						 "  calculated cycles: " & integer'image(res_nat) & " cy" & LF &
 						 "  resulting timing:  " & to_string(res_time, 3) & LF &
 						 "  deviation:         " & to_string(res_time - Timing, 3) & " (" & str_format(res_dev, 2) & "%)"
 			severity note;

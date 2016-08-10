@@ -13,9 +13,9 @@
 -- storage on some devices (e.g. Xilinx' SRLs). Only a single read pointer is
 -- maintained, which determines the number of valid entries within the
 -- underlying shift register.
--- 
+--
 -- The specified depth (``MIN_DEPTH``) is rounded up to the next suitable value.
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany,

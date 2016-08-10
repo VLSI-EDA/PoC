@@ -1,18 +1,18 @@
 # EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # =============================================================================
-#                 _   _   _        _ _           _       
-#  _ __  _   _   / \ | |_| |_ _ __(_) |__  _   _| |_ ___ 
+#                 _   _   _        _ _           _
+#  _ __  _   _   / \ | |_| |_ _ __(_) |__  _   _| |_ ___
 # | '_ \| | | | / _ \| __| __| '__| | '_ \| | | | __/ _ \
 # | |_) | |_| |/ ___ \ |_| |_| |  | | |_) | |_| | ||  __/
 # | .__/ \__, /_/   \_\__|\__|_|  |_|_.__/ \__,_|\__\___|
-# |_|    |___/                                           
-# 
+# |_|    |___/
+#
 # =============================================================================
 # Authors:            Patrick Lehmann
-# 
+#
 # Python package:      pyAttribute base classes
 #
 # Description:
@@ -22,13 +22,13 @@
 # License:
 # ============================================================================
 # Copyright 2007-2016 Patrick Lehmann - Dresden, Germany
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@
 class Attribute:
 	__AttributesMemberName__ =  "__pyattr__"
 	_debug =                    False
-	
+
 	def __call__(self, func):
 		self._AppendAttribute(func, self)
 		return func
@@ -51,7 +51,7 @@ class Attribute:
 			func.__dict__[Attribute.__AttributesMemberName__].append(attribute)
 		else:
 			func.__setattr__(Attribute.__AttributesMemberName__, [attribute])
-	
+
 	def __str__(self):
 		return self.__name__
 
@@ -67,7 +67,7 @@ class Attribute:
 							if isinstance(attribute, cls):
 								methods[funcname] = func
 		return methods.items()
-		
+
 	@classmethod
 	def GetAttributes(cls, method):
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
@@ -91,7 +91,7 @@ class AttributeHelperMixin:
 			return (isinstance(attributeList, list) and (len(attributeList) != 0))
 		else:
 			return False
-				
+
 	def GetAttributes(self, method):
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
 			attributeList = method.__dict__[Attribute.__AttributesMemberName__]

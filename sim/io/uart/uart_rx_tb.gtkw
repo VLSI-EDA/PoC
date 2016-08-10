@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
 [*] Tue Feb 09 01:06:25 2016
 [*]
-[dumpfile] "H:\Austausch\PoC\temp\ghdl\uart_rx_tb.ghw"
 [dumpfile_mtime] "Tue Feb 09 01:03:30 2016"
 [dumpfile_size] 54807
-[savefile] "H:\Austausch\PoC\sim\io\uart\uart_rx_tb.gtkw"
 [timestart] 0
 [size] 1680 997
 [pos] -35 -35

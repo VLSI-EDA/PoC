@@ -48,7 +48,7 @@ entity reconfig_icap_fsm is
 		icap_out		: in	std_logic_vector(31 downto 0);	-- data from the icap
 		icap_csb		: out	std_logic;
 		icap_rw			: out	std_logic;
-		
+
 		-- data interface, no internal fifos
 		in_data			: in	std_logic_vector(31 downto 0);	-- new configuration data
 		in_data_valid	: in	std_logic;						-- input data is valid
@@ -56,7 +56,7 @@ entity reconfig_icap_fsm is
 		out_data		: out	std_logic_vector(31 downto 0);	-- data read from the fifo
 		out_data_valid	: out	std_logic;						-- data from icap is valid
 		out_data_full	: in	std_logic;						-- receiving buffer is full, halt icap
-		
+
 		-- control structures
 		status			: out	std_logic_vector(31 downto 0)	-- status vector
 	);
@@ -67,79 +67,79 @@ architecture arch of reconfig_icap_fsm is
 	type t_state is (ready, abort0, abort1, abort2, abort3, write, writing, pre_reg_read0, pre_reg_read1, pre_stream_read0, read, reading, post_read);
 	signal cur_state : t_state := ready;
 	signal nxt_state : t_state := ready;
-	
+
 	-- detect the status of the synchronization
 	type t_sync_state is (none, dummy0, bus_width0, bus_width1, dummy1, synced, cmdWrite, dsynced);
 	signal sync_state : t_sync_state;
-	-- flag will be (re)set in the clocking process for the main fsm  
+	-- flag will be (re)set in the clocking process for the main fsm
 	signal sync_state_flag : boolean;
-	
-	CONSTANT sync_s_dummy	: std_logic_vector(31 downto 0) := x"FFFFFFFF";
-	CONSTANT sync_s_bus_p_0	: std_logic_vector(31 downto 0) := x"000000BB";
-	CONSTANT sync_s_bus_p_1	: std_logic_vector(31 downto 0) := x"11220044";
-	CONSTANT sync_s_sync	: std_logic_vector(31 downto 0) := x"AA995566";
-	CONSTANT sync_s_regW	: std_logic_vector(31 downto 0) := x"30008001";
-	CONSTANT sync_s_dsync	: std_logic_vector(31 downto 0) := x"0000000D";
 
-	CONSTANT cmd_nop		: std_logic_vector(31 downto 0) := x"20000000";
-	
+	constant sync_s_dummy	: std_logic_vector(31 downto 0) := x"FFFFFFFF";
+	constant sync_s_bus_p_0	: std_logic_vector(31 downto 0) := x"000000BB";
+	constant sync_s_bus_p_1	: std_logic_vector(31 downto 0) := x"11220044";
+	constant sync_s_sync	: std_logic_vector(31 downto 0) := x"AA995566";
+	constant sync_s_regW	: std_logic_vector(31 downto 0) := x"30008001";
+	constant sync_s_dsync	: std_logic_vector(31 downto 0) := x"0000000D";
+
+	constant cmd_nop		: std_logic_vector(31 downto 0) := x"20000000";
+
 	-- commands for icap's cmd register
-	CONSTANT cmd_reg_wcfg		: std_logic_vector(4 downto 0) := "00001";	-- write cfg data prior to write
-	CONSTANT reg_fdro		: std_logic_vector(4 downto 0) := "00011";	-- read cfg data register
-	
+	constant cmd_reg_wcfg		: std_logic_vector(4 downto 0) := "00001";	-- write cfg data prior to write
+	constant reg_fdro		: std_logic_vector(4 downto 0) := "00011";	-- read cfg data register
+
 	signal icap_enable			: boolean := false;
 	signal icap_read			: boolean := false;
 	signal icap_in_r			: std_logic_vector(31 downto 0);
 	-- icap bit switching
 	signal in_data_swap			: std_logic_vector(31 downto 0);
 	signal icap_out_swap		: std_logic_vector(31 downto 0);
-	
+
 	-- icap status word signals
 	signal icap_error			: std_logic := '0';
 	signal icap_sync			: std_logic := '0';
 	signal icap_abort			: std_logic := '0';
 	signal icap_status_valid	: std_logic := '0';
-	
+
 	signal readback_cnt			: unsigned(26 downto 0) := (others=>'0');
 	signal readback_cnt_en		: boolean;
 	signal readback_cnt_rst		: boolean := true;
-	
+
 	-- delayed signals
 	signal in_data_valid_d		: std_logic;
 	signal in_data_valid_re		: std_logic;	-- rising edge on in_data_valid signal
-	
+
 	-- status word signals
 	signal pr_reset				: boolean := false;
 	signal status_error			: boolean := false;
 begin
 	-- map icap_enable to the low-active csb
 	icap_csb	<= to_sl(not icap_enable) when rising_edge(clk);
-	icap_rw		<= to_sl(icap_read) when rising_edge(clk); 
-	
+	icap_rw		<= to_sl(icap_read) when rising_edge(clk);
+
 	-- drive icap data
 	icap_in		<= icap_in_r when rising_edge(clk);
 	icap_in_r	<= in_data_swap when in_data_valid = '1' else x"00000000";
-	
+
 	out_data	<= icap_out_swap when rising_edge(clk);
-	
+
 	-- TODO  detect errors
 	status_error <= false;
-	
+
 	-- construct status word
 	status(0) <= to_sl(pr_reset) when rising_edge(clk);
 	status(1) <= to_sl(not readback_cnt_rst) when rising_edge(clk);		-- readback in progress
 	status(2) <= to_sl(status_error) when rising_edge(clk);
 	status(3) <= to_sl(cur_state = ready) when rising_edge(clk);
 	status(31 downto 4) <= (others => '0');
-	
-	-- edge detection 
+
+	-- edge detection
 	in_data_valid_d		<= in_data_valid when rising_edge(clk);
-	in_data_valid_re	<= not in_data_valid_d and in_data_valid; 
-	
+	in_data_valid_re	<= not in_data_valid_d and in_data_valid;
+
 	-- combinatorial state machine
-	cur_state <= nxt_state when rising_edge(clk); 
-	
-	combi : process (reset, nxt_state, cur_state, in_data, in_data_valid, in_data_valid_re, 
+	cur_state <= nxt_state when rising_edge(clk);
+
+	combi : process (reset, nxt_state, cur_state, in_data, in_data_valid, in_data_valid_re,
 						sync_state, sync_state_flag, out_data_full, readback_cnt, pr_reset) begin
 		-- default assignments
 		nxt_state	<= cur_state;
@@ -162,7 +162,7 @@ begin
 					nxt_state <= writing;
 					icap_enable <= true;
 				elsif sync_state_flag then
-					nxt_state <= ready;				
+					nxt_state <= ready;
 				end if;
 			when writing =>
 				in_data_rden <= '1';
@@ -175,7 +175,7 @@ begin
 					if in_data(31 downto 27) = "00101" and sync_state = synced and pr_reset = false then
 						if in_data(17 downto 13) = reg_fdro then	-- FDRO read cfg register
 							nxt_state <= pre_stream_read0;
-						else 
+						else
 							nxt_state <= pre_reg_read0;
 						end if;
 					end if;
@@ -200,14 +200,14 @@ begin
 				in_data_rden <= '1';
 				icap_enable <= true;
 				nxt_state <= pre_reg_read0;
-			when read => 
+			when read =>
 				readback_cnt_rst <= false;
 				icap_read <= true;
 				icap_enable <= false;
-				if out_data_full = '0' then				
+				if out_data_full = '0' then
 					nxt_state <= reading;
 				end if;
-			when reading => 
+			when reading =>
 				readback_cnt_rst <= false;
 				readback_cnt_en <= true;
 				icap_enable <= true;
@@ -218,11 +218,11 @@ begin
 				elsif out_data_full = '1' then
 					nxt_state <= read;
 				end if;
-			when post_read => 
+			when post_read =>
 				in_data_rden <= '1';
 				nxt_state <= write;
 			when others =>
-				
+
 		end case;
 	end process combi;
 
@@ -242,8 +242,8 @@ begin
 			end if;
 		end if;
 	end process;
-	
-	
+
+
 	-- update sync status
 	sync_p : process(clk)
 	begin
@@ -280,7 +280,7 @@ begin
 					when dummy1 =>
 						if in_data = sync_s_sync then
 							sync_state <= synced;
-						elsif in_data /= sync_s_dummy then 
+						elsif in_data /= sync_s_dummy then
 							sync_state <= none;
 						end if;
 					when synced =>
@@ -304,7 +304,7 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	in_data_swap <= bit_swap(in_data, 8);
 	icap_out_swap <= bit_swap(icap_out, 8);
 

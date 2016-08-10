@@ -47,7 +47,7 @@ scripts are wrapped in Bash or PowerShell scripts, to hide some platform specifi
 Windows. See [Requirements][rtfd:using/requirements] for
 further details.
 
- [rtfd:using/requirements]: http://poc-library.readthedocs.io/en/master/UsingPoC/Requirements.html
+ [rtfd:using/requirements]: http://poc-library.readthedocs.io/en/release/UsingPoC/Requirements.html
 
 ##### PoC requires:
 
@@ -58,11 +58,11 @@ further details.
   * Bash on Linux and OS X
   * PowerShell on Windows
 
- [rtfd:whatis/toolchains]: http://poc-library.readthedocs.io/en/master/WhatIsPoC/SupportedToolChains.html
+ [rtfd:whatis/toolchains]: http://poc-library.readthedocs.io/en/release/WhatIsPoC/SupportedToolChains.html
 
 ##### PoC optionally requires:
 
-* Git command line tools or a Git GUI, if you want to check out the latest 'master' or 'release' branch.
+* Git command line tools or a Git GUI, if you want to check out the latest 'release' or 'release' branch.
 
 
 ##### PoC depends on third parts libraries:
@@ -75,8 +75,8 @@ further details.
   An unit testing framework for VHDL.
 
 All dependencies are available as GitHub repositories and are linked to PoC as Git submodules into
-the [PoCRoot\lib](https://github.com/VLSI-EDA/PoC/tree/master/lib) directory. See [Third Party
-Libraries](http://poc-library.readthedocs.io/en/master/Miscelaneous/ThirdParty.html) for more details on these libraries.
+the [PoCRoot\lib](https://github.com/VLSI-EDA/PoC/tree/release/lib) directory. See [Third Party
+Libraries](http://poc-library.readthedocs.io/en/release/Miscelaneous/ThirdParty.html) for more details on these libraries.
 
  [cocotb]: https://github.com/potentialventures/cocotb
  [osvvm]:	 https://github.com/JimLewis/OSVVM
@@ -84,7 +84,7 @@ Libraries](http://poc-library.readthedocs.io/en/master/Miscelaneous/ThirdParty.h
 
 ## 3 Download
 
-The PoC-Library can be downloaded as a [zip-file][github:download] (latest 'master' branch), cloned with `git clone`
+The PoC-Library can be downloaded as a [zip-file][github:download] (latest 'release' branch), cloned with `git clone`
 or embedded with `git submodule add` from GitHub. GitHub offers HTTPS and SSH as transfer protocols. See the [Download][rtfd:download] page for further details. The installation directory is referred to as `PoCRoot`.
 
 | Protocol | Git Clone Command                                                 |
@@ -92,8 +92,8 @@ or embedded with `git submodule add` from GitHub. GitHub offers HTTPS and SSH as
 | HTTPS    | `git clone --recursive https://github.com/VLSI-EDA/PoC.git PoC`   |
 | SSH      | `git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC` |
 
- [rtfd:download]: http://poc-library.readthedocs.io/en/master/UsingPoC/Download.html
- [github:download]: https://github.com/VLSI-EDA/PoC/archive/master.zip
+ [rtfd:download]: http://poc-library.readthedocs.io/en/release/UsingPoC/Download.html
+ [github:download]: https://github.com/VLSI-EDA/PoC/archive/release.zip
 
 
 ## 4 Configuring PoC on a Local System
@@ -101,7 +101,7 @@ or embedded with `git submodule add` from GitHub. GitHub offers HTTPS and SSH as
 To explore PoC's full potential, it's required to configure some paths and synthesis or simulation tool chains.
 The following commands start a guided configuration process. Please follow the instructions on screen. It's
 possible to relaunch the process at any time, for example to register new tools or to update tool versions.
-See [Configuration](http://poc-library.readthedocs.io/en/master/UsingPoC/PoCConfiguration.html) for more
+See [Configuration](http://poc-library.readthedocs.io/en/release/UsingPoC/PoCConfiguration.html) for more
 details. Run the following command line instructions to configure PoC on your local system:
 
 ```PowerShell
@@ -115,7 +115,7 @@ default value displayed in brackets.
 
 If you want to check your installation, you can run one of our testbenches as described in [Using PoC -> Simulation][rtfd:using/simulation]
 
- [rtfd:using/simulation]: http://poc-library.readthedocs.io/en/master/UsingPoC/Simulation.html
+ [rtfd:using/simulation]: http://poc-library.readthedocs.io/en/release/UsingPoC/Simulation.html
 
 ## 6 Integrating PoC into Projects
 

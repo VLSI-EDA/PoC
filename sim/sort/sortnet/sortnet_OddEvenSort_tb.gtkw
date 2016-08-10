@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
 [*] Sun Mar 20 17:00:26 2016
 [*]
-[dumpfile] "G:\git\PoC\temp\ghdl\sortnet_OddEvenSort_tb.ghw"
 [dumpfile_mtime] "Sun Mar 20 16:55:34 2016"
 [dumpfile_size] 1236808
-[savefile] "G:\git\PoC\sim\sort\sortnet\sortnet_OddEvenSort_tb.gtkw"
 [timestart] 0
 [size] 1680 997
 [pos] -1 -1

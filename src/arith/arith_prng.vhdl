@@ -14,9 +14,9 @@
 -- optimized polynomials from 3 to 168 bits. The polynomials have at most 5 tap
 -- positions, so that long shift registers can be inferred instead of single
 -- flip-flops.
--- 
+--
 -- The generated number sequence includes the value all-zeros, but not all-ones.
--- 
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany

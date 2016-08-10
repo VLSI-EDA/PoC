@@ -29,58 +29,41 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
+#
 function Open-Environment
-{	[CmdletBinding()]
-	param(
-		[String]		$Py_Interpreter,
-		[String[]]	$Py_Parameters,
-		[String]		$PoC_Query
-	)
-	$Debug = $true	#$false
+{	$Debug = $true	#$false
 	
 	# load Lattice Diamond environment if not loaded before
 	if (-not (Test-Path env:FOUNDRY))
-	{	$Query = "INSTALL.Lattice.Diamond:InstallationDirectory"
-		$PoC_Command = "$Py_Interpreter $Py_Parameters $PoC_Query query $Query"
-		if ($Debug -eq $true)
-		{	Write-Host "Inquire Diamond installation directory: command='$PoC_Command'" -ForegroundColor Yellow }
-
-		# execute python script to receive Diamond settings filename
-		$Diamond_InstallationDirectory = Invoke-Expression $PoC_Command
+	{	$Diamond_InstallationDirectory = PoCQuery "INSTALL.Lattice.Diamond:InstallationDirectory"
 		if ($LastExitCode -ne 0)
-		{	Write-Host "ERROR: ExitCode for '$PoC_Command' was not zero. Aborting execution." -ForegroundColor Red
+		{	Write-Host "[ERROR]: ExitCode for '$PoC_Command' was not zero. Aborting execution." -ForegroundColor Red
 			Write-Host "       $Diamond_InstallationDirectory" -ForegroundColor Red
 			return 1
 		}
-		
-		if ($Debug -eq $true)
-		{ Write-Host "Diamond installation directory: '$Diamond_InstallationDirectory'" -ForegroundColor Yellow }
-		
-		if ($Diamond_InstallationDirectory -eq "")
-		{	Write-Host "ERROR: No Lattice Diamond installation found." -ForegroundColor Red
+		elseif ($Diamond_InstallationDirectory -eq "")
+		{	Write-Host "[ERROR]: No Lattice Diamond installation found." -ForegroundColor Red
 			Write-Host "Run 'poc.ps1 configure' to configure your Lattice Diamond installation." -ForegroundColor Red
 			return 1
 		}
 		elseif (-not (Test-Path $Diamond_InstallationDirectory))
-		{	Write-Host "ERROR: Lattice Diamond is configured in PoC, but installation directory '$Diamond_SettingsFile' does not exist." -ForegroundColor Red
+		{	Write-Host "[ERROR]: Lattice Diamond is configured in PoC, but installation directory '$Diamond_InstallationDirectory' does not exist." -ForegroundColor Red
 			Write-Host "Run 'poc.ps1 configure' to configure your Lattice Diamond installation." -ForegroundColor Red
 			return 1
 		}
-		else
-		{	Write-Host "Loading Lattice Diamond environment..." -ForegroundColor Yellow
-			$env:LSC_INI_PATH =	""
-			$env:LSC_DIAMOND =	"true"
-			$env:FOUNDRY =			"$Diamond_InstallationDirectory\ispFPGA"
-			$env:TCL_LIBRARY =	"$Diamond_InstallationDirectory\tcltk\lib\tcl8.5"
-			return 0
-		}
+
+		Write-Host "Loading Lattice Diamond environment..." -ForegroundColor Yellow
+		$env:LSC_INI_PATH =	""
+		$env:LSC_DIAMOND =	"true"
+		$env:FOUNDRY =			"$Diamond_InstallationDirectory\ispFPGA"
+		$env:TCL_LIBRARY =	"$Diamond_InstallationDirectory\tcltk\lib\tcl8.5"
+		return 0
 	}
 	elseif (-not (Test-Path $env:FOUNDRY))
-	{	Write-Host "ERROR: Environment variable FOUNDRY is set, but the path does not exist." -ForegroundColor Red
+	{	Write-Host "[ERROR]: Environment variable FOUNDRY is set, but the path does not exist." -ForegroundColor Red
 		Write-Host ("  FOUNDRY=" + $env:FOUNDRY) -ForegroundColor Red
 		$env:FOUNDRY = $null
-		Load-Environment $Py_Interpreter $Py_Parameters $PoC_Query
+		return Load-Environment
 	}
 }
 

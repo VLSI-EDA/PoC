@@ -3,6 +3,7 @@
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- =============================================================================
 -- Authors:					Patrick Lehmann
+-- 									Martin Zabel
 --
 -- Package:					Simulation constants, functions and utilities.
 --
@@ -122,7 +123,7 @@ package waveform is
 		Value		: T_SLV_64;
 	end record;
 
-	subtype T_SIM_WAVEFORM			is T_TIMEVEC;
+	subtype T_SIM_WAVEFORM			is TIME_VECTOR; -- use predefined physical type TIME here
 	type T_SIM_WAVEFORM_SL			is array(natural range <>) of T_SIM_WAVEFORM_TUPLE_SL;
 	type T_SIM_WAVEFORM_SLV_8		is array(natural range <>) of T_SIM_WAVEFORM_TUPLE_SLV_8;
 	type T_SIM_WAVEFORM_SLV_16	is array(natural range <>) of T_SIM_WAVEFORM_TUPLE_SLV_16;
@@ -337,7 +338,7 @@ package body waveform is
 		constant TimeLow						: time			:= Period - TimeHigh + (Period * WanderAsFactor);						-- and 50% to the low level
 		constant ClockAfterRun_cy		: positive	:= 5;
 
-		constant PROCESS_ID					: T_SIM_PROCESS_ID	:= simRegisterProcess(TestID, "simGenerateClock(freq=" & to_string(to_freq(Period), 2) & ")", IsLowPriority => TRUE);
+		constant PROCESS_ID					: T_SIM_PROCESS_ID	:= simRegisterProcess(TestID, "simGenerateClock(period=" & to_string(Period, 2) & ")", IsLowPriority => TRUE);
 	begin
 		-- report "simGenerateClock: (Instance: '" & Clock'instance_name & "')" & LF &
 			-- "Period: "						& TIME'image(Period) & LF &

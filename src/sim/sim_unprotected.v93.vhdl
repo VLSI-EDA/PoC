@@ -47,36 +47,36 @@ package sim_unprotected is
   -- Simulation Task and Status Management
 	-- ===========================================================================
 	-- Initializer and Finalizer
-	procedure				initialize(MaxAssertFailures : NATURAL := NATURAL'high; MaxSimulationRuntime : TIME := TIME'high);
+	procedure				initialize(MaxAssertFailures : natural := natural'high; MaxSimulationRuntime : TIME := TIME'high);
 	procedure				finalize;
 
 	-- Assertions
-	procedure				fail(Message : STRING := "");
-	procedure				assertion(Condition : BOOLEAN; Message : STRING := "");
-	procedure				writeMessage(Message : STRING);
+	procedure				fail(Message : string := "");
+	procedure				assertion(Condition : boolean; Message : string := "");
+	procedure				writeMessage(Message : string);
 	procedure				writeReport;
 
 	-- Process Management
-	impure function	registerProcess(Name : STRING; IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID;
-	impure function registerProcess(TestID : T_SIM_TEST_ID; Name : STRING; IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID;
+	impure function	registerProcess(Name : string; IsLowPriority : boolean := FALSE) return T_SIM_PROCESS_ID;
+	impure function registerProcess(TestID : T_SIM_TEST_ID; Name : string; IsLowPriority : boolean := FALSE) return T_SIM_PROCESS_ID;
 	procedure				deactivateProcess(procID : T_SIM_PROCESS_ID);
 	procedure				stopAllProcesses;
 	procedure				stopProcesses(TestID	: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID);
 
 	-- Test Management
 	procedure				createDefaultTest;
-	impure function createTest(Name : STRING) return T_SIM_TEST_ID;
+	impure function createTest(Name : string) return T_SIM_TEST_ID;
 	procedure				activateDefaultTest;
-	impure function	finalizeDefaultTest return BOOLEAN;
+	impure function	finalizeDefaultTest return boolean;
 	procedure				finalizeTest(TestID : T_SIM_TEST_ID);
 
 	-- Clock Management
 	procedure				stopAllClocks;
 	procedure				stopClocks(TestID		: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID);
 
-	impure function	isStopped(TestID		: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID)	return BOOLEAN;
-	impure function isFinalized(TestID	: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID)	return BOOLEAN;
-	impure function isAllFinalized return BOOLEAN;
+	impure function	isStopped(TestID		: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID)	return boolean;
+	impure function isFinalized(TestID	: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID)	return boolean;
+	impure function isAllFinalized return boolean;
 end package;
 
 
@@ -93,7 +93,7 @@ package body sim_unprotected is
 		end if;
 	end procedure;
 
-	procedure initialize(MaxAssertFailures : NATURAL := NATURAL'high; MaxSimulationRuntime : TIME := TIME'high) is
+	procedure initialize(MaxAssertFailures : natural := natural'high; MaxSimulationRuntime : TIME := TIME'high) is
 	begin
 		if C_SIM_VERBOSE then		report "initialize:" severity NOTE;			end if;
 		init;
@@ -107,7 +107,7 @@ package body sim_unprotected is
 	end procedure;
 
 	procedure finalize is
-		variable Dummy	: BOOLEAN;
+		variable Dummy	: boolean;
 	begin
 		if (globalSim_StateIsFinalized = FALSE) then
 			if C_SIM_VERBOSE then		report "finalize: " severity NOTE;		end if;
@@ -123,50 +123,50 @@ package body sim_unprotected is
 	procedure writeReport_Header is
 		variable LineBuffer : LINE;
 	begin
-		write(LineBuffer,		(			STRING'("========================================")));
-		write(LineBuffer,		(LF & STRING'("POC TESTBENCH REPORT")));
-		write(LineBuffer,		(LF & STRING'("========================================")));
+		write(LineBuffer,		(			string'("========================================")));
+		write(LineBuffer,		(LF & string'("POC TESTBENCH REPORT")));
+		write(LineBuffer,		(LF & string'("========================================")));
 		writeline(output, LineBuffer);
 	end procedure;
 
-	procedure writeReport_TestReport(Prefix : STRING := "") is
+	procedure writeReport_TestReport(Prefix : string := "") is
 		variable LineBuffer : LINE;
 	begin
 		if (globalSim_Tests(C_SIM_DEFAULT_TEST_ID).Status /= SIM_TEST_STATUS_CREATED) then
-			write(LineBuffer,				 Prefix & "Tests          " & INTEGER'image(globalSim_TestCount + 1));
+			write(LineBuffer,				 Prefix & "Tests          " & integer'image(globalSim_TestCount + 1));
 			write(LineBuffer,		LF & Prefix & " " & str_ralign("-1", log10ceilnz(globalSim_TestCount + 1) + 1) & ": " & C_SIM_DEFAULT_TEST_NAME);
 		else
-			write(LineBuffer,				 Prefix & "Tests          " & INTEGER'image(globalSim_TestCount));
+			write(LineBuffer,				 Prefix & "Tests          " & integer'image(globalSim_TestCount));
 		end if;
 		for i in 0 to globalSim_TestCount - 1 loop
-			write(LineBuffer,		LF & Prefix & "  " & str_ralign(INTEGER'image(i), log10ceilnz(globalSim_TestCount)) & ": " & str_trim(globalSim_Tests(i).Name));
+			write(LineBuffer,		LF & Prefix & "  " & str_ralign(integer'image(i), log10ceilnz(globalSim_TestCount)) & ": " & str_trim(globalSim_Tests(i).Name));
 		end loop;
 		writeline(output, LineBuffer);
 	end procedure;
 
-	procedure writeReport_AssertReport(Prefix : STRING := "") is
+	procedure writeReport_AssertReport(Prefix : string := "") is
 		variable LineBuffer : LINE;
 	begin
-		write(LineBuffer,					 Prefix & "Assertions   " & INTEGER'image(globalSim_AssertCount));
-		write(LineBuffer,			LF & Prefix & "  failed     " & INTEGER'image(globalSim_FailedAssertCount) & ite((globalSim_FailedAssertCount >= globalSim_MaxAssertFailures), " Too many failed asserts!", ""));
+		write(LineBuffer,					 Prefix & "Assertions   " & integer'image(globalSim_AssertCount));
+		write(LineBuffer,			LF & Prefix & "  failed     " & integer'image(globalSim_FailedAssertCount) & ite((globalSim_FailedAssertCount >= globalSim_MaxAssertFailures), " Too many failed asserts!", ""));
 		writeline(output, LineBuffer);
 	end procedure;
 
-	procedure writeReport_ProcessReport(Prefix : STRING := "") is
+	procedure writeReport_ProcessReport(Prefix : string := "") is
 		variable LineBuffer : LINE;
 	begin
-		write(LineBuffer,					 Prefix & "Processes    " & INTEGER'image(globalSim_ProcessCount));
-		write(LineBuffer,			LF & Prefix & "  active     " & INTEGER'image(globalSim_ActiveProcessCount));
+		write(LineBuffer,					 Prefix & "Processes    " & integer'image(globalSim_ProcessCount));
+		write(LineBuffer,			LF & Prefix & "  active     " & integer'image(globalSim_ActiveProcessCount));
 		-- report killed processes
 		for i in 0 to globalSim_ProcessCount - 1 loop
 			if ((globalSim_Processes(i).Status = SIM_PROCESS_STATUS_ACTIVE) and (globalSim_Processes(i).IsLowPriority = FALSE)) then
-				write(LineBuffer,	LF & Prefix & "    " & str_ralign(INTEGER'image(i), log10ceilnz(globalSim_ProcessCount)) & ": " & str_trim(globalSim_Processes(i).Name));
+				write(LineBuffer,	LF & Prefix & "    " & str_ralign(integer'image(i), log10ceilnz(globalSim_ProcessCount)) & ": " & str_trim(globalSim_Processes(i).Name));
 			end if;
 		end loop;
 		writeline(output, LineBuffer);
 	end procedure;
 
-	procedure writeReport_RuntimeReport(Prefix : STRING := "") is
+	procedure writeReport_RuntimeReport(Prefix : string := "") is
 		variable LineBuffer : LINE;
 	begin
 		write(LineBuffer,					 Prefix & "Runtime      " & to_string(now, 1));
@@ -176,12 +176,12 @@ package body sim_unprotected is
 	procedure writeReport_SimulationResult is
 		variable LineBuffer : LINE;
 	begin
-		write(LineBuffer,																				(			STRING'("========================================")));
-		if (globalSim_AssertCount = 0) then	  write(LineBuffer, (LF & STRING'("SIMULATION RESULT = NO ASSERTS")));
-		elsif (globalSim_Passed = TRUE) then  write(LineBuffer, (LF & STRING'("SIMULATION RESULT = PASSED")));
-		else										 						 	write(LineBuffer, (LF & STRING'("SIMULATION RESULT = FAILED")));
+		write(LineBuffer,																				(			string'("========================================")));
+		if (globalSim_AssertCount = 0) then	  write(LineBuffer, (LF & string'("SIMULATION RESULT = NO ASSERTS")));
+		elsif (globalSim_Passed = TRUE) then  write(LineBuffer, (LF & string'("SIMULATION RESULT = PASSED")));
+		else										 						 	write(LineBuffer, (LF & string'("SIMULATION RESULT = FAILED")));
 		end if;
-		write(LineBuffer,																				(LF & STRING'("========================================")));
+		write(LineBuffer,																				(LF & string'("========================================")));
 		writeline(output, LineBuffer);
 	end procedure;
 
@@ -198,7 +198,7 @@ package body sim_unprotected is
 		writeReport_SimulationResult;
 	end procedure;
 
-	procedure assertion(condition : BOOLEAN; Message : STRING := "") is
+	procedure assertion(condition : boolean; Message : string := "") is
 	begin
 		globalSim_AssertCount := globalSim_AssertCount + 1;
 		if (condition = FALSE) then
@@ -210,7 +210,7 @@ package body sim_unprotected is
 		end if;
 	end procedure;
 
-	procedure fail(Message : STRING := "") is
+	procedure fail(Message : string := "") is
 	begin
 		if (Message'length > 0) then
 			report Message severity ERROR;
@@ -218,7 +218,7 @@ package body sim_unprotected is
 		globalSim_Passed := FALSE;
 	end procedure;
 
-	procedure writeMessage(Message : STRING) is
+	procedure writeMessage(Message : string) is
 		variable LineBuffer : LINE;
 	begin
 		write(LineBuffer, Message);
@@ -242,7 +242,7 @@ package body sim_unprotected is
 		globalSim_Tests(Test.ID)	:= Test;
 	end procedure;
 
-	impure function createTest(Name : STRING) return T_SIM_TEST_ID is
+	impure function createTest(Name : string) return T_SIM_TEST_ID is
 		variable Test							: T_SIM_TEST;
 	begin
 		if (globalSim_StateIsInitialized = FALSE) then
@@ -271,7 +271,7 @@ package body sim_unprotected is
 		end if;
 	end procedure;
 
-	impure function finalizeDefaultTest return BOOLEAN is
+	impure function finalizeDefaultTest return boolean is
 	begin
 		if (globalSim_Tests(C_SIM_DEFAULT_TEST_ID).Status = SIM_TEST_STATUS_CREATED) then
 			if C_SIM_VERBOSE then		report "finalizeDefaultTest: inactive" severity NOTE;		end if;
@@ -292,7 +292,7 @@ package body sim_unprotected is
 	end function;
 
 	procedure finalizeTest(TestID : T_SIM_TEST_ID) is
-		variable Dummy	: BOOLEAN;
+		variable Dummy	: boolean;
 	begin
 		if (TestID = C_SIM_DEFAULT_TEST_ID) then
 			if (globalSim_ActiveTestCount = 1) then
@@ -320,12 +320,12 @@ package body sim_unprotected is
 		end if;
 	end procedure;
 
-	impure function registerProcess(Name : STRING; IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID is
+	impure function registerProcess(Name : string; IsLowPriority : boolean := FALSE) return T_SIM_PROCESS_ID is
 	begin
 		return registerProcess(C_SIM_DEFAULT_TEST_ID, Name, IsLowPriority);
 	end function;
 
-	impure function registerProcess(TestID : T_SIM_TEST_ID; Name : STRING; IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID is
+	impure function registerProcess(TestID : T_SIM_TEST_ID; Name : string; IsLowPriority : boolean := FALSE) return T_SIM_PROCESS_ID is
 		variable Proc						: T_SIM_PROCESS;
 		variable TestProcID			: T_SIM_TEST_ID;
 	begin
@@ -417,17 +417,17 @@ package body sim_unprotected is
 		end if;
 	end procedure;
 
-	impure function isStopped(TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN is
+	impure function isStopped(TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return boolean is
 	begin
 		return not globalSim_MainClockEnables(TestID);
 	end function;
 
-	impure function isFinalized(TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN is
+	impure function isFinalized(TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return boolean is
 	begin
 		return (globalSim_Tests(TestID).Status = SIM_TEST_STATUS_ENDED);
 	end function;
 
-	impure function isAllFinalized return BOOLEAN is
+	impure function isAllFinalized return boolean is
 	begin
 		return (globalSim_ActiveTestCount = 0);
 	end function;

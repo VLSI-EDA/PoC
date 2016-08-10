@@ -111,32 +111,33 @@ class Configuration(BaseConfiguration):
 
 
 class QuartusMixIn:
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
 		self._platform =            platform
-		self._binaryDirectoryPath =  binaryDirectoryPath
-		self._version =              version
+		self._dryrun =              dryrun
+		self._binaryDirectoryPath = binaryDirectoryPath
+		self._version =             version
 		self._logger =              logger
 
 
 class Quartus(QuartusMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetMap(self):
-		return Map(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return Map(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 	def GetTclShell(self):
-		return TclShell(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return TclShell(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 
 class Map(Executable, QuartusMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 		if (platform == "Windows") :      executablePath = binaryDirectoryPath / "quartus_map.exe"
 		elif (platform == "Linux") :      executablePath = binaryDirectoryPath / "quartus_map"
 		else :                            raise PlatformNotSupportedException(platform)
-		Executable.__init__(self, platform, executablePath, logger=logger)
+		Executable.__init__(self, platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -176,6 +177,10 @@ class Map(Executable, QuartusMixIn):
 		parameterList = self.Parameters.ToArgumentList()
 		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
 
+		if (self._dryrun):
+			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
+
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -189,14 +194,14 @@ class Map(Executable, QuartusMixIn):
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("    quartus_map messages for '{0}'".format(self.Parameters[self.SwitchArgumentFile]))
-			self._LogNormal("    " + ("-" * 76))
+			self._LogNormal("  quartus_map messages for '{0}'".format(self.Parameters[self.SwitchArgumentFile]))
+			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
-				line.IndentBy(2)
+				line.IndentBy(self.Logger.BaseIndent + 1)
 				self._Log(line)
 				line = next(iterator)
 
@@ -204,16 +209,16 @@ class Map(Executable, QuartusMixIn):
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 class TclShell(Executable, QuartusMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 		if (platform == "Windows") :      executablePath = binaryDirectoryPath / "quartus_sh.exe"
 		elif (platform == "Linux") :      executablePath = binaryDirectoryPath / "quartus_sh"
 		else :                            raise PlatformNotSupportedException(platform)
-		Executable.__init__(self, platform, executablePath, logger=logger)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 

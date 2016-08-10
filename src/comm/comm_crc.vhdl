@@ -12,7 +12,7 @@
 -- Computes the Cyclic Redundancy Check (CRC) for a data packet as remainder
 -- of the polynomial division of the message by the given generator
 -- polynomial (GEN).
--- 
+--
 -- The computation is unrolled so as to process an arbitrary number of
 -- message bits per step. The generated CRC is independent from the chosen
 -- processing width.

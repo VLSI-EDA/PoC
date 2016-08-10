@@ -4,6 +4,7 @@
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Thomas B. Preusser
+-- 									Martin Zabel
 --
 -- Package:					Simulation constants, functions and utilities.
 --
@@ -39,6 +40,9 @@ use			PoC.sim_unprotected.all;
 
 
 package simulation is
+	-- mimic definition of VHDL-2008
+	type TIME_VECTOR is array(natural range<>) of time;
+
 	-- Testbench Status Management
 	-- ===========================================================================
 	-- alias simInitialize					is work.sim_unprotected.initialize[NATURAL, TIME];

@@ -16,7 +16,7 @@
 -- side for the sole purpose of reconstructing the correct order of the data.
 -- It is assumed to wrap so as to allow an infinite input sequence. Addresses
 -- are not actively exposed to the purely stream-based FIFO output.
--- 
+--
 -- The implemented functionality enables the reconstruction of streams that
 -- are tunnelled across address-based transports that are allowed to reorder
 -- the transmission of data blocks. This applies to many DMA implementations.

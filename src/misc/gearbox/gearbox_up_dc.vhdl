@@ -92,7 +92,7 @@ architecture rtl of gearbox_up_dc is
 	signal Select_us					: unsigned(COUNTER_BITS - 1 downto 0);
 
 	signal In_Data_d					: std_logic_vector(INPUT_BITS - 1 downto 0)		:= (others => '0');
-	signal In_Align_d					: STD_LOGIC;
+	signal In_Align_d					: std_logic;
 	signal Data_d							: T_CHUNK_VECTOR(INPUT_CHUNKS - 2 downto 0)		:= (others => (others => '0'));
 	signal Collected					: std_logic_vector(OUTPUT_BITS - 1 downto 0);
 	signal Collected_swapped	: std_logic_vector(OUTPUT_BITS - 1 downto 0);

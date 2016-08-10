@@ -1,30 +1,30 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
-# 
-# Python Class:      This XCOCompiler compiles xco IPCores to netlists
-# 
+#
+# Python Class:     This XCOCompiler compiles xco IPCores to netlists
+#
 # Description:
 # ------------------------------------
 #		TODO:
-#		- 
-#		- 
+#		-
+#		-
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,22 +40,23 @@ else:
 	from lib.Functions import Exit
 	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XCOCompiler")
 
-	
+
 # load dependencies
 import shutil
+from datetime               import datetime
 from os                     import chdir
 from pathlib                import Path
 from textwrap               import dedent
 
 from Base.Project           import ToolChain, Tool
-from Base.Compiler          import Compiler as BaseCompiler, CompilerException, SkipableCompilerException
+from Base.Compiler          import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
 from PoC.Entity             import WildCard
 from ToolChains.Xilinx.ISE  import ISE, ISEException
 
 
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =  ToolChain.Xilinx_ISE
-	_TOOL =        Tool.Xilinx_CoreGen
+	_TOOL_CHAIN =     ToolChain.Xilinx_ISE
+	_TOOL =           Tool.Xilinx_CoreGen
 
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)
@@ -69,43 +70,69 @@ class Compiler(BaseCompiler):
 		self._PrepareCompiler()
 
 	def _PrepareCompiler(self):
-		self._LogVerbose("Preparing Xilinx Core Generator Tool (CoreGen).")
+		super()._PrepareCompiler()
+
 		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.ISE']
 		binaryPath = Path(iseSection['BinaryDirectory'])
 		version = iseSection['Version']
-		self._toolChain = ISE(self.Host.Platform, binaryPath, version, logger=self.Logger)
+		self._toolChain = ISE(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):
-		for fqn in fqnList:
-			entity = fqn.Entity
-			if (isinstance(entity, WildCard)):
-				for netlist in entity.GetCoreGenNetlists():
+		"""Run a list of netlist compilations. Expand wildcards to all selected netlists."""
+		self._testSuite.StartTimer()
+		self.Logger.BaseIndent = int(len(fqnList) > 1)
+		try:
+			for fqn in fqnList:
+				entity = fqn.Entity
+				if (isinstance(entity, WildCard)):
+					self.Logger.BaseIndent = 1
+					for netlist in entity.GetCoreGenNetlists():
+						self.TryRun(netlist, *args, **kwargs)
+				else:
+					netlist = entity.CGNetlist
 					self.TryRun(netlist, *args, **kwargs)
-			else:
-				netlist = entity.CGNetlist
-				self.TryRun(netlist, *args, **kwargs)
+		except KeyboardInterrupt:
+			self._LogError("Received a keyboard interrupt.")
+		finally:
+			self._testSuite.StopTimer()
+
+		self.PrintOverallCompileReport()
+
+		return self._testSuite.IsAllSuccess
 
 	def Run(self, netlist, board):
 		super().Run(netlist, board)
+		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
 		self._LogNormal("Executing pre-processing tasks...")
+		self._state = CompileState.PreCopy
 		self._RunPreCopy(netlist)
+		self._state = CompileState.PrePatch
 		self._RunPreReplace(netlist)
+		self._preTasksTime = self._GetTimeDeltaSinceLastEvent()
 
 		self._LogNormal("Running Xilinx Core Generator...")
+		self._state = CompileState.Compile
 		self._RunCompile(netlist, board.Device)
+		self._compileTime = self._GetTimeDeltaSinceLastEvent()
 
 		self._LogNormal("Executing post-processing tasks...")
+		self._state = CompileState.PostCopy
 		self._RunPostCopy(netlist)
+		self._state = CompileState.PostPatch
 		self._RunPostReplace(netlist)
+		self._state = CompileState.PostDelete
 		self._RunPostDelete(netlist)
+		self._postTasksTime = self._GetTimeDeltaSinceLastEvent()
+
+		self._endAt = datetime.now()
 
 	def _WriteSpecialSectionIntoConfig(self, device):
 		# add the key Device to section SPECIAL at runtime to change interpolation results
 		self.Host.PoCConfig['SPECIAL'] = {}
 		self.Host.PoCConfig['SPECIAL']['Device'] =        device.FullName
 		self.Host.PoCConfig['SPECIAL']['DeviceSeries'] =  device.Series
-		self.Host.PoCConfig['SPECIAL']['OutputDir']	=      self.Directories.Working.as_posix()
+		self.Host.PoCConfig['SPECIAL']['OutputDir']	=     self.Directories.Working.as_posix()
 
 	def _RunCompile(self, netlist, device):
 		self._LogVerbose("Patching coregen.cgp and .cgc files...")

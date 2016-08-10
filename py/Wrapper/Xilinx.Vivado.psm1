@@ -29,64 +29,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
+#
 function Open-Environment
-{	[CmdletBinding()]
-	param(
-		[String]		$Py_Interpreter,
-		[String[]]	$Py_Parameters,
-		[String]		$PoC_Query
-	)
-	$Debug = $false
+{	$Debug = $false
 	
 	# load Xilinx Vivado environment if not loaded before
 	if (-not (Test-Path env:XILINX_VIVADO))
-	{	$Query = "Xilinx.Vivado:SettingsFile"
-		$PoC_Command = "$Py_Interpreter $Py_Parameters $PoC_Query query $Query"
-		if ($Debug -eq $true)
-		{	Write-Host "Inquire Vivado settings file: command='$PoC_Command'" -ForegroundColor Yellow }
-
-		# execute python script to receive Vivado settings filename
-		$Vivado_SettingsFile = Invoke-Expression $PoC_Command
+	{	$Vivado_SettingsFile = PoCQuery "Xilinx.Vivado:SettingsFile"
 		if ($LastExitCode -ne 0)
-		{	Write-Host "ERROR: ExitCode for '$PoC_Command' was not zero. Aborting execution." -ForegroundColor Red
+		{	Write-Host "[ERROR]: ExitCode for '$PoC_Command' was not zero. Aborting execution." -ForegroundColor Red
 			Write-Host "       $Vivado_SettingsFile" -ForegroundColor Red
 			return 1
 		}
-		
-		if ($Debug -eq $true)
-		{ Write-Host "Vivado settings file: '$Vivado_SettingsFile'" -ForegroundColor Yellow }
-		
-		if ($Vivado_SettingsFile -eq "")
-		{	Write-Host "ERROR: No Xilinx Vivado installation found." -ForegroundColor Red
+		elseif ($Vivado_SettingsFile -eq "")
+		{	Write-Host "[ERROR]: No Xilinx Vivado installation found." -ForegroundColor Red
 			Write-Host "Run 'poc.ps1 configure' to configure your Xilinx Vivado installation." -ForegroundColor Red
 			return 1
 		}
 		elseif (-not (Test-Path $Vivado_SettingsFile -PathType Leaf))
-		{	Write-Host "ERROR: Xilinx Vivado is configured in PoC, but settings file '$Vivado_SettingsFile' does not exist." -ForegroundColor Red
+		{	Write-Host "[ERROR]: Xilinx Vivado is configured in PoC, but settings file '$Vivado_SettingsFile' does not exist." -ForegroundColor Red
 			Write-Host "Run 'poc.ps1 configure' to configure your Xilinx Vivado installation." -ForegroundColor Red
 			return 1
 		}
-		elseif (($Vivado_SettingsFile -like "*.bat") -or ($Vivado_SettingsFile -like "*.cmd"))
-		{	Write-Host "Loading Xilinx Vivado environment '$Vivado_SettingsFile'" -ForegroundColor Yellow
-			if (-not (Get-Module -ListAvailable PSCX))
-			{	Write-Host "ERROR: PowerShell Community Extensions (PSCX) is not installed." -ForegroundColor Red
-				return 1
-			}
-			Import-Module PSCX
-			Invoke-BatchFile -path $Vivado_SettingsFile
-			return 0
-		}
-		else
-		{	Write-Host "ERROR: Xilinx Vivado is configured in PoC, but settings file format is not supported." -ForegroundColor Red
+		elseif (-not (($Vivado_SettingsFile -like "*.bat") -or ($Vivado_SettingsFile -like "*.cmd")))
+		{	Write-Host "[ERROR]: Xilinx Vivado is configured in PoC, but settings file format is not supported." -ForegroundColor Red
 			return 1
 		}
+
+		Write-Host "Loading Xilinx Vivado environment '$Vivado_SettingsFile'" -ForegroundColor Yellow
+		if (-not (Get-Module -ListAvailable PSCX))
+		{	Write-Host "[ERROR]: PowerShell Community Extensions (PSCX) is not installed." -ForegroundColor Red
+			return 1
+		}
+		Import-Module PSCX
+		Invoke-BatchFile -path $Vivado_SettingsFile
+		return 0
 	}
 	elseif (-not (Test-Path $env:XILINX_VIVADO))
-	{	Write-Host "ERROR: Environment variable XILINX_VIVADO is set, but the path does not exist." -ForegroundColor Red
+	{	Write-Host "[ERROR]: Environment variable XILINX_VIVADO is set, but the path does not exist." -ForegroundColor Red
 		Write-Host ("  XILINX_VIVADO=" + $env:XILINX_VIVADO) -ForegroundColor Red
 		$env:XILINX_VIVADO = $null
-		Load-Environment $Py_Interpreter $Py_Parameters $PoC_Query
+		return Load-Environment
 	}
 }
 

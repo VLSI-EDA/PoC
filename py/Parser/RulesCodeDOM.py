@@ -1,12 +1,12 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
 # Python Module:    TODO
-# 
+#
 # Description:
 # ------------------------------------
 #		TODO:
@@ -15,13 +15,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -65,7 +65,7 @@ class CopyStatement(Statement):
 	def SourcePath(self):       return self._sourcePath
 	@property
 	def DestinationPath(self):  return self._destinationPath
-	
+
 	@classmethod
 	def GetParser(cls):
 		# match for optional whitespacex
@@ -129,11 +129,11 @@ class CopyStatement(Statement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("CopyParser: Expected end of line or comment")
-		
+
 		# construct result
 		result = cls(sourceFile, destinationDirectory, commentText)
 		raise MatchingParserResult(result)
-	
+
 	def __str__(self, indent=0):
 		if (self._commentText != ""):
 			return "{0}Copy \"{1!s}\" To \"{2!s}\"    # {3}".format(("  " * indent), self._sourcePath, self._destinationPath, self._commentText)
@@ -174,6 +174,7 @@ class DeleteStatement(Statement):
 			file = ex.value.Value
 
 		# match for optional whitespace
+		token = yield
 		if isinstance(token, SpaceToken):           token = yield
 		# match for delimiter sign: \n
 		commentText = ""
@@ -220,13 +221,13 @@ class ReplaceStatement(Statement):
 	def MultiLine(self):        return self._multiLine
 	@property
 	def DotAll(self):           return self._dotAll
-	
+
 	@classmethod
 	def GetParser(cls):
 		multiLine =       False
 		dotAll =          False
 		caseInsensitive = False
-		
+
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -303,7 +304,7 @@ class ReplaceStatement(Statement):
 						continue
 					else:
 						break
-					
+
 		# match for delimiter sign: \n or #
 		commentText = ""
 		if (not isinstance(token, CharacterToken)): raise MismatchingParserResult("ReplaceParser: Expected end of line or comment")
@@ -333,7 +334,6 @@ class AppendLineStatement(Statement):
 
 	@property
 	def AppendPattern(self):   return self._appendPattern
-	@property
 
 	@classmethod
 	def GetParser(cls):
@@ -436,7 +436,7 @@ class FileStatement(BlockStatement):
 				commentText += token.Value
 		else:
 			raise MismatchingParserResult("FileParser: Expected end of line or comment")
-		
+
 		# match for inner statements
 		# ==========================================================================
 		# construct result
@@ -452,7 +452,7 @@ class FileStatement(BlockStatement):
 			print("ERROR in *.rules file -> fix me")
 		except MatchingParserResult:
 			pass
-		
+
 		# match for END FILE clause
 		# ==========================================================================
 		# match for optional whitespace
@@ -589,9 +589,9 @@ class PreProcessRulesStatement(ProcessRulesBlockStatement):
 	__PARSER_STATEMENTS__ = PreProcessStatements
 
 
-class PostProcessStatement(ProcessRulesBlockStatement):
-	__PARSER_NAME__ =       "PreProcessRulesParser"
-	__PARSER_BLOCK_NAME__ = "preprocessrules"
+class PostProcessRulesStatement(ProcessRulesBlockStatement):
+	__PARSER_NAME__ =       "PostProcessRulesParser"
+	__PARSER_BLOCK_NAME__ = "postprocessrules"
 	__PARSER_STATEMENTS__ = PostProcessStatements
 
 
@@ -612,7 +612,7 @@ class Document(BlockStatement):
 				parser.send(token)
 		except MatchingParserResult:
 			raise MatchingParserResult(result)
-	
+
 	def __str__(self, indent=0):
 		buffer = "  " * indent + "Document"
 		for stmt in self._statements:
@@ -637,6 +637,6 @@ PostProcessStatements.AddChoice(CommentLine)
 PostProcessStatements.AddChoice(EmptyLine)
 
 DocumentStatements.AddChoice(PreProcessRulesStatement)
-DocumentStatements.AddChoice(PostProcessStatement)
+DocumentStatements.AddChoice(PostProcessRulesStatement)
 DocumentStatements.AddChoice(CommentLine)
 DocumentStatements.AddChoice(EmptyLine)

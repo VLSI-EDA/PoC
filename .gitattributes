@@ -1,5 +1,7 @@
 *.tpl		-whitespace
 *.md		-whitespace
 *.rst		-whitespace
-*.vhdl	filter=normalize_vhdl
+*.pl	filter=normalize
 *.py	filter=normalize
+*.rst	filter=normailze_rest
+*.vhdl	filter=normalize_vhdl

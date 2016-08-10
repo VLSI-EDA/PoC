@@ -74,7 +74,7 @@ $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
 
-Import-Module $PSScriptRoot\precompile.psm1 -ArgumentList "$WorkingDir"
+Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -ArgumentList "$WorkingDir"
 
 # Display help if no command was selected
 $Help = $Help -or (-not ($All -or $GHDL -or $Questa))
@@ -136,7 +136,8 @@ if ($GHDL)
 		}
 	}
 	
-	rm $XilinxDirName -ErrorAction SilentlyContinue
+	if (Test-Path $XilinxDirName -PathType Leaf)
+	{	rm $XilinxDirName -ErrorAction SilentlyContinue		}
 	# New-Symlink $XilinxDirName2 $XilinxDirName -ErrorAction SilentlyContinue
 	# if ($LastExitCode -ne 0)
 	# {	Write-Host "[ERROR]: While creating a symlink. Not enough rights?" -ForegroundColor Red

@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
 [*] Mon Feb 08 22:46:43 2016
 [*]
-[dumpfile] "H:\Austausch\PoC\temp\ghdl\ocram_sdp_tb.ghw"
 [dumpfile_mtime] "Mon Feb 08 22:45:30 2016"
 [dumpfile_size] 116720
-[savefile] "H:\Austausch\PoC\sim\mem\ocram\ocram_sdp_tb.gtkw"
 [timestart] 0
 [size] 1680 997
 [pos] -217 -217

@@ -10,7 +10,7 @@
 -- Description:
 -- -------------------------------------
 -- Instantiates chip-specific DDR input registers.
--- 
+--
 -- Both data "DataIn_high/low" are synchronously outputted to the on-chip logic
 -- with the rising edge of "Clock". "DataIn_high" is the value at the "Pad"
 -- sampled with the same rising edge. "DataIn_low" is the value sampled with
@@ -21,12 +21,12 @@
 -- Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
 -- DataIn_low      ... >< 0      >< 2      ><
 -- DataIn_high     ... >< 1      >< 3      ><
--- 
+--
 -- < i > is the value of the i-th data bit on the line.
--- 
+--
 -- After power-up, the output ports "DataIn_high" and "DataIn_low" both equal
 -- INIT_VALUE.
--- 
+--
 -- "Pad" must be connected to a PAD because FPGAs only have these registers in
 -- IOBs.
 --

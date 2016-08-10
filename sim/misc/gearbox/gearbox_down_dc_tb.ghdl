@@ -1,0 +1,41 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/gearbox_down_dc_tb/<for>/clock1
+/gearbox_down_dc_tb/<for>/clock2
+/gearbox_down_dc_tb/<for>/datain
+/gearbox_down_dc_tb/<for>/dataout
+/gearbox_down_dc_tb/<for>/gear/clock1
+/gearbox_down_dc_tb/<for>/gear/clock2
+/gearbox_down_dc_tb/<for>/gear/in_data
+/gearbox_down_dc_tb/<for>/gear/out_data
+/gearbox_down_dc_tb/<for>/gear/wordboundary
+/gearbox_down_dc_tb/<for>/gear/wordboundary_d
+/gearbox_down_dc_tb/<for>/gear/align
+/gearbox_down_dc_tb/<for>/gear/data_d
+/gearbox_down_dc_tb/<for>/gear/datain
+/gearbox_down_dc_tb/<for>/gear/dataout_d
+/gearbox_down_dc_tb/<for>/gear/muxinput
+/gearbox_down_dc_tb/<for>/gear/muxoutput
+/gearbox_down_dc_tb/<for>/gear/muxcounter_us
+/gearbox_down_dc_tb/<for>/gear/muxselect_us
+/gearbox_down_dc_tb/<for>/clock1
+/gearbox_down_dc_tb/<for>/clock2
+/gearbox_down_dc_tb/<for>/datain
+/gearbox_down_dc_tb/<for>/dataout
+/gearbox_down_dc_tb/<for>/gear/clock1
+/gearbox_down_dc_tb/<for>/gear/clock2
+/gearbox_down_dc_tb/<for>/gear/in_data
+/gearbox_down_dc_tb/<for>/gear/out_data
+/gearbox_down_dc_tb/<for>/gear/wordboundary
+/gearbox_down_dc_tb/<for>/gear/wordboundary_d
+/gearbox_down_dc_tb/<for>/gear/align
+/gearbox_down_dc_tb/<for>/gear/data_d
+/gearbox_down_dc_tb/<for>/gear/datain
+/gearbox_down_dc_tb/<for>/gear/dataout_d
+/gearbox_down_dc_tb/<for>/gear/muxinput
+/gearbox_down_dc_tb/<for>/gear/muxoutput
+/gearbox_down_dc_tb/<for>/gear/muxcounter_us
+/gearbox_down_dc_tb/<for>/gear/muxselect_us
