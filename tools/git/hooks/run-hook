@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/bin/bash
 # EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -23,23 +23,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
-import os
-from subprocess import call
-
-def runAll(dir):
-	for root, dirs, files in os.walk(dir):
-		for file in files:
-			if not file.startswith('.'):
-				print(" executing '" + file + "'")
-				ret = call(['python3', os.path.join(root, file)])
-				if ret != 0:
-					return  ret
-	return  0
-
-hook = os.path.basename(__file__)
-
-print(hook + ':');
-ret = runAll('tools/git/hooks/' + hook + '.d')
-print('PASS' if ret == 0 else 'FAIL')
-exit(ret)
+hook=$(basename $0)
+for i in tools/git/hooks/$hook.d/*; do
+	echo " executing '$(basename $i)'"
+	if ! "$i"; then
+		echo FAIL
+		exit 1
+	fi
+done
+echo PASS

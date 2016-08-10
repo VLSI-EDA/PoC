@@ -31,7 +31,7 @@ from pathlib import Path
 hook_root   = Path(check_output(['git', 'rev-parse', '--show-toplevel'], universal_newlines=True).strip()) / 'tools/git/hooks'
 target_root = Path(check_output(['git', 'rev-parse', '--git-dir'], universal_newlines=True).strip()) / 'hooks'
 
-runner = hook_root / 'run-hook.py'
+runner = hook_root / 'run-hook'
 hooks  = [ hook.stem for hook in hook_root.glob('*.d') if hook.is_dir() ]
 
 for hook in hooks:
