@@ -77,7 +77,7 @@ if ($PoC_Solution -eq "")
 {	$Command = "$Python_Interpreter $Python_Parameters $PoC_RootDir\$PoC_ScriptPy $args"													}
 else
 {	$Command = "$Python_Interpreter $Python_Parameters $PoC_RootDir\$PoC_ScriptPy --sln=$PoC_Solution $args"			}
-
+	
 # execute script with appropriate Python interpreter and all given parameters
 if ($Debug -eq $true)	{	Write-Host "launching: '$Command'" -ForegroundColor Yellow	}
 Invoke-Expression $Command

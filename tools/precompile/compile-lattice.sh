@@ -2,13 +2,13 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 #	Authors:         	Martin Zabel
 #                   Patrick Lehmann
-# 
+#
 #	Bash Script:			Compile Lattice's simulation libraries
-# 
+#
 # Description:
 # ------------------------------------
 #	This is a Bash script (executable) which:
@@ -19,13 +19,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #		http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -158,11 +158,11 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
-	
+
 	# Assemble Lattice compile script path
 	GHDLLatticeScript="$($READLINK -f $GHDLScriptDir/compile-lattice.sh)"
 
-	
+
 	# Get Lattice installation directory
 	DiamondInstallDir=$($PoC_sh query INSTALL.Lattice.Diamond:InstallationDirectory 2>/dev/null)
 	if [ $? -ne 0 ]; then
@@ -177,9 +177,9 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	if [ -z $GHDL ]; then
 		export GHDL=$GHDLBinDir/ghdl
 	fi
-	
+
 	BASH=$(which bash)
-	
+
 	# compile all architectures, skip existing and large files, no wanrings
 	if [ $VHDL93 -eq 1 ]; then
 		$BASH $GHDLLatticeScript --all --vhdl93 -s -n --src $SourceDir --out $LatticeDirName
@@ -207,7 +207,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 
 	# Assemble output directory
 	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName/$LatticeDirName
-	
+
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
@@ -220,14 +220,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		exit -1;
   fi
 	Diamond_tcl=$DiamondBinDir/diamondc
-	
+
 	# create an empty modelsim.ini in the altera directory and add reference to parent modelsim.ini
 	CreateLocalModelsim_ini
 
 	Simulator=mentor
 	Language=vhdl
 	Device=all			# all, machxo, ecp, ...
-	
+
 	# compile common libraries
 	echo -e "cmpl_libs -lang $Language -sim_vendor $Simulator -sim_path $VSimBinDir -device $Device\nexit" | $Diamond_tcl
 	if [ $? -ne 0 ]; then

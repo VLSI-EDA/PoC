@@ -2,13 +2,13 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 #	Authors:         	Martin Zabel
 #                   Patrick Lehmann
-# 
+#
 #	Bash Script:			Compile Xilinx's ISE simulation libraries
-# 
+#
 # Description:
 # ------------------------------------
 #	This is a Bash script (executable) which:
@@ -19,13 +19,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #		http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -159,11 +159,11 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
-	
+
 	# Assemble Xilinx compile script path
 	GHDLXilinxScript="$($READLINK -f $GHDLScriptDir/compile-xilinx-ise.sh)"
 
-	
+
 	# Get Xilinx installation directory
 	ISEInstallDir=$($PoC_sh query INSTALL.Xilinx.ISE:InstallationDirectory 2>/dev/null)
 	if [ $? -ne 0 ]; then
@@ -178,9 +178,9 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	if [ -z $GHDL ]; then
 		export GHDL=$GHDLBinDir/ghdl
 	fi
-	
+
 	BASH=$(which bash)
-	
+
 	# compile all architectures, skip existing and large files, no wanrings
 	if [ $VHDL93 -eq 1 ]; then
 		$BASH $GHDLXilinxScript --all --vhdl93 -s -S -n --src $SourceDir --out $XilinxDirName2
@@ -196,7 +196,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 			exit -1;
 		fi
 	fi
-	
+
 	# create "xilinx" symlink
 	rm -f $XilinxDirName
 	ln -s $XilinxDirName2 $XilinxDirName
@@ -231,7 +231,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		source "$ISE_SettingsFile"
 		set -- $RescueArgs
 	fi
-	
+
 	ISEBinDir=$($PoC_sh query INSTALL.Xilinx.ISE:BinaryDirectory 2>/dev/null)
   if [ $? -ne 0 ]; then
 	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx ISE binary directory.${ANSI_NOCOLOR}"
@@ -240,21 +240,21 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		exit -1;
   fi
 	ISE_compxlib=$ISEBinDir/compxlib
-	
+
 	# create an empty modelsim.ini in the 'xilinx-ise' directory and add reference to parent modelsim.ini
 	CreateLocalModelsim_ini
 
 	Simulator=questa
 	Language=vhdl
 	TargetArchitecture=all			# all, virtex5, virtex6, virtex7, ...
-	
+
 	# compile common libraries
 	$ISE_compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $VSimBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Error while compiling Xilinx ISE libraries.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
-	
+
 	# create "xilinx" symlink
 	cd ..
 	rm -f $XilinxDirName

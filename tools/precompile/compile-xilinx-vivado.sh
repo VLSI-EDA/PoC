@@ -2,13 +2,13 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 #	Authors:         	Martin Zabel
 #                   Patrick Lehmann
-# 
+#
 #	Bash Script:			Compile Xilinx's Vivado simulation libraries
-# 
+#
 # Description:
 # ------------------------------------
 #	This is a Bash script (executable) which:
@@ -19,13 +19,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #		http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -159,10 +159,10 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
-	
+
 	# Assemble Xilinx compile script path
 	GHDLXilinxScript="$($READLINK -f $GHDLScriptDir/compile-xilinx-vivado.sh)"
-	
+
 
 	# Get Xilinx installation directory
 	VivadoInstallDir=$($PoC_sh query INSTALL.Xilinx.Vivado:InstallationDirectory 2>/dev/null)
@@ -178,9 +178,9 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	if [ -z $GHDL ]; then
 		export GHDL=$GHDLBinDir/ghdl
 	fi
-	
+
 	BASH=$(which bash)
-	
+
 	# compile all architectures, skip existing and large files, no wanrings
 	if [ $VHDL93 -eq 1 ]; then
 		$BASH $GHDLXilinxScript --all --vhdl93 -s -S -n --src $SourceDir --out $XilinxDirName2
@@ -196,7 +196,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 			exit -1;
 		fi
 	fi
-	
+
 	# create "xilinx" symlink
 	rm -f $XilinxDirName
 	ln -s $XilinxDirName2 $XilinxDirName
@@ -212,7 +212,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 
 	# Assemble output directory
 	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName/$XilinxDirName2
-	
+
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
@@ -232,7 +232,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		source "$Vivado_SettingsFile"
 		set -- $RescueArgs
 	fi
-	
+
 	VivadoBinDir=$($PoC_sh query INSTALL.Xilinx.Vivado:BinaryDirectory 2>/dev/null)
   if [ $? -ne 0 ]; then
 	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx Vivado binary directory.${ANSI_NOCOLOR}"
@@ -241,7 +241,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		exit -1;
   fi
 	Vivado_tcl=$VivadoBinDir/vivado
-	
+
 	# create an empty modelsim.ini in the 'xilinx-vivado' directory and add reference to parent modelsim.ini
 	CreateLocalModelsim_ini
 
@@ -249,9 +249,9 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	Language=vhdl
 	Library=all
 	Family=all			# all, virtex5, virtex6, virtex7, ...
-	
+
 	CommandFile=vivado.tcl
-	
+
 	echo -e "compile_simlib -force -no_ip_compile -library $Library -family $Family -language $Language -simulator $Simulator -simulator_exec_path $VSimBinDir -directory $DestDir\nexit" > $CommandFile
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Cannot create temporary tcl script.${ANSI_NOCOLOR}"
@@ -264,7 +264,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Error while compiling Xilinx Vivado libraries.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
-	
+
 	# create "xilinx" symlink
 	cd ..
 	rm -f $XilinxDirName

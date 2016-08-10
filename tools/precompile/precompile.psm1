@@ -1,13 +1,13 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 #	Authors:						Patrick Lehmann
-# 
+#
 #	PowerShell Module:	The module provides common CmdLets for the library
 #											pre-compilation process.
-# 
+#
 # Description:
 # ------------------------------------
 #	This PowerShell module provides CommandLets (CmdLets) to handle the GHDL.exe
@@ -15,17 +15,17 @@
 #
 # ==============================================================================
 #	Copyright (C) 2015-2016 Patrick Lehmann
-#	
+#
 #	GHDL is free software; you can redistribute it and/or modify it under
 #	the terms of the GNU General Public License as published by the Free
 #	Software Foundation; either version 2, or (at your option) any later
 #	version.
-#	
+#
 #	GHDL is distributed in the hope that it will be useful, but WITHOUT ANY
 #	WARRANTY; without even the implied warranty of MERCHANTABILITY or
 #	FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 #	for more details.
-#	
+#
 #	You should have received a copy of the GNU General Public License
 #	along with GHDL; see the file COPYING.  If not, write to the Free
 #	Software Foundation, 59 Temple Place - Suite 330, Boston, MA
@@ -43,10 +43,10 @@ function Exit-PrecompileScript
 {		<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER ExitCode
 		ExitCode of this script run
 	#>
@@ -54,15 +54,15 @@ function Exit-PrecompileScript
 	param(
 		[int]$ExitCode = 0
 	)
-	
+
 	# restore environment
 	rm env:GHDL -ErrorAction SilentlyContinue
-	
+
 	cd $Module_WorkingDir
-	
+
 	# unload modules
 	Remove-Module precompile -Verbose:$false
-	
+
 	if ($ExitCode -eq 0)
 	{	exit 0	}
 	else
@@ -75,10 +75,10 @@ function Resolve-Simulator
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER All
 		Undocumented
 		.PARAMETER GHDL
@@ -102,10 +102,10 @@ function Resolve-VHDLVersion
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER VHDL93
 		Undocumented
 		.PARAMETER VHDL2008
@@ -128,10 +128,10 @@ function Get-PrecompiledDirectoryName
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -139,7 +139,7 @@ function Get-PrecompiledDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query CONFIG.DirectoryNames:PrecompiledFiles"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -154,10 +154,10 @@ function Get-AlteraDirectoryName
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -165,7 +165,7 @@ function Get-AlteraDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query CONFIG.DirectoryNames:AlteraSpecificFiles"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -180,10 +180,10 @@ function Get-LatticeDirectoryName
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -191,7 +191,7 @@ function Get-LatticeDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query CONFIG.DirectoryNames:LatticeSpecificFiles"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -206,10 +206,10 @@ function Get-XilinxDirectoryName
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -217,7 +217,7 @@ function Get-XilinxDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query CONFIG.DirectoryNames:XilinxSpecificFiles"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -232,10 +232,10 @@ function Get-GHDLDirectoryName
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -243,7 +243,7 @@ function Get-GHDLDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query CONFIG.DirectoryNames:GHDLFiles"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -258,10 +258,10 @@ function Get-GHDLBinaryDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -269,7 +269,7 @@ function Get-GHDLBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.GHDL:BinaryDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -285,10 +285,10 @@ function Get-GHDLScriptDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -296,7 +296,7 @@ function Get-GHDLScriptDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.GHDL:ScriptDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -312,10 +312,10 @@ function Get-QuestaSimDirectoryName
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -323,7 +323,7 @@ function Get-QuestaSimDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query CONFIG.DirectoryNames:QuestaSimFiles"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -338,10 +338,10 @@ function Get-ModelSimBinaryDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -349,7 +349,7 @@ function Get-ModelSimBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query ModelSim:BinaryDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -365,10 +365,10 @@ function Get-QuartusInstallationDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -376,7 +376,7 @@ function Get-QuartusInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.Altera.Quartus:InstallationDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -392,10 +392,10 @@ function Get-QuartusBinaryDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -403,7 +403,7 @@ function Get-QuartusBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.Altera.Quartus:BinaryDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -419,10 +419,10 @@ function Get-DiamondInstallationDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -430,7 +430,7 @@ function Get-DiamondInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.Lattice.Diamond:InstallationDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -446,10 +446,10 @@ function Get-DiamondBinaryDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -457,7 +457,7 @@ function Get-DiamondBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.Lattice.Diamond:BinaryDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -473,10 +473,10 @@ function Get-ISEInstallationDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -484,7 +484,7 @@ function Get-ISEInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.Xilinx.ISE:InstallationDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -500,10 +500,10 @@ function Get-ISEBinaryDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -511,7 +511,7 @@ function Get-ISEBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.Xilinx.ISE:BinaryDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -527,10 +527,10 @@ function Get-VivadoInstallationDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -538,7 +538,7 @@ function Get-VivadoInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.Xilinx.Vivado:InstallationDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -554,10 +554,10 @@ function Get-VivadoBinaryDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -565,7 +565,7 @@ function Get-VivadoBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	$Command = "$PoCPS1 query INSTALL.Xilinx.Vivado:BinaryDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
@@ -582,10 +582,10 @@ function Initialize-DestinationDirectory
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -612,7 +612,7 @@ function New-ModelSim_ini
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
 	#>
@@ -630,10 +630,10 @@ function Open-ISEEnvironment
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -641,7 +641,7 @@ function Open-ISEEnvironment
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	# load Xilinx ISE environment if not loaded before
 	if (-not (Test-Path env:XILINX))
 	{	$Command = "$PoCPS1 query Xilinx.ISE:SettingsFile"
@@ -652,7 +652,7 @@ function Open-ISEEnvironment
 			Write-Host "Run 'poc.ps1 configure' to configure your Xilinx ISE installation." -ForegroundColor Yellow
 			Exit-PrecompileScript -1
 		}
-		
+
 		if (-not (Test-Path $ISE_SettingsFile -PathType Leaf))
 		{	Write-Host "[ERROR]: Xilinx ISE is configured in PoC, but settings file '$ISE_SettingsFile' does not exist." -ForegroundColor Red
 			Write-Host "Run 'poc.ps1 configure' to configure your Xilinx ISE installation." -ForegroundColor Red
@@ -666,7 +666,7 @@ function Open-ISEEnvironment
 			}
 			Import-Module PSCX
 			Invoke-BatchFile -path $ISE_SettingsFile
-			
+
 			if (-not (Test-Path env:XILINX))
 			{	Write-Host "[ERROR]: No Xilinx ISE environment loaded." -ForegroundColor Red
 				Exit-PrecompileScript -1
@@ -684,11 +684,11 @@ function Close-ISEEnvironment
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
 	#>
-	
+
 	Write-Host "Unloading Xilinx ISE environment..." -ForegroundColor Yellow
 	$env:XILINX =						$null
 	$env:XILINX_EDK =				$null
@@ -700,10 +700,10 @@ function Open-VivadoEnvironment
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
-		
+
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -711,7 +711,7 @@ function Open-VivadoEnvironment
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
-	
+
 	# load Xilinx Vivado environment if not loaded before
 	if (-not (Test-Path env:XILINX_VIVADO))
 	{	$Command = "$PoCPS1 query Xilinx.Vivado:SettingsFile"
@@ -722,7 +722,7 @@ function Open-VivadoEnvironment
 			Write-Host "Run 'poc.ps1 configure' to configure your Xilinx Vivado installation." -ForegroundColor Yellow
 			Exit-PrecompileScript -1
 		}
-		
+
 		if (-not (Test-Path $Vivado_SettingsFile -PathType Leaf))
 		{	Write-Host "[ERROR]: Xilinx Vivado is configured in PoC, but settings file '$Vivado_SettingsFile' does not exist." -ForegroundColor Red
 			Write-Host "Run 'poc.ps1 configure' to configure your Xilinx Vivado installation." -ForegroundColor Red
@@ -736,7 +736,7 @@ function Open-VivadoEnvironment
 			}
 			Import-Module PSCX
 			Invoke-BatchFile -path $Vivado_SettingsFile
-			
+
 			if (-not (Test-Path env:XILINX_VIVADO))
 			{	Write-Host "[ERROR]: No Xilinx Vivado environment loaded." -ForegroundColor Red
 				Exit-PrecompileScript -1
@@ -754,11 +754,11 @@ function Close-VivadoEnvironment
 {	<#
 		.SYNOPSIS
 		Undocumented
-		
+
 		.DESCRIPTION
 		Undocumented
 	#>
-	
+
 	Write-Host "Unloading Xilinx Vivado environment..." -ForegroundColor Yellow
 	$env:XILINX_VIVADO =		$null
 }
@@ -768,11 +768,11 @@ function Restore-NativeCommandStream
 		.SYNOPSIS
 		This CmdLet gathers multiple ErrorRecord objects and reconstructs outputs
 		as a single line.
-		
+
 		.DESCRIPTION
 		This CmdLet collects multiple ErrorRecord objects and emits one string
 		object per line.
-		
+
 		.PARAMETER InputObject
 		A object stream is required as an input.
 	#>
@@ -816,14 +816,14 @@ function Write-ColoredGHDLLine
 {	<#
 		.SYNOPSIS
 		This CmdLet colors GHDL output lines.
-		
+
 		.DESCRIPTION
 		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
 		in yellow and errors are prefixed with 'ERROR: ' in red.
-		
+
 		.PARAMETER InputObject
 		A object stream is required as an input.
-		
+
 		.PARAMETER SuppressWarnings
 		Skip warning messages. (Show errors only.)
 	#>
@@ -831,14 +831,14 @@ function Write-ColoredGHDLLine
 	param(
 		[Parameter(ValueFromPipeline=$true)]
 		$InputObject,
-		
+
 		[Parameter(Position=1)]
 		[switch]$SuppressWarnings = $false
 	)
 
 	begin
 	{	$ErrorRecordFound = $false	}
-	
+
 	process
 	{	if (-not $InputObject)
 		{	Write-Host "Empty pipeline!"	}
@@ -867,14 +867,14 @@ function Write-ColoredActiveHDLLine
 {	<#
 		.SYNOPSIS
 		This CmdLet colors GHDL output lines.
-		
+
 		.DESCRIPTION
 		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
 		in yellow and errors are prefixed with 'ERROR: ' in red.
-		
+
 		.PARAMETER InputObject
 		A object stream is required as an input.
-		
+
 		.PARAMETER SuppressWarnings
 		Skip warning messages. (Show errors only.)
 	#>
@@ -882,14 +882,14 @@ function Write-ColoredActiveHDLLine
 	param(
 		[Parameter(ValueFromPipeline=$true)]
 		$InputObject,
-		
+
 		[Parameter(Position=1)]
 		[switch]$SuppressWarnings = $false
 	)
 
 	begin
 	{	$ErrorRecordFound = $false	}
-	
+
 	process
 	{	if (-not $InputObject)
 		{	Write-Host "Empty pipeline!"	}
