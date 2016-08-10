@@ -32,7 +32,7 @@ mkdir -p $TEMP_DIR && cd $TEMP_DIR
 
 # downloading GHDL
 echo -e "${CYAN}Downloading $GRC_DEB from $GRC_URL...${NOCOLOR}"
-wget -q --show-progress $GRC_URL -O $GRC_DEB
+wget -q $GRC_URL -O $GRC_DEB
 if [ $? -eq 0 ]; then
 	echo -e "${GREEN}Download [SUCCESSFUL]${NOCOLOR}"
 else
