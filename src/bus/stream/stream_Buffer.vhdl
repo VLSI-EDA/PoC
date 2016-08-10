@@ -42,41 +42,41 @@ use			PoC.vectors.all;
 
 entity stream_Buffer is
 	generic (
-		FRAMES						: POSITIVE																								:= 2;
-		DATA_BITS					: POSITIVE																								:= 8;
-		DATA_FIFO_DEPTH		: POSITIVE																								:= 8;
+		FRAMES						: positive																								:= 2;
+		DATA_BITS					: positive																								:= 8;
+		DATA_FIFO_DEPTH		: positive																								:= 8;
 		META_BITS					: T_POSVEC																								:= (0 => 8);
 		META_FIFO_DEPTH		: T_POSVEC																								:= (0 => 16)
 	);
 	port (
-		Clock							: in	STD_LOGIC;
-		Reset							: in	STD_LOGIC;
+		Clock							: in	std_logic;
+		Reset							: in	std_logic;
 		-- IN Port
-		In_Valid					: in	STD_LOGIC;
-		In_Data						: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-		In_SOF						: in	STD_LOGIC;
-		In_EOF						: in	STD_LOGIC;
-		In_Ack						: out	STD_LOGIC;
-		In_Meta_rst				: out	STD_LOGIC;
-		In_Meta_nxt				: out	STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
-		In_Meta_Data			: in	STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
+		In_Valid					: in	std_logic;
+		In_Data						: in	std_logic_vector(DATA_BITS - 1 downto 0);
+		In_SOF						: in	std_logic;
+		In_EOF						: in	std_logic;
+		In_Ack						: out	std_logic;
+		In_Meta_rst				: out	std_logic;
+		In_Meta_nxt				: out	std_logic_vector(META_BITS'length - 1 downto 0);
+		In_Meta_Data			: in	std_logic_vector(isum(META_BITS) - 1 downto 0);
 		-- OUT Port
-		Out_Valid					: out	STD_LOGIC;
-		Out_Data					: out	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-		Out_SOF						: out	STD_LOGIC;
-		Out_EOF						: out	STD_LOGIC;
-		Out_Ack						: in	STD_LOGIC;
-		Out_Meta_rst			: in	STD_LOGIC;
-		Out_Meta_nxt			: in	STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
-		Out_Meta_Data			: out	STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0)
+		Out_Valid					: out	std_logic;
+		Out_Data					: out	std_logic_vector(DATA_BITS - 1 downto 0);
+		Out_SOF						: out	std_logic;
+		Out_EOF						: out	std_logic;
+		Out_Ack						: in	std_logic;
+		Out_Meta_rst			: in	std_logic;
+		Out_Meta_nxt			: in	std_logic_vector(META_BITS'length - 1 downto 0);
+		Out_Meta_Data			: out	std_logic_vector(isum(META_BITS) - 1 downto 0)
 	);
 end entity;
 
 
 architecture rtl of stream_Buffer is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
-	constant META_STREAMS							: POSITIVE																						:= META_BITS'length;
+	constant META_STREAMS							: positive																						:= META_BITS'length;
 
 	type T_WRITER_STATE is (ST_IDLE, ST_FRAME);
 	type T_READER_STATE is (ST_IDLE, ST_FRAME);
@@ -86,18 +86,18 @@ architecture rtl of stream_Buffer is
 	signal Reader_State								: T_READER_STATE																			:= ST_IDLE;
 	signal Reader_NextState						: T_READER_STATE;
 
-	constant EOF_BIT									: NATURAL																							:= DATA_BITS;
+	constant EOF_BIT									: natural																							:= DATA_BITS;
 
-	signal DataFIFO_put								: STD_LOGIC;
-	signal DataFIFO_DataIn						: STD_LOGIC_VECTOR(DATA_BITS downto 0);
-	signal DataFIFO_Full							: STD_LOGIC;
+	signal DataFIFO_put								: std_logic;
+	signal DataFIFO_DataIn						: std_logic_vector(DATA_BITS downto 0);
+	signal DataFIFO_Full							: std_logic;
 
-	signal DataFIFO_got								: STD_LOGIC;
-	signal DataFIFO_DataOut						: STD_LOGIC_VECTOR(DataFIFO_DataIn'range);
-	signal DataFIFO_Valid							: STD_LOGIC;
+	signal DataFIFO_got								: std_logic;
+	signal DataFIFO_DataOut						: std_logic_vector(DataFIFO_DataIn'range);
+	signal DataFIFO_Valid							: std_logic;
 
-	signal FrameCommit								: STD_LOGIC;
-	signal Meta_rst										: STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
+	signal FrameCommit								: std_logic;
+	signal Meta_rst										: std_logic_vector(META_BITS'length - 1 downto 0);
 
 begin
 	assert (META_BITS'length = META_FIFO_DEPTH'length) report "META_BITS'length /= META_FIFO_DEPTH'length" severity FAILURE;
@@ -129,19 +129,19 @@ begin
 
 		case Writer_State is
 			when ST_IDLE =>
-				In_Ack												<= NOT DataFIFO_Full;
+				In_Ack												<= not DataFIFO_Full;
 				DataFIFO_put									<= In_Valid;
 
-				if ((In_Valid AND In_SOF AND NOT In_EOF) = '1') then
+				if ((In_Valid and In_SOF and not In_EOF) = '1') then
 
 					Writer_NextState						<= ST_FRAME;
 				end if;
 
 			when ST_FRAME =>
-				In_Ack												<= NOT DataFIFO_Full;
+				In_Ack												<= not DataFIFO_Full;
 				DataFIFO_put									<= In_Valid;
 
-				if ((In_Valid AND In_EOF AND NOT DataFIFO_Full) = '1') then
+				if ((In_Valid and In_EOF and not DataFIFO_Full) = '1') then
 
 					Writer_NextState						<= ST_IDLE;
 				end if;
@@ -168,7 +168,7 @@ begin
 				Out_SOF											<= '1';
 				DataFIFO_got								<= Out_Ack;
 
-				if ((DataFIFO_Valid AND NOT DataFIFO_DataOut(EOF_BIT) AND Out_Ack) = '1') then
+				if ((DataFIFO_Valid and not DataFIFO_DataOut(EOF_BIT) and Out_Ack) = '1') then
 					Reader_NextState					<= ST_FRAME;
 				end if;
 
@@ -176,7 +176,7 @@ begin
 				Out_Valid										<= DataFIFO_Valid;
 				DataFIFO_got								<= Out_Ack;
 
-				if ((DataFIFO_Valid AND DataFIFO_DataOut(EOF_BIT) AND Out_Ack) = '1') then
+				if ((DataFIFO_Valid and DataFIFO_DataOut(EOF_BIT) and Out_Ack) = '1') then
 					Reader_NextState					<= ST_IDLE;
 				end if;
 
@@ -211,16 +211,16 @@ begin
 			fstate_rd						=> open
 		);
 
-	FrameCommit		<= DataFIFO_Valid AND DataFIFO_DataOut(EOF_BIT) AND Out_Ack;
+	FrameCommit		<= DataFIFO_Valid and DataFIFO_DataOut(EOF_BIT) and Out_Ack;
 	In_Meta_rst		<= slv_and(Meta_rst);
 
 	genMeta : for i in 0 to META_BITS'length - 1 generate
 
 	begin
 		genReg : if (META_FIFO_DEPTH(i) = 1) generate
-			signal MetaReg_DataIn				: STD_LOGIC_VECTOR(META_BITS(i) - 1 downto 0);
-			signal MetaReg_d						: STD_LOGIC_VECTOR(META_BITS(i) - 1 downto 0)		:= (others => '0');
-			signal MetaReg_DataOut			: STD_LOGIC_VECTOR(META_BITS(i) - 1 downto 0);
+			signal MetaReg_DataIn				: std_logic_vector(META_BITS(i) - 1 downto 0);
+			signal MetaReg_d						: std_logic_vector(META_BITS(i) - 1 downto 0)		:= (others => '0');
+			signal MetaReg_DataOut			: std_logic_vector(META_BITS(i) - 1 downto 0);
 		begin
 			MetaReg_DataIn		<= In_Meta_Data(high(META_BITS, i) downto low(META_BITS, i));
 
@@ -229,7 +229,7 @@ begin
 				if rising_edge(Clock) then
 					if (Reset = '1') then
 						MetaReg_d			<= (others => '0');
-					elsif ((In_Valid AND In_SOF) = '1') then
+					elsif ((In_Valid and In_SOF) = '1') then
 						MetaReg_d			<= MetaReg_DataIn;
 					end if;
 				end if;
@@ -239,27 +239,27 @@ begin
 			Out_Meta_Data(high(META_BITS, i) downto low(META_BITS, i))	<= MetaReg_DataOut;
 		end generate;	-- META_FIFO_DEPTH(i) = 1
 		genFIFO : if (META_FIFO_DEPTH(i) > 1) generate
-			signal MetaFIFO_put								: STD_LOGIC;
-			signal MetaFIFO_DataIn						: STD_LOGIC_VECTOR(META_BITS(i) - 1 downto 0);
-			signal MetaFIFO_Full							: STD_LOGIC;
+			signal MetaFIFO_put								: std_logic;
+			signal MetaFIFO_DataIn						: std_logic_vector(META_BITS(i) - 1 downto 0);
+			signal MetaFIFO_Full							: std_logic;
 
-			signal MetaFIFO_Commit						: STD_LOGIC;
-			signal MetaFIFO_Rollback					: STD_LOGIC;
+			signal MetaFIFO_Commit						: std_logic;
+			signal MetaFIFO_Rollback					: std_logic;
 
-			signal MetaFIFO_got								: STD_LOGIC;
-			signal MetaFIFO_DataOut						: STD_LOGIC_VECTOR(MetaFIFO_DataIn'range);
-			signal MetaFIFO_Valid							: STD_LOGIC;
+			signal MetaFIFO_got								: std_logic;
+			signal MetaFIFO_DataOut						: std_logic_vector(MetaFIFO_DataIn'range);
+			signal MetaFIFO_Valid							: std_logic;
 
-			signal Writer_CounterControl			: STD_LOGIC																																:= '0';
-			signal Writer_Counter_en					: STD_LOGIC;
-			signal Writer_Counter_us					: UNSIGNED(log2ceilnz(META_FIFO_DEPTH(i)) - 1 downto 0)										:= (others => '0');
+			signal Writer_CounterControl			: std_logic																																:= '0';
+			signal Writer_Counter_en					: std_logic;
+			signal Writer_Counter_us					: unsigned(log2ceilnz(META_FIFO_DEPTH(i)) - 1 downto 0)										:= (others => '0');
 		begin
 			process(Clock)
 			begin
 				if rising_edge(Clock) then
 					if (Reset = '1') then
 						Writer_CounterControl			<= '0';
-					elsif ((In_Valid AND In_SOF) = '1') then
+					elsif ((In_Valid and In_SOF) = '1') then
 						Writer_CounterControl			<= '1';
 					elsif (Writer_Counter_us = (META_FIFO_DEPTH(i) - 1)) then
 						Writer_CounterControl			<= '0';
@@ -267,7 +267,7 @@ begin
 				end if;
 			end process;
 
-			Writer_Counter_en		<= (In_Valid AND In_SOF) OR Writer_CounterControl;
+			Writer_Counter_en		<= (In_Valid and In_SOF) or Writer_CounterControl;
 
 			process(Clock)
 			begin
@@ -280,7 +280,7 @@ begin
 				end if;
 			end process;
 
-			Meta_rst(i)					<= NOT Writer_Counter_en;
+			Meta_rst(i)					<= not Writer_Counter_en;
 			In_Meta_nxt(i)			<= Writer_Counter_en;
 
 			MetaFIFO_put				<= Writer_Counter_en;

@@ -1,7 +1,7 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Thomas B. Preusser
@@ -11,20 +11,20 @@
 # Description:
 # ------------------------------------
 #		TODO:
-#		- 
-#		- 
+#		-
+#		-
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,6 +53,7 @@ class Severity(Enum):
 	Quiet =     20
 	Warning =   15
 	Info =      10
+	DryRun =     5
 	Normal =     4
 	Verbose =    2
 	Debug =      1
@@ -100,7 +101,8 @@ class LogEntry:
 		Severity.Quiet:     "{message}",
 		Severity.Normal:    "{message}",
 		Severity.Verbose:   "VERBOSE: {message}",
-		Severity.Debug:     "DEBUG: {message}"
+		Severity.Debug:     "DEBUG: {message}",
+		Severity.DryRun:    "DRYRUN: {message}"
 	}
 
 	@property
@@ -118,17 +120,21 @@ class LogEntry:
 
 class Logger:
 	def __init__(self, host, logLevel, printToStdOut=True):
-		self._host =          host
-		self._logLevel =      logLevel
-		self._printToStdOut = printToStdOut
-		self._entries =       []
+		self._host =            host
+		self._logLevel =        logLevel
+		self._printToStdOut =   printToStdOut
+		self._entries =         []
+		self._baseIndent =      0
 
 	@property
-	def LogLevel(self):
-		return self._logLevel
+	def LogLevel(self):             return self._logLevel
 	@LogLevel.setter
-	def LogLevel(self, value):
-		self._logLevel = value
+	def LogLevel(self, value):      self._logLevel = value
+
+	@property
+	def BaseIndent(self):           return self._baseIndent
+	@BaseIndent.setter
+	def BaseIndent(self, value):    self._baseIndent = value
 
 	__LOG_MESSAGE_FORMAT__ = {
 		Severity.Fatal:   "{DARKRED}{message}{NOCOLOR}",
@@ -136,6 +142,7 @@ class Logger:
 		Severity.Quiet:   "{message}",
 		Severity.Warning: "{YELLOW}{message}{NOCOLOR}",
 		Severity.Info:    "{WHITE}{message}{NOCOLOR}",
+		Severity.DryRun:  "{DARK_CYAN}{message}{NOCOLOR}",
 		Severity.Normal:  "{message}",
 		Severity.Verbose: "{GRAY}{message}{NOCOLOR}",
 		Severity.Debug:   "{DARK_GRAY}{message}{NOCOLOR}"
@@ -169,13 +176,16 @@ class Logger:
 		return self.Write(LogEntry(message, Severity.Quiet))
 
 	def WriteNormal(self, message, indent=0):
-		return self.Write(LogEntry(message, Severity.Normal, indent))
+		return self.Write(LogEntry(message, Severity.Normal, self._baseIndent + indent))
 
 	def WriteVerbose(self, message, indent=1):
-		return self.Write(LogEntry(message, Severity.Verbose, indent))
+		return self.Write(LogEntry(message, Severity.Verbose, self._baseIndent + indent))
 
 	def WriteDebug(self, message, indent=2):
-		return self.Write(LogEntry(message, Severity.Debug, indent))
+		return self.Write(LogEntry(message, Severity.Debug, self._baseIndent + indent))
+
+	def WriteDryRun(self, message, indent=2):
+		return self.Write(LogEntry(message, Severity.DryRun, self._baseIndent + indent))
 
 
 class ILogable:
@@ -234,4 +244,9 @@ class ILogable:
 	def _LogDebug(self, *args, **kwargs):
 		if self.__logger is not None:
 			return self.__logger.WriteDebug(*args, **kwargs)
+		return False
+
+	def _LogDryRun(self, *args, **kwargs):
+		if self.__logger is not None:
+			return self.__logger.WriteDryRun(*args, **kwargs)
 		return False

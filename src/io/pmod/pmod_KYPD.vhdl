@@ -47,27 +47,27 @@ entity pmod_KYPD is
 	generic (
 		CLOCK_FREQ		: FREQ				:= 100 MHz;
 		SCAN_FREQ			: FREQ				:= 1 kHz;
-		BOUNCE_TIME		: TIME				:= 10 ms
+		BOUNCE_TIME		: time				:= 10 ms
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		Reset					: in	STD_LOGIC;
+		Clock					: in	std_logic;
+		Reset					: in	std_logic;
 		-- Matrix interface
 		Keys					: out T_PMOD_KYPD_KEYPAD;
 		-- KeyPad interface
-		Columns_n			: out	STD_LOGIC_VECTOR(3 downto 0);
-		Rows_n				: in	STD_LOGIC_VECTOR(3 downto 0)
+		Columns_n			: out	std_logic_vector(3 downto 0);
+		Rows_n				: in	std_logic_vector(3 downto 0)
 	);
 end entity;
 
 
 architecture rtl of pmod_KYPD is
-	signal ColumnVector			: STD_LOGIC_VECTOR(3 downto 0);
-	signal RowVector				: STD_LOGIC_VECTOR(3 downto 0);
+	signal ColumnVector			: std_logic_vector(3 downto 0);
+	signal RowVector				: std_logic_vector(3 downto 0);
 
 	signal KeyPadMatrix			: T_SLM(3 downto 0, 3 downto 0);
-	signal KeyPadMatrix_slv	: STD_LOGIC_VECTOR(15 downto 0);
-	signal KeyPadVector			: STD_LOGIC_VECTOR(15 downto 0);
+	signal KeyPadMatrix_slv	: std_logic_vector(15 downto 0);
+	signal KeyPadVector			: std_logic_vector(15 downto 0);
 	signal KeyPad						: T_SLM(3 downto 0, 3 downto 0);
 
 begin

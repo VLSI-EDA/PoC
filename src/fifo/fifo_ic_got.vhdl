@@ -354,7 +354,7 @@ begin
     begin
       if rising_edge(clk_wr) then
         --synthesis translate_off
-        if SIMULATION AND (rst_wr = '1') then
+        if SIMULATION and (rst_wr = '1') then
           regfile <= (others => (others => '-'));
         else
         --synthesis translate_on

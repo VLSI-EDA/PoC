@@ -66,31 +66,31 @@ use			PoC.sync.all;
 
 entity sync_Bits is
   generic (
-	  BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
-		INIT					: STD_LOGIC_VECTOR		:= x"00000000";				-- initialitation bits
+	  BITS					: positive						:= 1;									-- number of bit to be synchronized
+		INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 	);
   port (
-		Clock					: in	STD_LOGIC;														-- <Clock>	output clock domain
-		Input					: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- @async:	input bits
-		Output				: out STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- @Clock:	output bits
+		Clock					: in	std_logic;														-- <Clock>	output clock domain
+		Input					: in	std_logic_vector(BITS - 1 downto 0);	-- @async:	input bits
+		Output				: out std_logic_vector(BITS - 1 downto 0)		-- @Clock:	output bits
 	);
 end entity;
 
 
 architecture rtl of sync_Bits is
-	constant INIT_I		: STD_LOGIC_VECTOR		:= resize(descend(INIT), BITS);
+	constant INIT_I		: std_logic_vector		:= resize(descend(INIT), BITS);
 	constant DEV_INFO : T_DEVICE_INFO				:= DEVICE_INFO;
 begin
 	genGeneric : if ((DEV_INFO.Vendor /= VENDOR_ALTERA) and (DEV_INFO.Vendor /= VENDOR_XILINX)) generate
-		attribute ASYNC_REG							: STRING;
-		attribute SHREG_EXTRACT					: STRING;
+		attribute ASYNC_REG							: string;
+		attribute SHREG_EXTRACT					: string;
 
 	begin
 		gen : for i in 0 to BITS - 1 generate
-			signal Data_async							: STD_LOGIC;
-			signal Data_meta							: STD_LOGIC																		:= INIT_I(i);
-			signal Data_sync							: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 1)		:= (others => INIT_I(i));
+			signal Data_async							: std_logic;
+			signal Data_meta							: std_logic																		:= INIT_I(i);
+			signal Data_sync							: std_logic_vector(SYNC_DEPTH - 1 downto 1)		:= (others => INIT_I(i));
 
 			-- Mark register DataSync_async's input as asynchronous and ignore timings (TIG)
 			attribute ASYNC_REG			of Data_meta	: signal is "TRUE";

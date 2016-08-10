@@ -1,0 +1,11 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/sync_vector_tb/clock1
+/sync_vector_tb/clock2
+/sync_vector_tb/sync_in
+/sync_vector_tb/sync_out
+/sync_vector_tb/sync_busy
+/sync_vector_tb/sync_changed

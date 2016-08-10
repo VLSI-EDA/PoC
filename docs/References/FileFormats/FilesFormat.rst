@@ -45,7 +45,7 @@ Conditional Statements
 **********************
 
 
-* ``If (<Expression>) Then ... [ElseIf (<Expression>) Then ...][Else ...] End IF`` 
+* ``If (<Expression>) Then ... [ElseIf (<Expression>) Then ...][Else ...] End IF``  
   This allows the user to define conditions, when to load a source file into
   the file list. The ``ElseIF`` and ``Else`` clause of an ``If`` statement are optional.
 
@@ -60,7 +60,7 @@ Unary operators
 * ``!`` - not
 * ``[...]`` - list construction
 * ``?`` - file exists
- 
+	
 Binary operators
 ----------------
 
@@ -86,23 +86,23 @@ Pre-defined constants
 ---------------------
 
 * Environment Variables:
- 
+    
   * ``Environment``
 	  Values:
- 
+		
     * ``"Simulation"``
     * ``"Synthesis"``
- 
+		
   * ``ToolChain`` - The used tool chain. E.g. ``"Xilinx_ISE"``
   * ``Tool`` - The used tool. E.g. ``"Mentor_QuestaSim"`` or ``"Xilinx_XST"``
   * ``VHDL`` - The used VHDL version. ``1987``, ``1993``, ``2002``, ``2008``
- 
+  
 * Board Variables:
- 
+    
   * ``BoardName`` - A string. E.g. ``"KC705"``
- 
+  
 * Device Variables:
- 
+    
   * ``DeviceVendor`` - The vendor of the device. E.g. ``"Altera"``
   * ``DeviceDevice`` - 
   * ``DeviceFamily`` - 
@@ -120,13 +120,13 @@ Path Expressions
 
 ### Other Statements
 
-* ``include "<FilesFile>"`` 
+* ``include "<FilesFile>"``  
   Include another \*.files file.
 
-* ``library <VHDLLibrary> "<LibraryPath>"`` 
+* ``library <VHDLLibrary> "<LibraryPath>"``  
   Reference an existing (pre-compiled) VHDL library, which is passed to the simulator, if external libraries are supported.
 
-* ``report "<Message>"`` 
+* ``report "<Message>"``  
   Print a critical warning in the log window. This critical warning is treated as an error.
 
 

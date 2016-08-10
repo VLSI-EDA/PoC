@@ -41,35 +41,35 @@ use			PoC.net.all;
 
 entity udp_FrameLoopback is
 	generic (
-		IP_VERSION										: POSITIVE						:= 6;
-		MAX_FRAMES										: POSITIVE						:= 4
+		IP_VERSION										: positive						:= 6;
+		MAX_FRAMES										: positive						:= 4
 	);
 	port (
-		Clock													: in	STD_LOGIC;
-		Reset													: in	STD_LOGIC;
+		Clock													: in	std_logic;
+		Reset													: in	std_logic;
 		-- IN port
-		In_Valid											: in	STD_LOGIC;
+		In_Valid											: in	std_logic;
 		In_Data												: in	T_SLV_8;
-		In_SOF												: in	STD_LOGIC;
-		In_EOF												: in	STD_LOGIC;
-		In_Ack												: out	STD_LOGIC;
-		In_Meta_rst										: out	STD_LOGIC;
-		In_Meta_DestIPAddress_nxt			: out	STD_LOGIC;
+		In_SOF												: in	std_logic;
+		In_EOF												: in	std_logic;
+		In_Ack												: out	std_logic;
+		In_Meta_rst										: out	std_logic;
+		In_Meta_DestIPAddress_nxt			: out	std_logic;
 		In_Meta_DestIPAddress_Data		: in	T_SLV_8;
-		In_Meta_SrcIPAddress_nxt			: out	STD_LOGIC;
+		In_Meta_SrcIPAddress_nxt			: out	std_logic;
 		In_Meta_SrcIPAddress_Data			: in	T_SLV_8;
 		In_Meta_DestPort							: in	T_NET_UDP_PORT;
 		In_Meta_SrcPort								: in	T_NET_UDP_PORT;
 		-- OUT port
-		Out_Valid											: out	STD_LOGIC;
+		Out_Valid											: out	std_logic;
 		Out_Data											: out	T_SLV_8;
-		Out_SOF												: out	STD_LOGIC;
-		Out_EOF												: out	STD_LOGIC;
-		Out_Ack												: in	STD_LOGIC;
-		Out_Meta_rst									: in	STD_LOGIC;
-		Out_Meta_DestIPAddress_nxt		: in	STD_LOGIC;
+		Out_SOF												: out	std_logic;
+		Out_EOF												: out	std_logic;
+		Out_Ack												: in	std_logic;
+		Out_Meta_rst									: in	std_logic;
+		Out_Meta_DestIPAddress_nxt		: in	std_logic;
 		Out_Meta_DestIPAddress_Data		: out	T_SLV_8;
-		Out_Meta_SrcIPAddress_nxt			: in	STD_LOGIC;
+		Out_Meta_SrcIPAddress_nxt			: in	std_logic;
 		Out_Meta_SrcIPAddress_Data		: out	T_SLV_8;
 		Out_Meta_DestPort							: out	T_NET_UDP_PORT;
 		Out_Meta_SrcPort							: out	T_NET_UDP_PORT
@@ -78,12 +78,12 @@ end entity;
 
 
 architecture rtl of udp_FrameLoopback is
-	constant IPADDRESS_LENGTH					: POSITIVE				:= ite((IP_VERSION = 4), 4, 16);
+	constant IPADDRESS_LENGTH					: positive				:= ite((IP_VERSION = 4), 4, 16);
 
-	constant META_STREAMID_SRCADDR		: NATURAL					:= 0;
-	constant META_STREAMID_DESTADDR		: NATURAL					:= 1;
-	constant META_STREAMID_SRCPORT		: NATURAL					:= 2;
-	constant META_STREAMID_DESTPORT		: NATURAL					:= 3;
+	constant META_STREAMID_SRCADDR		: natural					:= 0;
+	constant META_STREAMID_DESTADDR		: natural					:= 1;
+	constant META_STREAMID_SRCPORT		: natural					:= 2;
+	constant META_STREAMID_DESTPORT		: natural					:= 3;
 
 	constant META_BITS								: T_POSVEC				:= (
 		META_STREAMID_SRCADDR			=> 8,
@@ -99,10 +99,10 @@ architecture rtl of udp_FrameLoopback is
 		META_STREAMID_DESTPORT		=> 1
 	);
 
-	signal StmBuf_MetaIn_nxt					: STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
-	signal StmBuf_MetaIn_Data					: STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
-	signal StmBuf_MetaOut_nxt					: STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
-	signal StmBuf_MetaOut_Data				: STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
+	signal StmBuf_MetaIn_nxt					: std_logic_vector(META_BITS'length - 1 downto 0);
+	signal StmBuf_MetaIn_Data					: std_logic_vector(isum(META_BITS) - 1 downto 0);
+	signal StmBuf_MetaOut_nxt					: std_logic_vector(META_BITS'length - 1 downto 0);
+	signal StmBuf_MetaOut_Data				: std_logic_vector(isum(META_BITS) - 1 downto 0);
 
 begin
 	StmBuf_MetaIn_Data(high(META_BITS, META_STREAMID_SRCADDR)		downto low(META_BITS, META_STREAMID_SRCADDR))		<= In_Meta_SrcIPAddress_Data;

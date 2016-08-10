@@ -21,6 +21,20 @@ foreach($dir in (dir -Directory)) {
 }
 ```  
 
+## Cocotb
+
+**Folder:**		`<PoCRoot>\lib\cocotb\`  
+**Copyright:**	Copyright © 2013, [Potential Ventures Ltd.](http://potential.ventures/), SolarFlare Communications Inc.  
+**License:**	Revised BSD License, see [local copy](Cocotb BSD License.md)
+
+[Cocotb][10] is a coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
+
+Documentation: [http://cocotb.readthedocs.org/en/latest/index.html][10]
+Source: [https://github.com/potentialventures/cocotb][11]
+
+ [10]: http://cocotb.readthedocs.org/en/latest/index.html
+ [11]: https://github.com/potentialventures/cocotb
+
 
 ## Open Source VHDL Verification Methodology (OS-VVM)
 
@@ -28,7 +42,7 @@ foreach($dir in (dir -Directory)) {
 **Copyright:**	Copyright © 2012-2016 by [SynthWorks Design Inc.](http://www.synthworks.com/)  
 **License:**	[Artistic License 2.0][PAL2.0]
 
-[**Open Source VHDL Verification Methodology (OS-VVM)**][10] is an intelligent
+[**Open Source VHDL Verification Methodology (OS-VVM)**][20] is an intelligent
 testbench methodology that allows mixing of “Intelligent Coverage” (coverage
 driven randomization) with directed, algorithmic, file based, and constrained
 random test approaches. The methodology can be adopted in part or in whole as
@@ -36,11 +50,11 @@ needed. With OSVVM you can add advanced verification methodologies to your
 current testbench without having to learn a new language or throw out your
 existing testbench or testbench models.
 
-Website: [http://osvvm.org/][10]
-Source:  [https://github.com/JimLewis/OSVVM][11]
+Website: [http://osvvm.org/][20]
+Source:  [https://github.com/JimLewis/OSVVM][21]
 
- [10]: http://osvvm.org/
- [11]: https://github.com/JimLewis/OSVVM
+ [20]: http://osvvm.org/
+ [21]: https://github.com/JimLewis/OSVVM
 
 
 ## VUnit
@@ -61,19 +75,20 @@ Source: [https://github.com/VUnit/vunit][31]
  [30]: https://vunit.github.io/
  [31]: https://github.com/VUnit/vunit
 
-## Cocotb
+ 
+## Xillybus
 
-**Folder:**		`<PoCRoot>\lib\cocotb\`  
-**Copyright:**	Copyright © 2013, [Potential Ventures Ltd.](http://potential.ventures/), SolarFlare Communications Inc.  
-**License:**	Revised BSD License, see [local copy](Cocotb BSD License.md)
+**Folder:**		`<PoCRoot>\lib\xillybus\`  
+**Copyright:**	TODO
+**License:**	TODO, see [local copy](Xillybus License.md)
 
-[Cocotb][40] is a coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
+[xillybus][40] TODO
 
-Documentation: [http://cocotb.readthedocs.org/en/latest/index.html][40]
-Source: [https://github.com/potentialventures/cocotb][41]
+Documentation: [http://xillybus.com][40]
+Source: [http://xillybus.com][41]
 
- [40]: http://cocotb.readthedocs.org/en/latest/index.html
- [41]: https://github.com/potentialventures/cocotb
+ [40]: http://xillybus.com
+ [41]: http://xillybus.com
 
 
  [PAL2.0]:	http://www.perlfoundation.org/artistic_license_2_0

@@ -16,4 +16,4 @@ WordAligner
 Source file: `misc/misc_WordAligner.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_WordAligner.vhdl>`_
 
 
- 
+	 

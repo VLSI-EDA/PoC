@@ -41,37 +41,37 @@ use			PoC.net.all;
 
 entity udp_TX is
 	generic (
-		DEBUG												: BOOLEAN						:= FALSE;
-		IP_VERSION									: POSITIVE					:= 6
+		DEBUG												: boolean						:= FALSE;
+		IP_VERSION									: positive					:= 6
 	);
 	port (
-		Clock												: in	STD_LOGIC;									--
-		Reset												: in	STD_LOGIC;									--
+		Clock												: in	std_logic;									--
+		Reset												: in	std_logic;									--
 		-- IN port
-		In_Valid										: in	STD_LOGIC;
+		In_Valid										: in	std_logic;
 		In_Data											: in	T_SLV_8;
-		In_SOF											: in	STD_LOGIC;
-		In_EOF											: in	STD_LOGIC;
-		In_Ack											: out	STD_LOGIC;
-		In_Meta_rst									: out	STD_LOGIC;
-		In_Meta_SrcIPAddress_nxt		: out	STD_LOGIC;
+		In_SOF											: in	std_logic;
+		In_EOF											: in	std_logic;
+		In_Ack											: out	std_logic;
+		In_Meta_rst									: out	std_logic;
+		In_Meta_SrcIPAddress_nxt		: out	std_logic;
 		In_Meta_SrcIPAddress_Data		: in	T_SLV_8;
-		In_Meta_DestIPAddress_nxt		: out	STD_LOGIC;
+		In_Meta_DestIPAddress_nxt		: out	std_logic;
 		In_Meta_DestIPAddress_Data	: in	T_SLV_8;
 		In_Meta_SrcPort							: in	T_SLV_16;
 		In_Meta_DestPort						: in	T_SLV_16;
 		In_Meta_Length							: in	T_SLV_16;
 		In_Meta_Checksum						: in	T_SLV_16;
 		-- OUT port
-		Out_Valid										: out	STD_LOGIC;
+		Out_Valid										: out	std_logic;
 		Out_Data										: out	T_SLV_8;
-		Out_SOF											: out	STD_LOGIC;
-		Out_EOF											: out	STD_LOGIC;
-		Out_Ack											: in	STD_LOGIC;
-		Out_Meta_rst								: in	STD_LOGIC;
-		Out_Meta_SrcIPAddress_nxt		: in	STD_LOGIC;
+		Out_SOF											: out	std_logic;
+		Out_EOF											: out	std_logic;
+		Out_Ack											: in	std_logic;
+		Out_Meta_rst								: in	std_logic;
+		Out_Meta_SrcIPAddress_nxt		: in	std_logic;
 		Out_Meta_SrcIPAddress_Data	: out	T_SLV_8;
-		Out_Meta_DestIPAddress_nxt	: in	STD_LOGIC;
+		Out_Meta_DestIPAddress_nxt	: in	std_logic;
 		Out_Meta_DestIPAddress_Data	: out	T_SLV_8;
 		Out_Meta_Length							: out	T_SLV_16
 	);
@@ -142,7 +142,7 @@ end entity;
 --	+================================+================================+================================+================================+
 
 architecture rtl of udp_TX is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
 	type T_STATE is (
 		ST_IDLE,
@@ -166,39 +166,39 @@ architecture rtl of udp_TX is
 
 	signal State											: T_STATE											:= ST_IDLE;
 	signal NextState									: T_STATE;
-	attribute FSM_ENCODING of State		: signal IS ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
+	attribute FSM_ENCODING of State		: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
-	signal In_Ack_i										: STD_LOGIC;
+	signal In_Ack_i										: std_logic;
 
-	signal UpperLayerPacketLength			: STD_LOGIC_VECTOR(15 downto 0);
+	signal UpperLayerPacketLength			: std_logic_vector(15 downto 0);
 
-	signal IPSeqCounter_rst						: STD_LOGIC;
-	signal IPSeqCounter_en						: STD_LOGIC;
-	signal IPSeqCounter_us						: UNSIGNED(3 downto 0)									:= (others => '0');
+	signal IPSeqCounter_rst						: std_logic;
+	signal IPSeqCounter_en						: std_logic;
+	signal IPSeqCounter_us						: unsigned(3 downto 0)									:= (others => '0');
 
-	signal Checksum_rst								: STD_LOGIC;
-	signal Checksum_en								: STD_LOGIC;
-	signal Checksum_Addend0_us				: UNSIGNED(T_SLV_8'range);
-	signal Checksum_Addend1_us				: UNSIGNED(T_SLV_8'range);
-	signal Checksum0_nxt0_us					: UNSIGNED(T_SLV_8'high + 1 downto 0);
-	signal Checksum0_nxt1_us					: UNSIGNED(T_SLV_8'high + 1 downto 0);
-	signal Checksum0_d_us							: UNSIGNED(T_SLV_8'high downto 0)				:= (others => '0');
-	signal Checksum0_cy								: UNSIGNED(T_SLV_2'range);
-	signal Checksum1_nxt_us						: UNSIGNED(T_SLV_8'range);
-	signal Checksum1_d_us							: UNSIGNED(T_SLV_8'range)								:= (others => '0');
-	signal Checksum0_cy0							: STD_LOGIC;
-	signal Checksum0_cy0_d						: STD_LOGIC															:= '0';
-	signal Checksum0_cy1							: STD_LOGIC;
-	signal Checksum0_cy1_d						: STD_LOGIC															:= '0';
+	signal Checksum_rst								: std_logic;
+	signal Checksum_en								: std_logic;
+	signal Checksum_Addend0_us				: unsigned(T_SLV_8'range);
+	signal Checksum_Addend1_us				: unsigned(T_SLV_8'range);
+	signal Checksum0_nxt0_us					: unsigned(T_SLV_8'high + 1 downto 0);
+	signal Checksum0_nxt1_us					: unsigned(T_SLV_8'high + 1 downto 0);
+	signal Checksum0_d_us							: unsigned(T_SLV_8'high downto 0)				:= (others => '0');
+	signal Checksum0_cy								: unsigned(T_SLV_2'range);
+	signal Checksum1_nxt_us						: unsigned(T_SLV_8'range);
+	signal Checksum1_d_us							: unsigned(T_SLV_8'range)								:= (others => '0');
+	signal Checksum0_cy0							: std_logic;
+	signal Checksum0_cy0_d						: std_logic															:= '0';
+	signal Checksum0_cy1							: std_logic;
+	signal Checksum0_cy1_d						: std_logic															:= '0';
 
 	signal Checksum_i									: T_SLV_16;
 	signal Checksum										: T_SLV_16;
-	signal Checksum_mux_rst						: STD_LOGIC;
-	signal Checksum_mux_set						: STD_LOGIC;
-	signal Checksum_mux_r							: STD_LOGIC															:= '0';
+	signal Checksum_mux_rst						: std_logic;
+	signal Checksum_mux_set						: std_logic;
+	signal Checksum_mux_r							: std_logic															:= '0';
 
 begin
-	assert ((IP_VERSION = 6) OR (IP_VERSION = 4)) report "Internet Protocol Version not supported." severity ERROR;
+	assert ((IP_VERSION = 6) or (IP_VERSION = 4)) report "Internet Protocol Version not supported." severity ERROR;
 
 	UpperLayerPacketLength		<= std_logic_vector(unsigned(In_Meta_Length) + 8);
 
@@ -255,7 +255,7 @@ begin
 				IPSeqCounter_rst				<= '1';
 				Checksum_rst						<= '1';
 
-				if ((In_Valid AND In_SOF) = '1') then
+				if ((In_Valid and In_SOF) = '1') then
 					if (IP_VERSION = 4) then
 						NextState						<= ST_CHECKSUMV4_IPV4_ADDRESSES;
 					elsif (IP_VERSION = 6) then
@@ -484,7 +484,7 @@ begin
 				Out_EOF										<= In_EOF;
 				In_Ack_i									<= Out_Ack;
 
-				if ((In_EOF AND Out_Ack) = '1') then
+				if ((In_EOF and Out_Ack) = '1') then
 					NextState								<= ST_IDLE;
 				end if;
 
@@ -498,7 +498,7 @@ begin
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset OR IPSeqCounter_rst) = '1') then
+			if ((Reset or IPSeqCounter_rst) = '1') then
 				IPSeqCounter_us			<= to_unsigned(0, IPSeqCounter_us'length);
 			elsif (IPSeqCounter_en = '1') then
 				IPSeqCounter_us			<= IPSeqCounter_us + 1;
@@ -541,7 +541,7 @@ begin
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset OR Checksum_mux_rst) = '1') then
+			if ((Reset or Checksum_mux_rst) = '1') then
 				Checksum_mux_r		<= '0';
 			elsif (Checksum_mux_set = '1') then
 				Checksum_mux_r		<= '1';

@@ -26,7 +26,7 @@ The package [`misc`][misc.pkg] holds all component declarations for this namespa
 .. rubric:: Sub-Namespaces
 
 .. toctree::
- 
+   
    filter/index
    gearbox/index
    stat/index
@@ -35,7 +35,7 @@ The package [`misc`][misc.pkg] holds all component declarations for this namespa
 .. rubric:: Entities
 
 .. toctree::
- 
+   
    misc_Delay
    misc_FrequencyMeasurement
    misc_PulseTrain

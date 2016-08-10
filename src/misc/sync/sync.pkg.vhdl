@@ -35,44 +35,44 @@ use			IEEE.NUMERIC_STD.all;
 
 
 package sync is
-	subtype T_MISC_SYNC_DEPTH		is INTEGER range 2 to 16;
+	subtype T_MISC_SYNC_DEPTH		is integer range 2 to 16;
 
 	component sync_Bits is
 		generic (
-			BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
-			INIT					: STD_LOGIC_VECTOR		:= x"00000000";				-- initialitation bits
+			BITS					: positive						:= 1;									-- number of bit to be synchronized
+			INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
 			SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 		);
 		port (
-			Clock					: in	STD_LOGIC;														-- <Clock>	output clock domain
-			Input					: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- @async:	input bits
-			Output				: out STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- @Clock:	output bits
+			Clock					: in	std_logic;														-- <Clock>	output clock domain
+			Input					: in	std_logic_vector(BITS - 1 downto 0);	-- @async:	input bits
+			Output				: out std_logic_vector(BITS - 1 downto 0)		-- @Clock:	output bits
 		);
 	end component;
 
 	component sync_Bits_Altera is
 		generic (
-			BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
-			INIT					: STD_LOGIC_VECTOR		:= x"00000000";				-- initialitation bits
+			BITS					: positive						:= 1;									-- number of bit to be synchronized
+			INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
 			SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 		);
 		port (
-			Clock					: in	STD_LOGIC;														-- Clock to be synchronized to
-			Input					: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- Data to be synchronized
-			Output				: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- synchronised data
+			Clock					: in	std_logic;														-- Clock to be synchronized to
+			Input					: in	std_logic_vector(BITS - 1 downto 0);	-- Data to be synchronized
+			Output				: out	std_logic_vector(BITS - 1 downto 0)		-- synchronised data
 		);
 	end component;
 
 	component sync_Bits_Xilinx is
 		generic (
-			BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
-			INIT					: STD_LOGIC_VECTOR		:= x"00000000";				-- initialitation bits
+			BITS					: positive						:= 1;									-- number of bit to be synchronized
+			INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
 			SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 		);
 		port (
-			Clock					: in	STD_LOGIC;														-- Clock to be synchronized to
-			Input					: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- Data to be synchronized
-			Output				: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- synchronised data
+			Clock					: in	std_logic;														-- Clock to be synchronized to
+			Input					: in	std_logic_vector(BITS - 1 downto 0);	-- Data to be synchronized
+			Output				: out	std_logic_vector(BITS - 1 downto 0)		-- synchronised data
 		);
 	end component;
 
@@ -81,9 +81,9 @@ package sync is
 			SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2		-- generate SYNC_DEPTH many stages, at least 2
 		);
 		port (
-			Clock					: in	STD_LOGIC;							-- <Clock>	output clock domain
-			Input					: in	STD_LOGIC;							-- @async:	reset input
-			Output				: out STD_LOGIC								-- @Clock:	reset output
+			Clock					: in	std_logic;							-- <Clock>	output clock domain
+			Input					: in	std_logic;							-- @async:	reset input
+			Output				: out std_logic								-- @Clock:	reset output
 		);
 	end component;
 
@@ -92,9 +92,9 @@ package sync is
 			SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2		-- generate SYNC_DEPTH many stages, at least 2
 		);
 		port (
-			Clock					: in	STD_LOGIC;							-- <Clock>	output clock domain
-			Input					: in	STD_LOGIC;							-- @async:	reset input
-			Output				: out STD_LOGIC								-- @Clock:	reset output
+			Clock					: in	std_logic;							-- <Clock>	output clock domain
+			Input					: in	std_logic;							-- @async:	reset input
+			Output				: out std_logic								-- @Clock:	reset output
 		);
 	end component;
 
@@ -103,9 +103,9 @@ package sync is
 			SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2		-- generate SYNC_DEPTH many stages, at least 2
 		);
 		port (
-			Clock					: in	STD_LOGIC;							-- <Clock>	output clock domain
-			Input					: in	STD_LOGIC;							-- @async:	reset input
-			Output				: out STD_LOGIC								-- @Clock:	reset output
+			Clock					: in	std_logic;							-- <Clock>	output clock domain
+			Input					: in	std_logic;							-- @async:	reset input
+			Output				: out std_logic								-- @Clock:	reset output
 		);
 	end component;
 end package;

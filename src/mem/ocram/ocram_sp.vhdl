@@ -53,7 +53,7 @@ entity ocram_sp is
 	generic (
 		A_BITS		: positive;
 		D_BITS		: positive;
-		FILENAME	: STRING		:= ""
+		FILENAME	: string		:= ""
 	);
 	port (
 		clk : in	std_logic;
@@ -124,7 +124,7 @@ begin
 			generic (
 				A_BITS		: positive;
 				D_BITS		: positive;
-				FILENAME	: STRING		:= ""
+				FILENAME	: string		:= ""
 			);
 			port (
 				clk : in	std_logic;

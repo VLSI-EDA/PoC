@@ -48,17 +48,17 @@ end entity;
 
 architecture sim of ddrio_out_tb is
   -- component generics
-  constant NO_OUTPUT_ENABLE	: BOOLEAN	 		:= false;
-  constant BITS							: POSITIVE   	:= 2;
-  constant INIT_VALUE				: BIT_VECTOR(1 downto 0) := "10";
+  constant NO_OUTPUT_ENABLE	: boolean	 		:= false;
+  constant BITS							: positive   	:= 2;
+  constant INIT_VALUE				: bit_vector(1 downto 0) := "10";
 
   -- component ports
-  signal Clock				: STD_LOGIC := '1';
-  signal ClockEnable	: STD_LOGIC := '0';
-  signal OutputEnable	: STD_LOGIC := '0';
-  signal DataOut_high	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-  signal DataOut_low	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-  signal Pad					: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+  signal Clock				: std_logic := '1';
+  signal ClockEnable	: std_logic := '0';
+  signal OutputEnable	: std_logic := '0';
+  signal DataOut_high	: std_logic_vector(BITS - 1 downto 0);
+  signal DataOut_low	: std_logic_vector(BITS - 1 downto 0);
+  signal Pad					: std_logic_vector(BITS - 1 downto 0);
 
 	-- period of signal "Clock"
 	constant CLOCK_PERIOD : time := 10 ns;

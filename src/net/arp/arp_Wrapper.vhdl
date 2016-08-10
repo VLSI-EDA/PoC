@@ -47,54 +47,54 @@ entity arp_Wrapper is
 		INTERFACE_MACADDRESS								: T_NET_MAC_ADDRESS											:= C_NET_MAC_ADDRESS_EMPTY;
 		INITIAL_IPV4ADDRESSES								: T_NET_IPV4_ADDRESS_VECTOR							:= (0 => C_NET_IPV4_ADDRESS_EMPTY);
 		INITIAL_ARPCACHE_CONTENT						: T_NET_ARP_ARPCACHE_VECTOR							:= (0 => (Tag => C_NET_IPV4_ADDRESS_EMPTY, MAC => C_NET_MAC_ADDRESS_EMPTY));
-		APR_REQUEST_TIMEOUT									: TIME																	:= 100 ms
+		APR_REQUEST_TIMEOUT									: time																	:= 100 ms
 	);
 	port (
-		Clock																: in	STD_LOGIC;
-		Reset																: in	STD_LOGIC;
+		Clock																: in	std_logic;
+		Reset																: in	std_logic;
 
-		IPPool_Announce											: in	STD_LOGIC;
-		IPPool_Announced										: out	STD_LOGIC;
+		IPPool_Announce											: in	std_logic;
+		IPPool_Announced										: out	std_logic;
 
-		IPCache_Lookup											: in	STD_LOGIC;
-		IPCache_IPv4Address_rst							: out	STD_LOGIC;
-		IPCache_IPv4Address_nxt							: out	STD_LOGIC;
+		IPCache_Lookup											: in	std_logic;
+		IPCache_IPv4Address_rst							: out	std_logic;
+		IPCache_IPv4Address_nxt							: out	std_logic;
 		IPCache_IPv4Address_Data						: in	T_SLV_8;
 
-		IPCache_Valid												: out	STD_LOGIC;
-		IPCache_MACAddress_rst							: in	STD_LOGIC;
-		IPCache_MACAddress_nxt							: in	STD_LOGIC;
+		IPCache_Valid												: out	std_logic;
+		IPCache_MACAddress_rst							: in	std_logic;
+		IPCache_MACAddress_nxt							: in	std_logic;
 		IPCache_MACAddress_Data							: out	T_SLV_8;
 
-		Eth_UC_TX_Valid											: out	STD_LOGIC;
+		Eth_UC_TX_Valid											: out	std_logic;
 		Eth_UC_TX_Data											: out	T_SLV_8;
-		Eth_UC_TX_SOF												: out	STD_LOGIC;
-		Eth_UC_TX_EOF												: out	STD_LOGIC;
-		Eth_UC_TX_Ack												: in	STD_LOGIC;
-		Eth_UC_TX_Meta_rst									: in	STD_LOGIC;
-		Eth_UC_TX_Meta_DestMACAddress_nxt		: in	STD_LOGIC;
+		Eth_UC_TX_SOF												: out	std_logic;
+		Eth_UC_TX_EOF												: out	std_logic;
+		Eth_UC_TX_Ack												: in	std_logic;
+		Eth_UC_TX_Meta_rst									: in	std_logic;
+		Eth_UC_TX_Meta_DestMACAddress_nxt		: in	std_logic;
 		Eth_UC_TX_Meta_DestMACAddress_Data	: out	T_SLV_8;
 
-		Eth_UC_RX_Valid											: in	STD_LOGIC;
+		Eth_UC_RX_Valid											: in	std_logic;
 		Eth_UC_RX_Data											: in	T_SLV_8;
-		Eth_UC_RX_SOF												: in	STD_LOGIC;
-		Eth_UC_RX_EOF												: in	STD_LOGIC;
-		Eth_UC_RX_Ack												: out	STD_LOGIC;
-		Eth_UC_RX_Meta_rst									: out	STD_LOGIC;
-		Eth_UC_RX_Meta_SrcMACAddress_nxt		: out	STD_LOGIC;
+		Eth_UC_RX_SOF												: in	std_logic;
+		Eth_UC_RX_EOF												: in	std_logic;
+		Eth_UC_RX_Ack												: out	std_logic;
+		Eth_UC_RX_Meta_rst									: out	std_logic;
+		Eth_UC_RX_Meta_SrcMACAddress_nxt		: out	std_logic;
 		Eth_UC_RX_Meta_SrcMACAddress_Data		: in	T_SLV_8;
-		Eth_UC_RX_Meta_DestMACAddress_nxt		: out	STD_LOGIC;
+		Eth_UC_RX_Meta_DestMACAddress_nxt		: out	std_logic;
 		Eth_UC_RX_Meta_DestMACAddress_Data	: in	T_SLV_8;
 
-		Eth_BC_RX_Valid											: in	STD_LOGIC;
+		Eth_BC_RX_Valid											: in	std_logic;
 		Eth_BC_RX_Data											: in	T_SLV_8;
-		Eth_BC_RX_SOF												: in	STD_LOGIC;
-		Eth_BC_RX_EOF												: in	STD_LOGIC;
-		Eth_BC_RX_Ack												: out	STD_LOGIC;
-		Eth_BC_RX_Meta_rst									: out	STD_LOGIC;
-		Eth_BC_RX_Meta_SrcMACAddress_nxt		: out	STD_LOGIC;
+		Eth_BC_RX_SOF												: in	std_logic;
+		Eth_BC_RX_EOF												: in	std_logic;
+		Eth_BC_RX_Ack												: out	std_logic;
+		Eth_BC_RX_Meta_rst									: out	std_logic;
+		Eth_BC_RX_Meta_SrcMACAddress_nxt		: out	std_logic;
 		Eth_BC_RX_Meta_SrcMACAddress_Data		: in	T_SLV_8;
-		Eth_BC_RX_Meta_DestMACAddress_nxt		: out	STD_LOGIC;
+		Eth_BC_RX_Meta_DestMACAddress_nxt		: out	std_logic;
 		Eth_BC_RX_Meta_DestMACAddress_Data	: in	T_SLV_8
 	);
 end entity;
@@ -104,8 +104,8 @@ architecture rtl of arp_Wrapper is
 	signal ARPCache_Command												: T_NET_ARP_ARPCACHE_COMMAND;
 	signal IPPool_Command													: T_NET_ARP_IPPOOL_COMMAND;
 
-	signal IPPool_Announce_l											: STD_LOGIC							:= '0';
-	signal IPPool_Announced_i											: STD_LOGIC;
+	signal IPPool_Announce_l											: std_logic							:= '0';
+	signal IPPool_Announced_i											: std_logic;
 
 	type T_FSMPOOL_STATE is (
 		ST_IDLE,
@@ -118,22 +118,22 @@ architecture rtl of arp_Wrapper is
 	signal FSMPool_State													: T_FSMPOOL_STATE				:= ST_IDLE;
 	signal FSMPool_NextState											: T_FSMPOOL_STATE;
 
-	signal FSMPool_MACSeq1_SenderMACAddress_rst		: STD_LOGIC;
-	signal FSMPool_MACSeq1_SenderMACAddress_nxt		: STD_LOGIC;
+	signal FSMPool_MACSeq1_SenderMACAddress_rst		: std_logic;
+	signal FSMPool_MACSeq1_SenderMACAddress_nxt		: std_logic;
 
-	signal FSMPool_BCRcv_Clear										: STD_LOGIC;
-	signal FSMPool_BCRcv_Address_rst							: STD_LOGIC;
-	signal FSMPool_BCRcv_SenderMACAddress_nxt			: STD_LOGIC;
-	signal FSMPool_BCRcv_SenderIPv4Address_nxt		: STD_LOGIC;
-	signal FSMPool_BCRcv_TargetIPv4Address_nxt		: STD_LOGIC;
+	signal FSMPool_BCRcv_Clear										: std_logic;
+	signal FSMPool_BCRcv_Address_rst							: std_logic;
+	signal FSMPool_BCRcv_SenderMACAddress_nxt			: std_logic;
+	signal FSMPool_BCRcv_SenderIPv4Address_nxt		: std_logic;
+	signal FSMPool_BCRcv_TargetIPv4Address_nxt		: std_logic;
 
 	signal FSMPool_Command												: T_NET_ARP_IPPOOL_COMMAND;
 	signal FSMPool_NewIPv4Address_Data						: T_NET_IPV4_ADDRESS;
 	signal FSMPool_NewMACAddress_Data							: T_NET_MAC_ADDRESS;
-	signal FSMPool_IPPool_Lookup									: STD_LOGIC;
+	signal FSMPool_IPPool_Lookup									: std_logic;
 	signal FSMPool_IPPool_IPv4Address_Data				: T_SLV_8;
 
-	signal FSMPool_UCRsp_SendResponse							: STD_LOGIC;
+	signal FSMPool_UCRsp_SendResponse							: std_logic;
 	signal FSMPool_UCRsp_SenderMACAddress_Data		: T_SLV_8;
 	signal FSMPool_UCRsp_SenderIPv4Address_Data		: T_SLV_8;
 	signal FSMPool_UCRsp_TargetMACAddress_Data		: T_SLV_8;
@@ -143,36 +143,36 @@ architecture rtl of arp_Wrapper is
 	signal MACSeq1_SenderMACAddress_Data					: T_SLV_8;
 
 	-- broadcast receiver
-	signal BCRcv_Error														: STD_LOGIC;
+	signal BCRcv_Error														: std_logic;
 
-	signal BCRcv_RequestReceived									: STD_LOGIC;
+	signal BCRcv_RequestReceived									: std_logic;
 	signal BCRcv_SenderMACAddress_Data						: T_SLV_8;
 	signal BCRcv_SenderIPv4Address_Data						: T_SLV_8;
 	signal BCRcv_TargetIPv4Address_Data						: T_SLV_8;
 
 	-- ippool
-	signal IPPool_Insert													: STD_LOGIC;
-	signal IPPool_UCRsp_SendResponse							: STD_LOGIC;
-	signal IPPool_IPv4Address_rst									: STD_LOGIC;
-	signal IPPool_IPv4Address_nxt									: STD_LOGIC;
+	signal IPPool_Insert													: std_logic;
+	signal IPPool_UCRsp_SendResponse							: std_logic;
+	signal IPPool_IPv4Address_rst									: std_logic;
+	signal IPPool_IPv4Address_nxt									: std_logic;
 	signal IPPool_PoolResult											: T_CACHE_RESULT;
 
 	-- unicast responder
-	signal UCRsp_Complete													: STD_LOGIC;
+	signal UCRsp_Complete													: std_logic;
 
-	signal UCRsp_Address_rst											: STD_LOGIC;
-	signal UCRsp_SenderMACAddress_nxt							: STD_LOGIC;
-	signal UCRsp_SenderIPv4Address_nxt						: STD_LOGIC;
-	signal UCRsp_TargetMACAddress_nxt							: STD_LOGIC;
-	signal UCRsp_TargetIPv4Address_nxt						: STD_LOGIC;
+	signal UCRsp_Address_rst											: std_logic;
+	signal UCRsp_SenderMACAddress_nxt							: std_logic;
+	signal UCRsp_SenderIPv4Address_nxt						: std_logic;
+	signal UCRsp_TargetMACAddress_nxt							: std_logic;
+	signal UCRsp_TargetIPv4Address_nxt						: std_logic;
 
-	signal UCRsp_TX_Valid													: STD_LOGIC;
+	signal UCRsp_TX_Valid													: std_logic;
 	signal UCRsp_TX_Data													: T_SLV_8;
-	signal UCRsp_TX_SOF														: STD_LOGIC;
-	signal UCRsp_TX_EOF														: STD_LOGIC;
-	signal UCRsp_TX_Ack														: STD_LOGIC;
-	signal UCRsp_TX_Meta_DestMACAddress_rst				: STD_LOGIC;
-	signal UCRsp_TX_Meta_DestMACAddress_nxt				: STD_LOGIC;
+	signal UCRsp_TX_SOF														: std_logic;
+	signal UCRsp_TX_EOF														: std_logic;
+	signal UCRsp_TX_Ack														: std_logic;
+	signal UCRsp_TX_Meta_DestMACAddress_rst				: std_logic;
+	signal UCRsp_TX_Meta_DestMACAddress_nxt				: std_logic;
 	signal UCRsp_TX_Meta_DestMACAddress_Data			: T_SLV_8;
 
 	type T_FSMCACHE_STATE is (
@@ -190,24 +190,24 @@ architecture rtl of arp_Wrapper is
 	signal FSMCache_ARPCache_NewIPv4Address_Data	: T_SLV_8;
 	signal FSMCache_ARPCache_NewMACAddress_Data		: T_SLV_8;
 
-	signal FSMCache_MACSeq2_SenderMACAddress_rst	: STD_LOGIC;
-	signal FSMCache_MACSeq2_SenderMACAddress_nxt	: STD_LOGIC;
-	signal FSMCache_IPSeq2_SenderIPv4Address_rst	: STD_LOGIC;
-	signal FSMCache_IPSeq2_SenderIPv4Address_nxt	: STD_LOGIC;
+	signal FSMCache_MACSeq2_SenderMACAddress_rst	: std_logic;
+	signal FSMCache_MACSeq2_SenderMACAddress_nxt	: std_logic;
+	signal FSMCache_IPSeq2_SenderIPv4Address_rst	: std_logic;
+	signal FSMCache_IPSeq2_SenderIPv4Address_nxt	: std_logic;
 
-	signal FSMCache_UCRcv_Clear										: STD_LOGIC;
-	signal FSMCache_UCRcv_Address_rst							: STD_LOGIC;
-	signal FSMCache_UCRcv_SenderMACAddress_nxt		: STD_LOGIC;
-	signal FSMCache_UCRcv_SenderIPv4Address_nxt		: STD_LOGIC;
-	signal FSMCache_UCRcv_TargetMACAddress_nxt		: STD_LOGIC;
-	signal FSMCache_UCRcv_TargetIPv4Address_nxt		: STD_LOGIC;
+	signal FSMCache_UCRcv_Clear										: std_logic;
+	signal FSMCache_UCRcv_Address_rst							: std_logic;
+	signal FSMCache_UCRcv_SenderMACAddress_nxt		: std_logic;
+	signal FSMCache_UCRcv_SenderIPv4Address_nxt		: std_logic;
+	signal FSMCache_UCRcv_TargetMACAddress_nxt		: std_logic;
+	signal FSMCache_UCRcv_TargetIPv4Address_nxt		: std_logic;
 
-	signal FSMCache_ARPCache_Lookup								: STD_LOGIC;
+	signal FSMCache_ARPCache_Lookup								: std_logic;
 	signal FSMCache_ARPCache_IPv4Address_Data			: T_SLV_8;
-	signal FSMCache_ARPCache_MACAddress_rst				: STD_LOGIC;
-	signal FSMCache_ARPCache_MACAddress_nxt				: STD_LOGIC;
+	signal FSMCache_ARPCache_MACAddress_rst				: std_logic;
+	signal FSMCache_ARPCache_MACAddress_nxt				: std_logic;
 
-	signal FSMCache_BCReq_SendRequest							: STD_LOGIC;
+	signal FSMCache_BCReq_SendRequest							: std_logic;
 	signal FSMCache_BCReq_SenderMACAddress_Data		: T_SLV_8;
 	signal FSMCache_BCReq_SenderIPv4Address_Data	: T_SLV_8;
 	signal FSMCache_BCReq_TargetMACAddress_Data		: T_SLV_8;
@@ -218,16 +218,16 @@ architecture rtl of arp_Wrapper is
 	signal IPSeq2_SenderIPv4Address_Data					: T_SLV_8;
 
 	-- ARP request timeout counter
-	constant ARPREQ_TIMEOUTCOUNTER_MAX						: POSITIVE																						:= TimingToCycles(APR_REQUEST_TIMEOUT, CLOCK_FREQ);
-	constant ARPREQ_TIMEOUTCOUNTER_BITS						: POSITIVE																						:= log2ceilnz(ARPREQ_TIMEOUTCOUNTER_MAX);
+	constant ARPREQ_TIMEOUTCOUNTER_MAX						: positive																						:= TimingToCycles(APR_REQUEST_TIMEOUT, CLOCK_FREQ);
+	constant ARPREQ_TIMEOUTCOUNTER_BITS						: positive																						:= log2ceilnz(ARPREQ_TIMEOUTCOUNTER_MAX);
 
-	signal FSMCache_ARPReq_TimeoutCounter_rst			: STD_LOGIC;
-	signal ARPReq_TimeoutCounter_s								: SIGNED(ARPREQ_TIMEOUTCOUNTER_BITS downto 0)					:= to_signed(ARPREQ_TIMEOUTCOUNTER_MAX, ARPREQ_TIMEOUTCOUNTER_BITS + 1);
-	signal ARPReq_Timeout													: STD_LOGIC;
+	signal FSMCache_ARPReq_TimeoutCounter_rst			: std_logic;
+	signal ARPReq_TimeoutCounter_s								: signed(ARPREQ_TIMEOUTCOUNTER_BITS downto 0)					:= to_signed(ARPREQ_TIMEOUTCOUNTER_MAX, ARPREQ_TIMEOUTCOUNTER_BITS + 1);
+	signal ARPReq_Timeout													: std_logic;
 
 	-- unicast receiver
-	signal UCRcv_Error														: STD_LOGIC;
-	signal UCRcv_ResponseReceived									: STD_LOGIC;
+	signal UCRcv_Error														: std_logic;
+	signal UCRcv_ResponseReceived									: std_logic;
 	signal UCRcv_SenderMACAddress_Data						: T_SLV_8;
 	signal UCRcv_SenderIPv4Address_Data						: T_SLV_8;
 	signal UCRcv_TargetMACAddress_Data						: T_SLV_8;
@@ -235,34 +235,34 @@ architecture rtl of arp_Wrapper is
 
 	-- arp cache
 	signal ARPCache_Status												: T_NET_ARP_ARPCACHE_STATUS;
-	signal ARPCache_NewMACAddress_nxt							: STD_LOGIC;
-	signal ARPCache_NewIPv4Address_nxt						: STD_LOGIC;
+	signal ARPCache_NewMACAddress_nxt							: std_logic;
+	signal ARPCache_NewIPv4Address_nxt						: std_logic;
 	signal ARPCache_CacheResult										: T_CACHE_RESULT;
-	signal ARPCache_IPv4Address_rst								: STD_LOGIC;
-	signal ARPCache_IPv4Address_nxt								: STD_LOGIC;
+	signal ARPCache_IPv4Address_rst								: std_logic;
+	signal ARPCache_IPv4Address_nxt								: std_logic;
 	signal ARPCache_MACAddress_Data								: T_SLV_8;
 
 	-- broadcast requester
-	signal BCReq_Complete													: STD_LOGIC;
+	signal BCReq_Complete													: std_logic;
 
-	signal BCReq_Address_rst											: STD_LOGIC;
-	signal BCReq_SenderMACAddress_nxt							: STD_LOGIC;
-	signal BCReq_SenderIPv4Address_nxt						: STD_LOGIC;
-	signal BCReq_TargetMACAddress_nxt							: STD_LOGIC;
-	signal BCReq_TargetIPv4Address_nxt						: STD_LOGIC;
+	signal BCReq_Address_rst											: std_logic;
+	signal BCReq_SenderMACAddress_nxt							: std_logic;
+	signal BCReq_SenderIPv4Address_nxt						: std_logic;
+	signal BCReq_TargetMACAddress_nxt							: std_logic;
+	signal BCReq_TargetIPv4Address_nxt						: std_logic;
 
-	signal BCReq_TX_Valid													: STD_LOGIC;
+	signal BCReq_TX_Valid													: std_logic;
 	signal BCReq_TX_Data													: T_SLV_8;
-	signal BCReq_TX_SOF														: STD_LOGIC;
-	signal BCReq_TX_EOF														: STD_LOGIC;
-	signal BCReq_TX_Ack														: STD_LOGIC;
-	signal BCReq_TX_Meta_DestMACAddress_rst				: STD_LOGIC;
-	signal BCReq_TX_Meta_DestMACAddress_nxt				: STD_LOGIC;
+	signal BCReq_TX_SOF														: std_logic;
+	signal BCReq_TX_EOF														: std_logic;
+	signal BCReq_TX_Ack														: std_logic;
+	signal BCReq_TX_Meta_DestMACAddress_rst				: std_logic;
+	signal BCReq_TX_Meta_DestMACAddress_nxt				: std_logic;
 	signal BCReq_TX_Meta_DestMACAddress_Data			: T_SLV_8;
 
 begin
 	-- latched inputs (high-active)
-	IPPool_Announce_l	<= ((IPPool_Announce OR IPPool_Announce_l) and NOT IPPool_Announced_i) when rising_edge(Clock);
+	IPPool_Announce_l	<= ((IPPool_Announce or IPPool_Announce_l) and not IPPool_Announced_i) when rising_edge(Clock);
 	IPPool_Announced	<= IPPool_Announced_i;
 
 	-- FIXME: assign correct value
@@ -776,30 +776,30 @@ begin
 		);
 
 	blkStmMux : block
-		constant LLMUX_PORT_BCREQ		: NATURAL					:= 0;
-		constant LLMUX_PORT_UCRSP		: NATURAL					:= 1;
-		constant LLMUX_PORTS				: POSITIVE				:= 2;
+		constant LLMUX_PORT_BCREQ		: natural					:= 0;
+		constant LLMUX_PORT_UCRSP		: natural					:= 1;
+		constant LLMUX_PORTS				: positive				:= 2;
 
-		constant META_RST_BIT				: NATURAL					:= 0;
-		constant META_DEST_NXT_BIT	: NATURAL					:= 1;
+		constant META_RST_BIT				: natural					:= 0;
+		constant META_DEST_NXT_BIT	: natural					:= 1;
 
-		constant META_BITS					: POSITIVE				:= 8;
-		constant META_REV_BITS			: POSITIVE				:= 2;
+		constant META_BITS					: positive				:= 8;
+		constant META_REV_BITS			: positive				:= 2;
 
 
 		signal Temp_Meta						: T_SLVV_48(LLMUX_PORTS - 1 downto 0);
 		signal Temp_Meta2						: T_SLV_48;
 
-		signal StmMux_In_Valid			: STD_LOGIC_VECTOR(LLMUX_PORTS - 1 downto 0);
+		signal StmMux_In_Valid			: std_logic_vector(LLMUX_PORTS - 1 downto 0);
 		signal StmMux_In_Data				: T_SLM(LLMUX_PORTS - 1 downto 0, T_SLV_8'range)								:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 		signal StmMux_In_Meta				: T_SLM(LLMUX_PORTS - 1 downto 0, META_BITS - 1 downto 0)				:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 		signal StmMux_In_Meta_rev		: T_SLM(LLMUX_PORTS - 1 downto 0, META_REV_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
-		signal StmMux_In_SOF				: STD_LOGIC_VECTOR(LLMUX_PORTS - 1 downto 0);
-		signal StmMux_In_EOF				: STD_LOGIC_VECTOR(LLMUX_PORTS - 1 downto 0);
-		signal StmMux_In_Ack				: STD_LOGIC_VECTOR(LLMUX_PORTS - 1 downto 0);
+		signal StmMux_In_SOF				: std_logic_vector(LLMUX_PORTS - 1 downto 0);
+		signal StmMux_In_EOF				: std_logic_vector(LLMUX_PORTS - 1 downto 0);
+		signal StmMux_In_Ack				: std_logic_vector(LLMUX_PORTS - 1 downto 0);
 
-		signal StmMux_Out_Meta			: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
-		signal StmMux_Out_Meta_rev	: STD_LOGIC_VECTOR(META_REV_BITS - 1 downto 0);
+		signal StmMux_Out_Meta			: std_logic_vector(META_BITS - 1 downto 0);
+		signal StmMux_Out_Meta_rev	: std_logic_vector(META_REV_BITS - 1 downto 0);
 
 	begin
 

@@ -57,10 +57,10 @@ entity pmod_SSD is
 		REFRESH_RATE	: FREQ		:= 1 kHz
 	);
 	port (
-		Clock			: in	STD_LOGIC;
+		Clock			: in	std_logic;
 
-		Digit0		: in	STD_LOGIC_VECTOR(3 downto 0);
-		Digit1		: in	STD_LOGIC_VECTOR(3 downto 0);
+		Digit0		: in	std_logic_vector(3 downto 0);
+		Digit1		: in	std_logic_vector(3 downto 0);
 
 		SSD				: out	T_PMOD_SSD_PINS
 	);
@@ -68,17 +68,17 @@ end entity;
 
 
 architecture rtl of pmod_SSD is
-	constant REFRESHTIMER_MAX		: POSITIVE	:= TimingToCycles(to_time(REFRESH_RATE), CLOCK_FREQ) - 1;
-	constant REFRESHTIMER_BITS	: POSITIVE	:= log2ceilnz(REFRESHTIMER_MAX) + 1;
+	constant REFRESHTIMER_MAX		: positive	:= TimingToCycles(to_time(REFRESH_RATE), CLOCK_FREQ) - 1;
+	constant REFRESHTIMER_BITS	: positive	:= log2ceilnz(REFRESHTIMER_MAX) + 1;
 
-	signal RefreshTimer_rst	: STD_LOGIC;
-	signal RefreshTimer_s		: SIGNED(REFRESHTIMER_BITS - 1 downto 0)	:= to_signed(REFRESHTIMER_MAX, REFRESHTIMER_BITS);
+	signal RefreshTimer_rst	: std_logic;
+	signal RefreshTimer_s		: signed(REFRESHTIMER_BITS - 1 downto 0)	:= to_signed(REFRESHTIMER_MAX, REFRESHTIMER_BITS);
 
-	signal CathodeSelect_en	: STD_LOGIC;
-	signal CathodeSelect_r	: STD_LOGIC		:= '0';
+	signal CathodeSelect_en	: std_logic;
+	signal CathodeSelect_r	: std_logic		:= '0';
 
-	signal Digit						: STD_LOGIC_VECTOR(3 downto 0);
-	signal Segments					: STD_LOGIC_VECTOR(6 downto 0);
+	signal Digit						: std_logic_vector(3 downto 0);
+	signal Segments					: std_logic_vector(6 downto 0);
 begin
 	-- generate a < 1 kHz enable to toggle the CathodeSelect register
 	RefreshTimer_s		<= downcounter_next(cnt => RefreshTimer_s, rst => RefreshTimer_rst, INIT => REFRESHTIMER_MAX) when rising_edge(Clock);

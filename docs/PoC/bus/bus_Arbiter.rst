@@ -19,4 +19,4 @@ following arbitration strategies:
 Source file: `bus/bus_Arbiter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/bus_Arbiter.vhdl>`_
 
 
- 
+	 

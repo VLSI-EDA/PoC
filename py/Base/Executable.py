@@ -1,29 +1,29 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:          Patrick Lehmann
-# 
+#
 # Python Class:      TODO
-# 
+#
 # Description:
 # ------------------------------------
 #		TODO:
-#		- 
-#		- 
+#		-
+#		-
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -69,16 +69,16 @@ class ExecutableArgument(CommandLineArgument):
 	@Value.setter
 	def Value(self, value):
 		if isinstance(value, str):      self._value = value
-		elif isinstance(value, Path):    self._value = str(value)
-		else:                            raise ValueError("Parameter 'value' is not of type str or Path.")
+		elif isinstance(value, Path):   self._value = str(value)
+		else:                           raise ValueError("Parameter 'value' is not of type str or Path.")
 
 	def __str__(self):
-		if (self._value is None):        return ""
-		else:                            return self._value
+		if (self._value is None):       return ""
+		else:                           return self._value
 
 	def AsArgument(self):
-		if (self._value is None):        raise ValueError("Executable argument is still empty.")
-		else:                            return self._value
+		if (self._value is None):       raise ValueError("Executable argument is still empty.")
+		else:                           return self._value
 
 class StringArgument(CommandLineArgument):
 	_pattern =  "{0}"
@@ -306,15 +306,18 @@ class CommandLineArgumentList(list):
 class Executable(ILogable):
 	_POC_BOUNDARY = "====== POC BOUNDARY ======"
 
-	def __init__(self, platform, executablePath, logger=None):
+	def __init__(self, platform, dryrun, executablePath, logger=None):
 		super().__init__(logger)
 
 		self._platform =  platform
-		self._process =    None
+		self._dryrun =    dryrun
+		self._process =   None
 
 		if isinstance(executablePath, str):             executablePath = Path(executablePath)
 		elif (not isinstance(executablePath, Path)):    raise ValueError("Parameter 'executablePath' is not of type str or Path.")
-		if (not executablePath.exists()):               raise CommonException("Executable '{0!s}' cannot be found.".format(executablePath)) from FileNotFoundError(str(executablePath))
+		if (not executablePath.exists()):
+			if dryrun:  self._LogDryRun("File check for '{0!s}' failed. [SKIPPING]".format(executablePath))
+			else:       raise CommonException("Executable '{0!s}' not found.".format(executablePath)) from FileNotFoundError(str(executablePath))
 
 		# prepend the executable
 		self._executablePath =    executablePath
@@ -327,10 +330,13 @@ class Executable(ILogable):
 	def StartProcess(self, parameterList):
 		# start child process
 		# parameterList.insert(0, str(self._executablePath))
-		try:
-			self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
-		except OSError as ex:
-			raise CommonException("Error while accessing '{0!s}'.".format(self._executablePath)) from ex
+		if (not self._dryrun):
+			try:
+				self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
+			except OSError as ex:
+				raise CommonException("Error while accessing '{0!s}'.".format(self._executablePath)) from ex
+		else:
+			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 
 	def Send(self, line, end="\n"):
 		self._process.stdin.write(line + end)

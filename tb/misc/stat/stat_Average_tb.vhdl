@@ -87,27 +87,27 @@ architecture tb of stat_Average_tb is
 	);
 
 	type T_RESULT is record
-		Minimum			: NATURAL;
-		Count				: POSITIVE;
+		Minimum			: natural;
+		Count				: positive;
 	end record;
 
-	type T_RESULT_VECTOR	is array(NATURAL range <>) of T_RESULT;
+	type T_RESULT_VECTOR	is array(natural range <>) of T_RESULT;
 
-	constant DATA_BITS		: POSITIVE				:= 8;
-	constant COUNTER_BITS	: POSITIVE				:= 16;
-	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DATA_BITS=" & INTEGER'image(DATA_BITS) & "  COUNTER_BITS=" & INTEGER'image(COUNTER_BITS));
+	constant DATA_BITS		: positive				:= 8;
+	constant COUNTER_BITS	: positive				:= 16;
+	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DATA_BITS=" & integer'image(DATA_BITS) & "  COUNTER_BITS=" & INTEGER'image(COUNTER_BITS));
 
   -- component ports
-  signal Clock		: STD_LOGIC;
-  signal Reset		: STD_LOGIC;
+  signal Clock		: std_logic;
+  signal Reset		: std_logic;
 
-  signal Enable		: STD_LOGIC		:= '0';
-  signal DataIn		: STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
+  signal Enable		: std_logic		:= '0';
+  signal DataIn		: std_logic_vector(DATA_BITS - 1 downto 0);
 
-	signal Count		: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-	signal Sum			: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-	signal Average	: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-	signal Valid		: STD_LOGIC;
+	signal Count		: std_logic_vector(COUNTER_BITS - 1 downto 0);
+	signal Sum			: std_logic_vector(COUNTER_BITS - 1 downto 0);
+	signal Average	: std_logic_vector(COUNTER_BITS - 1 downto 0);
+	signal Valid		: std_logic;
 
 begin
 	-- initialize global simulation status
@@ -138,9 +138,9 @@ begin
 
 	procStimuli : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator and Checker");
-		variable ExpectedCnt	: NATURAL;
-		variable ExpectedSum	: NATURAL;
-		variable ExpectedAvg	: NATURAL;
+		variable ExpectedCnt	: natural;
+		variable ExpectedSum	: natural;
+		variable ExpectedAvg	: natural;
 	begin
 		DataIn		<= (others => '0');
 		wait until (Enable = '1') and falling_edge(Clock);
@@ -157,9 +157,9 @@ begin
 		ExpectedSum := isum(VALUES);
 		ExpectedAvg := ExpectedSum / ExpectedCnt;
 
-		simAssertion((unsigned(Count) = ExpectedCnt), "Count mismatch. Count=" & INTEGER'image(to_integer(unsigned(Count))) & "  Expected=" & INTEGER'image(ExpectedCnt));
-		simAssertion((unsigned(Sum) = ExpectedSum), "Sum mismatch. Sum=" & INTEGER'image(to_integer(unsigned(Sum))) & "  Expected=" & INTEGER'image(ExpectedSum));
-		simAssertion((unsigned(Average) = ExpectedAvg), "Average mismatch. Average=" & INTEGER'image(to_integer(unsigned(Average))) & "  Expected=" & INTEGER'image(ExpectedAvg));
+		simAssertion((unsigned(Count) = ExpectedCnt), "Count mismatch. Count=" & integer'image(to_integer(unsigned(Count))) & "  Expected=" & INTEGER'image(ExpectedCnt));
+		simAssertion((unsigned(Sum) = ExpectedSum), "Sum mismatch. Sum=" & integer'image(to_integer(unsigned(Sum))) & "  Expected=" & INTEGER'image(ExpectedSum));
+		simAssertion((unsigned(Average) = ExpectedAvg), "Average mismatch. Average=" & integer'image(to_integer(unsigned(Average))) & "  Expected=" & INTEGER'image(ExpectedAvg));
 
 		-- This process is finished
 		simDeactivateProcess(simProcessID);

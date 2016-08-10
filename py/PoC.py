@@ -1,13 +1,13 @@
 # EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
-# Authors:               Patrick Lehmann
+# Authors:              Patrick Lehmann
 #												Martin Zabel
-# 
-# Python Main Module:    Entry point to the testbench tools in PoC repository.
-# 
+#
+# Python Main Module:   Entry point to the testbench tools in PoC repository.
+#
 # Description:
 # ------------------------------------
 #    This is a python main module (executable) which:
@@ -18,13 +18,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # distributed under the License is distributed on an "AS IS" BASIS,default
@@ -47,10 +47,11 @@ from Base.Configuration             import ConfigurationException, SkipConfigura
 from Base.Exceptions                import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
 from Base.Logging                   import ILogable, Logger, Severity
 from Base.Project                   import VHDLVersion
-from Base.Simulator                 import SimulatorException
+from Base.Simulator                 import SimulatorException, Simulator as BaseSimulator
 from Base.ToolChain                 import ToolChainException
 from Compiler.LSECompiler           import Compiler as LSECompiler
 from Compiler.QuartusCompiler       import Compiler as MapCompiler
+from Compiler.ISECompiler           import Compiler as ISECompiler
 from Compiler.XCOCompiler           import Compiler as XCOCompiler
 from Compiler.XSTCompiler           import Compiler as XSTCompiler
 from Compiler.VivadoCompiler        import Compiler as VivadoCompiler
@@ -174,7 +175,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__repo =         None
 		self.__directories =  {}
 
-		self.__SimulationDefaultVHDLVersion = VHDLVersion.VHDL2008
+		self.__SimulationDefaultVHDLVersion = BaseSimulator._vhdlVersion
 		self.__SimulationDefaultBoard =       None
 
 		self._directories =             self.__Directories__()
@@ -362,10 +363,10 @@ class PoC(ILogable, ArgParseMixin):
 
 		self._LogVerbose("starting manual configuration...")
 		print("Explanation of abbreviations:")
-		print("  y - yes")
-		print("  n - no")
-		print("  p - pass (jump to next question)")
-		print("Upper case means default value")
+		print("  {YELLOW}Y{NOCOLOR} - yes      {YELLOW}P{NOCOLOR}        - pass (jump to next question)".format(**Init.Foreground))
+		print("  {YELLOW}N{NOCOLOR} - no       {YELLOW}Ctrl + C{NOCOLOR} - abort (nothing changes are saved)".format(**Init.Foreground))
+		print("Upper case or value in '[...]' means default value")
+		print("-"*80)
 		print()
 
 		# configure each vendor or tool of a tool chain
@@ -638,19 +639,19 @@ class PoC(ILogable, ArgParseMixin):
 	# 		self.Directories["XilinxPrimitiveSource"] = Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory']) / "data/vhdl/src"
 
 	def _ExtractBoard(self, BoardName, DeviceName, force=False):
-		if (BoardName is not None):      return Board(self, BoardName)
+		if (BoardName is not None):     return Board(self, BoardName)
 		elif (DeviceName is not None):  return Board(self, "Custom", DeviceName)
-		elif (force is True):            raise CommonException("Either a board name or a device name is required.")
-		else:                            return self.__SimulationDefaultBoard
+		elif (force is True):           raise CommonException("Either a board name or a device name is required.")
+		else:                           return self.__SimulationDefaultBoard
 
 	def _ExtractFQNs(self, fqns, defaultLibrary="PoC", defaultType=EntityTypes.Testbench):
-		if (len(fqns) == 0):             raise CommonException("No FQN given.")
+		if (len(fqns) == 0):            raise CommonException("No FQN given.")
 		return [FQN(self, fqn, defaultLibrary=defaultLibrary, defaultType=defaultType) for fqn in fqns]
 
 	def _ExtractVHDLVersion(self, vhdlVersion, defaultVersion=None):
 		if (defaultVersion is None):    defaultVersion = self.__SimulationDefaultVHDLVersion
-		if (vhdlVersion is None):        return defaultVersion
-		else:                            return VHDLVersion.Parse(vhdlVersion)
+		if (vhdlVersion is None):       return defaultVersion
+		else:                           return VHDLVersion.Parse(vhdlVersion)
 
 	# TODO: move to Configuration class in ToolChains.Xilinx.Vivado
 	def _CheckVivadoEnvironment(self):
@@ -882,7 +883,8 @@ class PoC(ILogable, ArgParseMixin):
 
 		# check if QuestaSim is configured
 		if (len(self.PoCConfig.options("INSTALL.Mentor.QuestaSim")) == 0):
-			raise NotConfiguredException("Mentor QuestaSim is not configured on this system.")
+			if (len(self.PoCConfig.options("INSTALL.Altera.ModelSim")) == 0):
+				raise NotConfiguredException("Neither Mentor QuestaSim nor Altera ModelSim is not configured on this system.")
 
 		fqnList =  self._ExtractFQNs(args.FQN)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -928,6 +930,27 @@ class PoC(ILogable, ArgParseMixin):
 			else:
 				testbench = entity.GetNetlists(nlFilter)
 				print(str(testbench))
+
+		Exit.exit()
+
+	# ----------------------------------------------------------------------------
+	# create the sub-parser for the "ise" command
+	# ----------------------------------------------------------------------------
+	@CommandGroupAttribute("Synthesis commands")
+	@CommandAttribute("ise", help="Generate any IP core for the Xilinx ISE tool chain")
+	@PoCEntityAttribute()
+	@BoardDeviceAttributeGroup()
+	@NoCleanUpAttribute()
+	def HandleISECompilation(self, args):
+		self.PrintHeadline()
+		self.__PrepareForSynthesis()
+		self._CheckISEEnvironment()
+
+		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
+		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
+
+		compiler = ISECompiler(self, self.DryRun, args.NoCleanUp)
+		compiler.RunAll(fqnList, board)
 
 		Exit.exit()
 

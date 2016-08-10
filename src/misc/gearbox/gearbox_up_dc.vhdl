@@ -50,37 +50,37 @@ use			PoC.components.all;
 
 entity gearbox_up_dc is
   generic (
-		INPUT_BITS						: POSITIVE				:= 8;														-- input bit width
+		INPUT_BITS						: positive				:= 8;														-- input bit width
 		INPUT_ORDER						: T_BIT_ORDER			:= LSB_FIRST;										-- LSB_FIRST: start at byte(0), MSB_FIRST: start at byte(n-1)
-		OUTPUT_BITS						: POSITIVE				:= 32;													-- output bit width
-		ADD_INPUT_REGISTERS		: BOOLEAN					:= FALSE												-- add input register @Clock1
+		OUTPUT_BITS						: positive				:= 32;													-- output bit width
+		ADD_INPUT_REGISTERS		: boolean					:= FALSE												-- add input register @Clock1
 	);
   port (
-	  Clock1								: in	STD_LOGIC;																	-- input clock domain
-		Clock2								: in	STD_LOGIC;																	-- output clock domain
-		In_Align							: in	STD_LOGIC;																	-- align word (one cycle high impulse)
-		In_Data								: in	STD_LOGIC_VECTOR(INPUT_BITS - 1 downto 0);	-- input word
-		Out_Data							: out STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);	-- output word
-		Out_Valid							: out	STD_LOGIC																		-- output is valid
+	  Clock1								: in	std_logic;																	-- input clock domain
+		Clock2								: in	std_logic;																	-- output clock domain
+		In_Align							: in	std_logic;																	-- align word (one cycle high impulse)
+		In_Data								: in	std_logic_vector(INPUT_BITS - 1 downto 0);	-- input word
+		Out_Data							: out std_logic_vector(OUTPUT_BITS - 1 downto 0);	-- output word
+		Out_Valid							: out	std_logic																		-- output is valid
 	);
 end entity;
 
 
-architecture rtl OF gearbox_up_dc is
+architecture rtl of gearbox_up_dc is
 	constant BIT_RATIO				: REAL			:= real(OUTPUT_BITS) / real(INPUT_BITS);
 
-	constant INPUT_CHUNKS			: POSITIVE	:= integer(BIT_RATIO);
-	constant BITS_PER_CHUNK		: POSITIVE	:= INPUT_BITS;
+	constant INPUT_CHUNKS			: positive	:= integer(BIT_RATIO);
+	constant BITS_PER_CHUNK		: positive	:= INPUT_BITS;
 
-	constant COUNTER_MAX			: POSITIVE	:= INPUT_CHUNKS - 1;
-	constant COUNTER_BITS 		: POSITIVE	:= log2ceil(COUNTER_MAX + 1);
+	constant COUNTER_MAX			: positive	:= INPUT_CHUNKS - 1;
+	constant COUNTER_BITS 		: positive	:= log2ceil(COUNTER_MAX + 1);
 
-	subtype T_CHUNK			is STD_LOGIC_VECTOR(BITS_PER_CHUNK - 1 downto 0);
-	type T_CHUNK_VECTOR	is array(NATURAL range <>) of T_CHUNK;
+	subtype T_CHUNK			is std_logic_vector(BITS_PER_CHUNK - 1 downto 0);
+	type T_CHUNK_VECTOR	is array(natural range <>) of T_CHUNK;
 
 	-- convert chunk-vector to flatten vector
-	function to_slv(slvv : T_CHUNK_VECTOR) return STD_LOGIC_VECTOR is
-		variable slv			: STD_LOGIC_VECTOR((slvv'length * BITS_PER_CHUNK) - 1 downto 0);
+	function to_slv(slvv : T_CHUNK_VECTOR) return std_logic_vector is
+		variable slv			: std_logic_vector((slvv'length * BITS_PER_CHUNK) - 1 downto 0);
 	begin
 		for i in slvv'range loop
 			slv(((i + 1) * BITS_PER_CHUNK) - 1 downto i * BITS_PER_CHUNK)		:= slvv(i);
@@ -88,30 +88,32 @@ architecture rtl OF gearbox_up_dc is
 		return slv;
 	end function;
 
-	signal Counter_us					: UNSIGNED(COUNTER_BITS - 1 downto 0)					:= (others => '0');
-	signal Select_us					: UNSIGNED(COUNTER_BITS - 1 downto 0);
+	signal Counter_us					: unsigned(COUNTER_BITS - 1 downto 0)					:= (others => '0');
+	signal Select_us					: unsigned(COUNTER_BITS - 1 downto 0);
 
-	signal In_Data_d					: STD_LOGIC_VECTOR(INPUT_BITS - 1 downto 0)		:= (others => '0');
+	signal In_Data_d					: std_logic_vector(INPUT_BITS - 1 downto 0)		:= (others => '0');
+	signal In_Align_d					: std_logic;
 	signal Data_d							: T_CHUNK_VECTOR(INPUT_CHUNKS - 2 downto 0)		:= (others => (others => '0'));
-	signal Collected					: STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);
-	signal Collected_swapped	: STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);
-	signal Collected_en				: STD_LOGIC;
-	signal Collected_d				: STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0)	:= (others => '0');
-	signal DataOut_d					: STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0)	:= (others => '0');
+	signal Collected					: std_logic_vector(OUTPUT_BITS - 1 downto 0);
+	signal Collected_swapped	: std_logic_vector(OUTPUT_BITS - 1 downto 0);
+	signal Collected_en				: std_logic;
+	signal Collected_d				: std_logic_vector(OUTPUT_BITS - 1 downto 0)	:= (others => '0');
+	signal DataOut_d					: std_logic_vector(OUTPUT_BITS - 1 downto 0)	:= (others => '0');
 
-	signal Valid_r						: STD_LOGIC																		:= '0';
-	signal Valid_d						: STD_LOGIC																		:= '0';
+	signal Valid_r						: std_logic																		:= '0';
+	signal Valid_d						: std_logic																		:= '0';
 begin
 	assert (INPUT_BITS < OUTPUT_BITS) report "INPUT_BITS must be less than OUTPUT_BITS, otherwise it's no up-sizing gearbox." severity FAILURE;
 
 	-- input register @Clock1
-	In_Data_d	<= In_Data when registered(Clock1, ADD_INPUT_REGISTERS);
+	In_Align_d	<= In_Align	when registered(Clock1, ADD_INPUT_REGISTERS);
+	In_Data_d		<= In_Data	when registered(Clock1, ADD_INPUT_REGISTERS);
 
 	-- byte alignment counter @Clock1
 	process(Clock1)
 	begin
 		if rising_edge(Clock1) then
-			if (In_Align = '1') then
+			if (In_Align_d = '1') then
 				Counter_us		<= to_unsigned(1, Counter_us'length);
 				Valid_r				<= '0';
 			elsif (upcounter_equal(cnt => Counter_us, value => COUNTER_MAX) = '1') then
@@ -123,7 +125,7 @@ begin
 		end if;
 	end process;
 
-	Select_us		<= mux(In_Align, Counter_us, (Counter_us'range => '0'));
+	Select_us		<= mux(In_Align_d, Counter_us, (Counter_us'range => '0'));
 
 	-- delay registers @Clock1
 	process(Clock1)

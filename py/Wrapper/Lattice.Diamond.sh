@@ -77,3 +77,5 @@ CloseEnvironment() {
 	# echo 1>&2 -e "${YELLOW}Unloading Lattice Diamond environment...${NOCOLOR}"
 	return 0
 }
+
+

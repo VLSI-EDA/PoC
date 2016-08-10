@@ -1,5 +1,9 @@
 *.tpl		-whitespace
 *.md		-whitespace
 *.rst		-whitespace
-*.vhdl	filter=whiteindent
-*.py	filter=whiteindent
+*.pl	filter=normalize
+*.psm1	filter=normalize
+*.py	filter=normalize
+*.sh	filter=normalize
+*.rst	filter=normailze_rest
+*.vhdl	filter=normalize_vhdl

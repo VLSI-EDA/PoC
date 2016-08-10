@@ -47,45 +47,45 @@ use			PoC.utils.all;
 
 package FileIO is
 	-- Constant declarations
-	constant C_LINEBREAK : STRING;
+	constant C_LINEBREAK : string;
 
 
 	-- Log file
 	-- ===========================================================================
 	subtype T_LOGFILE_OPEN_KIND is FILE_OPEN_KIND range WRITE_MODE to APPEND_MODE;
 
-	procedure				LogFile_Open(FileName : STRING; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE);
-	procedure				LogFile_Open(Status : out FILE_OPEN_STATUS; FileName : STRING; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE);
-	impure function	LogFile_IsOpen return BOOLEAN;
-	procedure				LogFile_Print(str : STRING);
-	procedure				LogFile_PrintLine(str : STRING := "");
+	procedure				LogFile_Open(FileName : string; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE);
+	procedure				LogFile_Open(Status : out FILE_OPEN_STATUS; FileName : string; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE);
+	impure function	LogFile_IsOpen return boolean;
+	procedure				LogFile_Print(str : string);
+	procedure				LogFile_PrintLine(str : string := "");
 	procedure				LogFile_Flush;
 	procedure				LogFile_Close;
 
 	-- StdOut
 	-- ===========================================================================
-	procedure StdOut_Print(str : STRING);
-	procedure StdOut_PrintLine(str : STRING := "");
+	procedure StdOut_Print(str : string);
+	procedure StdOut_PrintLine(str : string := "");
 	procedure StdOut_Flush;
 
 end package;
 
 
 package body FileIO is
-	constant C_LINEBREAK : STRING := ite(str_equal(MY_OPERATING_SYSTEM, "WINDOWS"), (CR & LF), (1 => LF));
+	constant C_LINEBREAK : string := ite(str_equal(MY_OPERATING_SYSTEM, "WINDOWS"), (CR & LF), (1 => LF));
 
 	-- ===========================================================================
 	file						LogFile_FileHandle		: TEXT;
-	shared variable	LogFile_State_IsOpen	: BOOLEAN		:= FALSE;
+	shared variable	LogFile_State_IsOpen	: boolean		:= FALSE;
 	shared variable LogFile_LineBuffer		: LINE;
 
-	procedure LogFile_Open(FileName : STRING; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE) is
+	procedure LogFile_Open(FileName : string; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE) is
 		variable OpenStatus		: FILE_OPEN_STATUS;
 	begin
 		LogFile_Open(OpenStatus, FileName, OpenKind);
 	end procedure;
 
-	procedure LogFile_Open(Status : out FILE_OPEN_STATUS; FileName : STRING; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE) is
+	procedure LogFile_Open(Status : out FILE_OPEN_STATUS; FileName : string; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE) is
 		variable OpenStatus		: FILE_OPEN_STATUS;
 	begin
 		file_open(OpenStatus, LogFile_FileHandle, FileName, OpenKind);
@@ -93,17 +93,17 @@ package body FileIO is
 		Status								:= OpenStatus;
 	end procedure;
 
-	impure function LogFile_IsOpen return BOOLEAN is
+	impure function LogFile_IsOpen return boolean is
 	begin
 		return LogFile_State_IsOpen;
 	end function;
 
-	procedure LogFile_Print(str : STRING) is
+	procedure LogFile_Print(str : string) is
 	begin
 		write(LogFile_LineBuffer, str);
 	end procedure;
 
-	procedure LogFile_PrintLine(str : STRING := "") is
+	procedure LogFile_PrintLine(str : string := "") is
 	begin
 		write(LogFile_LineBuffer, str);
 		writeline(LogFile_FileHandle, LogFile_LineBuffer);
@@ -125,12 +125,12 @@ package body FileIO is
 	-- ===========================================================================
 	shared variable StdOut_LineBuffer : line;
 
-	procedure StdOut_Print(str : STRING) is
+	procedure StdOut_Print(str : string) is
 	begin
 		write(StdOut_LineBuffer, str);
 	end procedure;
 
-	procedure StdOut_PrintLine(str : STRING := "") is
+	procedure StdOut_PrintLine(str : string := "") is
 	begin
 		write(StdOut_LineBuffer, str);
 		writeline(OUTPUT, StdOut_LineBuffer);

@@ -2,13 +2,13 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 #	Authors:          Martin Zabel
 #                   Patrick Lehmann
-# 
+#
 #	Bash Script:			Compile Altera's simulation libraries
-# 
+#
 # Description:
 # ------------------------------------
 #	This is a bash script compiles Altera's simulation libraries into a local
@@ -18,13 +18,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #		http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,11 +46,11 @@ PoC_sh=$PoCRootDir/poc.sh
 # source shared file from precompile directory
 source $ScriptDir/shared.sh
 
-# set bash options
-set -o pipefail
 
 # command line argument processing
 NO_COMMAND=1
+VHDL93=0
+VHDL2008=0
 while [[ $# > 0 ]]; do
 	key="$1"
 	case $key in
@@ -72,6 +72,12 @@ while [[ $# > 0 ]]; do
 		-h|--help)
 		HELP=TRUE
 		NO_COMMAND=0
+		;;
+		--vhdl93)
+		VHDL93=1
+		;;
+		--vhdl2008)
+		VHDL2008=1
 		;;
 		*)		# unknown option
 		echo 1>&2 -e "${COLORED_ERROR} Unknown command line option '$key'.${ANSI_NOCOLOR}"
@@ -95,7 +101,7 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  on Linux."
 	echo ""
 	echo "Usage:"
-	echo "  compile-altera.sh [-c] [--help|--all|--ghdl|--vsim]"
+	echo "  compile-altera.sh [-c] [--help|--all|--ghdl|--vsim] [<Options>]"
 	echo ""
 	echo "Common commands:"
 	echo "  -h --help             Print this help page"
@@ -106,6 +112,10 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "     --ghdl             Compile for GHDL."
 	echo "     --questa           Compile for QuestaSim/ModelSim."
 	echo ""
+	echo "Options:"
+	echo "     --vhdl93           Compile for VHDL-93."
+	echo "     --vhdl2008         Compile for VHDL-2008."
+	echo ""
 	exit 0
 fi
 
@@ -113,6 +123,10 @@ fi
 if [ "$COMPILE_ALL" == "TRUE" ]; then
 	COMPILE_FOR_GHDL=TRUE
 	COMPILE_FOR_VSIM=TRUE
+fi
+if [ \( $VHDL93 -eq 0 \) -a \( $VHDL2008 -eq 0 \) ]; then
+	VHDL93=1
+	VHDL2008=1
 fi
 
 PrecompiledDir=$($PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
@@ -131,7 +145,6 @@ fi
 
 # GHDL
 # ==============================================================================
-ERRORCOUNT=0
 if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# Get GHDL directories
 	# <= $GHDLBinDir
@@ -144,14 +157,11 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
-	
+
 	# Assemble Altera compile script path
 	GHDLAlteraScript="$($READLINK -f $GHDLScriptDir/compile-altera.sh)"
-	if [ ! -x $GHDLAlteraScript ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Altera compile script from GHDL is not executable.${ANSI_NOCOLOR}"
-		exit -1;
-	fi
-	
+
+
 	echo "=> $GHDLAlteraScript"
 
 	# Get Altera installation directory
@@ -167,18 +177,28 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	if [ -z $GHDL ]; then
 		export GHDL=$GHDLBinDir/ghdl
 	fi
-	
+
+	BASH=$(which bash)
+
 	# compile all architectures, skip existing and large files, no wanrings
-	$GHDLAlteraScript --all -s -S -n --src $SourceDir --out $AlteraDirName
-	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
-		exit -1;
+	if [ $VHDL93 -eq 1 ]; then
+		$BASH $GHDLAlteraScript --all --vhdl93 -s -S -n --src $SourceDir --out $AlteraDirName
+		if [ $? -ne 0 ]; then
+			echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
+			exit -1;
+		fi
+	fi
+	if [ $VHDL2008 -eq 1 ]; then
+		$BASH $GHDLAlteraScript --all --vhdl2008 -s -S -n --src $SourceDir --out $AlteraDirName
+		if [ $? -ne 0 ]; then
+			echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
+			exit -1;
+		fi
 	fi
 fi
 
 # QuestaSim/ModelSim
 # ==============================================================================
-ERRORCOUNT=0
 if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Get GHDL directories
 	# <= $VSimBinDir
@@ -199,26 +219,26 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		exit -1;
   fi
 	Quartus_sh=$QuartusBinDir/quartus_sh
-	
+
 	# create an empty modelsim.ini in the altera directory and add reference to parent modelsim.ini
 	CreateLocalModelsim_ini
 
-	
+
 	Simulator=questasim
 	Language=vhdl
-	TargetArchitecture=("all")		# "cycloneiii" "stratixiv")
-	
+	TargetArchitectures=("all")		# "cycloneiii" "stratixiv")
+
 	# compile common libraries
 	$Quartus_sh --simlib_comp -tool $Simulator -language $Language -tool_path $VSimBinDir -directory $DestDir -rtl_only
 	if [ $? -ne 0 ]; then
-		echo 1>&2 -e "${COLORED_ERROR} Error while compiling common libraries.${ANSI_NOCOLOR}"
+		echo 1>&2 -e "${COLORED_ERROR} While compiling common libraries.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
 
-	for Family in ${TargetArchitecture[@]}; do
+	for Family in ${TargetArchitectures[@]}; do
 		$Quartus_sh --simlib_comp -tool $Simulator -language $Language -family $Family -tool_path $VSimBinDir -directory $DestDir -no_rtl
 		if [ $? -ne 0 ]; then
-			echo 1>&2 -e "${COLORED_ERROR} Error while compiling family '$Family' libraries.${ANSI_NOCOLOR}"
+			echo 1>&2 -e "${COLORED_ERROR} While compiling family '$Family' libraries.${ANSI_NOCOLOR}"
 			exit -1;
 		fi
 	done

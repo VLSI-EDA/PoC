@@ -23,8 +23,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
 from subprocess import check_call
+from sys import argv
 
-check_call(['git', 'config', 'filter.whiteindent.clean',  'tools/git/filters/whiteindent clean'])
-check_call(['git', 'config', 'filter.whiteindent.smudge', 'tools/git/filters/whiteindent smudge'])
+cmd = ['git', 'config']
+if len(argv) > 1 and argv[1] == 'remove':
+	cmd.append('--unset')
+
+for lang in [None, 'rest', 'vhdl']:
+	filter = 'filter.normalize'
+	invoke = 'tools/git/filters/normalize {}'
+	if lang:
+		filter += '_'+lang
+		invoke += ' '+lang
+	for pas in ['clean', 'smudge']:
+		check_call(cmd + [filter + '.' + pas, invoke.format(pas)])

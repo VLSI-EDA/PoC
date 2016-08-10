@@ -18,4 +18,4 @@ io_7SegmentMux_HEX
 Source file: `io/io_7SegmentMux_HEX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_7SegmentMux_HEX.vhdl>`_
 
 
- 
+	 

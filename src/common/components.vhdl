@@ -44,58 +44,58 @@ use			PoC.utils.all;
 
 package components is
 	-- implement an optional register stage
-	function registered(signal Clock : STD_LOGIC; constant IsRegistered : BOOLEAN) return BOOLEAN;
+	function registered(signal Clock : std_logic; constant IsRegistered : boolean) return boolean;
 
 	-- FlipFlop functions
 	-- ===========================================================================
 	-- RS-FlipFlops
-	function ffrs(q : STD_LOGIC;	rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC;				-- RS-FlipFlop with dominant rst
-	function ffsr(q : STD_LOGIC;	rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC;				-- RS-FlipFlop with dominant set
+	function ffrs(q : std_logic;	rst : std_logic := '0'; set : std_logic := '0') return std_logic;				-- RS-FlipFlop with dominant rst
+	function ffsr(q : std_logic;	rst : std_logic := '0'; set : std_logic := '0') return std_logic;				-- RS-FlipFlop with dominant set
 	-- D-FlipFlops (Delay)
-	function ffdre(q : STD_LOGIC;					d : STD_LOGIC;				rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0')												return STD_LOGIC;					-- D-FlipFlop with reset and enable
-	function ffdre(q : STD_LOGIC_VECTOR;	d : STD_LOGIC_VECTOR;	rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC_VECTOR := (7 downto 0 => '0'))	return STD_LOGIC_VECTOR;	-- D-FlipFlop with reset and enable
-	function ffdse(q : STD_LOGIC;					d : STD_LOGIC;				set : STD_LOGIC := '0'; en : STD_LOGIC := '1')																													return STD_LOGIC;					-- D-FlipFlop with set and enable
+	function ffdre(q : std_logic;					d : std_logic;				rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic := '0')												return std_logic;					-- D-FlipFlop with reset and enable
+	function ffdre(q : std_logic_vector;	d : std_logic_vector;	rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic_vector := (7 downto 0 => '0'))	return std_logic_vector;	-- D-FlipFlop with reset and enable
+	function ffdse(q : std_logic;					d : std_logic;				set : std_logic := '0'; en : std_logic := '1')																													return std_logic;					-- D-FlipFlop with set and enable
 	-- T-FlipFlops (Toggle)
-	function fftre(q : STD_LOGIC;					t : STD_LOGIC;				rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0')												return STD_LOGIC;					-- T-FlipFlop with reset and enable
-	function fftse(q : STD_LOGIC;					t : STD_LOGIC;				set : STD_LOGIC := '0'; en : STD_LOGIC := '1')																													return STD_LOGIC;					-- T-FlipFlop with set and enable
+	function fftre(q : std_logic;					t : std_logic;				rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic := '0')												return std_logic;					-- T-FlipFlop with reset and enable
+	function fftse(q : std_logic;					t : std_logic;				set : std_logic := '0'; en : std_logic := '1')																													return std_logic;					-- T-FlipFlop with set and enable
 
 	-- counter
-	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : NATURAL := 0) return UNSIGNED;
-	function upcounter_equal(cnt : UNSIGNED; value : NATURAL) return STD_LOGIC;
-	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : INTEGER := 0) return SIGNED;
-	function downcounter_equal(cnt : SIGNED; value : INTEGER) return STD_LOGIC;
-	function downcounter_neg(cnt : SIGNED) return STD_LOGIC;
+	function upcounter_next(cnt : unsigned; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : natural := 0) return unsigned;
+	function upcounter_equal(cnt : unsigned; value : natural) return std_logic;
+	function downcounter_next(cnt : signed; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : integer := 0) return signed;
+	function downcounter_equal(cnt : signed; value : integer) return std_logic;
+	function downcounter_neg(cnt : signed) return std_logic;
 
 	-- shiftregisters
-	function shreg_left(q : STD_LOGIC_VECTOR; i : STD_LOGIC; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;
-	function shreg_right(q : STD_LOGIC_VECTOR; i : STD_LOGIC; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;
+	function shreg_left(q : std_logic_vector; i : std_logic; en : std_logic := '1') return std_logic_vector;
+	function shreg_right(q : std_logic_vector; i : std_logic; en : std_logic := '1') return std_logic_vector;
 	-- rotate registers
-	function rreg_left(q : STD_LOGIC_VECTOR; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;
-	function rreg_right(q : STD_LOGIC_VECTOR; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR;
+	function rreg_left(q : std_logic_vector; en : std_logic := '1') return std_logic_vector;
+	function rreg_right(q : std_logic_vector; en : std_logic := '1') return std_logic_vector;
 
 	-- compare
-	function comp(value1 : STD_LOGIC_VECTOR; value2 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR;
-	function comp(value1 : UNSIGNED; value2 : UNSIGNED) return UNSIGNED;
-	function comp(value1 : SIGNED; value2 : SIGNED) return SIGNED;
-	function comp_allzero(value	: STD_LOGIC_VECTOR)	return STD_LOGIC;
-	function comp_allzero(value	: UNSIGNED)					return STD_LOGIC;
-	function comp_allzero(value	: SIGNED)						return STD_LOGIC;
-	function comp_allone(value	: STD_LOGIC_VECTOR)	return STD_LOGIC;
-	function comp_allone(value	: UNSIGNED)					return STD_LOGIC;
-	function comp_allone(value	: SIGNED)						return STD_LOGIC;
+	function comp(value1 : std_logic_vector; value2 : std_logic_vector) return std_logic_vector;
+	function comp(value1 : unsigned; value2 : unsigned) return unsigned;
+	function comp(value1 : signed; value2 : signed) return signed;
+	function comp_allzero(value	: std_logic_vector)	return std_logic;
+	function comp_allzero(value	: unsigned)					return std_logic;
+	function comp_allzero(value	: signed)						return std_logic;
+	function comp_allone(value	: std_logic_vector)	return std_logic;
+	function comp_allone(value	: unsigned)					return std_logic;
+	function comp_allone(value	: signed)						return std_logic;
 
 	-- multiplexing
-	function mux(sel : STD_LOGIC; sl0		: STD_LOGIC;				sl1		: STD_LOGIC)				return STD_LOGIC;
-	function mux(sel : STD_LOGIC; slv0	: STD_LOGIC_VECTOR;	slv1	: STD_LOGIC_VECTOR)	return STD_LOGIC_VECTOR;
-	function mux(sel : STD_LOGIC; us0		: UNSIGNED;					us1		: UNSIGNED)					return UNSIGNED;
-	function mux(sel : STD_LOGIC; s0		: SIGNED;						s1		: SIGNED)						return SIGNED;
+	function mux(sel : std_logic; sl0		: std_logic;				sl1		: std_logic)				return std_logic;
+	function mux(sel : std_logic; slv0	: std_logic_vector;	slv1	: std_logic_vector)	return std_logic_vector;
+	function mux(sel : std_logic; us0		: unsigned;					us1		: unsigned)					return unsigned;
+	function mux(sel : std_logic; s0		: signed;						s1		: signed)						return signed;
 end package;
 
 
 package body components is
 	-- implement an optional register stage
 	-- ===========================================================================
-	function registered(signal Clock : STD_LOGIC; constant IsRegistered : BOOLEAN) return BOOLEAN is
+	function registered(signal Clock : std_logic; constant IsRegistered : boolean) return boolean is
 	begin
 		return ite(IsRegistered, rising_edge(Clock), TRUE);
 	end function;
@@ -103,7 +103,7 @@ package body components is
 	-- FlipFlops
 	-- ===========================================================================
 	-- D-flipflop with reset and enable
-	function ffdre(q : STD_LOGIC; d : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0') return STD_LOGIC is
+	function ffdre(q : std_logic; d : std_logic; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic := '0') return std_logic is
 	begin
 		if (SIMULATION = FALSE) then
 			if (INIT = '0') then
@@ -120,9 +120,9 @@ package body components is
 		end if;
 	end function;
 
-	function ffdre(q : STD_LOGIC_VECTOR; d : STD_LOGIC_VECTOR; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC_VECTOR := (7 downto 0 => '0')) return STD_LOGIC_VECTOR is
-		constant INIT_I		: STD_LOGIC_VECTOR(q'range)		:= resize(INIT, q'length);
-		variable Result		: STD_LOGIC_VECTOR(q'range);
+	function ffdre(q : std_logic_vector; d : std_logic_vector; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic_vector := (7 downto 0 => '0')) return std_logic_vector is
+		constant INIT_I		: std_logic_vector(q'range)		:= resize(INIT, q'length);
+		variable Result		: std_logic_vector(q'range);
 	begin
 		for i in q'range loop
 			Result(i)		:= ffdre(q => q(i), d => d(i), rst => rst, en => en, INIT => INIT_I(i));
@@ -131,13 +131,13 @@ package body components is
 	end function;
 
 	-- D-flipflop with set and enable
-	function ffdse(q : STD_LOGIC; d : STD_LOGIC; set : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
+	function ffdse(q : std_logic; d : std_logic; set : std_logic := '0'; en : std_logic := '1') return std_logic is
 	begin
 		return ffdre(q => q, d => d, rst => set, en => en, INIT => '1');
 	end function;
 
 	-- T-flipflop with reset and enable
-	function fftre(q : STD_LOGIC; t : STD_LOGIC; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : STD_LOGIC := '0') return STD_LOGIC is
+	function fftre(q : std_logic; t : std_logic; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic := '0') return std_logic is
 	begin
 		if (SIMULATION = FALSE) then
 			if (INIT = '0') then
@@ -155,19 +155,19 @@ package body components is
 	end function;
 
 	-- T-flipflop with set and enable
-	function fftse(q : STD_LOGIC; t : STD_LOGIC; set : STD_LOGIC := '0'; en : STD_LOGIC := '1') return STD_LOGIC is
+	function fftse(q : std_logic; t : std_logic; set : std_logic := '0'; en : std_logic := '1') return std_logic is
 	begin
 		return fftre(q => q, t => t, rst => set, en => en, INIT => '1');
 	end function;
 
 	-- RS-flipflop with dominant rst
-	function ffrs(q : STD_LOGIC; rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC is
+	function ffrs(q : std_logic; rst : std_logic := '0'; set : std_logic := '0') return std_logic is
 	begin
 		return (q or set) and not rst;
 	end function;
 
 	-- RS-flipflop with dominant set
-	function ffsr(q : STD_LOGIC; rst : STD_LOGIC := '0'; set : STD_LOGIC := '0') return STD_LOGIC is
+	function ffsr(q : std_logic; rst : std_logic := '0'; set : std_logic := '0') return std_logic is
 	begin
 		return (q and not rst) or set;
 	end function;
@@ -176,7 +176,7 @@ package body components is
 	-- Counters
 	-- ===========================================================================
 	-- up-counter
-	function upcounter_next(cnt : UNSIGNED; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : NATURAL := 0) return UNSIGNED is
+	function upcounter_next(cnt : unsigned; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : natural := 0) return unsigned is
 	begin
 		if (rst = '1') then
 			return to_unsigned(INIT, cnt'length);
@@ -187,14 +187,14 @@ package body components is
 		end if;
 	end function;
 
-	function upcounter_equal(cnt : UNSIGNED; value : NATURAL) return STD_LOGIC is
+	function upcounter_equal(cnt : unsigned; value : natural) return std_logic is
 	begin
 		-- optimized comparison for only up counting values
 		return to_sl((cnt and to_unsigned(value, cnt'length)) = value);
 	end function;
 
 	-- down-counter
-	function downcounter_next(cnt : SIGNED; rst : STD_LOGIC := '0'; en : STD_LOGIC := '1'; constant INIT : INTEGER := 0) return SIGNED is
+	function downcounter_next(cnt : signed; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : integer := 0) return signed is
 	begin
 		if (rst = '1') then
 			return to_signed(INIT, cnt'length);
@@ -205,35 +205,35 @@ package body components is
 		end if;
 	end function;
 
-	function downcounter_equal(cnt : SIGNED; value : INTEGER) return STD_LOGIC is
+	function downcounter_equal(cnt : signed; value : integer) return std_logic is
 	begin
 		-- optimized comparison for only down counting values
 		return to_sl((cnt nor to_signed(value, cnt'length)) /= value);
 	end function;
 
-	function downcounter_neg(cnt : SIGNED) return STD_LOGIC is
+	function downcounter_neg(cnt : signed) return std_logic is
 	begin
 		return cnt(cnt'high);
 	end function;
 
 	-- Shift/Rotate Registers
 	-- ===========================================================================
-	function shreg_left(q : STD_LOGIC_VECTOR; i : std_logic; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
+	function shreg_left(q : std_logic_vector; i : std_logic; en : std_logic := '1') return std_logic_vector is
 	begin
 		return mux(en, q, q(q'left - 1 downto q'right) & i);
 	end function;
 
-	function shreg_right(q : STD_LOGIC_VECTOR; i : std_logic; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
+	function shreg_right(q : std_logic_vector; i : std_logic; en : std_logic := '1') return std_logic_vector is
 	begin
 		return mux(en, q, i & q(q'left downto q'right - 1));
 	end function;
 
-	function rreg_left(q : STD_LOGIC_VECTOR; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
+	function rreg_left(q : std_logic_vector; en : std_logic := '1') return std_logic_vector is
 	begin
 		return mux(en, q, q(q'left - 1 downto q'right) & q(q'left));
 	end function;
 
-	function rreg_right(q : STD_LOGIC_VECTOR; en : STD_LOGIC := '1') return STD_LOGIC_VECTOR is
+	function rreg_right(q : std_logic_vector; en : std_logic := '1') return std_logic_vector is
 	begin
 		return mux(en, q, q(q'right) & q(q'left downto q'right - 1));
 	end function;
@@ -244,13 +244,13 @@ package body components is
 	--	1-		=> value1 < value2 (difference is negative)
 	--	00		=> value1 = value2 (difference is zero)
 	--	-1		=> value1 > value2 (difference is positive)
-	function comp(value1 : STD_LOGIC_VECTOR; value2 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
+	function comp(value1 : std_logic_vector; value2 : std_logic_vector) return std_logic_vector is
 	begin
 		report "Comparing two STD_LOGIC_VECTORs - implicit conversion to UNSIGNED" severity WARNING;
 		return std_logic_vector(comp(unsigned(value1), unsigned(value2)));
 	end function;
 
-	function comp(value1 : UNSIGNED; value2 : UNSIGNED) return UNSIGNED is
+	function comp(value1 : unsigned; value2 : unsigned) return unsigned is
 	begin
 		if (value1 < value2) then
 			return "10";
@@ -261,7 +261,7 @@ package body components is
 		end if;
 	end function;
 
-	function comp(value1 : SIGNED; value2 : SIGNED) return SIGNED is
+	function comp(value1 : signed; value2 : signed) return signed is
 	begin
 		if (value1 < value2) then
 			return "10";
@@ -272,54 +272,54 @@ package body components is
 		end if;
 	end function;
 
-	function comp_allzero(value	: STD_LOGIC_VECTOR) return STD_LOGIC is
+	function comp_allzero(value	: std_logic_vector) return std_logic is
 	begin
 		return comp_allzero(unsigned(value));
 	end function;
 
-	function comp_allzero(value	: UNSIGNED) return STD_LOGIC is
+	function comp_allzero(value	: unsigned) return std_logic is
 	begin
 		return to_sl(value = (value'range => '0'));
 	end function;
 
-	function comp_allzero(value	: SIGNED) return STD_LOGIC is
+	function comp_allzero(value	: signed) return std_logic is
 	begin
 		return to_sl(value = (value'range => '0'));
 	end function;
 
-	function comp_allone(value	: STD_LOGIC_VECTOR) return STD_LOGIC is
+	function comp_allone(value	: std_logic_vector) return std_logic is
 	begin
 		return comp_allone(unsigned(value));
 	end function;
 
-	function comp_allone(value	: UNSIGNED) return STD_LOGIC is
+	function comp_allone(value	: unsigned) return std_logic is
 	begin
 		return to_sl(value = (value'range => '1'));
 	end function;
 
-	function comp_allone(value	: SIGNED) return STD_LOGIC is
+	function comp_allone(value	: signed) return std_logic is
 	begin
 		return to_sl(value = (value'range => '1'));
 	end function;
 
 
 	-- multiplexers
-	function mux(sel : STD_LOGIC; sl0 : STD_LOGIC; sl1 : STD_LOGIC) return STD_LOGIC is
+	function mux(sel : std_logic; sl0 : std_logic; sl1 : std_logic) return std_logic is
 	begin
 		return (sl0 and not sel) or (sl1 and sel);
 	end function;
 
-	function mux(sel : STD_LOGIC; slv0 : STD_LOGIC_VECTOR; slv1 : STD_LOGIC_VECTOR) return STD_LOGIC_VECTOR is
+	function mux(sel : std_logic; slv0 : std_logic_vector; slv1 : std_logic_vector) return std_logic_vector is
 	begin
 		return (slv0 and not (slv0'range => sel)) or (slv1 and (slv1'range => sel));
 	end function;
 
-	function mux(sel : STD_LOGIC; us0 : UNSIGNED; us1 : UNSIGNED) return UNSIGNED is
+	function mux(sel : std_logic; us0 : unsigned; us1 : unsigned) return unsigned is
 	begin
 		return (us0 and not (us0'range => sel)) or (us1 and (us1'range => sel));
 	end function;
 
-	function mux(sel : STD_LOGIC; s0 : SIGNED; s1 : SIGNED) return SIGNED is
+	function mux(sel : std_logic; s0 : signed; s1 : signed) return signed is
 	begin
 		return (s0 and not (s0'range => sel)) or (s1 and (s1'range => sel));
 	end function;

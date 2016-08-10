@@ -41,86 +41,86 @@ use			PoC.sortnet.all;
 
 entity sortnet_Stream_Adapter2 is
 	generic (
-		STREAM_DATA_BITS			: POSITIVE				:= 32;
-		STREAM_META_BITS			: POSITIVE				:= 2;
-		DATA_COLUMNS					: POSITIVE				:= 2;
+		STREAM_DATA_BITS			: positive				:= 32;
+		STREAM_META_BITS			: positive				:= 2;
+		DATA_COLUMNS					: positive				:= 2;
 		SORTNET_IMPL					: T_SORTNET_IMPL	:= SORT_SORTNET_IMPL_ODDEVEN_MERGESORT;
-		SORTNET_SIZE					: POSITIVE				:= 32;
-		SORTNET_KEY_BITS			: POSITIVE				:= 32;
-		SORTNET_DATA_BITS			: NATURAL					:= 32;
-		SORTNET_REG_AFTER			: NATURAL					:= 2;
-		MERGENET_STAGES				: POSITIVE				:= 2
+		SORTNET_SIZE					: positive				:= 32;
+		SORTNET_KEY_BITS			: positive				:= 32;
+		SORTNET_DATA_BITS			: natural					:= 32;
+		SORTNET_REG_AFTER			: natural					:= 2;
+		MERGENET_STAGES				: positive				:= 2
 	);
 	port (
-		Clock				: in	STD_LOGIC;
-		Reset				: in	STD_LOGIC;
+		Clock				: in	std_logic;
+		Reset				: in	std_logic;
 
-		Inverse			: in	STD_LOGIC				:= '0';
+		Inverse			: in	std_logic				:= '0';
 
-		In_Valid		: in	STD_LOGIC;
-		In_Data			: in	STD_LOGIC_VECTOR(STREAM_DATA_BITS - 1 downto 0);
-		In_Meta			: in	STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
-		In_SOF			: in	STD_LOGIC;
-		In_IsKey		: in	STD_LOGIC;
-		In_EOF			: in	STD_LOGIC;
-		In_Ack			: out	STD_LOGIC;
+		In_Valid		: in	std_logic;
+		In_Data			: in	std_logic_vector(STREAM_DATA_BITS - 1 downto 0);
+		In_Meta			: in	std_logic_vector(STREAM_META_BITS - 1 downto 0);
+		In_SOF			: in	std_logic;
+		In_IsKey		: in	std_logic;
+		In_EOF			: in	std_logic;
+		In_Ack			: out	std_logic;
 
-		Out_Valid		: out	STD_LOGIC;
-		Out_Data		: out	STD_LOGIC_VECTOR(STREAM_DATA_BITS - 1 downto 0);
-		Out_Meta		: out	STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
-		Out_SOF			: out	STD_LOGIC;
-		Out_IsKey		: out	STD_LOGIC;
-		Out_EOF			: out	STD_LOGIC;
-		Out_Ack			: in	STD_LOGIC
+		Out_Valid		: out	std_logic;
+		Out_Data		: out	std_logic_vector(STREAM_DATA_BITS - 1 downto 0);
+		Out_Meta		: out	std_logic_vector(STREAM_META_BITS - 1 downto 0);
+		Out_SOF			: out	std_logic;
+		Out_IsKey		: out	std_logic;
+		Out_EOF			: out	std_logic;
+		Out_Ack			: in	std_logic
 	);
 end entity;
 
 
 architecture rtl of sortnet_Stream_Adapter2 is
-	constant C_VERBOSE							: BOOLEAN			:= FALSE;
+	constant C_VERBOSE							: boolean			:= FALSE;
 
-	constant GEARBOX_BITS						: POSITIVE		:= SORTNET_SIZE * SORTNET_DATA_BITS;
-	constant TRANSFORM_BITS					: POSITIVE		:= DATA_COLUMNS * SORTNET_DATA_BITS;
-	constant MERGE_BITS							: POSITIVE		:= TRANSFORM_BITS;
+	constant GEARBOX_BITS						: positive		:= SORTNET_SIZE * SORTNET_DATA_BITS;
+	constant TRANSFORM_BITS					: positive		:= DATA_COLUMNS * SORTNET_DATA_BITS;
+	constant MERGE_BITS							: positive		:= TRANSFORM_BITS;
 
-	constant META_ISKEY_BIT					: NATURAL			:= 0;
-	constant META_BITS							: POSITIVE		:= STREAM_META_BITS + 1;
+	constant META_ISKEY_BIT					: natural			:= 0;
+	constant META_BITS							: positive		:= STREAM_META_BITS + 1;
 
-	signal Synchronized_r						: STD_LOGIC		:= '0';
+	signal Synchronized_r						: std_logic		:= '0';
 
-	signal SyncIn										: STD_LOGIC;
-	signal MetaIn										: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+	signal SyncIn										: std_logic;
+	signal MetaIn										: std_logic_vector(META_BITS - 1 downto 0);
 
-	signal gearup_Sync							: STD_LOGIC;
-	signal gearup_Valid							: STD_LOGIC;
-	signal gearup_Data							: STD_LOGIC_VECTOR(GEARBOX_BITS - 1 downto 0);
-	signal gearup_Meta							: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
-	signal gearup_First							: STD_LOGIC;
-	signal gearup_Last							: STD_LOGIC;
+	signal gearup_Sync							: std_logic;
+	signal gearup_Valid							: std_logic;
+	signal gearup_Data							: std_logic_vector(GEARBOX_BITS - 1 downto 0);
+	signal gearup_Meta							: std_logic_vector(META_BITS - 1 downto 0);
+	signal gearup_First							: std_logic;
+	signal gearup_Last							: std_logic;
 
-	signal sort_Valid								: STD_LOGIC;
-	signal sort_IsKey								: STD_LOGIC;
-	signal sort_Data								: STD_LOGIC_VECTOR(GEARBOX_BITS - 1 downto 0);
-	signal sort_Meta								: STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
+	signal sort_Valid								: std_logic;
+	signal sort_IsKey								: std_logic;
+	signal sort_Data								: std_logic_vector(GEARBOX_BITS - 1 downto 0);
+	signal sort_Meta								: std_logic_vector(STREAM_META_BITS - 1 downto 0);
 
-	signal transform_Valid					: STD_LOGIC;
-	signal transform_Data						: STD_LOGIC_VECTOR(TRANSFORM_BITS - 1 downto 0);
-	signal transform_Meta						: STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
-	signal transform_SOF						: STD_LOGIC;
-	signal transform_EOF						: STD_LOGIC;
+	signal transform_Valid					: std_logic;
+	signal transform_Data						: std_logic_vector(TRANSFORM_BITS - 1 downto 0);
+	signal transform_Meta						: std_logic_vector(STREAM_META_BITS - 1 downto 0);
+	signal transform_SOF						: std_logic;
+	signal transform_EOF						: std_logic;
 
-	signal merge_Sync								: STD_LOGIC;
-	signal merge_Valid							: STD_LOGIC;
-	signal merge_Data								: STD_LOGIC_VECTOR(MERGE_BITS - 1 downto 0);
-	signal merge_Meta								: STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
-	signal merge_SOF								: STD_LOGIC;
-	signal merge_EOF								: STD_LOGIC;
-	signal merge_Ack								: STD_LOGIC;
+	signal merge_Sync								: std_logic;
+	signal merge_Valid							: std_logic;
+	signal merge_Data								: std_logic_vector(MERGE_BITS - 1 downto 0);
+	signal merge_Meta								: std_logic_vector(STREAM_META_BITS - 1 downto 0);
+	signal merge_SOF								: std_logic;
+	signal merge_EOF								: std_logic;
+	signal merge_Ack								: std_logic;
 
-	signal geardown_nxt							: STD_LOGIC;
-	signal geardown_Meta						: STD_LOGIC_VECTOR(STREAM_META_BITS - 1 downto 0);
-	signal geardown_First						: STD_LOGIC;
-	signal geardown_Last						: STD_LOGIC;
+	signal geardown_nxt							: std_logic;
+	signal geardown_Meta						: std_logic_vector(STREAM_META_BITS - 1 downto 0);
+	signal geardown_First						: std_logic;
+	signal geardown_Last						: std_logic;
 begin
 
 	In_Ack	<= '1';
@@ -299,14 +299,14 @@ begin
 	end block;
 
 	blkMergeSort : block
-		subtype T_MERGE_DATA				is STD_LOGIC_VECTOR(TRANSFORM_BITS - 1 downto 0);
-		type		T_MERGE_DATA_VECTOR	is array(NATURAL range <>) of T_MERGE_DATA;
+		subtype T_MERGE_DATA				is std_logic_vector(TRANSFORM_BITS - 1 downto 0);
+		type		T_MERGE_DATA_VECTOR	is array(natural range <>) of T_MERGE_DATA;
 
-		signal MergeSortMatrix_Valid					: STD_LOGIC_VECTOR(MERGENET_STAGES downto 0);
+		signal MergeSortMatrix_Valid					: std_logic_vector(MERGENET_STAGES downto 0);
 		signal MergeSortMatrix_Data						: T_MERGE_DATA_VECTOR(MERGENET_STAGES downto 0);
-		signal MergeSortMatrix_SOF						: STD_LOGIC_VECTOR(MERGENET_STAGES downto 0);
-		signal MergeSortMatrix_EOF						: STD_LOGIC_VECTOR(MERGENET_STAGES downto 0);
-		signal MergeSortMatrix_Ack						: STD_LOGIC_VECTOR(MERGENET_STAGES downto 0);
+		signal MergeSortMatrix_SOF						: std_logic_vector(MERGENET_STAGES downto 0);
+		signal MergeSortMatrix_EOF						: std_logic_vector(MERGENET_STAGES downto 0);
+		signal MergeSortMatrix_Ack						: std_logic_vector(MERGENET_STAGES downto 0);
 	begin
 		MergeSortMatrix_Valid(0)	<= transform_Valid;
 		MergeSortMatrix_Data(0)		<= transform_Data;
@@ -315,7 +315,7 @@ begin
 		merge_Ack									<= MergeSortMatrix_Ack(0);
 
 		genMerge : for i in 0 to MERGENET_STAGES - 1 generate
-			constant FIFO_DEPTH		: POSITIVE	:= 2**i * SORTNET_SIZE;
+			constant FIFO_DEPTH		: positive	:= 2**i * SORTNET_SIZE;
 		begin
 			merge : entity PoC.sortnet_MergeSort_Streamed
 				generic map (

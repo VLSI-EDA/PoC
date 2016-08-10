@@ -41,32 +41,32 @@ use			PoC.net.all;
 
 entity mac_TX_DestMAC_Prepender is
 	generic (
-		DEBUG													: BOOLEAN													:= FALSE
+		DEBUG													: boolean													:= FALSE
 	);
 	port (
-		Clock													: in	STD_LOGIC;
-		Reset													: in	STD_LOGIC;
+		Clock													: in	std_logic;
+		Reset													: in	std_logic;
 
-		In_Valid											: in	STD_LOGIC;
+		In_Valid											: in	std_logic;
 		In_Data												: in	T_SLV_8;
-		In_SOF												: in	STD_LOGIC;
-		In_EOF												: in	STD_LOGIC;
-		In_Ack												: out	STD_LOGIC;
-		In_Meta_rst										: out	STD_LOGIC;
-		In_Meta_DestMACAddress_nxt		: out	STD_LOGIC;
+		In_SOF												: in	std_logic;
+		In_EOF												: in	std_logic;
+		In_Ack												: out	std_logic;
+		In_Meta_rst										: out	std_logic;
+		In_Meta_DestMACAddress_nxt		: out	std_logic;
 		In_Meta_DestMACAddress_Data		: in	T_SLV_8;
 
-		Out_Valid											: out	STD_LOGIC;
+		Out_Valid											: out	std_logic;
 		Out_Data											: out	T_SLV_8;
-		Out_SOF												: out	STD_LOGIC;
-		Out_EOF												: out	STD_LOGIC;
-		Out_Ack												: in	STD_LOGIC
+		Out_SOF												: out	std_logic;
+		Out_EOF												: out	std_logic;
+		Out_Ack												: in	std_logic
 	);
 end entity;
 
 
 architecture rtl of mac_TX_DestMAC_Prepender is
-	attribute FSM_ENCODING					: STRING;
+	attribute FSM_ENCODING					: string;
 
 	type T_STATE is (
 		ST_IDLE,
@@ -82,9 +82,9 @@ architecture rtl of mac_TX_DestMAC_Prepender is
 	signal NextState								: T_STATE;
 	attribute FSM_ENCODING of State	: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
-	signal Is_DataFlow							: STD_LOGIC;
-	signal Is_SOF										: STD_LOGIC;
-	signal Is_EOF										: STD_LOGIC;
+	signal Is_DataFlow							: std_logic;
+	signal Is_SOF										: std_logic;
+	signal Is_EOF										: std_logic;
 
 begin
 

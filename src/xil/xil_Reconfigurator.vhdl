@@ -50,32 +50,32 @@ use			PoC.xil.all;
 
 entity xil_Reconfigurator is
 	generic (
-		DEBUG						: BOOLEAN										:= FALSE;																				--
+		DEBUG						: boolean										:= FALSE;																				--
 		CLOCK_FREQ			: FREQ											:= 100 MHz;																			--
 		CONFIG_ROM			: in	T_XIL_DRP_CONFIG_ROM	:= (0 downto 0 => C_XIL_DRP_CONFIG_SET_EMPTY)		--
 	);
 	port (
-		Clock						: in	STD_LOGIC;
-		Reset						: in	STD_LOGIC;
+		Clock						: in	std_logic;
+		Reset						: in	std_logic;
 
-		Reconfig				: in	STD_LOGIC;																														--
-		ReconfigDone		: out	STD_LOGIC;																														--
-		ConfigSelect		: in	STD_LOGIC_VECTOR(log2ceilnz(CONFIG_ROM'length) - 1 downto 0);					--
+		Reconfig				: in	std_logic;																														--
+		ReconfigDone		: out	std_logic;																														--
+		ConfigSelect		: in	std_logic_vector(log2ceilnz(CONFIG_ROM'length) - 1 downto 0);					--
 
-		DRP_en					: out	STD_LOGIC;																														--
+		DRP_en					: out	std_logic;																														--
 		DRP_Address			: out	T_XIL_DRP_ADDRESS;																										--
-		DRP_we					: out	STD_LOGIC;																														--
+		DRP_we					: out	std_logic;																														--
 		DRP_DataIn			: in	T_XIL_DRP_DATA;																												--
 		DRP_DataOut			: out	T_XIL_DRP_DATA;																												--
-		DRP_Ack					: in	STD_LOGIC																															--
+		DRP_Ack					: in	std_logic																															--
 	);
 end entity;
 
 
 architecture rtl of xil_Reconfigurator is
-	attribute KEEP								: BOOLEAN;
-	attribute FSM_ENCODING				: STRING;
-	attribute signal_ENCODING			: STRING;
+	attribute KEEP								: boolean;
+	attribute FSM_ENCODING				: string;
+	attribute signal_ENCODING			: string;
 
 	type T_STATE is (
 		ST_IDLE,
@@ -89,27 +89,27 @@ architecture rtl of xil_Reconfigurator is
 	signal NextState									: T_STATE;
 	attribute FSM_ENCODING	of State	: signal is ite(DEBUG, "gray", "speed1");
 
-	signal DataBuffer_en							: STD_LOGIC;
+	signal DataBuffer_en							: std_logic;
 	signal DataBuffer_d								: T_XIL_DRP_DATA												:= (others => '0');
 
 	signal ROM_Entry									: T_XIL_DRP_CONFIG;
-	signal ROM_LastConfigWord					: STD_LOGIC;
+	signal ROM_LastConfigWord					: std_logic;
 
-	constant CONFIGINDEX_BITS					: POSITIVE															:= log2ceilnz(CONFIG_ROM'length);
-	signal ConfigIndex_rst						: STD_LOGIC;
-	signal ConfigIndex_en							: STD_LOGIC;
-	signal ConfigIndex_us							: UNSIGNED(CONFIGINDEX_BITS - 1 downto 0);
+	constant CONFIGINDEX_BITS					: positive															:= log2ceilnz(CONFIG_ROM'length);
+	signal ConfigIndex_rst						: std_logic;
+	signal ConfigIndex_en							: std_logic;
+	signal ConfigIndex_us							: unsigned(CONFIGINDEX_BITS - 1 downto 0);
 
-	attribute KEEP OF ROM_LastConfigWord	: signal IS DEBUG;
+	attribute KEEP of ROM_LastConfigWord	: signal is DEBUG;
 
 begin
 	-- configuration ROM
 	blkCONFIG_ROM : block
-		signal SetIndex 						: INTEGER range 0 to CONFIG_ROM'high;
+		signal SetIndex 						: integer range 0 to CONFIG_ROM'high;
 		signal RowIndex 						: T_XIL_DRP_CONFIG_INDEX;
 
-		attribute KEEP OF SetIndex	: signal IS DEBUG;
-		attribute KEEP OF RowIndex	: signal IS DEBUG;
+		attribute KEEP of SetIndex	: signal is DEBUG;
+		attribute KEEP of RowIndex	: signal is DEBUG;
 	begin
 		SetIndex							<= to_index(ConfigSelect, CONFIG_ROM'high);
 		RowIndex							<= to_index(ConfigIndex_us, T_XIL_DRP_CONFIG_INDEX'high);

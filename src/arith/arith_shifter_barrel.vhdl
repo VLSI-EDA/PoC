@@ -44,24 +44,24 @@ use			PoC.utils.all;
 
 entity arith_shifter_barrel is
 	generic (
-		BITS				: POSITIVE		:= 32
+		BITS				: positive		:= 32
 	);
   port (
-		Input						: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		ShiftAmount			: in	STD_LOGIC_VECTOR(log2ceilnz(BITS) - 1 downto 0);
-		ShiftRotate			: in	STD_LOGIC;
-		LeftRight				: in	STD_LOGIC;
-		ArithmeticLogic	: in	STD_LOGIC;
-		Output					: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		Input						: in	std_logic_vector(BITS - 1 downto 0);
+		ShiftAmount			: in	std_logic_vector(log2ceilnz(BITS) - 1 downto 0);
+		ShiftRotate			: in	std_logic;
+		LeftRight				: in	std_logic;
+		ArithmeticLogic	: in	std_logic;
+		Output					: out	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
 
 
 architecture rtl of arith_shifter_barrel is
-	constant STAGES		: POSITIVE		:= log2ceilnz(BITS);
+	constant STAGES		: positive		:= log2ceilnz(BITS);
 
-	subtype	T_INTERMEDIATE_RESULT is STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	type		T_INTERMEDIATE_VECTOR is array (NATURAL range <>) of T_INTERMEDIATE_RESULT;
+	subtype	T_INTERMEDIATE_RESULT is std_logic_vector(BITS - 1 downto 0);
+	type		T_INTERMEDIATE_VECTOR is array (natural range <>) of T_INTERMEDIATE_RESULT;
 
 	signal IntermediateResults	: T_INTERMEDIATE_VECTOR(STAGES downto 0);
 

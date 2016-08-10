@@ -41,49 +41,49 @@ use			PoC.components.all;
 
 entity sortnet_OddEvenMergeSort is
 	generic (
-		INPUTS								: POSITIVE	:= 128;		-- input count
-		KEY_BITS							: POSITIVE	:= 32;		-- the first KEY_BITS of In_Data are used as a sorting critera (key)
-		DATA_BITS							: POSITIVE	:= 32;		-- inclusive KEY_BITS
-		META_BITS							: NATURAL		:= 2;			-- additional bits, not sorted but delayed as long as In_Data
-		PIPELINE_STAGE_AFTER	: NATURAL		:= 2;			-- add a pipline stage after n sorting stages
-		ADD_INPUT_REGISTERS		: BOOLEAN		:= FALSE;	--
-		ADD_OUTPUT_REGISTERS	: BOOLEAN		:= TRUE		--
+		INPUTS								: positive	:= 128;		-- input count
+		KEY_BITS							: positive	:= 32;		-- the first KEY_BITS of In_Data are used as a sorting critera (key)
+		DATA_BITS							: positive	:= 32;		-- inclusive KEY_BITS
+		META_BITS							: natural		:= 2;			-- additional bits, not sorted but delayed as long as In_Data
+		PIPELINE_STAGE_AFTER	: natural		:= 2;			-- add a pipline stage after n sorting stages
+		ADD_INPUT_REGISTERS		: boolean		:= FALSE;	--
+		ADD_OUTPUT_REGISTERS	: boolean		:= TRUE		--
 	);
 	port (
-		Clock				: in	STD_LOGIC;
-		Reset				: in	STD_LOGIC;
+		Clock				: in	std_logic;
+		Reset				: in	std_logic;
 
-		Inverse			: in	STD_LOGIC		:= '0';
+		Inverse			: in	std_logic		:= '0';
 
-		In_Valid		: in	STD_LOGIC;
-		In_IsKey		: in	STD_LOGIC;
+		In_Valid		: in	std_logic;
+		In_IsKey		: in	std_logic;
 		In_Data			: in	T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
-		In_Meta			: in	STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+		In_Meta			: in	std_logic_vector(META_BITS - 1 downto 0);
 
-		Out_Valid		: out	STD_LOGIC;
-		Out_IsKey		: out	STD_LOGIC;
+		Out_Valid		: out	std_logic;
+		Out_IsKey		: out	std_logic;
 		Out_Data		: out	T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
-		Out_Meta		: out	STD_LOGIC_VECTOR(META_BITS - 1 downto 0)
+		Out_Meta		: out	std_logic_vector(META_BITS - 1 downto 0)
 	);
 end entity;
 
 
 architecture rtl of sortnet_OddEvenMergeSort is
-	constant C_VERBOSE				: BOOLEAN			:= POC_VERBOSE;
+	constant C_VERBOSE				: boolean			:= POC_VERBOSE;
 
-	constant BLOCKS						: POSITIVE		:= log2ceil(INPUTS);
-	constant STAGES						: POSITIVE		:= triangularNumber(BLOCKS);
+	constant BLOCKS						: positive		:= log2ceil(INPUTS);
+	constant STAGES						: positive		:= triangularNumber(BLOCKS);
 
-	constant META_VALID_BIT		: NATURAL			:= 0;
-	constant META_ISKEY_BIT		: NATURAL			:= 1;
-	constant META_VECTOR_BITS	: POSITIVE		:= META_BITS + 2;
+	constant META_VALID_BIT		: natural			:= 0;
+	constant META_ISKEY_BIT		: natural			:= 1;
+	constant META_VECTOR_BITS	: positive		:= META_BITS + 2;
 
-	subtype T_META				is STD_LOGIC_VECTOR(META_VECTOR_BITS - 1 downto 0);
-	type		T_META_VECTOR	is array(NATURAL range <>) of T_META;
+	subtype T_META				is std_logic_vector(META_VECTOR_BITS - 1 downto 0);
+	type		T_META_VECTOR	is array(natural range <>) of T_META;
 
-	subtype	T_DATA				is STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-	type		T_DATA_VECTOR	is array(NATURAL range <>) of T_DATA;
-	type		T_DATA_MATRIX	is array(NATURAL range <>) of T_DATA_VECTOR(INPUTS - 1 downto 0);
+	subtype	T_DATA				is std_logic_vector(DATA_BITS - 1 downto 0);
+	type		T_DATA_VECTOR	is array(natural range <>) of T_DATA;
+	type		T_DATA_MATRIX	is array(natural range <>) of T_DATA_VECTOR(INPUTS - 1 downto 0);
 
 	function to_dv(slm : T_SLM) return T_DATA_VECTOR is
 		variable Result	: T_DATA_VECTOR(slm'range(1));
@@ -107,10 +107,10 @@ architecture rtl of sortnet_OddEvenMergeSort is
 		return Result;
 	end function;
 
-	signal In_Valid_d			: STD_LOGIC																						:= '0';
-	signal In_IsKey_d			: STD_LOGIC																						:= '0';
+	signal In_Valid_d			: std_logic																						:= '0';
+	signal In_IsKey_d			: std_logic																						:= '0';
 	signal In_Data_d			: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0)	:= (others => (others => '0'));
-	signal In_Meta_d			: STD_LOGIC_VECTOR(META_BITS - 1 downto 0)						:= (others => '0');
+	signal In_Meta_d			: std_logic_vector(META_BITS - 1 downto 0)						:= (others => '0');
 
 	signal MetaVector			: T_META_VECTOR(STAGES downto 0)											:= (others => (others => '0'));
 	signal DataMatrix			: T_DATA_MATRIX(STAGES downto 0)											:= (others => (others => (others => '0')));
@@ -120,10 +120,10 @@ architecture rtl of sortnet_OddEvenMergeSort is
 
 begin
 	assert (not C_VERBOSE)
-		report "sortnet_OddEvenMergeSort:" & CR &
-					 "  DATA_BITS=" & INTEGER'image(DATA_BITS) &
-					 "  KEY_BITS=" & INTEGER'image(KEY_BITS) &
-					 "  META_BITS=" & INTEGER'image(META_BITS)
+		report "sortnet_OddEvenMergeSort:" & LF &
+					 "  DATA_BITS=" & integer'image(DATA_BITS) &
+					 "  KEY_BITS=" & integer'image(KEY_BITS) &
+					 "  META_BITS=" & integer'image(META_BITS)
 		severity NOTE;
 
 	In_Valid_d	<= In_Valid	when registered(Clock, ADD_INPUT_REGISTERS);
@@ -137,41 +137,41 @@ begin
 	MetaVector(0)(META_VECTOR_BITS - 1 downto META_VECTOR_BITS - META_BITS)	<= In_Meta_d;
 
   genBlocks : for b in 0 to BLOCKS - 1 generate
-		constant GROUPS	: POSITIVE		:= 2 ** (BLOCKS - b - 1);
+		constant GROUPS	: positive		:= 2 ** (BLOCKS - b - 1);
 	begin
 		genGroups : for g in 0 to GROUPS - 1 generate
 			genStages : for s in 0 to b generate
-				constant DISTANCE									: POSITIVE	:= 2 ** (b-s);
-				constant STAGE_INDEX							: NATURAL		:= triangularNumber(b) + s;
-				constant INSERT_PIPELINE_REGISTER	: BOOLEAN		:= (PIPELINE_STAGE_AFTER /= 0) and (STAGE_INDEX mod PIPELINE_STAGE_AFTER = 0);
-				constant START_INDEX							: NATURAL		:= ite((s = 0), 0, DISTANCE);
-				constant END_INDEX								: NATURAL		:= ((2**(b+1))-DISTANCE-START_INDEX-1) / (2 * DISTANCE);
-				constant SRC											: NATURAL		:= (g * (INPUTS / GROUPS));
+				constant DISTANCE									: positive	:= 2 ** (b-s);
+				constant STAGE_INDEX							: natural		:= triangularNumber(b) + s;
+				constant INSERT_PIPELINE_REGISTER	: boolean		:= (PIPELINE_STAGE_AFTER /= 0) and (STAGE_INDEX mod PIPELINE_STAGE_AFTER = 0);
+				constant START_INDEX							: natural		:= ite((s = 0), 0, DISTANCE);
+				constant END_INDEX								: natural		:= ((2**(b+1))-DISTANCE-START_INDEX-1) / (2 * DISTANCE);
+				constant SRC											: natural		:= (g * (INPUTS / GROUPS));
 			begin
 				genMeta : if (g = 0) generate
 					MetaVector(STAGE_INDEX + 1)		<= MetaVector(STAGE_INDEX) when registered(Clock, INSERT_PIPELINE_REGISTER);
 				end generate;
 
 				genJ0 : for j in 0 to START_INDEX - 1 generate
-					assert (not C_VERBOSE) report INTEGER'image(STAGE_INDEX) & " passthrough: " & INTEGER'image(SRC + j) severity NOTE;
+					assert (not C_VERBOSE) report integer'image(STAGE_INDEX) & " passthrough: " & INTEGER'image(SRC + j) severity NOTE;
 					DataMatrix(STAGE_INDEX + 1)(SRC + j)		<= DataMatrix(STAGE_INDEX)(SRC + j)	when registered(Clock, INSERT_PIPELINE_REGISTER);
 				end generate;
 				genJ1 : for j in 0 to END_INDEX generate
-					constant K		: NATURAL			:= (j * 2 * DISTANCE) + START_INDEX;
+					constant K		: natural			:= (j * 2 * DISTANCE) + START_INDEX;
 				begin
 					genLoop : for i in 0 to DISTANCE - 1 generate
-						constant SRC0	: NATURAL		:= SRC + K + i;
-						constant SRC1	: NATURAL		:= SRC0 + DISTANCE;
+						constant SRC0	: natural		:= SRC + K + i;
+						constant SRC1	: natural		:= SRC0 + DISTANCE;
 
-						signal Greater		: STD_LOGIC;
-						signal Switch_d		: STD_LOGIC;
-						signal Switch_en	: STD_LOGIC;
-						signal Switch_r		: STD_LOGIC		:= '0';
-						signal Switch			: STD_LOGIC;
+						signal Greater		: std_logic;
+						signal Switch_d		: std_logic;
+						signal Switch_en	: std_logic;
+						signal Switch_r		: std_logic		:= '0';
+						signal Switch			: std_logic;
 						signal NewData0		: T_DATA;
 						signal NewData1		: T_DATA;
 					begin
-						assert (not C_VERBOSE) report INTEGER'image(STAGE_INDEX) & "     compare: " & INTEGER'image(SRC0) & " <-> " & INTEGER'image(SRC1) severity NOTE;
+						assert (not C_VERBOSE) report integer'image(STAGE_INDEX) & "     compare: " & INTEGER'image(SRC0) & " <-> " & integer'image(SRC1) severity NOTE;
 
 						Greater		<= to_sl(unsigned(DataMatrix(STAGE_INDEX)(SRC0)(KEY_BITS - 1 downto 0)) > unsigned(DataMatrix(STAGE_INDEX)(SRC1)(KEY_BITS - 1 downto 0)));
 						Switch_d	<= Greater xor Inverse;
@@ -187,7 +187,7 @@ begin
 					end generate;
 				end generate;
 				genJ2 : for j in (((END_INDEX * 2 * DISTANCE) + START_INDEX) + 2*DISTANCE) to (INPUTS / GROUPS) - 1 generate
-					assert (not C_VERBOSE) report INTEGER'image(STAGE_INDEX) & " passthrough: " & INTEGER'image(SRC + j) severity NOTE;
+					assert (not C_VERBOSE) report integer'image(STAGE_INDEX) & " passthrough: " & INTEGER'image(SRC + j) severity NOTE;
 					DataMatrix(STAGE_INDEX + 1)(SRC + j)		<= DataMatrix(STAGE_INDEX)(SRC + j)	when registered(Clock, INSERT_PIPELINE_REGISTER);
 				end generate;
 			end generate;

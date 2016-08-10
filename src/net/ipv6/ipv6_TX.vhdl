@@ -41,51 +41,51 @@ use			PoC.net.all;
 
 entity ipv6_TX is
 	generic (
-		DEBUG														: BOOLEAN							:= FALSE
+		DEBUG														: boolean							:= FALSE
 	);
 	port (
-		Clock														: in	STD_LOGIC;								--
-		Reset														: in	STD_LOGIC;								--
+		Clock														: in	std_logic;								--
+		Reset														: in	std_logic;								--
 		-- IN port
-		In_Valid												: in	STD_LOGIC;
+		In_Valid												: in	std_logic;
 		In_Data													: in	T_SLV_8;
-		In_SOF													: in	STD_LOGIC;
-		In_EOF													: in	STD_LOGIC;
-		In_Ack													: out	STD_LOGIC;
-		In_Meta_rst											: out	STD_LOGIC;
-		In_Meta_SrcIPv6Address_nxt			: out	STD_LOGIC;
+		In_SOF													: in	std_logic;
+		In_EOF													: in	std_logic;
+		In_Ack													: out	std_logic;
+		In_Meta_rst											: out	std_logic;
+		In_Meta_SrcIPv6Address_nxt			: out	std_logic;
 		In_Meta_SrcIPv6Address_Data			: in	T_SLV_8;
-		In_Meta_DestIPv6Address_nxt			: out	STD_LOGIC;
+		In_Meta_DestIPv6Address_nxt			: out	std_logic;
 		In_Meta_DestIPv6Address_Data		: in	T_SLV_8;
 		In_Meta_TrafficClass						: in	T_SLV_8;
 		In_Meta_FlowLabel								: in	T_SLV_24;	--STD_LOGIC_VECTOR(19 downto 0);
 		In_Meta_Length									: in	T_SLV_16;
 		In_Meta_NextHeader							: in	T_SLV_8;
 		-- to NDP layer
-		NDP_NextHop_Query								: out	STD_LOGIC;
-		NDP_NextHop_IPv6Address_rst			: in	STD_LOGIC;
-		NDP_NextHop_IPv6Address_nxt			: in	STD_LOGIC;
+		NDP_NextHop_Query								: out	std_logic;
+		NDP_NextHop_IPv6Address_rst			: in	std_logic;
+		NDP_NextHop_IPv6Address_nxt			: in	std_logic;
 		NDP_NextHop_IPv6Address_Data		: out	T_SLV_8;
 		-- from NDP layer
-		NDP_NextHop_Valid								: in	STD_LOGIC;
-		NDP_NextHop_MACAddress_rst			: out	STD_LOGIC;
-		NDP_NextHop_MACAddress_nxt			: out	STD_LOGIC;
+		NDP_NextHop_Valid								: in	std_logic;
+		NDP_NextHop_MACAddress_rst			: out	std_logic;
+		NDP_NextHop_MACAddress_nxt			: out	std_logic;
 		NDP_NextHop_MACAddress_Data			: in	T_SLV_8;
 		-- OUT port
-		Out_Valid												: out	STD_LOGIC;
+		Out_Valid												: out	std_logic;
 		Out_Data												: out	T_SLV_8;
-		Out_SOF													: out	STD_LOGIC;
-		Out_EOF													: out	STD_LOGIC;
-		Out_Ack													: in	STD_LOGIC;
-		Out_Meta_rst										: in	STD_LOGIC;
-		Out_Meta_DestMACAddress_nxt			: in	STD_LOGIC;
+		Out_SOF													: out	std_logic;
+		Out_EOF													: out	std_logic;
+		Out_Ack													: in	std_logic;
+		Out_Meta_rst										: in	std_logic;
+		Out_Meta_DestMACAddress_nxt			: in	std_logic;
 		Out_Meta_DestMACAddress_Data		: out	T_SLV_8
 	);
 end entity;
 
 
 architecture rtl of ipv6_TX is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
 	type T_STATE is (
 		ST_IDLE,
@@ -104,13 +104,13 @@ architecture rtl of ipv6_TX is
 
 	signal State											: T_STATE											:= ST_IDLE;
 	signal NextState									: T_STATE;
-	attribute FSM_ENCODING of State		: signal IS ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
+	attribute FSM_ENCODING of State		: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
-	signal In_Ack_i										: STD_LOGIC;
+	signal In_Ack_i										: std_logic;
 
-	signal IPv6SeqCounter_rst					: STD_LOGIC;
-	signal IPv6SeqCounter_en					: STD_LOGIC;
-	signal IPv6SeqCounter_us					: UNSIGNED(3 downto 0)				:= (others => '0');
+	signal IPv6SeqCounter_rst					: std_logic;
+	signal IPv6SeqCounter_en					: std_logic;
+	signal IPv6SeqCounter_us					: unsigned(3 downto 0)				:= (others => '0');
 
 begin
 
@@ -319,7 +319,7 @@ begin
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset OR IPv6SeqCounter_rst) = '1') then
+			if ((Reset or IPv6SeqCounter_rst) = '1') then
 				IPv6SeqCounter_us			<= (others => '0');
 			elsif (IPv6SeqCounter_en = '1') then
 				IPv6SeqCounter_us			<= IPv6SeqCounter_us + 1;

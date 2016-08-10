@@ -57,14 +57,14 @@ use			PoC.sync.all;
 
 entity sync_Bits_Xilinx is
 	generic (
-		BITS					: POSITIVE						:= 1;									-- number of bit to be synchronized
-		INIT					: STD_LOGIC_VECTOR		:= x"00000000";				-- initialitation bits
+		BITS					: positive						:= 1;									-- number of bit to be synchronized
+		INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
-		Clock					: in	STD_LOGIC;														-- Clock to be synchronized to
-		Input					: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);	-- Data to be synchronized
-		Output				: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)		-- synchronised data
+		Clock					: in	std_logic;														-- Clock to be synchronized to
+		Input					: in	std_logic_vector(BITS - 1 downto 0);	-- Data to be synchronized
+		Output				: out	std_logic_vector(BITS - 1 downto 0)		-- synchronised data
 	);
 end entity;
 
@@ -81,19 +81,19 @@ use			PoC.sync.all;
 
 entity sync_Bit_Xilinx is
 	generic (
-		INIT					: BIT;												-- initialitation bit
+		INIT					: bit;												-- initialitation bit
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2		-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
-		Clock					: in	STD_LOGIC;							-- Clock to be synchronized to
-		Input					: in	STD_LOGIC;							-- Data to be synchronized
-		Output				: out	STD_LOGIC								-- synchronised data
+		Clock					: in	std_logic;							-- Clock to be synchronized to
+		Input					: in	std_logic;							-- Data to be synchronized
+		Output				: out	std_logic								-- synchronised data
 	);
 end entity;
 
 
 architecture rtl of sync_Bits_Xilinx is
-	constant INIT_I						: BIT_VECTOR		:= to_bitvector(resize(descend(INIT), BITS));
+	constant INIT_I						: bit_vector		:= to_bitvector(resize(descend(INIT), BITS));
 begin
 	gen : for i in 0 to BITS - 1 generate
 		Sync : entity PoC.sync_Bit_Xilinx
@@ -111,13 +111,13 @@ end architecture;
 
 
 architecture rtl of sync_Bit_Xilinx is
-	attribute ASYNC_REG				: STRING;
-	attribute SHREG_EXTRACT		: STRING;
-	attribute RLOC						: STRING;
+	attribute ASYNC_REG				: string;
+	attribute SHREG_EXTRACT		: string;
+	attribute RLOC						: string;
 
-	signal Data_async				: STD_LOGIC;
-	signal Data_meta				: STD_LOGIC;
-	signal Data_sync				: STD_LOGIC;
+	signal Data_async				: std_logic;
+	signal Data_meta				: std_logic;
+	signal Data_sync				: std_logic;
 
 	-- Mark register Data_async's input as asynchronous
 	attribute ASYNC_REG			of Data_meta	: signal is "TRUE";

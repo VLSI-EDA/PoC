@@ -42,18 +42,18 @@ package io is
 	-- not yet supported by Xilinx ISE Simulator - the subsignal I (with reverse direction) is always 'U'
 	-- so use this record only in pure synthesis environments
 	type T_IO_TRISTATE is record
-		I			: STD_LOGIC;					-- input / from device to FPGA
-		O			: STD_LOGIC;					-- output / from FPGA to device
-		T			: STD_LOGIC;					-- output disable / tristate enable
+		I			: std_logic;					-- input / from device to FPGA
+		O			: std_logic;					-- output / from FPGA to device
+		T			: std_logic;					-- output disable / tristate enable
 	end record;
 
 	type T_IO_LVDS is record
-		P			: STD_LOGIC;
-		N			: STD_LOGIC;
+		P			: std_logic;
+		N			: std_logic;
 	end record;
 
-	type T_IO_TRISTATE_VECTOR	is array(NATURAL range <>) of T_IO_TRISTATE;
-	type T_IO_LVDS_VECTOR			is array(NATURAL range <>) of T_IO_LVDS;
+	type T_IO_TRISTATE_VECTOR	is array(natural range <>) of T_IO_TRISTATE;
+	type T_IO_LVDS_VECTOR			is array(natural range <>) of T_IO_LVDS;
 
 	type T_IO_DATARATE is (IO_DATARATE_SDR, IO_DATARATE_DDR, IO_DATARATE_QDR);
 
@@ -65,7 +65,7 @@ package io is
 		IO_7SEGMENT_CHAR_H, IO_7SEGMENT_CHAR_O, IO_7SEGMENT_CHAR_U, IO_7SEGMENT_CHAR_MINUS
 	);
 
-	type T_IO_7SEGMENT_CHAR_ENCODING is array(T_IO_7SEGMENT_CHAR) of STD_LOGIC_VECTOR(6 downto 0);
+	type T_IO_7SEGMENT_CHAR_ENCODING is array(T_IO_7SEGMENT_CHAR) of std_logic_vector(6 downto 0);
 
 	--constant C_IO_7SEGMENT_CHAR_ENCODING		: T_IO_7SEGMENT_CHAR_ENCODING := (
 		--IO_7SEGMENT_CHAR_0
@@ -90,8 +90,8 @@ package io is
 		--IO_7SEGMENT_CHAR_MINUS
 	--);
 
-	function io_7SegmentDisplayEncoding(hex	: STD_LOGIC_VECTOR(3 downto 0); dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE)	return STD_LOGIC_VECTOR;
-	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE)												return STD_LOGIC_VECTOR;
+	function io_7SegmentDisplayEncoding(hex	: std_logic_vector(3 downto 0); dot : std_logic := '0'; WITH_DOT : boolean := FALSE)	return std_logic_vector;
+	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : std_logic := '0'; WITH_DOT : boolean := FALSE)												return std_logic_vector;
 
 
 	-- MDIOController
@@ -145,13 +145,13 @@ package io is
       CLOCK_FREQ_MHZ	: real
     );
     port (
-      Clock						: in	STD_LOGIC;
-      Reset						: in	STD_LOGIC;
+      Clock						: in	std_logic;
+      Reset						: in	std_logic;
 
-      Fan_PWM					: out	STD_LOGIC;
-      Fan_Tacho				: in	STD_LOGIC;
+      Fan_PWM					: out	std_logic;
+      Fan_Tacho				: in	std_logic;
 
-      TachoFrequency	: out	STD_LOGIC_VECTOR(15 downto 0)
+      TachoFrequency	: out	std_logic_vector(15 downto 0)
     );
 	end component;
 
@@ -159,9 +159,9 @@ end package;
 
 
 package body io is
-	function io_7SegmentDisplayEncoding(hex	: STD_LOGIC_VECTOR(3 downto 0); dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE) return STD_LOGIC_VECTOR is
-		constant DOT_INDEX	: POSITIVE	:= ite(WITH_DOT, 7, 6);
-		variable Result			: STD_LOGIC_VECTOR(ite(WITH_DOT, 7, 6) downto 0);
+	function io_7SegmentDisplayEncoding(hex	: std_logic_vector(3 downto 0); dot : std_logic := '0'; WITH_DOT : boolean := FALSE) return std_logic_vector is
+		constant DOT_INDEX	: positive	:= ite(WITH_DOT, 7, 6);
+		variable Result			: std_logic_vector(ite(WITH_DOT, 7, 6) downto 0);
 	begin
 		Result(DOT_INDEX)		:= dot;
 		case hex is							-- segments:			GFEDCBA			--	Segment Pos.
@@ -186,7 +186,7 @@ package body io is
 		return Result;
 	end function;
 
-	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : STD_LOGIC := '0'; WITH_DOT : BOOLEAN := FALSE) return STD_LOGIC_VECTOR is
+	function io_7SegmentDisplayEncoding(digit	: T_BCD; dot : std_logic := '0'; WITH_DOT : boolean := FALSE) return std_logic_vector is
 	begin
 		return io_7SegmentDisplayEncoding(std_logic_vector(digit), dot, WITH_DOT);
 	end function;

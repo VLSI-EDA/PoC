@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -53,8 +53,8 @@ for root, dirs, files in os.walk(git_root):
 		if file.endswith('.tpl'):
 			trgt = file[:-3]+'md'
 			print('  generate ' + file + ' -> ' + trgt);
-			tpl = open(os.path.join(root, file), 'r')
-			md  = open(os.path.join(root, trgt), 'w')
+			tpl = open(os.path.join(root, file), 'r', encoding='utf-8')
+			md  = open(os.path.join(root, trgt), 'w', encoding='utf-8')
 			for line in tpl:
 				for key in substitutions:
 					line = line.replace('{@'+key+'@}', substitutions[key])

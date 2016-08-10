@@ -46,35 +46,35 @@ entity stream_Source is
 		TESTCASES					: T_SIM_STREAM_FRAMEGROUP_VECTOR_8
 	);
 	port (
-		Clock							: in	STD_LOGIC;
-		Reset							: in	STD_LOGIC;
+		Clock							: in	std_logic;
+		Reset							: in	std_logic;
 		-- Control interface
-		Enable						: in	STD_LOGIC;
+		Enable						: in	std_logic;
 		-- OUT Port
-		Out_Valid					: out	STD_LOGIC;
+		Out_Valid					: out	std_logic;
 		Out_Data					: out	T_SLV_8;
-		Out_SOF						: out	STD_LOGIC;
-		Out_EOF						: out	STD_LOGIC;
-		Out_Ack						: in	STD_LOGIC
+		Out_SOF						: out	std_logic;
+		Out_EOF						: out	std_logic;
+		Out_Ack						: in	std_logic
 	);
 end entity;
 
 
 architecture rtl of stream_Source is
-	constant MAX_CYCLES											: NATURAL																			:= 10 * 1000;
-	constant MAX_ERRORS											: NATURAL																			:=				50;
+	constant MAX_CYCLES											: natural																			:= 10 * 1000;
+	constant MAX_ERRORS											: natural																			:=				50;
 
 	-- dummy signals for iSIM
-	signal FrameGroupNumber_us		: UNSIGNED(log2ceilnz(TESTCASES'length) - 1 downto 0)		:= (others => '0');
+	signal FrameGroupNumber_us		: unsigned(log2ceilnz(TESTCASES'length) - 1 downto 0)		:= (others => '0');
 begin
 
 	process
-		variable Cycles							: NATURAL			:= 0;
-		variable Errors							: NATURAL			:= 0;
+		variable Cycles							: natural			:= 0;
+		variable Errors							: natural			:= 0;
 
-		variable FrameGroupNumber		: NATURAL			:= 0;
+		variable FrameGroupNumber		: natural			:= 0;
 
-		variable WordIndex					: NATURAL			:= 0;
+		variable WordIndex					: natural			:= 0;
 		variable CurFG							: T_SIM_STREAM_FRAMEGROUP_8;
 
 	begin
@@ -115,7 +115,7 @@ begin
 			-- infinite loop
 			loop
 				-- check for to many simulation cycles
-				assert (Cycles < MAX_CYCLES) report "MAX_CYCLES reached:  framegroup=" & INTEGER'image(to_integer(FrameGroupNumber_us)) severity FAILURE;
+				assert (Cycles < MAX_CYCLES) report "MAX_CYCLES reached:  framegroup=" & integer'image(to_integer(FrameGroupNumber_us)) severity FAILURE;
 --				assert (Errors < MAX_ERRORS) report "MAX_ERRORS reached" severity FAILURE;
 				Cycles := Cycles + 1;
 
@@ -133,8 +133,8 @@ begin
 				end if;
 
 				-- check if framegroup end is reached => exit loop
-				assert FALSE report "WordIndex=" & INTEGER'image(WordIndex) severity WARNING;
-				exit when ((WordIndex /= 0) AND (CurFG.Data(WordIndex - 1).EOFG = TRUE));
+				assert FALSE report "WordIndex=" & integer'image(WordIndex) severity WARNING;
+				exit when ((WordIndex /= 0) and (CurFG.Data(WordIndex - 1).EOFG = TRUE));
 			end loop;
 
 			-- PostPause

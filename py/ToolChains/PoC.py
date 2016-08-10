@@ -117,8 +117,12 @@ class Configuration(BaseConfiguration):
 					self._host._LogWarning("Could not setup '{}': {}".format(section, script))
 
 			# Setting up Hooks & Filters
-			for section in ['hooks', 'filters']:
-				call_setup(section)
+			answer = input("  Query for git mechanisms for PoC developers? [y/N]: ")
+			if answer in ['y', 'Y']:
+				for section in ['hooks', 'filters']:
+					answer = input('  Install git ' + section + '? [Y/n]: ')
+					if answer in ['', 'y', 'Y']:
+						call_setup(section)
 
 	# LOCAL = git rev-parse @
 	# PS G:\git\PoC> git rev-parse "@"

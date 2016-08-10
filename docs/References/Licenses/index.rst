@@ -9,7 +9,7 @@ which contains a link to the orginal license file source.
 
 .. toctree::
    :maxdepth: 1
- 
+   
    ApacheLicense2.0
    ArtisticLicense2.0
    BSDLicense_Cocotb

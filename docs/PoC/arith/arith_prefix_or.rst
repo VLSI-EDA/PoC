@@ -18,4 +18,4 @@ This implementation uses carry chains for wider implementations.
 Source file: `arith/arith_prefix_or.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_prefix_or.vhdl>`_
 
 
- 
+	 

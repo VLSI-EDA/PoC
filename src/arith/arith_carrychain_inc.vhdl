@@ -42,23 +42,23 @@ use			PoC.arith.all;
 
 entity arith_carrychain_inc is
 	generic (
-		BITS			: POSITIVE
+		BITS			: positive
 	);
 	port (
-		X		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		CIn	: in	STD_LOGIC															:= '1';
-		Y		: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		X		: in	std_logic_vector(BITS - 1 downto 0);
+		CIn	: in	std_logic															:= '1';
+		Y		: out	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
 
 
 architecture rtl of arith_carrychain_inc is
 	-- Force Carry-chain use for pointer increments on Xilinx architectures
-  constant XILINX_FORCE_CARRYCHAIN		: BOOLEAN		:= (not SIMULATION) and (VENDOR = VENDOR_XILINX) and (BITS > 4);
+  constant XILINX_FORCE_CARRYCHAIN		: boolean		:= (not SIMULATION) and (VENDOR = VENDOR_XILINX) and (BITS > 4);
 
 begin
 	genGeneric : if (XILINX_FORCE_CARRYCHAIN = FALSE) generate
-		signal Zero		: UNSIGNED(BITS - 1 downto 1)		:= (others => '0');
+		signal Zero		: unsigned(BITS - 1 downto 1)		:= (others => '0');
 	begin
 		Y <= std_logic_vector(unsigned(X) + (Zero & CIn));
 	end generate;

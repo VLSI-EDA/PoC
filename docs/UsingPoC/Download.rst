@@ -47,25 +47,25 @@ Command line instructions to clone the PoC-Library onto a Linux machine with
 HTTPS protocol:
 
 .. code-block:: Bash
- 
+   
    cd GitRoot
    git clone --recursive "https://github.com/VLSI-EDA/PoC.git" PoC
    cd PoC
-   git remote rename origion github
+   git remote rename origin github
 
 Command line instructions to clone the PoC-Library onto a Linux machine machine
 with SSH protocol:
 
 .. code-block:: Bash
- 
+   
    cd GitRoot
    git clone --recursive "ssh://git@github.com:VLSI-EDA/PoC.git" PoC
    cd PoC
-   git remote rename origion github
+   git remote rename origin github
 
 
 On OS X
-========
+=======
 
 Please see the Linux instructions.
 
@@ -74,7 +74,7 @@ On Windows
 ==========
 
 .. NOTE::
- 
+   
    All Windows command line instructions are intended for :program:`Windows PowerShell`,
    if not marked otherwise. So executing the following instructions in Windows
    Command Prompt (:program:`cmd.exe`) won't function or result in errors! See
@@ -85,21 +85,21 @@ Command line instructions to clone the PoC-Library onto a Windows machine with
 HTTPS protocol:
 
 .. code-block:: PowerShell
- 
+   
    cd GitRoot
    git clone --recursive "https://github.com/VLSI-EDA/PoC.git" PoC
    cd PoC
-   git remote rename origion github
+   git remote rename origin github
 
 Command line instructions to clone the PoC-Library onto a Windows machine with
 SSH protocol:
 
 .. code-block:: PowerShell
- 
+   
    cd GitRoot
    git clone --recursive "ssh://git@github.com:VLSI-EDA/PoC.git" PoC
    cd PoC
-   git remote rename origion github
+   git remote rename origin github
 
 
 .. NOTE::
@@ -126,7 +126,7 @@ Command line instructions to clone the PoC-Library onto a Linux machine with
 HTTPS protocol:
 
 .. code-block:: Bash
- 
+   
    cd ProjectRoot
    mkdir lib
    git submodule add "https://github.com/VLSI-EDA/PoC.git" lib/PoC
@@ -140,7 +140,7 @@ Command line instructions to clone the PoC-Library onto a Linux machine machine
 with SSH protocol:
 
 .. code-block:: Bash
- 
+   
    cd ProjectRoot
    mkdir lib
    git submodule add "ssh://git@github.com:VLSI-EDA/PoC.git" lib/PoC
@@ -152,7 +152,7 @@ with SSH protocol:
 
 
 On OS X
-========
+=======
 
 Please see the Linux instructions.
 
@@ -161,7 +161,7 @@ On Windows
 ==========
 
 .. NOTE::
- 
+   
    All Windows command line instructions are intended for :program:`Windows PowerShell`,
    if not marked otherwise. So executing the following instructions in Windows
    Command Prompt (:program:`cmd.exe`) won't function or result in errors! See
@@ -172,7 +172,7 @@ Command line instructions to clone the PoC-Library onto a Windows machine with
 HTTPS protocol:
 
 .. code-block:: PowerShell
- 
+   
    cd <ProjectRoot>
    mkdir lib | cd
    git submodule add "https://github.com/VLSI-EDA/PoC.git" PoC
@@ -186,7 +186,7 @@ Command line instructions to clone the PoC-Library onto a Windows machine with
 SSH protocol:
 
 .. code-block:: PowerShell
- 
+   
    cd <ProjectRoot>
    mkdir lib | cd
    git submodule add "ssh://git@github.com:VLSI-EDA/PoC.git" PoC

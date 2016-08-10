@@ -32,151 +32,90 @@ Table of Content:
 
 ## 1 Overview
 
-PoC - "Pile of Cores" provides implementations for often required hardware
-functions such as FIFOs, RAM wrapper, and ALUs. The hardware modules are
-typically provided as VHDL or Verilog source code, so it can be easily re-used
-in a variety of hardware designs.
+PoC - “Pile of Cores” provides implementations for often required hardware functions such as Arithmetic Units, Caches, Clock-Domain-Crossing Circuits, FIFOs, RAM wrappers, and I/O Controllers. The hardware modules are typically provided as VHDL or Verilog source code, so it can be easily re-used in a variety of hardware designs.
 
-TODO TODO TODO
+All hardware modules use a common set of VHDL packages to share new VHDL types, sub-programs and constants. Additionally, a set of simulation helper packages eases the writing of testbenches. Because PoC hosts a huge amount of IP cores, all cores are grouped into sub-namespaces to build a better hierachy.
 
-Related repositories: [PoC-Examples][poc_ex]
-
- [poc_ex]:  https://github.com/VLSI-EDA/PoC-Examples
+Various simulation and synthesis tool chains are supported to interoperate with PoC. To generalize all supported free and commercial vendor tool chains, PoC is shipped with a Python based Infrastruture to offer a command line based frontend.
 
 
-## 2 Download
+## 2 Requirements and Dependencies
 
-**The PoC-Library** can be downloaded as a [zip-file][download] (latest 'master' branch) or
-cloned with `git clone` from GitHub. GitHub offers HTTPS and SSH as transfer protocols.
-See the [Download][wiki:download] wiki page for more details.
+The PoC-Library comes with some scripts to ease most of the common tasks, like running testbenches or
+generating IP cores. PoC uses Python 3 as a platform independent scripting environment. All Python
+scripts are wrapped in Bash or PowerShell scripts, to hide some platform specifics of Darwin, Linux or
+Windows. See [Requirements][rtfd:using/requirements] for
+further details.
 
+ [rtfd:using/requirements]: http://poc-library.readthedocs.io/en/{@BRANCH@}/UsingPoC/Requirements.html
 
-For HTTPS protocol use the URL `https://github.com/VLSI-EDA/PoC.git` or command
-line instruction:
+##### PoC requires:
 
-```PowerShell
-cd <GitRoot>
-git clone --recursive https://github.com/VLSI-EDA/PoC.git PoC
-```
+* A [supported synthesis tool chain][rtfd:whatis/toolchains], if you want to synthezise IP cores.
+* A [supported simulator too chain][rtfd:whatis/toolchains], if you want to simulate IP cores.
+* The Python3 programming language and runtime, if you want to use PoC's infrastructure.
+* A shell to execute shell scripts:
+  * Bash on Linux and OS X
+  * PowerShell on Windows
 
-For SSH protocol use the URL `ssh://git@github.com:VLSI-EDA/PoC.git` or command
-line instruction:
+ [rtfd:whatis/toolchains]: http://poc-library.readthedocs.io/en/{@BRANCH@}/WhatIsPoC/SupportedToolChains.html
 
-```PowerShell
-cd <GitRoot>
-git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC
-```
+##### PoC optionally requires:
 
-**Note:** The option `--recursive` performs a recursive clone operation for all
-linked [git submodules][git_submod]. An additional `git submodule init` and
-`git submodule update` call is not needed anymore.
-
- [download]: https://github.com/VLSI-EDA/PoC/archive/master.zip
- [git_submod]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
-
-**Note:** The created folder `<GitRoot>\PoC` is used as `<PoCRoot>` in later instructions. 
+* Git command line tools or a Git GUI, if you want to check out the latest '{@BRANCH@}' or 'release' branch.
 
 
-## 3 Requirements
+##### PoC depends on third parts libraries:
 
-**The PoC-Library** comes with some scripts to ease most of the common tasks, like
-running testbenches or generating IP cores. We choose to use Python as a platform
-independent scripting environment. All Python scripts are wrapped in PowerShell
-or Bash scripts, to hide some platform specifics of Windows or Linux. See the
-[Requirements][wiki:requirements] wiki page for more details and download sources.
+* [**Cocotb**][cocotb]  
+  A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
+* [**OS-VVM**][osvvm]  
+  Open Source VHDL Verification Methodology.
+* [**VUnit**][vunit]  
+  An unit testing framework for VHDL.
 
-##### Common requirements:
-
- - Programming languages and runtimes:
-	- [Python 3][python] (&ge; 3.5):
-	     - [colorama][colorama]
-	     - [py-flags][pyflags]
-
-    All Python requirements are listed in [`requirements.txt`][pip3-req] and can be installed via: 
-   `sudo python3.5 -m pip install -r requirements.txt`
- - Synthesis tool chains:
-     - Altera Quartus-II &ge; 13.0 or
-     - Lattice Diamond or
-     - Xilinx ISE 14.7 or
-     - Xilinx Vivado (restricted, see [section 7.7](#7.7-in-xilinx-vivado-synth-and-xsim))
- - Simulation tool chains:
-     - Aldec Active-HDL or
-     - Mentor Graphics ModelSim Altera Edition or
-     - Mentor Graphics QuestaSim or
-     - Xilinx ISE Simulator 14.7 or
-     - Xilinx Vivado Simulator &ge; 2016.1 or
-     - [GHDL][ghdl] &ge; 0.34dev and [GTKWave][gtkwave] &ge; 3.3.70
-
- [python]:		https://www.python.org/downloads/
- [colorama]:	https://pypi.python.org/pypi/colorama
- [pyflags]:		https://pypi.python.org/pypi/py-flags
- [ghdl]:			https://sourceforge.net/projects/ghdl-updates/
- [gtkwave]:		http://gtkwave.sourceforge.net/
-
- [pip3-req]:  requirements.txt
-
-##### Linux specific requirements:
-
- - Debian specific:
-	- bash is configured as `/bin/sh` ([read more](https://wiki.debian.org/DashAsBinSh)) 
-      `dpkg-reconfigure dash`
-
-##### Windows specific requirements:
-
- - PowerShell 4.0 ([Windows Management Framework 4.0][wmf40])
-    - Allow local script execution ([read more][execpol])  
-      `Set-ExecutionPolicy RemoteSigned`
-    - PowerShell Community Extensions 3.2 ([pscx.codeplex.com][pscx])
-
- [wmf40]:   http://www.microsoft.com/en-US/download/details.aspx?id=40855
- [execpol]: https://technet.microsoft.com/en-us/library/hh849812.aspx
- [pscx]:    http://pscx.codeplex.com/
-
-
-## 4 Dependencies
-
-**The PoC-Library** depends on:
-
- - [**Cocotb**][cocotb] - A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python
- - [**OS-VVM**][osvvm] - Open Source VHDL Verification Methodology.
- - [**VUnit**][vunit] - An unit testing framework for VHDL.
-
-All dependencies are available as GitHub repositories and are linked to
-PoC as git submodules into the [`<PoCRoot>\lib\`][lib] directory.
+All dependencies are available as GitHub repositories and are linked to PoC as Git submodules into
+the [PoCRoot\lib](https://github.com/VLSI-EDA/PoC/tree/{@BRANCH@}/lib) directory. See [Third Party
+Libraries](http://poc-library.readthedocs.io/en/{@BRANCH@}/Miscelaneous/ThirdParty.html) for more details on these libraries.
 
  [cocotb]: https://github.com/potentialventures/cocotb
  [osvvm]:	 https://github.com/JimLewis/OSVVM
  [vunit]:	 https://github.com/VUnit/vunit
 
+## 3 Download
 
-## 5 Configuring PoC on a Local System (Stand Alone)
+The PoC-Library can be downloaded as a [zip-file][github:download] (latest '{@BRANCH@}' branch), cloned with `git clone`
+or embedded with `git submodule add` from GitHub. GitHub offers HTTPS and SSH as transfer protocols. See the [Download][rtfd:download] page for further details. The installation directory is referred to as `PoCRoot`.
 
-To explore PoC's full potential, it's required to configure some paths and
-synthesis or simulation tool chains. The following commands start a guided
-configuration process. Please follow the instructions. It's possible to
-relaunch the process at every time, for example to register new tools or to
-update tool versions. See the [Configuration][wiki:configuration] wiki page
-for more details.
+| Protocol | Git Clone Command                                                 |
+| -------- | ----------------------------------------------------------------- |
+| HTTPS    | `git clone --recursive https://github.com/VLSI-EDA/PoC.git PoC`   |
+| SSH      | `git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC` |
 
-> All Windows command line instructions are intended for **Windows PowerShell**,
-> if not marked otherwise. So executing the following instructions in Windows
-> Command Prompt (`cmd.exe`) won't function or result in errors! See the
-> [Requirements][wiki:requirements] wiki page on where to download or update
-> PowerShell.
+ [rtfd:download]: http://poc-library.readthedocs.io/en/{@BRANCH@}/UsingPoC/Download.html
+ [github:download]: https://github.com/VLSI-EDA/PoC/archive/{@BRANCH@}.zip
 
-Run the following command line instructions to configure PoC on your local system.
+
+## 4 Configuring PoC on a Local System
+
+To explore PoC's full potential, it's required to configure some paths and synthesis or simulation tool chains.
+The following commands start a guided configuration process. Please follow the instructions on screen. It's
+possible to relaunch the process at any time, for example to register new tools or to update tool versions.
+See [Configuration](http://poc-library.readthedocs.io/en/{@BRANCH@}/UsingPoC/PoCConfiguration.html) for more
+details. Run the following command line instructions to configure PoC on your local system:
 
 ```PowerShell
-cd <PoCRoot>
+cd PoCRoot
 .\poc.ps1 configure
 ```
 
-**Note:** The configuration process can be re-run at every time to add, remove
-or update choices made.
+Use the keyboard buttons: `Y` to accept, `N` to decline, `P` to skip/pass a step and `Return` to accept a
+default value displayed in brackets.
 
-If you want to check your installation, you can run one of our testbenches as described in [tb/README.md][tb_readme]
 
- [tb_readme]: tb/README.md
+If you want to check your installation, you can run one of our testbenches as described in [Using PoC -> Simulation][rtfd:using/simulation]
+
+ [rtfd:using/simulation]: http://poc-library.readthedocs.io/en/{@BRANCH@}/UsingPoC/Simulation.html
 
 ## 6 Integrating PoC into Projects
 

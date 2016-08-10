@@ -53,16 +53,16 @@ end entity;
 
 architecture tb of gearbox_down_cc_tb is
 	type T_TUPLE is record
-		InputBits			: POSITIVE;
-		OutputBits		: POSITIVE;
+		InputBits			: positive;
+		OutputBits		: positive;
 	end record;
 
-	type T_TUPLE_VECTOR is array(NATURAL range <>) of T_TUPLE;
+	type T_TUPLE_VECTOR is array(natural range <>) of T_TUPLE;
 
 	constant TB_GENERATOR_LIST			: T_TUPLE_VECTOR		:= ((32, 8), (20, 8), (36, 8), (66, 64), (128, 12));
 
 	constant CLOCK_FREQ							: FREQ				:= 100 MHz;
-	signal Clock										: STD_LOGIC		:= '1';
+	signal Clock										: std_logic		:= '1';
 
 begin
 	-- initialize global simulation status
@@ -72,21 +72,21 @@ begin
 
 
 	genInstances : for i in TB_GENERATOR_LIST'range generate
-		constant INPUT_BITS						: POSITIVE		:= TB_GENERATOR_LIST(i).InputBits;
-		constant OUTPUT_BITS					: POSITIVE		:= TB_GENERATOR_LIST(i).OutputBits;
+		constant INPUT_BITS						: positive		:= TB_GENERATOR_LIST(i).InputBits;
+		constant OUTPUT_BITS					: positive		:= TB_GENERATOR_LIST(i).OutputBits;
 		constant OUTPUT_ORDER					: T_BIT_ORDER	:= MSB_FIRST;
-		constant ADD_INPUT_REGISTERS	: BOOLEAN			:= TRUE;
-		constant ADD_OUTPUT_REGISTERS	: BOOLEAN			:= FALSE;
+		constant ADD_INPUT_REGISTERS	: boolean			:= TRUE;
+		constant ADD_OUTPUT_REGISTERS	: boolean			:= FALSE;
 
-		constant BITS_PER_CHUNK				: POSITIVE		:= greatestCommonDivisor(INPUT_BITS, OUTPUT_BITS);
-		constant INPUT_CHUNKS					: POSITIVE		:= INPUT_BITS / BITS_PER_CHUNK;
-		constant OUTPUT_CHUNKS				: POSITIVE		:= OUTPUT_BITS / BITS_PER_CHUNK;
+		constant BITS_PER_CHUNK				: positive		:= greatestCommonDivisor(INPUT_BITS, OUTPUT_BITS);
+		constant INPUT_CHUNKS					: positive		:= INPUT_BITS / BITS_PER_CHUNK;
+		constant OUTPUT_CHUNKS				: positive		:= OUTPUT_BITS / BITS_PER_CHUNK;
 
-		subtype T_CHUNK			is STD_LOGIC_VECTOR(BITS_PER_CHUNK - 1 downto 0);
-		type T_CHUNK_VECTOR	is array(NATURAL range <>) of T_CHUNK;
+		subtype T_CHUNK			is std_logic_vector(BITS_PER_CHUNK - 1 downto 0);
+		type T_CHUNK_VECTOR	is array(natural range <>) of T_CHUNK;
 
-		function to_slv(slvv : T_CHUNK_VECTOR) return STD_LOGIC_VECTOR is
-			variable slv			: STD_LOGIC_VECTOR((slvv'length * BITS_PER_CHUNK) - 1 downto 0);
+		function to_slv(slvv : T_CHUNK_VECTOR) return std_logic_vector is
+			variable slv			: std_logic_vector((slvv'length * BITS_PER_CHUNK) - 1 downto 0);
 		begin
 			for i in slvv'range loop
 				slv(((i + 1) * BITS_PER_CHUNK) - 1 downto (i * BITS_PER_CHUNK))		:= slvv(i);
@@ -94,29 +94,29 @@ begin
 			return slv;
 		end function;
 
-		constant LOOP_COUNT						: POSITIVE		:= 64;
-		constant DELAY								: POSITIVE		:= 16;
+		constant LOOP_COUNT						: positive		:= 64;
+		constant DELAY								: positive		:= 16;
 
-		signal SyncIn									: STD_LOGIC;
-		signal ValidIn								: STD_LOGIC;
-		signal DataIn									: STD_LOGIC_VECTOR(INPUT_BITS - 1 downto 0);
+		signal SyncIn									: std_logic;
+		signal ValidIn								: std_logic;
+		signal DataIn									: std_logic_vector(INPUT_BITS - 1 downto 0);
 
-		signal SyncOut								: STD_LOGIC;
-		signal ValidOut								: STD_LOGIC;
-		signal DataOut								: STD_LOGIC_VECTOR(OUTPUT_BITS - 1 downto 0);
-		signal FirstOut								: STD_LOGIC;
-		signal LastOut								: STD_LOGIC;
+		signal SyncOut								: std_logic;
+		signal ValidOut								: std_logic;
+		signal DataOut								: std_logic_vector(OUTPUT_BITS - 1 downto 0);
+		signal FirstOut								: std_logic;
+		signal LastOut								: std_logic;
 
-		constant simTestID : T_SIM_TEST_ID		:= simCreateTest("Test setup for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
+		constant simTestID : T_SIM_TEST_ID		:= simCreateTest("Test setup for " & integer'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
 
 	begin
 		procGenerator : process
 			-- from Simulation
-			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator " & integer'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & integer'image(OUTPUT_BITS));	--, "aaa/bbb/ccc");	--globalSimulationStatus'instance_name);
 			-- protected type from RandomPkg
 			variable RandomVar		: RandomPType;
 
-			impure function genChunkedRandomValue return STD_LOGIC_VECTOR is
+			impure function genChunkedRandomValue return std_logic_vector is
 				variable Temp			: T_CHUNK_VECTOR(INPUT_CHUNKS - 1 downto 0);
 			begin
 				for j in 0 to INPUT_CHUNKS - 1 loop
@@ -197,8 +197,8 @@ begin
 			);
 
 		procChecker : process
-			constant simProcessID	: T_SIM_PROCESS_ID	:= simRegisterProcess(simTestID, "Checker " & INTEGER'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & INTEGER'image(OUTPUT_BITS));
-			variable Check				: BOOLEAN;
+			constant simProcessID	: T_SIM_PROCESS_ID	:= simRegisterProcess(simTestID, "Checker " & integer'image(i) & " for " & INTEGER'image(INPUT_BITS) & "->" & integer'image(OUTPUT_BITS));
+			variable Check				: boolean;
 		begin
 			Check		:= TRUE;
 

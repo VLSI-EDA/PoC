@@ -7,7 +7,7 @@
 #                   Martin Zabel
 #                   Thomas B. Preusser
 #
-# Python Class:      GHDL specific classes
+# Python Class:     GHDL specific classes
 #
 # Description:
 # ------------------------------------
@@ -48,7 +48,7 @@ from subprocess             import check_output, CalledProcessError
 
 from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
 from Base.Exceptions        import PlatformNotSupportedException
-from Base.Executable        import Executable
+from Base.Executable        import Executable, LongValuedFlagArgument
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
 from Base.Executable        import ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
 from Base.Logging           import LogEntry, Severity
@@ -75,7 +75,7 @@ class Configuration(BaseConfiguration):
 				"Version":                "0.34dev",
 				"InstallationDirectory":  "C:/Tools/GHDL/0.34dev",
 				"BinaryDirectory":        "${InstallationDirectory}/bin",
-				"ScriptDirectory":        "${InstallationDirectory}/scripts",
+				"ScriptDirectory":        "${InstallationDirectory}/lib/vendors",
 				"Backend":                "mcode"
 			}
 		},
@@ -165,17 +165,20 @@ class Configuration(BaseConfiguration):
 				if match is not None:
 					backend = match.group(1).lower()
 
-		self._host.PoCConfig[self._section]['Version'] = '<unknown>' if version is None else version
-		self._host.PoCConfig[self._section]['Backend'] = '<unknown>' if backend is None else backend
+		if ((version is None) or (backend is None)):
+			raise ConfigurationException("Version number or back-end name not found in '{0!s} -v' output.".format(ghdlPath))
+
+		self._host.PoCConfig[self._section]['Version'] = version
+		self._host.PoCConfig[self._section]['Backend'] = backend
 
 
 class GHDL(Executable):
-	def __init__(self, platform, binaryDirectoryPath, version, backend, logger=None):
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, backend, logger=None):
 		if (platform == "Windows"):     executablePath = binaryDirectoryPath/ "ghdl.exe"
 		elif (platform == "Linux"):     executablePath = binaryDirectoryPath/ "ghdl"
 		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath/ "ghdl"
 		else:                                            raise PlatformNotSupportedException(platform)
-		super().__init__(platform, executablePath, logger=logger)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Executable = executablePath
 		#self.Parameters[self.Executable] = executablePath
@@ -251,21 +254,18 @@ class GHDL(Executable):
 	class FlagPSL(metaclass=ShortFlagArgument):
 		_name =    "fpsl"
 
-	class SwitchIEEEFlavor(metaclass=ShortValuedFlagArgument):
-		_pattern =  "--{0}={1}"
-		_name =      "ieee"
+	class SwitchIEEEFlavor(metaclass=LongValuedFlagArgument):
+		_name =     "ieee"
 
-	class SwitchVHDLVersion(metaclass=ShortValuedFlagArgument):
-		_pattern =  "--{0}={1}"
-		_name =      "std"
+	class SwitchVHDLVersion(metaclass=LongValuedFlagArgument):
+		_name =     "std"
 
-	class SwitchVHDLLibrary(metaclass=ShortValuedFlagArgument):
-		_pattern =  "--{0}={1}"
-		_name =      "work"
+	class SwitchVHDLLibrary(metaclass=LongValuedFlagArgument):
+		_name =     "work"
 
 	class ArgListLibraryReferences(metaclass=ValuedFlagListArgument):
 		_pattern =  "-{0}{1}"
-		_name =      "P"
+		_name =     "P"
 
 	class ArgSourceFile(metaclass=PathArgument):
 		pass
@@ -294,36 +294,35 @@ class GHDL(Executable):
 		ArgTopLevel
 	)
 
-	class SwitchIEEEAsserts(metaclass=ShortValuedFlagArgument):
-		_pattern =  "--{0}={1}"
-		_name =      "ieee-asserts"
+	class SwitchIEEEAsserts(metaclass=LongValuedFlagArgument):
+		_name =     "ieee-asserts"
 
-	class SwitchVCDWaveform(metaclass=ShortValuedFlagArgument):
-		_pattern =  "--{0}={1}"
-		_name =      "vcd"
+	class SwitchVCDWaveform(metaclass=LongValuedFlagArgument):
+		_name =     "vcd"
 
-	class SwitchVCDGZWaveform(metaclass=ShortValuedFlagArgument):
-		_pattern =  "--{0}={1}"
-		_name =      "vcdgz"
+	class SwitchVCDGZWaveform(metaclass=LongValuedFlagArgument):
+		_name =     "vcdgz"
 
-	class SwitchFastWaveform(metaclass=ShortValuedFlagArgument):
-		_pattern =  "--{0}={1}"
-		_name =      "fst"
+	class SwitchFastWaveform(metaclass=LongValuedFlagArgument):
+		_name =     "fst"
 
-	class SwitchGHDLWaveform(metaclass=ShortValuedFlagArgument):
-		_pattern =  "--{0}={1}"
-		_name =      "wave"
+	class SwitchGHDLWaveform(metaclass=LongValuedFlagArgument):
+		_name =     "wave"
+
+	class SwitchWaveformSelect(metaclass=LongValuedFlagArgument):
+		_name =     "wave-opt-file"		# requires GHDL update
 
 	RunOptions = CommandLineArgumentList(
 		SwitchIEEEAsserts,
 		SwitchVCDWaveform,
 		SwitchVCDGZWaveform,
 		SwitchFastWaveform,
-		SwitchGHDLWaveform
+		SwitchGHDLWaveform,
+		SwitchWaveformSelect
 	)
 
 	def GetGHDLAnalyze(self):
-		ghdl = GHDLAnalyze(self._platform, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
+		ghdl = GHDLAnalyze(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
 				ghdl.Parameters[param] = None
@@ -331,7 +330,7 @@ class GHDL(Executable):
 		return ghdl
 
 	def GetGHDLElaborate(self):
-		ghdl = GHDLElaborate(self._platform, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
+		ghdl = GHDLElaborate(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
 				ghdl.Parameters[param] = None
@@ -339,7 +338,7 @@ class GHDL(Executable):
 		return ghdl
 
 	def GetGHDLRun(self):
-		ghdl = GHDLRun(self._platform, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
+		ghdl = GHDLRun(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
 				ghdl.Parameters[param] = None
@@ -348,13 +347,17 @@ class GHDL(Executable):
 
 
 class GHDLAnalyze(GHDL):
-	def __init__(self, platform, binaryDirectoryPath, version, backend, logger=None):
-		super().__init__(platform, binaryDirectoryPath, version, backend, logger=logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, backend, logger=None):
+		super().__init__(platform, dryrun, binaryDirectoryPath, version, backend, logger=logger)
 
 	def Analyze(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList.insert(0, self.Executable)
 		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -369,14 +372,14 @@ class GHDLAnalyze(GHDL):
 
 			line = next(iterator)
 			self._hasOutput =    True
-			self._LogNormal("    ghdl analyze messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
-			self._LogNormal("    " + ("-" * 76))
+			self._LogNormal("  ghdl analyze messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
+			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |=  (line.Severity is Severity.Warning)
 				self._hasErrors |=    (line.Severity is Severity.Error)
 
-				line.IndentBy(2)
+				line.IndentBy(self.Logger.BaseIndent + 1)
 				self._Log(line)
 				line = next(iterator)
 
@@ -384,16 +387,20 @@ class GHDLAnalyze(GHDL):
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 class GHDLElaborate(GHDL):
-	def __init__(self, platform, binaryDirectoryPath, version, backend, logger=None):
-		super().__init__(platform, binaryDirectoryPath, version, backend, logger=logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, backend, logger=None):
+		super().__init__(platform, dryrun, binaryDirectoryPath, version, backend, logger=logger)
 
 	def Elaborate(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList.insert(0, self.Executable)
 		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -407,12 +414,12 @@ class GHDLElaborate(GHDL):
 			iterator = iter(GHDLElaborateFilter(self.GetReader()))
 
 			line = next(iterator)
-			line.IndentBy(2)
+			line.IndentBy(self.Logger.BaseIndent + 1)
 			self._hasOutput = True
 			vhdlLibraryName = self.Parameters[self.SwitchVHDLLibrary]
 			topLevel = self.Parameters[self.ArgTopLevel]
-			self._LogNormal("    ghdl elaborate messages for '{0}.{1}'".format(vhdlLibraryName, topLevel))
-			self._LogNormal("    " + ("-" * 76))
+			self._LogNormal("  ghdl elaborate messages for '{0}.{1}'".format(vhdlLibraryName, topLevel))
+			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 			self._Log(line)
 
 			while True:
@@ -420,25 +427,28 @@ class GHDLElaborate(GHDL):
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.IndentBy(2)
+				line.IndentBy(self.Logger.BaseIndent + 1)
 				self._Log(line)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 class GHDLRun(GHDL):
-	def __init__(self, platform, binaryDirectoryPath, version, backend, logger=None):
-		super().__init__(platform, binaryDirectoryPath, version, backend, logger=logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, backend, logger=None):
+		super().__init__(platform, dryrun, binaryDirectoryPath, version, backend, logger=logger)
 
 	def Run(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList += self.RunOptions.ToArgumentList()
 		parameterList.insert(0, self.Executable)
-
 		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -453,12 +463,12 @@ class GHDLRun(GHDL):
 			iterator = iter(PoCSimulationResultFilter(GHDLRunFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
-			line.IndentBy(2)
+			line.IndentBy(self.Logger.BaseIndent + 1)
 			self._hasOutput = True
 			vhdlLibraryName =  self.Parameters[self.SwitchVHDLLibrary]
 			topLevel =        self.Parameters[self.ArgTopLevel]
-			self._LogNormal("    ghdl run messages for '{0}.{1}'".format(vhdlLibraryName, topLevel))
-			self._LogNormal("    " + ("-" * 76))
+			self._LogNormal("  ghdl run messages for '{0}.{1}'".format(vhdlLibraryName, topLevel))
+			self._LogNormal("  " + ("-" * 76))
 			self._Log(line)
 
 			while True:
@@ -466,14 +476,14 @@ class GHDLRun(GHDL):
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.IndentBy(2)
+				line.IndentBy(self.Logger.BaseIndent + 1)
 				self._Log(line)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self._LogNormal("  " + ("-" * 76))
 
 		return simulationResult.value
 

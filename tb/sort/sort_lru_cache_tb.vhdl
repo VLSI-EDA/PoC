@@ -53,21 +53,21 @@ end entity;
 
 
 architecture tb of sort_lru_cache_tb is
-	constant ELEMENTS					: POSITIVE	:= 8;
-	constant KEY_BITS					: POSITIVE	:= log2ceilnz(ELEMENTS);
+	constant ELEMENTS					: positive	:= 8;
+	constant KEY_BITS					: positive	:= log2ceilnz(ELEMENTS);
 
-	constant LOOP_COUNT				: POSITIVE	:= 32;
+	constant LOOP_COUNT				: positive	:= 32;
 
-	constant CLOCK_PERIOD			: TIME				:= 10 ns;
-	signal Clock							: STD_LOGIC		:= '1';
+	constant CLOCK_PERIOD			: time				:= 10 ns;
+	signal Clock							: std_logic		:= '1';
 
-	signal Insert							: STD_LOGIC;
-	signal Free								: STD_LOGIC;
-	signal KeyIn							: STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0);
+	signal Insert							: std_logic;
+	signal Free								: std_logic;
+	signal KeyIn							: std_logic_vector(KEY_BITS - 1 downto 0);
 
-	signal KeyOut							: STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0);
+	signal KeyOut							: std_logic_vector(KEY_BITS - 1 downto 0);
 
-	signal StopSimulation			: STD_LOGIC		:= '0';
+	signal StopSimulation			: std_logic		:= '0';
 begin
 
 	simInitialize;
@@ -76,7 +76,7 @@ begin
 
 	process
 		variable RandomVar	: RandomPType;								-- protected type from RandomPkg
-		variable Command		: INTEGER range 0 to 1;--2;
+		variable Command		: integer range 0 to 1;--2;
 	begin
 		RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
 

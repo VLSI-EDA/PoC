@@ -45,21 +45,21 @@ entity pmod_USBUART is
 		BAUDRATE			: BAUD		:= 115200 Bd
 	);
 	port (
-		Clock			: in	STD_LOGIC;
-		Reset			: in	STD_LOGIC;
+		Clock			: in	std_logic;
+		Reset			: in	std_logic;
 
-		TX_put		: in	STD_LOGIC;
-		TX_Data		: in	STD_LOGIC_VECTOR(7 downto 0);
-		TX_Full		: out	STD_LOGIC;
+		TX_put		: in	std_logic;
+		TX_Data		: in	std_logic_vector(7 downto 0);
+		TX_Full		: out	std_logic;
 
-		RX_Valid	: out	STD_LOGIC;
-		RX_Data		: out	STD_LOGIC_VECTOR(7 downto 0);
-		RX_got		: in	STD_LOGIC;
+		RX_Valid	: out	std_logic;
+		RX_Data		: out	std_logic_vector(7 downto 0);
+		RX_got		: in	std_logic;
 
-		UART_TX		: out	STD_LOGIC;
-		UART_RX		: in	STD_LOGIC;
-		UART_RTS	: out	STD_LOGIC;
-		UART_CTS	: in	STD_LOGIC
+		UART_TX		: out	std_logic;
+		UART_RX		: in	std_logic;
+		UART_RTS	: out	std_logic;
+		UART_CTS	: in	std_logic
 	);
 end entity;
 

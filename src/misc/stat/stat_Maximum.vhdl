@@ -39,18 +39,18 @@ use			PoC.vectors.all;
 
 entity stat_Maximum is
 	generic (
-		DEPTH					: POSITIVE		:= 8;
-		DATA_BITS			: POSITIVE		:= 16;
-		COUNTER_BITS	: POSITIVE		:= 16
+		DEPTH					: positive		:= 8;
+		DATA_BITS			: positive		:= 16;
+		COUNTER_BITS	: positive		:= 16
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		Reset					: in	STD_LOGIC;
+		Clock					: in	std_logic;
+		Reset					: in	std_logic;
 
-		Enable				: in	STD_LOGIC;
-		DataIn				: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
+		Enable				: in	std_logic;
+		DataIn				: in	std_logic_vector(DATA_BITS - 1 downto 0);
 
-		Valids				: out	STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
+		Valids				: out	std_logic_vector(DEPTH - 1 downto 0);
 		Maximums			: out	T_SLM(DEPTH - 1 downto 0, DATA_BITS - 1 downto 0);
 		Counts				: out	T_SLM(DEPTH - 1 downto 0, COUNTER_BITS - 1 downto 0)
 	);
@@ -58,8 +58,8 @@ end entity;
 
 
 architecture rtl of stat_Maximum is
-	type T_TAG_MEMORY				is array(NATURAL range <>) of UNSIGNED(DATA_BITS - 1 downto 0);
-	type T_COUNTER_MEMORY		is array(NATURAL range <>) of UNSIGNED(COUNTER_BITS - 1 downto 0);
+	type T_TAG_MEMORY				is array(natural range <>) of unsigned(DATA_BITS - 1 downto 0);
+	type T_COUNTER_MEMORY		is array(natural range <>) of unsigned(COUNTER_BITS - 1 downto 0);
 
 	-- create matrix from vector-vector
 	function to_slm(usv : T_TAG_MEMORY) return T_SLM is
@@ -84,14 +84,14 @@ architecture rtl of stat_Maximum is
 		return slm;
 	end function;
 
-	signal DataIn_us				: UNSIGNED(DataIn'range);
+	signal DataIn_us				: unsigned(DataIn'range);
 
-	signal TagHit						: STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
-	signal MaximumHit				: STD_LOGIC_VECTOR(DEPTH - 1 downto 0);
+	signal TagHit						: std_logic_vector(DEPTH - 1 downto 0);
+	signal MaximumHit				: std_logic_vector(DEPTH - 1 downto 0);
 	signal TagMemory				: T_TAG_MEMORY(DEPTH - 1 downto 0)			:= (others => (others => '0'));
 	signal CounterMemory		: T_COUNTER_MEMORY(DEPTH - 1 downto 0)	:= (others => (others => '0'));
-	signal MaximumIndex			: STD_LOGIC_VECTOR(DEPTH - 1 downto 0)	:= '1' & (DEPTH - 2 downto 0 => '0');	--((DEPTH - 1) => '1', others => '0'); -- WORKAROUND: GHDL says  not static choice exclude others choice;  non-locally static choice for an aggregate is allowed only if only choice
-	signal ValidMemory			: STD_LOGIC_VECTOR(DEPTH - 1 downto 0)	:= (others => '0');
+	signal MaximumIndex			: std_logic_vector(DEPTH - 1 downto 0)	:= '1' & (DEPTH - 2 downto 0 => '0');	--((DEPTH - 1) => '1', others => '0'); -- WORKAROUND: GHDL says  not static choice exclude others choice;  non-locally static choice for an aggregate is allowed only if only choice
+	signal ValidMemory			: std_logic_vector(DEPTH - 1 downto 0)	:= (others => '0');
 
 begin
 	DataIn_us		<= unsigned(DataIn);
@@ -102,7 +102,7 @@ begin
 	end generate;
 
 	process(Clock)
-		variable TagHit_idx 			: NATURAL;
+		variable TagHit_idx 			: natural;
 	begin
 		if rising_edge(Clock) then
 			if (Reset = '1') then

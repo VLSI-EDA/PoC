@@ -37,7 +37,7 @@ library PoC;
 use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.physical.all;
-use			PoC.sortnet.ALL;
+use			PoC.sortnet.all;
 -- simulation only packages
 use			PoC.sim_types.all;
 use			PoC.simulation.all;
@@ -52,35 +52,35 @@ end entity;
 
 
 architecture tb of sortnet_Stream_Adapter_tb is
-	constant DEBUG									: BOOLEAN		:= TRUE;
+	constant DEBUG									: boolean		:= TRUE;
 
-	constant STREAM_DATA_BITS				: POSITIVE	:= ite(DEBUG, 16,	 32);
+	constant STREAM_DATA_BITS				: positive	:= ite(DEBUG, 16,	 32);
 
-	constant SORTNET_SIZE						: POSITIVE	:= ite(DEBUG, 8,	128);
-	constant SORTNET_KEY_BITS				: POSITIVE	:= ite(DEBUG, 8,	 32);
-	constant SORTNET_DATA_BITS			: POSITIVE	:= ite(DEBUG, 16,	 64);
+	constant SORTNET_SIZE						: positive	:= ite(DEBUG, 8,	128);
+	constant SORTNET_KEY_BITS				: positive	:= ite(DEBUG, 8,	 32);
+	constant SORTNET_DATA_BITS			: positive	:= ite(DEBUG, 16,	 64);
 
-	constant LOOP_COUNT							: POSITIVE	:= ite(DEBUG, 10,	 32);	--1024);
+	constant LOOP_COUNT							: positive	:= ite(DEBUG, 10,	 32);	--1024);
 
-	constant STAGES									: POSITIVE	:= SORTNET_SIZE;
-	constant DELAY									: NATURAL		:= 50;	--STAGES / PIPELINE_STAGE_AFTER;
+	constant STAGES									: positive	:= SORTNET_SIZE;
+	constant DELAY									: natural		:= 50;	--STAGES / PIPELINE_STAGE_AFTER;
 
 	constant CLOCK_FREQ							: FREQ				:= 100 MHz;
-	signal Clock										: STD_LOGIC		:= '1';
+	signal Clock										: std_logic		:= '1';
 
-	constant TAG_BITS								: POSITIVE		:= 2;
-	signal Generator_Valid					: STD_LOGIC;
-	signal Generator_Data						: STD_LOGIC_VECTOR(STREAM_DATA_BITS - 1 downto 0);
-	signal Generator_IsKey					: STD_LOGIC;
-	signal Generator_Tag						: STD_LOGIC_VECTOR(TAG_BITS - 1 downto 0);
+	constant TAG_BITS								: positive		:= 2;
+	signal Generator_Valid					: std_logic;
+	signal Generator_Data						: std_logic_vector(STREAM_DATA_BITS - 1 downto 0);
+	signal Generator_IsKey					: std_logic;
+	signal Generator_Tag						: std_logic_vector(TAG_BITS - 1 downto 0);
 
-	signal Sort_Out_Valid						: STD_LOGIC;
-	signal Sort_Out_Data						: STD_LOGIC_VECTOR(STREAM_DATA_BITS - 1 downto 0);
-	signal Sort_Out_IsKey						: STD_LOGIC;
+	signal Sort_Out_Valid						: std_logic;
+	signal Sort_Out_Data						: std_logic_vector(STREAM_DATA_BITS - 1 downto 0);
+	signal Sort_Out_IsKey						: std_logic;
 
-	signal Tester_Ack								: STD_LOGIC;
+	signal Tester_Ack								: std_logic;
 
-	signal StopSimulation						: STD_LOGIC		:= '0';
+	signal StopSimulation						: std_logic		:= '0';
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -92,8 +92,8 @@ begin
 		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Generator");
 		variable RandomVar	: RandomPType;								-- protected type from RandomPkg
 
-		variable KeyInput		: STD_LOGIC_VECTOR(SORTNET_KEY_BITS - 1 downto 0);
-		variable DataInput	: STD_LOGIC_VECTOR(SORTNET_DATA_BITS - SORTNET_KEY_BITS - 1 downto 0);
+		variable KeyInput		: std_logic_vector(SORTNET_KEY_BITS - 1 downto 0);
+		variable DataInput	: std_logic_vector(SORTNET_DATA_BITS - SORTNET_KEY_BITS - 1 downto 0);
 
 	begin
 		RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
@@ -161,11 +161,11 @@ begin
 	procChecker : process
 		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Checker");
 
-		variable Check			: BOOLEAN;
-		variable CurValue		: UNSIGNED(SORTNET_KEY_BITS - 1 downto 0);
-		variable LastValue	: UNSIGNED(SORTNET_KEY_BITS - 1 downto 0);
+		variable Check			: boolean;
+		variable CurValue		: unsigned(SORTNET_KEY_BITS - 1 downto 0);
+		variable LastValue	: unsigned(SORTNET_KEY_BITS - 1 downto 0);
 	begin
-		report "Delay=" & INTEGER'image(DELAY) severity NOTE;
+		report "Delay=" & integer'image(DELAY) severity NOTE;
 
 		Tester_Ack		<= '0';
 

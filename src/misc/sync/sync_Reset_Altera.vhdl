@@ -41,20 +41,20 @@ entity sync_Reset_Altera is
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2	-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
-		Clock					: in	STD_LOGIC;						-- Clock to be synchronized to
-		Input					: in	STD_LOGIC;						-- Data to be synchronized
-		Output				: out	STD_LOGIC							-- synchronised data
+		Clock					: in	std_logic;						-- Clock to be synchronized to
+		Input					: in	std_logic;						-- Data to be synchronized
+		Output				: out	std_logic							-- synchronised data
 	);
 end entity;
 
 
 architecture rtl of sync_Reset_Altera is
-	attribute ALTERA_ATTRIBUTE	: STRING;
-	attribute preserve					: BOOLEAN;
+	attribute ALTERA_ATTRIBUTE	: string;
+	attribute preserve					: boolean;
 
-	signal Data_async				: STD_LOGIC;
-	signal Data_meta				: STD_LOGIC																	:= '1';
-	signal Data_sync				: STD_LOGIC_VECTOR(SYNC_DEPTH - 1 downto 0)	:= (others => '1');
+	signal Data_async				: std_logic;
+	signal Data_meta				: std_logic																	:= '1';
+	signal Data_sync				: std_logic_vector(SYNC_DEPTH - 1 downto 0)	:= (others => '1');
 
 	-- Apply a SDC constraint to meta stable flip flop
 	--attribute ALTERA_ATTRIBUTE of rtl					: architecture is "-name SDC_STATEMENT ""set_false_path -to *|sync_Reset_Altera:*|Data_meta """;

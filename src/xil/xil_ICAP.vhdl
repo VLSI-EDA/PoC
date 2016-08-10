@@ -46,13 +46,13 @@ use			PoC.config.all;
 
 entity xil_ICAP is
 	generic (
-		ICAP_WIDTH	:	STRING := "X32";					-- Specifies the input and output data width to be used
+		ICAP_WIDTH	:	string := "X32";					-- Specifies the input and output data width to be used
 															-- Spartan 6: fixed to 16 bit
 															-- Virtex 4:  X8 or X32
 															-- Rest: X8, X16, X32
-		DEVICE_ID	:	BIT_VECTOR := X"1234567";				-- pre-programmed Device ID value for simulation
+		DEVICE_ID	:	bit_vector := X"1234567";				-- pre-programmed Device ID value for simulation
 															-- supported by Spartan 6, Virtex 6 and above
-		SIM_CFG_FILE_NAME	: STRING	:= "NONE"			-- Raw Bitstream (RBT) file to be parsed by the simulation model
+		SIM_CFG_FILE_NAME	: string	:= "NONE"			-- Raw Bitstream (RBT) file to be parsed by the simulation model
 															-- supported by Spartan 6, Virtex 6 and above
 	);
 	port (
@@ -86,14 +86,14 @@ begin
 	      WRITE => rd_wr				-- 1-bit input: Read/Write control input
 	   );
 	end generate;
-	
+
 	genVirtex4 : if (DEV_INFO.Device = DEVICE_VIRTEX4) generate
 		signal ce : std_logic;
 	begin
 	   ce <= not disable;
 	   icap : ICAP_VIRTEX4
 	   generic map (
-	      ICAP_WIDTH => ICAP_WIDTH) -- "X8" or "X32" 
+	      ICAP_WIDTH => ICAP_WIDTH) -- "X8" or "X32"
 	   port map (
 	      BUSY => busy,   -- Busy output
 	      O => data_out,         -- 32-bit data output
@@ -107,10 +107,10 @@ begin
 	genVirtex5 : if (DEV_INFO.Device = DEVICE_VIRTEX5) generate
 		signal ce : std_logic;
 	begin
-	   ce <= not disable; 
+	   ce <= not disable;
 	   icap : ICAP_VIRTEX5
 	   generic map (
-	      ICAP_WIDTH => ICAP_WIDTH) 
+	      ICAP_WIDTH => ICAP_WIDTH)
 	   port map (
 	      BUSY => busy,   -- Busy output
 	      O => data_out,         -- 32-bit data output
@@ -126,7 +126,7 @@ begin
 	   icap : ICAP_VIRTEX6
 	   generic map (
 	      DEVICE_ID => DEVICE_ID,
-	      ICAP_WIDTH => ICAP_WIDTH,   
+	      ICAP_WIDTH => ICAP_WIDTH,
 	      SIM_CFG_FILE_NAME => SIM_CFG_FILE_NAME
 	   )
 	   port map (
@@ -144,7 +144,7 @@ begin
 	   icap : ICAPE2
 	   generic map (
 	      DEVICE_ID => X"0" & DEVICE_ID,
-	      ICAP_WIDTH => ICAP_WIDTH,         
+	      ICAP_WIDTH => ICAP_WIDTH,
 	      SIM_CFG_FILE_NAME => SIM_CFG_FILE_NAME
 	   )
 	   port map (

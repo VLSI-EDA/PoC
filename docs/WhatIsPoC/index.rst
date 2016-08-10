@@ -52,7 +52,7 @@ effectively use 6-input LUTs.
 
 .. toctree::
    :hidden:
- 
+   
    History
    SupportedToolChains
    WhyShouldIUsePoC

@@ -50,11 +50,11 @@ architecture tb of sync_Reset_tb is
 	constant CLOCK_1_FREQ			: FREQ								:= 100 MHz;
 	constant CLOCK_2_FREQ			: FREQ								:= 60 MHz;
 
-	signal Clock1							: STD_LOGIC;
-	signal Clock2							: STD_LOGIC;
+	signal Clock1							: std_logic;
+	signal Clock2							: std_logic;
 
-	signal Sync_in						: STD_LOGIC				:= '0';
-	signal Sync_out						: STD_LOGIC;
+	signal Sync_in						: std_logic				:= '0';
+	signal Sync_out						: std_logic;
 
 begin
 	-- initialize global simulation status

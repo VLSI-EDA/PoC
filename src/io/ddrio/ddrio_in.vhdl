@@ -60,15 +60,15 @@ use			PoC.ddrio.all;
 
 entity ddrio_in is
 	generic (
-		BITS					: POSITIVE;
-		INIT_VALUE		: BIT_VECTOR	:= x"FFFFFFFF"
+		BITS					: positive;
+		INIT_VALUE		: bit_vector	:= x"FFFFFFFF"
 	);
 	port (
-		Clock					: in		STD_LOGIC;
-		ClockEnable		: in		STD_LOGIC;
-		DataIn_high		: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataIn_low		: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		Pad						: in		STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		Clock					: in		std_logic;
+		ClockEnable		: in		std_logic;
+		DataIn_high		: out		std_logic_vector(BITS - 1 downto 0);
+		DataIn_low		: out		std_logic_vector(BITS - 1 downto 0);
+		Pad						: in		std_logic_vector(BITS - 1 downto 0)
 		);
 end entity;
 
@@ -111,9 +111,9 @@ begin
 	end generate;
 
 	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
-		signal Pad_d_fe				: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
-		signal DataIn_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
-		signal DataIn_low_d		: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal Pad_d_fe				: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataIn_high_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataIn_low_d		: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 	begin
 		Pad_d_fe				<= Pad			when falling_edge(Clock)	and (ClockEnable = '1');
 		DataIn_high_d		<= Pad			when rising_edge(Clock)		and (ClockEnable = '1');

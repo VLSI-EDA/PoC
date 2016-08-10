@@ -52,7 +52,7 @@ architecture rtl of arith_counter_bcd_tb is
 	constant CLOCK_FREQ				: FREQ			:= 100 MHz;
 	constant TEST_PARAMETERS	: T_INTVEC	:= (3, 4);
 
-	signal Clock							: STD_LOGIC;
+	signal Clock							: std_logic;
 
 begin
 	-- initialize global simulation status
@@ -61,17 +61,17 @@ begin
 	simGenerateClock(Clock, CLOCK_FREQ);
 
 	genTests : for i in TEST_PARAMETERS'range generate
-		constant DIGITS			: POSITIVE				:= TEST_PARAMETERS(i);
-		constant simTestID	: T_SIM_TEST_ID		:= simCreateTest("Test setup for DIGITS=" & INTEGER'image(DIGITS));
+		constant DIGITS			: positive				:= TEST_PARAMETERS(i);
+		constant simTestID	: T_SIM_TEST_ID		:= simCreateTest("Test setup for DIGITS=" & integer'image(DIGITS));
 
-		signal Reset				: STD_LOGIC;
-		signal inc					: STD_LOGIC;
+		signal Reset				: std_logic;
+		signal inc					: std_logic;
 		signal Value				: T_BCD_VECTOR(DIGITS - 1 downto 0);
 	begin
 		-- simGenerateWaveform(simTestID,	Reset, simGenerateWaveform_Reset(Pause => 10 ns, ResetPulse => 10 ns));
 
 		procGenerator : process
-			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator for " & INTEGER'image(DIGITS) & " digits");
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator for " & integer'image(DIGITS) & " digits");
 		begin
 			Reset		<= '0';
 			inc			<= '0';
@@ -124,33 +124,33 @@ begin
 			);
 
 		procChecker : process
-			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & INTEGER'image(DIGITS) & " digits");
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & integer'image(DIGITS) & " digits");
 			variable Expected			: T_BCD_VECTOR(DIGITS - 1 downto 0);
 		begin
 			wait until rising_edge(Clock);
 			wait until rising_edge(Clock);
 			Expected	:= to_BCD_Vector(0, DIGITS);
-			simAssertion((Value = Expected), "Test " & INTEGER'image(simTestID) & ": Wrong initial state. Value=" & to_string(Value) & "  Expected=" & to_string(Expected));
+			simAssertion((Value = Expected), "Test " & integer'image(simTestID) & ": Wrong initial state. Value=" & to_string(Value) & "  Expected=" & to_string(Expected));
 
 			wait until rising_edge(Clock);
-			simAssertion((Value = Expected), "Test " & INTEGER'image(simTestID) & ": Wrong initial state. Value=" & to_string(Value) & "  Expected=" & to_string(Expected));
+			simAssertion((Value = Expected), "Test " & integer'image(simTestID) & ": Wrong initial state. Value=" & to_string(Value) & "  Expected=" & to_string(Expected));
 
 			wait until rising_edge(Clock);
 			for i in 1 to 10**DIGITS - 1 loop
 				Expected	:= to_BCD_Vector(i, DIGITS);
 				wait until rising_edge(Clock);
-				simAssertion((Value = Expected), "Test " & INTEGER'image(simTestID) & ": Must be incremented to state " & to_string(Expected) & "  Value=" & to_string(Value));
+				simAssertion((Value = Expected), "Test " & integer'image(simTestID) & ": Must be incremented to state " & to_string(Expected) & "  Value=" & to_string(Value));
 				wait until rising_edge(Clock);
-				simAssertion((Value = Expected), "Test " & INTEGER'image(simTestID) & ": Must keep the state " & to_string(Expected) & "  Value=" & to_string(Value));
+				simAssertion((Value = Expected), "Test " & integer'image(simTestID) & ": Must keep the state " & to_string(Expected) & "  Value=" & to_string(Value));
 			end loop;
 
 			wait until rising_edge(Clock);
-			simAssertion(Value = (DIGITS - 1 downto 0 => x"0"), "Test " & INTEGER'image(simTestID) & ": Should be wrapped to 0000.");
+			simAssertion(Value = (DIGITS - 1 downto 0 => x"0"), "Test " & integer'image(simTestID) & ": Should be wrapped to 0000.");
 
 			simWaitUntilRisingEdge(Clock, 5);
 
 			wait until rising_edge(Clock);
-			simAssertion(Value = (DIGITS - 1 downto 0 => x"0"), "Test " & INTEGER'image(simTestID) & ": Should be resetted again.");
+			simAssertion(Value = (DIGITS - 1 downto 0 => x"0"), "Test " & integer'image(simTestID) & ": Should be resetted again.");
 
 			-- This process is finished
 			simDeactivateProcess(simProcessID);

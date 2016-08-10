@@ -52,3 +52,5 @@ CloseEnvironment() {
 	# echo 1>&2 -e "${YELLOW}Unloading Xilinx ISE environment...${NOCOLOR}"
 	return 0
 }
+
+

@@ -41,70 +41,70 @@ use			PoC.net.all;
 
 entity ipv4_Wrapper is
 	generic (
-		DEBUG														: BOOLEAN												:= FALSE;
+		DEBUG														: boolean												:= FALSE;
 		PACKET_TYPES										: T_NET_IPV4_PROTOCOL_VECTOR		:= (0 => x"00")
 	);
 	port (
-		Clock														: in	STD_LOGIC;
-		Reset														: in	STD_LOGIC;
+		Clock														: in	std_logic;
+		Reset														: in	std_logic;
 		-- to MAC layer
-		MAC_TX_Valid										: out	STD_LOGIC;
+		MAC_TX_Valid										: out	std_logic;
 		MAC_TX_Data											: out	T_SLV_8;
-		MAC_TX_SOF											: out	STD_LOGIC;
-		MAC_TX_EOF											: out	STD_LOGIC;
-		MAC_TX_Ack											: in	STD_LOGIC;
-		MAC_TX_Meta_rst									: in	STD_LOGIC;
-		MAC_TX_Meta_DestMACAddress_nxt	: in	STD_LOGIC;
+		MAC_TX_SOF											: out	std_logic;
+		MAC_TX_EOF											: out	std_logic;
+		MAC_TX_Ack											: in	std_logic;
+		MAC_TX_Meta_rst									: in	std_logic;
+		MAC_TX_Meta_DestMACAddress_nxt	: in	std_logic;
 		MAC_TX_Meta_DestMACAddress_Data	: out	T_SLV_8;
 		-- from MAC layer
-		MAC_RX_Valid										: in	STD_LOGIC;
+		MAC_RX_Valid										: in	std_logic;
 		MAC_RX_Data											: in	T_SLV_8;
-		MAC_RX_SOF											: in	STD_LOGIC;
-		MAC_RX_EOF											: in	STD_LOGIC;
-		MAC_RX_Ack											: out	STD_LOGIC;
-		MAC_RX_Meta_rst									: out	STD_LOGIC;
-		MAC_RX_Meta_SrcMACAddress_nxt		: out	STD_LOGIC;
+		MAC_RX_SOF											: in	std_logic;
+		MAC_RX_EOF											: in	std_logic;
+		MAC_RX_Ack											: out	std_logic;
+		MAC_RX_Meta_rst									: out	std_logic;
+		MAC_RX_Meta_SrcMACAddress_nxt		: out	std_logic;
 		MAC_RX_Meta_SrcMACAddress_Data	: in	T_SLV_8;
-		MAC_RX_Meta_DestMACAddress_nxt	: out	STD_LOGIC;
+		MAC_RX_Meta_DestMACAddress_nxt	: out	std_logic;
 		MAC_RX_Meta_DestMACAddress_Data	: in	T_SLV_8;
 		MAC_RX_Meta_EthType							: in	T_SLV_16;
 		-- to ARP
-		ARP_IPCache_Query								: out	STD_LOGIC;
-		ARP_IPCache_IPv4Address_rst			: in	STD_LOGIC;
-		ARP_IPCache_IPv4Address_nxt			: in	STD_LOGIC;
+		ARP_IPCache_Query								: out	std_logic;
+		ARP_IPCache_IPv4Address_rst			: in	std_logic;
+		ARP_IPCache_IPv4Address_nxt			: in	std_logic;
 		ARP_IPCache_IPv4Address_Data		: out	T_SLV_8;
 		-- from ARP
-		ARP_IPCache_Valid								: in	STD_LOGIC;
-		ARP_IPCache_MACAddress_rst			: out	STD_LOGIC;
-		ARP_IPCache_MACAddress_nxt			: out	STD_LOGIC;
+		ARP_IPCache_Valid								: in	std_logic;
+		ARP_IPCache_MACAddress_rst			: out	std_logic;
+		ARP_IPCache_MACAddress_nxt			: out	std_logic;
 		ARP_IPCache_MACAddress_Data			: in	T_SLV_8;
 		-- from upper layer
-		TX_Valid												: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
+		TX_Valid												: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
 		TX_Data													: in	T_SLVV_8(PACKET_TYPES'length - 1 downto 0);
-		TX_SOF													: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
-		TX_EOF													: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
-		TX_Ack													: out	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
-		TX_Meta_rst											: out	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
-		TX_Meta_SrcIPv4Address_nxt			: out	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
+		TX_SOF													: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
+		TX_EOF													: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
+		TX_Ack													: out	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
+		TX_Meta_rst											: out	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
+		TX_Meta_SrcIPv4Address_nxt			: out	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
 		TX_Meta_SrcIPv4Address_Data			: in	T_SLVV_8(PACKET_TYPES'length - 1 downto 0);
-		TX_Meta_DestIPv4Address_nxt			: out	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
+		TX_Meta_DestIPv4Address_nxt			: out	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
 		TX_Meta_DestIPv4Address_Data		: in	T_SLVV_8(PACKET_TYPES'length - 1 downto 0);
 		TX_Meta_Length									: in	T_SLVV_16(PACKET_TYPES'length - 1 downto 0);
 		-- to upper layer
-		RX_Valid												: out	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
+		RX_Valid												: out	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
 		RX_Data													: out	T_SLVV_8(PACKET_TYPES'length - 1 downto 0);
-		RX_SOF													: out	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
-		RX_EOF													: out	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
-		RX_Ack													: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
-		RX_Meta_rst											: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
-		RX_Meta_SrcMACAddress_nxt				: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
+		RX_SOF													: out	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
+		RX_EOF													: out	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
+		RX_Ack													: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
+		RX_Meta_rst											: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
+		RX_Meta_SrcMACAddress_nxt				: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
 		RX_Meta_SrcMACAddress_Data			: out	T_SLVV_8(PACKET_TYPES'length - 1 downto 0);
-		RX_Meta_DestMACAddress_nxt			: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
+		RX_Meta_DestMACAddress_nxt			: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
 		RX_Meta_DestMACAddress_Data			: out	T_SLVV_8(PACKET_TYPES'length - 1 downto 0);
 		RX_Meta_EthType									: out	T_SLVV_16(PACKET_TYPES'length - 1 downto 0);
-		RX_Meta_SrcIPv4Address_nxt			: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
+		RX_Meta_SrcIPv4Address_nxt			: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
 		RX_Meta_SrcIPv4Address_Data			: out	T_SLVV_8(PACKET_TYPES'length - 1 downto 0);
-		RX_Meta_DestIPv4Address_nxt			: in	STD_LOGIC_VECTOR(PACKET_TYPES'length - 1 downto 0);
+		RX_Meta_DestIPv4Address_nxt			: in	std_logic_vector(PACKET_TYPES'length - 1 downto 0);
 		RX_Meta_DestIPv4Address_Data		: out	T_SLVV_8(PACKET_TYPES'length - 1 downto 0);
 		RX_Meta_Length									: out	T_SLVV_16(PACKET_TYPES'length - 1 downto 0);
 		RX_Meta_Protocol								: out	T_SLVV_8(PACKET_TYPES'length - 1 downto 0)
@@ -113,12 +113,12 @@ end entity;
 
 
 architecture rtl of ipv4_Wrapper is
-	constant IPV4_SWITCH_PORTS								: POSITIVE				:= PACKET_TYPES'length;
+	constant IPV4_SWITCH_PORTS								: positive				:= PACKET_TYPES'length;
 
-	constant TXSTMMUX_META_STREAMID_SRCADR		: NATURAL					:= 0;
-	constant TXSTMMUX_META_STREAMID_DESTADR		: NATURAL					:= 1;
-	constant TXSTMMUX_META_STREAMID_LENGTH		: NATURAL					:= 2;
-	constant TXSTMMUX_META_STREAMID_PROTOCOL			: NATURAL					:= 3;
+	constant TXSTMMUX_META_STREAMID_SRCADR		: natural					:= 0;
+	constant TXSTMMUX_META_STREAMID_DESTADR		: natural					:= 1;
+	constant TXSTMMUX_META_STREAMID_LENGTH		: natural					:= 2;
+	constant TXSTMMUX_META_STREAMID_PROTOCOL			: natural					:= 3;
 
 	constant TXSTMMUX_META_BITS								: T_POSVEC				:= (
 		TXSTMMUX_META_STREAMID_SRCADR			=> 8,
@@ -127,40 +127,40 @@ architecture rtl of ipv4_Wrapper is
 		TXSTMMUX_META_STREAMID_PROTOCOL		=> 8
 	);
 
-	constant TXSTMMUX_META_RST_BIT						: NATURAL					:= 0;
-	constant TXSTMMUX_META_SRC_NXT_BIT				: NATURAL					:= 1;
-	constant TXSTMMUX_META_DEST_NXT_BIT				: NATURAL					:= 2;
+	constant TXSTMMUX_META_RST_BIT						: natural					:= 0;
+	constant TXSTMMUX_META_SRC_NXT_BIT				: natural					:= 1;
+	constant TXSTMMUX_META_DEST_NXT_BIT				: natural					:= 2;
 
-	constant TXSTMMUX_META_REV_BITS						: NATURAL					:= 3;
+	constant TXSTMMUX_META_REV_BITS						: natural					:= 3;
 
-	signal StmMux_In_Valid										: STD_LOGIC_VECTOR(IPV4_SWITCH_PORTS - 1 downto 0);
+	signal StmMux_In_Valid										: std_logic_vector(IPV4_SWITCH_PORTS - 1 downto 0);
 	signal StmMux_In_Data											: T_SLM(IPV4_SWITCH_PORTS - 1 downto 0, T_SLV_8'range)													:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal StmMux_In_Meta											: T_SLM(IPV4_SWITCH_PORTS - 1 downto 0, isum(TXSTMMUX_META_BITS) - 1 downto 0)	:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal StmMux_In_Meta_rev									: T_SLM(IPV4_SWITCH_PORTS - 1 downto 0, TXSTMMUX_META_REV_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
-	signal StmMux_In_SOF											: STD_LOGIC_VECTOR(IPV4_SWITCH_PORTS - 1 downto 0);
-	signal StmMux_In_EOF											: STD_LOGIC_VECTOR(IPV4_SWITCH_PORTS - 1 downto 0);
-	signal StmMux_In_Ack											: STD_LOGIC_VECTOR(IPV4_SWITCH_PORTS - 1 downto 0);
+	signal StmMux_In_SOF											: std_logic_vector(IPV4_SWITCH_PORTS - 1 downto 0);
+	signal StmMux_In_EOF											: std_logic_vector(IPV4_SWITCH_PORTS - 1 downto 0);
+	signal StmMux_In_Ack											: std_logic_vector(IPV4_SWITCH_PORTS - 1 downto 0);
 
-	signal TX_StmMux_Valid										: STD_LOGIC;
+	signal TX_StmMux_Valid										: std_logic;
 	signal TX_StmMux_Data											: T_SLV_8;
-	signal TX_StmMux_Meta											: STD_LOGIC_VECTOR(isum(TXSTMMUX_META_BITS) - 1 downto 0);
-	signal TX_StmMux_Meta_rev									: STD_LOGIC_VECTOR(TXSTMMUX_META_REV_BITS - 1 downto 0);
-	signal TX_StmMux_SOF											: STD_LOGIC;
-	signal TX_StmMux_EOF											: STD_LOGIC;
+	signal TX_StmMux_Meta											: std_logic_vector(isum(TXSTMMUX_META_BITS) - 1 downto 0);
+	signal TX_StmMux_Meta_rev									: std_logic_vector(TXSTMMUX_META_REV_BITS - 1 downto 0);
+	signal TX_StmMux_SOF											: std_logic;
+	signal TX_StmMux_EOF											: std_logic;
 	signal TX_StmMux_SrcIPv4Address_Data			: T_SLV_8;
 	signal TX_StmMux_DestIPv4Address_Data			: T_SLV_8;
 	signal TX_StmMux_Length										: T_SLV_16;
 	signal TX_StmMux_Protocol									: T_SLV_8;
 
-	signal IPv4_TX_Ack												: STD_LOGIC;
-	signal IPv4_TX_Meta_rst										: STD_LOGIC;
-	signal IPv4_TX_Meta_SrcIPv4Address_nxt		: STD_LOGIC;
-	signal IPv4_TX_Meta_DestIPv4Address_nxt		: STD_LOGIC;
+	signal IPv4_TX_Ack												: std_logic;
+	signal IPv4_TX_Meta_rst										: std_logic;
+	signal IPv4_TX_Meta_SrcIPv4Address_nxt		: std_logic;
+	signal IPv4_TX_Meta_DestIPv4Address_nxt		: std_logic;
 
-	signal IPv4_RX_Valid											: STD_LOGIC;
+	signal IPv4_RX_Valid											: std_logic;
 	signal IPv4_RX_Data												: T_SLV_8;
-	signal IPv4_RX_SOF												: STD_LOGIC;
-	signal IPv4_RX_EOF												: STD_LOGIC;
+	signal IPv4_RX_SOF												: std_logic;
+	signal IPv4_RX_EOF												: std_logic;
 
 	signal IPv4_RX_Meta_SrcMACAddress_Data		: T_SLV_8;
 	signal IPv4_RX_Meta_DestMACAddress_Data		: T_SLV_8;
@@ -170,21 +170,21 @@ architecture rtl of ipv4_Wrapper is
 	signal IPv4_RX_Meta_Length								: T_SLV_16;
 	signal IPv4_RX_Meta_Protocol							: T_SLV_8;
 
-	constant STMDEMUX_META_RST_BIT						: NATURAL					:= 0;
-	constant STMDEMUX_META_MACSRC_NXT_BIT			: NATURAL					:= 1;
-	constant STMDEMUX_META_MACDEST_NXT_BIT		: NATURAL					:= 2;
-	constant STMDEMUX_META_IPV4SRC_NXT_BIT		: NATURAL					:= 3;
-	constant STMDEMUX_META_IPV4DEST_NXT_BIT		: NATURAL					:= 4;
+	constant STMDEMUX_META_RST_BIT						: natural					:= 0;
+	constant STMDEMUX_META_MACSRC_NXT_BIT			: natural					:= 1;
+	constant STMDEMUX_META_MACDEST_NXT_BIT		: natural					:= 2;
+	constant STMDEMUX_META_IPV4SRC_NXT_BIT		: natural					:= 3;
+	constant STMDEMUX_META_IPV4DEST_NXT_BIT		: natural					:= 4;
 
-	constant STMDEMUX_META_STREAMID_SRCMAC		: NATURAL					:= 0;
-	constant STMDEMUX_META_STREAMID_DESTMAC		: NATURAL					:= 1;
-	constant STMDEMUX_META_STREAMID_ETHTYPE		: NATURAL					:= 2;
-	constant STMDEMUX_META_STREAMID_SRCIP			: NATURAL					:= 3;
-	constant STMDEMUX_META_STREAMID_DESTIP		: NATURAL					:= 4;
-	constant STMDEMUX_META_STREAMID_LENGTH		: NATURAL					:= 5;
-	constant STMDEMUX_META_STREAMID_PROTO			: NATURAL					:= 6;
+	constant STMDEMUX_META_STREAMID_SRCMAC		: natural					:= 0;
+	constant STMDEMUX_META_STREAMID_DESTMAC		: natural					:= 1;
+	constant STMDEMUX_META_STREAMID_ETHTYPE		: natural					:= 2;
+	constant STMDEMUX_META_STREAMID_SRCIP			: natural					:= 3;
+	constant STMDEMUX_META_STREAMID_DESTIP		: natural					:= 4;
+	constant STMDEMUX_META_STREAMID_LENGTH		: natural					:= 5;
+	constant STMDEMUX_META_STREAMID_PROTO			: natural					:= 6;
 
-	constant STMDEMUX_DATA_BITS								: NATURAL					:= 8;							--
+	constant STMDEMUX_DATA_BITS								: natural					:= 8;							--
 	constant STMDEMUX_META_BITS								: T_POSVEC				:= (
 		STMDEMUX_META_STREAMID_SRCMAC		=> 8,
 		STMDEMUX_META_STREAMID_DESTMAC 	=> 8,
@@ -194,31 +194,31 @@ architecture rtl of ipv4_Wrapper is
 		STMDEMUX_META_STREAMID_LENGTH		=> 16,
 		STMDEMUX_META_STREAMID_PROTO			=> 8
 	);
-	constant STMDEMUX_META_REV_BITS							: NATURAL					:= 5;							-- sum over all control bits (rst, nxt, nxt, nxt, nxt)
+	constant STMDEMUX_META_REV_BITS							: natural					:= 5;							-- sum over all control bits (rst, nxt, nxt, nxt, nxt)
 
-	signal RX_StmDeMux_Ack												: STD_LOGIC;
-	signal RX_StmDeMux_Meta_rst									: STD_LOGIC;
-	signal RX_StmDeMux_Meta_SrcMACAddress_nxt		: STD_LOGIC;
-	signal RX_StmDeMux_Meta_DestMACAddress_nxt		: STD_LOGIC;
-	signal RX_StmDeMux_Meta_SrcIPv4Address_nxt		: STD_LOGIC;
-	signal RX_StmDeMux_Meta_DestIPv4Address_nxt	: STD_LOGIC;
+	signal RX_StmDeMux_Ack												: std_logic;
+	signal RX_StmDeMux_Meta_rst									: std_logic;
+	signal RX_StmDeMux_Meta_SrcMACAddress_nxt		: std_logic;
+	signal RX_StmDeMux_Meta_DestMACAddress_nxt		: std_logic;
+	signal RX_StmDeMux_Meta_SrcIPv4Address_nxt		: std_logic;
+	signal RX_StmDeMux_Meta_DestIPv4Address_nxt	: std_logic;
 
-	signal RX_StmDeMux_MetaIn										: STD_LOGIC_VECTOR(isum(STMDEMUX_META_BITS) - 1 downto 0);
-	signal RX_StmDeMux_MetaIn_rev								: STD_LOGIC_VECTOR(STMDEMUX_META_REV_BITS - 1 downto 0);
+	signal RX_StmDeMux_MetaIn										: std_logic_vector(isum(STMDEMUX_META_BITS) - 1 downto 0);
+	signal RX_StmDeMux_MetaIn_rev								: std_logic_vector(STMDEMUX_META_REV_BITS - 1 downto 0);
 	signal RX_StmDeMux_Data											: T_SLM(IPV4_SWITCH_PORTS - 1 downto 0, STMDEMUX_DATA_BITS - 1 downto 0)				:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal RX_StmDeMux_MetaOut										: T_SLM(IPV4_SWITCH_PORTS - 1 downto 0, isum(STMDEMUX_META_BITS) - 1 downto 0)	:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 	signal RX_StmDeMux_MetaOut_rev								: T_SLM(IPV4_SWITCH_PORTS - 1 downto 0, STMDEMUX_META_REV_BITS - 1 downto 0)		:= (others => (others => 'Z'));		-- necessary default assignment 'Z' to get correct simulation results (iSIM, vSIM, ghdl/gtkwave)
 
-	signal StmDeMux_Control											: STD_LOGIC_VECTOR(IPV4_SWITCH_PORTS - 1 downto 0);
+	signal StmDeMux_Control											: std_logic_vector(IPV4_SWITCH_PORTS - 1 downto 0);
 
 begin
 -- =============================================================================
 -- TX Path
 -- =============================================================================
 	genTXStmBuf : for i in 0 to IPV4_SWITCH_PORTS - 1 generate
-		constant TXSTMBUF_META_STREAMID_SRCADR		: NATURAL					:= 0;
-		constant TXSTMBUF_META_STREAMID_DESTADR		: NATURAL					:= 1;
-		constant TXSTMBUF_META_STREAMID_LENGTH		: NATURAL					:= 2;
+		constant TXSTMBUF_META_STREAMID_SRCADR		: natural					:= 0;
+		constant TXSTMBUF_META_STREAMID_DESTADR		: natural					:= 1;
+		constant TXSTMBUF_META_STREAMID_LENGTH		: natural					:= 2;
 
 		constant TXSTMBUF_META_BITS								: T_POSVEC				:= (
 			TXSTMBUF_META_STREAMID_SRCADR				=> 8,
@@ -234,19 +234,19 @@ begin
 
 		signal StmBuf_DataOut											: T_SLV_8;
 --		signal Meta_rst														: STD_LOGIC;
-		signal StmBuf_MetaIn_nxt									: STD_LOGIC_VECTOR(TXSTMBUF_META_BITS'length - 1 downto 0);
-		signal StmBuf_MetaIn_Data									: STD_LOGIC_VECTOR(isum(TXSTMBUF_META_BITS) - 1 downto 0);
+		signal StmBuf_MetaIn_nxt									: std_logic_vector(TXSTMBUF_META_BITS'length - 1 downto 0);
+		signal StmBuf_MetaIn_Data									: std_logic_vector(isum(TXSTMBUF_META_BITS) - 1 downto 0);
 
-		signal StmBuf_Meta_rst										: STD_LOGIC;
-		signal StmBuf_MetaOut_nxt									: STD_LOGIC_VECTOR(TXSTMBUF_META_BITS'length - 1 downto 0);
-		signal StmBuf_MetaOut_Data								: STD_LOGIC_VECTOR(isum(TXSTMBUF_META_BITS) - 1 downto 0);
+		signal StmBuf_Meta_rst										: std_logic;
+		signal StmBuf_MetaOut_nxt									: std_logic_vector(TXSTMBUF_META_BITS'length - 1 downto 0);
+		signal StmBuf_MetaOut_Data								: std_logic_vector(isum(TXSTMBUF_META_BITS) - 1 downto 0);
 
-		signal StmBuf_Meta_SrcIPv4Address_Data		: STD_LOGIC_VECTOR(TX_StmMux_SrcIPv4Address_Data'range);
-		signal StmBuf_Meta_DestIPv4Address_Data		: STD_LOGIC_VECTOR(TX_StmMux_DestIPv4Address_Data'range);
-		signal StmBuf_Meta_Length									: STD_LOGIC_VECTOR(TX_StmMux_Length'range);
-		signal StmBuf_Meta_Protocol								: STD_LOGIC_VECTOR(TX_StmMux_Protocol'range);
+		signal StmBuf_Meta_SrcIPv4Address_Data		: std_logic_vector(TX_StmMux_SrcIPv4Address_Data'range);
+		signal StmBuf_Meta_DestIPv4Address_Data		: std_logic_vector(TX_StmMux_DestIPv4Address_Data'range);
+		signal StmBuf_Meta_Length									: std_logic_vector(TX_StmMux_Length'range);
+		signal StmBuf_Meta_Protocol								: std_logic_vector(TX_StmMux_Protocol'range);
 
-		signal StmMux_MetaIn_Data									: STD_LOGIC_VECTOR(isum(TXSTMMUX_META_BITS) - 1 downto 0);
+		signal StmMux_MetaIn_Data									: std_logic_vector(isum(TXSTMMUX_META_BITS) - 1 downto 0);
 
 	begin
 		StmBuf_MetaIn_Data(high(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_SRCADR)	downto low(TXSTMBUF_META_BITS, TXSTMBUF_META_STREAMID_SRCADR))	<= TX_Meta_SrcIPv4Address_Data(i);

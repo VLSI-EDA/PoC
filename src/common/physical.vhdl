@@ -65,21 +65,21 @@ use			PoC.strings.all;
 
 package physical is
 
-	type FREQ is range 0 to INTEGER'high units
+	type FREQ is range 0 to integer'high units
 		Hz;
 		kHz = 1000 Hz;
 		MHz = 1000 kHz;
 		GHz = 1000 MHz;
 	end units;
 
-	type BAUD is range 0 to INTEGER'high units
+	type BAUD is range 0 to integer'high units
 		Bd;
 		kBd = 1000 Bd;
 		MBd = 1000 kBd;
 		GBd = 1000 MBd;
 	end units;
 
-	type MEMORY is range 0 to INTEGER'high units
+	type MEMORY is range 0 to integer'high units
 		Byte;
 		KiB = 1024 Byte;
 		MiB = 1024 KiB;
@@ -87,19 +87,19 @@ package physical is
 	end units;
 
 	-- vector data types
-	type		T_TIMEVEC						is array(NATURAL range <>) of TIME;
-	type		T_FREQVEC						is array(NATURAL range <>) of FREQ;
-	type		T_BAUDVEC						is array(NATURAL range <>) of BAUD;
-	type		T_MEMVEC						is array(NATURAL range <>) of MEMORY;
+	type		T_TIMEVEC						is array(natural range <>) of time;
+	type		T_FREQVEC						is array(natural range <>) of FREQ;
+	type		T_BAUDVEC						is array(natural range <>) of BAUD;
+	type		T_MEMVEC						is array(natural range <>) of MEMORY;
 
 	-- if true: TimingToCycles reports difference between expected and actual result
-	constant C_PHYSICAL_REPORT_TIMING_DEVIATION		: BOOLEAN		:= TRUE;
+	constant C_PHYSICAL_REPORT_TIMING_DEVIATION		: boolean		:= TRUE;
 
 	-- conversion functions
-	function to_time(f : FREQ)	return TIME;
-	function to_freq(p : TIME)	return FREQ;
+	function to_time(f : FREQ)	return time;
+	function to_freq(p : time)	return FREQ;
 	function to_freq(br : BAUD)	return FREQ;
-	function to_baud(str : STRING)	return BAUD;
+	function to_baud(str : string)	return BAUD;
 
 	-- inter-type arithmetic
 	function "/"(x : real; t : time) return FREQ;
@@ -108,69 +108,69 @@ package physical is
 	function "*"(f : FREQ; t : time) return real;
 
 	-- if-then-else
-	function ite(cond : BOOLEAN; value1 : TIME;	value2 : TIME)			return TIME;
-	function ite(cond : BOOLEAN; value1 : FREQ;	value2 : FREQ)			return FREQ;
-	function ite(cond : BOOLEAN; value1 : BAUD;	value2 : BAUD)			return BAUD;
-	function ite(cond : BOOLEAN; value1 : MEMORY;	value2 : MEMORY)	return MEMORY;
+	function ite(cond : boolean; value1 : time;	value2 : time)			return time;
+	function ite(cond : boolean; value1 : FREQ;	value2 : FREQ)			return FREQ;
+	function ite(cond : boolean; value1 : BAUD;	value2 : BAUD)			return BAUD;
+	function ite(cond : boolean; value1 : MEMORY;	value2 : MEMORY)	return MEMORY;
 
 	-- min/ max for 2 arguments
-	function tmin(arg1 : TIME; arg2 : TIME) return TIME;						-- Calculates: min(arg1, arg2) for times
+	function tmin(arg1 : time; arg2 : time) return time;						-- Calculates: min(arg1, arg2) for times
 	function fmin(arg1 : FREQ; arg2 : FREQ) return FREQ;						-- Calculates: min(arg1, arg2) for frequencies
 	function bmin(arg1 : BAUD; arg2 : BAUD) return BAUD;						-- Calculates: min(arg1, arg2) for symbols per second
 	function mmin(arg1 : MEMORY; arg2 : MEMORY) return MEMORY;			-- Calculates: min(arg1, arg2) for memory
 
-	function tmax(arg1 : TIME; arg2 : TIME) return TIME;						-- Calculates: max(arg1, arg2) for times
+	function tmax(arg1 : time; arg2 : time) return time;						-- Calculates: max(arg1, arg2) for times
 	function fmax(arg1 : FREQ; arg2 : FREQ) return FREQ;						-- Calculates: max(arg1, arg2) for frequencies
 	function bmax(arg1 : BAUD; arg2 : BAUD) return BAUD;						-- Calculates: max(arg1, arg2) for symbols per second
 	function mmax(arg1 : MEMORY; arg2 : MEMORY) return MEMORY;			-- Calculates: max(arg1, arg2) for memory
 
 	-- min/max/sum as vector aggregation
-	function tmin(vec : T_TIMEVEC)	return TIME;										-- Calculates: min(vec) for a time vector
+	function tmin(vec : T_TIMEVEC)	return time;										-- Calculates: min(vec) for a time vector
 	function fmin(vec : T_FREQVEC)	return FREQ;										-- Calculates: min(vec) for a frequency vector
 	function bmin(vec : T_BAUDVEC)	return BAUD;										-- Calculates: min(vec) for a baud vector
 	function mmin(vec : T_MEMVEC)	return MEMORY;									-- Calculates: min(vec) for a memory vector
 
-	function tmax(vec : T_TIMEVEC)	return TIME;										-- Calculates: max(vec) for a time vector
+	function tmax(vec : T_TIMEVEC)	return time;										-- Calculates: max(vec) for a time vector
 	function fmax(vec : T_FREQVEC)	return FREQ;										-- Calculates: max(vec) for a frequency vector
 	function bmax(vec : T_BAUDVEC)	return BAUD;										-- Calculates: max(vec) for a baud vector
 	function mmax(vec : T_MEMVEC)	return MEMORY;									-- Calculates: max(vec) for a memory vector
 
-	function tsum(vec : T_TIMEVEC)	return TIME;										-- Calculates: sum(vec) for a time vector
+	function tsum(vec : T_TIMEVEC)	return time;										-- Calculates: sum(vec) for a time vector
 	function fsum(vec : T_FREQVEC)	return FREQ;										-- Calculates: sum(vec) for a frequency vector
 	function bsum(vec : T_BAUDVEC)	return BAUD;										-- Calculates: sum(vec) for a baud vector
 	function msum(vec : T_MEMVEC)	return MEMORY;									-- Calculates: sum(vec) for a memory vector
 
 	-- convert standard types (NATURAL, REAL) to time (TIME)
-	function fs2Time(t_fs : INTEGER)		return TIME;
-	function ps2Time(t_ps : INTEGER)		return TIME;
-	function ns2Time(t_ns : INTEGER)		return TIME;
-	function us2Time(t_us : INTEGER)		return TIME;
-	function ms2Time(t_ms : INTEGER)		return TIME;
-	function sec2Time(t_sec : INTEGER)	return TIME;
+	function fs2Time(t_fs : integer)		return time;
+	function ps2Time(t_ps : integer)		return time;
+	function ns2Time(t_ns : integer)		return time;
+	function us2Time(t_us : integer)		return time;
+	function ms2Time(t_ms : integer)		return time;
+	function sec2Time(t_sec : integer)	return time;
 
-	function fs2Time(t_fs : REAL)				return TIME;
-	function ps2Time(t_ps : REAL)				return TIME;
-	function ns2Time(t_ns : REAL)				return TIME;
-	function us2Time(t_us : REAL)				return TIME;
-	function ms2Time(t_ms : REAL)				return TIME;
-	function sec2Time(t_sec : REAL)			return TIME;
+	function fs2Time(t_fs : REAL)				return time;
+	function ps2Time(t_ps : REAL)				return time;
+	function ns2Time(t_ns : REAL)				return time;
+	function us2Time(t_us : REAL)				return time;
+	function ms2Time(t_ms : REAL)				return time;
+	function sec2Time(t_sec : REAL)			return time;
 
 	-- convert standard types (NATURAL, REAL) to period (TIME)
-	function Hz2Time(f_Hz : NATURAL)		return TIME;
-	function kHz2Time(f_kHz : NATURAL)	return TIME;
-	function MHz2Time(f_MHz : NATURAL)	return TIME;
-	function GHz2Time(f_GHz : NATURAL)	return TIME;
+	function Hz2Time(f_Hz : natural)		return time;
+	function kHz2Time(f_kHz : natural)	return time;
+	function MHz2Time(f_MHz : natural)	return time;
+	function GHz2Time(f_GHz : natural)	return time;
 
-	function Hz2Time(f_Hz : REAL)				return TIME;
-	function kHz2Time(f_kHz : REAL) 		return TIME;
-	function MHz2Time(f_MHz : REAL) 		return TIME;
-	function GHz2Time(f_GHz : REAL) 		return TIME;
+	function Hz2Time(f_Hz : REAL)				return time;
+	function kHz2Time(f_kHz : REAL) 		return time;
+	function MHz2Time(f_MHz : REAL) 		return time;
+	function GHz2Time(f_GHz : REAL) 		return time;
 
 	-- convert standard types (NATURAL, REAL) to frequency (FREQ)
-	function Hz2Freq(f_Hz : NATURAL)		return FREQ;
-	function kHz2Freq(f_kHz : NATURAL)	return FREQ;
-	function MHz2Freq(f_MHz : NATURAL)	return FREQ;
-	function GHz2Freq(f_GHz : NATURAL)	return FREQ;
+	function Hz2Freq(f_Hz : natural)		return FREQ;
+	function kHz2Freq(f_kHz : natural)	return FREQ;
+	function MHz2Freq(f_MHz : natural)	return FREQ;
+	function GHz2Freq(f_GHz : natural)	return FREQ;
 
 	function Hz2Freq(f_Hz : REAL)				return FREQ;
 	function kHz2Freq(f_kHz : REAL)			return FREQ;
@@ -178,36 +178,50 @@ package physical is
 	function GHz2Freq(f_GHz : REAL)			return FREQ;
 
 	-- convert physical types to standard type (REAL)
-	function to_real(t : TIME;			scale : TIME)		return REAL;
+	function to_real(t : time;			scale : time)		return REAL;
 	function to_real(f : FREQ;			scale : FREQ)		return REAL;
 	function to_real(br : BAUD;			scale : BAUD)		return REAL;
 	function to_real(mem : MEMORY;	scale : MEMORY)	return REAL;
 
 	-- convert physical types to standard type (INTEGER)
-	function to_int(t : TIME;			scale : TIME;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return INTEGER;
-	function to_int(f : FREQ;			scale : FREQ;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return INTEGER;
-	function to_int(br : BAUD;		scale : BAUD;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return INTEGER;
-	function to_int(mem : MEMORY;	scale : MEMORY;	RoundingStyle : T_ROUNDING_STYLE := ROUND_UP)					return INTEGER;
+	function to_int(t : time;			scale : time;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return integer;
+	function to_int(f : FREQ;			scale : FREQ;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return integer;
+	function to_int(br : BAUD;		scale : BAUD;		RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST)	return integer;
+	function to_int(mem : MEMORY;	scale : MEMORY;	RoundingStyle : T_ROUNDING_STYLE := ROUND_UP)					return integer;
 
 	-- calculate needed counter cycles to achieve a given 1. timing/delay and 2. frequency/period
-	function TimingToCycles(Timing : TIME; Clock_Period			: TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL;
-	function TimingToCycles(Timing : TIME; Clock_Frequency	: FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL;
+	function TimingToCycles(Timing : time; Clock_Period			: time; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return natural;
+	function TimingToCycles(Timing : time; Clock_Frequency	: FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return natural;
 
-	function CyclesToDelay(Cycles : NATURAL; Clock_Period			: TIME) return TIME;
-	function CyclesToDelay(Cycles : NATURAL; Clock_Frequency	: FREQ) return TIME;
+	function CyclesToDelay(Cycles : natural; Clock_Period			: time) return time;
+	function CyclesToDelay(Cycles : natural; Clock_Frequency	: FREQ) return time;
 
 	-- convert and format physical types to STRING
-	function to_string(t : TIME; precision : NATURAL)			return STRING;
-	function to_string(f : FREQ; precision : NATURAL)			return STRING;
-	function to_string(br : BAUD; precision : NATURAL)		return STRING;
-	function to_string(mem : MEMORY; precision : NATURAL)	return STRING;
+	function to_string(t : time; precision : natural)			return string;
+	function to_string(f : FREQ; precision : natural)			return string;
+	function to_string(br : BAUD; precision : natural)		return string;
+	function to_string(mem : MEMORY; precision : natural)	return string;
 end package;
 
 
 package body physical is
 
-	-- iSim 14.7 does not support fs in simulation (fs values are converted to 0 ps)
-	function MinimalTimeResolutionInSimulation return TIME is
+	-- WORKAROUND: for simulators with a "Minimal Time Resolution" > 1 fs
+	--	Version:	all
+	--	Vendors:	all
+	--	Issue:
+	--		Some simulators use a lower minimal time resolution (MTR) than the VHDL
+	--		standard (LRM) defines (1 fs). Usually, the MTR is set to 1 ps or 1 ns.
+	--		Most simulators allow the user to specify a higher MTR -> check the
+	--		simulator documentation.
+	--	Solution:
+	--		The currently set MTR can be calculated in VHDL. Using the correct MTR
+	--		can prevent cleared intermediate values and division by zero errors.
+	--	Examples:
+	--		Mentor Graphics QuestaSim/ModelSim (vSim): default MTR = ? ??
+	--		Xilinx ISE Simulator (iSim):               default MTR = 1 ps
+	--		Xilinx Vivado Simulator (xSim):            default MTR = 1 ps
+	function MinimalTimeResolutionInSimulation return time is
 	begin
 		if		(1 fs > 0 sec) then	return 1 fs;
 		elsif	(1 ps > 0 sec) then	return 1 ps;
@@ -220,12 +234,19 @@ package body physical is
 
 	-- real division for physical types
 	-- ===========================================================================
-	function div(a : TIME; b : TIME) return REAL is
-		constant MTRIS	: TIME		:= MinimalTimeResolutionInSimulation;
+	function div(a : time; b : time) return REAL is
+		constant MTRIS	: time		:= MinimalTimeResolutionInSimulation;
 		variable a_real : real;
 		variable b_real : real;
 	begin
-		-- Quartus-II work-around
+		-- WORKAROUND: for Altera Quartus
+		--	Version:	all
+		--	Issue:
+		--		Results of TIME arithmetic must be in 32-bit integer range, because
+		--		the internally used 64-bit integer for type TIME can not be
+		--		represented in VHDL.
+		--	Solution:
+		--		Pre- and post-scale all values to stay in the integer range.
 	  if    a < 1 us  then
 			a_real  := real(a / MTRIS);
 		elsif a < 1 ms  then
@@ -266,8 +287,8 @@ package body physical is
 
 	-- conversion functions
 	-- ===========================================================================
-	function to_time(f : FREQ) return TIME is
-		variable res : TIME;
+	function to_time(f : FREQ) return time is
+		variable res : time;
 	begin
 		res := div(1000 MHz, f) * 1 ns;
 		if (POC_VERBOSE = TRUE) then
@@ -276,7 +297,7 @@ package body physical is
 		return res;
 	end function;
 
-	function to_freq(p : TIME) return FREQ is
+	function to_freq(p : time) return FREQ is
 		variable res : FREQ;
 	begin
 		if (p <= 1 sec) then res := div(1 sec, p) * 1  Hz;
@@ -298,12 +319,12 @@ package body physical is
 		return res;
 	end function;
 
-	function to_baud(str : STRING) return BAUD is
-		variable pos		: INTEGER;
-		variable int		: NATURAL;
-		variable base		: POSITIVE;
-		variable frac		: NATURAL;
-		variable digits	: NATURAL;
+	function to_baud(str : string) return BAUD is
+		variable pos		: integer;
+		variable int		: natural;
+		variable base		: positive;
+		variable frac		: natural;
+		variable digits	: natural;
 	begin
 		pos			:= str'low;
 		int			:= 0;
@@ -381,7 +402,7 @@ package body physical is
 
 	-- if-then-else
 	-- ===========================================================================
-	function ite(cond : BOOLEAN; value1 : TIME;	value2 : TIME) return TIME is
+	function ite(cond : boolean; value1 : time;	value2 : time) return time is
 	begin
 		if cond then
 			return value1;
@@ -390,7 +411,7 @@ package body physical is
 		end if;
 	end function;
 
-	function ite(cond : BOOLEAN; value1 : FREQ;	value2 : FREQ) return FREQ is
+	function ite(cond : boolean; value1 : FREQ;	value2 : FREQ) return FREQ is
 	begin
 		if cond then
 			return value1;
@@ -399,7 +420,7 @@ package body physical is
 		end if;
 	end function;
 
-	function ite(cond : BOOLEAN; value1 : BAUD;	value2 : BAUD) return BAUD is
+	function ite(cond : boolean; value1 : BAUD;	value2 : BAUD) return BAUD is
 	begin
 		if cond then
 			return value1;
@@ -408,7 +429,7 @@ package body physical is
 		end if;
 	end function;
 
-	function ite(cond : BOOLEAN; value1 : MEMORY;	value2 : MEMORY) return MEMORY is
+	function ite(cond : boolean; value1 : MEMORY;	value2 : MEMORY) return MEMORY is
 	begin
 		if cond then
 			return value1;
@@ -420,7 +441,7 @@ package body physical is
 	-- min/ max for 2 arguments
 	-- ===========================================================================
 	-- Calculates: min(arg1, arg2) for times
-	function tmin(arg1 : TIME; arg2 : TIME) return TIME is
+	function tmin(arg1 : time; arg2 : time) return time is
 	begin
 		if (arg1 < arg2) then return arg1; end if;
 		return arg2;
@@ -448,7 +469,7 @@ package body physical is
 	end function;
 
 	-- Calculates: max(arg1, arg2) for times
-	function tmax(arg1 : TIME; arg2 : TIME) return TIME is
+	function tmax(arg1 : time; arg2 : time) return time is
 	begin
 		if (arg1 > arg2) then return arg1; end if;
 		return arg2;
@@ -478,8 +499,8 @@ package body physical is
 	-- min/max/sum as vector aggregation
 	-- ===========================================================================
 	-- Calculates: min(vec) for a time vector
-	function tmin(vec : T_TIMEVEC)	return TIME is
-		variable  res : TIME := TIME'high;
+	function tmin(vec : T_TIMEVEC)	return time is
+		variable  res : time := time'high;
 	begin
 		for i in vec'range loop
 			if (vec(i) < res) then
@@ -526,8 +547,8 @@ package body physical is
 	end;
 
 	-- Calculates: max(vec) for a time vector
-	function tmax(vec : T_TIMEVEC)	return TIME is
-		variable  res : TIME := TIME'low;
+	function tmax(vec : T_TIMEVEC)	return time is
+		variable  res : time := time'low;
 	begin
 		for i in vec'range loop
 			if (vec(i) > res) then
@@ -574,8 +595,8 @@ package body physical is
 	end;
 
 	-- Calculates: sum(vec) for a time vector
-	function tsum(vec : T_TIMEVEC)	return TIME is
-		variable  res : TIME := 0 fs;
+	function tsum(vec : T_TIMEVEC)	return time is
+		variable  res : time := 0 fs;
 	begin
 		for i in vec'range loop
 			res	:= res + vec(i);
@@ -615,127 +636,127 @@ package body physical is
 
 	-- convert standard types (NATURAL, REAL) to time (TIME)
 	-- ===========================================================================
-	function fs2Time(t_fs : INTEGER) return TIME is
+	function fs2Time(t_fs : integer) return time is
 	begin
 		return t_fs * 1 fs;
 	end function;
 
-	function ps2Time(t_ps : INTEGER) return TIME is
+	function ps2Time(t_ps : integer) return time is
 	begin
 		return t_ps * 1 ps;
 	end function;
 
-	function ns2Time(t_ns : INTEGER) return TIME is
+	function ns2Time(t_ns : integer) return time is
 	begin
 		return t_ns * 1 ns;
 	end function;
 
-	function us2Time(t_us : INTEGER) return TIME is
+	function us2Time(t_us : integer) return time is
 	begin
 		return t_us * 1 us;
 	end function;
 
-	function ms2Time(t_ms : INTEGER) return TIME is
+	function ms2Time(t_ms : integer) return time is
 	begin
 		return t_ms * 1 ms;
 	end function;
 
-	function sec2Time(t_sec : INTEGER) return TIME is
+	function sec2Time(t_sec : integer) return time is
 	begin
 		return t_sec * 1 sec;
 	end function;
 
-	function fs2Time(t_fs : REAL) return TIME is
+	function fs2Time(t_fs : REAL) return time is
 	begin
 		return t_fs * 1 fs;
 	end function;
 
-	function ps2Time(t_ps : REAL) return TIME is
+	function ps2Time(t_ps : REAL) return time is
 	begin
 		return t_ps * 1 ps;
 	end function;
 
-	function ns2Time(t_ns : REAL) return TIME is
+	function ns2Time(t_ns : REAL) return time is
 	begin
 		return t_ns * 1 ns;
 	end function;
 
-	function us2Time(t_us : REAL) return TIME is
+	function us2Time(t_us : REAL) return time is
 	begin
 		return t_us * 1 us;
 	end function;
 
-	function ms2Time(t_ms : REAL) return TIME is
+	function ms2Time(t_ms : REAL) return time is
 	begin
 		return t_ms * 1 ms;
 	end function;
 
-	function sec2Time(t_sec : REAL) return TIME is
+	function sec2Time(t_sec : REAL) return time is
 	begin
 		return t_sec * 1 sec;
 	end function;
 
 	-- convert standard types (NATURAL, REAL) to period (TIME)
 	-- ===========================================================================
-	function Hz2Time(f_Hz : NATURAL) return TIME is
+	function Hz2Time(f_Hz : natural) return time is
 	begin
 		return 1 sec / f_Hz;
 	end function;
 
-	function kHz2Time(f_kHz : NATURAL) return TIME is
+	function kHz2Time(f_kHz : natural) return time is
 	begin
 		return 1 ms / f_kHz;
 	end function;
 
-	function MHz2Time(f_MHz : NATURAL) return TIME
+	function MHz2Time(f_MHz : natural) return time
 	 is
 	begin
 		return 1 us / f_MHz;
 	end function;
 
-	function GHz2Time(f_GHz : NATURAL) return TIME is
+	function GHz2Time(f_GHz : natural) return time is
 	begin
 		return 1 ns / f_GHz;
 	end function;
 
-	function Hz2Time(f_Hz : REAL) return TIME is
+	function Hz2Time(f_Hz : REAL) return time is
 	begin
 		return 1 sec / f_Hz;
 	end function;
 
-	function kHz2Time(f_kHz : REAL) return TIME is
+	function kHz2Time(f_kHz : REAL) return time is
 	begin
 		return 1 ms / f_kHz;
 	end function;
 
-	function MHz2Time(f_MHz : REAL) return TIME is
+	function MHz2Time(f_MHz : REAL) return time is
 	begin
 		return 1 us / f_MHz;
 	end function;
 
-	function GHz2Time(f_GHz : REAL) return TIME is
+	function GHz2Time(f_GHz : REAL) return time is
 	begin
 		return 1 ns / f_GHz;
 	end function;
 
 	-- convert standard types (NATURAL, REAL) to frequency (FREQ)
 	-- ===========================================================================
-	function Hz2Freq(f_Hz : NATURAL) return FREQ is
+	function Hz2Freq(f_Hz : natural) return FREQ is
 	begin
 		return f_Hz * 1 Hz;
 	end function;
 
-	function kHz2Freq(f_kHz : NATURAL) return FREQ is
+	function kHz2Freq(f_kHz : natural) return FREQ is
 	begin
 		return f_kHz * 1 kHz;
 	end function;
 
-	function MHz2Freq(f_MHz : NATURAL) return FREQ is
+	function MHz2Freq(f_MHz : natural) return FREQ is
 	begin
 		return f_MHz * 1 MHz;
 	end function;
 
-	function GHz2Freq(f_GHz : NATURAL) return FREQ is
+	function GHz2Freq(f_GHz : natural) return FREQ is
 	begin
 		return f_GHz * 1 GHz;
 	end function;
@@ -762,7 +783,7 @@ package body physical is
 
 	-- convert physical types to standard type (REAL)
 	-- ===========================================================================
-	function to_real(t : TIME; scale : TIME) return REAL is
+	function to_real(t : time; scale : time) return REAL is
 	begin
 		if		(scale = 1	fs) then	return div(t, 1	 fs);
 		elsif	(scale = 1	ps) then	return div(t, 1	 ps);
@@ -807,7 +828,7 @@ package body physical is
 
 	-- convert physical types to standard type (INTEGER)
 	-- ===========================================================================
-	function to_int(t : TIME; scale : TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return INTEGER is
+	function to_int(t : time; scale : time; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return integer is
 	begin
 		case RoundingStyle is
 			when ROUND_UP =>					return integer(ceil(to_real(t, scale)));
@@ -818,7 +839,7 @@ package body physical is
 		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
 	end;
 
-	function to_int(f : FREQ; scale : FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return INTEGER is
+	function to_int(f : FREQ; scale : FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return integer is
 	begin
 		case RoundingStyle is
 			when ROUND_UP =>					return integer(ceil(to_real(f, scale)));
@@ -829,7 +850,7 @@ package body physical is
 		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
 	end;
 
-	function to_int(br : BAUD; scale : BAUD; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return INTEGER is
+	function to_int(br : BAUD; scale : BAUD; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return integer is
 	begin
 		case RoundingStyle is
 			when ROUND_UP =>					return integer(ceil(to_real(br, scale)));
@@ -840,7 +861,7 @@ package body physical is
 		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
 	end;
 
-	function to_int(mem : MEMORY; scale : MEMORY; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return INTEGER is
+	function to_int(mem : MEMORY; scale : MEMORY; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return integer is
 	begin
 		case RoundingStyle is
 			when ROUND_UP =>					return integer(ceil(to_real(mem, scale)));
@@ -855,11 +876,11 @@ package body physical is
 	-- ===========================================================================
 	--	@param Timing					A given timing or delay, which should be achived
 	--	@param Clock_Period		The period of the circuits clock
-	--	@RoundingStyle				Default = round to nearest; other choises: ROUND_UP, ROUND_DOWN
-	function TimingToCycles(Timing : TIME; Clock_Period : TIME; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL is
+	--	@RoundingStyle				Default = ROUND_UP; other choises: ROUND_UP, ROUND_DOWN, ROUND_TO_NEAREST
+	function TimingToCycles(Timing : time; Clock_Period : time; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return natural is
 		variable res_real	: REAL;
-		variable res_nat	: NATURAL;
-		variable res_time	: TIME;
+		variable res_nat	: natural;
+		variable res_time	: time;
 		variable res_dev	: REAL;
 	begin
 		res_real := div(Timing, Clock_Period);
@@ -873,20 +894,20 @@ package body physical is
 		res_dev		:= (div(res_time, Timing) - 1.0) * 100.0;
 
 		if (POC_VERBOSE = TRUE) then
-			report "TimingToCycles: " & 	CR &
-						 "  Timing: " &					to_string(Timing, 3) & CR &
-						 "  Clock_Period: " &		to_string(Clock_Period, 3) & CR &
-						 "  RoundingStyle: " &	str_substr(T_ROUNDING_STYLE'image(RoundingStyle), 7) & CR &
-						 "  res_real = " &			str_format(res_real, 3) & CR &
-						 "  => " &							INTEGER'image(res_nat)
+			report "TimingToCycles: " & 	LF &
+						 "  Timing: " &					to_string(Timing, 3) & LF &
+						 "  Clock_Period: " &		to_string(Clock_Period, 3) & LF &
+						 "  RoundingStyle: " &	str_substr(T_ROUNDING_STYLE'image(RoundingStyle), 7) & LF &
+						 "  res_real = " &			str_format(res_real, 3) & LF &
+						 "  => " &							integer'image(res_nat)
 			severity note;
 		end if;
 
 		if (C_PHYSICAL_REPORT_TIMING_DEVIATION = TRUE) then
-			report "TimingToCycles (timing deviation report): " & CR &
-						 "  timing to achieve: " & to_string(Timing, 3) & CR &
-						 "  calculated cycles: " & INTEGER'image(res_nat) & " cy" & CR &
-						 "  resulting timing:  " & to_string(res_time, 3) & CR &
+			report "TimingToCycles (timing deviation report): " & LF &
+						 "  timing to achieve: " & to_string(Timing, 3) & LF &
+						 "  calculated cycles: " & integer'image(res_nat) & " cy" & LF &
+						 "  resulting timing:  " & to_string(res_time, 3) & LF &
 						 "  deviation:         " & to_string(res_time - Timing, 3) & " (" & str_format(res_dev, 2) & "%)"
 			severity note;
 		end if;
@@ -894,25 +915,25 @@ package body physical is
 		return res_nat;
 	end;
 
-	function TimingToCycles(Timing : TIME; Clock_Frequency	: FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return NATURAL is
+	function TimingToCycles(Timing : time; Clock_Frequency	: FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return natural is
 	begin
 		return TimingToCycles(Timing, to_time(Clock_Frequency), RoundingStyle);
 	end function;
 
-	function CyclesToDelay(Cycles : NATURAL; Clock_Period : TIME) return TIME is
+	function CyclesToDelay(Cycles : natural; Clock_Period : time) return time is
 	begin
 		return Clock_Period * Cycles;
 	end function;
 
-	function CyclesToDelay(Cycles : NATURAL; Clock_Frequency : FREQ) return TIME is
+	function CyclesToDelay(Cycles : natural; Clock_Frequency : FREQ) return time is
 	begin
 		return CyclesToDelay(Cycles, to_time(Clock_Frequency));
 	end function;
 
 	-- convert and format physical types to STRING
-	function to_string(t : TIME; precision : NATURAL) return STRING is
-		variable tt     : TIME;
-		variable unit		: STRING(1 to 3)	:= (others => C_POC_NUL);
+	function to_string(t : time; precision : natural) return string is
+		variable tt     : time;
+		variable unit		: string(1 to 3)	:= (others => C_POC_NUL);
 		variable value	: REAL;
 	begin
 		tt := abs t;
@@ -940,8 +961,8 @@ package body physical is
 							      '-' & str_format(value, precision) & " " & str_trim(unit));
 	end function;
 
-	function to_string(f : FREQ; precision : NATURAL) return STRING is
-		variable unit		: STRING(1 to 3)	:= (others => C_POC_NUL);
+	function to_string(f : FREQ; precision : natural) return string is
+		variable unit		: string(1 to 3)	:= (others => C_POC_NUL);
 		variable value	: REAL;
 	begin
 		if (f < 1 kHz) then
@@ -961,8 +982,8 @@ package body physical is
 		return str_format(value, precision) & " " & str_trim(unit);
 	end function;
 
-	function to_string(br : BAUD; precision : NATURAL) return STRING is
-		variable unit		: STRING(1 to 3)	:= (others => C_POC_NUL);
+	function to_string(br : BAUD; precision : natural) return string is
+		variable unit		: string(1 to 3)	:= (others => C_POC_NUL);
 		variable value	: REAL;
 	begin
 		if (br < 1 kBd) then
@@ -982,8 +1003,8 @@ package body physical is
 		return str_format(value, precision) & " " & str_trim(unit);
 	end function;
 
-	function to_string(mem : MEMORY; precision : NATURAL) return STRING is
-		variable unit		: STRING(1 to 3)	:= (others => C_POC_NUL);
+	function to_string(mem : MEMORY; precision : natural) return string is
+		variable unit		: string(1 to 3)	:= (others => C_POC_NUL);
 		variable value	: REAL;
 	begin
 		if (mem < 1 KiB) then

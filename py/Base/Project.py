@@ -1,13 +1,13 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
 # Python Module:    TODO
-# 
+#
 # Description:
 # ------------------------------------
 #		TODO:
@@ -16,13 +16,13 @@
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -110,20 +110,50 @@ class ToolChain(Enum):
 
 
 @unique
-class Tool(Enum):
+class Tool(Enum):      # ID     Short Name       Long Name
 	Any =                 0
-	Aldec_aSim =         10
-	Altera_Quartus_Map = 20
-	Cocotb_QuestaSim =   30
-	GHDL =               40
-	GTKwave =            41
-	Lattice_LSE =        50
-	Mentor_vSim =        60
-	Xilinx_iSim =        70
-	Xilinx_XST =         71
-	Xilinx_CoreGen =     72
-	Xilinx_xSim =        80
-	Xilinx_Synth =       81
+	Aldec_aSim =         ("ASIM",   "Aldec Active-HDL",         "Aldec Active-HDL")
+	Altera_Quartus_Map = ("QMAP",   "Quartus Map",              "Altera Quartus Map (quartus_map)")
+	Cocotb_QuestaSim =   ("COCO",   "Cocotb",                   "Coroutine Cosimulation Testbench (Cocotb)")
+	GHDL =               ("GHDL",   "GHDL",                     "GHDL")
+	GTKwave =            ("GTKW",   "GTKWave",                  "GTKWave")
+	Lattice_LSE =        ("LSE",    "Lattice LSE",              "Lattice Synthesis Engine (LSE)")
+	Mentor_vSim =        ("VSIM",   "Mentor QuestaSim",         "Mentor Graphics QuestaSim (vSim)")
+	Xilinx_iSim =        ("XSIM",   "Xilinx iSim",              "Xilinx ISE Simulator (iSim)")
+	Xilinx_XST =         ("XST",    "Xilinx XST",               "Xilinx Synthesis Tool (XST)")
+	Xilinx_CoreGen =     ("CG",     "Xilinx CoreGen",           "Xilinx Core Generator Tool (CoreGen)")
+	Xilinx_xSim =        ("XSIM",   "Xilinx xSim",              "Xilinx Vivado Simulator (xSim)")
+	Xilinx_Synth =       ("VIVADO", "Xilinx Vivado Synthesis",  "Xilinx Vivado Synthesis (synth)")
+
+	def __init__(self, *_):
+		"""Patch the embedded MAP dictionary"""
+		for k, v in self.__class__.__TOOL_ID_MAPPINGS__.items():
+			if ((not isinstance(v, self.__class__)) and (v == self.value)):
+				self.__class__.__TOOL_ID_MAPPINGS__[k] = self
+
+	__TOOL_ID_MAPPINGS__ = {
+		"QMAP":   Altera_Quartus_Map,
+		"LSE":    Lattice_LSE,
+		"CG":     Xilinx_CoreGen,
+		"XST":    Xilinx_XST
+	}
+
+	@classmethod
+	def Parse(cls, value):
+		try:
+			return cls.__TOOL_ID_MAPPINGS__[value]
+		except KeyError:
+			ValueError("Value '{0!s}' cannot be parsed to member of {1}.".format(value, cls.__name__))
+
+	@property
+	def ID(self):             return self.value[0]
+	@property
+	def ShortName(self):      return self.value[1]
+	@property
+	def LongName(self):       return self.value[2]
+
+	def __str__(self):        return self.ShortName
+	def __repr__(self):       return self.ID
 
 
 class VHDLVersion(Enum):
@@ -132,7 +162,6 @@ class VHDLVersion(Enum):
 	VHDL93 =             93
 	VHDL2002 =         2002
 	VHDL2008 =         2008
-
 
 	def __init__(self, *_):
 		"""Patch the embedded MAP dictionary"""
@@ -224,7 +253,7 @@ class Project:
 		if isinstance(value, str):
 			value = Board(value)
 		elif (not isinstance(value, Board)):            raise ValueError("Parameter 'board' is not of type Board.")
-		self._board =    value
+		self._board =   value
 		self._device =  value.Device
 
 	@property
@@ -236,7 +265,7 @@ class Project:
 		if isinstance(value, (str, Device)):
 			board = Board("custom", value)
 		else:                                            raise ValueError("Parameter 'device' is not of type str or Device.")
-		self._board =    board
+		self._board =   board
 		self._device =  board.Device
 
 	@property

@@ -72,7 +72,7 @@ begin
 		constant STATE_REG  : boolean :=  c mod 4 > 1;
 		constant OUTPUT_REG : boolean :=  c mod 8 > 3;
 
-		constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
+		constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for DATA_REG=" & boolean'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & boolean'image(OUTPUT_REG));
 
     -- Local Component Ports
     signal put				: std_logic;
@@ -111,7 +111,7 @@ begin
 
     -- Writer
     procWriter : process
-			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Writer for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Writer for DATA_REG=" & boolean'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & boolean'image(OUTPUT_REG));
     begin
       din <= (others => '-');
       put <= '0';
@@ -142,12 +142,12 @@ begin
 
     -- Reader
 		procReader : process
-			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Reader for DATA_REG=" & BOOLEAN'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & BOOLEAN'image(OUTPUT_REG));
+			constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Reader for DATA_REG=" & boolean'image(DATA_REG) & " STATE_REG=" & BOOLEAN'image(STATE_REG) & " OUTPUT_REG=" & boolean'image(OUTPUT_REG));
     begin
       got <= '0';
       for i in 0 to 2**D_BITS-1 loop
         wait until rising_edge(clk) and valid = '1';
-				simAssertion((dout = std_logic_vector(to_unsigned(i, D_BITS))), "Output failure in configuration " & INTEGER'image(c) & " @ Pos " & INTEGER'image(i));
+				simAssertion((dout = std_logic_vector(to_unsigned(i, D_BITS))), "Output failure in configuration " & integer'image(c) & " @ Pos " & INTEGER'image(i));
         got <= '1';
         wait until rising_edge(clk);
         got <= '0';

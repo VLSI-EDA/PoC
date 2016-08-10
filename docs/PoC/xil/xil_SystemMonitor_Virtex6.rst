@@ -8,7 +8,7 @@ temperature values are overrun.
 .. rubric:: Temperature Curve
 
 .. code-block:: None
- 
+   
                    |                      /-----\
    Temp_ov   on=80 | - - - - - - /-------/       \
                    |            /        |        \
@@ -33,4 +33,4 @@ temperature values are overrun.
 Source file: `xil/xil_SystemMonitor_Virtex6.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_SystemMonitor_Virtex6.vhdl>`_
 
 
- 
+	 

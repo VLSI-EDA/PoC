@@ -32,4 +32,4 @@ sync_Reset
 Source file: `misc/sync/sync_Reset.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Reset.vhdl>`_
 
 
- 
+	 

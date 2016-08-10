@@ -50,12 +50,12 @@ architecture tb of sync_Bits_tb is
 	constant CLOCK_1_FREQ			: FREQ								:= 100 MHz;
 	constant CLOCK_2_FREQ			: FREQ								:= 60 MHz;
 
-	signal Clock1							: STD_LOGIC;
-	signal Clock2							: STD_LOGIC;
+	signal Clock1							: std_logic;
+	signal Clock2							: std_logic;
 
-	constant INIT 						: STD_LOGIC_VECTOR(0 downto 0) := "0";
-	signal Sync_in						: STD_LOGIC_VECTOR(0 downto 0) := INIT;
-	signal Sync_out						: STD_LOGIC_VECTOR(0 downto 0);
+	constant INIT 						: std_logic_vector(0 downto 0) := "0";
+	signal Sync_in						: std_logic_vector(0 downto 0) := INIT;
+	signal Sync_out						: std_logic_vector(0 downto 0);
 begin
 	-- initialize global simulation status
 	simInitialize;

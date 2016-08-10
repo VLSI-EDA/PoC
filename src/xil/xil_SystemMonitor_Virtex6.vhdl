@@ -55,25 +55,25 @@ use			UniSim.vComponents.all;
 
 entity xil_SystemMonitor_Virtex6 is
 	port (
-		Reset								: in	STD_LOGIC;				-- Reset signal for the System Monitor control logic
+		Reset								: in	std_logic;				-- Reset signal for the System Monitor control logic
 
-		Alarm_UserTemp			: out	STD_LOGIC;				-- Temperature-sensor alarm output
-		Alarm_OverTemp			: out	STD_LOGIC;				-- Over-Temperature alarm output
-		Alarm								: out	STD_LOGIC;				-- OR'ed output of all the Alarms
-		VP									: in	STD_LOGIC;				-- Dedicated Analog Input Pair
-		VN									: in	STD_LOGIC
+		Alarm_UserTemp			: out	std_logic;				-- Temperature-sensor alarm output
+		Alarm_OverTemp			: out	std_logic;				-- Over-Temperature alarm output
+		Alarm								: out	std_logic;				-- OR'ed output of all the Alarms
+		VP									: in	std_logic;				-- Dedicated Analog Input Pair
+		VN									: in	std_logic
 	);
 end entity;
 
 
 architecture xilinx of xil_SystemMonitor_Virtex6 is
-	signal FLOAT_VCCAUX_ALARM		: STD_LOGIC;
-	signal FLOAT_VCCINT_ALARM		: STD_LOGIC;
-	signal aux_channel_p				: STD_LOGIC_VECTOR(15 downto 0);
-	signal aux_channel_n				: STD_LOGIC_VECTOR(15 downto 0);
+	signal FLOAT_VCCAUX_ALARM		: std_logic;
+	signal FLOAT_VCCINT_ALARM		: std_logic;
+	signal aux_channel_p				: std_logic_vector(15 downto 0);
+	signal aux_channel_n				: std_logic_vector(15 downto 0);
 
-	signal SysMonitor_Alarm			: STD_LOGIC_VECTOR(2 downto 0);
-	signal SysMonitor_OverTemp	: STD_LOGIC;
+	signal SysMonitor_Alarm			: std_logic_vector(2 downto 0);
+	signal SysMonitor_OverTemp	: std_logic;
 begin
 	genAUXChannel : for i in 0 to 15 generate
 		aux_channel_p(i) <= '0';

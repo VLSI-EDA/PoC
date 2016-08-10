@@ -50,18 +50,18 @@ end entity;
 architecture test of lut_Sine_tb is
 	constant CLOCK_FREQ							: FREQ					:= 100 MHz;
 
-	signal Clock							: STD_LOGIC						:= '1';
-	signal sim_Stop						: STD_LOGIC						:= '0';
+	signal Clock							: std_logic						:= '1';
+	signal sim_Stop						: std_logic						:= '0';
 
-	signal lut_in							: STD_LOGIC_VECTOR(7 downto 0)	:= (others => '0');
-	signal lut_Q1_in					: STD_LOGIC_VECTOR(7 downto 0);
-	signal lut_Q1_out					: STD_LOGIC_VECTOR(7 downto 0);
-	signal lut_Q2_in					: STD_LOGIC_VECTOR(7 downto 0);
-	signal lut_Q2_out					: STD_LOGIC_VECTOR(7 downto 0);
-	signal lut_Q3_in					: STD_LOGIC_VECTOR(7 downto 0);
-	signal lut_Q3_out					: STD_LOGIC_VECTOR(7 downto 0);
-	signal lut_Q4_in					: STD_LOGIC_VECTOR(7 downto 0);
-	signal lut_Q4_out					: STD_LOGIC_VECTOR(7 downto 0);
+	signal lut_in							: std_logic_vector(7 downto 0)	:= (others => '0');
+	signal lut_Q1_in					: std_logic_vector(7 downto 0);
+	signal lut_Q1_out					: std_logic_vector(7 downto 0);
+	signal lut_Q2_in					: std_logic_vector(7 downto 0);
+	signal lut_Q2_out					: std_logic_vector(7 downto 0);
+	signal lut_Q3_in					: std_logic_vector(7 downto 0);
+	signal lut_Q3_out					: std_logic_vector(7 downto 0);
+	signal lut_Q4_in					: std_logic_vector(7 downto 0);
+	signal lut_Q4_out					: std_logic_vector(7 downto 0);
 
 begin
 	-- initialize global simulation status

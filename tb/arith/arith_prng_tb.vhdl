@@ -72,14 +72,14 @@ architecture tb of arith_prng_tb is
 		x"9A", x"34", x"69", x"D3", x"A7", x"4F", x"9E", x"3C", x"78", x"F0", x"E0", x"C1", x"82", x"04", x"09", x"12"
 	);
 
-	constant BITS				: POSITIVE					:= 8;
-	constant SEED				: STD_LOGIC_VECTOR	:= x"12";
-	constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for BITS=" & INTEGER'image(BITS) & "; SEED=0x" & raw_format_slv_hex(SEED));
+	constant BITS				: positive					:= 8;
+	constant SEED				: std_logic_vector	:= x"12";
+	constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for BITS=" & integer'image(BITS) & "; SEED=0x" & raw_format_slv_hex(SEED));
 
-	signal Clock				: STD_LOGIC;
-	signal Reset				: STD_LOGIC;
-	signal Test_got			: STD_LOGIC;
-	signal PRNG_Value		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+	signal Clock				: std_logic;
+	signal Reset				: std_logic;
+	signal Test_got			: std_logic;
+	signal PRNG_Value		: std_logic_vector(BITS - 1 downto 0);
 
 begin
 	-- initialize global simulation status
@@ -101,7 +101,7 @@ begin
 		);
 
 	procChecker : process
-		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & INTEGER'image(BITS) & " bits");
+		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Checker for " & integer'image(BITS) & " bits");
 	begin
 		Test_got						<= '0';
 
@@ -113,7 +113,7 @@ begin
 
 			wait until rising_edge(Clock);
 			simAssertion((PRNG_Value = COMPARE_LIST_8_BITS(i)),
-				str_ralign(INTEGER'image(i), log10ceil(COMPARE_LIST_8_BITS'high)) &
+				str_ralign(integer'image(i), log10ceil(COMPARE_LIST_8_BITS'high)) &
 				": Value=" &		raw_format_slv_hex(PRNG_Value) &
 				" Expected=" &	raw_format_slv_hex(COMPARE_LIST_8_BITS(i))
 			);

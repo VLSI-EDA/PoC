@@ -40,64 +40,64 @@ use			PoC.components.all;
 
 entity sortnet_MergeSort_Streamed is
 	generic (
-		FIFO_DEPTH	: POSITIVE		:= 32;
-		KEY_BITS		: POSITIVE		:= 32;
-		DATA_BITS		: POSITIVE		:= 32
+		FIFO_DEPTH	: positive		:= 32;
+		KEY_BITS		: positive		:= 32;
+		DATA_BITS		: positive		:= 32
 	);
 	port (
-		Clock			: in	STD_LOGIC;
-		Reset			: in	STD_LOGIC;
+		Clock			: in	std_logic;
+		Reset			: in	std_logic;
 
-		Inverse		: in	STD_LOGIC			:= '0';
+		Inverse		: in	std_logic			:= '0';
 
-		In_Valid	: in	STD_LOGIC;
-		In_Data		: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-		In_SOF		: in	STD_LOGIC;
-		In_IsKey	: in	STD_LOGIC;
-		In_EOF		: in	STD_LOGIC;
-		In_Ack		: out	STD_LOGIC;
+		In_Valid	: in	std_logic;
+		In_Data		: in	std_logic_vector(DATA_BITS - 1 downto 0);
+		In_SOF		: in	std_logic;
+		In_IsKey	: in	std_logic;
+		In_EOF		: in	std_logic;
+		In_Ack		: out	std_logic;
 
-		Out_Sync	: out	STD_LOGIC;
-		Out_Valid	: out	STD_LOGIC;
-		Out_Data	: out	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-		Out_SOF		: out	STD_LOGIC;
-		Out_IsKey	: out	STD_LOGIC;
-		Out_EOF		: out	STD_LOGIC;
-		Out_Ack		: in	STD_LOGIC
+		Out_Sync	: out	std_logic;
+		Out_Valid	: out	std_logic;
+		Out_Data	: out	std_logic_vector(DATA_BITS - 1 downto 0);
+		Out_SOF		: out	std_logic;
+		Out_IsKey	: out	std_logic;
+		Out_EOF		: out	std_logic;
+		Out_Ack		: in	std_logic
 	);
 end entity;
 
 
 architecture rtl of sortnet_MergeSort_Streamed is
 
-	constant DATA_SOF_BIT		: NATURAL			:= DATA_BITS + 0;
-	constant DATA_ISKEY_BIT	: NATURAL			:= DATA_BITS + 1;
-	constant DATA_EOF_BIT		: NATURAL			:= DATA_BITS + 2;
-	constant FIFO_BITS			: POSITIVE		:= DATA_BITS + 3;
+	constant DATA_SOF_BIT		: natural			:= DATA_BITS + 0;
+	constant DATA_ISKEY_BIT	: natural			:= DATA_BITS + 1;
+	constant DATA_EOF_BIT		: natural			:= DATA_BITS + 2;
+	constant FIFO_BITS			: positive		:= DATA_BITS + 3;
 
-	subtype	T_FIFO_DATA			is STD_LOGIC_VECTOR(FIFO_BITS - 1 downto 0);
+	subtype	T_FIFO_DATA			is std_logic_vector(FIFO_BITS - 1 downto 0);
 
-	signal FIFO_sel_r				: STD_LOGIC		:= '0';
+	signal FIFO_sel_r				: std_logic		:= '0';
 
-	signal FIFO_0_put				: STD_LOGIC;
+	signal FIFO_0_put				: std_logic;
 	signal FIFO_0_DataIn		: T_FIFO_DATA;
-	signal FIFO_0_Full			: STD_LOGIC;
-	signal FIFO_0_got				: STD_LOGIC;
+	signal FIFO_0_Full			: std_logic;
+	signal FIFO_0_got				: std_logic;
 	signal FIFO_0_DataOut		: T_FIFO_DATA;
-	signal FIFO_0_Valid			: STD_LOGIC;
+	signal FIFO_0_Valid			: std_logic;
 
-	signal FIFO_1_put				: STD_LOGIC;
+	signal FIFO_1_put				: std_logic;
 	signal FIFO_1_DataIn		: T_FIFO_DATA;
-	signal FIFO_1_Full			: STD_LOGIC;
-	signal FIFO_1_got				: STD_LOGIC;
+	signal FIFO_1_Full			: std_logic;
+	signal FIFO_1_got				: std_logic;
 	signal FIFO_1_DataOut		: T_FIFO_DATA;
-	signal FIFO_1_Valid			: STD_LOGIC;
+	signal FIFO_1_Valid			: std_logic;
 
-	signal Greater					: STD_LOGIC;
-	signal Switch_d					: STD_LOGIC;
-	signal Switch_en				: STD_LOGIC;
-	signal Switch_r					: STD_LOGIC		:= '0';
-	signal Switch						: STD_LOGIC;
+	signal Greater					: std_logic;
+	signal Switch_d					: std_logic;
+	signal Switch_en				: std_logic;
+	signal Switch_r					: std_logic		:= '0';
+	signal Switch						: std_logic;
 
 	type T_STATE is (ST_IDLE, ST_MERGE, ST_EMPTY_FIFO_0, ST_EMPTY_FIFO_1);
 	signal State						: T_STATE			:= ST_IDLE;
@@ -185,11 +185,11 @@ begin
 	end process;
 
 	process(State, FIFO_0_Valid, FIFO_0_DataOut, FIFO_1_Valid, FIFO_1_DataOut, Switch, Out_Ack)
-		variable IsKey				: STD_LOGIC;
-		variable FIFO_0_SOF		: STD_LOGIC;
-		variable FIFO_0_EOF		: STD_LOGIC;
-		variable FIFO_1_SOF		: STD_LOGIC;
-		variable FIFO_1_EOF		: STD_LOGIC;
+		variable IsKey				: std_logic;
+		variable FIFO_0_SOF		: std_logic;
+		variable FIFO_0_EOF		: std_logic;
+		variable FIFO_1_SOF		: std_logic;
+		variable FIFO_1_EOF		: std_logic;
 	begin
 		IsKey					:= FIFO_0_DataOut(DATA_ISKEY_BIT);
 		FIFO_0_SOF		:= FIFO_0_DataOut(DATA_SOF_BIT);

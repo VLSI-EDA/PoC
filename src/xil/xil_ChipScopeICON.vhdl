@@ -57,7 +57,7 @@ use			PoC.xil.all;
 
 entity xil_ChipScopeICON is
 	generic (
-		PORTS				: POSITIVE
+		PORTS				: positive
 	);
   port (
 		ControlBus	: inout	T_XIL_CHIPSCOPE_CONTROL_VECTOR(PORTS - 1 downto 0)

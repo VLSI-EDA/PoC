@@ -38,13 +38,13 @@ use			PoC.strings.all;
 
 
 package debug is
-	impure function dbg_ExportEncoding(Name : STRING; encodings : string; tokenFileName : STRING) return BOOLEAN;
+	impure function dbg_ExportEncoding(Name : string; encodings : string; tokenFileName : string) return boolean;
 
 end package;
 
 
 package body debug is
-	impure function dbg_ExportEncoding(Name : STRING; encodings : string; tokenFileName : STRING) return BOOLEAN is
+	impure function dbg_ExportEncoding(Name : string; encodings : string; tokenFileName : string) return boolean is
 		file		tokenFile : TEXT open WRITE_MODE is tokenFileName;
 
 		variable cnt, base : integer;
@@ -54,14 +54,14 @@ package body debug is
 		report "dbg_ExportEncoding: '" & encodings & "'" severity note;
 
 		-- write file header
-		write(l, STRING'("# Encoding file for '" & Name & "'"));	writeline(tokenFile, l);
-		write(l, STRING'("#"));																		writeline(tokenFile, l);
-		write(l, STRING'("# ChipScope Token File Version"));			writeline(tokenFile, l);
-		write(l, STRING'("@FILE_VERSION=1.0.0"));									writeline(tokenFile, l);
-		write(l, STRING'("#"));																		writeline(tokenFile, l);
-		write(l, STRING'("# Default token value"));								writeline(tokenFile, l);
-		write(l, STRING'("@DEFAULT_TOKEN="));											writeline(tokenFile, l);
-		write(l, STRING'("#"));																		writeline(tokenFile, l);
+		write(l, string'("# Encoding file for '" & Name & "'"));	writeline(tokenFile, l);
+		write(l, string'("#"));																		writeline(tokenFile, l);
+		write(l, string'("# ChipScope Token File Version"));			writeline(tokenFile, l);
+		write(l, string'("@FILE_VERSION=1.0.0"));									writeline(tokenFile, l);
+		write(l, string'("#"));																		writeline(tokenFile, l);
+		write(l, string'("# Default token value"));								writeline(tokenFile, l);
+		write(l, string'("@DEFAULT_TOKEN="));											writeline(tokenFile, l);
+		write(l, string'("#"));																		writeline(tokenFile, l);
 
 		-- write state entires
 		cnt  := 0;

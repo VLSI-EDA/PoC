@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.69 (w)1999-2016 BSI
 [*] Sun Mar 20 17:07:11 2016
 [*]
-[dumpfile] "G:\git\PoC\temp\ghdl\sortnet_Stream_Adapter_tb.ghw"
 [dumpfile_mtime] "Sun Mar 20 17:06:47 2016"
 [dumpfile_size] 89113
-[savefile] "G:\git\PoC\sim\sort\sortnet\sortnet_Stream_Adapter_tb.gtkw"
 [timestart] 0
 [size] 1676 997
 [pos] -1 -1

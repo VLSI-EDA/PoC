@@ -45,11 +45,11 @@ entity io_TimingCounter is
 	  TIMING_TABLE	: T_NATVEC																					-- timing table
 	);
   port (
-	  Clock					: in	STD_LOGIC;																		-- clock
-		Enable				: in	STD_LOGIC;																		-- enable counter
-		Load					: in	STD_LOGIC;																		-- load Timing Value from TIMING_TABLE selected by slot
-		Slot					: in	NATURAL range 0 to (TIMING_TABLE'length - 1);	--
-		Timeout				: out STD_LOGIC																			-- timing reached
+	  Clock					: in	std_logic;																		-- clock
+		Enable				: in	std_logic;																		-- enable counter
+		Load					: in	std_logic;																		-- load Timing Value from TIMING_TABLE selected by slot
+		Slot					: in	natural range 0 to (TIMING_TABLE'length - 1);	--
+		Timeout				: out std_logic																			-- timing reached
 	);
 end entity;
 
@@ -61,16 +61,16 @@ architecture rtl of io_TimingCounter is
 		assert (not MY_VERBOSE) report "TIMING_TABLE (transformed):" severity NOTE;
     for i in vec'range loop
 			Result(i)	 := vec(i) - 1;
-			assert (not MY_VERBOSE) report "  " & INTEGER'image(i) & " - " & INTEGER'image(Result(i)) severity NOTE;
+			assert (not MY_VERBOSE) report "  " & integer'image(i) & " - " & INTEGER'image(Result(i)) severity NOTE;
 		end loop;
 		return Result;
   end;
 
 	constant TIMING_TABLE2	: T_INTVEC		:= transform(TIMING_TABLE);
-	constant TIMING_MAX			: NATURAL			:= imax(TIMING_TABLE2);
-	constant COUNTER_BITS		: NATURAL			:= log2ceilnz(TIMING_MAX + 1);
+	constant TIMING_MAX			: natural			:= imax(TIMING_TABLE2);
+	constant COUNTER_BITS		: natural			:= log2ceilnz(TIMING_MAX + 1);
 
-	signal Counter_s				: SIGNED(COUNTER_BITS downto 0)		:= to_signed(TIMING_TABLE2(0), COUNTER_BITS + 1);
+	signal Counter_s				: signed(COUNTER_BITS downto 0)		:= to_signed(TIMING_TABLE2(0), COUNTER_BITS + 1);
 
 begin
 	process(Clock)

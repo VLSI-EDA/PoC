@@ -39,21 +39,21 @@ use			UniSim.vComponents.all;
 
 entity ddrio_inout_xilinx is
 	generic (
-		BITS						: POSITIVE
+		BITS						: positive
 	);
 	port (
-		ClockOut				: in		STD_LOGIC;
-		ClockOutEnable	: in		STD_LOGIC;
-		OutputEnable		: in		STD_LOGIC;
-		DataOut_high		: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataOut_low			: in		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		ClockOut				: in		std_logic;
+		ClockOutEnable	: in		std_logic;
+		OutputEnable		: in		std_logic;
+		DataOut_high		: in		std_logic_vector(BITS - 1 downto 0);
+		DataOut_low			: in		std_logic_vector(BITS - 1 downto 0);
 
-		ClockIn					: in		STD_LOGIC;
-		ClockInEnable		: in		STD_LOGIC;
-		DataIn_high			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataIn_low			: out		STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		ClockIn					: in		std_logic;
+		ClockInEnable		: in		std_logic;
+		DataIn_high			: out		std_logic_vector(BITS - 1 downto 0);
+		DataIn_low			: out		std_logic_vector(BITS - 1 downto 0);
 
-		Pad							: inout	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		Pad							: inout	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
 

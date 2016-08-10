@@ -46,21 +46,21 @@ use			PoC.config.all;
 
 entity xil_BSCAN is
 	generic (
-		JTAG_CHAIN					: NATURAL;
-		DISABLE_JTAG				: BOOLEAN			:= FALSE
+		JTAG_CHAIN					: natural;
+		DISABLE_JTAG				: boolean			:= FALSE
 	);
 	port (
-		Reset								: out	STD_LOGIC;
-		RunTest							: out	STD_LOGIC;
-		Sel									: out	STD_LOGIC;
-		Capture							: out	STD_LOGIC;
-		drck								: out	STD_LOGIC;
-		Shift								: out	STD_LOGIC;
-		Test_Clock					: out	STD_LOGIC;
-		Test_DataIn					: out	STD_LOGIC;
-		Test_DataOut				: in	STD_LOGIC;
-		Test_ModeSelect			: out	STD_LOGIC;
-		Update							: out	STD_LOGIC
+		Reset								: out	std_logic;
+		RunTest							: out	std_logic;
+		Sel									: out	std_logic;
+		Capture							: out	std_logic;
+		drck								: out	std_logic;
+		Shift								: out	std_logic;
+		Test_Clock					: out	std_logic;
+		Test_DataIn					: out	std_logic;
+		Test_DataOut				: in	std_logic;
+		Test_ModeSelect			: out	std_logic;
+		Update							: out	std_logic
 	);
 end entity;
 
@@ -69,9 +69,9 @@ architecture rtl of xil_BSCAN is
 	constant DEV_INFO		: T_DEVICE_INFO	:= DEVICE_INFO;
 begin
 	genSpartan3 : if (DEV_INFO.Device = DEVICE_SPARTAN3) generate
-		signal drck_i		: STD_LOGIC_VECTOR(1 downto 0);
-		signal sel_i		: STD_LOGIC_VECTOR(1 downto 0);
-		signal tdo_i		: STD_LOGIC_VECTOR(1 downto 0);
+		signal drck_i		: std_logic_vector(1 downto 0);
+		signal sel_i		: std_logic_vector(1 downto 0);
+		signal tdo_i		: std_logic_vector(1 downto 0);
 	begin
 		drck		<= drck_i(JTAG_CHAIN - 1);
 		Sel			<= sel_i(JTAG_CHAIN - 1);
@@ -159,7 +159,7 @@ begin
 		bscan : BSCANE2
 			generic map (
 				JTAG_CHAIN		=> JTAG_CHAIN,
-				DISABLE_JTAG	=> BOOLEAN'image(DISABLE_JTAG)
+				DISABLE_JTAG	=> boolean'image(DISABLE_JTAG)
 			)
 			port map (
 				CAPTURE		=> Capture,
