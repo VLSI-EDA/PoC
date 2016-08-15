@@ -5,6 +5,7 @@ lut_Sine
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/mem/lut/lut_Sine.vhdl

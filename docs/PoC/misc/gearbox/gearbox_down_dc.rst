@@ -2,15 +2,17 @@
 gearbox_down_dc
 ###############
 
-This module provides a downscaling gearbox with a dependent clock (dc)
-interface. It perfoems a 'word' to 'byte' splitting. The default order is
-LITTLE_ENDIAN (starting at byte(0)). Input "In_Data" is of clock domain
-"Clock1"; output "Out_Data" is of clock domain "Clock2". Optional input and
-output registers can be added by enabling (ADD_***PUT_REGISTERS = TRUE).
+	This module provides a downscaling gearbox with a dependent clock (dc)
+	interface. It perfoems a 'word' to 'byte' splitting. The default order is
+	LITTLE_ENDIAN (starting at byte(0)). Input "In_Data" is of clock domain
+	"Clock1"; output "Out_Data" is of clock domain "Clock2". Optional input and
+	output registers can be added by enabling (ADD_***PUT_REGISTERS = TRUE).
+
 Assertions:
 ===========
-- Clock periods of Clock1 and Clock2 MUST be multiples of each other.
-- Clock1 and Clock2 MUST be phase aligned (related) to each other.
+	- Clock periods of Clock1 and Clock2 MUST be multiples of each other.
+	- Clock1 and Clock2 MUST be phase aligned (related) to each other.
+
 
 
 .. rubric:: Entity Declaration:

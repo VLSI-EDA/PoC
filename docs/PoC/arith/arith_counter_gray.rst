@@ -5,6 +5,7 @@ arith_counter_gray
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/arith/arith_counter_gray.vhdl

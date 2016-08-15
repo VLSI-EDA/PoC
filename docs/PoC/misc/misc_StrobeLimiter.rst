@@ -5,6 +5,7 @@ misc_StrobeLimiter
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/misc/misc_StrobeLimiter.vhdl

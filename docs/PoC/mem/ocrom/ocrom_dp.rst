@@ -3,13 +3,18 @@ ocrom_dp
 ########
 
 Inferring / instantiating dual-port read-only memory, with:
+
 * dual clock, clock enable,
 * 2 read ports.
+
 The generalized behavior across Altera and Xilinx FPGAs since
 Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
+
 WARNING: The simulated behavior on RT-level is not correct.
+
 TODO: add timing diagram
 TODO: implement correct behavior for RT-level simulation
+
 
 
 .. rubric:: Entity Declaration:

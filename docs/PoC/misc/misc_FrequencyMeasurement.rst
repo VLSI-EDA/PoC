@@ -7,6 +7,7 @@ reference time is used to start and stop a timer at input clock. The counter
 value is the measured frequency in Hz.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/misc/misc_FrequencyMeasurement.vhdl

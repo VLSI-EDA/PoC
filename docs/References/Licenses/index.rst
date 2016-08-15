@@ -11,6 +11,8 @@ which contains a link to the orginal license file source.
    :maxdepth: 1
    
    ApacheLicense2.0
+   ICLA
+   CCLA
    ArtisticLicense2.0
    BSDLicense_Cocotb
    MozillaPublicLicense2.0

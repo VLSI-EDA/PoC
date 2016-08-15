@@ -11,10 +11,10 @@
 -- -------------------------------------
 -- .. TODO:: No documentation available.
 --
---	old comments:
---		UART BAUD rate generator
---		bclk_r    = bit clock is rising
---		bclk_x8_r = bit clock times 8 is rising
+-- old comments:
+--   :abbr:`UART (Universal Asynchronous Receiver Transmitter)` BAUD rate generator
+--   bclk_r    = bit clock is rising
+--   bclk_x8_r = bit clock times 8 is rising
 --
 --
 -- License:
@@ -66,15 +66,15 @@ architecture rtl of uart_bclk is
 	constant TIME_UNIT_INTERVAL				: time							:= 1 sec / (to_real(BAUDRATE, 1 Bd) * real(UART_OVERSAMPLING_RATE));
 	constant BAUDRATE_COUNTER_MAX			: positive					:= TimingToCycles(TIME_UNIT_INTERVAL, CLOCK_FREQ);
 	constant BAUDRATE_COUNTER_BITS		: positive					:= log2ceilnz(BAUDRATE_COUNTER_MAX + 1);
-
+	
   -- registers
   signal x8_cnt : unsigned(BAUDRATE_COUNTER_BITS - 1 downto 0)	:= (others => '0');
   signal x1_cnt : unsigned(2 downto 0)													:= (others => '0');
-
+  
   -- control signals
   signal x8_cnt_done : std_logic;
   signal x1_cnt_done : std_logic;
-
+  
 	signal bclk_r			: std_logic		:= '0';
 	signal bclk_x8_r	: std_logic		:= '0';
 begin
@@ -85,23 +85,23 @@ begin
 					 "  COUNTER_MAX="		& integer'image(BAUDRATE_COUNTER_MAX) & LF &
 					 "  COUNTER_BITS="	& integer'image(BAUDRATE_COUNTER_BITS)
 		severity NOTE;
-
+		
 	assert io_UART_IsTypicalBaudRate(BAUDRATE)
 		report "The baudrate " & to_string(BAUDRATE, 3) & " is not known to be a typical baudrate!"
 		severity WARNING;
-
+		
 	x8_cnt			<= upcounter_next(cnt => x8_cnt, rst => (rst or x8_cnt_done)) when rising_edge(clk);
   x8_cnt_done <= upcounter_equal(cnt => x8_cnt, value => BAUDRATE_COUNTER_MAX - 1);
-
+  
 	x1_cnt			<= upcounter_next(cnt => x1_cnt, rst => rst, en => x8_cnt_done) when rising_edge(clk);
   x1_cnt_done <= comp_allzero(x1_cnt);
-
+  
   -- outputs
 	-- ---------------------------------------------------------------------------
 	-- only x8_cnt_done is pulsed for one clock cycle!
 	bclk_r			<= (x1_cnt_done and x8_cnt_done)	when rising_edge(clk);
 	bclk_x8_r		<= x8_cnt_done										when rising_edge(clk);
-
+	
 	bclk				<= bclk_r;
 	bclk_x8			<= bclk_x8_r;
 end;

@@ -8,11 +8,11 @@
 --
 -- Description:
 -- -------------------------------------
---		This module drives a one-hot encoded column vector to read back a rows
---		vector. By scanning column-by-column it's possible to extract the current
---		button state of the whole keypad. The scanner uses high-active logic. The
---		keypad size and scan frequency can be configured. The outputed signal
---		matrix is not debounced.
+-- This module drives a one-hot encoded column vector to read back a rows
+-- vector. By scanning column-by-column it's possible to extract the current
+-- button state of the whole keypad. The scanner uses high-active logic. The
+-- keypad size and scan frequency can be configured. The outputed signal
+-- matrix is not debounced.
 --
 -- License:
 -- =============================================================================
@@ -65,28 +65,28 @@ end entity;
 
 architecture rtl of io_KeyPadScanner is
 	constant SHIFT_FREQ				: FREQ			:= SCAN_FREQ * COLUMNS;
-
+	
 	constant COLUMNTIMER_MAX	: positive	:= TimingToCycles(to_time(SHIFT_FREQ), CLOCK_FREQ) - 1;
 	constant COLUMNTIMER_BITS	: positive	:= log2ceilnz(COLUMNTIMER_MAX) + 1;
-
+	
 	signal ColumnTimer_rst	: std_logic;
 	signal ColumnTimer_s		: signed(COLUMNTIMER_BITS - 1 downto 0)	:= to_signed(COLUMNTIMER_MAX, COLUMNTIMER_BITS);
-
+	
 	signal ColumnSelect_en	: std_logic;
 	signal ColumnSelect_d		: std_logic_vector(COLUMNS - 1 downto 0)	:= (0 => '1', others => '0');
-
+	
 	signal Rows_sync				: std_logic_vector(ROWS - 1 downto 0);
 	signal KeyPadMatrix_r		: T_SLM(COLUMNS - 1 downto 0, ROWS - 1 downto 0)	:= (others => (others => '0'));
 begin
 	-- generate a < 100 kHz shift enable to 'clock' the ColumnSelect shift register
 	ColumnTimer_s		<= downcounter_next(cnt => ColumnTimer_s, rst => ColumnTimer_rst, INIT => COLUMNTIMER_MAX) when rising_edge(Clock);
 	ColumnTimer_rst	<= downcounter_neg(cnt => ColumnTimer_s);
-
+	
 	-- generate a column scan signal (one-hot encoded), based on a one-hot rotate register
 	ColumnSelect_en	<= ColumnTimer_rst;
 	ColumnSelect_d	<= rreg_left(q => ColumnSelect_d, en => ColumnSelect_en) when rising_edge(Clock);
 	ColumnVector		<= ColumnSelect_d;
-
+	
 	-- synchronize input signals
 	genSync : if (ADD_INPUT_SYNCHRONIZERS = TRUE) generate
 		sync : entity PoC.sync_Bits
@@ -102,7 +102,7 @@ begin
 	genNoSync : if (ADD_INPUT_SYNCHRONIZERS = FALSE) generate
 		Rows_sync	<= RowVector;
 	end generate;
-
+	
 	geni : for i in 0 to COLUMNS - 1 generate
 		genj : for j in 0 to ROWS - 1 generate
 			KeyPadMatrix_r(i, j)	<= ffsr(q => KeyPadMatrix_r(i, j),
@@ -111,6 +111,6 @@ begin
 																	when rising_edge(Clock);
 		end generate;
 	end generate;
-
+	
 	KeyPadMatrix	<= KeyPadMatrix_r;
 end architecture;

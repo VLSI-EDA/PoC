@@ -10,33 +10,46 @@
 -- Description:
 -- -------------------------------------
 --
--- Policies														| supported
--- -----------------------------------#--------------------
---	RR			round robin								| not yet
---	RAND		random										| not yet
---	CLOCK		clock algorithm						| not yet
---	LRU			least recently used				| YES
---	LFU			least frequently used			| not yet
--- -----------------------------------#--------------------
+-- **Supported policies:**
 --
--- Command thruth table:
+-- +----------+-----------------------+-----------+
+-- | Abbr.    | Policies              | supported |
+-- +==========+=======================+===========+
+-- | RR       | round robin           | not yet   |
+-- +----------+-----------------------+-----------+
+-- | RAND     | random                | not yet   |
+-- +----------+-----------------------+-----------+
+-- | CLOCK    | clock algorithm       | not yet   |
+-- +----------+-----------------------+-----------+
+-- | LRU      | least recently used   | YES       |
+-- +----------+-----------------------+-----------+
+-- | LFU      | least frequently used | not yet   |
+-- +----------+-----------------------+-----------+
 --
---	TagAccess | ReadWrite | Invalidate	| Replace | Command
---	----------+-----------+-------------+---------+--------------------------------
---		0				|		-				|		-					|		0			| None
---		1				|		0				|		0					|		0			| TagHit and reading a cache line
---		1				|		1				|		0					|		0			| TagHit and writing a cache line
---		1				|		0				|		1					|		0			| TagHit and invalidate a	cache line (while reading)
---		1				|		1				|		1					|		0			| TagHit and invalidate a	cache line (while writing)
---		0				|		-				|		0					|		1			| Replace cache line
---	----------+-----------+-------------+------------------------------------------
+-- **Command thruth table:**
+--
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- | TagAccess | ReadWrite | Invalidate  | Replace | Command                                             |
+-- +===========+===========+=============+=========+=====================================================+
+-- |  0        |           |             |    0    | None                                                |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    0      |    0        |    0    | TagHit and reading a cache line                     |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    1      |    0        |    0    | TagHit and writing a cache line                     |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    0      |    1        |    0    | TagHit and invalidate a  cache line (while reading) |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    1      |    1        |    0    | TagHit and invalidate a  cache line (while writing) |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  0        |           |    0        |    1    | Replace cache line                                  |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
 --
 -- In a set-associative cache, each cache-set has its own instance of this component.
 --
--- The input `HitWay` specifies the accessed way in a fully-associative or
+-- The input ``HitWay`` specifies the accessed way in a fully-associative or
 -- set-associative cache.
 --
--- The output `ReplaceWay` identifies the way which will be replaced as next by
+-- The output ``ReplaceWay`` identifies the way which will be replaced as next by
 -- a replace command. In a set-associative cache, this is the way in a specific
 -- cache set (see above).
 --
@@ -77,49 +90,49 @@ entity cache_replacement_policy is
 	port (
 		Clock : in std_logic;
 		Reset : in std_logic;
-
+		
 		-- replacement interface
 		Replace		 : in	 std_logic;
 		ReplaceWay : out std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0);
-
+		
 		-- cacheline usage update interface
 		TagAccess	 : in std_logic;
 		ReadWrite	 : in std_logic;
 		Invalidate : in std_logic;
 		HitWay		 : in std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0)
 	);
-end;
+end entity;
 
 
 architecture rtl of cache_replacement_policy is
 	attribute KEEP				 : boolean;
 	attribute FSM_ENCODING : string;
-
+	
 	constant KEY_BITS : positive := log2ceilnz(CACHE_WAYS);
-
+	
 begin
 	assert (str_equal(REPLACEMENT_POLICY, "RR") or
 					str_equal(REPLACEMENT_POLICY, "LRU"))
 		report "Unsupported replacement strategy"
 		severity error;
-
-
+		
+		
 	-- ===========================================================================
 	-- policy: RR - round robin
 	-- ===========================================================================
 	genRR : if (str_equal(REPLACEMENT_POLICY, "RR") = true) generate
 		constant VALID_BIT : natural := 0;
-
+		
 		subtype T_OPTION_LINE is std_logic_vector(0 downto 0);
 		type T_OPTION_LINE_VECTOR is array (natural range <>) of T_OPTION_LINE;
-
+		
 		signal OptionMemory : T_OPTION_LINE_VECTOR(CACHE_WAYS - 1 downto 0) := (others => (
 			VALID_BIT																																			=> '0')
 																																						 );
-
+																																						 
 		signal ValidHit		: std_logic;
 		signal Pointer_us : unsigned(log2ceilnz(CACHE_WAYS) - 1 downto 0) := (others => '0');
-
+		
 	begin
 --		ValidHit		<= OptionMemory(to_integer(unsigned(HitWay)))(VALID_BIT);
 --		IsValid			<= ValidHit;
@@ -159,7 +172,7 @@ begin
 --			end if;
 --		end process;
 	end generate;
-
+	
 	-- ===========================================================================
 	-- policy: LRU - least recently used
 	-- ===========================================================================
@@ -168,17 +181,17 @@ begin
 		signal LRU_Invalidate : std_logic;
 		signal KeyIn					: std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0);
 		signal LRU_Key				: std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0);
-
+		
 	begin
 		-- Command Decoding
 		LRU_Insert		 <= (TagAccess and not Invalidate) or Replace;
 		LRU_Invalidate <= TagAccess and Invalidate;
-
+		
 		KeyIn <= LRU_Key when Replace = '1' else HitWay;
-
+		
 		-- Output
 		ReplaceWay <= LRU_Key;
-
+		
 		LRU : entity PoC.sort_lru_cache
 			generic map (
 				ELEMENTS => CACHE_WAYS
@@ -186,11 +199,11 @@ begin
 			port map (
 				Clock => Clock,
 				Reset => Reset,
-
+				
 				Insert => LRU_Insert,
 				Free	 => LRU_Invalidate,
 				KeyIn	 => KeyIn,
-
+				
 				KeyOut => LRU_Key
 			);
 	end generate;

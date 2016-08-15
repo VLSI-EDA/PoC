@@ -4,11 +4,12 @@
 -- =============================================================================
 -- Authors:        Thomas B. Preusser
 --
--- Entity:				 uart_rx
+-- Entity:				 Universal Asynchronous Receiver Transmitter (UART) - Receiver
 --
 -- Description:
 -- -------------------------------------
--- UART (RS232) Receiver: 1 Start + 8 Data + 1 Stop
+-- :abbr:`UART (Universal Asynchronous Receiver Transmitter)` Receiver:
+-- 1 Start + 8 Data + 1 Stop
 --
 -- License:
 -- =============================================================================
@@ -43,11 +44,11 @@ entity uart_rx is
     -- Global Control
     clk : in std_logic;
     rst : in std_logic;
-
+    
     -- Bit Clock and RX Line
     bclk_x8 : in std_logic;  	-- bit clock, eight strobes per bit length
     rx      : in std_logic;
-
+    
     -- Byte Stream Output
     do  : out std_logic_vector(7 downto 0);
     stb : out std_logic
@@ -58,20 +59,20 @@ end entity;
 architecture rtl of uart_rx is
   -- RX Synchronization
   signal rxs : std_logic;
-
+  
   --                Buf        Cnt  Vld
   --   Idle     "---------0"    X    0
   --   Start    "0111111111"  5->16  0   -- 1.5 bit length after start of start bit
   --   Recv     "dcba011111"  9->16  0   -- shifting left to right (LSB first)
   --   Done     "1hgfedcba0"    X    1   -- Output strobe
-
+  
 	-- Data buffer
   signal Buf : std_logic_vector(9 downto 0) := (0      => '0', others => '-');
 	-- Bit clock counter: 8 ticks per bit
   signal Cnt : unsigned(4 downto 0)         := (others => '-');
 	-- Output strobe
   signal Vld : std_logic                    := '0';
-
+  
 begin
   -- Input synchronization
 	sync :  entity PoC.sync_Bits
@@ -84,7 +85,7 @@ begin
 			Input(0)			=> rx,		-- @async:	input bits
 			Output(0)			=> rxs		-- @Clock:	output bits
 		);
-
+		
   -- Reception state
   process(clk)
   begin
@@ -114,9 +115,9 @@ begin
       end if;
     end if;
   end process;
-
+  
   -- Outputs
   do  <= Buf(8 downto 1);
   stb <= Vld;
-
+  
 end architecture;

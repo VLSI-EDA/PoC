@@ -57,10 +57,10 @@ Please see the Linux instructions.
                             The PoC-Library - Service Tool
    ================================================================================
    Explanation of abbreviations:
-     y - yes
-     n - no
-     p - pass (jump to next question)
-   Upper case means default value
+     Y - yes      P        - pass (jump to next question)
+     N - no       Ctrl + C - abort (no changes are saved)
+   Upper case or value in '[...]' means default value
+   --------------------------------------------------------------------------------
    
    Configuring PoC
      PoC version: v1.0.1 (found in git)
@@ -75,74 +75,135 @@ Git and the installation directory is taken from the frontend scripts location.
 
 Aldec
 =====
+.. code-block:: none
 
+   Configuring Aldec
+     Are Aldec products installed on your system? [Y/n/p]: Y
+     Aldec installation directory [C:\Aldec]:
 
 Active-HDL
 ----------
+.. code-block:: none
+
+   Configuring Aldec Active-HDL
+     Is Aldec Active-HDL installed on your system? [Y/n/p]: Y
+     Aldec Active-HDL version [10.3]:
+     Aldec Active-HDL installation directory [C:\Aldec\Active-HDL]: C:\Aldec\Active-HDL-Student-Edition
 
 Altera
 ======
-
+.. code-block:: none
+   
+	 Configuring Altera
+     Are Altera products installed on your system? [Y/n/p]: Y
+     Altera installation directory [C:\Altera]:
+	
 Quartus
 -------
+.. code-block:: none
+
+   Configuring Altera Quartus
+     Is Altera Quartus-II or Quartus Prime installed on your system? [Y/n/p]: Y
+     Altera Quartus version [15.1]: 16.0
+     Altera Quartus installation directory [C:\Altera\16.0\quartus]:
 
 ModelSim Altera Edition
 -----------------------
+.. code-block:: none
+
+   Configuring ModelSim Altera Edition
+     Is ModelSim Altera Edition installed on your system? [Y/n/p]: Y
+     ModelSim Altera Edition installation directory [C:\Altera\15.0\modelsim_ae]: C:\Altera\16.0\modelsim_ase
 
 Lattice
 =======
+.. code-block:: none
+
+   Configuring Lattice
+     Are Lattice products installed on your system? [Y/n/p]: Y
+     Lattice installation directory [D:\Lattice]:
 
 Diamond
 -------
+.. code-block:: none
+
+   Configuring Lattice Diamond
+     Is Lattice Diamond installed on your system? [Y/n/p]: >
+     Lattice Diamond version [3.7]:
+     Lattice Diamond installation directory [D:\Lattice\Diamond\3.7_x64]:
 
 Active-HDL Lattice Edition
 --------------------------
+.. code-block:: none
+
+   Configuring Active-HDL Lattice Edition
+     Is Aldec Active-HDL installed on your system? [Y/n/p]: Y
+     Active-HDL Lattice Edition version [10.2]:
+     Active-HDL Lattice Edition installation directory [D:\Lattice\Diamond\3.7_x64\active-hdl]:
 
 Mentor Graphics
 ===============
+.. code-block:: none
+
+   Configuring Mentor
+     Are Mentor products installed on your system? [Y/n/p]: Y
+     Mentor installation directory [C:\Mentor]:
 
 QuestaSim
 ---------
+.. code-block:: none
 
-.. TODO::
-   Is Questa-SIM installed on your system? [Y/n/p]: y
-   Questa-SIM Installation Directory [C:\Mentor\QuestaSim64\10.2c]: C:\Mentor\QuestaSim64\10.3
-   Questa-SIM Version Number [10.2c]: 10.3
+   Configuring Mentor QuestaSim
+     Is Mentor QuestaSim installed on your system? [Y/n/p]: Y
+     Mentor QuestaSim version [10.4d]: 10.4c
+     Mentor QuestaSim installation directory [C:\Mentor\QuestaSim\10.4c]: C:\Mentor\QuestaSim64\10.4c
 
 Xilinx
 ======
+If Xilinx products are available and they shall be configured in PoC, then
+answer the following questions:
+
+.. code-block:: none
+
+   Configuring Xilinx
+     Are Xilinx products installed on your system? [Y/n/p]: Y
+     Xilinx installation directory [C:\Xilinx]:
 
 ISE
 ---
+If an Xilinx ISE environment is available and shall be configured in PoC, then
+answer the following questions:
 
-.. TODO::
-   If an Xilinx ISE environment is available and shall be configured in PoC, then answer the
-   following questions:
-   
-     Is Xilinx ISE installed on your system? [Y/n/p]: y
-     Xilinx Installation Directory [C:\Xilinx]: C:\Xilinx
-     Xilinx ISE Version Number [14.7]: 14.7
+.. code-block:: none
+
+   Configuring Xilinx ISE
+     Is Xilinx ISE installed on your system? [Y/n/p]: Y
+     Xilinx ISE installation directory [C:\Xilinx\14.7\ISE_DS]:
 
 Vivado
 ------
+If an Xilinx ISE environment is available and shall be configured in PoC, then
+answer the following questions:
 
-.. TODO::
-   Is Xilinx Vivado installed on your system? [Y/n/p]: y
-   Xilinx Installation Directory [C:\Xilinx]: C:\Xilinx
-   Xilinx Vivado Version Number [2014.4]: 2015.2
+.. code-block:: none
+
+   Configuring Xilinx Vivado
+     Is Xilinx Vivado installed on your system? [Y/n/p]: Y
+     Xilinx Vivado version [2016.2]:
+     Xilinx Vivado installation directory [C:\Xilinx\Vivado\2016.2]:
 
 GHDL
 ====
+.. code-block:: none
 
-.. TODO::
-   Is GHDL installed on your system? [Y/n/p]: y
-   GHDL Installation Directory [C:\Program Files (x86)\GHDL]: C:\Tools\GHDL\0.33dev
-   GHDL Version Number [0.31]: 0.33
+   Configuring GHDL
+     Is GHDL installed on your system? [Y/n/p]: Y
+     GHDL installation directory [C:\Tools\GHDL\0.34dev]:
 
 GTKWave
 =======
+.. code-block:: none
 
-.. TODO::
-   Is GTKWave installed on your system? [Y/n/p]: y
-   GTKWave Installation Directory [C:\Program Files (x86)\GTKWave]: C:\Tools\GTKWave\3.3.66
-   GTKWave Version Number [3.3.61]: 3.3.66
+   Configuring GTKWave
+     Is GTKWave installed on your system? [Y/n/p]: Y
+     GTKWave installation directory [C:\Tools\GTKWave\3.3.71]:

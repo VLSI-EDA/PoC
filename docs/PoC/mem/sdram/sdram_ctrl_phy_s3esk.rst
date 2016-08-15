@@ -1,0 +1,67 @@
+
+sdram_ctrl_phy_s3esk
+####################
+
+Physical layer used by module 'sdram_ctrl_s3esk'
+
+Instantiates input and output buffer components and adjusts timing for
+the Spartan-3E Starter Kit Board.
+
+Command signals and write data are sampled with clk.
+
+Read data is aligned with clk_fb90_n. Either process data in this clock
+domain, or connect a FIFO to transfer data into another clock domain of your
+choice.  This FIFO should capable of storing at least one burst (size BL/2)
++ start of next burst (size 1).
+
+clk     : base clock for command and write data path.
+clk_n   : clk phase shifted by 180 degrees.
+clk90   : clk phase shifted by  90 degrees.
+clk90_n : clk phase shifted by 270 degrees.
+
+clk_fb     : driven by external feedback (sd_ck_fb) of DDR-SDRAM clock
+             (sd_ck_p). (Actually unused, just for reference.)
+clk_fb90   : clk_fb phase shifted by 90 degrees.
+clk_fb90_n : clk_fb phase shifted by 270 degrees.
+
+rst        : Reset for clk.
+rst180     : Reset for clk_n.
+rst90      : Reset for clk90.
+rst270     : Reset for clk270.
+rst_fb90   : Reset for clk_fb90.
+rst_fb90_n : Reset for clk_fb90_n.
+
+Write and read enable (wren_nxt, rden_nxt) must be hold for
+  1 clock cycle  if BL = 2,
+  2 clock cycles if BL = 4, or
+  4 clock cycles if BL = 8.
+They must be first asserted with the read and write command. Proper delay is
+included in this unit.
+
+The first word to write must be asserted with the write command. Proper
+delay is included in this unit.
+
+The SDRAM clock is regenerated in this module. The following timing is
+chosen for minimum latency. (Should work up to 100 MHz.)
+  rising_edge(clk90)   triggers rising_edge(sd_ck_p)
+  rising_edge(clk90_n) triggers falling_edge(sd_ck_p)
+
+
+XST options: Disable equivalent register removal.
+
+Synchronous resets are used. Reset must be hold for at least two cycles.
+
+
+
+.. rubric:: Entity Declaration:
+
+.. literalinclude:: ../../../../src/mem/sdram/sdram_ctrl_phy_s3esk.vhdl
+   :language: vhdl
+   :tab-width: 2
+   :linenos:
+   :lines: 104-148
+
+Source file: `mem/sdram/sdram_ctrl_phy_s3esk.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_phy_s3esk.vhdl>`_
+
+
+	 

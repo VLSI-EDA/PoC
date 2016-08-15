@@ -5,6 +5,7 @@ mdio_IIC_Adapter
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/io/mdio/mdio_IIC_Adapter.vhdl

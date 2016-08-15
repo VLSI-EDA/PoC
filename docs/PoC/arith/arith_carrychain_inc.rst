@@ -2,8 +2,10 @@
 arith_carrychain_inc
 ####################
 
-This is a generic carry-chain abstraction for increment by one operations.
-Y <= X + (0...0) & Cin
+	This is a generic carry-chain abstraction for increment by one operations.
+
+	Y <= X + (0...0) & Cin
+
 
 
 .. rubric:: Entity Declaration:

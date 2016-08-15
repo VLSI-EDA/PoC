@@ -2,9 +2,8 @@
 stream_Sink
 ###########
 
-This module implements a generic buffer (FifO) for the PoC.Stream protocol.
-It is generic in DATA_BITS and in META_BITS as well as in FifO depths for
-data and meta information.
+.. TODO:: No documentation available.
+
 
 
 .. rubric:: Entity Declaration:
@@ -13,7 +12,7 @@ data and meta information.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 44-61
+   :lines: 42-59
 
 Source file: `bus/stream/stream_Sink.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Sink.vhdl>`_
 

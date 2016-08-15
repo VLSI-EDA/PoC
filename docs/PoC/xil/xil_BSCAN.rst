@@ -3,11 +3,12 @@ xil_BSCAN
 #########
 
 This module wraps Xilinx "Boundary Scan" (JTAG) primitives in a generic
-module. Supported devices are:
+module. |br|
+Supported devices are:
+ * Spartan-3, Spartan-6
+ * Virtex-5, Virtex-6
+ * Series-7 (Artix-7, Kintex-7, Virtex-7, Zynq-7000)
 
-* Spartan-3, Spartan-6
-* Virtex-5, Virtex-6
-* Series-7 (Artix-7, Kintex-7, Virtex-7, Zynq-7000)
 
 
 .. rubric:: Entity Declaration:

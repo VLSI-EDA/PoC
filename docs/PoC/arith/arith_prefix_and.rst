@@ -7,6 +7,7 @@ Prefix AND computation:
 This implementation uses carry chains for wider implementations.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/arith/arith_prefix_and.vhdl

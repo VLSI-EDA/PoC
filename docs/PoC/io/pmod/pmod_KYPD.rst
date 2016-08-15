@@ -2,12 +2,13 @@
 pmod_KYPD
 #########
 
-	This module drives a 4-bit one-cold encoded column vector to read back a
-	4-bit rows vector. By scanning column-by-column it's possible to extract
-	the current button state of the whole keypad. This wrapper converts the
-	high-active signals from io_KeyPadScanner to low-active signals for the
-	pmod. An additional debounce circuit filters the button signals. The scan
-	frequency and bounce time can be configured.
+This module drives a 4-bit one-cold encoded column vector to read back a
+4-bit rows vector. By scanning column-by-column it's possible to extract
+the current button state of the whole keypad. This wrapper converts the
+high-active signals from :doc:`PoC.io.KeypadScanner <../io_KeyPadScanner>`
+to low-active signals for the pmod. An additional debounce circuit filters
+the button signals. The scan frequency and bounce time can be configured.
+
 
 
 .. rubric:: Entity Declaration:

@@ -11,6 +11,7 @@ message bits per step. The generated CRC is independent from the chosen
 processing width.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/comm/comm_crc.vhdl

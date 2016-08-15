@@ -8,6 +8,7 @@ following arbitration strategies:
 * Round Robin (RR)
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/bus/bus_Arbiter.vhdl

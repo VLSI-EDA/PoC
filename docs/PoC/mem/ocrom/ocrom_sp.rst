@@ -3,8 +3,11 @@ ocrom_sp
 ########
 
 Inferring / instantiating single-port read-only memory
+
 - single clock, clock enable
 - 1 read port
+
+
 
 
 .. rubric:: Entity Declaration:

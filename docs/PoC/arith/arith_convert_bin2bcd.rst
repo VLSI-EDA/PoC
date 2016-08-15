@@ -5,6 +5,7 @@ arith_convert_bin2bcd
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/arith/arith_convert_bin2bcd.vhdl

@@ -8,6 +8,7 @@ enabling ``INVERT_FEEDBACK``. The number of counter bits is configurable with
 ``BITS``.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/arith/arith_counter_ring.vhdl

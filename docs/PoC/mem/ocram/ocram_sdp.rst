@@ -3,10 +3,12 @@ ocram_sdp
 #########
 
 Inferring / instantiating simple dual-port memory, with:
-* dual clock, clock enable,
-* 1 read port plus 1 write port.
+	* dual clock, clock enable,
+	* 1 read port plus 1 write port.
+
 The generalized behavior across Altera and Xilinx FPGAs since
 Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
+
   The Altera M512/M4K TriMatrix memory (as found e.g. in Stratix and
   Stratix II FPGAs) defines the minimum time after which the written data at
   the write port can be read-out at read port again. As stated in the Stratix
@@ -20,9 +22,12 @@ Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
   If the rising-edge of "rclk" coincides with the falling-edge of "wclk"
   (e.g. same clock signal), then it is counted as the 1st rising-edge of
   "rclk" in this timing.
+
 WARNING: The simulated behavior on RT-level is not correct.
+
 TODO: add timing diagram
 TODO: implement correct behavior for RT-level simulation
+
 
 
 .. rubric:: Entity Declaration:

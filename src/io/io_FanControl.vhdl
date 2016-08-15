@@ -8,6 +8,8 @@
 --
 -- Description:
 -- -------------------------------------
+-- .. code-block:: none
+--
 --		This module generates a PWM signal for a 3-pin (transistor controlled) or
 --		4-pin fan header. The FPGAs temperature is read from device specific system
 --		monitors (normal, user temperature, over temperature).
@@ -68,10 +70,10 @@ entity io_FanControl is
 		-- Global Control
 		Clock										: in	std_logic;
 		Reset										: in	std_logic;
-
+		
 		-- Fan Control derived from internal System Health Monitor
 		Fan_PWM									: out	std_logic;
-
+		
     -- Decoding of Speed Sensor (Requires ENABLE_TACHO)
     Fan_Tacho      : in  std_logic := 'X';
     TachoFrequency : out std_logic_vector(15 downto 0)
@@ -85,22 +87,22 @@ architecture rtl of io_FanControl is
 	constant TIME_STARTUP_INVERSE : FREQ																					:= 2 Hz;		-- StartUp time
 	constant PWM_RESOLUTION		: positive																					:= 4;					-- 4 Bit resolution => 0 to 15 steps
 	constant PWM_FREQ					: FREQ																							:= 10 Hz;			--
-
+	
 	constant TACHO_RESOLUTION	: positive																					:= 8;
-
+	
 	signal PWM_PWMIn					: std_logic_vector(PWM_RESOLUTION - 1 downto 0);
 	signal PWM_PWMOut					: std_logic																					:= '0';
-
+	
 begin
 	-- System Monitor and temperature to PWM ratio calculation for Virtex6
 	-- ==========================================================================================================================================================
 	genXilinx : if (VENDOR = VENDOR_XILINX) generate
 		signal OverTemperature_async	: std_logic;
 		signal OverTemperature_sync		: std_logic;
-
+		
 		signal UserTemperature_async	: std_logic;
 		signal UserTemperature_sync		: std_logic;
-
+		
 		signal TC_Timeout					: std_logic;
 		signal StartUp						: std_logic;
 	begin
@@ -108,7 +110,7 @@ begin
 			SystemMonitor : xil_SystemMonitor_Virtex6
 				port map (
 					Reset								=> Reset,										-- Reset signal for the System Monitor control logic
-
+					
 					Alarm_UserTemp			=> UserTemperature_async,		-- Temperature-sensor alarm output
 					Alarm_OverTemp			=> OverTemperature_async,		-- Over-Temperature alarm output
 					Alarm								=> open,										-- OR'ed output of all the Alarms
@@ -120,7 +122,7 @@ begin
 			SystemMonitor : xil_SystemMonitor_Series7
 				port map (
 					Reset								=> Reset,										-- Reset signal for the System Monitor control logic
-
+					
 					Alarm_UserTemp			=> UserTemperature_async,		-- Temperature-sensor alarm output
 					Alarm_OverTemp			=> OverTemperature_async,		-- Over-Temperature alarm output
 					Alarm								=> open,										-- OR'ed output of all the Alarms
@@ -128,7 +130,7 @@ begin
 					VN									=> '0'
 				);
 		end generate;
-
+		
 		sync : entity PoC.sync_Bits
 			generic map (
 				BITS			=> 2
@@ -140,7 +142,7 @@ begin
 				Output(0)		=> OverTemperature_sync,
 				Output(1)		=> UserTemperature_sync
 			);
-
+			
 		-- timer for warm-up control
 		-- ==========================================================================================================================================================
 		TC : entity PoC.io_TimingCounter
@@ -154,9 +156,9 @@ begin
 				Slot								=> 0,						--
 				Timeout							=> TC_Timeout		-- timing reached
 			);
-
+			
 		StartUp	<= not TC_Timeout;
-
+		
 		process(StartUp, UserTemperature_sync, OverTemperature_sync)
 		begin
 			if		(StartUp = '1') then								PWM_PWMIn <= to_slv(2**(PWM_RESOLUTION) - 1, PWM_RESOLUTION);			-- 100%; start up
@@ -166,14 +168,14 @@ begin
 			end if;
 		end process;
 	end generate;
-
+	
 	genAltera : if (VENDOR = VENDOR_ALTERA) generate
 --		signal OverTemperature_async	: STD_LOGIC;
 		signal OverTemperature_sync		: std_logic;
-
+		
 --		signal UserTemperature_async	: STD_LOGIC;
 		signal UserTemperature_sync		: std_logic;
-
+		
 		signal TC_Timeout					: std_logic;
 		signal StartUp						: std_logic;
 	begin
@@ -181,7 +183,7 @@ begin
 			OverTemperature_sync		<= '0';
 			UserTemperature_sync		<= '1';
 		end generate;
-
+		
 		-- timer for warm-up control
 		-- ==========================================================================================================================================================
 		TC : entity PoC.io_TimingCounter
@@ -195,9 +197,9 @@ begin
 				Slot								=> 0,						--
 				Timeout							=> TC_Timeout		-- timing reached
 			);
-
+			
 		StartUp	<= not TC_Timeout;
-
+		
 		process(StartUp, UserTemperature_sync, OverTemperature_sync)
 		begin
 			if		(StartUp = '1') then								PWM_PWMIn <= to_slv(2**(PWM_RESOLUTION) - 1, PWM_RESOLUTION);			-- 100%; start up
@@ -207,7 +209,7 @@ begin
 			end if;
 		end process;
 	end generate;
-
+	
 	-- PWM signal modulator
 	-- ==========================================================================================================================================================
 	PWM : entity PoC.io_PulseWidthModulation
@@ -222,10 +224,10 @@ begin
 			PWMIn								=> PWM_PWMIn,
 			PWMOut							=> PWM_PWMOut
 		);
-
+		
 	-- registered output
 	Fan_PWM 		<= PWM_PWMOut	when rising_edge(Clock);
-
+	
 	-- tacho signal interpretation -> convert to RPM
 	-- ==========================================================================================================================================================
 	genNoTacho : if (ENABLE_TACHO = FALSE) generate
@@ -247,7 +249,7 @@ begin
 					Output(0) => Tacho_sync			-- synchronised data
 				);
 		end generate;
-
+		
 		Tacho : entity PoC.io_FrequencyCounter
 			generic map (
 				CLOCK_FREQ					=> CLOCK_FREQ,					--
@@ -260,7 +262,7 @@ begin
 				FreqIn							=> Tacho_sync,
 				FreqOut							=> Tacho_Freq
 			);
-
+			
 		-- multiply by 64; divide by 2 for RPMs (2 impulses per revolution) => append 5x '0'
 		TachoFrequency	<= resize(Tacho_Freq & "00000", TachoFrequency'length);		-- resizing to 16 bit
 	end generate;

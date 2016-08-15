@@ -8,9 +8,7 @@
 --
 -- Description:
 -- -------------------------------------
--- This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
--- It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
--- data and meta information.
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -74,39 +72,39 @@ end entity;
 architecture rtl of stream_Mux is
 	attribute KEEP										: boolean;
 	attribute FSM_ENCODING						: string;
-
+	
 	subtype T_CHANNEL_INDEX is natural range 0 to PORTS - 1;
-
+	
 	type T_STATE is (ST_IDLE, ST_DATAFLOW);
-
+	
 	signal State											: T_STATE					:= ST_IDLE;
 	signal NextState									: T_STATE;
-
+	
 	signal FSM_Dataflow_en						: std_logic;
-
+	
 	signal RequestVector							: std_logic_vector(PORTS - 1 downto 0);
 	signal RequestWithSelf						: std_logic;
 	signal RequestWithoutSelf					: std_logic;
-
+	
 	signal RequestLeft								: unsigned(PORTS - 1 downto 0);
 	signal SelectLeft									: unsigned(PORTS - 1 downto 0);
 	signal SelectRight								: unsigned(PORTS - 1 downto 0);
-
+	
 	signal ChannelPointer_en					: std_logic;
 	signal ChannelPointer							: std_logic_vector(PORTS - 1 downto 0);
 	signal ChannelPointer_d						: std_logic_vector(PORTS - 1 downto 0)						:= to_slv(2 ** (PORTS - 1), PORTS);
 	signal ChannelPointer_nxt					: std_logic_vector(PORTS - 1 downto 0);
 	signal ChannelPointer_bin					: unsigned(log2ceilnz(PORTS) - 1 downto 0);
-
+	
 	signal idx												: T_CHANNEL_INDEX;
-
+	
 	signal Out_EOF_i									: std_logic;
-
+	
 begin
 	RequestVector				<= In_Valid and In_SOF;
 	RequestWithSelf			<= slv_or(RequestVector);
 	RequestWithoutSelf	<= slv_or(RequestVector and not ChannelPointer_d);
-
+	
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -117,27 +115,27 @@ begin
 			end if;
 		end if;
 	end process;
-
+	
 	process(State, RequestWithSelf, RequestWithoutSelf, Out_Ack, Out_EOF_i, ChannelPointer_d, ChannelPointer_nxt)
 	begin
 		NextState									<= State;
-
+		
 		FSM_Dataflow_en						<= '0';
-
+		
 		ChannelPointer_en					<= '0';
 		ChannelPointer						<= ChannelPointer_d;
-
+		
 		case State is
 			when ST_IDLE =>
 				if (RequestWithSelf = '1') then
 					ChannelPointer_en		<= '1';
-
+					
 					NextState						<= ST_DATAFLOW;
 				end if;
-
+				
 			when ST_DATAFLOW =>
 				FSM_Dataflow_en				<= '1';
-
+				
 				if ((Out_Ack and Out_EOF_i) = '1') then
 					if (RequestWithoutSelf = '0') then
 						NextState					<= ST_IDLE;
@@ -147,7 +145,7 @@ begin
 				end if;
 		end case;
 	end process;
-
+	
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -158,25 +156,25 @@ begin
 			end if;
 		end if;
 	end process;
-
+	
 	RequestLeft					<= (not ((unsigned(ChannelPointer_d) - 1) or unsigned(ChannelPointer_d))) and unsigned(RequestVector);
 	SelectLeft					<= (unsigned(not RequestLeft) + 1)		and RequestLeft;
 	SelectRight					<= (unsigned(not RequestVector) + 1)	and unsigned(RequestVector);
 	ChannelPointer_nxt	<= std_logic_vector(ite((RequestLeft = (RequestLeft'range => '0')), SelectRight, SelectLeft));
-
+	
 	ChannelPointer_bin	<= onehot2bin(ChannelPointer);
 	idx									<= to_integer(ChannelPointer_bin);
-
+	
 	Out_Data						<= get_row(In_Data, idx);
 	Out_Meta						<= get_row(In_Meta, idx);
-
+	
 	Out_SOF							<= In_SOF(to_integer(ChannelPointer_bin));
 	Out_EOF_i						<= In_EOF(to_integer(ChannelPointer_bin));
 	Out_Valid						<= In_Valid(to_integer(ChannelPointer_bin)) and FSM_Dataflow_en;
 	Out_EOF							<= Out_EOF_i;
-
+	
 	In_Ack							<= (In_Ack	'range => (Out_Ack	 and FSM_Dataflow_en)) and ChannelPointer;
-
+	
 	genMetaReverse_0 : if (META_REV_BITS = 0) generate
 		In_Meta_rev		<= (others => (others => '0'));
 	end generate;
@@ -191,5 +189,5 @@ begin
 		end generate;
 		In_Meta_rev		<= Temp_Meta_rev;
 	end generate;
-
+	
 end architecture;

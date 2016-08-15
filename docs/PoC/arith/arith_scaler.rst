@@ -19,6 +19,7 @@ Make sure to tap a sufficient number of result bits in accordance to the
 highest scaling ratio to be used in order to avoid a truncation overflow.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/arith/arith_scaler.vhdl

@@ -7,6 +7,7 @@ bits in parallel. The mask are output in little endian. The generated bit
 sequence is independent from the chosen output width.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/comm/comm_scramble.vhdl

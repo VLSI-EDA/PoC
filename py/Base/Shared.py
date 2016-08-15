@@ -32,11 +32,6 @@
 # ==============================================================================
 #
 # entry point
-from datetime import datetime
-
-from PoC.TestCase import TestSuite
-
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -47,6 +42,7 @@ else:
 
 # load dependencies
 import shutil
+from datetime           import datetime
 from os                 import chdir
 
 from lib.Parser         import ParserException
@@ -54,7 +50,6 @@ from Base.Exceptions    import CommonException, SkipableCommonException
 from Base.Logging       import ILogable
 from Base.Project       import ToolChain, Tool, VHDLVersion, Environment
 from PoC.Solution       import VirtualProject, FileListFile
-from PoC.TestCase				import TestSuite
 
 
 # local helper function

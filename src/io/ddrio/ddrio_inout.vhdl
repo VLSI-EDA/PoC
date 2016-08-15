@@ -9,30 +9,34 @@
 --
 -- Description:
 -- -------------------------------------
--- Instantiates chip-specific DDR input and output registers.
+-- Instantiates chip-specific :abbr:`DDR (Double Data Rate)` input and output
+-- registers.
 --
--- Both data "DataOut_high/low" as well as "OutputEnable" are sampled with
--- the rising_edge(Clock) from the on-chip logic. "DataOut_high" is brought
--- out with this rising edge. "DataOut_low" is brought out with the falling
+-- Both data ``DataOut_high/low`` as well as ``OutputEnable`` are sampled with
+-- the ``rising_edge(Clock)`` from the on-chip logic. ``DataOut_high`` is brought
+-- out with this rising edge. ``DataOut_low`` is brought out with the falling
 -- edge.
 --
--- "OutputEnable" (Tri-State) is high-active. It is automatically inverted if
+-- ``OutputEnable`` (Tri-State) is high-active. It is automatically inverted if
 -- necessary. Output is disabled after power-up.
 --
--- Both data "DataIn_high/low" are synchronously outputted to the on-chip logic
--- with the rising edge of "Clock". "DataIn_high" is the value at the "Pad"
--- sampled with the same rising edge. "DataIn_low" is the value sampled with
+-- Both data ``DataIn_high/low`` are synchronously outputted to the on-chip logic
+-- with the rising edge of ``Clock``. ``DataIn_high`` is the value at the ``Pad``
+-- sampled with the same rising edge. ``DataIn_low`` is the value sampled with
 -- the falling edge directly before this rising edge. Thus sampling starts with
 -- the falling edge of the clock as depicted in the following waveform.
---              __      ____      ____      __
--- Clock          |____|    |____|    |____|
--- Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
--- DataIn_low      ... >< 0      >< 2      ><
--- DataIn_high     ... >< 1      >< 3      ><
 --
--- < i > is the value of the i-th data bit on the line.
+-- .. code-block:: none
 --
--- "Pad" must be connected to a PAD because FPGAs only have these registers in
+--                 __      ____      ____      __
+--    Clock          |____|    |____|    |____|
+--    Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
+--    DataIn_low      ... >< 0      >< 2      ><
+--    DataIn_high     ... >< 1      >< 3      ><
+--
+--    < i > is the value of the i-th data bit on the line.
+--
+-- ``Pad`` must be connected to a PAD because FPGAs only have these registers in
 -- IOBs.
 --
 -- License:
@@ -73,12 +77,12 @@ entity ddrio_inout is
 		OutputEnable		: in		std_logic;
 		DataOut_high		: in		std_logic_vector(BITS - 1 downto 0);
 		DataOut_low			: in		std_logic_vector(BITS - 1 downto 0);
-
+		
 		ClockIn					: in		std_logic;
 		ClockInEnable		: in		std_logic;
 		DataIn_high			: out		std_logic_vector(BITS - 1 downto 0);
 		DataIn_low			: out		std_logic_vector(BITS - 1 downto 0);
-
+		
 		Pad							: inout	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
@@ -90,7 +94,7 @@ begin
 	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.inout is not implemented for given DEVICE."
 		severity FAILURE;
-
+		
 	genXilinx : if (VENDOR = VENDOR_XILINX) generate
 		inst : ddrio_inout_xilinx
 			generic map (
@@ -109,7 +113,7 @@ begin
 				Pad							=> Pad
 			);
 	end generate;
-
+	
 	genAltera : if (VENDOR = VENDOR_ALTERA) generate
 		inst : ddrio_inout_altera
 			generic map (
@@ -128,13 +132,13 @@ begin
 				Pad							=> Pad
 			);
 	end generate;
-
+	
 	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
 		signal DataOut_high_d	: std_logic_vector(BITS - 1 downto 0);
 		signal DataOut_low_d	: std_logic_vector(BITS - 1 downto 0);
 		signal OutputEnable_d	: std_logic;
 		signal Pad_o					: std_logic_vector(BITS - 1 downto 0);
-
+		
 		signal Pad_d_fe				: std_logic_vector(BITS - 1 downto 0);
 		signal DataIn_high_d	: std_logic_vector(BITS - 1 downto 0);
 		signal DataIn_low_d		: std_logic_vector(BITS - 1 downto 0);
@@ -142,27 +146,27 @@ begin
 		DataOut_high_d	<= DataOut_high		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 		DataOut_low_d		<= DataOut_low		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 		OutputEnable_d	<= OutputEnable		when rising_edge(ClockOut) and (ClockOutEnable = '1');
-
+		
 		process(ClockOut, OutputEnable_d, DataOut_high_d, DataOut_low_d)
 			type T_MUX is array(bit) of std_logic_vector(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
 		begin
 			MuxInput('1')	:= DataOut_high_d;
 			MuxInput('0')	:= DataOut_low_d;
-
+			
 			if (OutputEnable_d = '1') then
 				Pad_o		<= MuxInput(to_bit(ClockOut));
 			else
 				Pad_o		<= (others => 'Z');
 			end if;
 		end process;
-
+		
 		Pad			<= Pad_o;
-
+		
 		Pad_d_fe				<= Pad			when falling_edge(ClockIn)	and (ClockInEnable = '1');
 		DataIn_high_d		<= Pad			when rising_edge(ClockIn)		and (ClockInEnable = '1');
 		DataIn_low_d		<= Pad_d_fe	when rising_edge(ClockIn)		and (ClockInEnable = '1');
-
+		
 		DataIn_high			<= DataIn_high_d;
 		DataIn_low			<= DataIn_low_d;
 	end generate;

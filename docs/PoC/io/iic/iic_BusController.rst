@@ -8,6 +8,7 @@ I2C bus, use the I2C Controller, which utilizes this controller. This
 controller is compatible to the System Management Bus (SMBus).
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/io/iic/iic_BusController.vhdl

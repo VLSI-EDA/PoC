@@ -9,6 +9,7 @@ References
    FileFormats/index
    Interfaces/index
    NamingConventions
+   ListOfDevices
    ListOfBoards
    Glossary
    KnownIssues

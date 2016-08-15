@@ -8,6 +8,7 @@ I2C BusController to send/receive bits over the I2C bus. This controller
 is compatible to the System Management Bus (SMBus).
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/io/iic/iic_Controller.vhdl

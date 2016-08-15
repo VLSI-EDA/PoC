@@ -7,8 +7,8 @@ temperature values are overrun.
 
 .. rubric:: Temperature Curve
 
-.. code-block:: None
-   
+.. code-block:: none
+
                    |                      /-----\
    Temp_ov   on=80 | - - - - - - /-------/       \
                    |            /        |        \
@@ -20,6 +20,7 @@ temperature values are overrun.
                    |  /     |            |              |           \
    ----------------|--------|------------|--------------|-----------|--------
    pwm =           |   min  |  medium    |   max        |   medium  |  min
+
 
 
 .. rubric:: Entity Declaration:

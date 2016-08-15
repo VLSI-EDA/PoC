@@ -5,6 +5,7 @@ lcd_LCDBuffer
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/io/lcd/lcd_LCDBuffer.vhdl

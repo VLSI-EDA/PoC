@@ -5,6 +5,7 @@ filter_mean
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/misc/filter/filter_mean.vhdl

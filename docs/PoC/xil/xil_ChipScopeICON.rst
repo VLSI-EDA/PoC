@@ -6,17 +6,17 @@ This module wraps 15 ChipScope ICON IP core netlists generated from ChipScope
 ICON xco files. The generic parameter ``PORTS`` selects the apropriate ICON
 instance with 1 to 15 ICON ``ControlBus`` ports. Each ``ControlBus`` port is
 of type ``T_XIL_CHIPSCOPE_CONTROL`` and of mode ``inout``.
-..rubric:: Compile required CoreGenerator IP Cores to Netlists with PoC:
 
-Please use the provided netlist compile command in PoC to recreate the needed
-source and netlist files on your local machine.
+.. rubric:: Compile required CoreGenerator IP Cores to Netlists with PoC
 
-.. code-block:: vhdl
-   
-   cd <PoCRoot>
-   .\poc.ps1 coregen PoC.xil.ChipScopeICON_1 --board=KC705
-   [...]
-   .\poc.ps1 coregen PoC.xil.ChipScopeICON_15 --board=KC705
+Please use the provided Xilinx ISE compile command ``ise`` in PoC to recreate
+the needed source and netlist files on your local machine.
+
+.. code-block:: PowerShell
+
+   cd PoCRoot
+   .\poc.ps1 ise PoC.xil.ChipScopeICON --board=KC705
+
 
 
 .. rubric:: Entity Declaration:
@@ -25,7 +25,7 @@ source and netlist files on your local machine.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 58-65
+   :lines: 56-63
 
 Source file: `xil/xil_ChipScopeICON.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ChipScopeICON.vhdl>`_
 

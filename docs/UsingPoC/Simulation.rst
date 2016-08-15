@@ -119,6 +119,14 @@ A vendor specific testbench can be launched by passing either ``--board=xxx`` or
    # Example 3 - A Xilinx Kintex-7 325T device
    .\poc.ps1 ghdl PoC.arith.prng --device=XC7K325T-2FFG900
 
+.. note::
+   Running vendor specific testbenches may require pre-compiled vendor libraries.
+   Some simulators are shipped with diverse pre-compiled libraries, others include
+   scripts or user guides to pre-compile them on the target system.
+   
+   PoC is shipped with a set of pre-compile scripts to offer a unified interface
+   and common storage for all supported vendor's pre-compile procedures. See
+   :doc:`Pre-Compiling Vendor Libraries </UsingPoC/PrecompilingVendorLibraries>`.
 
 Running a Single Testbench
 **************************

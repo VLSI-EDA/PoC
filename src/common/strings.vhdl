@@ -668,7 +668,7 @@ package body strings is
 			-- WORKAROUND: for Altera Quartus-II
 			--	Version:	15.0
 			--	Issue:		array bounds are check regardless of the hierachy and control flow
-			Result(1 to imin(Size, imax(1, str'length))) := ite((str'length > 0), str(1 to imin(Size, str'length)), ConstNUL);
+			Result(1 to bound(Size, 1, str'length)) := ite((str'length > 0), str(1 to imin(Size, str'length)), ConstNUL);
 		end if;
 		return Result;
 	end function;

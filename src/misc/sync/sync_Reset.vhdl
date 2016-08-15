@@ -2,33 +2,33 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- =============================================================================
--- Authors:					Patrick Lehmann
+-- Authors:         Patrick Lehmann
 --
--- Entity:					Synchronizes a reset signal across clock-domain boundaries
+-- Entity:          Synchronizes a reset signal across clock-domain boundaries
 --
 -- Description:
 -- -------------------------------------
---    This module synchronizes an asynchronous reset signal to the clock
---    'Clock'. The 'Input' can be asserted and de-asserted at any time.
---    The 'Output' is asserted asynchronously and de-asserted synchronously
---    to the clock.
+-- This module synchronizes an asynchronous reset signal to the clock
+-- ``Clock``. The ``Input`` can be asserted and de-asserted at any time.
+-- The ``Output`` is asserted asynchronously and de-asserted synchronously
+-- to the clock.
 --
---		ATTENTION:
---			Use this synchronizer only to asynchronously reset your design.
---      The 'Output' should be feed by global buffer to the destination FFs, so
---      that, it reaches their reset inputs within one clock cycle.
+-- .. ATTENTION::
+--    Use this synchronizer only to asynchronously reset your design.
+--    The 'Output' should be feed by global buffer to the destination FFs, so
+--    that, it reaches their reset inputs within one clock cycle.
 --
---		CONSTRAINTS:
---			General:
---				Please add constraints for meta stability to all '_meta' signals and
---				timing ignore constraints to all '_async' signals.
+-- Constraints:
+--   General:
+--     Please add constraints for meta stability to all '_meta' signals and
+--     timing ignore constraints to all '_async' signals.
 --
---			Xilinx:
---				In case of a Xilinx device, this module will instantiate the optimized
---				module xil_SyncReset. Please attend to the notes of xil_SyncReset.
+--   Xilinx:
+--     In case of a Xilinx device, this module will instantiate the optimized
+--     module xil_SyncReset. Please attend to the notes of xil_SyncReset.
 --
---			Altera sdc file:
---				TODO
+--   Altera sdc file:
+--     TODO
 --
 -- License:
 -- =============================================================================

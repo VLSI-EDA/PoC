@@ -83,4 +83,5 @@ are fulfilled. Chose one of the following integration kinds:
    Simulation
    Synthesis
    ProjectManagement
+   PrecompilingVendorLibraries
    Miscellaneous

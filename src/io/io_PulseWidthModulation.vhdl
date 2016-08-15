@@ -8,8 +8,8 @@
 --
 -- Description:
 -- -------------------------------------
---		This module generates a pulse width modulated signal, that can be configured
---		in frequency (PWM_FREQ) and modulation granularity (PWM_RESOLUTION).
+-- This module generates a pulse width modulated signal, that can be configured
+-- in frequency (``PWM_FREQ``) and modulation granularity (``PWM_RESOLUTION``).
 --
 -- License:
 -- =============================================================================
@@ -58,12 +58,12 @@ architecture rtl of io_PulseWidthModulation is
 	constant PWM_STEP_FREQ							: FREQ																					:= PWM_FREQ * (PWM_STEPS - 1);
 	constant PWM_FREQUENCYCOUNTER_MAX		: positive																			:= (CLOCK_FREQ+PWM_STEP_FREQ-1 Hz) / PWM_STEP_FREQ; -- division with round-up
 	constant PWM_FREQUENCYCOUNTER_BITS	: positive																			:= log2ceilnz(PWM_FREQUENCYCOUNTER_MAX);
-
+	
 	signal PWM_FrequencyCounter_us			: unsigned(PWM_FREQUENCYCOUNTER_BITS downto 0)	:= (others => '0');
 	signal PWM_FrequencyCounter_ov			: std_logic;
 	signal PWM_PulseCounter_us					: unsigned(PWM_RESOLUTION - 1 downto 0)					:= (others => '0');
 	signal PWM_PulseCounter_ov					: std_logic;
-
+	
 begin
 	-- PWM frequency counter
 	process(Clock)
@@ -76,9 +76,9 @@ begin
 			end if;
 		end if;
 	end process;
-
+	
 	PWM_FrequencyCounter_ov	<= to_sl(PWM_FrequencyCounter_us = PWM_FREQUENCYCOUNTER_MAX);
-
+	
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
@@ -89,8 +89,8 @@ begin
 			end if;
 		end if;
 	end process;
-
+	
 	PWM_PulseCounter_ov <= to_sl(PWM_PulseCounter_us = ((2**PWM_RESOLUTION) - 2)) and PWM_FrequencyCounter_ov;
-
+	
 	PWMOut		<= to_sl(PWM_PulseCounter_us < unsigned(PWMIn));
 end;

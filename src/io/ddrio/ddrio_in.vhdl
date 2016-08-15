@@ -9,25 +9,28 @@
 --
 -- Description:
 -- -------------------------------------
--- Instantiates chip-specific DDR input registers.
+-- Instantiates chip-specific :abbr:`DDR (Double Data Rate)` input registers.
 --
--- Both data "DataIn_high/low" are synchronously outputted to the on-chip logic
--- with the rising edge of "Clock". "DataIn_high" is the value at the "Pad"
--- sampled with the same rising edge. "DataIn_low" is the value sampled with
+-- Both data ``DataIn_high/low`` are synchronously outputted to the on-chip logic
+-- with the rising edge of ``Clock``. ``DataIn_high`` is the value at the ``Pad``
+-- sampled with the same rising edge. ``DataIn_low`` is the value sampled with
 -- the falling edge directly before this rising edge. Thus sampling starts with
 -- the falling edge of the clock as depicted in the following waveform.
---              __      ____      ____      __
--- Clock          |____|    |____|    |____|
--- Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
--- DataIn_low      ... >< 0      >< 2      ><
--- DataIn_high     ... >< 1      >< 3      ><
 --
--- < i > is the value of the i-th data bit on the line.
+-- .. code-block:: none
 --
--- After power-up, the output ports "DataIn_high" and "DataIn_low" both equal
+--                 __      ____      ____      __
+--    Clock          |____|    |____|    |____|
+--    Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
+--    DataIn_low      ... >< 0      >< 2      ><
+--    DataIn_high     ... >< 1      >< 3      ><
+--
+--    < i > is the value of the i-th data bit on the line.
+--
+-- After power-up, the output ports ``DataIn_high`` and ``DataIn_low`` both equal
 -- INIT_VALUE.
 --
--- "Pad" must be connected to a PAD because FPGAs only have these registers in
+-- ``Pad`` must be connected to a PAD because FPGAs only have these registers in
 -- IOBs.
 --
 -- License:
@@ -79,7 +82,7 @@ begin
 	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.in is not implemented for given DEVICE."
 		severity FAILURE;
-
+		
 	genXilinx : if (VENDOR = VENDOR_XILINX) generate
 		i : ddrio_in_xilinx
 			generic map (
@@ -94,7 +97,7 @@ begin
 				Pad					=> Pad
 			);
 	end generate;
-
+	
 	genAltera : if (VENDOR = VENDOR_ALTERA) generate
 		i : ddrio_in_altera
 			generic map (
@@ -109,7 +112,7 @@ begin
 				Pad					=> Pad
 			);
 	end generate;
-
+	
 	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
 		signal Pad_d_fe				: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 		signal DataIn_high_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
@@ -118,7 +121,7 @@ begin
 		Pad_d_fe				<= Pad			when falling_edge(Clock)	and (ClockEnable = '1');
 		DataIn_high_d		<= Pad			when rising_edge(Clock)		and (ClockEnable = '1');
 		DataIn_low_d		<= Pad_d_fe	when rising_edge(Clock)		and (ClockEnable = '1');
-
+		
 		DataIn_high			<= DataIn_high_d;
 		DataIn_low			<= DataIn_low_d;
 	end generate;

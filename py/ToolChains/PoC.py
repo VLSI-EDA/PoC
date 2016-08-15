@@ -44,9 +44,9 @@ else:
 
 from os                   import environ
 from pathlib              import Path
-from subprocess           import check_output, check_call, call, CalledProcessError
+from subprocess           import check_output, check_call, CalledProcessError
 
-from Base.Configuration   import Configuration as BaseConfiguration, ConfigurationException
+from Base.Configuration   import Configuration as BaseConfiguration
 
 
 class Configuration(BaseConfiguration):
@@ -112,7 +112,7 @@ class Configuration(BaseConfiguration):
 				script = str(gitToolsPath / ('git-' + section + '.setup.py'))
 				try:
 					check_call(["python", script])
-				except CalledProcessError as ex:
+				except CalledProcessError:
 					# We do not want this to be fatal
 					self._host._LogWarning("Could not setup '{}': {}".format(section, script))
 

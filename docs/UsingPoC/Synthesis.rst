@@ -33,11 +33,10 @@ one of PoC's frontend script:
 
 
 .. seealso::
-   List of Supported Target Devices
-	    xxxx
-   List of Supported Development Boards
-      xxxx
-
+   :doc:`List of Supported FPGA Devices </References/ListOfDevices>`
+	   See this list to find a supported and well known target device.
+   :doc:`List of Supported Development Boards </References/ListOfBoards>`
+     See this list to find a supported and well known development board.
 
 Quick Example
 *************

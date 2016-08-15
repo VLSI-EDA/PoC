@@ -7,6 +7,7 @@ pipeline. Data storage is limited to two words only so as to allow both
 the ``ful``  and the ``vld`` indicators to be driven by registers.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/fifo/fifo_glue.vhdl

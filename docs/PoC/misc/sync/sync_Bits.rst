@@ -12,16 +12,16 @@ implementation is choosen.
    Use this synchronizer only for long time stable signals (flags).
 
 Constraints:
-	General:
-		Please add constraints for meta stability to all '_meta' signals and
-		timing ignore constraints to all '_async' signals.
+  General:
+    Please add constraints for meta stability to all '_meta' signals and
+    timing ignore constraints to all '_async' signals.
 
-	Xilinx:
-		In case of a Xilinx device, this module will instantiate the optimized
-		module PoC.xil.SyncBits. Please attend to the notes of xil_SyncBits.vhdl.
+  Xilinx:
+    In case of a Xilinx device, this module will instantiate the optimized
+    module PoC.xil.SyncBits. Please attend to the notes of xil_SyncBits.vhdl.
 
-	Altera sdc file:
-		TODO
+  Altera sdc file:
+    TODO
 
 
 
@@ -43,5 +43,6 @@ Source file: `misc/sync/sync_Bits.vhdl <https://github.com/VLSI-EDA/PoC/blob/mas
      For a synchronizer for *strobe*-signals.
    :doc:`PoC.misc.sync.Vector </PoC/misc/sync/sync_Vector>`
      For a multiple bits capable synchronizer.
+   
 
 	 

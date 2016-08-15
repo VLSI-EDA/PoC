@@ -42,7 +42,3 @@ The following additional file types are supported:
 Browse the `Notepad++ directory <https://github.com/VLSI-EDA/PoC/tree/master/tools/Notepad%2B%2B>`_.
 
 
-Precompile
-**********
-
-Scripts to pre-compile vendor libraries for PoC into ``temp\precompiled\``.

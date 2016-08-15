@@ -2,10 +2,10 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- =============================================================================
--- Authors:					Patrick Lehmann
---									Martin Zabel
+-- Authors:         Patrick Lehmann
+--                  Martin Zabel
 --
--- Entity:					Optimized LRU list implementation for Caches.
+-- Entity:          Optimized LRU list implementation for Caches.
 --
 -- Description:
 -- -------------------------------------
@@ -20,12 +20,10 @@
 -- rising-edge of the clock ``clock``. All control signals are high-active.
 --
 -- Supported operations:
---
--- * Insert: Mark index ``KeyIn`` as			 recently used, e.g., when a cache-line
---	 was accessed.
---
--- * Free:	 Mark index ``KeyIn`` as least-recently used. Apply this operation,
---	 when a cache-line gets invalidated.
+--  * **Insert:** Mark index ``KeyIn`` as recently used, e.g., when a cache-line
+--    was accessed.
+--  * **Free:** Mark index ``KeyIn`` as least-recently used. Apply this operation,
+--    when a cache-line gets invalidated.
 --
 -- License:
 -- =============================================================================

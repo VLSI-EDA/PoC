@@ -364,7 +364,7 @@ class PoC(ILogable, ArgParseMixin):
 		self._LogVerbose("starting manual configuration...")
 		print("Explanation of abbreviations:")
 		print("  {YELLOW}Y{NOCOLOR} - yes      {YELLOW}P{NOCOLOR}        - pass (jump to next question)".format(**Init.Foreground))
-		print("  {YELLOW}N{NOCOLOR} - no       {YELLOW}Ctrl + C{NOCOLOR} - abort (nothing changes are saved)".format(**Init.Foreground))
+		print("  {YELLOW}N{NOCOLOR} - no       {YELLOW}Ctrl + C{NOCOLOR} - abort (no changes are saved)".format(**Init.Foreground))
 		print("Upper case or value in '[...]' means default value")
 		print("-"*80)
 		print()

@@ -164,7 +164,7 @@ class NamedCommandLineArgument(CommandLineArgument):
 		return self._name
 
 
-class FlagArgument(NamedCommandLineArgument):
+class CommandArgument(NamedCommandLineArgument):
 	_pattern =    "{0}"
 
 	@property
@@ -173,9 +173,9 @@ class FlagArgument(NamedCommandLineArgument):
 
 	@Value.setter
 	def Value(self, value):
-		if (value is None):            self._value = None
-		elif isinstance(value, bool):  self._value = value
-		else:                          raise ValueError("Parameter 'value' is not of type bool.")
+		if (value is None):           self._value = None
+		elif isinstance(value, bool): self._value = value
+		else:                         raise ValueError("Parameter 'value' is not of type bool.")
 
 	def __str__(self):
 		if (self._value is None):      return ""
@@ -187,9 +187,37 @@ class FlagArgument(NamedCommandLineArgument):
 		elif self._value:              return self._pattern.format(self._name)
 		else:                          return None
 
-class ShortFlagArgument(FlagArgument):    _pattern =  "-{0}"
-class LongFlagArgument(FlagArgument):      _pattern =  "--{0}"
-class WindowsFlagArgument(FlagArgument):  _pattern =  "/{0}"
+class ShortCommandArgument(CommandArgument):    _pattern = "-{0}"
+class LongCommandArgument(CommandArgument):     _pattern = "--{0}"
+class WindowsCommandArgument(CommandArgument):  _pattern = "/{0}"
+
+
+class FlagArgument(NamedCommandLineArgument):
+	_pattern =    "{0}"
+
+	@property
+	def Value(self):
+		return self._value
+
+	@Value.setter
+	def Value(self, value):
+		if (value is None):           self._value = None
+		elif isinstance(value, bool): self._value = value
+		else:                         raise ValueError("Parameter 'value' is not of type bool.")
+
+	def __str__(self):
+		if (self._value is None):     return ""
+		elif self._value:             return self._pattern.format(self._name)
+		else:                         return ""
+
+	def AsArgument(self):
+		if (self._value is None):     return None
+		elif self._value:             return self._pattern.format(self._name)
+		else:                         return None
+
+class ShortFlagArgument(FlagArgument):    _pattern = "-{0}"
+class LongFlagArgument(FlagArgument):     _pattern = "--{0}"
+class WindowsFlagArgument(FlagArgument):  _pattern = "/{0}"
 
 class ValuedFlagArgument(NamedCommandLineArgument):
 	_pattern = "{0}={1}"
@@ -200,24 +228,24 @@ class ValuedFlagArgument(NamedCommandLineArgument):
 
 	@Value.setter
 	def Value(self, value):
-		if (value is None):            self._value = None
+		if (value is None):           self._value = None
 		elif isinstance(value, str):  self._value = value
 		else:
 			try:                        self._value = str(value)
-			except Exception as ex:      raise ValueError("Parameter 'value' cannot be converted to type str.") from ex
+			except Exception as ex:     raise ValueError("Parameter 'value' cannot be converted to type str.") from ex
 
 	def __str__(self):
-		if (self._value is None):      return ""
-		elif self._value:              return self._pattern.format(self._name, self._value)
-		else:                          return ""
+		if (self._value is None):     return ""
+		elif self._value:             return self._pattern.format(self._name, self._value)
+		else:                         return ""
 
 	def AsArgument(self):
-		if (self._value is None):      return None
-		elif self._value:              return self._pattern.format(self._name, self._value)
-		else:                          return None
+		if (self._value is None):     return None
+		elif self._value:             return self._pattern.format(self._name, self._value)
+		else:                         return None
 
 class ShortValuedFlagArgument(ValuedFlagArgument):  _pattern = "-{0}={1}"
-class LongValuedFlagArgument(ValuedFlagArgument):    _pattern = "--{0}={1}"
+class LongValuedFlagArgument(ValuedFlagArgument):   _pattern = "--{0}={1}"
 
 class ValuedFlagListArgument(NamedCommandLineArgument):
 	_pattern = "{0}={1}"
@@ -233,17 +261,17 @@ class ValuedFlagListArgument(NamedCommandLineArgument):
 		else:                                  raise ValueError("Parameter 'value' is not of type tuple or list.")
 
 	def __str__(self):
-		if (self._value is None):      return ""
+		if (self._value is None):     return ""
 		elif (len(self._value) > 0):  return " ".join([self._pattern.format(self._name, item) for item in self._value])
-		else:                          return ""
+		else:                         return ""
 
 	def AsArgument(self):
-		if (self._value is None):      return None
+		if (self._value is None):     return None
 		elif (len(self._value) > 0):  return [self._pattern.format(self._name, item) for item in self._value]
-		else:                          return None
+		else:                         return None
 
 class ShortValuedFlagListArgument(ValuedFlagListArgument):  _pattern = "-{0}={1}"
-class LongValuedFlagListArgument(ValuedFlagListArgument):    _pattern = "--{0}={1}"
+class LongValuedFlagListArgument(ValuedFlagListArgument):   _pattern = "--{0}={1}"
 
 class TupleArgument(NamedCommandLineArgument):
 	_switchPattern =  "{0}"
@@ -255,24 +283,24 @@ class TupleArgument(NamedCommandLineArgument):
 
 	@Value.setter
 	def Value(self, value):
-		if (value is None):            self._value = None
+		if (value is None):           self._value = None
 		elif isinstance(value, str):  self._value = value
 		else:
 			try:                        self._value = str(value)
-			except TypeError as ex:      raise ValueError("Parameter 'value' cannot be converted to type str.") from ex
+			except TypeError as ex:     raise ValueError("Parameter 'value' cannot be converted to type str.") from ex
 
 	def __str__(self):
-		if (self._value is None):      return ""
-		elif self._value:              return self._switchPattern.format(self._name) + " \"" + self._valuePattern.format(self._value) + "\""
-		else:                          return ""
+		if (self._value is None):     return ""
+		elif self._value:             return self._switchPattern.format(self._name) + " \"" + self._valuePattern.format(self._value) + "\""
+		else:                         return ""
 
 	def AsArgument(self):
-		if (self._value is None):      return None
-		elif self._value:              return [self._switchPattern.format(self._name), self._valuePattern.format(self._value)]
-		else:                          return None
+		if (self._value is None):     return None
+		elif self._value:             return [self._switchPattern.format(self._name), self._valuePattern.format(self._value)]
+		else:                         return None
 
 class ShortTupleArgument(TupleArgument):    _switchPattern = "-{0}"
-class LongTupleArgument(TupleArgument):      _switchPattern = "--{0}"
+class LongTupleArgument(TupleArgument):     _switchPattern = "--{0}"
 
 class CommandLineArgumentList(list):
 	def __init__(self, *args):
@@ -296,10 +324,10 @@ class CommandLineArgumentList(list):
 		result = []
 		for item in self:
 			arg = item.AsArgument()
-			if (arg is None):            pass
+			if (arg is None):           pass
 			elif isinstance(arg, str):  result.append(arg)
-			elif isinstance(arg, list):  result += arg
-			else:                        raise TypeError()
+			elif isinstance(arg, list): result += arg
+			else:                       raise TypeError()
 		return result
 
 

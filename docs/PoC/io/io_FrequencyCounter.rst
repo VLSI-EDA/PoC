@@ -5,6 +5,7 @@ io_FrequencyCounter
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/io/io_FrequencyCounter.vhdl

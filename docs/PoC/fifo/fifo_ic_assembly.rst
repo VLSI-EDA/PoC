@@ -16,6 +16,7 @@ are tunnelled across address-based transports that are allowed to reorder
 the transmission of data blocks. This applies to many DMA implementations.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/fifo/fifo_ic_assembly.vhdl

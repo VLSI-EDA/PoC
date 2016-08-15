@@ -5,6 +5,7 @@ stat_Minimum
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/misc/stat/stat_Minimum.vhdl

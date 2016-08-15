@@ -2,24 +2,23 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- =============================================================================
--- Authors:					Steffen Koehler
---									Patrick Lehmann
+-- Authors:         Steffen Koehler
+--                  Patrick Lehmann
 --
--- Entity:					Synchronizes a signal vector across clock-domain boundaries
+-- Entity:          Synchronizes a signal vector across clock-domain boundaries
 --
 -- Description:
 -- -------------------------------------
---		This module synchronizes a vector of bits from clock-domain 'Clock1' to
---		clock-domain 'Clock2'. The clock-domain boundary crossing is done by a
---		change comparator, a T-FF, two synchronizer D-FFs and a reconstructive
---		XOR indicating a value change on the input. This changed signal is used
---		to capture the input for the new output. A busy flag is additionally
---		calculated for the input clock domain.
+-- This module synchronizes a vector of bits from clock-domain ``Clock1`` to
+-- clock-domain ``Clock2``. The clock-domain boundary crossing is done by a
+-- change comparator, a T-FF, two synchronizer D-FFs and a reconstructive
+-- XOR indicating a value change on the input. This changed signal is used
+-- to capture the input for the new output. A busy flag is additionally
+-- calculated for the input clock domain.
 --
---		CONSTRAINTS:
---			General:
---				This module uses sub modules which need to be constrainted. Please
---				attend to the notes of the instantiated sub modules.
+-- Constraints:
+--   This module uses sub modules which need to be constrainted. Please
+--   attend to the notes of the instantiated sub modules.
 --
 -- License:
 -- =============================================================================

@@ -9,21 +9,21 @@
 --
 -- Description:
 -- -------------------------------------
--- Instantiates chip-specific DDR output registers.
+-- Instantiates chip-specific :abbr:`DDR (Double Data Rate)` output registers.
 --
--- Both data "DataOut_high/low" as well as "OutputEnable" are sampled with
--- the rising_edge(Clock) from the on-chip logic. "DataOut_high" is brought
--- out with this rising edge. "DataOut_low" is brought out with the falling
+-- Both data ``DataOut_high/low`` as well as ``OutputEnable`` are sampled with
+-- the ``rising_edge(Clock)`` from the on-chip logic. ``DataOut_high`` is brought
+-- out with this rising edge. ``DataOut_low`` is brought out with the falling
 -- edge.
 --
--- "OutputEnable" (Tri-State) is high-active. It is automatically inverted if
+-- ``OutputEnable`` (Tri-State) is high-active. It is automatically inverted if
 -- necessary. If an output enable is not required, you may save some logic by
--- setting NO_OUTPUT_ENABLE = true.
+-- setting ``NO_OUTPUT_ENABLE = true``.
 --
--- If NO_OUTPUT_ENABLE = false then output is disabled after power-up.
--- If NO_OUTPUT_ENABLE = true then output after power-up equals INIT_VALUE.
+-- If ``NO_OUTPUT_ENABLE = false`` then output is disabled after power-up.
+-- If ``NO_OUTPUT_ENABLE = true`` then output after power-up equals ``INIT_VALUE``.
 --
--- "Pad" must be connected to a PAD because FPGAs only have these registers in
+-- ``Pad`` must be connected to a PAD because FPGAs only have these registers in
 -- IOBs.
 --
 -- License:
@@ -77,7 +77,7 @@ begin
 	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.out is not implemented for given DEVICE."
 		severity FAILURE;
-
+		
 	genXilinx : if (VENDOR = VENDOR_XILINX) generate
 		i : ddrio_out_xilinx
 			generic map (
@@ -94,7 +94,7 @@ begin
 				Pad						=> Pad
 			);
 	end generate;
-
+	
 	genAltera : if (VENDOR = VENDOR_ALTERA) generate
 		i : ddrio_out_altera
 			generic map (
@@ -111,7 +111,7 @@ begin
 				Pad						=> Pad
 			);
 	end generate;
-
+	
 	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
 		signal DataOut_high_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 		signal DataOut_low_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
@@ -121,21 +121,21 @@ begin
 		DataOut_high_d	<= DataOut_high		when rising_edge(Clock) and (ClockEnable = '1');
 		DataOut_low_d		<= DataOut_low		when rising_edge(Clock) and (ClockEnable = '1');
 		OutputEnable_d	<= OutputEnable		when rising_edge(Clock) and (ClockEnable = '1');
-
+		
 		process(Clock, OutputEnable_d, DataOut_high_d, DataOut_low_d)
 			type T_MUX is array(bit) of std_logic_vector(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
 		begin
 			MuxInput('1')	:= DataOut_high_d;
 			MuxInput('0')	:= DataOut_low_d;
-
+			
 			if (OutputEnable_d = '1') or NO_OUTPUT_ENABLE then
 				Pad_o		<= MuxInput(to_bit(Clock));
 			else
 				Pad_o		<= (others => 'Z');
 			end if;
 		end process;
-
+		
 		Pad			<= Pad_o;
 	end generate;
 end architecture;

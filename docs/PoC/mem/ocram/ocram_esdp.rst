@@ -3,14 +3,18 @@ ocram_esdp
 ##########
 
 Inferring / instantiating enhanced simple dual-port memory, with:
+
 * dual clock, clock enable,
 * 1 read/write port (1st port) plus 1 read port (2nd port).
+
 The generalized behavior across Altera and Xilinx FPGAs since
 Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
+
 * Same-Port Read-During Write:
   At rising edge of "clk1", data "d1" written to port 1 (ce1 and we1 = '1')
   is directly passed to the output "q1". This is also known as write-first
   mode or read-through write behavior.
+
 * Mixed-Port Read-During Write:
   Here, the Altera M512/M4K TriMatrix memory (as found e.g. in Stratix
   and Stratix II FPGAs) defines the minimum time after which the written data
@@ -25,9 +29,12 @@ Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
   If the rising-edge of "clk2" coincides with the falling-edge of "clk1"
   (e.g. same clock signal), then it is counted as the 1st rising-edge of
   "clk2" in this timing.
+
 WARNING: The simulated behavior on RT-level is not correct.
+
 TODO: add timing diagram
 TODO: implement correct behavior for RT-level simulation
+
 
 
 .. rubric:: Entity Declaration:
