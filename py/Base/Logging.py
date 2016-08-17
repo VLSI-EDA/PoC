@@ -121,15 +121,15 @@ class LogEntry:
 class Logger:
 	def __init__(self, host, logLevel, printToStdOut=True):
 		self._host =            host
-		self.LogLevel =        logLevel
+		self._LogLevel =        logLevel
 		self._printToStdOut =   printToStdOut
 		self._entries =         []
 		self._baseIndent =      0
 
 	@property
-	def LogLevel(self):             return self.LogLevel
+	def LogLevel(self):             return self._LogLevel
 	@LogLevel.setter
-	def LogLevel(self, value):      self.LogLevel = value
+	def LogLevel(self, value):      self._LogLevel = value
 
 	@property
 	def BaseIndent(self):           return self._baseIndent
@@ -149,7 +149,7 @@ class Logger:
 	}
 
 	def Write(self, entry):
-		if (entry.Severity >= self.LogLevel):
+		if (entry.Severity >= self._LogLevel):
 			self._entries.append(entry)
 			if self._printToStdOut:
 				print(self._Log_MESSAGE_FORMAT__[entry.Severity].format(message=entry.Message, **Init.Foreground))
@@ -158,7 +158,7 @@ class Logger:
 			return False
 
 	def TryWrite(self, entry):
-		return (entry.Severity >= self.LogLevel)
+		return (entry.Severity >= self._LogLevel)
 
 	def WriteFatal(self, message):
 		return self.Write(LogEntry(message, Severity.Fatal))
