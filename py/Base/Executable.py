@@ -345,7 +345,7 @@ class Executable(ILogable):
 		if isinstance(executablePath, str):             executablePath = Path(executablePath)
 		elif (not isinstance(executablePath, Path)):    raise ValueError("Parameter 'executablePath' is not of type str or Path.")
 		if (not executablePath.exists()):
-			if dryrun:  self._LogDryRun("File check for '{0!s}' failed. [SKIPPING]".format(executablePath))
+			if dryrun:  self.LogDryRun("File check for '{0!s}' failed. [SKIPPING]".format(executablePath))
 			else:       raise CommonException("Executable '{0!s}' not found.".format(executablePath)) from FileNotFoundError(str(executablePath))
 
 		# prepend the executable
@@ -365,7 +365,7 @@ class Executable(ILogable):
 			except OSError as ex:
 				raise CommonException("Error while accessing '{0!s}'.".format(self._executablePath)) from ex
 		else:
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 
 	def Send(self, line, end="\n"):
 		self._process.stdin.write(line + end)
@@ -395,4 +395,4 @@ class Executable(ILogable):
 			print(__indent + line)
 			if (self._POC_BOUNDARY in line):
 				break
-		self._LogDebug("Quartus II is ready")
+		self.LogDebug("Quartus II is ready")

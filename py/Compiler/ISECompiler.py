@@ -58,7 +58,7 @@ class Compiler(BaseCompiler):
 		self._PrepareCompiler()
 
 	def _PrepareCompiler(self):
-		self._LogVerbose("Preparing Meta-Compiler for the Xilinx ISE tool chain.")
+		self.LogVerbose("Preparing Meta-Compiler for the Xilinx ISE tool chain.")
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		for fqn in fqnList:
@@ -70,14 +70,14 @@ class Compiler(BaseCompiler):
 				self.Run(entity, args, kwargs)
 
 	def Run(self, entity, args, kwargs):
-		self._LogVerbose("Checking '{0!s}' for dependencies...".format(entity))
+		self.LogVerbose("Checking '{0!s}' for dependencies...".format(entity))
 		dependencies =  []
 		for dependency in entity.Dependencies:
 			toolName, entityName = dependency.split(":")
 			dependencyFQN = FQN(self.Host, entityName, defaultLibrary="PoC", defaultType=EntityTypes.NetList)
 			tool = Tool.Parse(toolName)
 			dependencies.append((tool, dependencyFQN))
-			self._LogVerbose("  IP core: {1!s} compile with {0!s}".format(dependencyFQN, tool))
+			self.LogVerbose("  IP core: {1!s} compile with {0!s}".format(dependencyFQN, tool))
 
 		for tool,fqn in dependencies:
 			if (tool is Tool.Xilinx_CoreGen):

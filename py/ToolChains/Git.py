@@ -50,8 +50,7 @@ from shutil               import copy as shutil_copy
 
 from Base.Exceptions      import PlatformNotSupportedException, CommonException
 from Base.Configuration   import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
-from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList, CommandArgument, LongFlagArgument, StringListArgument, ValuedFlagArgument, StringArgument, \
-	NamedCommandLineArgument
+from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList, CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument
 from Base.ToolChain       import ToolChainException
 
 
@@ -95,17 +94,17 @@ class Configuration(BaseConfiguration):
 			raise
 
 		if (len(self._host.PoCConfig['INSTALL.Git']) == 0):
-			self._host._LogNormal("  Skipping Git setup. Not Git installation found.")
+			self._host.LogNormal("  Skipping Git setup. Not Git installation found.")
 			return
 
 		try:
 			binaryDirectoryPath = binPath
 			self._git = Git(self._host.Platform, self._host.DryRun, binaryDirectoryPath, logger=self._host.Logger)
 		except Exception as ex:
-			self._host._LogWarning(str(ex))
+			self._host.LogWarning(str(ex))
 
 		if (not self.__IsUnderGitControl()):
-			self._host._LogNormal("Skipping Git setup. This directory is not under Git control.")
+			self._host.LogNormal("Skipping Git setup. This directory is not under Git control.")
 			return
 
 		if (not self._AskDoInstall("Install Git mechanisms for PoC developers?")):
@@ -120,18 +119,19 @@ class Configuration(BaseConfiguration):
 
 	def _GetDefaultInstallationDirectory(self):
 		if (self._host.Platform == "Windows"):
+			# TODO: extract to base class -> provide a SearchInPath method
 			envPath = environ.get('PATH')
 			for pathItem in envPath.split(";"):
 				binaryDirectoryPath = Path(pathItem)
 				gitPath =             binaryDirectoryPath / "git.exe"
 				if gitPath.exists():
 					return binaryDirectoryPath.parent.as_posix()
-			else:
-				raise GitException("No Git installation found.")
+			raise GitException("No Git installation found.")
 		elif (self._host.Platform in ["Linux", "Darwin"]):
 			try:
 				name = check_output(["which", "git"], universal_newlines=True).strip()
-				if name != "": return Path(name).parent.as_posix()
+				if name != "":
+					return Path(name).parent.as_posix()
 			except CalledProcessError:
 				pass  # `which` returns non-zero exit code if GHDL is not in PATH
 
@@ -185,7 +185,7 @@ class Configuration(BaseConfiguration):
 
 	# FIXME: unused method -> call when Developer tools get disabled
 	def __UninstallGitFilters(self):
-		self._host._LogNormal("  Uninstalling Git filters...")
+		self._host.LogNormal("  Uninstalling Git filters...")
 
 		for fileFormat in [None, "rest", "vhdl"]:
 			filterName = "filter.normalize"
@@ -198,10 +198,10 @@ class Configuration(BaseConfiguration):
 				git.ConfigParameters[git.ValueFilterParameters] = filterName
 				git.Execute()
 			except CommonException:
-				self._host._LogWarning("    Error while removing section {0}.".format(filterName))
+				self._host.LogWarning("    Error while removing section {0}.".format(filterName))
 
 	def __InstallGitFilters(self):
-		self._host._LogNormal("  Installing Git filters...")
+		self._host.LogNormal("  Installing Git filters...")
 
 		normalizeScript =     "tools/git/filters/normalize.pl"
 		pocInstallationPath = Path(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
@@ -238,7 +238,7 @@ class Configuration(BaseConfiguration):
 
 	# FIXME: unused method -> call when Developer tools get disabled
 	def __UninstallGitHooks(self):
-		self._host._LogNormal("  Uninstalling Git hooks...")
+		self._host.LogNormal("  Uninstalling Git hooks...")
 		pocInstallationPath =   Path(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
 		hookRunnerPath =        pocInstallationPath / "tools/git/hooks/run-hook.sh"
 
@@ -249,17 +249,17 @@ class Configuration(BaseConfiguration):
 			gitHookPath = gitHookDirectoryPath / hookName
 			if gitHookPath.exists():
 				if (gitHookPath.is_symlink() and (gitHookPath.resolve() == hookRunnerPath)):
-					self._host._LogNormal("  '{0}' hook is configured for PoC. Deleting.".format(hookName))
+					self._host.LogNormal("  '{0}' hook is configured for PoC. Deleting.".format(hookName))
 					try:
 						gitHookPath.unlink()
 					except OSError as ex:
 						raise ConfigurationException("Cannot remove '{0!s}'.".format(gitHookPath)) from ex
 				else:
 					# TODO: check if file was copied -> Hash compare?
-					self._host._LogWarning("  '{0}' hook is in use by another script. Skipping.".format(hookName))
+					self._host.LogWarning("  '{0}' hook is in use by another script. Skipping.".format(hookName))
 
 	def __InstallGitHooks(self):
-		self._host._LogNormal("  Installing Git hooks...")
+		self._host.LogNormal("  Installing Git hooks...")
 		pocInstallationPath =   Path(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
 		hookRunnerPath =        pocInstallationPath / "tools/git/hooks/run-hook.sh"
 
@@ -273,18 +273,18 @@ class Configuration(BaseConfiguration):
 			gitHookPath = gitHookDirectoryPath / hookName
 			if gitHookPath.exists():
 				if (gitHookPath.is_symlink() and (gitHookPath.resolve() == hookRunnerPath)):
-					self._host._LogNormal("  '{0}' hook is already configured for PoC.".format(hookName))
+					self._host.LogNormal("  '{0}' hook is already configured for PoC.".format(hookName))
 				else:
-					self._host._LogWarning("  '{0}' hook is already in use by another script.".format(hookName))
+					self._host.LogWarning("  '{0}' hook is already in use by another script.".format(hookName))
 			else:
-				self._host._LogNormal("  Setting '{0}' hook for PoC...".format(hookName))
-				self._host._LogDebug("symlink '{0!s}' -> '{1!s}'.".format(gitHookPath, hookRunnerPath))
+				self._host.LogNormal("  Setting '{0}' hook for PoC...".format(hookName))
+				self._host.LogDebug("symlink '{0!s}' -> '{1!s}'.".format(gitHookPath, hookRunnerPath))
 				try:
 					gitHookPath.symlink_to(hookRunnerPath)
 				except OSError as ex:
 					# if symlink fails, do a copy as backup solution
 					if getattr(ex, 'winerror', None) == 1314:
-						self._host._LogDebug("copy '{0!s}' to '{1!s}'.".format(hookRunnerPath, gitHookPath))
+						self._host.LogDebug("copy '{0!s}' to '{1!s}'.".format(hookRunnerPath, gitHookPath))
 						try:
 							shutil_copy(str(hookRunnerPath), str(gitHookPath))
 						except OSError as ex2:
@@ -316,19 +316,19 @@ class GitMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		# self._version =             version
-		self._logger =              logger
+		self.Logger =              logger
 
 
 class Git(GitMixIn):
 	def GetGitRevParse(self):
-		git = GitRevParse(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._logger)
+		git = GitRevParse(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self.Logger)
 		git.Clear()
 		git.RevParseParameters[GitRevParse.Command] = True
 
 		return git
 
 	def GetGitConfig(self):
-		git = GitConfig(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._logger)
+		git = GitConfig(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self.Logger)
 		git.Clear()
 		git.ConfigParameters[GitConfig.Command] = True
 
@@ -398,10 +398,10 @@ class GitRevParse(GitSCM):
 	def Execute(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList += self.RevParseParameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -460,10 +460,10 @@ class GitConfig(GitSCM):
 	def Execute(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList += self.ConfigParameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:

@@ -83,7 +83,7 @@ class Simulator(BaseSimulator):
 
 	def _PrepareSimulator(self):
 		# create the GHDL executable factory
-		self._LogVerbose("Preparing GHDL simulator.")
+		self.LogVerbose("Preparing GHDL simulator.")
 		ghdlSection =     self.Host.PoCConfig['INSTALL.GHDL']
 		binaryPath =      Path(ghdlSection['BinaryDirectory'])
 		version =         ghdlSection['Version']
@@ -220,17 +220,17 @@ class Simulator(BaseSimulator):
 		configSection =     self.Host.PoCConfig[testbench.ConfigSectionName]
 		gtkwSaveFilePath =  self.Host.Directories.Root / configSection['gtkwSaveFile']
 		if gtkwSaveFilePath.exists():
-			self._LogDebug("Found waveform save file: '{0!s}'".format(gtkwSaveFilePath))
+			self.LogDebug("Found waveform save file: '{0!s}'".format(gtkwSaveFilePath))
 			gtkw.Parameters[gtkw.SwitchSaveFile] = str(gtkwSaveFilePath)
 		else:
-			self._LogDebug("Didn't find waveform save file: '{0!s}'".format(gtkwSaveFilePath))
+			self.LogDebug("Didn't find waveform save file: '{0!s}'".format(gtkwSaveFilePath))
 
 		# run GTKWave GUI
 		gtkw.View()
 
 		# clean-up *.gtkw files
 		if gtkwSaveFilePath.exists():
-			self._LogVerbose("Cleaning up GTKWave save file...")
+			self.LogVerbose("Cleaning up GTKWave save file...")
 			removeKeys =  ("[dumpfile]", "[savefile]")
 			buffer =      ""
 			with gtkwSaveFilePath.open('r') as gtkwHandle:

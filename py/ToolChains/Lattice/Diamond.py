@@ -141,7 +141,7 @@ class DiamondMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self._logger =              logger
+		self.Logger =              logger
 
 
 class Diamond(DiamondMixIn):
@@ -149,7 +149,7 @@ class Diamond(DiamondMixIn):
 		DiamondMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetSynthesizer(self):
-		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
 
 
 class Synth(Executable, DiamondMixIn):
@@ -195,10 +195,10 @@ class Synth(Executable, DiamondMixIn):
 
 	def Compile(self, logFile):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -214,22 +214,22 @@ class Synth(Executable, DiamondMixIn):
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("  LSE messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  LSE messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
 def MapFilter(gen):
@@ -246,7 +246,7 @@ class SynthesisArgumentFile(File):
 		self._speedGrade =    None
 		self._package =       None
 		self._topLevel =      None
-		self._logfile =       None
+		self.Logfile =       None
 		self._vhdlVersion =		VHDLVersion.Any
 		self._hdlParams =			[]
 
@@ -287,10 +287,10 @@ class SynthesisArgumentFile(File):
 
 	@property
 	def LogFile(self):
-		return self._logfile
+		return self.Logfile
 	@LogFile.setter
 	def LogFile(self, value):
-		self._logfile = value
+		self.Logfile = value
 
 	@property
 	def VHDLVersion(self):
@@ -319,8 +319,8 @@ class SynthesisArgumentFile(File):
 		buffer += "-top {0}\n".format(self._topLevel)
 		if (self._vhdlVersion is VHDLVersion.VHDL2008):
 			buffer += "-vh2008\n"
-		if (self._logfile is not None):
-			buffer += "-logfile {0}\n".format(self._logfile)
+		if (self.Logfile is not None):
+			buffer += "-logfile {0}\n".format(self.Logfile)
 		if (len(self._hdlParams) > 0):
 			for keyValuePair in self._hdlParams:
 				buffer += "-hdl_param {Key} {Value}\n".format(Key=keyValuePair[0].strip(), Value=keyValuePair[1].strip())

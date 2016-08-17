@@ -71,7 +71,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 	def _PrepareSimulator(self):
 		# create the Xilinx ISE executable factory
-		self._LogVerbose("Preparing ISE simulator.")
+		self.LogVerbose("Preparing ISE simulator.")
 		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.ISE']
 		version = iseSection['Version']
 		binaryPath = Path(iseSection['BinaryDirectory'])
@@ -118,9 +118,9 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 			# if iSim save file exists, load it's settings
 			if wcfgFilePath.exists():
-				self._LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
+				self.LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
 				iSim.Parameters[iSim.SwitchWaveformFile] =  str(wcfgFilePath)
 			else:
-				self._LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
+				self.LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
 		testbench.Result = iSim.Simulate()

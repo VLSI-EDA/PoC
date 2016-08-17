@@ -216,7 +216,7 @@ class PoC(ILogable, ArgParseMixin):
 	# read PoC configuration
 	# ============================================================================
 	def __ReadPoCConfiguration(self):
-		self._LogVerbose("Reading configuration files...")
+		self.LogVerbose("Reading configuration files...")
 
 		configFiles = [
 			(self.ConfigFiles.Private,		"private"),
@@ -227,19 +227,19 @@ class PoC(ILogable, ArgParseMixin):
 		]
 
 		# create parser instance
-		self._LogDebug("Reading PoC configuration from:")
+		self.LogDebug("Reading PoC configuration from:")
 		self.__pocConfig = ExtendedConfigParser()
 		self.__pocConfig.optionxform = str
 
 		try:
 			# process first file (private)
 			file, name = configFiles[0]
-			self._LogDebug("  {0!s}".format(file))
+			self.LogDebug("  {0!s}".format(file))
 			if not file.exists():  raise NotConfiguredException("PoC's {0} configuration file '{1!s}' does not exist.".format(name, file))  from FileNotFoundError(str(file))
 			self.__pocConfig.read(str(file))
 
 			for file, name in configFiles[1:]:
-				self._LogDebug("  {0!s}".format(file))
+				self.LogDebug("  {0!s}".format(file))
 				if not file.exists():  raise ConfigurationException("PoC's {0} configuration file '{1!s}' does not exist.".format(name, file))  from FileNotFoundError(str(file))
 				self.__pocConfig.read(str(file))
 		except DuplicateOptionError as ex:
@@ -271,7 +271,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__pocConfig.remove_section("SOLUTION.DEFAULTS")
 
 		# Writing configuration to disc
-		self._LogNormal("Writing configuration file to '{0!s}'".format(self._configFiles.Private))
+		self.LogNormal("Writing configuration file to '{0!s}'".format(self._configFiles.Private))
 		with self._configFiles.Private.open('w') as configFileHandle:
 			self.PoCConfig.write(configFileHandle)
 
@@ -279,11 +279,11 @@ class PoC(ILogable, ArgParseMixin):
 		self.__ReadPoCConfiguration()
 
 	def __PrepareForSimulation(self):
-		self._LogNormal("Initializing PoC-Library Service Tool for simulations")
+		self.LogNormal("Initializing PoC-Library Service Tool for simulations")
 		self.__ReadPoCConfiguration()
 
 	def __PrepareForSynthesis(self):
-		self._LogNormal("Initializing PoC-Library Service Tool for synthesis")
+		self.LogNormal("Initializing PoC-Library Service Tool for synthesis")
 		self.__ReadPoCConfiguration()
 
 	# ============================================================================
@@ -302,9 +302,9 @@ class PoC(ILogable, ArgParseMixin):
 		ArgParseMixin.Run(self)
 
 	def PrintHeadline(self):
-		self._LogNormal("{HEADLINE}{line}{NOCOLOR}".format(line="="*80, **Init.Foreground))
-		self._LogNormal("{HEADLINE}{headline: ^80s}{NOCOLOR}".format(headline=self.HeadLine, **Init.Foreground))
-		self._LogNormal("{HEADLINE}{line}{NOCOLOR}".format(line="="*80, **Init.Foreground))
+		self.LogNormal("{HEADLINE}{line}{NOCOLOR}".format(line="="*80, **Init.Foreground))
+		self.LogNormal("{HEADLINE}{headline: ^80s}{NOCOLOR}".format(headline=self.HeadLine, **Init.Foreground))
+		self.LogNormal("{HEADLINE}{line}{NOCOLOR}".format(line="="*80, **Init.Foreground))
 
 	# ----------------------------------------------------------------------------
 	# fallback handler if no command was recognized
@@ -362,7 +362,7 @@ class PoC(ILogable, ArgParseMixin):
 		except NotConfiguredException:
 			self._InitializeConfiguration()
 
-		self._LogVerbose("starting manual configuration...")
+		self.LogVerbose("starting manual configuration...")
 		print("Explanation of abbreviations:")
 		print("  {YELLOW}Y{NOCOLOR} - yes      {YELLOW}P{NOCOLOR}        - pass (jump to next question)".format(**Init.Foreground))
 		print("  {YELLOW}N{NOCOLOR} - no       {YELLOW}Ctrl + C{NOCOLOR} - abort (no changes are saved)".format(**Init.Foreground))
@@ -378,7 +378,7 @@ class PoC(ILogable, ArgParseMixin):
 			configurators = [config(self) for config in Configurations if (config._section.lower().startswith(sectionName.lower()))]
 
 		if (len(configurators) == 0):
-			self._LogError("{RED}No configuration named '{0}' found.{NOCOLOR}".format(toolChain, **Init.Foreground))
+			self.LogError("{RED}No configuration named '{0}' found.{NOCOLOR}".format(toolChain, **Init.Foreground))
 			return
 
 		# configure each vendor or tool of a tool chain
@@ -392,7 +392,7 @@ class PoC(ILogable, ArgParseMixin):
 				configurator.ClearSection()
 				continue
 
-			self._LogNormal("{CYAN}Configuring {0!s}{NOCOLOR}".format(configurator, **Init.Foreground))
+			self.LogNormal("{CYAN}Configuring {0!s}{NOCOLOR}".format(configurator, **Init.Foreground))
 			nxt = False
 			while (nxt is False):
 				try:
@@ -411,12 +411,12 @@ class PoC(ILogable, ArgParseMixin):
 		self.__ReadPoCConfiguration()
 
 		# run post-configuration tasks
-		self._LogNormal("{CYAN}Running post configuration tasks{NOCOLOR}".format(**Init.Foreground))
+		self.LogNormal("{CYAN}Running post configuration tasks{NOCOLOR}".format(**Init.Foreground))
 		for configurator in configurators:
 			configurator.RunPostConfigurationTasks()
 
 	def _InitializeConfiguration(self):
-		self._LogWarning("No private configuration found. Generating an empty PoC configuration...")
+		self.LogWarning("No private configuration found. Generating an empty PoC configuration...")
 
 		for config in Configurations:
 			for sectionName in config.GetSections(self.Platform):
@@ -430,9 +430,9 @@ class PoC(ILogable, ArgParseMixin):
 		delSections = pocSections.difference(configSections)
 
 		if addSections:
-			self._LogWarning("Adding new sections to configuration...")
+			self.LogWarning("Adding new sections to configuration...")
 			for sectionName in addSections:
-				self._LogWarning("  Adding [{0}]".format(sectionName))
+				self.LogWarning("  Adding [{0}]".format(sectionName))
 				self.__pocConfig[sectionName] = OrderedDict()
 
 		if delSections:
@@ -448,7 +448,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
 
-		self._LogNormal("Register a new solutions in PoC")
+		self.LogNormal("Register a new solutions in PoC")
 		solutionName = input("  Solution name: ")
 		if (solutionName == ""):        raise ConfigurationException("Empty input. Aborting!")
 
@@ -475,7 +475,7 @@ class PoC(ILogable, ArgParseMixin):
 
 			self.__repo.AddSolution(solutionID, solutionName, solutionRootPath)
 		self.__WritePoCConfiguration()
-		self._LogNormal("Solution {GREEN}successfully{NOCOLOR} created.".format(**Init.Foreground))
+		self.LogNormal("Solution {GREEN}successfully{NOCOLOR} created.".format(**Init.Foreground))
 
 
 	# ----------------------------------------------------------------------------
@@ -487,17 +487,17 @@ class PoC(ILogable, ArgParseMixin):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
 
-		self._LogNormal("Registered solutions in PoC:")
+		self.LogNormal("Registered solutions in PoC:")
 		if self.__repo.Solutions:
 			for solution in self.__repo.Solutions:
-				self._LogNormal("  {id: <10}{name}".format(id=solution.ID, name=solution.Name))
+				self.LogNormal("  {id: <10}{name}".format(id=solution.ID, name=solution.Name))
 				if (self.Logger.LogLevel <= Severity.Verbose):
-					self._LogVerbose("  Path:   {path!s}".format(path=solution.Path))
-					self._LogVerbose("  Projects:")
+					self.LogVerbose("  Path:   {path!s}".format(path=solution.Path))
+					self.LogVerbose("  Projects:")
 					for project in solution.Projects:
-						self._LogVerbose("    {id: <6}{name}".format(id=project.ID, name=project.Name))
+						self.LogVerbose("    {id: <6}{name}".format(id=project.ID, name=project.Name))
 		else:
-			self._LogNormal("  {RED}No registered solutions found.{NOCOLOR}".format(**Init.Foreground))
+			self.LogNormal("  {RED}No registered solutions found.{NOCOLOR}".format(**Init.Foreground))
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-solution" command
@@ -511,7 +511,7 @@ class PoC(ILogable, ArgParseMixin):
 
 		solution = self.__repo[args.SolutionID]
 
-		self._LogNormal("Removing solution '{0}'.".format(solution.Name))
+		self.LogNormal("Removing solution '{0}'.".format(solution.Name))
 		remove = input("Do you really want to remove this solution? [N/y]: ")
 		remove = remove if remove != "" else "N"
 		if (remove in ['n', 'N']):
@@ -522,7 +522,7 @@ class PoC(ILogable, ArgParseMixin):
 		self.__repo.RemoveSolution(solution)
 
 		self.__WritePoCConfiguration()
-		self._LogNormal("Solution {GREEN}successfully{NOCOLOR} removed.".format(**Init.Foreground))
+		self.LogNormal("Solution {GREEN}successfully{NOCOLOR} removed.".format(**Init.Foreground))
 
 
 	# ----------------------------------------------------------------------------
@@ -549,12 +549,12 @@ class PoC(ILogable, ArgParseMixin):
 		except KeyError as ex:
 			raise ConfigurationException("Solution ID '{0}' is not registered in PoC.".format(args.SolutionID)) from ex
 
-		self._LogNormal("Registered projects for solution '{0}':".format(solution.ID))
+		self.LogNormal("Registered projects for solution '{0}':".format(solution.ID))
 		if solution.Projects:
 			for project in solution.Projects:
-				self._LogNormal("  {id: <10}{name}".format(id=project.ID, name=project.Name))
+				self.LogNormal("  {id: <10}{name}".format(id=project.ID, name=project.Name))
 		else:
-			self._LogNormal("  {RED}No registered projects found.{NOCOLOR}".format(**Init.Foreground))
+			self.LogNormal("  {RED}No registered projects found.{NOCOLOR}".format(**Init.Foreground))
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "remove-project" command
@@ -586,7 +586,7 @@ class PoC(ILogable, ArgParseMixin):
 	#
 	# 	ipcore = Solution(self)
 	#
-	# 	self._LogNormal("Registered ipcores in PoC:")
+	# 	self.LogNormal("Registered ipcores in PoC:")
 	# 	for ipcoreName in ipcore.GetIPCoreNames():
 	# 		print("  {0}".format(ipcoreName))
 
@@ -704,9 +704,9 @@ class PoC(ILogable, ArgParseMixin):
 				solutionDefaultsFile = solutionRootPath / ".PoC" / "solution.defaults.ini"
 				print("  sln files: {0!s}  {1!s}".format(solutionConfigFile, solutionDefaultsFile))
 
-				self._LogVerbose("Reading solution file...")
-				self._LogDebug("  {0!s}".format(solutionConfigFile))
-				self._LogDebug("  {0!s}".format(solutionDefaultsFile))
+				self.LogVerbose("Reading solution file...")
+				self.LogDebug("  {0!s}".format(solutionConfigFile))
+				self.LogDebug("  {0!s}".format(solutionDefaultsFile))
 				if not solutionConfigFile.exists():
 					raise NotConfiguredException("Solution's {0} configuration file '{1!s}' does not exist.".format(solutionName, solutionConfigFile)) \
 						from FileNotFoundError(str(solutionConfigFile))
@@ -747,7 +747,7 @@ class PoC(ILogable, ArgParseMixin):
 
 		fqnList = self._ExtractFQNs(args.FQN, defaultLibrary)
 		for fqn in fqnList:
-			self._LogNormal("")
+			self.LogNormal("")
 			entity = fqn.Entity
 			if (isinstance(entity, WildCard)):
 				for testbench in entity.GetTestbenches(tbFilter):

@@ -92,7 +92,7 @@ class Compiler(BaseCompiler):
 					netlist = entity.CGNetlist
 					self.TryRun(netlist, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -104,19 +104,19 @@ class Compiler(BaseCompiler):
 		super().Run(netlist, board)
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing pre-processing tasks...")
+		self.LogNormal("Executing pre-processing tasks...")
 		self._state = CompileState.PreCopy
 		self._RunPreCopy(netlist)
 		self._state = CompileState.PrePatch
 		self._RunPreReplace(netlist)
 		self._preTasksTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running Xilinx Core Generator...")
+		self.LogNormal("Running Xilinx Core Generator...")
 		self._state = CompileState.Compile
 		self._RunCompile(netlist, board.Device)
 		self._compileTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing post-processing tasks...")
+		self.LogNormal("Executing post-processing tasks...")
 		self._state = CompileState.PostCopy
 		self._RunPostCopy(netlist)
 		self._state = CompileState.PostPatch
@@ -135,7 +135,7 @@ class Compiler(BaseCompiler):
 		self.Host.PoCConfig['SPECIAL']['OutputDir']	=     self.Directories.Working.as_posix()
 
 	def _RunCompile(self, netlist, device):
-		self._LogVerbose("Patching coregen.cgp and .cgc files...")
+		self.LogVerbose("Patching coregen.cgp and .cgc files...")
 		# read netlist settings from configuration file
 		xcoInputFilePath =    netlist.XcoFile
 		cgcTemplateFilePath =  self.Directories.Netlist / "template.cgc"
@@ -176,12 +176,12 @@ class Compiler(BaseCompiler):
 			WorkingDirectory=WorkingDirectory
 		))
 
-		self._LogDebug("Writing CoreGen project file to '{0}'.".format(cgpFilePath))
+		self.LogDebug("Writing CoreGen project file to '{0}'.".format(cgpFilePath))
 		with cgpFilePath.open('w') as cgpFileHandle:
 			cgpFileHandle.write(cgProjectFileContent)
 
 		# write CoreGenerator content? file
-		self._LogDebug("Reading CoreGen content file to '{0}'.".format(cgcTemplateFilePath))
+		self.LogDebug("Reading CoreGen content file to '{0}'.".format(cgcTemplateFilePath))
 		with cgcTemplateFilePath.open('r') as cgcFileHandle:
 			cgContentFileContent = cgcFileHandle.read()
 
@@ -193,20 +193,20 @@ class Compiler(BaseCompiler):
 			speedgrade=device.SpeedGrade
 		)
 
-		self._LogDebug("Writing CoreGen content file to '{0}'.".format(cgcFilePath))
+		self.LogDebug("Writing CoreGen content file to '{0}'.".format(cgcFilePath))
 		with cgcFilePath.open('w') as cgcFileHandle:
 			cgcFileHandle.write(cgContentFileContent)
 
 		# copy xco file into temporary directory
-		self._LogVerbose("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
-		self._LogDebug("cp {0!s} {1!s}".format(xcoInputFilePath, self.Directories.Working))
+		self.LogVerbose("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
+		self.LogDebug("cp {0!s} {1!s}".format(xcoInputFilePath, self.Directories.Working))
 		try:
 			shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
 		except OSError as ex:
 			raise CompilerException("Error while copying '{0!s}'.".format(xcoInputFilePath)) from ex
 
 		# change working directory to temporary CoreGen path
-		self._LogDebug("cd {0!s}".format(self.Directories.Working))
+		self.LogDebug("cd {0!s}".format(self.Directories.Working))
 		try:
 			chdir(str(self.Directories.Working))
 		except OSError as ex:
@@ -214,7 +214,7 @@ class Compiler(BaseCompiler):
 
 		# running CoreGen
 		# ==========================================================================
-		self._LogVerbose("Executing CoreGen...")
+		self.LogVerbose("Executing CoreGen...")
 		coreGen = self._toolChain.GetCoreGenerator()
 		coreGen.Parameters[coreGen.SwitchProjectFile] =  "."		# use current directory and the default project name
 		coreGen.Parameters[coreGen.SwitchBatchFile] =    str(xcoFilePath)

@@ -69,7 +69,7 @@ class Simulator(BaseSimulator):
 
 	def _PrepareSimulator(self):
 		# create the Active-HDL executable factory
-		self._LogVerbose("Preparing Active-HDL simulator.")
+		self.LogVerbose("Preparing Active-HDL simulator.")
 		for sectionName in ['INSTALL.Aldec.ActiveHDL', 'INSTALL.Lattice.ActiveHDL']:
 			if (len(self.Host.PoCConfig.options(sectionName)) != 0):
 				break
@@ -147,10 +147,10 @@ class Simulator(BaseSimulator):
 		# aSim.Title =          testbench.ModuleName
 		#
 		# if (tclWaveFilePath.exists()):
-		# 	self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
+		# 	self.LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
 		# 	aSim.BatchCommand =  "do {0!s}; do {1!s}".format(tclWaveFilePath, tclGUIFilePath)
 		# else:
-		# 	self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
+		# 	self.LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
 		# 	aSim.BatchCommand =  "add wave *; do {0!s}".format(tclGUIFilePath)
 		#
 		# aSim.TopLevel =    "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)

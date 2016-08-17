@@ -202,8 +202,8 @@ class Configuration:    #(ISubClassRegistration):
 
 	def _ConfigureVersion(self):
 		"""
-			Asks for version and updates section. Returns version as string.
-			If no version was configured before, then _GetDefaultVersion is called.
+		If no version was configured before, then _GetDefaultVersion is called.
+		Asks for version and updates section. Returns version as string.
 		"""
 		if self._host.PoCConfig.has_option(self._section, 'Version'):
 			defaultVersion = self._host.PoCConfig[self._section]['Version']

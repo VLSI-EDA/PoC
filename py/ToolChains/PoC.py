@@ -67,16 +67,16 @@ class Configuration(BaseConfiguration):
 			latestTagHash = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True).strip()
 			latestTagName = check_output(["git", "describe", "--tags", latestTagHash], universal_newlines=True).strip()
 			latestTagName = latestTagName
-			self._host._LogNormal("  PoC version: {0} (found in git)".format(latestTagName))
+			self._host.LogNormal("  PoC version: {0} (found in git)".format(latestTagName))
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = latestTagName
 		except CalledProcessError:
 			print("WARNING: Can't get version information from latest git tag.")
 			pocVersion = self._template['ALL']['INSTALL.PoC']['Version']
-			self._host._LogNormal("  PoC version: {0} (found in default configuration)".format(pocVersion))
+			self._host.LogNormal("  PoC version: {0} (found in default configuration)".format(pocVersion))
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = pocVersion
 
 		pocInstallationDirectory = Path(environ.get('PoCRootDirectory'))
-		self._host._LogNormal("  Installation directory: {0!s} (found in environment variable)".format(pocInstallationDirectory))
+		self._host.LogNormal("  Installation directory: {0!s} (found in environment variable)".format(pocInstallationDirectory))
 		self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'] = pocInstallationDirectory.as_posix()
 
 	def __CheckForGit(self):

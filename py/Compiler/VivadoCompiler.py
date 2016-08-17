@@ -92,7 +92,7 @@ class Compiler(BaseCompiler):
 					netlist = entity.VivadoNetlist
 					self.TryRun(netlist, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -107,19 +107,19 @@ class Compiler(BaseCompiler):
 		self._WriteTclFile(netlist,board.Device)
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing pre-processing tasks...")
+		self.LogNormal("Executing pre-processing tasks...")
 		self._state = CompileState.PreCopy
 		self._RunPreCopy(netlist)
 		self._state = CompileState.PrePatch
 		self._RunPreReplace(netlist)
 		self._preTasksTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running Xilinx Vivado Synthesis...")
+		self.LogNormal("Running Xilinx Vivado Synthesis...")
 		self._state = CompileState.Compile
 		self._RunCompile(netlist)
 		self._compileTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing post-processing tasks...")
+		self.LogNormal("Executing post-processing tasks...")
 		self._state = CompileState.PostCopy
 		self._RunPostCopy(netlist)
 		self._state = CompileState.PostPatch
@@ -181,6 +181,6 @@ class Compiler(BaseCompiler):
 		buffer += "write_checkpoint -noxdef {top}.dcp \n".format(top=netlist.ModuleName)
 		buffer += "catch {{ report_utilization -file {top}_synth.rpt -pb {top}_synth.pb }}\n".format(top=netlist.ModuleName)
 
-		self._LogDebug("Writing Vivado TCL file to '{0!s}'".format(netlist.TclFile))
+		self.LogDebug("Writing Vivado TCL file to '{0!s}'".format(netlist.TclFile))
 		with netlist.TclFile.open('w') as tclFileHandle:
 			tclFileHandle.write(buffer)

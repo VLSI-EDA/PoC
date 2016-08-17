@@ -116,7 +116,7 @@ class QuartusMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self._logger =              logger
+		self.Logger =              logger
 
 
 class Quartus(QuartusMixIn):
@@ -124,10 +124,10 @@ class Quartus(QuartusMixIn):
 		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetMap(self):
-		return Map(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return Map(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
 
 	def GetTclShell(self):
-		return TclShell(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return TclShell(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
 
 
 class Map(Executable, QuartusMixIn):
@@ -175,10 +175,10 @@ class Map(Executable, QuartusMixIn):
 
 	def Compile(self) :
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -194,22 +194,22 @@ class Map(Executable, QuartusMixIn):
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("  quartus_map messages for '{0}'".format(self.Parameters[self.SwitchArgumentFile]))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  quartus_map messages for '{0}'".format(self.Parameters[self.SwitchArgumentFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 class TclShell(Executable, QuartusMixIn):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):

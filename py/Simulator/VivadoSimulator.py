@@ -73,7 +73,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 	def _PrepareSimulator(self):
 		# create the Vivado executable factory
-		self._LogVerbose("Preparing Vivado simulator.")
+		self.LogVerbose("Preparing Vivado simulator.")
 		vivadoSection = self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
 		version =  vivadoSection['Version']
 		binaryPath = Path(vivadoSection['BinaryDirectory'])
@@ -124,10 +124,10 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 			# if xSim save file exists, load it's settings
 			if wcfgFilePath.exists():
-				self._LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
+				self.LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
 				xSim.Parameters[xSim.SwitchWaveformFile] =  str(wcfgFilePath)
 			else:
-				self._LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
+				self.LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
 		xSim.Parameters[xSim.SwitchSnapshot] = testbench.ModuleName
 		testbench.Result = xSim.Simulate()

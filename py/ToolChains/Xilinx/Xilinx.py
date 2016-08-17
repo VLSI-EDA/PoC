@@ -102,6 +102,6 @@ class XilinxProjectExportMixIn:
 
 	def _WriteXilinxProjectFile(self, projectFilePath, tool, vhdlVersion=VHDLVersion.VHDL93):
 		projectFileContent = self._GenerateXilinxProjectFileContent(tool, vhdlVersion)
-		self._LogDebug("Writing {0} project file to '{1!s}'".format(tool, projectFilePath)) #self._LogDebug only available via late binding
+		self.LogDebug("Writing {0} project file to '{1!s}'".format(tool, projectFilePath)) #self.LogDebug only available via late binding
 		with projectFilePath.open('w') as prjFileHandle:
 			prjFileHandle.write(projectFileContent)

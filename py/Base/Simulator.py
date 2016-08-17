@@ -108,7 +108,7 @@ class Simulator(Shared):
 		self._Prepare()
 
 	def _PrepareSimulationEnvironment(self):
-		self._LogNormal("Preparing simulation environment...")
+		self.LogNormal("Preparing simulation environment...")
 		self._PrepareEnvironment()
 
 	def RunAll(self, fqnList, *args, **kwargs):
@@ -126,7 +126,7 @@ class Simulator(Shared):
 					testbench = entity.VHDLTestbench
 					self.TryRun(testbench, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -153,14 +153,14 @@ class Simulator(Shared):
 		except SkipableSimulatorException as ex:
 			testCase.Status = __SIMULATION_STATE_TO_TESTCASE_STATUS__[self._state]
 
-			self._LogQuiet("  {RED}ERROR:{NOCOLOR} {ExMsg}".format(ExMsg=ex.message, **Init.Foreground))
+			self.LogQuiet("  {RED}ERROR:{NOCOLOR} {ExMsg}".format(ExMsg=ex.message, **Init.Foreground))
 			cause = ex.__cause__
 			if (cause is not None):
-				self._LogQuiet("    {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
+				self.LogQuiet("    {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
 				cause = cause.__cause__
 				if (cause is not None):
-					self._LogQuiet("      {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
-			self._LogQuiet("  {RED}[SKIPPED DUE TO ERRORS]{NOCOLOR}".format(**Init.Foreground))
+					self.LogQuiet("      {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
+			self.LogQuiet("  {RED}[SKIPPED DUE TO ERRORS]{NOCOLOR}".format(**Init.Foreground))
 		except SimulatorException:
 			testCase.Status = __SIMULATION_STATE_TO_TESTCASE_STATUS__[self._state]
 			raise
@@ -172,7 +172,7 @@ class Simulator(Shared):
 
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
 		"""Write the Testbench message line, create a PoCProject and add the first *.files file to it."""
-		self._LogQuiet("{CYAN}Testbench: {0!s}{NOCOLOR}".format(testbench.Parent, **Init.Foreground))
+		self.LogQuiet("{CYAN}Testbench: {0!s}{NOCOLOR}".format(testbench.Parent, **Init.Foreground))
 
 		self._vhdlVersion =  vhdlVersion
 		self._vhdlGenerics = vhdlGenerics
@@ -183,23 +183,23 @@ class Simulator(Shared):
 
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running analysis for every vhdl file...")
+		self.LogNormal("Running analysis for every vhdl file...")
 		self._state = SimulationState.Analyze
 		self._RunAnalysis(testbench)
 		self._analyzeTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running elaboration...")
+		self.LogNormal("Running elaboration...")
 		self._state = SimulationState.Elaborate
 		self._RunElaboration(testbench)
 		self._elaborationTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running simulation...")
+		self.LogNormal("Running simulation...")
 		self._state = SimulationState.Simulate
 		self._RunSimulation(testbench)
 		self._simulationTime = self._GetTimeDeltaSinceLastEvent()
 
 		if (guiMode is True):
-			self._LogNormal("Executing waveform viewer...")
+			self.LogNormal("Executing waveform viewer...")
 			self._state = SimulationState.View
 			self._RunView(testbench)
 
@@ -218,16 +218,16 @@ class Simulator(Shared):
 		pass
 
 	def PrintOverallSimulationReport(self):
-		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
-		self._LogQuiet("{HEADLINE}{headline: ^80s}{NOCOLOR}".format(headline="Overall Simulation Report", **Init.Foreground))
-		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
+		self.LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
+		self.LogQuiet("{HEADLINE}{headline: ^80s}{NOCOLOR}".format(headline="Overall Simulation Report", **Init.Foreground))
+		self.LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
 		# table header
-		self._LogQuiet("{Name: <24} | {Duration: >5} | {Status: ^11}".format(Name="Name", Duration="Time", Status="Status"))
-		self._LogQuiet("-" * 80)
+		self.LogQuiet("{Name: <24} | {Duration: >5} | {Status: ^11}".format(Name="Name", Duration="Time", Status="Status"))
+		self.LogQuiet("-" * 80)
 		self.PrintSimulationReportLine(self._testSuite, 0, 24)
 
-		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
-		self._LogQuiet("Time: {time: >5}  Count: {count: <3}  Passed: {passed: <3}  No Asserts: {noassert: <2}  Failed: {failed: <2}  Errors: {error: <2}".format(
+		self.LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
+		self.LogQuiet("Time: {time: >5}  Count: {count: <3}  Passed: {passed: <3}  No Asserts: {noassert: <2}  Failed: {failed: <2}  Errors: {error: <2}".format(
 			time=to_time(self._testSuite.OverallRunTime),
 			count=self._testSuite.Count,
 			passed=self._testSuite.PassedCount,
@@ -235,7 +235,7 @@ class Simulator(Shared):
 			failed=self._testSuite.FailedCount,
 			error=self._testSuite.ErrorCount
 		))
-		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
+		self.LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
 
 	__SIMULATION_REPORT_COLOR_TABLE__ = {
 		SimulationStatus.Unknown:             "RED",
@@ -265,12 +265,12 @@ class Simulator(Shared):
 		_indent = "  " * indent
 		for group in testObject.Groups.values():
 			pattern = "{indent}{{groupName: <{nameColumnWidth}}} |       | ".format(indent=_indent, nameColumnWidth=nameColumnWidth)
-			self._LogQuiet(pattern.format(groupName=group.Name))
+			self.LogQuiet(pattern.format(groupName=group.Name))
 			self.PrintSimulationReportLine(group, indent + 1, nameColumnWidth - 2)
 		for testCase in testObject.TestCases.values():
 			pattern = "{indent}{{testcaseName: <{nameColumnWidth}}} | {{duration: >5}} | {{{color}}}{{status: ^11}}{{NOCOLOR}}".format(
 				indent=_indent, nameColumnWidth=nameColumnWidth, color=self.__SIMULATION_REPORT_COLOR_TABLE__[testCase.Status])
-			self._LogQuiet(pattern.format(testcaseName=testCase.Name, duration=to_time(testCase.OverallRunTime),
+			self.LogQuiet(pattern.format(testcaseName=testCase.Name, duration=to_time(testCase.OverallRunTime),
 																		status=self.__SIMULATION_REPORT_STATUS_TEXT_TABLE__[testCase.Status], **Init.Foreground))
 
 

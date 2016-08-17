@@ -70,7 +70,7 @@ class Simulator(BaseSimulator):
 
 	def _PrepareSimulator(self):
 		# create the QuestaSim executable factory
-		self._LogVerbose("Preparing Mentor simulator.")
+		self.LogVerbose("Preparing Mentor simulator.")
 		for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Altera.ModelSim']:
 			if (len(self.Host.PoCConfig.options(sectionName)) != 0):
 				break
@@ -171,10 +171,10 @@ class Simulator(BaseSimulator):
 		# vsim.Parameters[vsim.SwitchTitle] =           testbenchName
 
 		if (tclWaveFilePath.exists()):
-			self._LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
+			self.LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
 			vsim.Parameters[vsim.SwitchBatchCommand] =  "do {0}; do {1}".format(tclWaveFilePath.as_posix(), tclGUIFilePath.as_posix())
 		else:
-			self._LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
+			self.LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
 			vsim.Parameters[vsim.SwitchBatchCommand] =  "add wave *; do {0}".format(tclGUIFilePath.as_posix())
 
 		testbench.Result = vsim.Simulate()
