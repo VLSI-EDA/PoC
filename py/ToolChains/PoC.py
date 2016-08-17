@@ -64,9 +64,9 @@ class Configuration(BaseConfiguration):
 
 	def ConfigureForAll(self):
 		try:
-			latestTagHash = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True)
-			latestTagName = check_output(["git", "describe", "--tags", latestTagHash[:-1]], universal_newlines=True)
-			latestTagName = latestTagName[:-1]
+			latestTagHash = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True).strip()
+			latestTagName = check_output(["git", "describe", "--tags", latestTagHash], universal_newlines=True).strip()
+			latestTagName = latestTagName
 			self._host._LogNormal("  PoC version: {0} (found in git)".format(latestTagName))
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = latestTagName
 		except CalledProcessError:
@@ -88,41 +88,17 @@ class Configuration(BaseConfiguration):
 
 	def __IsUnderGitControl(self):
 		try:
-			response = check_output(["git", "rev-parse", "--is-inside-work-tree"], universal_newlines=True)
-			return (response[:-1] == "true")
+			response = check_output(["git", "rev-parse", "--is-inside-work-tree"], universal_newlines=True).strip()
+			return (response == "true")
 		except OSError:
 			return False
 
 	def __GetCurrentBranchName(self):
 		try:
-			response = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], universal_newlines=True)
-			return response[:-1]
+			response = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], universal_newlines=True).strip()
+			return response
 		except OSError:
 			return False
-
-	def RunPostConfigurationTasks(self):
-
-		# Setup Git Mechanisms
-		if self.__IsUnderGitControl():
-			pocInstallationPath = Path(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'])
-			gitToolsPath = pocInstallationPath / 'tools/git'
-
-			def call_setup(section):
-				self._host._LogNormal("Setting up Git " + section, indent=1)
-				script = str(gitToolsPath / ('git-' + section + '.setup.py'))
-				try:
-					check_call(["python", script])
-				except CalledProcessError:
-					# We do not want this to be fatal
-					self._host._LogWarning("Could not setup '{}': {}".format(section, script))
-
-			# Setting up Hooks & Filters
-			answer = input("  Query for git mechanisms for PoC developers? [y/N]: ")
-			if answer in ['y', 'Y']:
-				for section in ['hooks', 'filters']:
-					answer = input('  Install git ' + section + '? [Y/n]: ')
-					if answer in ['', 'y', 'Y']:
-						call_setup(section)
 
 	# LOCAL = git rev-parse @
 	# PS G:\git\PoC> git rev-parse "@"

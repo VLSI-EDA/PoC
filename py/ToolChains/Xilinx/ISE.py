@@ -59,8 +59,8 @@ class ISEException(XilinxException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =    "Xilinx"
-	_toolName =  "Xilinx ISE"
+	_vendor =   "Xilinx"
+	_toolName = "Xilinx ISE"
 	_section =  "INSTALL.Xilinx.ISE"
 	_template = {
 		"Windows": {
@@ -143,7 +143,7 @@ class Fuse(Executable, ISEMixIn):
 		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
 		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "fuse.exe"
 		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "fuse"
-		else:                                            raise PlatformNotSupportedException(self._platform)
+		else:                          raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath

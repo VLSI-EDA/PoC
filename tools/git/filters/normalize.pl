@@ -114,9 +114,13 @@ sub restfix {
 my $pass;
 my @chain = ();
 
+# open(my $fh, '>>', 'D:\git\PoC\temp\normalize.log');
+
 if($pass = shift) {
 	my $lang = @ARGV? lc(shift) : '';
+	# print $fh "$lang";
 	if($pass eq 'clean') {
+		# print $fh " clean xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
 		push @chain, \&rtrim;
 		push @chain, \&vhdlcap if $lang eq 'vhdl';
 		push @chain, \&restfix if $lang eq 'rest';
@@ -132,4 +136,7 @@ while(<>) {
   my $line = $_;
   $line = $_->($line) for @chain;
   print "$line\n";
+	# print $fh "$line\n";
 }
+
+# close $fh;

@@ -77,13 +77,17 @@ class SkipConfigurationException(ExceptionBase):
 # 		return self._subclasses
 
 class Configuration:    #(ISubClassRegistration):
-	_vendor =      "Unknown"
-	_toolName =    "Unknown"
-	_section =    "ERROR"
-	_template =    {}
+	_vendor =       "Unknown"
+	_toolName =     "Unknown"
+	_section =      "ERROR"
+	_template =     {}
 
 	def __init__(self, host):
 		self._host =  host
+
+	@property
+	def Host(self):
+		return self._host
 
 	def IsSupportedPlatform(self):
 		if (self._host.Platform not in self._template):

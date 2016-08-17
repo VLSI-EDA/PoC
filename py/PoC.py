@@ -350,7 +350,8 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
 	@CommandAttribute("configure", help="Configure vendor tools for PoC.")
-	def HandleConfiguration(self, _):
+	@ArgumentAttribute(metavar="<ToolChain>", dest="ToolChain", type=str, nargs="?", help="Specify a tool chain to be configured.")
+	def HandleConfiguration(self, args):
 		self.PrintHeadline()
 
 		if (self.Platform not in ["Darwin", "Linux", "Windows"]):    raise PlatformNotSupportedException(self.Platform)
@@ -367,10 +368,21 @@ class PoC(ILogable, ArgParseMixin):
 		print("  {YELLOW}N{NOCOLOR} - no       {YELLOW}Ctrl + C{NOCOLOR} - abort (no changes are saved)".format(**Init.Foreground))
 		print("Upper case or value in '[...]' means default value")
 		print("-"*80)
-		print()
+
+		# select tool chains for configuration
+		toolChain = args.ToolChain
+		if (toolChain is None):
+			configurators = [config(self) for config in Configurations]
+		elif (toolChain != ""):
+			sectionName = "INSTALL.{0}".format(toolChain)
+			configurators = [config(self) for config in Configurations if (config._section.lower().startswith(sectionName.lower()))]
+
+		if (len(configurators) == 0):
+			self._LogError("{RED}No configuration named '{0}' found.{NOCOLOR}".format(toolChain, **Init.Foreground))
+			return
 
 		# configure each vendor or tool of a tool chain
-		configurators = [config(self) for config in Configurations]
+		print()
 		for configurator in configurators:
 
 			# skip configuration with unsupported platforms
@@ -384,7 +396,7 @@ class PoC(ILogable, ArgParseMixin):
 			nxt = False
 			while (nxt is False):
 				try:
-					if   (self.Platform == "Darwin"):    configurator.ConfigureForDarwin()
+					if   (self.Platform == "Darwin"):   configurator.ConfigureForDarwin()
 					elif (self.Platform == "Linux"):    configurator.ConfigureForLinux()
 					elif (self.Platform == "Windows"):  configurator.ConfigureForWindows()
 

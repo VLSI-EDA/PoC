@@ -104,8 +104,8 @@ class Configuration(BaseConfiguration):
 	def _GetDefaultInstallationDirectory(self):
 		if (self._host.Platform in ["Linux", "Darwin"]):
 			try:
-				name = check_output(["which", "gtkwave"], universal_newlines=True)
-				if name != "": return Path(name[:-1]).parent.as_posix()
+				name = check_output(["which", "gtkwave"], universal_newlines=True).strip()
+				if name != "": return Path(name).parent.as_posix()
 			except CalledProcessError:
 				pass # `which` returns non-zero exit code if executable is not in PATH
 

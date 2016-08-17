@@ -15,4 +15,4 @@ set_property PACKAGE_PIN	E18		[get_ports VC707_SystemClock_200MHz_n]
 # set I/O standard
 set_property IOSTANDARD		LVDS	[get_ports -regexp {VC707_SystemClock_200MHz_[p|n]}]
 # specify a 200 MHz clock
-create_clock -period 5.000 -name NET_SystemClock_200MHz [get_ports VC707_SystemClock_200MHz_p]
+create_clock -period 5.000 -name PIN_SystemClock_200MHz [get_ports VC707_SystemClock_200MHz_p]

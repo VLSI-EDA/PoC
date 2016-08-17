@@ -43,7 +43,6 @@ else:
 # load dependencies
 import re
 
-from Base.Configuration      import Configuration as BaseConfiguration
 from Base.Exceptions         import PlatformNotSupportedException
 from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument
 from Base.Logging            import LogEntry, Severity
@@ -54,15 +53,6 @@ from lib.Functions           import Init, CallByRefParam
 
 class GNUException(ToolChainException):
 	pass
-
-
-class Configuration(BaseConfiguration):
-	_vendor =      "GNU"
-	_toolName =    "GNU Make"
-	_section =     None
-
-	def CheckDependency(self):
-		return False
 
 
 class Make(Executable):

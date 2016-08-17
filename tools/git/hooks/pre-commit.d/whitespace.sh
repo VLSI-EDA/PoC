@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/bin/bash
 # EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
@@ -23,18 +23,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-from subprocess import check_call
-from sys import argv
 
-cmd = ['git', 'config']
-if len(argv) > 1 and argv[1] == 'remove':
-	cmd.append('--unset')
-
-for lang in [None, 'rest', 'vhdl']:
-	filter = 'filter.normalize'
-	invoke = 'tools/git/filters/normalize {}'
-	if lang:
-		filter += '_'+lang
-		invoke += ' '+lang
-	for pas in ['clean', 'smudge']:
-		check_call(cmd + [filter + '.' + pas, invoke.format(pas)])
+if ! git diff --cached --check; then
+  echo 1>&2 'ERROR: Commit would introduce whitespace errors. Please fix and try again.'
+  exit 1
+fi

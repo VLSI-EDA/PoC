@@ -43,7 +43,7 @@ else:
 
 
 from pathlib                import Path
-from re                     import compile as RegExpCompile
+from re                     import compile as re_compile
 from subprocess             import check_output, CalledProcessError
 
 from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
@@ -114,8 +114,8 @@ class Configuration(BaseConfiguration):
 	def _GetDefaultInstallationDirectory(self):
 		if (self._host.Platform in ["Linux", "Darwin"]):
 			try:
-				name = check_output(["which", "ghdl"], universal_newlines=True)
-				if name != "": return Path(name[:-1]).parent.as_posix()
+				name = check_output(["which", "ghdl"], universal_newlines=True).strip()
+				if name != "": return Path(name).parent.as_posix()
 			except CalledProcessError:
 				pass # `which` returns non-zero exit code if GHDL is not in PATH
 
@@ -151,9 +151,9 @@ class Configuration(BaseConfiguration):
 		version = None
 		backend = None
 		versionRegExpStr = r"^GHDL (.+?) "
-		versionRegExp = RegExpCompile(versionRegExpStr)
+		versionRegExp = re_compile(versionRegExpStr)
 		backendRegExpStr = r"(?i).*(mcode|gcc|llvm).* code generator"
-		backendRegExp = RegExpCompile(backendRegExpStr)
+		backendRegExp = re_compile(backendRegExpStr)
 		for line in output.split('\n'):
 			if version is None:
 				match = versionRegExp.match(line)
@@ -174,10 +174,10 @@ class Configuration(BaseConfiguration):
 
 class GHDL(Executable):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, backend, logger=None):
-		if (platform == "Windows"):     executablePath = binaryDirectoryPath/ "ghdl.exe"
-		elif (platform == "Linux"):     executablePath = binaryDirectoryPath/ "ghdl"
-		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath/ "ghdl"
-		else:                                            raise PlatformNotSupportedException(platform)
+		if (platform == "Windows"):     executablePath = binaryDirectoryPath / "ghdl.exe"
+		elif (platform == "Linux"):     executablePath = binaryDirectoryPath / "ghdl"
+		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath / "ghdl"
+		else:                           raise PlatformNotSupportedException(platform)
 		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Executable = executablePath
@@ -490,7 +490,7 @@ class GHDLRun(GHDL):
 
 def GHDLAnalyzeFilter(gen):
 	filterPattern = r".+?:\d+:\d+:(?P<warning>warning:)? (?P<message>.*)"			# <Path>:<line>:<column>:[warning:] <message>
-	filterRegExp  = RegExpCompile(filterPattern)
+	filterRegExp  = re_compile(filterPattern)
 
 	for line in gen:
 		filterMatch = filterRegExp.match(line)
@@ -519,7 +519,7 @@ def GHDLRunFilter(gen):
 	#  (*) -> unknown <severity>                                        -> Severity.Error
 
 	filterPattern = r".+?:\d+:\d+:((?P<report>@\w+:\((?:report|assertion) )?(?P<severity>\w+)(?(report)\)):)? (?P<message>.*)"
-	filterRegExp = RegExpCompile(filterPattern)
+	filterRegExp = re_compile(filterPattern)
 
 	lineno = 0
 	for line in gen:
