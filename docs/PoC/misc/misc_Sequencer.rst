@@ -17,4 +17,4 @@ misc_Sequencer
 Source file: `misc/misc_Sequencer.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_Sequencer.vhdl>`_
 
 
-	 
+

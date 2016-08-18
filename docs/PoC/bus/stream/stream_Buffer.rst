@@ -20,4 +20,4 @@ meta information.
 Source file: `bus/stream/stream_Buffer.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Buffer.vhdl>`_
 
 
-	 
+

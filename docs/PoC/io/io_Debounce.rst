@@ -28,4 +28,4 @@ of a two-FF input synchronizer on each input bit.
 Source file: `io/io_Debounce.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_Debounce.vhdl>`_
 
 
-	 
+

@@ -23,4 +23,4 @@ processing width.
 Source file: `comm/comm_crc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_crc.vhdl>`_
 
 
-	 
+

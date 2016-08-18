@@ -28,4 +28,4 @@ is specified by ``val(3 downto 0)``.
 Source file: `arith/arith_counter_bcd.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_bcd.vhdl>`_
 
 
-	 
+

@@ -53,4 +53,4 @@ misc_bit_lz
 Source file: `misc/misc_bit_lz.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_bit_lz.vhdl>`_
 
 
-	 
+

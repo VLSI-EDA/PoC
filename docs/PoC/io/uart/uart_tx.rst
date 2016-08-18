@@ -18,4 +18,4 @@ uart_tx
 Source file: `io/uart/uart_tx.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_tx.vhdl>`_
 
 
-	 
+

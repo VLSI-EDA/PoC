@@ -138,7 +138,7 @@ class QuestaSimMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self.Logger =              logger
+		self._Logger =              logger
 
 
 class QuestaSim(QuestaSimMixIn):
@@ -146,13 +146,13 @@ class QuestaSim(QuestaSimMixIn):
 		QuestaSimMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetVHDLCompiler(self):
-		return QuestaVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return QuestaVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetSimulator(self):
-		return QuestaSimulator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return QuestaSimulator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetVHDLLibraryTool(self):
-		return QuestaVHDLLibraryTool(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return QuestaVHDLLibraryTool(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class QuestaVHDLCompiler(Executable, QuestaSimMixIn):

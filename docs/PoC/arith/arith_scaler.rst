@@ -31,4 +31,4 @@ highest scaling ratio to be used in order to avoid a truncation overflow.
 Source file: `arith/arith_scaler.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_scaler.vhdl>`_
 
 
-	 
+

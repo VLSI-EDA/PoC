@@ -116,7 +116,7 @@ class QuartusMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self.Logger =              logger
+		self._Logger =              logger
 
 
 class Quartus(QuartusMixIn):
@@ -124,10 +124,10 @@ class Quartus(QuartusMixIn):
 		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetMap(self):
-		return Map(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return Map(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetTclShell(self):
-		return TclShell(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return TclShell(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class Map(Executable, QuartusMixIn):

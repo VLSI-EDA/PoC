@@ -17,4 +17,4 @@ misc_StrobeGenerator
 Source file: `misc/misc_StrobeGenerator.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_StrobeGenerator.vhdl>`_
 
 
-	 
+

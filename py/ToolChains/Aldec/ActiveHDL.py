@@ -118,7 +118,7 @@ class ActiveHDLMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self.Logger =              logger
+		self._Logger =              logger
 
 
 class ActiveHDL(ActiveHDLMixIn):
@@ -126,13 +126,13 @@ class ActiveHDL(ActiveHDLMixIn):
 		ActiveHDLMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetVHDLLibraryTool(self):
-		return ActiveHDLVHDLLibraryTool(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return ActiveHDLVHDLLibraryTool(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetVHDLCompiler(self):
-		return VHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return VHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetSimulator(self):
-		return StandaloneSimulator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return StandaloneSimulator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class VHDLCompiler(Executable, ActiveHDLMixIn):

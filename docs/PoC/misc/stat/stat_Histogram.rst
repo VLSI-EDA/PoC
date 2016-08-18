@@ -17,4 +17,4 @@ stat_Histogram
 Source file: `misc/stat/stat_Histogram.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/stat/stat_Histogram.vhdl>`_
 
 
-	 
+

@@ -20,13 +20,13 @@ the falling edge directly before this rising edge. Thus sampling starts with
 the falling edge of the clock as depicted in the following waveform.
 
 .. code-block:: none
-  
+
                 __      ____      ____      __
    Clock          |____|    |____|    |____|
    Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
    DataIn_low      ... >< 0      >< 2      ><
    DataIn_high     ... >< 1      >< 3      ><
-  
+
    < i > is the value of the i-th data bit on the line.
 
 ``Pad`` must be connected to a PAD because FPGAs only have these registers in
@@ -45,4 +45,4 @@ IOBs.
 Source file: `io/ddrio/ddrio_inout.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_inout.vhdl>`_
 
 
-	 
+

@@ -117,7 +117,7 @@ class ISEMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self.Logger =              logger
+		self._Logger =              logger
 
 
 class ISE(ISEMixIn):
@@ -129,13 +129,13 @@ class ISE(ISEMixIn):
 		# return ISEVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetFuse(self):
-		return Fuse(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return Fuse(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetXst(self):
-		return Xst(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return Xst(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetCoreGenerator(self):
-		return CoreGenerator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return CoreGenerator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class Fuse(Executable, ISEMixIn):
@@ -208,9 +208,9 @@ class Fuse(Executable, ISEMixIn):
 		except Exception as ex:
 			raise ISEException("Failed to launch fuse.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		try:
 			iterator = iter(FuseFilter(self.GetReader()))
 
@@ -235,14 +235,14 @@ class Fuse(Executable, ISEMixIn):
 
 
 class ISESimulator(Executable):
-	def __init__(self, executablePath, logger=None):
-		super().__init__("", executablePath, logger=logger)
+	def __init__(self, platform, dryrun, executablePath, logger=None):
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 
 	@property
 	def HasWarnings(self):
@@ -287,9 +287,9 @@ class ISESimulator(Executable):
 		except Exception as ex:
 			raise ISEException("Failed to launch isim.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		simulationResult =  CallByRefParam(SimulationResult.Error)
 		try:
 			iterator = iter(PoCSimulationResultFilter(SimulatorFilter(self.GetReader()), simulationResult))
@@ -326,9 +326,9 @@ class Xst(Executable, ISEMixIn):
 
 		self.Parameters[self.Executable] = executablePath
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 
 	@property
 	def HasWarnings(self):
@@ -370,9 +370,9 @@ class Xst(Executable, ISEMixIn):
 		except Exception as ex:
 			raise ISEException("Failed to launch xst.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		try:
 			iterator = iter(XstFilter(self.GetReader()))
 
@@ -406,9 +406,9 @@ class CoreGenerator(Executable, ISEMixIn):
 
 		self.Parameters[self.Executable] = executablePath
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 
 	@property
 	def HasWarnings(self):
@@ -449,9 +449,9 @@ class CoreGenerator(Executable, ISEMixIn):
 		except Exception as ex:
 			raise ISEException("Failed to launch corgen.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		try:
 			iterator = iter(CoreGeneratorFilter(self.GetReader()))
 

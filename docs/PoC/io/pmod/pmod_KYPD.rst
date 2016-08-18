@@ -22,4 +22,4 @@ the button signals. The scan frequency and bounce time can be configured.
 Source file: `io/pmod/pmod_KYPD.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_KYPD.vhdl>`_
 
 
-	 
+

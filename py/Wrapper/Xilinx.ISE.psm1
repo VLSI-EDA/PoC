@@ -64,6 +64,9 @@ function Open-Environment
 			return 1
 		}
 		Import-Module PSCX
+
+		Push-EnvironmentBlock -Description "Before loading Xilinx ISE."
+
 		Invoke-BatchFile -path $ISE_SettingsFile
 		return 0
 	}
@@ -77,6 +80,9 @@ function Open-Environment
 
 function Close-Environment
 {	Write-Host "Unloading Xilinx ISE environment..." -ForegroundColor Yellow
+
+	Pop-EnvironmentBlock
+
 	$env:XILINX =						$null
 	$env:XILINX_EDK =				$null
 	$env:XILINX_PLANAHEAD =	$null

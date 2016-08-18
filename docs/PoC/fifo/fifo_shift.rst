@@ -23,4 +23,4 @@ The specified depth (``MIN_DEPTH``) is rounded up to the next suitable value.
 Source file: `fifo/fifo_shift.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_shift.vhdl>`_
 
 
-	 
+

@@ -21,4 +21,4 @@ vga_phy
 Source file: `io/vga/vga_phy.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy.vhdl>`_
 
 
-	 
+

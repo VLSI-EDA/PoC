@@ -79,4 +79,4 @@ The write data must directly connected to the physical layer.
 Source file: `mem/sdram/sdram_ctrl_fsm.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_fsm.vhdl>`_
 
 
-	 
+

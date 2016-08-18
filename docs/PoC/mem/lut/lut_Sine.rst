@@ -17,4 +17,4 @@ lut_Sine
 Source file: `mem/lut/lut_Sine.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/lut/lut_Sine.vhdl>`_
 
 
-	 
+

@@ -116,7 +116,7 @@ class VivadoMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self.Logger =              logger
+		self._Logger =              logger
 
 
 class Vivado(VivadoMixIn):
@@ -124,13 +124,13 @@ class Vivado(VivadoMixIn):
 		VivadoMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetElaborator(self):
-		return XElab(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return XElab(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetSimulator(self):
-		return XSim(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return XSim(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetSynthesizer(self):
-		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class XElab(Executable, VivadoMixIn):

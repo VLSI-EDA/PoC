@@ -32,4 +32,4 @@ IOBs.
 Source file: `io/ddrio/ddrio_out.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_out.vhdl>`_
 
 
-	 
+

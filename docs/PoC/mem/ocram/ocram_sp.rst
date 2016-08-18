@@ -24,4 +24,4 @@ write-first mode or read-through-write behaviour.
 Source file: `mem/ocram/ocram_sp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sp.vhdl>`_
 
 
-	 
+

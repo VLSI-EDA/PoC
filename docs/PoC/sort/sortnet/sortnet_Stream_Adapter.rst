@@ -17,4 +17,4 @@ sortnet_Stream_Adapter
 Source file: `sort/sortnet/sortnet_Stream_Adapter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_Stream_Adapter.vhdl>`_
 
 
-	 
+

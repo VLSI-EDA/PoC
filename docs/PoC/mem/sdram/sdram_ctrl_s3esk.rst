@@ -35,4 +35,4 @@ Synchronous resets are used.
 Source file: `mem/sdram/sdram_ctrl_s3esk.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_s3esk.vhdl>`_
 
 
-	 
+

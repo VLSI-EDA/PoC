@@ -40,4 +40,4 @@ Synchronous reset is used. Both resets must overlap.
 Source file: `fifo/fifo_dc_got_sm.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_dc_got_sm.vhdl>`_
 
 
-	 
+

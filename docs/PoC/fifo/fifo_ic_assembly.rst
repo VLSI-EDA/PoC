@@ -28,4 +28,4 @@ the transmission of data blocks. This applies to many DMA implementations.
 Source file: `fifo/fifo_ic_assembly.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_ic_assembly.vhdl>`_
 
 
-	 
+

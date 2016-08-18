@@ -322,7 +322,7 @@ class GHDL(Executable):
 	)
 
 	def GetGHDLAnalyze(self):
-		ghdl = GHDLAnalyze(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
+		ghdl = GHDLAnalyze(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self._Logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
 				ghdl.Parameters[param] = None
@@ -330,7 +330,7 @@ class GHDL(Executable):
 		return ghdl
 
 	def GetGHDLElaborate(self):
-		ghdl = GHDLElaborate(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
+		ghdl = GHDLElaborate(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self._Logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
 				ghdl.Parameters[param] = None
@@ -338,7 +338,7 @@ class GHDL(Executable):
 		return ghdl
 
 	def GetGHDLRun(self):
-		ghdl = GHDLRun(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self.Logger)
+		ghdl = GHDLRun(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self._Logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
 				ghdl.Parameters[param] = None

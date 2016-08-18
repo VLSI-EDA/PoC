@@ -19,4 +19,4 @@ sequence is independent from the chosen output width.
 Source file: `comm/comm_scramble.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_scramble.vhdl>`_
 
 
-	 
+

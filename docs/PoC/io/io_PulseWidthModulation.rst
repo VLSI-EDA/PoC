@@ -18,4 +18,4 @@ in frequency (``PWM_FREQ``) and modulation granularity (``PWM_RESOLUTION``).
 Source file: `io/io_PulseWidthModulation.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_PulseWidthModulation.vhdl>`_
 
 
-	 
+

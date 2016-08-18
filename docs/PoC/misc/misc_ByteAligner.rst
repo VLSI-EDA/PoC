@@ -17,4 +17,4 @@ misc_ByteAligner
 Source file: `misc/misc_ByteAligner.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_ByteAligner.vhdl>`_
 
 
-	 
+

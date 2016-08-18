@@ -36,4 +36,4 @@ Synchronous resets are used.
 Source file: `mem/sdram/sdram_ctrl_de0.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_de0.vhdl>`_
 
 
-	 
+

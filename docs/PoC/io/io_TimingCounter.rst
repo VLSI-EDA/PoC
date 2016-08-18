@@ -20,4 +20,4 @@ consisting of ``log2ceilnz(imax(TIMING_TABLE)) + 1`` 6-input LUTs.
 Source file: `io/io_TimingCounter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_TimingCounter.vhdl>`_
 
 
-	 
+

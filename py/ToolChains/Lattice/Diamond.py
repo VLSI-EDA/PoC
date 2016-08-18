@@ -141,7 +141,7 @@ class DiamondMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self.Logger =              logger
+		self._Logger =              logger
 
 
 class Diamond(DiamondMixIn):
@@ -149,7 +149,7 @@ class Diamond(DiamondMixIn):
 		DiamondMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetSynthesizer(self):
-		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.Logger)
+		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class Synth(Executable, DiamondMixIn):

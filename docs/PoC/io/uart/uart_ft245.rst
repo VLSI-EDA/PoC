@@ -17,4 +17,4 @@ uart_ft245
 Source file: `io/uart/uart_ft245.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_ft245.vhdl>`_
 
 
-	 
+

@@ -59,4 +59,4 @@ cache set (see above).
 Source file: `cache/cache_replacement_policy.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_replacement_policy.vhdl>`_
 
 
-	 
+

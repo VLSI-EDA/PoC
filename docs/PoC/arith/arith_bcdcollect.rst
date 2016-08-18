@@ -17,4 +17,4 @@ arith_bcdcollect
 Source file: `arith/arith_bcdcollect.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_bcdcollect.vhdl>`_
 
 
-	 
+

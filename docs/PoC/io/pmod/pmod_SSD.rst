@@ -30,4 +30,4 @@ Pmod connector (7 anode bits, 1 cathode bit).
 Source file: `io/pmod/pmod_SSD.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_SSD.vhdl>`_
 
 
-	 
+

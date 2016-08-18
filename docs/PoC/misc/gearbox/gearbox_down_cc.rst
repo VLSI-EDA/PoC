@@ -21,4 +21,4 @@ gearbox_down_cc
 Source file: `misc/gearbox/gearbox_down_cc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/gearbox/gearbox_down_cc.vhdl>`_
 
 
-	 
+

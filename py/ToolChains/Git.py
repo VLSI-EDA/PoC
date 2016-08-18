@@ -316,19 +316,19 @@ class GitMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		# self._version =             version
-		self.Logger =              logger
+		self._Logger =              logger
 
 
 class Git(GitMixIn):
 	def GetGitRevParse(self):
-		git = GitRevParse(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self.Logger)
+		git = GitRevParse(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
 		git.Clear()
 		git.RevParseParameters[GitRevParse.Command] = True
 
 		return git
 
 	def GetGitConfig(self):
-		git = GitConfig(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self.Logger)
+		git = GitConfig(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
 		git.Clear()
 		git.ConfigParameters[GitConfig.Command] = True
 
