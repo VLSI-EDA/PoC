@@ -348,7 +348,7 @@ class PoC(ILogable, ArgParseMixin):
 	# ============================================================================
 	# create the sub-parser for the "configure" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Configuration commands")
+	@CommandGroupAttribute("Configuration commands") # mccabe:disable=MC0001
 	@CommandAttribute("configure", help="Configure vendor tools for PoC.")
 	@ArgumentAttribute(metavar="<ToolChain>", dest="ToolChain", type=str, nargs="?", help="Specify a tool chain to be configured.")
 	def HandleConfiguration(self, args):
@@ -680,7 +680,7 @@ class PoC(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-testbench" command
 	# ----------------------------------------------------------------------------
-	@CommandGroupAttribute("Simulation commands")
+	@CommandGroupAttribute("Simulation commands") # mccabe:disable=MC0001
 	@CommandAttribute("list-testbench", help="List all testbenches")
 	@PoCEntityAttribute()
 	@ArgumentAttribute("--kind", metavar="<Kind>", dest="TestbenchKind", help="Testbench kind: VHDL | COCOTB")
@@ -1079,7 +1079,7 @@ class PoC(ILogable, ArgParseMixin):
 
 
 # main program
-def main():
+def main(): # mccabe:disable=MC0001
 	dryRun =  "-D" in sys_argv
 	debug =   "-d" in sys_argv
 	verbose = "-v" in sys_argv

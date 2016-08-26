@@ -50,7 +50,7 @@ from Base.Configuration     import Configuration as BaseConfiguration, Configura
 from Base.Exceptions        import PlatformNotSupportedException
 from Base.Executable        import Executable, LongValuedFlagArgument
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
-from Base.Executable        import ShortFlagArgument, LongFlagArgument, ShortValuedFlagArgument, CommandLineArgumentList
+from Base.Executable        import ShortFlagArgument, LongFlagArgument, CommandLineArgumentList
 from Base.Logging           import LogEntry, Severity
 from Base.Simulator         import PoCSimulationResultFilter, SimulationResult
 from Base.ToolChain         import ToolChainException

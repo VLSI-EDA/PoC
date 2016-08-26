@@ -412,7 +412,7 @@ class IPCore(PathElement):
 			raise ConfigurationException("No Vivado netlist configured for '{0!s}'.".format(self))
 		return self._vivadoNetlist[0]
 
-	def GetNetlists(self, kind=NetlistKind.All):
+	def GetNetlists(self, kind=NetlistKind.All): # mccabe:disable=MC0001
 		if (NetlistKind.LatticeNetlist in kind):
 			for nl in self._latticeNetlist:
 				if nl.IsVisible:

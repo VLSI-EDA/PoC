@@ -440,7 +440,7 @@ class Synth(Executable, VivadoMixIn):
 
 
 
-def ElaborationFilter(gen):
+def ElaborationFilter(gen): # mccabe:disable=MC0001
 	for line in gen:
 		if line.startswith("Vivado Simulator "):
 			continue

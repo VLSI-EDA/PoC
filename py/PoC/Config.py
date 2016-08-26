@@ -296,10 +296,10 @@ class Device:
 		else:
 			raise ConfigurationException("RegExp mismatch.")
 
-	def _DecodeLatticeICE(self, deviceString):
+	def _DecodeLatticeICE(self, deviceString): # pylint:disable=unused-argument
 		self.__vendor = Vendors.Lattice
 
-	def _DecodeLatticeLCM(self, deviceString):
+	def _DecodeLatticeLCM(self, deviceString): # pylint:disable=unused-argument
 		self.__vendor = Vendors.Lattice
 
 	def _DecodeLatticeLFE(self, deviceString):

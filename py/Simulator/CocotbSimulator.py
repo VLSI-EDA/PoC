@@ -95,7 +95,7 @@ class Simulator(BaseSimulator):
 
 		return self._testSuite.IsAllPassed
 
-	def _RunSimulation(self, testbench):
+	def _RunSimulation(self, testbench): # mccabe:disable=MC0001
 		# select modelsim.ini from precompiled
 		precompiledModelsimIniPath = self.Directories.PreCompiled
 		device_vendor = self._pocProject.Board.Device.Vendor

@@ -461,7 +461,7 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 		# ]
 
 
-def VHDLCompilerFilter(gen):
+def VHDLCompilerFilter(gen): # mccabe:disable=MC0001
 	for line in gen:
 		if line.startswith("Aldec, Inc. VHDL Compiler"):
 			yield LogEntry(line, Severity.Debug)

@@ -67,7 +67,7 @@ class CopyStatement(Statement):
 	def DestinationPath(self):  return self._destinationPath
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# match for optional whitespacex
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -395,7 +395,7 @@ class FileStatement(BlockStatement):
 	def FilePath(self):    return self._filePath
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# match for IN ... FILE clause
 		# ==========================================================================
 		# match for optional whitespace
@@ -504,7 +504,7 @@ class ProcessRulesBlockStatement(BlockStatement):
 		self._commentText = commentText
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield

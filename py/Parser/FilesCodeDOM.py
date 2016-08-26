@@ -269,7 +269,7 @@ class VHDLStatement(Statement):
 	def PathExpression(self): return self._pathExpression
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -630,7 +630,7 @@ class PathStatement(Statement):
 		return self._pathExpression
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -776,7 +776,7 @@ class LibraryStatement(Statement):
 		return self._pathExpression
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -907,7 +907,7 @@ class IfStatement(ConditionalBlockStatement):
 		self._commentText = commentText
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# match for IF clause
 		# ==========================================================================
 		# match for optional whitespace
@@ -984,7 +984,7 @@ class ElseIfStatement(ConditionalBlockStatement):
 		self._commentText = commentText
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# match for multiple ELSEIF clauses
 		# ==========================================================================
 		token = yield
@@ -1129,7 +1129,7 @@ class IfElseIfElseStatement(Statement):
 	def ElseClause(self, value):    self._elseClause = value
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		# construct result
 		result = cls()
 
