@@ -223,7 +223,7 @@ class ReplaceStatement(Statement):
 	def DotAll(self):           return self._dotAll
 
 	@classmethod
-	def GetParser(cls):
+	def GetParser(cls): # mccabe:disable=MC0001
 		multiLine =       False
 		dotAll =          False
 		caseInsensitive = False

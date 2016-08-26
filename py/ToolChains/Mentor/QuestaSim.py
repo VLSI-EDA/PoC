@@ -54,7 +54,7 @@ from Base.Executable            import ExecutableArgument, ShortFlagArgument, Sh
 from ToolChains.Mentor.Mentor    import MentorException
 
 
-class QuestaException(MentorException):
+class QuestaSimException(MentorException):
 	pass
 
 
@@ -240,7 +240,7 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
-			raise QuestaException("Failed to launch vcom run.") from ex
+			raise QuestaSimException("Failed to launch vcom run.") from ex
 
 		self._hasOutput = False
 		self._hasWarnings = False
@@ -370,7 +370,7 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
-			raise QuestaException("Failed to launch vsim run.") from ex
+			raise QuestaSimException("Failed to launch vsim run.") from ex
 
 		self._hasOutput = False
 		self._hasWarnings = False
@@ -440,7 +440,7 @@ class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
-			raise QuestaException("Failed to launch vlib run.") from ex
+			raise QuestaSimException("Failed to launch vlib run.") from ex
 
 		self._hasOutput = False
 		self._hasWarnings = False

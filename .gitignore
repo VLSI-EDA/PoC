@@ -93,4 +93,4 @@ other/diamond/.spreadsheet_view.ini
 # general whitelist
 !.git*
 !.publish
-!.README.md
+!README.md

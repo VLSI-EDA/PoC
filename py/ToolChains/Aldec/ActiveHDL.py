@@ -46,13 +46,13 @@ else:
 
 from lib.Functions          import CallByRefParam
 from Base.Exceptions        import PlatformNotSupportedException
-from Base.Logging            import LogEntry, Severity
-from Base.Simulator          import SimulationResult, PoCSimulationResultFilter
+from Base.Logging           import LogEntry, Severity
+from Base.Simulator         import SimulationResult, PoCSimulationResultFilter
 from Base.Executable        import Executable
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument
 from Base.Executable        import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
-from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
-from ToolChains.Aldec.Aldec  import AldecException
+from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
+from ToolChains.Aldec.Aldec import AldecException
 
 
 class ActiveHDLException(AldecException):

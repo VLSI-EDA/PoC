@@ -78,7 +78,7 @@ from lib.pyAttribute                import Attribute
 
 class PoCEntityAttribute(Attribute):
 	def __call__(self, func):
-		self._AppendAttribute(func, ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="A space seperated list of PoC entities."))
+		self._AppendAttribute(func, ArgumentAttribute(metavar="<PoC Entity>", dest="FQN", type=str, nargs='+', help="A space separated list of PoC entities."))
 		return func
 
 class BoardDeviceAttributeGroup(Attribute):

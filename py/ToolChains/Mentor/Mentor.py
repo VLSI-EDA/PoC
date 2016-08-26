@@ -6,7 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Mentor specific classes
+# Python Class:     Mentor specific classes
 #
 # Description:
 # ------------------------------------

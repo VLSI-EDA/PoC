@@ -13,6 +13,6 @@
 NET "VC707_SystemClock_200MHz_p"				LOC = "E19";				## U51.4
 NET "VC707_SystemClock_200MHz_n"				LOC = "E18";				## U51.5
 NET "VC707_SystemClock_200MHz_?"				IOSTANDARD = LVDS;
-NET "VC707_SystemClock_200MHz_p"				TNM_NET = "NET_SystemClock_200MHz";
+NET "VC707_SystemClock_200MHz_p"				TNM_NET = "PIN_SystemClock_200MHz";
 
-TIMESPEC "TS_SystemClock"	= PERIOD "NET_SystemClock_200MHz"		200 MHz	HIGH 50 %;
+TIMESPEC "TS_SystemClock"	= PERIOD "PIN_SystemClock_200MHz"		200 MHz	HIGH 50 %;

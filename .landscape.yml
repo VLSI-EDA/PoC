@@ -18,6 +18,11 @@ pep8:
   enable:
   options:
     max-line-length: 180
+mccabe:
+  options:
+    max-complexity: 20
+vulture:
+  run: true
 ignore-paths:
 - lib
 - netlist

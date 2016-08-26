@@ -143,8 +143,7 @@ class Visibility(Enum):
 		for key,member in cls.__members__.items():
 			if (key == value):
 				return member
-		else:
-			raise ValueError("'{0!s}' is not a valid {1}".format(value, cls.__name__))
+		raise ValueError("'{0!s}' is not a valid {1}".format(value, cls.__name__))
 
 
 class PathElement:

@@ -6,7 +6,7 @@
 ##		Device:				XC7K325T
 ##		Package:			FFG900
 ##		Speedgrade:		-2
-##	
+##
 ##	Notes:
 ##		Power Rail 4 driving VADJ_FPGA is defaulted to 2.5V (choices: 1.8V, 2.5V, 3.3V)
 ##
@@ -24,6 +24,7 @@
 ##			Frequency:		10 - 810 MHz, 50ppm
 ##			Default Freq:	156.250 MHz
 ##			I²C-Address:	0x5D #$ (0111 010xb)
-NET "KC705_ProgUserClock_n"				LOC = "K29" | IOSTANDARD = LVDS_25;				## {IN}		U45.5
-NET "KC705_ProgUserClock_p"				LOC = "K28" | IOSTANDARD = LVDS_25;				## {IN}		U45.4
-NET "KC705_ProgUserClock_p"				TNM_NET = "NET_ProgUserClock";
+NET "KC705_ProgUserClock_p"				LOC = "K28";									## {IN}		U45.4
+NET "KC705_ProgUserClock_n"				LOC = "K29";									## {IN}		U45.5
+NET "KC705_ProgUserClock_p"				IOSTANDARD = LVDS_25;
+NET "KC705_ProgUserClock_p"				TNM_NET = "PIN_ProgUserClock";

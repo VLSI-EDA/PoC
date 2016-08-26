@@ -163,7 +163,7 @@ declare -A Env_Xilinx=(
 )
 declare -A Env_Xilinx_ISE=(
 	["Load"]=0
-	["Commands"]="isim xst coregen"
+	["Commands"]="isim xst coregen ise"
 	["BashModule"]="Xilinx.ISE.sh"
 	["PreHookFile"]="Xilinx.ISE.pre.sh"
 	["PostHookFile"]="Xilinx.ISE.post.sh"
