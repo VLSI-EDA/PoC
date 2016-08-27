@@ -21,6 +21,8 @@ pep8:
 mccabe:
   options:
     max-complexity: 20
+# vulture:
+  # run: true
 ignore-paths:
 - lib
 - netlist

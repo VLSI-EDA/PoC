@@ -268,8 +268,8 @@ class VHDLStatement(Statement):
 	@property
 	def PathExpression(self): return self._pathExpression
 
-	@classmethod
-	def GetParser(cls): # mccabe:disable=MC0001
+	@classmethod # mccabe:disable=MC0001
+	def GetParser(cls):
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -629,8 +629,8 @@ class PathStatement(Statement):
 	def PathExpression(self):
 		return self._pathExpression
 
-	@classmethod
-	def GetParser(cls): # mccabe:disable=MC0001
+	@classmethod # mccabe:disable=MC0001
+	def GetParser(cls):
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -775,8 +775,8 @@ class LibraryStatement(Statement):
 	def PathExpression(self):
 		return self._pathExpression
 
-	@classmethod
-	def GetParser(cls): # mccabe:disable=MC0001
+	@classmethod # mccabe:disable=MC0001
+	def GetParser(cls):
 		# match for optional whitespace
 		token = yield
 		if isinstance(token, SpaceToken):           token = yield
@@ -906,8 +906,8 @@ class IfStatement(ConditionalBlockStatement):
 		super().__init__(expression)
 		self._commentText = commentText
 
-	@classmethod
-	def GetParser(cls): # mccabe:disable=MC0001
+	@classmethod # mccabe:disable=MC0001
+	def GetParser(cls):
 		# match for IF clause
 		# ==========================================================================
 		# match for optional whitespace
@@ -983,8 +983,8 @@ class ElseIfStatement(ConditionalBlockStatement):
 		super().__init__(expression)
 		self._commentText = commentText
 
-	@classmethod
-	def GetParser(cls): # mccabe:disable=MC0001
+	@classmethod # mccabe:disable=MC0001
+	def GetParser(cls):
 		# match for multiple ELSEIF clauses
 		# ==========================================================================
 		token = yield
@@ -1128,8 +1128,8 @@ class IfElseIfElseStatement(Statement):
 	@ElseClause.setter
 	def ElseClause(self, value):    self._elseClause = value
 
-	@classmethod
-	def GetParser(cls): # mccabe:disable=MC0001
+	@classmethod # mccabe:disable=MC0001
+	def GetParser(cls):
 		# construct result
 		result = cls()
 
