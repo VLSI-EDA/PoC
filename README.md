@@ -62,7 +62,7 @@ further details.
 
 ##### PoC optionally requires:
 
-* Git command line tools or a Git GUI, if you want to check out the latest 'release' or 'release' branch.
+* Git command line tools or a Git GUI, if you want to check out the latest 'master' or 'release' branch.
 
 
 ##### PoC depends on third parts libraries:
@@ -84,7 +84,7 @@ Libraries](http://poc-library.readthedocs.io/en/release/Miscelaneous/ThirdParty.
 
 ## 3 Download
 
-The PoC-Library can be downloaded as a [zip-file][github:download] (latest 'release' branch), cloned with `git clone`
+The PoC-Library can be downloaded as a [zip-file][github:download] (latest 'master' branch), cloned with `git clone`
 or embedded with `git submodule add` from GitHub. GitHub offers HTTPS and SSH as transfer protocols. See the [Download][rtfd:download] page for further details. The installation directory is referred to as `PoCRoot`.
 
 | Protocol | Git Clone Command                                                 |

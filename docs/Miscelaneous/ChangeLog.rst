@@ -148,7 +148,7 @@ New in 1.0 (13.05.2016)
     * Aldec Active-HDL support (no GUI support)
 
       * Tested with Active-HDL from Lattice Diamond
-      * Tested with Active-HDL Student-Edition
+      * Tested with Active-HDL Student Edition
 
     * Cocotb (with QuestaSim backend on Linux)
 

@@ -91,7 +91,7 @@ architecture rtl of ocram_sdp is
 
 begin
 
-	gInfer : if ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
+	gInfer : if (VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX) generate
 		-- RAM can be inferred correctly
 		-- Xilinx notes:
 		--	 WRITE_MODE is set to WRITE_FIRST, but this also means that read data
@@ -113,10 +113,10 @@ begin
 			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
 			variable res			: ram_t;
 		begin
-			if (str_length(FilePath) = 0) then
+			if str_length(FilePath) = 0 then
 				-- shortcut required by Vivado
 				return (others => (others => ite(SIMULATION, 'U', '0')));
-			elsif (mem_FileExtension(FilePath) = "mem") then
+			elsif mem_FileExtension(FilePath) = "mem" then
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
 			else
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_INTEL_HEX, MEM_CONTENT_HEX);

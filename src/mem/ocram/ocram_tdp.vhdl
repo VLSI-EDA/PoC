@@ -101,7 +101,7 @@ architecture rtl of ocram_tdp is
 	constant DEPTH : positive := 2**A_BITS;
 
 begin
-	gInfer : if ((VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
+	gInfer : if (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX) generate
 		-- RAM can be inferred correctly only if '-use_new_parser yes' is enabled in XST options
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		ram_t		is array(0 to DEPTH - 1) of word_t;
@@ -111,10 +111,10 @@ begin
 			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
 			variable res			: ram_t;
 		begin
-			if (str_length(FilePath) = 0) then
+			if str_length(FilePath) = 0 then
         -- shortcut required by Vivado
 				return (others => (others => ite(SIMULATION, 'U', '0')));
-			elsif (mem_FileExtension(FilePath) = "mem") then
+			elsif mem_FileExtension(FilePath) = "mem" then
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
 			else
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_INTEL_HEX, MEM_CONTENT_HEX);

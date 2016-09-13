@@ -71,7 +71,7 @@ end entity;
 
 architecture rtl of sync_Reset is
 begin
-	genGeneric : if ((VENDOR /= VENDOR_ALTERA) and (VENDOR /= VENDOR_XILINX)) generate
+	genGeneric : if (VENDOR /= VENDOR_ALTERA) and (VENDOR /= VENDOR_XILINX) generate
 		attribute ASYNC_REG										: string;
 		attribute SHREG_EXTRACT								: string;
 
@@ -105,7 +105,7 @@ begin
 	end generate;
 
 	-- use dedicated and optimized 2 D-FF synchronizer for Altera FPGAs
-	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+	genAltera : if VENDOR = VENDOR_ALTERA generate
 		sync : sync_Reset_Altera
 			generic map (
 				SYNC_DEPTH	=> SYNC_DEPTH
@@ -118,7 +118,7 @@ begin
 	end generate;
 
 	-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+	genXilinx : if VENDOR = VENDOR_XILINX generate
 		sync : sync_Reset_Xilinx
 			generic map (
 				SYNC_DEPTH	=> SYNC_DEPTH

@@ -1,6 +1,6 @@
 
 sortnet
-=======
+========
 
 This sub-namespace contains sorting network implementations.
 
@@ -16,7 +16,7 @@ This sub-namespace contains sorting network implementations.
 
 .. toctree::
    :hidden:
-   
+
    sortnet_BitonicSort
    sortnet_MergeSort_Streamed
    sortnet_OddEvenMergeSort

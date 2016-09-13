@@ -12,7 +12,7 @@ The package :doc:`PoC.fifo <fifo.pkg>` holds all component declarations for this
 
 PoC offers FIFOs with a `got`-interface. This means, the current read-pointer value
 is available on the output. Asserting the `got`-input, acknoledge the processing of
-the current output signals and moves the read-pointer to the next value, if available.  
+the current output signals and moves the read-pointer to the next value, if available.
 
 All FIFOs implement a bidirectional flow control (`put`/`full` and `valid`/`got`).
 Each FIFO also offers a EmptyState (write-side) and FullState (read-side) to indicate
@@ -24,9 +24,9 @@ clock) refer to the write- and read-side clock relationship.
  * :doc:`PoC.fifo.cc_got <fifo_cc_got>` implements a regular FIFO (one common clock,
    got-interface)
  * :doc:`PoC.fifo.cc_got_tempgot <fifo_cc_got_tempgot>` implements a regular FIFO (one common
-   clock, got-interface), extended by a transactional `tempgot`-interface (read-side). 
+   clock, got-interface), extended by a transactional `tempgot`-interface (read-side).
  * :doc:`PoC.fifo.cc_got_tempput <fifo_cc_got_tempput>` implements a regular FIFO (one common
-   clock, got-interface), extended by a transactional `tempput`-interface (write-side). 
+   clock, got-interface), extended by a transactional `tempput`-interface (write-side).
  * :doc:`PoC.fifo.dc_got <fifo_dc_got>` implements a cross-clock FIFO (two related clocks,
    got-interface)
  * :doc:`PoC.fifo.ic_got <fifo_ic_got>` implements a cross-clock FIFO (two independent clocks,
@@ -38,9 +38,9 @@ clock) refer to the write- and read-side clock relationship.
 
 .. toctree::
    :hidden:
-   
+
    fifo.pkg
-   
+
    fifo_cc_got
    fifo_cc_got_tempgot
    fifo_cc_got_tempput

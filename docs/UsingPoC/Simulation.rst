@@ -19,20 +19,20 @@ frontend script:
   Use this fronend script on Darwin, Linux and Unix platforms.
 * **poc.ps1:** ``poc.ps1 <common options> <simulator> <module> <simulator options>`` |br|
   Use this frontend script Windows platforms. |br|
-  
+
   .. ATTENTION::
      All Windows command line instructions are intended for Windows
      PowerShell, if not marked otherwise. So executing the following instructions
      in Windows Command Prompt (``cmd.exe``) won't function or result in errors!
 
 .. seealso::
-   
+
    :doc:`PoC Configuration </UsingPoC/PoCConfiguration>`
      See the Configuration page on how to configure PoC and your installed
      simulator tool chains. This is required to invoke the simulators.
    :doc:`Supported Simulators </WhatIsPoC/SupportedToolChains>`
      See the Intruction page for a list of supported simulators.
-     
+
 
 Quick Example
 *************
@@ -47,7 +47,7 @@ passed to the frontend script.
 .. rubric:: Example 1:
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\poc.ps1 ghdl PoC.arith.prng
 
@@ -75,7 +75,7 @@ in GUI-mode. If a waveform configuration file is present (e.g. a ``*.gtkw``
 file for GTKWave), then it is preloaded into the simulator's waveform viewer.
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\poc.ps1 ghdl PoC.arith.prng --gui
 
@@ -123,7 +123,7 @@ A vendor specific testbench can be launched by passing either ``--board=xxx`` or
    Running vendor specific testbenches may require pre-compiled vendor libraries.
    Some simulators are shipped with diverse pre-compiled libraries, others include
    scripts or user guides to pre-compile them on the target system.
-   
+
    PoC is shipped with a set of pre-compile scripts to offer a unified interface
    and common storage for all supported vendor's pre-compile procedures. See
    :doc:`Pre-Compiling Vendor Libraries </UsingPoC/PrecompilingVendorLibraries>`.
@@ -410,11 +410,11 @@ Terrasic DE4 board:
 
 
 .. seealso::
-   
+
    :doc:`PoC Configuration </UsingPoC/PoCConfiguration>`
      See the Configuration page on how to configure PoC and your installed
      simulator tool chains. This is required to invoke the simulators.
    `Latest Travis-CI Report <https://travis-ci.org/VLSI-EDA/PoC/branches>`_
      Browse the list of branches at Travis-CI.org.
-   
-   
+
+

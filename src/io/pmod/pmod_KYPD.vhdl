@@ -64,17 +64,17 @@ end entity;
 architecture rtl of pmod_KYPD is
 	signal ColumnVector			: std_logic_vector(3 downto 0);
 	signal RowVector				: std_logic_vector(3 downto 0);
-	
+
 	signal KeyPadMatrix			: T_SLM(3 downto 0, 3 downto 0);
 	signal KeyPadMatrix_slv	: std_logic_vector(15 downto 0);
 	signal KeyPadVector			: std_logic_vector(15 downto 0);
 	signal KeyPad						: T_SLM(3 downto 0, 3 downto 0);
-	
+
 begin
 	-- KeyPad interface (low-active)
 	Columns_n		<= not ColumnVector;
 	RowVector		<= Rows_n;
-	
+
 	-- initialize a 4x4 matrix scanner
 	scanner : entity PoC.io_KeyPadScanner
 		generic map (
@@ -91,10 +91,10 @@ begin
 			ColumnVector	=> ColumnVector,
 			RowVector			=> RowVector
 		);
-		
+
 	-- serialize the keypad matrix for debouncing
 	KeyPadMatrix_slv	<= to_slv(KeyPadMatrix);
-	
+
 	debounce : entity PoC.io_Debounce
 		generic map (
 			CLOCK_FREQ							=> CLOCK_FREQ,
@@ -107,7 +107,7 @@ begin
 			Input			=> KeyPadMatrix_slv,
 			Output		=> KeyPadVector
 		);
-		
+
 	KeyPad		<= to_slm(KeyPadVector, 4, 4);
 	Keys.Key1	<= KeyPad(0, 0);
 	Keys.Key2	<= KeyPad(1, 0);

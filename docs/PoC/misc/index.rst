@@ -26,14 +26,14 @@ The package :doc:`PoC.misc <misc.pkg>` holds all component declarations for this
 
 .. toctree::
    :hidden:
-   
+
    filter/index
    gearbox/index
    stat/index
    sync/index
-   
+
    misc.pkg
-   
+
    misc_Delay
    misc_FrequencyMeasurement
    misc_PulseTrain

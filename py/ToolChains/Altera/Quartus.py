@@ -258,15 +258,54 @@ def MapFilter(gen):
 		else:
 			yield LogEntry(line, Severity.Normal)
 
+
+class QuartusSession:
+	def __init__(self, host):
+		self.TclShell = host.Toolchain.GetTclShell()
+		self.TclShell.Parameters[self.TclShell.SwitchShell] = True
+		self.TclShell.StartProcess()
+		self.TclShell.SendBoundary()
+		self.TclShell.ReadUntilBoundary()
+
+	def exit(self):
+		self.TclShell.Send("exit")
+		self.TclShell.ReadUntilBoundary()
+
+
 class QuartusProject(BaseProject):
 	def __init__(self, host, name, projectFile=None):
 		super().__init__(name)
 
 		self._host =        host
-		self._projectFile =  projectFile
+		self._projectFile = projectFile
 
-	def Save(self):
-		pass
+	def Create(self, session=None):
+		if (session is None):
+			tclShell = self._host.Toolchain.GetTclShell()
+			tclShell.Parameters[tclShell.SwitchShell] = True
+			tclShell.StartProcess()
+			tclShell.SendBoundary()
+			tclShell.ReadUntilBoundary()
+		else:
+			tclShell = session.TclShell
+
+		tclShell.Send("project_create {0}".format(self._name))
+		tclShell.SendBoundary()
+		tclShell.ReadUntilBoundary()
+
+		if (session is None):
+			tclShell.Send("project_close")
+			tclShell.SendBoundary()
+			tclShell.ReadUntilBoundary()
+
+			tclShell.Send("exit")
+			tclShell.ReadUntilBoundary()
+
+	def Save(self, session):
+		tclShell = session.TclShell
+		tclShell.Send("export_assignments")
+		tclShell.SendBoundary()
+		tclShell.ReadUntilBoundary()
 
 	def Read(self):
 		tclShell = self._host.Toolchain.GetSynthesizer()
@@ -281,21 +320,31 @@ class QuartusProject(BaseProject):
 		tclShell.Send("exit")
 		tclShell.ReadUntilBoundary()
 
-	def Open(self):
-		pass
+	def Open(self, session):
+		tclShell = session.TclShell
 
-	def Close(self):
-		pass
+		tclShell.Send("project_open {0}".format(self._name))
+		tclShell.SendBoundary()
+		tclShell.ReadUntilBoundary()
+
+	def Close(self, session):
+		tclShell = session.TclShell
+
+		tclShell.Send("project_close")
+		tclShell.SendBoundary()
+		tclShell.ReadUntilBoundary()
+
+		tclShell.Send("exit")
+		tclShell.ReadUntilBoundary()
 
 
 class QuartusSettingsFile(SettingsFile):
 	def __init__(self, name, settingsFile=None):
 		super().__init__(name)
 
-		self._projectFile =    settingsFile
-
-		self._sourceFiles =              []
-		self._globalAssignments =        OrderedDict()
+		self._projectFile =       settingsFile
+		self._sourceFiles =       []
+		self._globalAssignments = OrderedDict()
 
 	@property
 	def File(self):

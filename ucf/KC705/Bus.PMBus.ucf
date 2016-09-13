@@ -3,12 +3,12 @@
 ## -----------------------------------------------------------------------------
 #$	##		Bank:						15
 #$	##			VCCO:					1,8V (VCC1V8_FPGA)
-#$	##		Location:				
-#$	##			Vendor:				
-#$	##			Device:				
-#$	##NET "KC705_PMBus_Clock"								LOC = "AW37" | IOSTANDARD = LVCMOS18; ## 
-#$	##NET "KC705_PMBus_Data"								LOC = "AY39" | IOSTANDARD = LVCMOS18; ## 
-#$	##NET "KC705_PMBus_Alert"								LOC = "AV38" | IOSTANDARD = LVCMOS18; ## 
+#$	##		Location:
+#$	##			Vendor:
+#$	##			Device:
+#$	##NET "KC705_PMBus_Clock"								LOC = "AW37" | IOSTANDARD = LVCMOS18; ##
+#$	##NET "KC705_PMBus_Data"								LOC = "AY39" | IOSTANDARD = LVCMOS18; ##
+#$	##NET "KC705_PMBus_Alert"								LOC = "AV38" | IOSTANDARD = LVCMOS18; ##
 
 ## Ignore timings on async I/O pins
 #$	NET "KC705_LCD_*"									TIG;

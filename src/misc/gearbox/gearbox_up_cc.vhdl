@@ -106,7 +106,7 @@ architecture rtl of gearbox_up_cc is
 	begin
 		First		:= '1';
 
-		if (C_VERBOSE = TRUE) then
+		if C_VERBOSE then
 			report "genCounterDescription:" &
 						 " INPUT_CHUNKS=" & integer'image(INPUT_CHUNKS) &
 						 " OUTPUT_CHUNKS=" & integer'image(OUTPUT_CHUNKS) &
@@ -121,7 +121,7 @@ architecture rtl of gearbox_up_cc is
 			DESC(i).Last			:= to_sl(i = (OUTPUT_CHUNKS - 1));
 			First							:= First and not DESC(i).First;
 
-			if (C_VERBOSE = TRUE) then
+			if C_VERBOSE then
 				report "  i: " & integer'image(i) &
 							 "  en=" & std_logic'image(DESC(i).Reg_en) &
 							 "  stg=" & integer'image(DESC(i).Reg_Stage) &
@@ -129,7 +129,7 @@ architecture rtl of gearbox_up_cc is
 				severity NOTE;
 			end if;
 		end loop;
-		if (C_VERBOSE and (STAGES < OUTPUT_CHUNKS)) then		report "----------------------------------------" severity NOTE;		end if;
+		if C_VERBOSE and (STAGES < OUTPUT_CHUNKS) then		report "----------------------------------------" severity NOTE;		end if;
 		for i in STAGES to OUTPUT_CHUNKS - 1 loop
 			DESC(i).Reg_en		:= to_sl(i /= (OUTPUT_CHUNKS - 1));
 			DESC(i).Reg_Stage	:= i mod STAGES;
@@ -138,7 +138,7 @@ architecture rtl of gearbox_up_cc is
 			DESC(i).Last			:= to_sl(i = (OUTPUT_CHUNKS - 1));
 			First							:= First and not DESC(i).First;
 
-			if (C_VERBOSE = TRUE) then
+			if C_VERBOSE then
 				report "  i: " & integer'image(i) &
 							 "  en=" & std_logic'image(DESC(i).Reg_en) &
 							 "  stg=" & integer'image(DESC(i).Reg_Stage) &
@@ -154,7 +154,7 @@ architecture rtl of gearbox_up_cc is
 		variable k		: T_MUX_INDEX;
 		variable s		: T_STAGE_INDEX;
 	begin
-		if (C_VERBOSE = TRUE) then
+		if C_VERBOSE then
 			report "genMuxDescription:" &
 						 " INPUT_CHUNKS=" & integer'image(INPUT_CHUNKS) &
 						 " OUTPUT_CHUNKS=" & integer'image(OUTPUT_CHUNKS) &
@@ -164,13 +164,13 @@ architecture rtl of gearbox_up_cc is
 		k 		:= INPUT_CHUNKS - 1;
 		for i in 0 to INPUT_CHUNKS - 1 loop
 			s		:= ite((i = 0), STAGES, 0);
-			if (C_VERBOSE = TRUE) then		report "  Mux " & integer'image(i) severity NOTE;			end if;
+			if C_VERBOSE then		report "  Mux " & integer'image(i) severity NOTE;			end if;
 			for j in 0 to OUTPUT_CHUNKS - 1 loop
 				s									:= ite(((k + 1) = INPUT_CHUNKS), (s + 1) mod (STAGES + 1), s);
 				k									:= (k + 1) mod INPUT_CHUNKS;
 				DESC(i)(j).Stage	:= s;
 				DESC(i)(j).Index	:= k;
-				if (C_VERBOSE = TRUE) then
+				if C_VERBOSE then
 					report "    port: " & integer'image(j) &
 								 "  idx=" & integer'image(DESC(i)(j).Stage) &
 								 "  stg=" & integer'image(DESC(i)(j).Index)

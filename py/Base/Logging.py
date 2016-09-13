@@ -139,11 +139,11 @@ class Logger:
 	_Log_MESSAGE_FORMAT__ = {
 		Severity.Fatal:   "{DARKRED}{message}{NOCOLOR}",
 		Severity.Error:   "{RED}{message}{NOCOLOR}",
-		Severity.Quiet:   "{message}",
+		Severity.Quiet:   "{WHITE}{message}{NOCOLOR}",
 		Severity.Warning: "{YELLOW}{message}{NOCOLOR}",
 		Severity.Info:    "{WHITE}{message}{NOCOLOR}",
 		Severity.DryRun:  "{DARK_CYAN}{message}{NOCOLOR}",
-		Severity.Normal:  "{message}",
+		Severity.Normal:  "{WHITE}{message}{NOCOLOR}",
 		Severity.Verbose: "{GRAY}{message}{NOCOLOR}",
 		Severity.Debug:   "{DARK_GRAY}{message}{NOCOLOR}"
 	}

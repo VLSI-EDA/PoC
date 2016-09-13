@@ -96,7 +96,7 @@ begin
 				D0		<= Input(i);
 
 				-- T-FF to converts a strobe to a flag signal
-				if (GATED_INPUT_BY_BUSY = TRUE) then
+				if GATED_INPUT_BY_BUSY then
 					T1	<= (Changed_Clk1 and not Busy_i) xor T1;
 				else
 					T1	<= Changed_Clk1 xor T1;

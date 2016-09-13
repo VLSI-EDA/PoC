@@ -16,8 +16,8 @@ as the protection of the Chair and its users; it does not change
 your rights to use your own Contributions for any other purpose.
 
 This version of the Agreement allows an entity (the "Corporation") to
-submit Contributions to the Chair, to authorize Contributions 
-submitted by its designated employees to the Chair, and to grant 
+submit Contributions to the Chair, to authorize Contributions
+submitted by its designated employees to the Chair, and to grant
 copyright and patent licenses thereto.
 
 

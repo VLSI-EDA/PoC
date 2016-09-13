@@ -103,7 +103,7 @@ begin
 
     process(clk)
     begin
-        if(rising_edge(clk)) then
+        if rising_edge(clk) then
             if(rst = '1') then
                 current_state <= SEMPTY;
             else
@@ -147,7 +147,7 @@ begin
                     ctrl <= PUSH;
                     s_adr <= stackpointer;
                     we <= '1';
-                    if (stackpointer = (MIN_DEPTH - 1)) then
+                    if stackpointer = (MIN_DEPTH - 1) then
                         next_state <= SFULL;
                     end if;
                 elsif (got = '1' and put = '1') then
@@ -179,7 +179,7 @@ begin
 
     process(clk)
     begin
-        if (rising_edge(clk)) then
+        if rising_edge(clk) then
             case( ctrl ) is
                 when IDLE =>
                     stackpointer <= stackpointer;

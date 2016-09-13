@@ -70,12 +70,12 @@ end entity;
 architecture rtl of io_Debounce is
 	-- Number of required locking cycles
 	constant LOCK_COUNT_X : integer := TimingToCycles(BOUNCE_TIME, CLOCK_FREQ) - 1;
-	
+
 	-- Input Refinements
   signal sync		: std_logic_vector(Input'range);										-- Synchronized
   signal prev		: std_logic_vector(Input'range) := (others => '0');	-- Delayed
 	signal active	: std_logic_vector(Input'range);										-- Allow Output Updates
-	
+
 begin
   -----------------------------------------------------------------------------
   -- Input Synchronization
@@ -94,7 +94,7 @@ begin
         Output => sync  		-- synchronised data
       );
   end generate;
-  
+
 	-----------------------------------------------------------------------------
 	-- Bounce Filter
 	process(Clock)
@@ -112,17 +112,17 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	genNoLock: if LOCK_COUNT_X <= 0 generate
 		active <= (others => '1');
 	end generate genNoLock;
 	genLock: if LOCK_COUNT_X > 0 generate
 		constant LOCKS	: positive := ite(COMMON_LOCK, 1, BITS);
-		
+
 		signal toggle		: std_logic_vector(LOCKS-1 downto 0);
 		signal locked		: std_logic_vector(LOCKS-1 downto 0);
 	begin
-	
+
     genOneLock: if COMMON_LOCK generate
       toggle(0) <= '1' when prev /= sync else '0';
       active    <= (others => not locked(0));
@@ -131,7 +131,7 @@ begin
       toggle <= prev xor sync;
       active <= not locked;
     end generate genManyLocks;
-    
+
 		genLocks: for i in 0 to LOCKS-1 generate
 			signal Lock : signed(log2ceil(LOCK_COUNT_X+1) downto 0) := (others => '0');
 		begin
@@ -152,5 +152,5 @@ begin
 			locked(i) <= Lock(Lock'left);
 		end generate genLocks;
 	end generate genLock;
-	
+
 end;

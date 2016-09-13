@@ -90,11 +90,11 @@ entity cache_replacement_policy is
 	port (
 		Clock : in std_logic;
 		Reset : in std_logic;
-		
+
 		-- replacement interface
 		Replace		 : in	 std_logic;
 		ReplaceWay : out std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0);
-		
+
 		-- cacheline usage update interface
 		TagAccess	 : in std_logic;
 		ReadWrite	 : in std_logic;
@@ -107,32 +107,32 @@ end entity;
 architecture rtl of cache_replacement_policy is
 	attribute KEEP				 : boolean;
 	attribute FSM_ENCODING : string;
-	
+
 	constant KEY_BITS : positive := log2ceilnz(CACHE_WAYS);
-	
+
 begin
 	assert (str_equal(REPLACEMENT_POLICY, "RR") or
 					str_equal(REPLACEMENT_POLICY, "LRU"))
 		report "Unsupported replacement strategy"
 		severity error;
-		
-		
+
+
 	-- ===========================================================================
 	-- policy: RR - round robin
 	-- ===========================================================================
-	genRR : if (str_equal(REPLACEMENT_POLICY, "RR") = true) generate
+	genRR : if str_equal(REPLACEMENT_POLICY, "RR") generate
 		constant VALID_BIT : natural := 0;
-		
+
 		subtype T_OPTION_LINE is std_logic_vector(0 downto 0);
 		type T_OPTION_LINE_VECTOR is array (natural range <>) of T_OPTION_LINE;
-		
+
 		signal OptionMemory : T_OPTION_LINE_VECTOR(CACHE_WAYS - 1 downto 0) := (others => (
 			VALID_BIT																																			=> '0')
 																																						 );
-																																						 
+
 		signal ValidHit		: std_logic;
 		signal Pointer_us : unsigned(log2ceilnz(CACHE_WAYS) - 1 downto 0) := (others => '0');
-		
+
 	begin
 --		ValidHit		<= OptionMemory(to_integer(unsigned(HitWay)))(VALID_BIT);
 --		IsValid			<= ValidHit;
@@ -172,26 +172,26 @@ begin
 --			end if;
 --		end process;
 	end generate;
-	
+
 	-- ===========================================================================
 	-- policy: LRU - least recently used
 	-- ===========================================================================
-	genLRU : if (str_equal(REPLACEMENT_POLICY, "LRU") = true) generate
+	genLRU : if str_equal(REPLACEMENT_POLICY, "LRU") generate
 		signal LRU_Insert			: std_logic;
 		signal LRU_Invalidate : std_logic;
 		signal KeyIn					: std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0);
 		signal LRU_Key				: std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0);
-		
+
 	begin
 		-- Command Decoding
 		LRU_Insert		 <= (TagAccess and not Invalidate) or Replace;
 		LRU_Invalidate <= TagAccess and Invalidate;
-		
+
 		KeyIn <= LRU_Key when Replace = '1' else HitWay;
-		
+
 		-- Output
 		ReplaceWay <= LRU_Key;
-		
+
 		LRU : entity PoC.sort_lru_cache
 			generic map (
 				ELEMENTS => CACHE_WAYS
@@ -199,11 +199,11 @@ begin
 			port map (
 				Clock => Clock,
 				Reset => Reset,
-				
+
 				Insert => LRU_Insert,
 				Free	 => LRU_Invalidate,
 				KeyIn	 => KeyIn,
-				
+
 				KeyOut => LRU_Key
 			);
 	end generate;

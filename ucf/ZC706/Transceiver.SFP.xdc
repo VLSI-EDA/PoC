@@ -3,8 +3,8 @@
 ## -----------------------------------------------------------------------------
 ##	Bank:						12, 15, 117
 ##		VCCO:					2.5V, 2.5V (VADJ_FPGA, VADJ_FPGA)
-##		Quad117:		 
-##			RefClock0		
+##		Quad117:
+##			RefClock0
 ##			RefClock1		ZC706_SMA_RefClock
 ##		Placement:
 ##			SFP:				Quad117.Channel2 (GTXE2_CHANNEL_X0Y10)
@@ -18,13 +18,13 @@ set_property IOSTANDARD		LVCMOS25		[get_ports ZC706_SFP_TX_Disable_n]
 ##
 ## --------------------------
 ## SFP+ LVDS signal-pairs
-## {OUT}	
+## {OUT}
 set_property PACKAGE_PIN		W4				[get_ports ZC706_SFP_TX_p]
-## {OUT}	
+## {OUT}
 set_property PACKAGE_PIN		W3				[get_ports ZC706_SFP_TX_n]
-## {IN}		
+## {IN}
 set_property PACKAGE_PIN		Y6				[get_ports ZC706_SFP_RX_p]
-## {IN}		
+## {IN}
 set_property PACKAGE_PIN		Y5				[get_ports ZC706_SFP_RX_n]
 
 # Ignore timings on async I/O pins

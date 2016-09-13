@@ -11,6 +11,6 @@ These are reconfig entities....
 
 .. toctree::
    :hidden:
-   
+
    reconfig_icap_fsm
    reconfig_icap_wrapper

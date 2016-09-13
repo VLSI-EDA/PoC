@@ -364,7 +364,7 @@ package body waveform is
 			wait for TimeLow;
 		end if;
 		Clock		<= '1';
-		while (not simIsStopped(TestID)) loop
+		while not simIsStopped(TestID) loop
 			wait for TimeHigh;
 			Clock		<= '0';
 			wait for TimeLow;
@@ -425,7 +425,7 @@ package body waveform is
 		Clock		<= '1';
 		randInitializeSeed(Seed);
 
-		while (not simIsStopped(TestID)) loop
+		while not simIsStopped(TestID) loop
 			ieee.math_real.Uniform(Seed.Seed1, Seed.Seed2, rand);
 			Index		:= scale(rand, 0, JitterDistribution'length * 10) mod JitterDistribution'length;
 			randNormalDistributedValue(Seed, rand, JitterDistribution(Index).StandardDeviation, JitterDistribution(Index).Mean, -1.0, 1.0);
@@ -741,7 +741,7 @@ package body waveform is
 		TimePos := 0 fs;
 		for i in Wave'range loop
 			TimePos	:= TimePos + Wave(i);
-			if (TimePos > Offset) then
+			if TimePos > Offset then
 				return (TimePos - Offset) & Wave(i + 1 to Wave'high);
 			end if;
 		end loop;

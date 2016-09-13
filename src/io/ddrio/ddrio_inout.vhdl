@@ -77,12 +77,12 @@ entity ddrio_inout is
 		OutputEnable		: in		std_logic;
 		DataOut_high		: in		std_logic_vector(BITS - 1 downto 0);
 		DataOut_low			: in		std_logic_vector(BITS - 1 downto 0);
-		
+
 		ClockIn					: in		std_logic;
 		ClockInEnable		: in		std_logic;
 		DataIn_high			: out		std_logic_vector(BITS - 1 downto 0);
 		DataIn_low			: out		std_logic_vector(BITS - 1 downto 0);
-		
+
 		Pad							: inout	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
@@ -94,8 +94,8 @@ begin
 	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.inout is not implemented for given DEVICE."
 		severity FAILURE;
-		
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+
+	genXilinx : if VENDOR = VENDOR_XILINX generate
 		inst : ddrio_inout_xilinx
 			generic map (
 				BITS						=> BITS
@@ -113,8 +113,8 @@ begin
 				Pad							=> Pad
 			);
 	end generate;
-	
-	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+
+	genAltera : if VENDOR = VENDOR_ALTERA generate
 		inst : ddrio_inout_altera
 			generic map (
 				BITS						=> BITS
@@ -132,13 +132,13 @@ begin
 				Pad							=> Pad
 			);
 	end generate;
-	
-	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
+
+	genGeneric : if SIMULATION  and (VENDOR = VENDOR_GENERIC) generate
 		signal DataOut_high_d	: std_logic_vector(BITS - 1 downto 0);
 		signal DataOut_low_d	: std_logic_vector(BITS - 1 downto 0);
 		signal OutputEnable_d	: std_logic;
 		signal Pad_o					: std_logic_vector(BITS - 1 downto 0);
-		
+
 		signal Pad_d_fe				: std_logic_vector(BITS - 1 downto 0);
 		signal DataIn_high_d	: std_logic_vector(BITS - 1 downto 0);
 		signal DataIn_low_d		: std_logic_vector(BITS - 1 downto 0);
@@ -146,27 +146,27 @@ begin
 		DataOut_high_d	<= DataOut_high		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 		DataOut_low_d		<= DataOut_low		when rising_edge(ClockOut) and (ClockOutEnable = '1');
 		OutputEnable_d	<= OutputEnable		when rising_edge(ClockOut) and (ClockOutEnable = '1');
-		
+
 		process(ClockOut, OutputEnable_d, DataOut_high_d, DataOut_low_d)
 			type T_MUX is array(bit) of std_logic_vector(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
 		begin
 			MuxInput('1')	:= DataOut_high_d;
 			MuxInput('0')	:= DataOut_low_d;
-			
+
 			if (OutputEnable_d = '1') then
 				Pad_o		<= MuxInput(to_bit(ClockOut));
 			else
 				Pad_o		<= (others => 'Z');
 			end if;
 		end process;
-		
+
 		Pad			<= Pad_o;
-		
+
 		Pad_d_fe				<= Pad			when falling_edge(ClockIn)	and (ClockInEnable = '1');
 		DataIn_high_d		<= Pad			when rising_edge(ClockIn)		and (ClockInEnable = '1');
 		DataIn_low_d		<= Pad_d_fe	when rising_edge(ClockIn)		and (ClockInEnable = '1');
-		
+
 		DataIn_high			<= DataIn_high_d;
 		DataIn_low			<= DataIn_low_d;
 	end generate;

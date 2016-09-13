@@ -33,6 +33,7 @@ use			IEEE.std_logic_1164.all;
 use			IEEE.numeric_std.all;
 
 library PoC;
+use			PoC.config.all;
 use			PoC.utils.all;
 use			PoC.math.all;
 use			PoC.vectors.all;

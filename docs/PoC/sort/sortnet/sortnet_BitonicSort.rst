@@ -12,7 +12,7 @@ This sorting network uses the *bitonic sort* algorithm.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 42-68
+   :lines: 43-69
 
 Source file: `sort/sortnet/sortnet_BitonicSort.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_BitonicSort.vhdl>`_
 

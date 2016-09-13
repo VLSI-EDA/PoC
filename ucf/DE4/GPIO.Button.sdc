@@ -4,9 +4,9 @@
 ##
 ## Cursor Buttons
 ## =============================================================================
-##	Bank:						
-##		VCCO:					
-##	Location:				
+##	Bank:
+##		VCCO:
+##	Location:
 ## -----------------------------------------------------------------------------
 if {$TimingConstraints == 0} then {
 	# is it possible to define pin and I/O standard constraints here?

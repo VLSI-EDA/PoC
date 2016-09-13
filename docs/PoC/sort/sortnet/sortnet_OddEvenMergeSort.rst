@@ -12,7 +12,7 @@ sortnet_OddEvenMergeSort
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 42-68
+   :lines: 43-69
 
 Source file: `sort/sortnet/sortnet_OddEvenMergeSort.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_OddEvenMergeSort.vhdl>`_
 

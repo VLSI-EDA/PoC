@@ -9,6 +9,7 @@
 *.rst	filter=normalize_rest
 *.vhdl	filter=normalize_vhdl
 *.ucf		filter=normalize
+*.xcf		filter=normalize
 *.ldc		filter=normalize
 *.sdc		filter=normalize
 *.xdc		filter=normalize

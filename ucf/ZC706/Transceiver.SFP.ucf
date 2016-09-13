@@ -3,21 +3,21 @@
 ## -----------------------------------------------------------------------------
 ##	Bank:						9, 111
 ##		VCCO:					2.5V (VADJ_FPGA)
-##		Quad117:		 
-##			RefClock0		
+##		Quad117:
+##			RefClock0
 ##			RefClock1		ZC706_SMA_RefClock
 ##		Placement:
 ##			SFP:				Quad??.Channel2 (GTXE2_CHANNEL_X??Y??)
 ##		Location:			P2
-##		I²C-Address:	
+##		I²C-Address:
 NET "ZC706_SFP_TX_Disable_n"		LOC = "AA18" | IOSTANDARD = LVCMOS25; ## ; low-active; external 4k7 pullup resistor; level shifted by Q4 (NDS331N)
 ##
 ## --------------------------
 ## SFP+ LVDS signal-pairs
-NET "ZC706_SFP_TX_p"					LOC = "W4";													## {OUT}	
-NET "ZC706_SFP_TX_n"					LOC = "W3";													## {OUT}	
-NET "ZC706_SFP_RX_p"					LOC = "Y6";													## {IN}		
-NET "ZC706_SFP_RX_n"					LOC = "Y5";													## {IN}		
+NET "ZC706_SFP_TX_p"					LOC = "W4";													## {OUT}
+NET "ZC706_SFP_TX_n"					LOC = "W3";													## {OUT}
+NET "ZC706_SFP_RX_p"					LOC = "Y6";													## {IN}
+NET "ZC706_SFP_RX_n"					LOC = "Y5";													## {IN}
 
 # Ignore timings on async I/O pins
 NET "ZC706_SFP_TX_Disable_n"		TIG;

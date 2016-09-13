@@ -12,10 +12,10 @@ NET "VC707_SFP_LossOfSignal"						LOC = "BB38" | IOSTANDARD = LVCMOS18; ## ; hig
 ##	Bank:						113
 ##	ReferenceClock
 ##		Location:			P3
-NET "VC707_SFP_TX_p"									LOC = "AM4";													## 
-NET "VC707_SFP_TX_n"									LOC = "AM3";													## 
-NET "VC707_SFP_RX_p"									LOC = "AL6";													## 
-NET "VC707_SFP_RX_n"									LOC = "AL5";													## 
+NET "VC707_SFP_TX_p"									LOC = "AM4";													##
+NET "VC707_SFP_TX_n"									LOC = "AM3";													##
+NET "VC707_SFP_RX_p"									LOC = "AL6";													##
+NET "VC707_SFP_RX_n"									LOC = "AL5";													##
 
 ## Ignore timings on async I/O pins
 NET "VC707_SFP_TX_Disable_n"						TIG;

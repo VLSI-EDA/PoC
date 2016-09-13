@@ -183,7 +183,6 @@ class Configuration(BaseConfiguration):
 		except CommonException:
 			return False
 
-	# FIXME: unused method -> call when Developer tools get disabled
 	def __UninstallGitFilters(self):
 		self._host.LogNormal("  Uninstalling Git filters...")
 
@@ -236,7 +235,6 @@ class Configuration(BaseConfiguration):
 		except CommonException:
 			return False
 
-	# FIXME: unused method -> call when Developer tools get disabled
 	def __UninstallGitHooks(self):
 		self._host.LogNormal("  Uninstalling Git hooks...")
 		pocInstallationPath =   Path(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'])

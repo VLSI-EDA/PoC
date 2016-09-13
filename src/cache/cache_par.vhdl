@@ -84,13 +84,13 @@ entity cache_par is
 	port (
 		Clock : in std_logic;
 		Reset : in std_logic;
-		
+
 		Request		 : in std_logic;
 		ReadWrite	 : in std_logic;
 		Invalidate : in std_logic;
 		Replace 	 : in std_logic;
 		Address		 : in std_logic_vector(ADDRESS_BITS - 1 downto 0);
-		
+
 		CacheLineIn	 : in	 std_logic_vector(DATA_BITS - 1 downto 0);
 		CacheLineOut : out std_logic_vector(DATA_BITS - 1 downto 0);
 		CacheHit		 : out std_logic := '0';
@@ -102,24 +102,24 @@ end entity;
 
 architecture rtl of cache_par is
 	attribute KEEP : boolean;
-	
+
 	constant LINE_INDEX_BITS : positive := log2ceilnz(CACHE_LINES);
-	
+
 	subtype T_CACHE_LINE is std_logic_vector(DATA_BITS - 1 downto 0);
 	type T_CACHE_LINE_VECTOR is array (natural range <>) of T_CACHE_LINE;
-	
+
 	-- look-up (request)
 	signal TU_LineIndex : std_logic_vector(LINE_INDEX_BITS - 1 downto 0);
 	signal TU_TagHit		: std_logic;
 	signal TU_TagMiss		: std_logic;
-	
+
 	-- replace
 	signal TU_ReplaceLineIndex : std_logic_vector(LINE_INDEX_BITS - 1 downto 0);
 	signal TU_OldAddress			 : std_logic_vector(ADDRESS_BITS - 1 downto 0);
-	
+
 	signal MemoryIndex_us : unsigned(LINE_INDEX_BITS - 1 downto 0);
 	signal CacheMemory		: T_CACHE_LINE_VECTOR(CACHE_LINES - 1 downto 0);
-	
+
 begin
 
 	-- Cache TagUnit
@@ -133,12 +133,12 @@ begin
 		port map (
 			Clock => Clock,
 			Reset => Reset,
-			
+
 			Replace					 => Replace,
 			ReplaceLineIndex => TU_ReplaceLineIndex,
 			NewAddress			 => Address,
 			OldAddress			 => TU_OldAddress,
-			
+
 			Request		 => Request,
 			ReadWrite	 => ReadWrite,
 			Invalidate => Invalidate,
@@ -147,22 +147,22 @@ begin
 			TagHit		 => TU_TagHit,
 			TagMiss		 => TU_TagMiss
 		);
-		
+
 	-- Address selector
 	MemoryIndex_us <= unsigned(TU_LineIndex) when Request = '1' else
 										unsigned(TU_ReplaceLineIndex);
-										
+
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
 			if ((Request and TU_TagHit and ReadWrite) or Replace) = '1' then
 				CacheMemory(to_integer(MemoryIndex_us)) <= CacheLineIn;
 			end if;
-			
+
 			-- Single-port memory with read before write is required here.
 			-- Cannot be mapped to `PoC.ocram_sdp`.
 			CacheLineOut <= CacheMemory(to_integer(MemoryIndex_us));
-			
+
 			-- Control outputs have same latency as cache line data.
 			if Reset = '1' then
 				CacheMiss <= '0';
@@ -171,7 +171,7 @@ begin
 				CacheMiss <= TU_TagMiss;
 				CacheHit	<= TU_TagHit;
 			end if;
-			
+
 			OldAddress <= TU_OldAddress;
 		end if;
 	end process;

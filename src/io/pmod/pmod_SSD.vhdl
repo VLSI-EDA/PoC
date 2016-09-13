@@ -60,10 +60,10 @@ entity pmod_SSD is
 	);
 	port (
 		Clock			: in	std_logic;
-		
+
 		Digit0		: in	std_logic_vector(3 downto 0);
 		Digit1		: in	std_logic_vector(3 downto 0);
-		
+
 		SSD				: out	T_PMOD_SSD_PINS
 	);
 end entity;
@@ -72,24 +72,24 @@ end entity;
 architecture rtl of pmod_SSD is
 	constant REFRESHTIMER_MAX		: positive	:= TimingToCycles(to_time(REFRESH_RATE), CLOCK_FREQ) - 1;
 	constant REFRESHTIMER_BITS	: positive	:= log2ceilnz(REFRESHTIMER_MAX) + 1;
-	
+
 	signal RefreshTimer_rst	: std_logic;
 	signal RefreshTimer_s		: signed(REFRESHTIMER_BITS - 1 downto 0)	:= to_signed(REFRESHTIMER_MAX, REFRESHTIMER_BITS);
-	
+
 	signal CathodeSelect_en	: std_logic;
 	signal CathodeSelect_r	: std_logic		:= '0';
-	
+
 	signal Digit						: std_logic_vector(3 downto 0);
 	signal Segments					: std_logic_vector(6 downto 0);
 begin
 	-- generate a < 1 kHz enable to toggle the CathodeSelect register
 	RefreshTimer_s		<= downcounter_next(cnt => RefreshTimer_s, rst => RefreshTimer_rst, INIT => REFRESHTIMER_MAX) when rising_edge(Clock);
 	RefreshTimer_rst	<= downcounter_neg(cnt => RefreshTimer_s);
-	
+
 	-- generate a cathode select signal, based on a T-FF
 	CathodeSelect_en	<= RefreshTimer_rst;
 	CathodeSelect_r		<= fftre(q => CathodeSelect_r, t => CathodeSelect_en) when rising_edge(Clock);
-	
+
 	Digit				<= mux(CathodeSelect_r, Digit0, Digit1);
 	Segments		<= io_7SegmentDisplayEncoding(Digit);
 	SSD.AnodeA	<= Segments(0);

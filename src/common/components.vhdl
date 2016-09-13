@@ -105,7 +105,7 @@ package body components is
 	-- D-flipflop with reset and enable
 	function ffdre(q : std_logic; d : std_logic; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic := '0') return std_logic is
 	begin
-		if (SIMULATION = FALSE) then
+		if not SIMULATION then
 			if (INIT = '0') then
 				return ((d and en) or (q and not en)) and not rst;
 			elsif (INIT = '1') then
@@ -139,7 +139,7 @@ package body components is
 	-- T-flipflop with reset and enable
 	function fftre(q : std_logic; t : std_logic; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic := '0') return std_logic is
 	begin
-		if (SIMULATION = FALSE) then
+		if not SIMULATION then
 			if (INIT = '0') then
 				return ((not q and (t and en)) or (q and not (t and en))) and not rst;
 			elsif (INIT = '1') then
@@ -252,9 +252,9 @@ package body components is
 
 	function comp(value1 : unsigned; value2 : unsigned) return unsigned is
 	begin
-		if (value1 < value2) then
+		if value1 < value2 then
 			return "10";
-		elsif (value1 = value2) then
+		elsif value1 = value2 then
 			return "00";
 		else
 			return "01";
@@ -263,9 +263,9 @@ package body components is
 
 	function comp(value1 : signed; value2 : signed) return signed is
 	begin
-		if (value1 < value2) then
+		if value1 < value2 then
 			return "10";
-		elsif (value1 = value2) then
+		elsif value1 = value2 then
 			return "00";
 		else
 			return "01";

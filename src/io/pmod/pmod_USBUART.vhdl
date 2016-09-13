@@ -48,15 +48,15 @@ entity pmod_USBUART is
 	port (
 		Clock			: in	std_logic;
 		Reset			: in	std_logic;
-		
+
 		TX_put		: in	std_logic;
 		TX_Data		: in	std_logic_vector(7 downto 0);
 		TX_Full		: out	std_logic;
-		
+
 		RX_Valid	: out	std_logic;
 		RX_Data		: out	std_logic_vector(7 downto 0);
 		RX_got		: in	std_logic;
-		
+
 		UART_TX		: out	std_logic;
 		UART_RX		: in	std_logic;
 		UART_RTS	: out	std_logic;
@@ -73,26 +73,26 @@ begin
 			CLOCK_FREQ							=> CLOCK_FREQ,
 			BAUDRATE								=> BAUDRATE,
 			ADD_INPUT_SYNCHRONIZERS	=> TRUE,
-			
+
 			TX_MIN_DEPTH						=> 32,
 			TX_ESTATE_BITS					=> 0,
 			RX_MIN_DEPTH						=> 32,
 			RX_FSTATE_BITS					=> 0,
-			
+
 			FLOWCONTROL							=> UART_FLOWCONTROL_RTS_CTS
 		)
 		port map (
 			Clock			=> Clock,
 			Reset			=> Reset,
-			
+
 			TX_put		=> TX_put,
 			TX_Data		=> TX_Data,
 			TX_Full		=> TX_Full,
-			
+
 			RX_Valid	=> RX_Valid,
 			RX_Data		=> RX_Data,
 			RX_got		=> RX_got,
-			
+
 			UART_TX		=> UART_TX,
 			UART_RX		=> UART_RX,
 			UART_RTS	=> UART_RTS,

@@ -50,10 +50,10 @@ entity io_7SegmentMux_BCD is
 	);
   port (
 	  Clock						: in	std_logic;
-	  
+
 		BCDDigits				: in	T_BCD_VECTOR(DIGITS - 1 downto 0);
 		BCDDots					: in	std_logic_vector(DIGITS - 1 downto 0);
-		
+
 		SegmentControl	: out	std_logic_vector(7 downto 0);
 		DigitControl		: out	std_logic_vector(DIGITS - 1 downto 0)
 	);
@@ -75,22 +75,22 @@ begin
 			Clock		=> Clock,
 			O				=> DigitCounter_en
 		);
-		
+
 	--
 	DigitCounter_rst	<= upcounter_equal(DigitCounter_us, DIGITS - 1) and DigitCounter_en;
 	DigitCounter_us		<= upcounter_next(DigitCounter_us, DigitCounter_rst, DigitCounter_en) when rising_edge(Clock);
 	DigitControl			<= resize(bin2onehot(std_logic_vector(DigitCounter_us)), DigitControl'length);
-	
+
 	process(BCDDigits, BCDDots, DigitCounter_us)
 		variable BCDDigit : T_BCD;
 		variable BCDDot 	: std_logic;
 	begin
 		BCDDigit	:= BCDDigits(to_index(DigitCounter_us, BCDDigits'length));
 		BCDDot		:= BCDDots(to_index(DigitCounter_us, BCDDigits'length));
-		
-		if (BCDDigit < C_BCD_MINUS) then
+
+		if BCDDigit < C_BCD_MINUS then
 			SegmentControl	<= io_7SegmentDisplayEncoding(BCDDigit, BCDDot, WITH_DOT => TRUE);
-		elsif (BCDDigit = C_BCD_MINUS) then
+		elsif BCDDigit = C_BCD_MINUS then
 			SegmentControl	<= BCDDot & "1000000";
 		else
 			SegmentControl	<= "00000000";

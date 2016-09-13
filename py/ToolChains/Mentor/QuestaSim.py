@@ -41,17 +41,17 @@ else:
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
 
 
-from subprocess import check_output
-from textwrap import dedent
+from subprocess                 import check_output
+from textwrap                   import dedent
 
 from lib.Functions              import CallByRefParam
 from Base.Exceptions            import PlatformNotSupportedException
-from Base.Logging                import LogEntry, Severity
+from Base.Logging               import LogEntry, Severity
 from Base.Configuration         import Configuration as BaseConfiguration, ConfigurationException
-from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
+from Base.Simulator             import SimulationResult, PoCSimulationResultFilter
 from Base.Executable            import Executable
 from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
-from ToolChains.Mentor.Mentor    import MentorException
+from ToolChains.Mentor.Mentor   import MentorException
 
 
 class QuestaSimException(MentorException):

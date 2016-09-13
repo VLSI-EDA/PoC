@@ -15,4 +15,4 @@ BCDDigit
 Source file: `io/lcd/BCDDigit.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/BCDDigit.vhdl>`_
 
 
-	 
+

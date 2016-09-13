@@ -80,7 +80,7 @@ more details. Run the following command line instructions to configure PoC on
 your local system:
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\poc.ps1 configure
 
@@ -123,11 +123,11 @@ The PoC-Library should be configured to explore it's full potential. See
 following command lines will start the configuration process:
 
 .. code-block:: powershell
-   
+
    cd ProjectRoot
    .\lib\PoC\poc.ps1 configure
 
-	 
+
 .. rubric:: 3. Creating PoC's ``my_config.vhdl`` and ``my_project.vhdl`` Files
 
 The PoC-Library needs two VHDL files for it's configuration. These files are
@@ -137,7 +137,7 @@ source folder. Rename these files to \*.vhdl and configure the VHDL constants
 in the files:
 
 .. code-block:: powershell
-   
+
    cd ProjectRoot
    cp lib\PoC\src\common\my_config.vhdl.template src\common\my_config.vhdl
    cp lib\PoC\src\common\my_project.vhdl.template src\common\my_project.vhdl
@@ -145,7 +145,7 @@ in the files:
 `my_config.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_config.vhdl.template>`_ defines two global constants, which need to be adjusted:
 
 .. code-block:: vhdl
-   
+
    constant MY_BOARD            : string := "CHANGE THIS"; -- e.g. Custom, ML505, KC705, Atlys
    constant MY_DEVICE           : string := "CHANGE THIS"; -- e.g. None, XC5VLX50T-1FF1136, EP2SGX90FF1508C3
 
@@ -153,7 +153,7 @@ in the files:
 also defines two global constants, which need to be adjusted:
 
 .. code-block:: vhdl
-   
+
    constant MY_PROJECT_DIR      : string := "CHANGE THIS"; -- e.g. d:/vhdl/myproject/, /home/me/projects/myproject/"
    constant MY_OPERATING_SYSTEM : string := "CHANGE THIS"; -- e.g. WINDOWS, LINUX
 
@@ -197,7 +197,7 @@ passed to the frontend script.
 .. rubric:: Example:
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\poc.ps1 ghdl PoC.arith.prng
 
@@ -232,7 +232,7 @@ unique name: ``PoC.arith.prng``, which is passed to the frontend script.
 .. rubric:: Example:
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\poc.ps1 xst PoC.arith.prng --board=KC705
 

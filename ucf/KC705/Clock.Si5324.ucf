@@ -6,7 +6,7 @@
 ##		Device:				XC7K325T
 ##		Package:			FFG900
 ##		Speedgrade:		-2
-##	
+##
 ##	Notes:
 ##		Power Rail 4 driving VADJ_FPGA is defaulted to 2.5V (choices: 1.8V, 2.5V, 3.3V)
 ##
@@ -24,7 +24,7 @@
 #$	##			I²C-Address:	0xA0 (1010 000xb)
 #$	NET "KC705_Si5324_Alarm_n"							LOC = "AU34"	| IOSTANDARD = LVCMOS25; ## U24.3; level shifted by U33 (SN74AVC1T45)
 #$	NET "KC705_Si5324_Reset_n"							LOC = "AT36"	| IOSTANDARD = LVCMOS25; ## U24.1; level shifted by U39 (SN74AVC4T245)
-#$	
+#$
 ## recovered clock output
 #$	NET "KC705_Si5324_ClockIn_n"						LOC = "AW33"	| IOSTANDARD = LVCMOS25;	## U24.17
 #$	NET "KC705_Si5324_ClockIn_p"						LOC = "AW32"	| IOSTANDARD = LVCMOS25;	## U24.16

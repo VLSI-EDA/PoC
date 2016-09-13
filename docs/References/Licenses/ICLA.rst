@@ -39,7 +39,7 @@ and interest in and to Your Contributions.
     direction or management of such entity, whether by contract or
     otherwise, or (ii) ownership of fifty percent (50%) or more of the
     outstanding shares, or (iii) beneficial ownership of such entity.
-    
+
     *"Contribution"* shall mean any original work of authorship,
     including any modifications or additions to an existing work, that
     is intentionally submitted by You to the Chair for inclusion
@@ -53,7 +53,7 @@ and interest in and to Your Contributions.
     discussing and improving the Work, but excluding communication that
     is conspicuously marked or otherwise designated in writing by You
     as **"Not a Contribution."**
-    
+
  2. **Grant of Copyright License.** Subject to the terms and conditions of
     this Agreement, You hereby grant to the Chair and to
     recipients of software distributed by the Chair a perpetual,
@@ -61,7 +61,7 @@ and interest in and to Your Contributions.
     copyright license to reproduce, prepare derivative works of,
     publicly display, publicly perform, sublicense, and distribute Your
     Contributions and such derivative works.
-    
+
  3. **Grant of Patent License.** Subject to the terms and conditions of
     this Agreement, You hereby grant to the Chair and to
     recipients of software distributed by the Chair a perpetual,
@@ -79,7 +79,7 @@ and interest in and to Your Contributions.
     patent licenses granted to that entity under this Agreement for
     that Contribution or Work shall terminate as of the date such
     litigation is filed.
-    
+
  4. You represent that you are legally entitled to grant the above
     license. If your employer(s) has rights to intellectual property
     that you create that includes your Contributions, you represent
@@ -87,7 +87,7 @@ and interest in and to Your Contributions.
     of that employer, that your employer has waived such rights for
     your Contributions to the Chair, or that your employer has
     executed a separate :doc:`Corporate CLA <CCLA>` with the Chair.
-    
+
  5. You represent that each of Your Contributions is Your original
     creation (see section 7 for submissions on behalf of others). You
     represent that Your Contribution submissions include complete
@@ -95,7 +95,7 @@ and interest in and to Your Contributions.
     but not limited to, related patents and trademarks) of which you
     are personally aware and which are associated with any part of Your
     Contributions.
-    
+
  6. You are not expected to provide support for Your Contributions,
     except to the extent You desire to provide support. You may provide
     support for free, for a fee, or not at all. Unless required by
@@ -104,7 +104,7 @@ and interest in and to Your Contributions.
     OF ANY KIND, either express or implied, including, without
     limitation, any warranties or conditions of TITLE, NON-
     INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE.
-    
+
  7. Should You wish to submit work that is not Your original creation,
     You may submit it to the Chair separately from any
     Contribution, identifying the complete details of its source and of

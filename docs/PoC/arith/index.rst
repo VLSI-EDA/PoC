@@ -30,9 +30,9 @@ These are arithmetic entities....
 
 .. toctree::
    :hidden:
-   
+
    arith.pkg
-   
+
    arith_addw
    arith_carrychain_inc
    arith_convert_bin2bcd

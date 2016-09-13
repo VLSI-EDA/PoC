@@ -60,7 +60,7 @@ begin
 	-- ===========================================================================
 	-- 1 Qudrant LUT
 	-- ===========================================================================
-	genQ1 : if (QUARTERS = 1) generate
+	genQ1 : if QUARTERS = 1 generate
 		subtype T_RESULT	is natural range 0 to MAX_AMPLITUDE;
 		type		T_LUT			is array (natural range <>) of T_RESULT;
 
@@ -87,7 +87,7 @@ begin
 	-- ===========================================================================
 	-- 2 Qudrant LUT
 	-- ===========================================================================
-	genQ12 : if (QUARTERS = 2) generate
+	genQ12 : if QUARTERS = 2 generate
 		subtype T_RESULT	is natural range 0 to MAX_AMPLITUDE;
 		type		T_LUT			is array (natural range <>) of T_RESULT;
 
@@ -114,13 +114,13 @@ begin
 	-- ===========================================================================
 	-- 3 Qudrant LUT -> ERROR
 	-- ===========================================================================
-	genQ13 : if (QUARTERS = 3) generate
+	genQ13 : if QUARTERS = 3 generate
 		assert false report "QUARTERS=3 is not supported." severity FAILURE;
 	end generate;
 	-- ===========================================================================
 	-- 4 Qudrant LUT
 	-- ===========================================================================
-	genQ14 : if (QUARTERS = 4) generate
+	genQ14 : if QUARTERS = 4 generate
 		subtype T_RESULT	is integer range -MAX_AMPLITUDE to MAX_AMPLITUDE;
 		type		T_LUT			is array (natural range <>) of T_RESULT;
 
@@ -150,14 +150,14 @@ begin
 	-- ===========================================================================
 	-- No output registers
 	-- ===========================================================================
-	genNoReg : if (REG_OUTPUT = FALSE) generate
+	genNoReg : if not REG_OUTPUT generate
 	begin
 		Output		<= Output_nxt;
 	end generate;
 	-- ===========================================================================
 	-- Output registers
 	-- ===========================================================================
-	genReg : if (REG_OUTPUT = TRUE) generate
+	genReg : if REG_OUTPUT generate
 		signal Output_d		: std_logic_vector(Output'range)	:= (others => '0');
 	begin
 		Output_d	<= Output_nxt	when rising_edge(Clock);

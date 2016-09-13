@@ -52,6 +52,7 @@ from Base.ToolChain                 import ToolChainException
 from Compiler.LSECompiler           import Compiler as LSECompiler
 from Compiler.QuartusCompiler       import Compiler as MapCompiler
 from Compiler.ISECompiler           import Compiler as ISECompiler
+from Compiler.XCICompiler           import Compiler as XCICompiler
 from Compiler.XCOCompiler           import Compiler as XCOCompiler
 from Compiler.XSTCompiler           import Compiler as XSTCompiler
 from Compiler.VivadoCompiler        import Compiler as VivadoCompiler
@@ -1009,6 +1010,27 @@ class PoC(ILogable, ArgParseMixin):
 		Exit.exit()
 
 	# ----------------------------------------------------------------------------
+	# create the sub-parser for the "xci" command
+	# ----------------------------------------------------------------------------
+	@CommandGroupAttribute("Synthesis commands")
+	@CommandAttribute("xci", help="Generate an IP core from Xilinx Vivado IP Catalog")
+	@PoCEntityAttribute()
+	@BoardDeviceAttributeGroup()
+	@NoCleanUpAttribute()
+	def HandleCoreGeneratorCompilation(self, args):
+		self.PrintHeadline()
+		self.__PrepareForSynthesis()
+		self._CheckISEEnvironment()
+
+		fqnList = self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
+		board = self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
+
+		compiler = XCICompiler(self, self.DryRun, args.NoCleanUp)
+		compiler.RunAll(fqnList, board)
+
+		Exit.exit()
+
+	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "vivado" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
@@ -1080,10 +1102,10 @@ class PoC(ILogable, ArgParseMixin):
 
 # main program
 def main(): # mccabe:disable=MC0001
-	dryRun =  "-D" in sys_argv
-	debug =   "-d" in sys_argv
-	verbose = "-v" in sys_argv
-	quiet =   "-q" in sys_argv
+	dryRun =  "--dryrun"  in sys_argv
+	debug =   "-d"        in sys_argv
+	verbose = "-v"        in sys_argv
+	quiet =   "-q"        in sys_argv
 
 	# configure Exit class
 	Exit.quiet = quiet

@@ -117,7 +117,7 @@ begin
 			Out_Valid		=> gearup_Valid
 		);
 
-	genOES : if (SORTNET_IMPL = SORT_SORTNET_IMPL_ODDEVEN_SORT) generate
+	genOES : if SORTNET_IMPL = SORT_SORTNET_IMPL_ODDEVEN_SORT generate
 		signal DataInputMatrix	: T_SLM(SORTNET_SIZE - 1 downto 0, SORTNET_DATA_BITS - 1 downto 0);
 		signal DataOutputMatrix	: T_SLM(SORTNET_SIZE - 1 downto 0, SORTNET_DATA_BITS - 1 downto 0);
 
@@ -154,7 +154,7 @@ begin
 	end generate;
 
 
-	genOEMS : if (SORTNET_IMPL = SORT_SORTNET_IMPL_ODDEVEN_MERGESORT) generate
+	genOEMS : if SORTNET_IMPL = SORT_SORTNET_IMPL_ODDEVEN_MERGESORT generate
 		signal DataInputMatrix	: T_SLM(SORTNET_SIZE - 1 downto 0, SORTNET_DATA_BITS - 1 downto 0);
 		signal DataOutputMatrix	: T_SLM(SORTNET_SIZE - 1 downto 0, SORTNET_DATA_BITS - 1 downto 0);
 
@@ -189,7 +189,7 @@ begin
 	end generate;
 
 
-	genBS : if (SORTNET_IMPL = SORT_SORTNET_IMPL_BITONIC_SORT) generate
+	genBS : if SORTNET_IMPL = SORT_SORTNET_IMPL_BITONIC_SORT generate
 		signal DataInputMatrix	: T_SLM(SORTNET_SIZE - 1 downto 0, SORTNET_DATA_BITS - 1 downto 0);
 		signal DataOutputMatrix	: T_SLM(SORTNET_SIZE - 1 downto 0, SORTNET_DATA_BITS - 1 downto 0);
 

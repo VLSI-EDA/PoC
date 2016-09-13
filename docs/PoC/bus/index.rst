@@ -15,8 +15,8 @@ These are bus entities....
 
 .. toctree::
    :hidden:
-   
+
    stream/index
    wb/index
-   
+
    bus_Arbiter

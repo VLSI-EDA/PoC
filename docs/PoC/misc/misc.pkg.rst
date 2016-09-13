@@ -1,6 +1,6 @@
 
 Package
-=======
+========
 
 This package holds all component declarations for this namespace.
 

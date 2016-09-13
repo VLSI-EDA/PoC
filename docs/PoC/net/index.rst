@@ -24,7 +24,7 @@ These are bus entities....
 
 .. toctree::
    :hidden:
-   
+
    arp/index
    eth/index
    icmpv4/index
@@ -38,6 +38,6 @@ These are bus entities....
 
 .. toctree::
    :hidden:
-   
+
    net_FrameChecksum
    net_FrameLoopback

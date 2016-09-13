@@ -82,8 +82,8 @@ begin
 	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.in is not implemented for given DEVICE."
 		severity FAILURE;
-		
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+
+	genXilinx : if VENDOR = VENDOR_XILINX generate
 		i : ddrio_in_xilinx
 			generic map (
 				BITS				=> BITS,
@@ -97,8 +97,8 @@ begin
 				Pad					=> Pad
 			);
 	end generate;
-	
-	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+
+	genAltera : if VENDOR = VENDOR_ALTERA generate
 		i : ddrio_in_altera
 			generic map (
 				BITS				=> BITS,
@@ -112,8 +112,8 @@ begin
 				Pad					=> Pad
 			);
 	end generate;
-	
-	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
+
+	genGeneric : if SIMULATION  and (VENDOR = VENDOR_GENERIC) generate
 		signal Pad_d_fe				: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 		signal DataIn_high_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 		signal DataIn_low_d		: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
@@ -121,7 +121,7 @@ begin
 		Pad_d_fe				<= Pad			when falling_edge(Clock)	and (ClockEnable = '1');
 		DataIn_high_d		<= Pad			when rising_edge(Clock)		and (ClockEnable = '1');
 		DataIn_low_d		<= Pad_d_fe	when rising_edge(Clock)		and (ClockEnable = '1');
-		
+
 		DataIn_high			<= DataIn_high_d;
 		DataIn_low			<= DataIn_low_d;
 	end generate;

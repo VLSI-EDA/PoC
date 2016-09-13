@@ -82,7 +82,7 @@ begin
 	-- ==========================================================================================================================================================
 	-- Full-Assoziative Cache
 	-- ==========================================================================================================================================================
-	genFA : if (CACHE_LINES = ASSOCIATIVITY) generate
+	genFA : if CACHE_LINES = ASSOCIATIVITY generate
 		constant FA_CACHE_LINES				: positive := ASSOCIATIVITY;
 		constant FA_TAG_BITS					: positive := TAG_BITS;
 		constant FA_CHUNKS						: positive := div_ceil(FA_TAG_BITS, CHUNK_BITS);
@@ -206,7 +206,7 @@ begin
 --					NewTagSeqCounter_en			<= '1';
 					TagMemory_we			 <= '1';
 
-					if (NewTagSeqCounter_us = ite((TAG_BYTE_ORDER = LITTLE_ENDIAN), (FA_CHUNKS - 1), 0)) then
+					if NewTagSeqCounter_us = ite((TAG_BYTE_ORDER = LITTLE_ENDIAN), (FA_CHUNKS - 1), 0) then
 						Replaced <= '1';
 
 						Replace_NextState <= ST_IDLE;
@@ -260,7 +260,7 @@ begin
 
 						Request_NextState <= ST_IDLE;
 					else
-						if (TagSeqCounter_us = ite((TAG_BYTE_ORDER = LITTLE_ENDIAN), (FA_CHUNKS - 1), 0)) then
+						if TagSeqCounter_us = ite((TAG_BYTE_ORDER = LITTLE_ENDIAN), (FA_CHUNKS - 1), 0) then
 							RequestComplete <= '1';
 
 							Request_NextState <= ST_READ;
@@ -296,13 +296,13 @@ begin
 			if rising_edge(Clock) then
 				-- NewTagSeqCounter
 				if ((Reset or NewTagSeqCounter_rst) = '1') then
-					if (TAG_BYTE_ORDER = LITTLE_ENDIAN) then
+					if TAG_BYTE_ORDER = LITTLE_ENDIAN then
 						NewTagSeqCounter_us <= to_unsigned(0, NewTagSeqCounter_us'length);
 					else
 						NewTagSeqCounter_us <= to_unsigned((FA_CHUNKS - 1), NewTagSeqCounter_us'length);
 					end if;
 				else
-					if (TAG_BYTE_ORDER = LITTLE_ENDIAN) then
+					if TAG_BYTE_ORDER = LITTLE_ENDIAN then
 						NewTagSeqCounter_us <= NewTagSeqCounter_us + 1;
 					else
 						NewTagSeqCounter_us <= NewTagSeqCounter_us - 1;
@@ -311,13 +311,13 @@ begin
 
 				-- TagSeqCounter
 				if ((Reset or TagSeqCounter_rst) = '1') then
-					if (TAG_BYTE_ORDER = LITTLE_ENDIAN) then
+					if TAG_BYTE_ORDER = LITTLE_ENDIAN then
 						TagSeqCounter_us <= to_unsigned(0, TagSeqCounter_us'length);
 					else
 						TagSeqCounter_us <= to_unsigned((FA_CHUNKS - 1), TagSeqCounter_us'length);
 					end if;
 				else
-					if (TAG_BYTE_ORDER = LITTLE_ENDIAN) then
+					if TAG_BYTE_ORDER = LITTLE_ENDIAN then
 						TagSeqCounter_us <= TagSeqCounter_us + 1;
 					else
 						TagSeqCounter_us <= TagSeqCounter_us - 1;
@@ -426,7 +426,7 @@ begin
 	-- ==========================================================================================================================================================
 	-- Direct-Mapped Cache
 	-- ==========================================================================================================================================================
-	genDM : if (ASSOCIATIVITY = 1) generate
+	genDM : if ASSOCIATIVITY = 1 generate
 		constant FA_CACHE_LINES				: positive := CACHE_LINES;
 		constant FA_TAG_BITS					: positive := TAG_BITS;
 		constant FA_MEMORY_INDEX_BITS : positive := log2ceilnz(FA_CACHE_LINES);
@@ -500,7 +500,7 @@ begin
 	-- ==========================================================================================================================================================
 	-- Set-Assoziative Cache
 	-- ==========================================================================================================================================================
-	genSA : if ((ASSOCIATIVITY > 1) and (SETS > 1)) generate
+	genSA : if (ASSOCIATIVITY > 1) and (SETS > 1) generate
 		constant FA_CACHE_LINES				: positive := CACHE_LINES;
 		constant SETINDEX_BITS				: natural	 := log2ceil(SETS);
 		constant FA_TAG_BITS					: positive := TAG_BITS;

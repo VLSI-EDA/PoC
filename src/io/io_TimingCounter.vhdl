@@ -65,13 +65,13 @@ architecture rtl of io_TimingCounter is
 		end loop;
 		return Result;
   end;
-  
+
 	constant TIMING_TABLE2	: T_INTVEC		:= transform(TIMING_TABLE);
 	constant TIMING_MAX			: natural			:= imax(TIMING_TABLE2);
 	constant COUNTER_BITS		: natural			:= log2ceilnz(TIMING_MAX + 1);
-	
+
 	signal Counter_s				: signed(COUNTER_BITS downto 0)		:= to_signed(TIMING_TABLE2(0), COUNTER_BITS + 1);
-	
+
 begin
 	process(Clock)
 	begin
@@ -83,6 +83,6 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 	Timeout <= Counter_s(Counter_s'high);
 end;

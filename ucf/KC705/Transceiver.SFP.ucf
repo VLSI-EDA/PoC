@@ -3,8 +3,8 @@
 ## -----------------------------------------------------------------------------
 ##	Bank:						12, 15, 117
 ##		VCCO:					2.5V, 2.5V (VADJ_FPGA, VADJ_FPGA)
-##		Quad117:		 
-##			RefClock0		
+##		Quad117:
+##			RefClock0
 ##			RefClock1		KC705_SMA_RefClock
 ##		Placement:
 ##			SFP:				Quad117.Channel2 (GTXE2_CHANNEL_X0Y10)
@@ -15,10 +15,10 @@ NET "KC705_SFP_LossOfSignal"		LOC = "P19" | IOSTANDARD = LVCMOS25; ## #$	; high-
 ##
 ## --------------------------
 ## SFP+ LVDS signal-pairs
-NET "KC705_SFP_TX_n"					LOC = "H1";													## {OUT}	
-NET "KC705_SFP_TX_p"					LOC = "H2";													## {OUT}	
-NET "KC705_SFP_RX_n"					LOC = "G3";													## {IN}		
-NET "KC705_SFP_RX_p"					LOC = "G4";													## {IN}		
+NET "KC705_SFP_TX_n"					LOC = "H1";													## {OUT}
+NET "KC705_SFP_TX_p"					LOC = "H2";													## {OUT}
+NET "KC705_SFP_RX_n"					LOC = "G3";													## {IN}
+NET "KC705_SFP_RX_p"					LOC = "G4";													## {IN}
 
 # Ignore timings on async I/O pins
 NET "KC705_SFP_TX_Disable_n"		TIG;

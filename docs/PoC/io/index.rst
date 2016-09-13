@@ -7,7 +7,7 @@ as well as low-speed bus protocol controllers.
 
 **Sub-namespaces**
 
- * :doc:`PoC.io.ddrio <ddrio/index>` - Double-Data-Rate (DDR) input/output abstraction layer. 
+ * :doc:`PoC.io.ddrio <ddrio/index>` - Double-Data-Rate (DDR) input/output abstraction layer.
  * :doc:`PoC.io.iic <iic/index>` - I²C bus controllers
  * :doc:`PoC.io.jtag <jtag/index>` - JTAG implementations
  * :doc:`PoC.io.lcd <lcd/index>` - LC-Display bus controllers
@@ -34,7 +34,7 @@ The package :doc:`PoC.io <io.pkg>` holds all enum, function and component declar
 
 .. toctree::
    :hidden:
-   
+
    ddrio/index
    iic/index
    jtag/index
@@ -46,9 +46,9 @@ The package :doc:`PoC.io <io.pkg>` holds all enum, function and component declar
    ps2/index
    uart/index
    vga/index
-   
+
    io.pkg
-   
+
    io_7SegmentMux_BCD
    io_7SegmentMux_HEX
    io_Debounce

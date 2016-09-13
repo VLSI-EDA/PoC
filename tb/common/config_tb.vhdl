@@ -49,7 +49,7 @@ begin
 	procChecker : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker");
 	begin
-		if (SimQuiet = FALSE) then
+		if not SimQuiet then
 			report "is simulation?:    " & boolean'image(SIMULATION)							severity note;
 			report "Vendor:            " & T_VENDOR'image(VENDOR)									severity note;
 			report "Device:            " & T_DEVICE'image(DEVICE)									severity note;

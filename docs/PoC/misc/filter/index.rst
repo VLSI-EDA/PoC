@@ -12,7 +12,7 @@ These are filter entities....
 
 .. toctree::
    :hidden:
-   
+
    filter_and
    filter_mean
    filter_or

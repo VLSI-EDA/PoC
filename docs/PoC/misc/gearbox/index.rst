@@ -1,6 +1,6 @@
 
 gearbox
-=======
+========
 
 These are gearbox entities....
 
@@ -13,7 +13,7 @@ These are gearbox entities....
 
 .. toctree::
    :hidden:
-   
+
    gearbox_down_cc
    gearbox_down_dc
    gearbox_up_cc

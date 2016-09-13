@@ -111,9 +111,9 @@ package body FileIO is
 		procedure OpenFile(Status : out FILE_OPEN_STATUS; FileName : string; OpenKind : T_LOGFILE_OPEN_KIND := WRITE_MODE) is
 			variable Status_i : FILE_OPEN_STATUS;
 		begin
-			if (Local_IsOpen = FALSE) then
+			if not Local_IsOpen then
 				file_open(Status_i, Global_LogFile, FileName, OpenKind);
-				Local_IsOpen		:= (Status_i = OPEN_OK);
+				Local_IsOpen		:= Status_i = OPEN_OK;
 				Local_FileName	:= resize(FileName, Local_FileName'length);
 				Status 					:= Status_i;
 			else
@@ -128,7 +128,7 @@ package body FileIO is
 
 		procedure CloseFile is
 		begin
-			if (Local_IsOpen = TRUE) then
+			if Local_IsOpen then
 				file_close(Global_LogFile);
 				Local_IsOpen	:= FALSE;
 			end if;
@@ -136,7 +136,7 @@ package body FileIO is
 
 		procedure WriteLine(LineBuffer : inout LINE) is
 		begin
-			if (Local_IsOpen = FALSE) then
+			if not Local_IsOpen then
 				writeline(OUTPUT, LineBuffer);
 			-- elsif (LogFile_IsMirrored.Get = TRUE) then
 				-- tee(Global_LogFile, LineBuffer);
@@ -189,9 +189,9 @@ package body FileIO is
 		procedure OpenFile(Status : out FILE_OPEN_STATUS; FileName : string; OpenKind : FILE_OPEN_KIND := WRITE_MODE) is
 			variable Status_i : FILE_OPEN_STATUS;
 		begin
-			if (Local_IsOpen = FALSE) then
+			if not Local_IsOpen then
 				file_open(Status_i, LocalFile, FileName, OpenKind);
-				Local_IsOpen		:= (Status_i = OPEN_OK);
+				Local_IsOpen		:= Status_i = OPEN_OK;
 				Local_FileName	:= resize(FileName, Local_FileName'length);
 				Status 					:= Status_i;
 			else
@@ -201,7 +201,7 @@ package body FileIO is
 
 		procedure CloseFile is
 		begin
-			if (Local_IsOpen = TRUE) then
+			if Local_IsOpen then
 				file_close(LocalFile);
 				Local_IsOpen	:= FALSE;
 			end if;
@@ -209,7 +209,7 @@ package body FileIO is
 
 		procedure WriteLine(LineBuffer : inout LINE) is
 		begin
-			if (Local_IsOpen = FALSE) then
+			if not Local_IsOpen then
 				report "File is not open." severity ERROR;
 			else
 				writeline(LocalFile, LineBuffer);

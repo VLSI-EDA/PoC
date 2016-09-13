@@ -5,7 +5,7 @@ stream
 PoC.Stream modules ...
 
 .. toctree::
-   
+
    stream_Buffer
    stream_DeMux
    stream_Mux

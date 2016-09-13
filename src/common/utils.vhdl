@@ -32,19 +32,11 @@
 -- =============================================================================
 
 library	IEEE;
-
-use			IEEE.std_logic_1164.all;
-use			IEEE.numeric_std.all;
-use			IEEE.math_real.all;
-
-library	PoC;
-use			PoC.my_config.all;
-
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+use IEEE.math_real.all;
 
 package utils is
-	-- PoC settings
-	-- ==========================================================================
-	constant POC_VERBOSE				: boolean			:= MY_VERBOSE;
 
   -- Environment
 	-- ==========================================================================
@@ -511,7 +503,7 @@ package body utils is
 	begin
 		Result	:= integer'high;
 		for i in vec'range loop
-			if (vec(i) < Result) then
+			if vec(i) < Result then
 				Result	:= vec(i);
 			end if;
 		end loop;
@@ -523,7 +515,7 @@ package body utils is
 	begin
 		Result	:= natural'high;
 		for i in vec'range loop
-			if (vec(i) < Result) then
+			if vec(i) < Result then
 				Result	:= vec(i);
 			end if;
 		end loop;
@@ -535,7 +527,7 @@ package body utils is
 	begin
 		Result	:= positive'high;
 		for i in vec'range loop
-			if (vec(i) < Result) then
+			if vec(i) < Result then
 				Result	:= vec(i);
 			end if;
 		end loop;
@@ -571,7 +563,7 @@ package body utils is
 	begin
 		Result		:= integer'low;
 		for i in vec'range loop
-			if (vec(i) > Result) then
+			if vec(i) > Result then
 				Result	:= vec(i);
 			end if;
 		end loop;
@@ -583,7 +575,7 @@ package body utils is
 	begin
 		Result		:= natural'low;
 		for i in vec'range loop
-			if (vec(i) > Result) then
+			if vec(i) > Result then
 				Result	:= vec(i);
 			end if;
 		end loop;
@@ -595,7 +587,7 @@ package body utils is
 	begin
 		Result		:= positive'low;
 		for i in vec'range loop
-			if (vec(i) > Result) then
+			if vec(i) > Result then
 				Result	:= vec(i);
 			end if;
 		end loop;
@@ -785,9 +777,9 @@ package body utils is
 	-- bound array indices for simulation, to prevent out of range errors
 	function bound(index : integer; lowerBound : integer; upperBound : integer) return integer is
 	begin
-		if (index < lowerBound) then
+		if index < lowerBound then
 			return lowerBound;
-		elsif (upperBound < index) then
+		elsif upperBound < index then
 			return upperBound;
 		else
 			return index;
@@ -888,7 +880,7 @@ package body utils is
 	-- ==========================================================================
 	function genmask_high(Bits : natural; MaskLength : positive) return std_logic_vector is
 	begin
-		if (Bits = 0) then
+		if Bits = 0 then
 			return (MaskLength - 1 downto 0 => '0');
 		else
 			return (MaskLength - 1 downto MaskLength - Bits + 1 => '1') & (MaskLength - Bits downto 0 => '0');
@@ -897,7 +889,7 @@ package body utils is
 
 	function genmask_low(Bits : natural; MaskLength : positive) return std_logic_vector is
 	begin
-		if (Bits = 0) then
+		if Bits = 0 then
 			return (MaskLength - 1 downto 0 => '0');
 		else
 			return (MaskLength - 1 downto Bits => '0') & (Bits - 1 downto 0 => '1');
@@ -1040,7 +1032,7 @@ package body utils is
 	function scale(Value : REAL; Minimum : integer; Maximum : integer; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return integer is
 		variable Result	: REAL;
 	begin
-		if (Maximum < Minimum) then
+		if Maximum < Minimum then
 			return integer'low;
 		else
 			Result	:= real(Value) * ((real(Maximum) + 0.5) - (real(Minimum) - 0.5)) + (real(Minimum) - 0.5);
@@ -1057,7 +1049,7 @@ package body utils is
 
 	function scale(Value : REAL; Minimum : REAL; Maximum : REAL) return REAL is
 	begin
-		if (Maximum < Minimum) then
+		if Maximum < Minimum then
 			return REAL'low;
 		else
 			return Value * (Maximum - Minimum) + Minimum;

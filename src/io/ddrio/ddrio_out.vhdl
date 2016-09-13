@@ -77,8 +77,8 @@ begin
 	assert ((VENDOR = VENDOR_ALTERA) or ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) or (VENDOR = VENDOR_XILINX))
 		report "PoC.io.ddrio.out is not implemented for given DEVICE."
 		severity FAILURE;
-		
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+
+	genXilinx : if VENDOR = VENDOR_XILINX generate
 		i : ddrio_out_xilinx
 			generic map (
 				NO_OUTPUT_ENABLE	=> NO_OUTPUT_ENABLE,
@@ -94,8 +94,8 @@ begin
 				Pad						=> Pad
 			);
 	end generate;
-	
-	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+
+	genAltera : if VENDOR = VENDOR_ALTERA generate
 		i : ddrio_out_altera
 			generic map (
 				NO_OUTPUT_ENABLE	=> NO_OUTPUT_ENABLE,
@@ -111,8 +111,8 @@ begin
 				Pad						=> Pad
 			);
 	end generate;
-	
-	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
+
+	genGeneric : if SIMULATION  and (VENDOR = VENDOR_GENERIC) generate
 		signal DataOut_high_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 		signal DataOut_low_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 		signal OutputEnable_d	: std_logic;
@@ -121,21 +121,21 @@ begin
 		DataOut_high_d	<= DataOut_high		when rising_edge(Clock) and (ClockEnable = '1');
 		DataOut_low_d		<= DataOut_low		when rising_edge(Clock) and (ClockEnable = '1');
 		OutputEnable_d	<= OutputEnable		when rising_edge(Clock) and (ClockEnable = '1');
-		
+
 		process(Clock, OutputEnable_d, DataOut_high_d, DataOut_low_d)
 			type T_MUX is array(bit) of std_logic_vector(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
 		begin
 			MuxInput('1')	:= DataOut_high_d;
 			MuxInput('0')	:= DataOut_low_d;
-			
+
 			if (OutputEnable_d = '1') or NO_OUTPUT_ENABLE then
 				Pad_o		<= MuxInput(to_bit(Clock));
 			else
 				Pad_o		<= (others => 'Z');
 			end if;
 		end process;
-		
+
 		Pad			<= Pad_o;
 	end generate;
 end architecture;

@@ -16,12 +16,12 @@ Git
 ***
 
 * ``git-alias.setup.ps1``/``git-alias.setup.sh`` registers new global aliasses in Git
-  
+
   * ``git tree`` - Prints the colored commit tree into the console
   * ``git treea`` - Prints the colored commit tree into the console
-    
+
   .. code-block:: Bash
-     
+
      git config --global alias.tree 'log --decorate --pretty=oneline --abbrev-commit --date-order --graph'
      git config --global alias.tree 'log --decorate --pretty=oneline --abbrev-commit --date-order --graph --all'
 

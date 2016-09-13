@@ -36,7 +36,7 @@ Report a Bug
 Please report issues of any kind in our Git provider's issue tracker. This allows
 us to categorize issues into groups and assign developers to them. You can track
 the issue's state and see how it's getting closed. All enhancements and feature
-requests are tracked on GitHub at 
+requests are tracked on GitHub at
 `GitHub Issues <https://github.com/VLSI-EDA/PoC/issues>`_.
 
 
@@ -113,32 +113,32 @@ as fetch target and the new fork ``<username>/PoC`` as push target.
 **Shell Commands for Cloning:**
 
 .. code-block:: PowerShell
-   
+
    cd GitRoot
    git clone --recursive "ssh://git@github.com:<username>/PoC.git" PoC
    cd PoC
    git remote rename origin github
    git remote add upstream "ssh://git@github.com:VLSI-EDA/PoC.git"
    git fetch --prune --tags
-	 
+
 **Shell Commands for Editing an existing Clone:**
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    git remote rename github upstream
    git remote add github "ssh://git@github.com:<username>/PoC.git"
    git fetch --prune --tags
 
 *These commands work for Git submodules too.*
-	 
-	 
+
+
 3. Checkout a Branch
 ====================
 Checkout the ``master`` or ``release`` branch and maybe stash outstanding changes.
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    git checkout master
 
@@ -150,7 +150,7 @@ the developer tools. You can skip (:kbd:`P`) all tool chain questions until you
 reach the Git questions.
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\PoC.ps1 configure
 
@@ -159,7 +159,7 @@ reach the Git questions.
 Each developer has his own ``master`` branch. So create one and check it out.
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    git branch <username>/master
    git checkout <username>/master
@@ -186,7 +186,7 @@ branch names:
 
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    git branch <username>/<feature>
    git checkout <username>/<feature>
@@ -197,7 +197,7 @@ branch names:
 Commit your porposed changes to your feature branch and push all changes to GitHub.
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    # git add ....
    git commit -m "Fixed a bug in function bounds() in utils.vhdl."
@@ -229,7 +229,7 @@ Give us Feedback
 Please send us feedback about the PoC documentation, our IP cores or your user
 story on how you use PoC.
 
-	
+
 List of Contributers
 ********************
 

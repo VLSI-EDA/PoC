@@ -18,12 +18,12 @@ These are sorting entities....
 
 .. toctree::
    :hidden:
-   
+
    sortnet/index
 
 .. toctree::
    :hidden:
-   
+
    sort_ExpireList
    sort_InsertSort
    sort_LeastFrequentlyUsed

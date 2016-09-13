@@ -2,8 +2,8 @@
 ## Transceiver - SMA interface
 ## -----------------------------------------------------------------------------
 ##	Bank:						117
-##		Quad117:		 
-##			RefClock0		
+##		Quad117:
+##			RefClock0
 ##			RefClock1		KC705_SMA_RefClock
 ##		Placement:
 ##			SMA:				Quad117.Channel0 (GTXE2_CHANNEL_X0Y8)

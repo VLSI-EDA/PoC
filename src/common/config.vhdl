@@ -351,6 +351,7 @@ use			PoC.utils.all;
 package config is
 	constant PROJECT_DIR			: string	:= MY_PROJECT_DIR;
 	constant OPERATING_SYSTEM	: string	:= MY_OPERATING_SYSTEM;
+	constant POC_VERBOSE			: boolean := MY_VERBOSE;
 
 	-- List of known FPGA / Chip vendors
 	-- ---------------------------------------------------------------------------
@@ -542,7 +543,7 @@ package body config is
 	function str_length(str : string) return natural is
 	begin
 		for i in str'range loop
-			if (str(i) = C_POC_NUL) then
+			if str(i) = C_POC_NUL then
 				return i - str'low;
 			end if;
 		end loop;
@@ -552,7 +553,7 @@ package body config is
 	function str_trim(str : string) return string is
 	begin
 		for i in str'range loop
-			if (str(i) = C_POC_NUL) then
+			if str(i) = C_POC_NUL then
 				return str(str'low to i-1);
 			end if;
 		end loop;
@@ -576,11 +577,11 @@ package body config is
 			if (character'pos('A') <= CHARACTER'pos(chr2)) and (character'pos(chr2) <= CHARACTER'pos('Z')) then
 				chr2	:= character'val(CHARACTER'pos(chr2) - character'pos('A') + CHARACTER'pos('a'));
 			end if;
-			if (chr1 /= chr2) then
+			if chr1 /= chr2 then
 				return FALSE;
-			elsif ((chr1 = C_POC_NUL) xor (chr2 = C_POC_NUL)) then
+			elsif (chr1 = C_POC_NUL) xor (chr2 = C_POC_NUL) then
 				return FALSE;
-			elsif ((chr1 = C_POC_NUL) and (chr2 = C_POC_NUL)) then
+			elsif (chr1 = C_POC_NUL) and (chr2 = C_POC_NUL) then
 				return TRUE;
 			end if;
 		end loop;
@@ -615,14 +616,14 @@ package body config is
 	begin
 		Result := (others => C_POC_NUL);
 		-- report DeviceString for debugging
-		if (POC_VERBOSE = TRUE) then
+		if POC_VERBOSE then
 			report "getLocalDeviceString: DeviceString='" & str_trim(DeviceString) & "' MY_DEVICE='" & str_trim(MY_DEVICE) & "' MY_DEVICE_STR='" & str_trim(MY_DEVICE_STR) & "'"  severity NOTE;
 		end if;
 		-- if DeviceString is populated
-		if ((str_length(DeviceString) /= 0) and (str_imatch(DeviceString, "None") = FALSE)) then
+		if (str_length(DeviceString) /= 0) and not str_imatch(DeviceString, "None") then
 			Result(1 to bound(T_DEVICE_STRING'length, 1, DeviceString'length))	:= ite((DeviceString'length > 0), DeviceString(1 to imin(T_DEVICE_STRING'length, DeviceString'length)), ConstNUL);
 		-- if MY_DEVICE is set, prefer it
-		elsif ((str_length(MY_DEVICE) /= 0) and (str_imatch(MY_DEVICE, "None") = FALSE)) then
+		elsif (str_length(MY_DEVICE) /= 0) and not str_imatch(MY_DEVICE, "None") then
 			Result(1 to bound(T_DEVICE_STRING'length, 1, MY_DEVICE'length))			:= ite((MY_DEVICE'length > 0), MY_DEVICE(1 to imin(T_DEVICE_STRING'length, MY_DEVICE'length)), ConstNUL);
 		-- otherwise use MY_BOARD
 		else
@@ -646,7 +647,7 @@ package body config is
 			end if;
 		end loop;
 		-- abort if no digit can be found
-		if (low = -1) then		return 0; end if;
+		if low = -1 then		return 0; end if;
 
 		for i in (low + 1) to str'high loop
 			if chr_isAlpha(str(i)) then
@@ -655,12 +656,12 @@ package body config is
 			end if;
 		end loop;
 
-		if (high = -1) then		return 0; end if;
+		if high = -1 then		return 0; end if;
 		-- return INTEGER'value(str(low to high));			-- 'value(...) is not supported by Vivado Synth 2014.1
 
 		-- convert substring to a number
 		for i in low to high loop
-			if (chr_isDigit(str(i)) = FALSE) then
+			if not chr_isDigit(str(i)) then
 				return 0;
 			end if;
 			Result	:= (Result * 10) + (character'pos(str(i)) - character'pos('0'));
@@ -675,7 +676,7 @@ package body config is
 		constant MY_BRD			: T_BOARD_CONFIG_STRING	:= ite((BoardConfig /= C_BOARD_STRING_EMPTY), conf(BoardConfig), conf(MY_BOARD));
 		constant BOARD_NAME	: string								:= str_trim(MY_BRD);
 	begin
-		if (POC_VERBOSE = TRUE) then	report "PoC configuration: Used board is '" & BOARD_NAME & "'" severity NOTE;		end if;
+		if POC_VERBOSE then	report "PoC configuration: Used board is '" & BOARD_NAME & "'" severity NOTE;		end if;
 		for i in C_BOARD_INFO_LIST'range loop
 			if str_imatch(BOARD_NAME, C_BOARD_INFO_LIST(i).BoardName) then
 				return  i;
@@ -874,7 +875,7 @@ package body config is
 	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY) return natural is
 		constant SERIES		: T_DEVICE_SERIES		:= DEVICE_SERIES(DeviceString);
 	begin
-		if (SERIES = DEVICE_SERIES_7_SERIES) then
+		if SERIES = DEVICE_SERIES_7_SERIES then
 			return 7;
 		else
 			return 0;
@@ -923,14 +924,14 @@ package body config is
 					 DEVICE_CYCLONE5 =>																															return DEVICE_SUBTYPE_NONE;
 
 			when DEVICE_STRATIX2 =>
-				if		chr_isDigit(DEV_SUB_STR(1)) then																						return DEVICE_SUBTYPE_NONE;
-				elsif	(DEV_SUB_STR = "GX") then																										return DEVICE_SUBTYPE_GX;
+				if chr_isDigit(DEV_SUB_STR(1)) then																						return DEVICE_SUBTYPE_NONE;
+				elsif DEV_SUB_STR = "GX" then																										return DEVICE_SUBTYPE_GX;
 				else	report "Unknown Stratix II subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_STRATIX4 =>
 				if		(DEV_SUB_STR(1) = 'E') then																									return DEVICE_SUBTYPE_E;
-				elsif	(DEV_SUB_STR = "GX") then																										return DEVICE_SUBTYPE_GX;
+				elsif DEV_SUB_STR = "GX" then																										return DEVICE_SUBTYPE_GX;
 --				elsif	(DEV_SUB_STR = "GT") then																										return DEVICE_SUBTYPE_GT;
 				else	report "Unknown Stratix IV subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
@@ -942,7 +943,7 @@ package body config is
 
 			when DEVICE_ECP5 =>
 				if		(DEV_SUB_STR(1) = 'U') then																									return DEVICE_SUBTYPE_U;
-				elsif	(DEV_SUB_STR = "UM") then																										return DEVICE_SUBTYPE_UM;
+				elsif DEV_SUB_STR = "UM" then																										return DEVICE_SUBTYPE_UM;
 				else	report "Unknown Lattice ECP5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
@@ -1089,7 +1090,7 @@ package body config is
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_T =>			return TRANSCEIVER_GTXE2;
 					when DEVICE_SUBTYPE_XT =>
-						if (DEV_NUM = 485) then			return TRANSCEIVER_GTXE2;
+						if DEV_NUM = 485 then			return TRANSCEIVER_GTXE2;
 						else												return TRANSCEIVER_GTHE2;
 						end if;
 					when DEVICE_SUBTYPE_HT =>			return TRANSCEIVER_GTHE2;
@@ -1127,7 +1128,7 @@ package body config is
 	-- force FSM to predefined encoding in debug mode
 	function getFSMEncoding_gray(debug : boolean) return string is
 	begin
-		if (debug = true) then
+		if debug then
 			return "gray";
 		else
 			case VENDOR is

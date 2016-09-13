@@ -14,7 +14,7 @@ These are :abbr:`UART (Universal Asynchronous Receiver Transmitter)` entities...
 
 .. toctree::
    :hidden:
-   
+
    uart_bclk
    uart_rx
    uart_tx

@@ -70,7 +70,7 @@ begin
 			y(1) <= p(1);
 		end generate gen1;
 	end generate;
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+	genXilinx : if VENDOR = VENDOR_XILINX generate
 		prefix : arith_prefix_and_xilinx
 			generic map (
 				N		=> N

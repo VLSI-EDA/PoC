@@ -1012,7 +1012,7 @@ package body vectors is
 				Result(Writer)		:= to_char(slm(i, j));
 				Writer						:= Writer + 1;
 				GroupCounter			:= GroupCounter + 1;
-				if (GroupCounter = groups) then
+				if GroupCounter = groups then
 					Result(Writer)	:= ' ';
 					Writer					:= Writer + 1;
 					GroupCounter		:= 0;

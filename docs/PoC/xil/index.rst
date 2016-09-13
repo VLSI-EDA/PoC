@@ -24,13 +24,13 @@ This namespace is for Xilinx specific modules.
 
 .. toctree::
    :hidden:
-   
+
    mig/index
    reconfig/index
 
 .. toctree::
    :hidden:
-   
+
    xil_BSCAN
    xil_ChipScopeICON
    xil_DRP_BusMux

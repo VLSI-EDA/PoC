@@ -12,7 +12,7 @@ sortnet_OddEvenSort
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 41-67
+   :lines: 42-68
 
 Source file: `sort/sortnet/sortnet_OddEvenSort.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_OddEvenSort.vhdl>`_
 

@@ -22,8 +22,8 @@
 ##			Address:			0xA8 (1010 100xb)
 ##		Channel 3:		I2C Port Expander
 ##			Location:			U16
-##			Vendor:				
-##			Device:				
+##			Vendor:
+##			Device:
 ##			Address:			0x42 (0100 001xb)
 ##			Channel 0:			DDR3 SODIMM J1
 ##				Address:				0xA0, 0x30 (1010 000xb, 0011 000xb)
@@ -33,13 +33,13 @@
 ##			Device:															/ SI5324 - Any-Frequency Precision Clock Multiplier/Jitter Attenuator
 ##			Address:			0xA2 (1010 001xb)			/ 0xD0 (1101 000xb)
 ##		Channel 5:		FMC HPC
-##			Location:			
-##			Vendor:				
-##			Device:				
-##			Address:			
+##			Location:
+##			Vendor:
+##			Device:
+##			Address:
 ##		Channel 6:		FMX LPC
-##			Location:			
-##			Address:			
+##			Location:
+##			Address:
 ##		Channel 7:		UCD90120A (PMbus)
 ##			Location:			U48
 ##			Address:			0xCA (1100 101xb)

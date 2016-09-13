@@ -56,10 +56,10 @@ begin
 	Delays					<= Delays(Delays'high - 1 downto 0) & DataIn when rising_edge(Clock);
 	FilterOut				<= slv_and(Delays);
 
-	genOutReg0 : if (ADD_OUTPUT_REG = FALSE) generate
+	genOutReg0 : if not ADD_OUTPUT_REG generate
 		DataOut				<= FilterOut;
 	end generate;
-	genOutReg1 : if (ADD_OUTPUT_REG = TRUE) generate
+	genOutReg1 : if ADD_OUTPUT_REG generate
 		signal FilterOut_d	: std_logic	:= INIT;
 	begin
 		FilterOut_d		<= FilterOut when rising_edge(Clock);

@@ -13,7 +13,7 @@ These are Pmod entities....
 
 .. toctree::
    :hidden:
-   
+
    pmod_KYPD
    pmod_SSD
    pmod_USBUART

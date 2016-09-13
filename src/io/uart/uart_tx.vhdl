@@ -37,11 +37,11 @@ entity uart_tx is
     -- Global Control
     clk : in std_logic;
     rst : in std_logic;
-    
+
     -- Bit Clock and TX Line
     bclk : in  std_logic;  -- bit clock, one strobe each bit length
     tx   : out std_logic;
-    
+
     -- Byte Stream Input
     di  : in  std_logic_vector(7 downto 0);
     put : in  std_logic;
@@ -60,10 +60,10 @@ architecture rtl of uart_tx is
   --   Start    "hgfedcba01"     -10
   --   Send     "1111hgfedc"   -10 -> -1
   --   Done     "1111111111"       0
-  
+
   signal Buf : std_logic_vector(9 downto 0) := (0 => '1', others => '-');
   signal Cnt : signed(4 downto 0)           := "0----";
-  
+
 begin
 
   process(clk)
