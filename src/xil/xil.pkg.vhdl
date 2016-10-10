@@ -77,6 +77,10 @@ package xil is
 		Ack						: std_logic;
 	end record;
 
+	constant C_XIL_DRP_BUS_OUT_EMPTY : T_XIL_DRP_BUS_OUT := (
+		Ack				=> '0',
+		Data			=> (others => '0'));
+
 	type T_XIL_DRP_CONFIG is record
 		Address														: T_XIL_DRP_ADDRESS;
 		Mask															: T_XIL_DRP_DATA;

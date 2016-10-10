@@ -2,14 +2,21 @@
 ocram_sp
 ########
 
-Inferring / instantiating single-port RAM
+Inferring / instantiating enhanced single port memory, with:
 
-- single clock, clock enable
-- 1 read/write port
+* single clock, clock enable,
+* 1 read/write port.
 
-Written data is passed through the memory and output again as read-data 'q'.
-This is the normal behaviour of a single-port RAM and also known as
-write-first mode or read-through-write behaviour.
+When writing data, the read output will be unknown which is aka. "don't
+care behavior". The read output will be unknown for the full write-cycle
+time, which starts at the rising-edge of the clock and (in the worst case)
+extends until the next rising-edge of the clock.
+
+.. WARNING::
+   The simulated behavior on RT-level is too optimistic. During a
+   write, always the new data will be returned as read value.
+
+.. TODO:: Implement correct behavior for RT-level simulation.
 
 
 
@@ -19,7 +26,7 @@ write-first mode or read-through-write behaviour.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 52-66
+   :lines: 59-73
 
 Source file: `mem/ocram/ocram_sp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sp.vhdl>`_
 

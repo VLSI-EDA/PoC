@@ -58,9 +58,7 @@ architecture rtl of arith_carrychain_inc is
 
 begin
 	genGeneric : if not XILINX_FORCE_CARRYCHAIN generate
-		signal Zero		: unsigned(BITS - 1 downto 1)		:= (others => '0');
-	begin
-		Y <= std_logic_vector(unsigned(X) + (Zero & CIn));
+		Y <= std_logic_vector(unsigned(X) + unsigned'((0 to 0 => CIn)));
 	end generate;
 
 	genXilinx : if XILINX_FORCE_CARRYCHAIN generate

@@ -17,31 +17,27 @@
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
--- * Same-Port Read-During Write:
---	 At rising edge of "clk1", data "d1" written to port 1 (ce1 and we1 = '1')
---	 is directly passed to the output "q1". This is also known as write-first
---	 mode or read-through write behavior. Same applies for port 2 (d2 -> q2).
+-- Same-Port Read-During Write
+--   When writing data through port 1, the read output of the same port (``q1``)
+--   will be unknown which is aka. "don't care behavior". The read output will
+--   be unknown for the full write-cycle time, which starts at the
+--   rising-edge of the clock of port 1 (``clk1``) and (in the worst case)
+--   extends until the next rising-edge of that clock.
 --
--- * Mixed-Port Read-During Write:
---	 Here, the Altera M512/M4K TriMatrix memory (as found e.g. in Stratix
---	 and Stratix II FPGAs) defines the minimum time after which the written data
---	 at one port can be read-out at the other again. As stated in the Stratix
---	 Handbook, Volume 2, page 2-13, data is actually written with the falling
---	 (instead of the rising) edge of the clock into the memory array. The write
---	 itself takes the write-cycle time which is less or equal to the minimum
---	 clock-period time. After this, the data can be read-out at the other port.
---	 Consequently, data "d1" written at the rising-edge of "clk1" at address
---	 "a1" can be read-out at the 2nd port from the same address with the
---	 2nd rising-edge of "clk2" following the falling-edge of "clk1".
---	 If the rising-edge of "clk2" coincides with the falling-edge of "clk1"
---	 (e.g. same clock signal), then it is counted as the 1st rising-edge of
---	 "clk2" in this timing. Same applies analogous to data written at port 2
---	 and read-out at port 1.
+--   Same applies to port 2.
 --
--- WARNING: The simulated behavior on RT-level is not correct.
+-- Mixed-Port Read During Write
+--   When reading at the write address, the read value will be unknown which is
+--   aka. "don't care behavior". This applies to all reads (at the same
+--   address) which are issued during the write-cycle time, which starts at the
+--   rising-edge of the write clock and (in the worst case) extends
+--   until the next rising-edge of that write clock.
 --
--- TODO: add timing diagram
--- TODO: implement correct behavior for RT-level simulation
+-- .. WARNING::
+--    The simulated behavior on RT-level is too optimistic. When reading
+--    at the write address always the new data will be returned.
+--
+-- .. TODO:: Implement correct behavior for RT-level simulation.
 --
 -- License:
 -- =============================================================================
@@ -76,23 +72,23 @@ use			PoC.mem.all;
 
 entity ocram_tdp is
 	generic (
-		A_BITS		: positive;
-		D_BITS		: positive;
-		FILENAME	: string		:= ""
+		A_BITS		: positive;															-- number of address bits
+		D_BITS		: positive;															-- number of data bits
+		FILENAME	: string		:= ""												-- file-name for RAM initialization
 	);
 	port (
-		clk1 : in	std_logic;
-		clk2 : in	std_logic;
-		ce1	: in	std_logic;
-		ce2	: in	std_logic;
-		we1	: in	std_logic;
-		we2	: in	std_logic;
-		a1	 : in	unsigned(A_BITS-1 downto 0);
-		a2	 : in	unsigned(A_BITS-1 downto 0);
-		d1	 : in	std_logic_vector(D_BITS-1 downto 0);
-		d2	 : in	std_logic_vector(D_BITS-1 downto 0);
-		q1	 : out std_logic_vector(D_BITS-1 downto 0);
-		q2	 : out std_logic_vector(D_BITS-1 downto 0)
+		clk1 : in	std_logic;															-- clock for 1st port
+		clk2 : in	std_logic;															-- clock for 2nd port
+		ce1	: in	std_logic;															-- clock-enable for 1st port
+		ce2	: in	std_logic;															-- clock-enable for 2nd port
+		we1	: in	std_logic;															-- write-enable for 1st port
+		we2	: in	std_logic;															-- write-enable for 2nd port
+		a1	 : in	unsigned(A_BITS-1 downto 0);						-- address for 1st port
+		a2	 : in	unsigned(A_BITS-1 downto 0);						-- address for 2nd port
+		d1	 : in	std_logic_vector(D_BITS-1 downto 0);		-- write-data for 1st port
+		d2	 : in	std_logic_vector(D_BITS-1 downto 0);		-- write-data for 2nd port
+		q1	 : out std_logic_vector(D_BITS-1 downto 0);		-- read-data from 1st port
+		q2	 : out std_logic_vector(D_BITS-1 downto 0) 		-- read-data from 2nd port
 	);
 end entity;
 

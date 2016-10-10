@@ -102,6 +102,9 @@ package physical is
 	function to_baud(str : string)	return BAUD;
 
 	-- inter-type arithmetic
+	function div(a : time; b : time) return real;
+	function div(a : FREQ; b : FREQ) return real;
+
 	function "/"(x : real; t : time) return FREQ;
 	function "/"(x : real; f : FREQ) return time;
 	function "*"(t : time; f : FREQ) return real;

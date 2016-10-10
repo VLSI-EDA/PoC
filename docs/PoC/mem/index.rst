@@ -8,6 +8,7 @@ implementations.
 
 **Sub-Namespaces**
 
+ * :doc:`PoC.mem.ddr3 <ddr3/index>` - DDR3 memory controllers
  * :doc:`PoC.mem.is61lv <is61lv/index>` - ISSI - IS61LV SRAM controller
  * :doc:`PoC.mem.is61nlp <is61nlp/index>` - ISSI - IS61NLP SRAM controller
  * :doc:`PoC.mem.lut <lut/index>` - Lookup-Table (LUT) implementations
@@ -23,6 +24,7 @@ implementations.
 .. toctree::
    :hidden:
 
+   ddr3/index
    is61lv/index
    is61nlp/index
    lut/index

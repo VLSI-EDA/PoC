@@ -9,14 +9,21 @@
 --
 -- Description:
 -- -------------------------------------
--- Inferring / instantiating single-port RAM
+-- Inferring / instantiating enhanced single port memory, with:
 --
--- - single clock, clock enable
--- - 1 read/write port
+-- * single clock, clock enable,
+-- * 1 read/write port.
 --
--- Written data is passed through the memory and output again as read-data 'q'.
--- This is the normal behaviour of a single-port RAM and also known as
--- write-first mode or read-through-write behaviour.
+-- When writing data, the read output will be unknown which is aka. "don't
+-- care behavior". The read output will be unknown for the full write-cycle
+-- time, which starts at the rising-edge of the clock and (in the worst case)
+-- extends until the next rising-edge of the clock.
+--
+-- .. WARNING::
+--    The simulated behavior on RT-level is too optimistic. During a
+--    write, always the new data will be returned as read value.
+--
+-- .. TODO:: Implement correct behavior for RT-level simulation.
 --
 -- License:
 -- =============================================================================
@@ -51,17 +58,17 @@ use			PoC.mem.all;
 
 entity ocram_sp is
 	generic (
-		A_BITS		: positive;
-		D_BITS		: positive;
-		FILENAME	: string		:= ""
+		A_BITS		: positive;															-- number of address bits
+		D_BITS		: positive;															-- number of data bits
+		FILENAME	: string		:= ""												-- file-name for RAM initialization
 	);
 	port (
-		clk : in	std_logic;
-		ce	: in	std_logic;
-		we	: in	std_logic;
-		a	 : in	unsigned(A_BITS-1 downto 0);
-		d	 : in	std_logic_vector(D_BITS-1 downto 0);
-		q	 : out std_logic_vector(D_BITS-1 downto 0)
+		clk : in	std_logic;															-- clock
+		ce	: in	std_logic;															-- clock enable
+		we	: in	std_logic;															-- write enable
+		a	 : in	unsigned(A_BITS-1 downto 0);							-- address
+		d	 : in	std_logic_vector(D_BITS-1 downto 0);			-- write data
+		q	 : out std_logic_vector(D_BITS-1 downto 0) 			-- read output
 	);
 end entity;
 
