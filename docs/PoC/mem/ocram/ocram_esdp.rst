@@ -7,15 +7,39 @@ Inferring / instantiating enhanced simple dual-port memory, with:
 * dual clock, clock enable,
 * 1 read/write port (1st port) plus 1 read port (2nd port).
 
+Command truth table for port 1:
+
+=== === ================
+ce1 we1 Command
+=== === ================
+0   X   No operation
+1   0   Read from memory
+1   1   Write to memory
+=== === ================
+
+Command truth table for port 2:
+
+=== ================
+ce2 Command
+=== ================
+0   No operation
+1   Read from memory
+=== ================
+
+Both reading and writing are synchronous to the rising-edge of the clock.
+Thus, when reading, the memory data will be outputted after the
+clock edge, i.e, in the following clock cycle.
+
 The generalized behavior across Altera and Xilinx FPGAs since
 Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 
 Same-Port Read-During Write
-  When writing data through port 1, the read output of the same port (``q1``)
-  will be unknown which is aka. "don't care behavior". The read output will
-  be unknown for the full write-cycle time, which starts at the
-  rising-edge of the clock of port 1 (``clk1``) and (in the worst case)
-  extends until the next rising-edge of that clock.
+  When writing data through port 1, the read output of the same port
+  (``q1``) will output the new data (``d1``, in the following clock cycle)
+  which is aka. "write-first behavior". This behavior also applies to Altera
+  M20K memory blocks as described in the Altera: "Stratix 5 Device Handbook"
+  (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
+  (UG-01068) is wrong.
 
 Mixed-Port Read During Write
   When reading at the write address, the read value will be unknown which is
@@ -38,7 +62,7 @@ Mixed-Port Read During Write
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 73-91
+   :lines: 97-115
 
 Source file: `mem/ocram/ocram_esdp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_esdp.vhdl>`_
 

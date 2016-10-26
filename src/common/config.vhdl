@@ -516,7 +516,12 @@ package config is
 
 	function DEVICE_INFO(DeviceString : string := C_DEVICE_STRING_EMPTY)				return T_DEVICE_INFO;
 
+	-- Convert T_DEVICE to string representation as required by "altera_mf" library
+	-- ===========================================================================
+	function getAlteraDeviceName (device : T_DEVICE) return string;
+
 	-- force FSM to predefined encoding in debug mode
+	-- ===========================================================================
 	function getFSMEncoding_gray(debug : boolean) return string;
 end package;
 
@@ -1123,6 +1128,32 @@ package body config is
 		Result.LUT_FanIn				:= LUT_FANIN(DeviceString);
 
 		return Result;
+	end function;
+
+
+	-- Convert T_DEVICE to string representation as required by "altera_mf" library
+	function getAlteraDeviceName (device : T_DEVICE) return string is
+	begin
+		case device is
+			when DEVICE_ARRIA1		=> return "Arria";
+			when DEVICE_ARRIA2		=> return "Arria II";
+			when DEVICE_ARRIA5		=> return "Arria V";
+			when DEVICE_ARRIA10		=> return "Arria 10";
+			when DEVICE_CYCLONE1	=> return "Cyclone";
+			when DEVICE_CYCLONE2	=> return "Cyclone II";
+			when DEVICE_CYCLONE3	=> return "Cyclone III";
+			when DEVICE_CYCLONE4	=> return "Cyclone IV";
+			when DEVICE_CYCLONE5	=> return "Cyclone V";
+			when DEVICE_STRATIX1	=> return "Stratix";
+			when DEVICE_STRATIX2	=> return "Stratix II";
+			when DEVICE_STRATIX3	=> return "Stratix III";
+			when DEVICE_STRATIX4	=> return "Stratix IV";
+			when DEVICE_STRATIX5	=> return "Stratix V";
+			when DEVICE_STRATIX10 => return "Stratix 10";
+			when others =>
+				report "Unknown Altera device." severity failure;
+		    -- return statement is explicitly missing otherwise XST won't stop
+		end case;
 	end function;
 
 	-- force FSM to predefined encoding in debug mode

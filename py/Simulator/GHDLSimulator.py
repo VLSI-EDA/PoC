@@ -121,8 +121,7 @@ class Simulator(BaseSimulator):
 				raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(file.Path))
 
 	def _SetVHDLVersionAndIEEEFlavor(self, ghdl):
-		if (self._vhdlVersion <= VHDLVersion.VHDL93):
-			ghdl.Parameters[ghdl.SwitchIEEEFlavor] =  "synopsys"
+		ghdl.Parameters[ghdl.SwitchIEEEFlavor] =  "synopsys"
 
 		if (self._vhdlVersion is VHDLVersion.VHDL93):
 			ghdl.Parameters[ghdl.SwitchVHDLVersion] = "93c"

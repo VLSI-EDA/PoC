@@ -14,15 +14,39 @@
 -- * dual clock, clock enable,
 -- * 1 read/write port (1st port) plus 1 read port (2nd port).
 --
+-- Command truth table for port 1:
+--
+-- === === ================
+-- ce1 we1 Command
+-- === === ================
+-- 0   X   No operation
+-- 1   0   Read from memory
+-- 1   1   Write to memory
+-- === === ================
+--
+-- Command truth table for port 2:
+--
+-- === ================
+-- ce2 Command
+-- === ================
+-- 0   No operation
+-- 1   Read from memory
+-- === ================
+--
+-- Both reading and writing are synchronous to the rising-edge of the clock.
+-- Thus, when reading, the memory data will be outputted after the
+-- clock edge, i.e, in the following clock cycle.
+--
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
 -- Same-Port Read-During Write
---   When writing data through port 1, the read output of the same port (``q1``)
---   will be unknown which is aka. "don't care behavior". The read output will
---   be unknown for the full write-cycle time, which starts at the
---   rising-edge of the clock of port 1 (``clk1``) and (in the worst case)
---   extends until the next rising-edge of that clock.
+--   When writing data through port 1, the read output of the same port
+--   (``q1``) will output the new data (``d1``, in the following clock cycle)
+--   which is aka. "write-first behavior". This behavior also applies to Altera
+--   M20K memory blocks as described in the Altera: "Stratix 5 Device Handbook"
+--   (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
+--   (UG-01068) is wrong.
 --
 -- Mixed-Port Read During Write
 --   When reading at the write address, the read value will be unknown which is
@@ -35,7 +59,9 @@
 --    The simulated behavior on RT-level is too optimistic. When reading
 --    at the write address always the new data will be returned.
 --
--- .. TODO:: Implement correct behavior for RT-level simulation.
+-- .. TODO::
+--    Implement correct behavior for RT-level simulation.
+--    Xilinx Vivado synthesizes LUT-RAM, fix it.
 --
 -- License:
 -- =============================================================================
@@ -143,7 +169,8 @@ begin
 			end if;
 		end process;
 
-		q1 <= ram(to_integer(a1_reg));				-- gets new data
+		q1 <= (others => 'X') when SIMULATION and is_x(std_logic_vector(a1_reg)) else
+					ram(to_integer(a1_reg));				-- gets new data
 
 		process (clk2)
 		begin	-- process
@@ -154,8 +181,12 @@ begin
 			end if;
 		end process;
 
-		-- read data is unknown, when reading at write address
-		q2 <= ram(to_integer(a2_reg));
+		-- NOTE: Do not move into clocked process above, otherwise synthesis with
+		-- XST will fail.
+		-- TODO: read data is unknown, when reading at write address
+		-- TODO: Improper synthesis results from Vivado.
+		q2 <= (others => 'X') when SIMULATION and is_X(std_logic_vector(a2_reg)) else
+					ram(to_integer(a2_reg));
 	end generate gInfer;
 
 	gAltera: if VENDOR = VENDOR_ALTERA generate

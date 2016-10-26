@@ -14,15 +14,26 @@
 -- * dual clock, clock enable,
 -- * 2 read/write ports.
 --
+-- Command truth table for port 1, same applies to port 2:
+--
+-- === === ================
+-- ce1 we1 Command
+-- === === ================
+-- 0   X   No operation
+-- 1   0   Read from memory
+-- 1   1   Write to memory
+-- === === ================
+--
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
 -- Same-Port Read-During Write
---   When writing data through port 1, the read output of the same port (``q1``)
---   will be unknown which is aka. "don't care behavior". The read output will
---   be unknown for the full write-cycle time, which starts at the
---   rising-edge of the clock of port 1 (``clk1``) and (in the worst case)
---   extends until the next rising-edge of that clock.
+--   When writing data through port 1, the read output of the same port
+--   (``q1``) will output the new data (``d1``, in the following clock cycle)
+--   which is aka. "write-first behavior". This behavior also applies to Altera
+--   M20K memory blocks as described in the Altera: "Stratix 5 Device Handbook"
+--   (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
+--   (UG-01068) is wrong.
 --
 --   Same applies to port 2.
 --
@@ -153,8 +164,10 @@ begin
 			end if;
 		end process;
 
-		q1 <= ram(to_integer(a1_reg));		-- returns new data
-		q2 <= ram(to_integer(a2_reg));		-- returns new data
+		q1 <= (others => 'X') when SIMULATION and is_x(std_logic_vector(a1_reg)) else
+					ram(to_integer(a1_reg));		-- returns new data
+		q2 <= (others => 'X') when SIMULATION and is_x(std_logic_vector(a2_reg)) else
+					ram(to_integer(a2_reg));		-- returns new data
 	end generate gInfer;
 
 	gAltera: if VENDOR = VENDOR_ALTERA generate

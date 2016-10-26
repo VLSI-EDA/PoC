@@ -41,6 +41,7 @@ library	altera_mf;
 use			altera_mf.all;
 
 library PoC;
+use			PoC.config.all;
 use			PoC.utils.all;
 use			PoC.strings.all;
 
@@ -104,7 +105,7 @@ begin
 			address_aclr_a					=> "NONE",
 			indata_aclr_a						=> "NONE",
 			init_file								=> INIT_FILE,
-			intended_device_family	=> "Stratix",
+			intended_device_family	=> getAlteraDeviceName(DEVICE),
 			lpm_hint								=> "ENABLE_RUNTIME_MOD = NO",
 			lpm_type								=> "altsyncram",
 			numwords_a							=> DEPTH,

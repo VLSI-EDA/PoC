@@ -9,21 +9,30 @@
 --
 -- Description:
 -- -------------------------------------
--- Inferring / instantiating enhanced single port memory, with:
+-- Inferring / instantiating single port memory, with:
 --
 -- * single clock, clock enable,
 -- * 1 read/write port.
 --
--- When writing data, the read output will be unknown which is aka. "don't
--- care behavior". The read output will be unknown for the full write-cycle
--- time, which starts at the rising-edge of the clock and (in the worst case)
--- extends until the next rising-edge of the clock.
+-- Command Truth Table:
 --
--- .. WARNING::
---    The simulated behavior on RT-level is too optimistic. During a
---    write, always the new data will be returned as read value.
+-- == == ================
+-- ce we Command
+-- == == ================
+-- 0  X  No operation
+-- 1  0  Read from memory
+-- 1  1  Write to memory
+-- == == ================
 --
--- .. TODO:: Implement correct behavior for RT-level simulation.
+-- Both reading and writing are synchronous to the rising-edge of the clock.
+-- Thus, when reading, the memory data will be outputted after the
+-- clock edge, i.e, in the following clock cycle.
+--
+-- When writing data, the read output will output the new data (in the
+-- following clock cycle) which is aka. "write-first behavior". This behavior
+-- also applies to Altera M20K memory blocks as described in the Altera:
+-- "Stratix 5 Device Handbook" (S5-5V1). The documentation in the Altera:
+-- "Embedded Memory User Guide" (UG-01068) is wrong.
 --
 -- License:
 -- =============================================================================
@@ -123,7 +132,8 @@ begin
 			end if;
 		end process;
 
-		q <= ram(to_integer(a_reg));					-- gets new data
+		q <= (others => 'X') when SIMULATION and is_x(std_logic_vector(a_reg)) else
+				 ram(to_integer(a_reg));					-- gets new data
 	end generate gInfer;
 
 	gAltera: if VENDOR = VENDOR_ALTERA generate

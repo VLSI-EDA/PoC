@@ -494,7 +494,10 @@ def GHDLAnalyzeFilter(gen):
 
 	for line in gen:
 		filterMatch = filterRegExp.match(line)
-		if (filterMatch is not None):
+		if ("ghdl: compilation error" in line):
+			yield LogEntry(line, Severity.Error)
+			continue
+		elif (filterMatch is not None):
 			if (filterMatch.group('warning') is not None):
 				yield LogEntry(line, Severity.Warning)
 				continue
