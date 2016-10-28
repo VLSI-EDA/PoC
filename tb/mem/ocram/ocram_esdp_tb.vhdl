@@ -74,6 +74,9 @@ architecture tb of ocram_esdp_tb is
 	signal exp_q1 : std_logic_vector(D_BITS-1 downto 0) := (others => '-');
 	signal exp_q2 : std_logic_vector(D_BITS-1 downto 0) := (others => '-');
 
+	-- Signaling between Stimuli and Checker process
+	signal finished : boolean := false;
+
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -102,12 +105,15 @@ begin
   Stimuli: process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Stimuli process");
   begin
-    -- insert signal assignments here
-    ce1 <= '0';
-    we1 <= '0';
-    a1  <= (others => '-');
-    ce2 <= '0';
-    a2  <= (others => '-');
+    -- No operation on first rising clock edge
+    ce1   <= '0';
+    we1   <= '-';
+    a1    <= (others => '-');
+    d1    <= (others => '-');
+    rd_d1 <= (others => '-');
+    ce2   <= '0';
+    a2    <= (others => '-');
+    rd_d2 <= (others => '-');
 
 		-------------------------------------------------------------------------
 		-- Write in 8 consecutive clock cycles, read one cycle later
@@ -166,10 +172,11 @@ begin
 
 		-------------------------------------------------------------------------
 		-- Finish
-
 		simWaitUntilRisingEdge(clk, 1);
 		ce2 <= '0';
     a2  <= (others => '-');
+
+		finished <= true;
 
     -- This process is finished
 		simDeactivateProcess(simProcessID);
@@ -186,7 +193,7 @@ begin
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker process");
 		variable i : integer;
   begin
-		for i in 0 to 20 loop
+		while not finished loop
 			simWaitUntilRisingEdge(clk, 1);
 			simAssertion(std_match(q1, exp_q1));
 			simAssertion(std_match(q2, exp_q2));

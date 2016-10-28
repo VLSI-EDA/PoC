@@ -76,6 +76,9 @@ architecture tb of ocram_tdp_tb is
 	signal exp_q1 : std_logic_vector(D_BITS-1 downto 0) := (others => '-');
 	signal exp_q2 : std_logic_vector(D_BITS-1 downto 0) := (others => '-');
 
+	-- Signaling between Stimuli and Checker process
+	signal finished : boolean := false;
+
 begin
 	-- initialize global simulation status
 	simInitialize;
@@ -106,13 +109,17 @@ begin
   Stimuli: process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Stimuli process");
   begin
-    -- insert signal assignments here
-    ce1 <= '0';
-    we1 <= '-';
-    a1  <= (others => '-');
-    ce2 <= '0';
-    we2 <= '-';
-    a2  <= (others => '-');
+    -- No operation on first rising clock edge
+    ce1   <= '0';
+    we1   <= '-';
+    a1    <= (others => '-');
+    d1    <= (others => '-');
+    rd_d1 <= (others => '-');
+    ce2   <= '0';
+    we2   <= '-';
+    a2    <= (others => '-');
+    d2    <= (others => '-');
+    rd_d2 <= (others => '-');
 
 		-------------------------------------------------------------------------
 		-- Write in 8 consecutive clock cycles on port 1, read one cycle later on
@@ -193,10 +200,10 @@ begin
 			rd_d2 <= std_logic_vector(to_unsigned(i, d1'length));
 
 			-- read is delayed by one clock cycle
-			ce1		<= ce1;
+			ce1		<= ce2;
 			we1   <= '0';
-			a1		<= a1;
-			rd_d1 <= d1;											-- data to be read
+			a1		<= a2;
+			rd_d1 <= d2;											-- data to be read
 		end loop;
 
 		simWaitUntilRisingEdge(clk, 1);
@@ -206,26 +213,26 @@ begin
 		rd_d2 <= (others => '-');
 
 		-- last read is delayed by one clock cycle
-		ce1		<= ce1;
+		ce1		<= ce2;
     we1   <= '0';
-		a1		<= a1;
-		rd_d1 <= d1;												-- data to be read
+		a1		<= a2;
+		rd_d1 <= d2;												-- data to be read
 
 		-------------------------------------------------------------------------
 		-- Alternating write on port 2 / read on port 1
 		for i in 24 to 31 loop
 			simWaitUntilRisingEdge(clk, 1);
-			ce2		<= not ce1;									-- write @ even addresses
+			ce2		<= not ce2;									-- write @ even addresses
 			we2		<= '1';
 			a2		<= to_unsigned(i, a1'length);
 			d2		<= std_logic_vector(to_unsigned(i, d1'length));
 			rd_d2 <= std_logic_vector(to_unsigned(i, d1'length));
 
 			-- read is delayed by one clock cycle
-			ce1		<= ce1;
+			ce1		<= ce2;
 			we1   <= '0';
-			a1		<= a1;
-			rd_d1 <= d1;											-- data to be read
+			a1		<= a2;
+			rd_d1 <= d2;											-- data to be read
 		end loop;
 
 		simWaitUntilRisingEdge(clk, 1);
@@ -235,10 +242,10 @@ begin
 		rd_d2 <= (others => '-');
 
 		-- last read is delayed by one clock cycle
-		ce1		<= ce1;
+		ce1		<= ce2;
 		we1   <= '0';
-		a1		<= a1;
-		rd_d1 <= d1;												-- data to be read
+		a1		<= a2;
+		rd_d1 <= d2;												-- data to be read
 
 		simWaitUntilRisingEdge(clk, 1);
 		ce1		<= '0';
@@ -248,6 +255,7 @@ begin
 
 		-------------------------------------------------------------------------
 		-- Finish
+		finished <= true;
 
     -- This process is finished
 		simDeactivateProcess(simProcessID);
@@ -264,7 +272,7 @@ begin
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker process");
 		variable i : integer;
   begin
-		for i in 0 to 20 loop
+		while not finished loop
 			simWaitUntilRisingEdge(clk, 1);
 			simAssertion(std_match(q1, exp_q1));
 			simAssertion(std_match(q2, exp_q2));
