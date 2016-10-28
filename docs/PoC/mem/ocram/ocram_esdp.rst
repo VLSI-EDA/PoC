@@ -7,6 +7,12 @@ Inferring / instantiating enhanced simple dual-port memory, with:
 * dual clock, clock enable,
 * 1 read/write port (1st port) plus 1 read port (2nd port).
 
+.. NOTE::
+   This component is **deprecated**.
+   Please use :doc:`PoC.mem.ocram.tdp <ocram_tdp>` for new designs.
+   This component has been provided because older FPGA compilers where not
+   able to infer true dual-port memory from an RTL description.
+
 Command truth table for port 1:
 
 === === ================
@@ -33,7 +39,7 @@ clock edge, i.e, in the following clock cycle.
 The generalized behavior across Altera and Xilinx FPGAs since
 Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 
-Same-Port Read-During Write
+Same-Port Read-During-Write
   When writing data through port 1, the read output of the same port
   (``q1``) will output the new data (``d1``, in the following clock cycle)
   which is aka. "write-first behavior". This behavior also applies to Altera
@@ -41,7 +47,7 @@ Same-Port Read-During Write
   (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
   (UG-01068) is wrong.
 
-Mixed-Port Read During Write
+Mixed-Port Read-During-Write
   When reading at the write address, the read value will be unknown which is
   aka. "don't care behavior". This applies to all reads (at the same
   address) which are issued during the write-cycle time, which starts at the
@@ -52,10 +58,6 @@ Mixed-Port Read During Write
    The simulated behavior on RT-level is too optimistic. When reading
    at the write address always the new data will be returned.
 
-.. TODO::
-   Implement correct behavior for RT-level simulation.
-   Xilinx Vivado synthesizes LUT-RAM, fix it.
-
 
 
 .. rubric:: Entity Declaration:
@@ -64,7 +66,7 @@ Mixed-Port Read During Write
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 99-117
+   :lines: 101-119
 
 Source file: `mem/ocram/ocram_esdp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_esdp.vhdl>`_
 

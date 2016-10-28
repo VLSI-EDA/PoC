@@ -14,6 +14,12 @@
 -- * dual clock, clock enable,
 -- * 1 read/write port (1st port) plus 1 read port (2nd port).
 --
+-- .. NOTE::
+--    This component is **deprecated**.
+--    Please use :doc:`PoC.mem.ocram.tdp <ocram_tdp>` for new designs.
+--    This component has been provided because older FPGA compilers where not
+--    able to infer true dual-port memory from an RTL description.
+--
 -- Command truth table for port 1:
 --
 -- === === ================
@@ -40,7 +46,7 @@
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
--- Same-Port Read-During Write
+-- Same-Port Read-During-Write
 --   When writing data through port 1, the read output of the same port
 --   (``q1``) will output the new data (``d1``, in the following clock cycle)
 --   which is aka. "write-first behavior". This behavior also applies to Altera
@@ -48,7 +54,7 @@
 --   (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
 --   (UG-01068) is wrong.
 --
--- Mixed-Port Read During Write
+-- Mixed-Port Read-During-Write
 --   When reading at the write address, the read value will be unknown which is
 --   aka. "don't care behavior". This applies to all reads (at the same
 --   address) which are issued during the write-cycle time, which starts at the
@@ -58,10 +64,6 @@
 -- .. WARNING::
 --    The simulated behavior on RT-level is too optimistic. When reading
 --    at the write address always the new data will be returned.
---
--- .. TODO::
---    Implement correct behavior for RT-level simulation.
---    Xilinx Vivado synthesizes LUT-RAM, fix it.
 --
 -- License:
 -- =============================================================================
@@ -122,75 +124,33 @@ architecture rtl of ocram_esdp is
 
 begin
 	gInfer : if (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX) generate
-		-- RAM can be inferred correctly
-		-- XST Advanced HDL Synthesis generates extended simple dual-port
-		-- memory as expected.
-		-- RAM can be inferred correctly only for newer FPGAs!
-		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
-		type		ram_t		is array(0 to DEPTH - 1) of word_t;
 
-		-- Compute the initialization of a RAM array, if specified, from the passed file.
-		impure function ocram_InitMemory(FilePath : string) return ram_t is
-			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
-			variable res			: ram_t;
-		begin
-			if str_length(FilePath) = 0 then
-        -- shortcut required by Vivado
-				return (others => (others => ite(SIMULATION, 'U', '0')));
-			elsif mem_FileExtension(FilePath) = "mem" then
-				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
-			else
-				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_INTEL_HEX, MEM_CONTENT_HEX);
-			end if;
-
-			for i in Memory'range(1) loop
-				for j in word_t'range loop
-					res(i)(j)		:= Memory(i, j);
-				end loop;
-			end loop;
-			return  res;
-		end function;
-
-		signal ram			: ram_t		:= ocram_InitMemory(FILENAME);
-		signal a1_reg		: unsigned(A_BITS-1 downto 0);
-		signal a2_reg		: unsigned(A_BITS-1 downto 0);
-
-	begin
-		process (clk1)
-		begin
-			if rising_edge(clk1) then
-				if ce1 = '1' then
-					if we1 = '1' then
-						ram(to_integer(a1)) <= d1;
-					end if;
-
-					a1_reg <= a1;
-				end if;
-			end if;
-		end process;
-
-		q1 <= (others => 'X') when SIMULATION and is_x(std_logic_vector(a1_reg)) else
-					ram(to_integer(a1_reg));				-- gets new data
-
-		process (clk2)
-		begin	-- process
-			if rising_edge(clk2) then
-				if ce2 = '1' then
-					a2_reg <= a2;
-				end if;
-			end if;
-		end process;
-
-		-- NOTE: Do not move into clocked process above, otherwise synthesis with
-		-- XST will fail.
-		-- TODO: read data is unknown, when reading at write address
-		-- TODO: Improper synthesis results from Vivado.
-		q2 <= (others => 'X') when SIMULATION and is_X(std_logic_vector(a2_reg)) else
-					ram(to_integer(a2_reg));
+		-- For Xilinx ISE, Xilinx Vivado and Lattice LSE we can reuse the ocram_tdp.
+		--
+		-- **Attention**: This encapsulation is mandatory for Xilinx Vivado,
+		-- otherwise Vivado synthesizes a lot of LUT-RAM instead of Block-RAM.
+		ram_tdp: entity poc.ocram_tdp
+			generic map (
+				A_BITS	 => A_BITS,
+				D_BITS	 => D_BITS,
+				FILENAME => FILENAME)
+			port map (
+				clk1 => clk1,
+				clk2 => clk2,
+				ce1	 => ce1,
+				ce2	 => ce2,
+				we1	 => we1,
+				we2	 => '0',
+				a1	 => a1,
+				a2	 => a2,
+				d1	 => d1,
+				d2	 => (others => '0'),
+				q1	 => q1,
+				q2	 => q2);
 	end generate gInfer;
 
 	gAltera: if VENDOR = VENDOR_ALTERA generate
-		component ocram_esdp_altera
+		component ocram_tdp_altera
 			generic (
 				A_BITS		: positive;
 				D_BITS		: positive;
@@ -202,9 +162,11 @@ begin
 				ce1	: in	std_logic;
 				ce2	: in	std_logic;
 				we1	: in	std_logic;
+				we2	: in	std_logic;
 				a1	 : in	unsigned(A_BITS-1 downto 0);
 				a2	 : in	unsigned(A_BITS-1 downto 0);
 				d1	 : in	std_logic_vector(D_BITS-1 downto 0);
+				d2	 : in	std_logic_vector(D_BITS-1 downto 0);
 				q1	 : out std_logic_vector(D_BITS-1 downto 0);
 				q2	 : out std_logic_vector(D_BITS-1 downto 0)
 			);
@@ -213,7 +175,7 @@ begin
 		-- Direct instantiation of altsyncram (including component
 		-- declaration above) is not sufficient for ModelSim.
 		-- That requires also usage of altera_mf library.
-		i: ocram_esdp_altera
+		ram_tdp: ocram_tdp_altera
 			generic map (
 				A_BITS		=> A_BITS,
 				D_BITS		=> D_BITS,
@@ -225,9 +187,11 @@ begin
 				ce1	=> ce1,
 				ce2	=> ce2,
 				we1	=> we1,
+				we2 => '0',
 				a1	 => a1,
 				a2	 => a2,
 				d1	 => d1,
+				d2   => (others => '0'),
 				q1	 => q1,
 				q2	 => q2
 			);

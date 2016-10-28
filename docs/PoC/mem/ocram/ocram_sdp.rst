@@ -10,7 +10,7 @@ Inferring / instantiating simple dual-port memory, with:
 The generalized behavior across Altera and Xilinx FPGAs since
 Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 
-Mixed-Port Read During Write
+Mixed-Port Read-During-Write
   When reading at the write address, the read value will be unknown which is
   aka. "don't care behavior". This applies to all reads (at the same
   address) which are issued during the write-cycle time, which starts at the

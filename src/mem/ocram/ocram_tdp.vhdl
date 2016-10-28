@@ -27,7 +27,7 @@
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
--- Same-Port Read-During Write
+-- Same-Port Read-During-Write
 --   When writing data through port 1, the read output of the same port
 --   (``q1``) will output the new data (``d1``, in the following clock cycle)
 --   which is aka. "write-first behavior". This behavior also applies to Altera
@@ -37,7 +37,7 @@
 --
 --   Same applies to port 2.
 --
--- Mixed-Port Read During Write
+-- Mixed-Port Read-During-Write
 --   When reading at the write address, the read value will be unknown which is
 --   aka. "don't care behavior". This applies to all reads (at the same
 --   address) which are issued during the write-cycle time, which starts at the
@@ -197,7 +197,7 @@ begin
 		-- declaration above) is not sufficient for ModelSim.
 		-- That requires also usage of altera_mf library.
 
-		i: ocram_tdp_altera
+		ram_tdp: ocram_tdp_altera
 			generic map (
 				A_BITS		=> A_BITS,
 				D_BITS		=> D_BITS,
