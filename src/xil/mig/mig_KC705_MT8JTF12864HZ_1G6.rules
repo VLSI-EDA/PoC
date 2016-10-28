@@ -65,4 +65,7 @@ PostProcessRules
 	Copy "${tempDir}/user_design/rtl/ui/mig_7series_v1_9_ui_cmd.v"											To "${dstDir}/mig_7series_v1_9_ui_cmd.v"
 	Copy "${tempDir}/user_design/rtl/${TopLevel}.vhd"																		To "${dstDir}/${TopLevel}_top.vhd"
 	Copy "${tempDir}/user_design/constraints/${TopLevel}.ucf"														To "${dstDir}/${TopLevel}.ncf"
+	File "${dstDir}/${TopLevel}.ncf"
+		Replace "DATAPATHONLY;" With "DATAPATHONLY;\\nINST \"*/xadc_supplied_temperature.rst_r1*\" TNM=\"TNM_XADC_ASYNC_RST\";\\nTIMESPEC \"TS_XADC_ASYNC_RST\" = TO \"TNM_XADC_ASYNC_RST\" TIG;"
+	End File
 End PostProcessRules

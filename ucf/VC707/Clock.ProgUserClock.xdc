@@ -13,4 +13,3 @@ set_property PACKAGE_PIN	AK34	[get_ports VC707_ProgUserClock_p]
 set_property PACKAGE_PIN	AL34	[get_ports VC707_ProgUserClock_n]
 # set I/O standard
 set_property IOSTANDARD		LVDS	[get_ports -regexp {VC707_ProgUserClock_[p|n]}]
-#$ NET "VC707_ProgUserClock_p"				TNM_NET = "NET_ProgUserClock";

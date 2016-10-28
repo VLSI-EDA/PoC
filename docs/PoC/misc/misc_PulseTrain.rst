@@ -2,8 +2,9 @@
 misc_PulseTrain
 ###############
 
-	This module generates pulse trains. This module was written as a answer for
-	a StackOverflow question: http://stackoverflow.com/questions/25783320
+		This module generates pulse trains. This module was written as a answer for
+		a StackOverflow question: http://stackoverflow.com/questions/25783320
+
 
 
 .. rubric:: Entity Declaration:
@@ -17,4 +18,4 @@ misc_PulseTrain
 Source file: `misc/misc_PulseTrain.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_PulseTrain.vhdl>`_
 
 
-	 
+

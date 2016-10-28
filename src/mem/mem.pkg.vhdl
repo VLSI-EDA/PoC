@@ -93,13 +93,13 @@ package body mem is
 		Good		:= TRUE;
 		for i in 0 to DigitCount - 1 loop
 			read(L, Char, ok);
-			if (ok = FALSE) then
+			if not ok then
 				Swapped	:= swap(slv, 4);
 				Value		:= Swapped(Value'length - 1 downto 0);
 				return;
 			end if;
 			Digit := to_digit_hex(Char);
-			if (Digit = -1) then
+			if Digit = -1 then
 				Good := FALSE;
 				return;
 			end if;
@@ -125,7 +125,7 @@ package body mem is
 	begin
 		Result := (others => (others => ite(SIMULATION, 'U', '0')));
 
-		if (FORMAT = MEM_FILEFORMAT_XILINX_MEM) then
+		if FORMAT = MEM_FILEFORMAT_XILINX_MEM then
 			-- discard the first line of a mem file
 			readline(FileHandle, CurrentLine);
 		end if;
@@ -136,7 +136,7 @@ package body mem is
 			readline(FileHandle, CurrentLine);
 --			report CurrentLine.all severity NOTE;
 			ReadHex(CurrentLine, TempWord, Good);
-			if (Good = FALSE) then
+			if not Good then
 				report "Error while reading memory file '" & FileName & "'." severity FAILURE;
 				return Result;
 			end if;

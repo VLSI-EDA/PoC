@@ -79,8 +79,8 @@ architecture rtl of xil_Reconfigurator is
 
 	type T_STATE is (
 		ST_IDLE,
-		ST_READ_begin,	ST_READ_WAIT,
-		ST_WRITE_begin,	ST_WRITE_WAIT,
+		ST_READ_BEGIN,	ST_READ_WAIT,
+		ST_WRITE_BEGIN,	ST_WRITE_WAIT,
 		ST_DONE
 	);
 
@@ -94,6 +94,8 @@ architecture rtl of xil_Reconfigurator is
 
 	signal ROM_Entry									: T_XIL_DRP_CONFIG;
 	signal ROM_LastConfigWord					: std_logic;
+
+	signal ConfigSelect_d 						: std_logic_vector(ConfigSelect'range);
 
 	constant CONFIGINDEX_BITS					: positive															:= log2ceilnz(CONFIG_ROM'length);
 	signal ConfigIndex_rst						: std_logic;
@@ -111,7 +113,7 @@ begin
 		attribute KEEP of SetIndex	: signal is DEBUG;
 		attribute KEEP of RowIndex	: signal is DEBUG;
 	begin
-		SetIndex							<= to_index(ConfigSelect, CONFIG_ROM'high);
+		SetIndex							<= to_index(ConfigSelect_d, CONFIG_ROM'high);
 		RowIndex							<= to_index(ConfigIndex_us, T_XIL_DRP_CONFIG_INDEX'high);
 		ROM_Entry							<= CONFIG_ROM(SetIndex).Configs(RowIndex);
 		ROM_LastConfigWord		<= to_sl(RowIndex = CONFIG_ROM(SetIndex).LastIndex);
@@ -121,8 +123,9 @@ begin
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset or ConfigIndex_rst) = '1') then
+			if (ConfigIndex_rst = '1') then
 				ConfigIndex_us		<= (others => '0');
+				ConfigSelect_d		<= ConfigSelect;
 			elsif (ConfigIndex_en = '1') then
 				ConfigIndex_us		<= ConfigIndex_us + 1;
 			end if;
@@ -177,10 +180,10 @@ begin
 			when ST_IDLE =>
 				if (Reconfig = '1') then
 					ConfigIndex_rst		<= '1';
-					NextState					<= ST_READ_begin;
+					NextState					<= ST_READ_BEGIN;
 				end if;
 
-			when ST_READ_begin =>
+			when ST_READ_BEGIN =>
 				DRP_en							<= '1';
 				DRP_we							<= '0';
 				NextState						<= ST_READ_WAIT;
@@ -188,10 +191,10 @@ begin
 			when ST_READ_WAIT =>
 				if (DRP_Ack = '1') then
 					DataBuffer_en			<= '1';
-					NextState					<= ST_WRITE_begin;
+					NextState					<= ST_WRITE_BEGIN;
 				end if;
 
-			when ST_WRITE_begin =>
+			when ST_WRITE_BEGIN =>
 				DRP_en							<= '1';
 				DRP_we							<= '1';
 				NextState						<= ST_WRITE_WAIT;
@@ -202,7 +205,7 @@ begin
 						NextState				<= ST_DONE;
 					else
 						ConfigIndex_en	<= '1';
-						NextState				<= ST_READ_begin;
+						NextState				<= ST_READ_BEGIN;
 					end if;
 				end if;
 

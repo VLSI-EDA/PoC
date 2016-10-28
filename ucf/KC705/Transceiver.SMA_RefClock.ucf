@@ -2,8 +2,8 @@
 ## Transceiver - SMA interface
 ## -----------------------------------------------------------------------------
 ##	Bank:						117
-##		Quad117:		 
-##			RefClock0		
+##		Quad117:
+##			RefClock0
 ##			RefClock1		KC705_SMA_RefClock
 ##		Placement:
 ##			SMA:				Quad117.Channel0 (GTXE2_CHANNEL_X0Y8)
@@ -13,5 +13,5 @@
 ##
 ## reference clock
 ## --------------------------
-NET "KC705_SMA_RefClock_n"											LOC = "J7";													## {IN}		J15; external 0.01 uF decoupling capacitor
-NET "KC705_SMA_RefClock_p"											LOC = "J8";													## {IN}		J16; external 0.01 uF decoupling capacitor
+NET "KC705_SMA_RefClock_n"											LOC = "J7" | IOSTANDARD = LVDS;													## {IN}		J15; external 0.01 uF decoupling capacitor
+NET "KC705_SMA_RefClock_p"											LOC = "J8" | IOSTANDARD = LVDS;													## {IN}		J16; external 0.01 uF decoupling capacitor

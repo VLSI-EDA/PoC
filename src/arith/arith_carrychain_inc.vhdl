@@ -57,13 +57,14 @@ architecture rtl of arith_carrychain_inc is
   constant XILINX_FORCE_CARRYCHAIN		: boolean		:= (not SIMULATION) and (VENDOR = VENDOR_XILINX) and (BITS > 4);
 
 begin
-	genGeneric : if (XILINX_FORCE_CARRYCHAIN = FALSE) generate
-		signal Zero		: unsigned(BITS - 1 downto 1)		:= (others => '0');
+	genGeneric : if not XILINX_FORCE_CARRYCHAIN generate
+		signal Cin_vec : unsigned(0 downto 0);
 	begin
-		Y <= std_logic_vector(unsigned(X) + (Zero & CIn));
+		Cin_vec(0) <= Cin; -- WORKAROUND: for GHDL
+		Y <= std_logic_vector(unsigned(X) + Cin_vec);
 	end generate;
 
-	genXilinx : if (XILINX_FORCE_CARRYCHAIN = TRUE) generate
+	genXilinx : if XILINX_FORCE_CARRYCHAIN generate
 		inc : arith_carrychain_inc_xilinx
 			generic map (
 				BITS		=> BITS

@@ -5,6 +5,7 @@ sort_LeastFrequentlyUsed
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/sort/sort_LeastFrequentlyUsed.vhdl
@@ -16,4 +17,4 @@ sort_LeastFrequentlyUsed
 Source file: `sort/sort_LeastFrequentlyUsed.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_LeastFrequentlyUsed.vhdl>`_
 
 
-	 
+

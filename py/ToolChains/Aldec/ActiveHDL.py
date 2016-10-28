@@ -46,13 +46,13 @@ else:
 
 from lib.Functions          import CallByRefParam
 from Base.Exceptions        import PlatformNotSupportedException
-from Base.Logging            import LogEntry, Severity
-from Base.Simulator          import SimulationResult, PoCSimulationResultFilter
+from Base.Logging           import LogEntry, Severity
+from Base.Simulator         import SimulationResult, PoCSimulationResultFilter
 from Base.Executable        import Executable
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument
 from Base.Executable        import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
-from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
-from ToolChains.Aldec.Aldec  import AldecException
+from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
+from ToolChains.Aldec.Aldec import AldecException
 
 
 class ActiveHDLException(AldecException):
@@ -118,7 +118,7 @@ class ActiveHDLMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self._logger =              logger
+		self._Logger =              logger
 
 
 class ActiveHDL(ActiveHDLMixIn):
@@ -126,13 +126,13 @@ class ActiveHDL(ActiveHDLMixIn):
 		ActiveHDLMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetVHDLLibraryTool(self):
-		return ActiveHDLVHDLLibraryTool(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return ActiveHDLVHDLLibraryTool(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetVHDLCompiler(self):
-		return VHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return VHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetSimulator(self):
-		return StandaloneSimulator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return StandaloneSimulator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class VHDLCompiler(Executable, ActiveHDLMixIn):
@@ -194,10 +194,10 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 
 	def Compile(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -214,22 +214,22 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 
 
 			self._hasOutput = True
-			self._LogNormal("  acom messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  acom messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
 class StandaloneSimulator(Executable, ActiveHDLMixIn):
@@ -268,8 +268,8 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 
 	def Simulate(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
-		self._LogDebug("tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogDebug("tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
 
 		try:
 			self.StartProcess(parameterList)
@@ -285,22 +285,22 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 			line = next(iterator)
 
 			self._hasOutput = True
-			self._LogNormal("  vsimsa messages for '{0}.{1}'".format("?????", "?????"))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  vsimsa messages for '{0}.{1}'".format("?????", "?????"))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |=  (line.Severity is Severity.Warning)
 				self._hasErrors |=    (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 		return simulationResult.value
 
@@ -356,8 +356,8 @@ class Simulator(Executable, ActiveHDLMixIn):
 	def Simulate(self):
 		parameterList = self.Parameters.ToArgumentList()
 
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
-		self._LogDebug("tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogDebug("tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
 
 		_indent = "    "
 		print(_indent + "vsimsa messages for '{0}.{1}'".format("??????", "??????"))  # self.VHDLLibrary, topLevel))
@@ -411,7 +411,7 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 
 	def CreateLibrary(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		try:
 			self.StartProcess(parameterList)
@@ -426,22 +426,22 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 			line = next(iterator)
 
 			self._hasOutput = True
-			self._LogNormal("  alib messages for '{0}'".format(self.Parameters[self.SwitchLibraryName]))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  alib messages for '{0}'".format(self.Parameters[self.SwitchLibraryName]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |=  (line.Severity is Severity.Warning)
 				self._hasErrors |=    (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
 		# 			# assemble acom command as list of parameters
@@ -461,7 +461,7 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 		# ]
 
 
-def VHDLCompilerFilter(gen):
+def VHDLCompilerFilter(gen): # mccabe:disable=MC0001
 	for line in gen:
 		if line.startswith("Aldec, Inc. VHDL Compiler"):
 			yield LogEntry(line, Severity.Debug)

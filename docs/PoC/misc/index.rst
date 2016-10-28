@@ -2,40 +2,38 @@
 misc
 ====
 
-These are misc entities....
+The namespace ``PoC.misc`` offers different yet uncathegorized entities.
 
-# Namespace `PoC.misc`
+**Sub-Namespaces**
 
-The namespace `PoC.misc` offers different yet uncathegorized entities.
+ * :doc:`PoC.misc.filter <filter/index>` contains 1-bit filter algorithms.
+ * :doc:`PoC.misc.stat <stat/index>` contains statistic modules.
+ * :doc:`PoC.misc.sync <sync/index>` offers clock-domain-crossing (CDC) modules.
 
+**Package**
 
-## Sub-Namespace(s)
+The package :doc:`PoC.misc <misc.pkg>` holds all component declarations for this namespace.
 
- -  [`PoC.misc.filter`][misc_filter] contains 1-bit filter algorithms.
- -  [`PoC.misc.stat`][misc_stat] contains statistic modules.
- -  [`PoC.misc.sync`][misc_sync] offers clock-domain-crossing (CDC) modules.
+**Entities**
 
-
-## Package(s)
-
-The package [`misc`][misc.pkg] holds all component declarations for this namespace.
-
-
-
-
-.. rubric:: Sub-Namespaces
+ * :doc:`PoC.misc.Delay <misc_Delay>`
+ * :doc:`PoC.misc.FrequencyMeasurement <misc_FrequencyMeasurement>`
+ * :doc:`PoC.misc.PulseTrain <misc_PulseTrain>`
+ * :doc:`PoC.misc.Sequencer <misc_Sequencer>`
+ * :doc:`PoC.misc.StrobeGenerator <misc_StrobeGenerator>`
+ * :doc:`PoC.misc.StrobeLimiter <misc_StrobeLimiter>`
+ * :doc:`PoC.misc.WordAligner <misc_WordAligner>`
 
 .. toctree::
-   
+   :hidden:
+
    filter/index
    gearbox/index
    stat/index
    sync/index
 
-.. rubric:: Entities
+   misc.pkg
 
-.. toctree::
-   
    misc_Delay
    misc_FrequencyMeasurement
    misc_PulseTrain

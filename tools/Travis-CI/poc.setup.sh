@@ -18,6 +18,13 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+echo -e "${CYAN}Test PoC front-end script.${NOCOLOR}"
+./poc.sh
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}Testing PoC front-end script [FAILED]${NOCOLOR}"
+	exit 1
+fi
+
 echo -e "${CYAN}Copy my_project.vhdl into ./tb/common directory${NOCOLOR}"
 cp ./tools/Travis-CI/my_project.vhdl ./tb/common
 if [ $? -ne 0 ]; then

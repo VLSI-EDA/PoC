@@ -5,6 +5,7 @@ Eth_PHYController_Marvell_88E1111
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/net/eth/eth_PHYController_Marvell_88E1111.vhdl
@@ -16,4 +17,4 @@ Eth_PHYController_Marvell_88E1111
 Source file: `net/eth/eth_PHYController_Marvell_88E1111.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_PHYController_Marvell_88E1111.vhdl>`_
 
 
-	 
+

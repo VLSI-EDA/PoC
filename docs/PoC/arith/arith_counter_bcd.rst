@@ -11,9 +11,10 @@ state. Groups of 4 bit represent one BCD digit. The lowest significant digit
 is specified by ``val(3 downto 0)``.
 
 .. TODO::
-   
+
    * implement a ``dec`` input for decrementing
    * implement a ``load`` input to load a value
+
 
 
 .. rubric:: Entity Declaration:
@@ -27,4 +28,4 @@ is specified by ``val(3 downto 0)``.
 Source file: `arith/arith_counter_bcd.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_bcd.vhdl>`_
 
 
-	 
+

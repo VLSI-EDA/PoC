@@ -95,7 +95,7 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 					netlist = entity.XSTNetlist
 					self.TryRun(netlist, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -113,19 +113,19 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		self._WriteXstOptionsFile(netlist, board.Device)
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing pre-processing tasks...")
+		self.LogNormal("Executing pre-processing tasks...")
 		self._state = CompileState.PreCopy
 		self._RunPreCopy(netlist)
 		self._state = CompileState.PrePatch
 		self._RunPreReplace(netlist)
 		self._preTasksTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running Xilinx Synthesis Tool...")
+		self.LogNormal("Running Xilinx Synthesis Tool...")
 		self._state = CompileState.Compile
 		self._RunCompile(netlist)
 		self._compileTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing post-processing tasks...")
+		self.LogNormal("Executing post-processing tasks...")
 		self._state = CompileState.PostCopy
 		self._RunPostCopy(netlist)
 		self._state = CompileState.PostPatch
@@ -159,10 +159,10 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 
 
 	def _WriteXstOptionsFile(self, netlist, device):
-		self._LogVerbose("Generating XST options file.")
+		self.LogVerbose("Generating XST options file.")
 
 		# read XST options file template
-		self._LogDebug("Reading Xilinx Compiler Tool option file from '{0!s}'".format(netlist.XstTemplateFile))
+		self.LogDebug("Reading Xilinx Compiler Tool option file from '{0!s}'".format(netlist.XstTemplateFile))
 		if (not netlist.XstTemplateFile.exists()):
 			raise CompilerException("XST template files '{0!s}' not found.".format(netlist.XstTemplateFile))\
 				from FileNotFoundError(str(netlist.XstTemplateFile))
@@ -236,9 +236,13 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 
 		xstFileContent = xstFileContent.format(**xstTemplateDictionary)
 
-		if (self.Host.PoCConfig.has_option(netlist.ConfigSectionName, 'XSTOption.Generics')):
-			xstFileContent += "-generics {{ {0} }}".format(self.Host.PoCConfig[netlist.ConfigSectionName]['XSTOption.Generics'])
+		hdlParameters=self._GetHDLParameters(netlist.ConfigSectionName)
+		if(len(hdlParameters)>0):
+			xstFileContent += "-generics {"
+			for keyValuePair in hdlParameters.items():
+				xstFileContent += " {0}={1}".format(*keyValuePair)
+			xstFileContent += " }\n"
 
-		self._LogDebug("Writing Xilinx Compiler Tool option file to '{0!s}'".format(netlist.XstFile))
+		self.LogDebug("Writing Xilinx Compiler Tool option file to '{0!s}'".format(netlist.XstFile))
 		with netlist.XstFile.open('w') as fileHandle:
 			fileHandle.write(xstFileContent)

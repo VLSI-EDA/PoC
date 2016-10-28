@@ -102,6 +102,9 @@ package physical is
 	function to_baud(str : string)	return BAUD;
 
 	-- inter-type arithmetic
+	function div(a : time; b : time) return real;
+	function div(a : FREQ; b : FREQ) return real;
+
 	function "/"(x : real; t : time) return FREQ;
 	function "/"(x : real; f : FREQ) return time;
 	function "*"(t : time; f : FREQ) return real;
@@ -291,7 +294,7 @@ package body physical is
 		variable res : time;
 	begin
 		res := div(1000 MHz, f) * 1 ns;
-		if (POC_VERBOSE = TRUE) then
+		if POC_VERBOSE then
 			report "to_time: f= " & to_string(f, 3) & "  return " & to_string(res, 3) severity note;
 		end if;
 		return res;
@@ -303,7 +306,7 @@ package body physical is
 		if (p <= 1 sec) then res := div(1 sec, p) * 1  Hz;
 		else report "to_freq: input period exceeds output frequency scale." severity failure;
 		end if;
-		if (POC_VERBOSE = TRUE) then
+		if POC_VERBOSE then
 			report "to_freq: p= " & to_string(p, 3) & "  return " & to_string(res, 3) severity note;
 		end if;
 		return res;
@@ -313,7 +316,7 @@ package body physical is
 		variable res : FREQ;
 	begin
 		res := (br / 1 Bd)	* 1  Hz;
-		if (POC_VERBOSE = TRUE) then
+		if POC_VERBOSE then
 			report "to_freq: br= " & to_string(br, 3) & "  return " & to_string(res, 3) severity note;
 		end if;
 		return res;
@@ -332,7 +335,7 @@ package body physical is
 		digits	:= 0;
 		-- read integer part
 		for i in pos to str'high loop
-			if (chr_isDigit(str(i)) = TRUE) then		int := int * 10 + to_digit_dec(str(i));
+			if chr_isDigit(str(i)) then		int := int * 10 + to_digit_dec(str(i));
 			elsif (str(i) = '.') then								pos	:= -i;	exit;
 			elsif (str(i) = ' ') then								pos	:= i;		exit;
 			else																		pos := 0;		exit;
@@ -342,32 +345,32 @@ package body physical is
 		if ((pos < 0) and (-pos < str'high)) then
 			for i in -pos+1 to str'high loop
 				if ((frac = 0) and (str(i) = '0')) then	next;
-				elsif (chr_isDigit(str(i)) = TRUE) then	frac	:= frac * 10 + to_digit_dec(str(i));
+				elsif chr_isDigit(str(i)) then	frac	:= frac * 10 + to_digit_dec(str(i));
 				elsif (str(i) = ' ') then								digits	:= i + pos - 1;	pos	:= i;	exit;
 				else																														pos	:= 0;	exit;
 				end if;
 			end loop;
 		end if;
 		-- abort if format is unknown
-		if (pos = 0) then report "to_baud: Unknown format" severity FAILURE;	end if;
+		if pos = 0 then report "to_baud: Unknown format" severity FAILURE;	end if;
 		-- parse unit
 		pos := pos + 1;
 		if ((pos + 1 = str'high) and (str(pos to pos + 1) = "Bd")) then
 																		return int * 1 Bd;
 		elsif (pos + 2 = str'high) then
 			if (str(pos to pos + 2) = "kBd") then
-				if (frac = 0) then					return (int * 1 kBd);
+				if frac = 0 then					return (int * 1 kBd);
 				elsif (digits <= 3) then		return (int * 1 kBd) + (frac * 10**(3 - digits) * 1 Bd);
 				else												return (int * 1 kBd) + (frac / 10**(digits - 3) * 100 Bd);
 				end if;
 			elsif (str(pos to pos + 2) = "MBd") then
-				if (frac = 0) then					return (int * 1 kBd);
+				if frac = 0 then					return (int * 1 kBd);
 				elsif (digits <= 3) then		return (int * 1 MBd) + (frac * 10**(3 - digits) * 1 kBd);
 				elsif (digits <= 6) then		return (int * 1 MBd) + (frac * 10**(6 - digits) * 1 Bd);
 				else												return (int * 1 MBd) + (frac / 10**(digits - 6) * 100000 Bd);
 				end if;
 			elsif (str(pos to pos + 2) = "GBd") then
-				if (frac = 0) then					return (int * 1 kBd);
+				if frac = 0 then					return (int * 1 kBd);
 				elsif (digits <= 3) then		return (int * 1 GBd) + (frac * 10**(3 - digits) * 1 MBd);
 				elsif (digits <= 6) then		return (int * 1 GBd) + (frac * 10**(6 - digits) * 1 kBd);
 				elsif (digits <= 9) then		return (int * 1 GBd) + (frac * 10**(9 - digits) * 1 Bd);
@@ -443,56 +446,56 @@ package body physical is
 	-- Calculates: min(arg1, arg2) for times
 	function tmin(arg1 : time; arg2 : time) return time is
 	begin
-		if (arg1 < arg2) then return arg1; end if;
+		if arg1 < arg2 then return arg1; end if;
 		return arg2;
 	end function;
 
 	-- Calculates: min(arg1, arg2) for frequencies
 	function fmin(arg1 : FREQ; arg2 : FREQ) return FREQ is
 	begin
-		if (arg1 < arg2) then return arg1; end if;
+		if arg1 < arg2 then return arg1; end if;
 		return arg2;
 	end function;
 
 	-- Calculates: min(arg1, arg2) for symbols per second
 	function bmin(arg1 : BAUD; arg2 : BAUD) return BAUD is
 	begin
-		if (arg1 < arg2) then return arg1; end if;
+		if arg1 < arg2 then return arg1; end if;
 		return arg2;
 	end function;
 
 	-- Calculates: min(arg1, arg2) for memory
 	function mmin(arg1 : MEMORY; arg2 : MEMORY) return MEMORY is
 	begin
-		if (arg1 < arg2) then return arg1; end if;
+		if arg1 < arg2 then return arg1; end if;
 		return arg2;
 	end function;
 
 	-- Calculates: max(arg1, arg2) for times
 	function tmax(arg1 : time; arg2 : time) return time is
 	begin
-		if (arg1 > arg2) then return arg1; end if;
+		if arg1 > arg2 then return arg1; end if;
 		return arg2;
 	end function;
 
 	-- Calculates: max(arg1, arg2) for frequencies
 	function fmax(arg1 : FREQ; arg2 : FREQ) return FREQ is
 	begin
-		if (arg1 > arg2) then return arg1; end if;
+		if arg1 > arg2 then return arg1; end if;
 		return arg2;
 	end function;
 
 	-- Calculates: max(arg1, arg2) for symbols per second
 	function bmax(arg1 : BAUD; arg2 : BAUD) return BAUD is
 	begin
-		if (arg1 > arg2) then return arg1; end if;
+		if arg1 > arg2 then return arg1; end if;
 		return arg2;
 	end function;
 
 	-- Calculates: max(arg1, arg2) for memory
 	function mmax(arg1 : MEMORY; arg2 : MEMORY) return MEMORY is
 	begin
-		if (arg1 > arg2) then return arg1; end if;
+		if arg1 > arg2 then return arg1; end if;
 		return arg2;
 	end function;
 
@@ -503,7 +506,7 @@ package body physical is
 		variable  res : time := time'high;
 	begin
 		for i in vec'range loop
-			if (vec(i) < res) then
+			if vec(i) < res then
 				res := vec(i);
 			end if;
 		end loop;
@@ -551,7 +554,7 @@ package body physical is
 		variable  res : time := time'low;
 	begin
 		for i in vec'range loop
-			if (vec(i) > res) then
+			if vec(i) > res then
 				res := vec(i);
 			end if;
 		end loop;
@@ -874,7 +877,7 @@ package body physical is
 
 	-- calculate needed counter cycles to achieve a given 1. timing/delay and 2. frequency/period
 	-- ===========================================================================
-	--	@param Timing					A given timing or delay, which should be achived
+	--	@param Timing					A given timing or delay, which should be achieved
 	--	@param Clock_Period		The period of the circuits clock
 	--	@RoundingStyle				Default = ROUND_UP; other choises: ROUND_UP, ROUND_DOWN, ROUND_TO_NEAREST
 	function TimingToCycles(Timing : time; Clock_Period : time; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return natural is
@@ -893,7 +896,7 @@ package body physical is
 		res_time	:= CyclesToDelay(res_nat, Clock_Period);
 		res_dev		:= (div(res_time, Timing) - 1.0) * 100.0;
 
-		if (POC_VERBOSE = TRUE) then
+		if POC_VERBOSE then
 			report "TimingToCycles: " & 	LF &
 						 "  Timing: " &					to_string(Timing, 3) & LF &
 						 "  Clock_Period: " &		to_string(Clock_Period, 3) & LF &
@@ -903,7 +906,7 @@ package body physical is
 			severity note;
 		end if;
 
-		if (C_PHYSICAL_REPORT_TIMING_DEVIATION = TRUE) then
+		if C_PHYSICAL_REPORT_TIMING_DEVIATION then
 			report "TimingToCycles (timing deviation report): " & LF &
 						 "  timing to achieve: " & to_string(Timing, 3) & LF &
 						 "  calculated cycles: " & integer'image(res_nat) & " cy" & LF &

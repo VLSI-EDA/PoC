@@ -10,33 +10,46 @@
 -- Description:
 -- -------------------------------------
 --
--- Policies														| supported
--- -----------------------------------#--------------------
---	RR			round robin								| not yet
---	RAND		random										| not yet
---	CLOCK		clock algorithm						| not yet
---	LRU			least recently used				| YES
---	LFU			least frequently used			| not yet
--- -----------------------------------#--------------------
+-- **Supported policies:**
 --
--- Command thruth table:
+-- +----------+-----------------------+-----------+
+-- | Abbr.    | Policies              | supported |
+-- +==========+=======================+===========+
+-- | RR       | round robin           | not yet   |
+-- +----------+-----------------------+-----------+
+-- | RAND     | random                | not yet   |
+-- +----------+-----------------------+-----------+
+-- | CLOCK    | clock algorithm       | not yet   |
+-- +----------+-----------------------+-----------+
+-- | LRU      | least recently used   | YES       |
+-- +----------+-----------------------+-----------+
+-- | LFU      | least frequently used | not yet   |
+-- +----------+-----------------------+-----------+
 --
---	TagAccess | ReadWrite | Invalidate	| Replace | Command
---	----------+-----------+-------------+---------+--------------------------------
---		0				|		-				|		-					|		0			| None
---		1				|		0				|		0					|		0			| TagHit and reading a cache line
---		1				|		1				|		0					|		0			| TagHit and writing a cache line
---		1				|		0				|		1					|		0			| TagHit and invalidate a	cache line (while reading)
---		1				|		1				|		1					|		0			| TagHit and invalidate a	cache line (while writing)
---		0				|		-				|		0					|		1			| Replace cache line
---	----------+-----------+-------------+------------------------------------------
+-- **Command thruth table:**
+--
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- | TagAccess | ReadWrite | Invalidate  | Replace | Command                                             |
+-- +===========+===========+=============+=========+=====================================================+
+-- |  0        |           |             |    0    | None                                                |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    0      |    0        |    0    | TagHit and reading a cache line                     |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    1      |    0        |    0    | TagHit and writing a cache line                     |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    0      |    1        |    0    | TagHit and invalidate a  cache line (while reading) |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    1      |    1        |    0    | TagHit and invalidate a  cache line (while writing) |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  0        |           |    0        |    1    | Replace cache line                                  |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
 --
 -- In a set-associative cache, each cache-set has its own instance of this component.
 --
--- The input `HitWay` specifies the accessed way in a fully-associative or
+-- The input ``HitWay`` specifies the accessed way in a fully-associative or
 -- set-associative cache.
 --
--- The output `ReplaceWay` identifies the way which will be replaced as next by
+-- The output ``ReplaceWay`` identifies the way which will be replaced as next by
 -- a replace command. In a set-associative cache, this is the way in a specific
 -- cache set (see above).
 --
@@ -88,7 +101,7 @@ entity cache_replacement_policy is
 		Invalidate : in std_logic;
 		HitWay		 : in std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0)
 	);
-end;
+end entity;
 
 
 architecture rtl of cache_replacement_policy is
@@ -107,7 +120,7 @@ begin
 	-- ===========================================================================
 	-- policy: RR - round robin
 	-- ===========================================================================
-	genRR : if (str_equal(REPLACEMENT_POLICY, "RR") = true) generate
+	genRR : if str_equal(REPLACEMENT_POLICY, "RR") generate
 		constant VALID_BIT : natural := 0;
 
 		subtype T_OPTION_LINE is std_logic_vector(0 downto 0);
@@ -163,7 +176,7 @@ begin
 	-- ===========================================================================
 	-- policy: LRU - least recently used
 	-- ===========================================================================
-	genLRU : if (str_equal(REPLACEMENT_POLICY, "LRU") = true) generate
+	genLRU : if str_equal(REPLACEMENT_POLICY, "LRU") generate
 		signal LRU_Insert			: std_logic;
 		signal LRU_Invalidate : std_logic;
 		signal KeyIn					: std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0);

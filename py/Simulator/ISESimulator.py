@@ -71,26 +71,26 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 	def _PrepareSimulator(self):
 		# create the Xilinx ISE executable factory
-		self._LogVerbose("Preparing ISE simulator.")
-		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.ISE']
-		version = iseSection['Version']
-		binaryPath = Path(iseSection['BinaryDirectory'])
+		self.LogVerbose("Preparing ISE simulator.")
+		iseSection =  self.Host.PoCConfig['INSTALL.Xilinx.ISE']
+		version =     iseSection['Version']
+		binaryPath =  Path(iseSection['BinaryDirectory'])
 		self._toolChain = ISE(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
 	def _RunElaboration(self, testbench):
-		exeFilePath =  self.Directories.Working / (testbench.ModuleName + ".exe")
+		exeFilePath = self.Directories.Working / (testbench.ModuleName + ".exe")
 		prjFilePath = self.Directories.Working / (testbench.ModuleName + ".prj")
 		self._WriteXilinxProjectFile(prjFilePath, "iSim")
 
 		# create a ISELinker instance
 		fuse = self._toolChain.GetFuse()
-		fuse.Parameters[fuse.FlagIncremental] =        True
+		fuse.Parameters[fuse.FlagIncremental] =       True
 		fuse.Parameters[fuse.SwitchTimeResolution] =  "1fs"
 		fuse.Parameters[fuse.SwitchMultiThreading] =  "4"
 		fuse.Parameters[fuse.FlagRangeCheck] =        True
-		fuse.Parameters[fuse.SwitchProjectFile] =      str(prjFilePath)
+		fuse.Parameters[fuse.SwitchProjectFile] =     str(prjFilePath)
 		fuse.Parameters[fuse.SwitchOutputFile] =      str(exeFilePath)
-		fuse.Parameters[fuse.ArgTopLevel] =            "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+		fuse.Parameters[fuse.ArgTopLevel] =           "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 
 		try:
 			fuse.Link()
@@ -100,27 +100,27 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 			raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(prjFilePath))
 
 	def _RunSimulation(self, testbench):
-		iSimLogFilePath =    self.Directories.Working / (testbench.ModuleName + ".iSim.log")
-		exeFilePath =        self.Directories.Working / (testbench.ModuleName + ".exe")
+		iSimLogFilePath =   self.Directories.Working / (testbench.ModuleName + ".iSim.log")
+		exeFilePath =       self.Directories.Working / (testbench.ModuleName + ".exe")
 		tclBatchFilePath =  self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimBatchScript']
 		tclGUIFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimGUIScript']
 		wcfgFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimWaveformConfigFile']
 
 		# create a ISESimulator instance
-		iSim = ISESimulator(exeFilePath, logger=self.Logger)
-		iSim.Parameters[iSim.SwitchLogFile] =          str(iSimLogFilePath)
+		iSim = ISESimulator(self._host.Platform, self._host.DryRun, exeFilePath, logger=self.Logger)
+		iSim.Parameters[iSim.SwitchLogFile] =         str(iSimLogFilePath)
 
 		if (not self._guiMode):
 			iSim.Parameters[iSim.SwitchTclBatchFile] =  str(tclBatchFilePath)
 		else:
 			iSim.Parameters[iSim.SwitchTclBatchFile] =  str(tclGUIFilePath)
-			iSim.Parameters[iSim.FlagGuiMode] =          True
+			iSim.Parameters[iSim.FlagGuiMode] =         True
 
 			# if iSim save file exists, load it's settings
 			if wcfgFilePath.exists():
-				self._LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
+				self.LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
 				iSim.Parameters[iSim.SwitchWaveformFile] =  str(wcfgFilePath)
 			else:
-				self._LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
+				self.LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
 		testbench.Result = iSim.Simulate()

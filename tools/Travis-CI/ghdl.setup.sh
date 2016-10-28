@@ -3,7 +3,7 @@
 # configure variables in the section below
 GHDL_BACKEND="llvm"
 GHDL_VERSION="0.34dev"
-RELEASE_DATE="2016-06-07"
+RELEASE_DATE="2016-09-14"
 
 GITHUB_SERVER="https://github.com"
 GITHUB_SLUG="tgingold/ghdl"
@@ -26,7 +26,6 @@ GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHU
 # other variables
 # --------------------------------------
 GITROOT=$(pwd)
-POCROOT=$(pwd)
 GHDL_TARBALL="ghdl.tgz"
 
 # define color escape codes
@@ -79,9 +78,3 @@ else
 	echo 1>&2 -e "${RED}GHDL test [FAILED]${NOCOLOR}"
 	exit 1
 fi
-
-# WORKAROUND:
-echo -e "${YELLOW}WORKAROUND: needed until GHDL ships vendor compile scripts in the monthly build${NOCOLOR}"
-mkdir -p ./lib/ghdl/vendors
-cp $POCROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
-cp $POCROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors

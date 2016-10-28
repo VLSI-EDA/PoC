@@ -13,6 +13,7 @@ strobe to ``Reconfig`` will start the reconfiguration process. The operation
 completes with another strobe on ``ReconfigDone``.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/xil/xil_Reconfigurator.vhdl
@@ -24,4 +25,4 @@ completes with another strobe on ``ReconfigDone``.
 Source file: `xil/xil_Reconfigurator.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_Reconfigurator.vhdl>`_
 
 
-	 
+

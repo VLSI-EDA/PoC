@@ -59,8 +59,8 @@ class ISEException(XilinxException):
 
 
 class Configuration(BaseConfiguration):
-	_vendor =    "Xilinx"
-	_toolName =  "Xilinx ISE"
+	_vendor =   "Xilinx"
+	_toolName = "Xilinx ISE"
 	_section =  "INSTALL.Xilinx.ISE"
 	_template = {
 		"Windows": {
@@ -117,7 +117,7 @@ class ISEMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self._logger =              logger
+		self._Logger =              logger
 
 
 class ISE(ISEMixIn):
@@ -126,16 +126,16 @@ class ISE(ISEMixIn):
 
 	def GetVHDLCompiler(self):
 		raise NotImplementedError("ISE.GetVHDLCompiler")
-		# return ISEVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self.__logger)
+		# return ISEVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetFuse(self):
-		return Fuse(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return Fuse(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetXst(self):
-		return Xst(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return Xst(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetCoreGenerator(self):
-		return CoreGenerator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return CoreGenerator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class Fuse(Executable, ISEMixIn):
@@ -143,7 +143,7 @@ class Fuse(Executable, ISEMixIn):
 		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
 		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "fuse.exe"
 		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "fuse"
-		else:                                            raise PlatformNotSupportedException(self._platform)
+		else:                          raise PlatformNotSupportedException(self._platform)
 		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -197,10 +197,10 @@ class Fuse(Executable, ISEMixIn):
 
 	def Link(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -208,41 +208,41 @@ class Fuse(Executable, ISEMixIn):
 		except Exception as ex:
 			raise ISEException("Failed to launch fuse.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		try:
 			iterator = iter(FuseFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("  fuse messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  fuse messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
 class ISESimulator(Executable):
-	def __init__(self, executablePath, logger=None):
-		super().__init__("", executablePath, logger=logger)
+	def __init__(self, platform, dryrun, executablePath, logger=None):
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 
 	@property
 	def HasWarnings(self):
@@ -276,10 +276,10 @@ class ISESimulator(Executable):
 
 	def Simulate(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -287,31 +287,31 @@ class ISESimulator(Executable):
 		except Exception as ex:
 			raise ISEException("Failed to launch isim.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		simulationResult =  CallByRefParam(SimulationResult.Error)
 		try:
 			iterator = iter(PoCSimulationResultFilter(SimulatorFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("  isim messages for '{0}'".format(self.Parameters[self.Executable]))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  isim messages for '{0}'".format(self.Parameters[self.Executable]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 		return simulationResult.value
 
@@ -326,9 +326,9 @@ class Xst(Executable, ISEMixIn):
 
 		self.Parameters[self.Executable] = executablePath
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 
 	@property
 	def HasWarnings(self):
@@ -359,10 +359,10 @@ class Xst(Executable, ISEMixIn):
 
 	def Compile(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -370,30 +370,30 @@ class Xst(Executable, ISEMixIn):
 		except Exception as ex:
 			raise ISEException("Failed to launch xst.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		try:
 			iterator = iter(XstFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("  xst messages for '{0}'".format(self.Parameters[self.SwitchXstFile]))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  xst messages for '{0}'".format(self.Parameters[self.SwitchXstFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
 class CoreGenerator(Executable, ISEMixIn):
@@ -406,9 +406,9 @@ class CoreGenerator(Executable, ISEMixIn):
 
 		self.Parameters[self.Executable] = executablePath
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 
 	@property
 	def HasWarnings(self):
@@ -438,10 +438,10 @@ class CoreGenerator(Executable, ISEMixIn):
 
 	def Generate(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -449,30 +449,30 @@ class CoreGenerator(Executable, ISEMixIn):
 		except Exception as ex:
 			raise ISEException("Failed to launch corgen.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		try:
 			iterator = iter(CoreGeneratorFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("  coregen messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("  coregen messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |=  (line.Severity is Severity.Warning)
 				self._hasErrors |=    (line.Severity is Severity.Error)
 
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
 def VhCompFilter(gen):

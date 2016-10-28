@@ -204,9 +204,9 @@ package body sim_protected is
 		  variable LineBuffer : LINE;
 	  begin
 		  write(LineBuffer,																(			string'("========================================")));
-		  if		(Passed = FALSE) then		write(LineBuffer, (LF & string'("SIMULATION RESULT = FAILED")));
-			elsif (AssertCount = 0) then	write(LineBuffer, (LF & string'("SIMULATION RESULT = NO ASSERTS")));
-		  elsif (Passed = TRUE) then		write(LineBuffer, (LF & string'("SIMULATION RESULT = PASSED")));
+		  if not Passed then		write(LineBuffer, (LF & string'("SIMULATION RESULT = FAILED")));
+			elsif AssertCount = 0 then	write(LineBuffer, (LF & string'("SIMULATION RESULT = NO ASSERTS")));
+		  elsif Passed then		write(LineBuffer, (LF & string'("SIMULATION RESULT = PASSED")));
 		  end if;
 		  write(LineBuffer,																(LF & string'("========================================")));
 		  writeline(output, LineBuffer);
@@ -228,7 +228,7 @@ package body sim_protected is
 	  procedure assertion(condition : boolean; Message : string := "") is
   	begin
 			AssertCount := AssertCount + 1;
-		  if (condition = FALSE) then
+		  if not condition then
 		    fail(Message);
 				FailedAssertCount := FailedAssertCount + 1;
 				if (FailedAssertCount >= Max_AssertFailures) then
@@ -310,14 +310,14 @@ package body sim_protected is
 				return;
 			end if;
 
-			if (TestID = C_SIM_DEFAULT_TEST_ID) then
+			if TestID = C_SIM_DEFAULT_TEST_ID then
 				if (Tests(C_SIM_DEFAULT_TEST_ID).Status = SIM_TEST_STATUS_CREATED) then
 					if C_SIM_VERBOSE then		report "finalizeTest(" & integer'image(C_SIM_DEFAULT_TEST_ID) & "): inactive" severity NOTE;	end if;
 					Tests(C_SIM_DEFAULT_TEST_ID).Status	:= SIM_TEST_STATUS_ENDED;
 					stopProcesses(C_SIM_DEFAULT_TEST_ID);
 					return;
 				elsif (Tests(C_SIM_DEFAULT_TEST_ID).Status = SIM_TEST_STATUS_ACTIVE) then
-					if (ActiveTestCount > 1) then
+					if ActiveTestCount > 1 then
 						for ProcIdx in 0 to Tests(C_SIM_DEFAULT_TEST_ID).ProcessCount - 1 loop
 							deactivateProcess(Tests(C_SIM_DEFAULT_TEST_ID).ProcessIDs(ProcIdx), TRUE);
 						end loop;
@@ -346,9 +346,9 @@ package body sim_protected is
 				stopProcesses(TestID);
 			end if;
 
-			if (ActiveTestCount = 0) then
+			if ActiveTestCount = 0 then
 				finalize;
-			elsif (ActiveTestCount = 1) then
+			elsif ActiveTestCount = 1 then
 				if (Tests(C_SIM_DEFAULT_TEST_ID).Status = SIM_TEST_STATUS_ACTIVE) then
 					finalizeTest(C_SIM_DEFAULT_TEST_ID);
 				elsif (Tests(C_SIM_DEFAULT_TEST_ID).Status = SIM_TEST_STATUS_ZOMBI) then
@@ -372,7 +372,7 @@ package body sim_protected is
 			if (State.IsInitialized = FALSE) then
 				init;
 			end if;
-			if (TestID = C_SIM_DEFAULT_TEST_ID) then
+			if TestID = C_SIM_DEFAULT_TEST_ID then
 				activateDefaultTest;
 			end if;
 
@@ -476,7 +476,7 @@ package body sim_protected is
 		impure function isAllFinalized return boolean is
 		begin
 			if (State.IsFinalized = TRUE) then
-				if (ActiveTestCount = 0) then
+				if ActiveTestCount = 0 then
 					return TRUE;
 				end if;
 				report "isAllFinalized: " severity ERROR;

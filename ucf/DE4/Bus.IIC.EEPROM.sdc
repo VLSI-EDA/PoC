@@ -1,11 +1,11 @@
 ## =============================================================================
 ## I2C bus to EEPROM
 ## =============================================================================
-##	Bank:						
-##		VCCO:					
-##	Location:				
-##		Vendor:				
-##		Device:				
+##	Bank:
+##		VCCO:
+##	Location:
+##		Vendor:
+##		Device:
 ## =============================================================================
 if {$TimingConstraints == 0} then {
 	# is it possible to define pin and I/O standard constraints here?

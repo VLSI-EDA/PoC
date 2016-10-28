@@ -34,6 +34,7 @@ use			IEEE.NUMERIC_STD.all;
 
 library PoC;
 use			PoC.math.all;
+use			PoC.config.all;
 use			PoC.utils.all;
 use			PoC.vectors.all;
 use			PoC.components.all;
@@ -146,9 +147,9 @@ begin
 				constant INSERT_PIPELINE_REGISTER	: boolean		:= (PIPELINE_STAGE_AFTER /= 0) and (STAGE_INDEX mod PIPELINE_STAGE_AFTER = 0);
 				constant START_INDEX							: natural		:= ite((s = 0), 0, DISTANCE);
 				constant END_INDEX								: natural		:= ((2**(b+1))-DISTANCE-START_INDEX-1) / (2 * DISTANCE);
-				constant SRC											: natural		:= (g * (INPUTS / GROUPS));
+				constant SRC											: natural		:= g * (INPUTS / GROUPS);
 			begin
-				genMeta : if (g = 0) generate
+				genMeta : if g = 0 generate
 					MetaVector(STAGE_INDEX + 1)		<= MetaVector(STAGE_INDEX) when registered(Clock, INSERT_PIPELINE_REGISTER);
 				end generate;
 

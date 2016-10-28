@@ -249,7 +249,7 @@ begin
 	begin
 		temp			:= val_r(val_r'left);
 		for i in 0 to 4 loop
-			if (C_TAPPOSITIONS(i) > 0) then
+			if C_TAPPOSITIONS(i) > 0 then
 				temp	:= temp xnor val_r(C_TAPPOSITIONS(i));
 			end if;
 		end loop;

@@ -73,7 +73,7 @@ class Simulator(BaseSimulator):
 
 	def _PrepareSimulator(self):
 		# create the Cocotb executable factory
-		self._LogVerbose("Preparing Cocotb simulator.")
+		self.LogVerbose("Preparing Cocotb simulator.")
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		self._testSuite.StartTimer()
@@ -87,7 +87,7 @@ class Simulator(BaseSimulator):
 					testbench = entity.CocoTestbench
 					self.TryRun(testbench, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -95,7 +95,7 @@ class Simulator(BaseSimulator):
 
 		return self._testSuite.IsAllPassed
 
-	def _RunSimulation(self, testbench):
+	def _RunSimulation(self, testbench): # mccabe:disable=MC0001
 		# select modelsim.ini from precompiled
 		precompiledModelsimIniPath = self.Directories.PreCompiled
 		device_vendor = self._pocProject.Board.Device.Vendor
@@ -114,8 +114,8 @@ class Simulator(BaseSimulator):
 		simBuildPath = self.Directories.Working / self._COCOTB_SIMBUILD_DIRECTORY
 		# create temporary directory for Cocotb if not existent
 		if (not (simBuildPath).exists()):
-			self._LogVerbose("Creating build directory for simulator files.")
-			self._LogDebug("Build directory: {0!s}".format(simBuildPath))
+			self.LogVerbose("Creating build directory for simulator files.")
+			self.LogDebug("Build directory: {0!s}".format(simBuildPath))
 			try:
 				simBuildPath.mkdir(parents=True)
 			except OSError as ex:
@@ -137,7 +137,7 @@ class Simulator(BaseSimulator):
 			fileHandle.write(fileContent)
 
 		#
-		self._LogNormal("Running simulation...")
+		self.LogNormal("Running simulation...")
 		cocotbTemplateFilePath = self.Host.Directories.Root / \
 															self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile'] # depends on testbench
 		topLevel =      testbench.TopLevel
@@ -152,21 +152,21 @@ class Simulator(BaseSimulator):
 			vhdlSources += str(file.Path) + " "
 
 		# copy Cocotb (Python) files to temp directory
-		self._LogVerbose("Copying Cocotb (Python) files into temporary directory.")
+		self.LogVerbose("Copying Cocotb (Python) files into temporary directory.")
 		cocotbTempDir = str(self.Directories.Working)
 		for file in self._pocProject.Files(fileType=FileTypes.CocotbSourceFile):
 			if (not file.Path.exists()):
 				raise SimulatorException("Cannot copy '{0!s}' to Cocotb temp directory.".format(file.Path)) \
 					from FileNotFoundError(str(file.Path))
-			self._LogDebug("copy {0!s} {1}".format(file.Path, cocotbTempDir))
+			self.LogDebug("copy {0!s} {1}".format(file.Path, cocotbTempDir))
 			try:
 				shutil.copy(str(file.Path), cocotbTempDir)
 			except OSError as ex:
 				raise SimulatorException("Error while copying '{0!s}'.".format(file.Path)) from ex
 
 		# read/write Makefile template
-		self._LogVerbose("Generating Makefile...")
-		self._LogDebug("Reading Cocotb Makefile template file from '{0!s}'".format(cocotbTemplateFilePath))
+		self.LogVerbose("Generating Makefile...")
+		self.LogDebug("Reading Cocotb Makefile template file from '{0!s}'".format(cocotbTemplateFilePath))
 		with cocotbTemplateFilePath.open('r') as fileHandle:
 			cocotbMakefileContent = fileHandle.read()
 
@@ -175,7 +175,7 @@ class Simulator(BaseSimulator):
 																													TopLevel=topLevel, CocotbModule=cocotbModule)
 
 		cocotbMakefilePath = self.Directories.Working / "Makefile"
-		self._LogDebug("Writing Cocotb Makefile to '{0!s}'".format(cocotbMakefilePath))
+		self.LogDebug("Writing Cocotb Makefile to '{0!s}'".format(cocotbMakefilePath))
 		with cocotbMakefilePath.open('w') as fileHandle:
 			fileHandle.write(cocotbMakefileContent)
 

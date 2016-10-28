@@ -4,11 +4,12 @@
 -- =============================================================================
 -- Authors:        Thomas B. Preusser
 --
--- Entity:				 uart_rx
+-- Entity:				 Universal Asynchronous Receiver Transmitter (UART) - Receiver
 --
 -- Description:
 -- -------------------------------------
--- UART (RS232) Receiver: 1 Start + 8 Data + 1 Stop
+-- :abbr:`UART (Universal Asynchronous Receiver Transmitter)` Receiver:
+-- 1 Start + 8 Data + 1 Stop
 --
 -- License:
 -- =============================================================================

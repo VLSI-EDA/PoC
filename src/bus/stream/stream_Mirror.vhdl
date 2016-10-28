@@ -8,9 +8,7 @@
 --
 -- Description:
 -- -------------------------------------
--- This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
--- It is generic in DATA_BITS and in META_BITS as well as in FIFO depths for
--- data and meta information.
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -126,7 +124,7 @@ begin
 	end generate;
 
 	Ack_i					<= slv_and(Out_Ack) or slv_and(not Mask_r or Out_Ack);
-	FIFOGlue_got	<= Ack_i	;
+	FIFOGlue_got	<= Ack_i;
 
 	Out_Valid			<= (PORTS - 1 downto 0 => FIFOGlue_Valid) and Mask_r;
 	Out_Data			<= Out_Data_i;
@@ -153,7 +151,7 @@ begin
 		type T_METAMEMORY_VECTOR				is array(natural range <>) of T_METAMEMORY;
 
 	begin
-		genReg : if (META_LENGTH(i) = 1) generate
+		genReg : if META_LENGTH(i) = 1 generate
 			signal MetaMemory_en					: std_logic;
 			signal MetaMemory							: T_METAMEMORY;
 		begin
@@ -172,7 +170,7 @@ begin
 				assign_row(Out_Meta_Data_i, MetaMemory, J, high(META_BITS, i), low(META_BITS, i));
 			end generate;
 		end generate;
-		genMem : if (META_LENGTH(i) > 1) generate
+		genMem : if META_LENGTH(i) > 1 generate
 			signal MetaMemory_en					: std_logic;
 			signal MetaMemory							: T_METAMEMORY_VECTOR(META_LENGTH(i) - 1 downto 0);
 
@@ -191,7 +189,7 @@ begin
 					else
 						if ((In_Valid and In_SOF) = '1') then
 							Writer_CounterControl		<= '1';
-						elsif (Writer_us = (META_LENGTH(i) - 1)) then
+						elsif Writer_us = (META_LENGTH(i) - 1) then
 							Writer_CounterControl		<= '0';
 						end if;
 					end if;

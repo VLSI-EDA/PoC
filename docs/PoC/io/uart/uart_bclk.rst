@@ -3,10 +3,13 @@ uart_bclk
 #########
 
 .. TODO:: No documentation available.
+
 old comments:
-	UART BAUD rate generator
-	bclk_r    = bit clock is rising
-	bclk_x8_r = bit clock times 8 is rising
+  :abbr:`UART (Universal Asynchronous Receiver Transmitter)` BAUD rate generator
+  bclk_r    = bit clock is rising
+  bclk_x8_r = bit clock times 8 is rising
+
+
 
 
 .. rubric:: Entity Declaration:
@@ -20,4 +23,4 @@ old comments:
 Source file: `io/uart/uart_bclk.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_bclk.vhdl>`_
 
 
-	 
+

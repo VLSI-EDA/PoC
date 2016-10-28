@@ -101,11 +101,11 @@ architecture rtl of gearbox_down_cc is
 		variable UseBuffer	: boolean;
 		variable k					: T_MUX_INDEX;
 	begin
-		if (C_VERBOSE = TRUE) then		report "genMuxDescription: IC=" & integer'image(INPUT_CHUNKS) severity NOTE;		end if;
+		if C_VERBOSE then		report "genMuxDescription: IC=" & integer'image(INPUT_CHUNKS) severity NOTE;		end if;
 
 		k := INPUT_CHUNKS - 1;
 		for i in 0 to INPUT_CHUNKS - 1 loop
-			if (C_VERBOSE = TRUE) then		report "  i: " & integer'image(i) & "  List:" severity NOTE;		end if;
+			if C_VERBOSE then		report "  i: " & integer'image(i) & "  List:" severity NOTE;		end if;
 			UseBuffer					:= TRUE;
 			for j in 0 to OUTPUT_CHUNKS - 1 loop
 				k													:= (k + 1) mod INPUT_CHUNKS;
@@ -113,14 +113,14 @@ architecture rtl of gearbox_down_cc is
 				DESC(i).List(j).Index			:= k;
 				DESC(i).List(j).UseBuffer	:= UseBuffer;
 
-				if (C_VERBOSE = TRUE) then		report "    j= " & integer'image(j) & "  k=" & INTEGER'image(DESC(i).List(j).Index) severity NOTE;		end if;
+				if C_VERBOSE then		report "    j= " & integer'image(j) & "  k=" & INTEGER'image(DESC(i).List(j).Index) severity NOTE;		end if;
 			end loop;
 			DESC(i).Reg_en		:= to_sl(not UseBuffer);
 			DESC(i).Nxt				:= to_sl(k + OUTPUT_CHUNKS >= INPUT_CHUNKS);
 			DESC(i).First			:= to_sl(i = 0);
 			DESC(i).Last			:= to_sl(i = INPUT_CHUNKS - 1);
 
-			if (C_VERBOSE = TRUE) then		report "    en=" & std_logic'image(DESC(i).Reg_en) & "  nxt=" & STD_LOGIC'image(DESC(i).Nxt) severity NOTE;		end if;
+			if C_VERBOSE then		report "    en=" & std_logic'image(DESC(i).Reg_en) & "  nxt=" & STD_LOGIC'image(DESC(i).Nxt) severity NOTE;		end if;
 		end loop;
 		return DESC;
 	end function;

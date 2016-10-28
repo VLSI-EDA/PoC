@@ -183,7 +183,7 @@ begin
 		Drift_Clock_41		<= (others => '0');
 		wait until rising_edge(Clock_40);
 		wait until rising_edge(Clock_41);
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_41);
 			Drift_Clock_41		<= to_signed((Clock_40'last_event - Clock_41'last_event) / 10 ps, Drift_Clock_41'length);
 		end loop;
@@ -200,7 +200,7 @@ begin
 		Drift_Clock_42		<= (others => '0');
 		wait until rising_edge(Clock_40);
 		wait until rising_edge(Clock_42);
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_42);
 			Drift_Clock_42		<= to_signed((Clock_40'last_event - Clock_42'last_event) / 10 ps, Drift_Clock_42'length);
 		end loop;
@@ -217,7 +217,7 @@ begin
 		Drift_Clock_43		<= (others => '0');
 		wait until rising_edge(Clock_40);
 		wait until rising_edge(Clock_43);
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_43);
 			Drift_Clock_43		<= to_signed((Clock_40'last_event - Clock_43'last_event) / 10 ps, Drift_Clock_43'length);
 		end loop;
@@ -258,7 +258,7 @@ begin
 		RandBuffer			:= (others => (BIN_SIZE / 2));
 
 		wait until rising_edge(Clock_51);
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_51);
 			-- subtract old random value from mean aggregator
 			Sum												:= Sum - RandBuffer(RandPointer);
@@ -291,7 +291,7 @@ begin
 		wait until rising_edge(Clock_50);
 		wait until rising_edge(Clock_51);
 
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_50);
 			Drift_Clock_51		<= to_signed((Clock_50'last_event - Clock_51'last_event) / 100 fs, Drift_Clock_51'length);
 			-- Drift_Clock_52		<= to_signed((Clock_51'last_event - Clock_50'last_event) / 100 fs, Drift_Clock_52'length);

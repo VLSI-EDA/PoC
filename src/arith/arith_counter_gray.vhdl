@@ -148,7 +148,7 @@ begin
 			par_nxt			<= s(0) xor dec;
 		end process;
 
-		cry <=	((gray_cnt_r(BITS-1) xor dec) and (gray_cnt_nxt(BITS-1) xnor dec));
+		cry <=	(gray_cnt_r(BITS-1) xor dec) and (gray_cnt_nxt(BITS-1) xnor dec);
 	end generate g2;
 
 end rtl;

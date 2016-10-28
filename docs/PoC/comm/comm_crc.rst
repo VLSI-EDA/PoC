@@ -11,6 +11,7 @@ message bits per step. The generated CRC is independent from the chosen
 processing width.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/comm/comm_crc.vhdl
@@ -22,4 +23,4 @@ processing width.
 Source file: `comm/comm_crc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_crc.vhdl>`_
 
 
-	 
+

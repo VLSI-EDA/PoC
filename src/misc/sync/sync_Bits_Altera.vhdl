@@ -8,16 +8,16 @@
 --
 -- Description:
 -- -------------------------------------
---		This is a multi-bit clock-domain-crossing circuit optimized for Altera FPGAs.
---		It generates 2 flip flops per input bit and notifies Quartus II, that these
---		flip flops are synchronizer flip flops. If you need a platform independent
---		version of this synchronizer, please use 'PoC.misc.sync.sync_Flag', which
---		internally instantiates this module if a Altera FPGA is detected.
+-- This is a multi-bit clock-domain-crossing circuit optimized for Altera FPGAs.
+-- It generates 2 flip flops per input bit and notifies Quartus, that these
+-- flip flops are synchronizer flip flops. If you need a platform independent
+-- version of this synchronizer, please use `PoC.misc.sync.Flag`, which
+-- internally instantiates this module if an Altera FPGA is detected.
 --
---		ATTENTION:
---			Use this synchronizer only for long time stable signals (flags).
+-- .. ATTENTION:
+-- 	  Use this synchronizer only for long time stable signals (flags).
 --
---		CONSTRAINTS:
+-- CONSTRAINTS:
 --
 -- License:
 -- =============================================================================

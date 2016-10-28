@@ -5,6 +5,7 @@ sortnet_Stream_Adapter2
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/sort/sortnet/sortnet_Stream_Adapter2.vhdl
@@ -16,4 +17,4 @@ sortnet_Stream_Adapter2
 Source file: `sort/sortnet/sortnet_Stream_Adapter2.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_Stream_Adapter2.vhdl>`_
 
 
-	 
+

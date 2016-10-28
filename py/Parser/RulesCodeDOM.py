@@ -66,7 +66,7 @@ class CopyStatement(Statement):
 	@property
 	def DestinationPath(self):  return self._destinationPath
 
-	@classmethod
+	@classmethod # mccabe:disable=MC0001
 	def GetParser(cls):
 		# match for optional whitespacex
 		token = yield
@@ -222,7 +222,7 @@ class ReplaceStatement(Statement):
 	@property
 	def DotAll(self):           return self._dotAll
 
-	@classmethod
+	@classmethod # mccabe:disable=MC0001
 	def GetParser(cls):
 		multiLine =       False
 		dotAll =          False
@@ -394,7 +394,7 @@ class FileStatement(BlockStatement):
 	@property
 	def FilePath(self):    return self._filePath
 
-	@classmethod
+	@classmethod # mccabe:disable=MC0001
 	def GetParser(cls):
 		# match for IN ... FILE clause
 		# ==========================================================================
@@ -503,7 +503,7 @@ class ProcessRulesBlockStatement(BlockStatement):
 		super().__init__()
 		self._commentText = commentText
 
-	@classmethod
+	@classmethod # mccabe:disable=MC0001
 	def GetParser(cls):
 		# match for optional whitespace
 		token = yield

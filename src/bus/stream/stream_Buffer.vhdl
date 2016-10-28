@@ -8,9 +8,10 @@
 --
 -- Description:
 -- -------------------------------------
--- This module implements a generic buffer (FIFO) for the PoC.Stream protocol.
--- It is generic in ``DATA_BITS`` and in ``META_BITS`` as well as in FIFO depths
--- for data and meta information.
+-- This module implements a generic buffer (FIFO) for the
+-- :doc:`PoC.Stream </References/Interfaces/Stream>` protocol. It is generic in
+-- ``DATA_BITS`` and in ``META_BITS`` as well as in FIFO depths for data and
+-- meta information.
 --
 -- License:
 -- =============================================================================
@@ -217,7 +218,7 @@ begin
 	genMeta : for i in 0 to META_BITS'length - 1 generate
 
 	begin
-		genReg : if (META_FIFO_DEPTH(i) = 1) generate
+		genReg : if META_FIFO_DEPTH(i) = 1 generate
 			signal MetaReg_DataIn				: std_logic_vector(META_BITS(i) - 1 downto 0);
 			signal MetaReg_d						: std_logic_vector(META_BITS(i) - 1 downto 0)		:= (others => '0');
 			signal MetaReg_DataOut			: std_logic_vector(META_BITS(i) - 1 downto 0);
@@ -238,7 +239,7 @@ begin
 			MetaReg_DataOut		<= MetaReg_d;
 			Out_Meta_Data(high(META_BITS, i) downto low(META_BITS, i))	<= MetaReg_DataOut;
 		end generate;	-- META_FIFO_DEPTH(i) = 1
-		genFIFO : if (META_FIFO_DEPTH(i) > 1) generate
+		genFIFO : if META_FIFO_DEPTH(i) > 1 generate
 			signal MetaFIFO_put								: std_logic;
 			signal MetaFIFO_DataIn						: std_logic_vector(META_BITS(i) - 1 downto 0);
 			signal MetaFIFO_Full							: std_logic;
@@ -261,7 +262,7 @@ begin
 						Writer_CounterControl			<= '0';
 					elsif ((In_Valid and In_SOF) = '1') then
 						Writer_CounterControl			<= '1';
-					elsif (Writer_Counter_us = (META_FIFO_DEPTH(i) - 1)) then
+					elsif Writer_Counter_us = (META_FIFO_DEPTH(i) - 1) then
 						Writer_CounterControl			<= '0';
 					end if;
 				end if;

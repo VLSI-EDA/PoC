@@ -9,30 +9,34 @@
 --
 -- Description:
 -- -------------------------------------
--- Instantiates chip-specific DDR input and output registers.
+-- Instantiates chip-specific :abbr:`DDR (Double Data Rate)` input and output
+-- registers.
 --
--- Both data "DataOut_high/low" as well as "OutputEnable" are sampled with
--- the rising_edge(Clock) from the on-chip logic. "DataOut_high" is brought
--- out with this rising edge. "DataOut_low" is brought out with the falling
+-- Both data ``DataOut_high/low`` as well as ``OutputEnable`` are sampled with
+-- the ``rising_edge(Clock)`` from the on-chip logic. ``DataOut_high`` is brought
+-- out with this rising edge. ``DataOut_low`` is brought out with the falling
 -- edge.
 --
--- "OutputEnable" (Tri-State) is high-active. It is automatically inverted if
+-- ``OutputEnable`` (Tri-State) is high-active. It is automatically inverted if
 -- necessary. Output is disabled after power-up.
 --
--- Both data "DataIn_high/low" are synchronously outputted to the on-chip logic
--- with the rising edge of "Clock". "DataIn_high" is the value at the "Pad"
--- sampled with the same rising edge. "DataIn_low" is the value sampled with
+-- Both data ``DataIn_high/low`` are synchronously outputted to the on-chip logic
+-- with the rising edge of ``Clock``. ``DataIn_high`` is the value at the ``Pad``
+-- sampled with the same rising edge. ``DataIn_low`` is the value sampled with
 -- the falling edge directly before this rising edge. Thus sampling starts with
 -- the falling edge of the clock as depicted in the following waveform.
---              __      ____      ____      __
--- Clock          |____|    |____|    |____|
--- Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
--- DataIn_low      ... >< 0      >< 2      ><
--- DataIn_high     ... >< 1      >< 3      ><
 --
--- < i > is the value of the i-th data bit on the line.
+-- .. code-block:: none
 --
--- "Pad" must be connected to a PAD because FPGAs only have these registers in
+--                 __      ____      ____      __
+--    Clock          |____|    |____|    |____|
+--    Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
+--    DataIn_low      ... >< 0      >< 2      ><
+--    DataIn_high     ... >< 1      >< 3      ><
+--
+--    < i > is the value of the i-th data bit on the line.
+--
+-- ``Pad`` must be connected to a PAD because FPGAs only have these registers in
 -- IOBs.
 --
 -- License:
@@ -91,7 +95,7 @@ begin
 		report "PoC.io.ddrio.inout is not implemented for given DEVICE."
 		severity FAILURE;
 
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+	genXilinx : if VENDOR = VENDOR_XILINX generate
 		inst : ddrio_inout_xilinx
 			generic map (
 				BITS						=> BITS
@@ -110,7 +114,7 @@ begin
 			);
 	end generate;
 
-	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+	genAltera : if VENDOR = VENDOR_ALTERA generate
 		inst : ddrio_inout_altera
 			generic map (
 				BITS						=> BITS
@@ -129,7 +133,7 @@ begin
 			);
 	end generate;
 
-	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
+	genGeneric : if SIMULATION  and (VENDOR = VENDOR_GENERIC) generate
 		signal DataOut_high_d	: std_logic_vector(BITS - 1 downto 0);
 		signal DataOut_low_d	: std_logic_vector(BITS - 1 downto 0);
 		signal OutputEnable_d	: std_logic;

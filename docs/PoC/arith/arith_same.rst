@@ -24,4 +24,4 @@ bit position as to avoid an undetected sign change between the slices.
 Source file: `arith/arith_same.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_same.vhdl>`_
 
 
-	 
+

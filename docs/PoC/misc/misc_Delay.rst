@@ -5,6 +5,7 @@ misc_Delay
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/misc/misc_Delay.vhdl
@@ -16,4 +17,4 @@ misc_Delay
 Source file: `misc/misc_Delay.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_Delay.vhdl>`_
 
 
-	 
+

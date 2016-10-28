@@ -271,7 +271,7 @@ package body sim_types is
 	procedure randUniformDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out integer; Minimum : integer; Maximum : integer) is
 		variable rand : REAL;
 	begin
-		if (Maximum < Minimum) then			report "randUniformDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
+		if Maximum < Minimum then			report "randUniformDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
 		ieee.math_real.Uniform(Seed.Seed1, Seed.Seed2, rand);
 		Value := scale(rand, Minimum, Maximum);
 	end procedure;
@@ -279,7 +279,7 @@ package body sim_types is
 	procedure randUniformDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; Minimum : REAL; Maximum : REAL) is
 		variable rand : REAL;
 	begin
-		if (Maximum < Minimum) then			report "randUniformDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
+		if Maximum < Minimum then			report "randUniformDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
 		ieee.math_real.Uniform(Seed.Seed1, Seed.Seed2, rand);
 		Value := scale(rand, Minimum, Maximum);
 	end procedure;
@@ -303,9 +303,9 @@ package body sim_types is
 		variable rand_real		: REAL;
 		variable rand_int			: integer;
 	begin
-		if (Maximum < Minimum) then			report "randNormalDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
+		if Maximum < Minimum then			report "randNormalDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
 		if StandardDeviation < 0.0 then	report "randNormalDistributedValue: Standard deviation must be >= 0.0"			severity FAILURE;		end if;
-		while (TRUE) loop
+		while TRUE loop
 			randNormalDistributedValue(Seed, rand_real, StandardDeviation, Mean);
 			rand_int	:= integer(round(rand_real));
 			exit when ((Minimum <= rand_int) and (rand_int <= Maximum));
@@ -316,9 +316,9 @@ package body sim_types is
 	procedure randNormalDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; StandardDeviation : in REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) is
 		variable rand		: REAL;
 	begin
-		if (Maximum < Minimum) then			report "randNormalDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
+		if Maximum < Minimum then			report "randNormalDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
 		if StandardDeviation < 0.0 then	report "randNormalDistributedValue: Standard deviation must be >= 0.0"			severity FAILURE;		end if;
-		while (TRUE) loop
+		while TRUE loop
 			randNormalDistributedValue(Seed, rand, StandardDeviation, Mean);
 			exit when ((Minimum <= rand) and (rand <= Maximum));
 		end loop;
@@ -354,8 +354,8 @@ package body sim_types is
 		variable rand_real		: REAL;
 		variable rand_int			: integer;
 	begin
-		if (Maximum < Minimum) then			report "randPoissonDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
-		while (TRUE) loop
+		if Maximum < Minimum then			report "randPoissonDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
+		while TRUE loop
 			randPoissonDistributedValue(Seed, rand_real, Mean);
 			rand_int	:= integer(round(rand_real));
 			exit when ((Minimum <= rand_int) and (rand_int <= Maximum));
@@ -366,8 +366,8 @@ package body sim_types is
 	procedure randPoissonDistributedValue(Seed : inout T_SIM_RAND_SEED; Value : out REAL; Mean : in REAL; Minimum : in REAL; Maximum : in REAL) is
 		variable rand		: REAL;
 	begin
-		if (Maximum < Minimum) then			report "randPoissonDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
-		while (TRUE) loop
+		if Maximum < Minimum then			report "randPoissonDistributedValue: Maximum must be greater than Minimum."	severity FAILURE;		end if;
+		while TRUE loop
 			randPoissonDistributedValue(Seed, rand, Mean);
 			exit when ((Minimum <= rand) and (rand <= Maximum));
 		end loop;

@@ -96,7 +96,7 @@ begin
 
 	DataIn	<= to_dv(In_Data);
 
-	ColumnWriter_rst	<= (ColumnWriter_ov and In_Valid);	-- or In_Sync;
+	ColumnWriter_rst	<= ColumnWriter_ov and In_Valid;	-- or In_Sync;
 	ColumnWriter_us		<= upcounter_next(cnt => ColumnWriter_us, rst => ColumnWriter_rst, en => In_Valid) when rising_edge(Clock);
 	ColumnWriter_ov		<= upcounter_equal(cnt => ColumnWriter_us, value => COLUMNS - 1);
 
@@ -113,7 +113,7 @@ begin
 
 	RowReader_en_r	<= ffrs(q => RowReader_en_r, set => (ColumnWriter_ov and In_Valid), rst => RowReader_ov) when rising_edge(Clock);
 
-	RowReader_rst		<= (ColumnWriter_ov and RowReader_ov);	-- or In_Sync;
+	RowReader_rst		<= ColumnWriter_ov and RowReader_ov;	-- or In_Sync;
 	RowReader_en		<= RowReader_en_r;
 	RowReader_us		<= upcounter_next(cnt => RowReader_us, rst => RowReader_rst, en => RowReader_en) when rising_edge(Clock);
 	RowReader_ov		<= upcounter_equal(cnt => RowReader_us, value => ROWS - 1);

@@ -410,14 +410,14 @@ package body strings is
 
 	-- convert an integer Value to a STRING using an arbitrary base
 	function to_string(Value : integer; base : positive := 10) return string is
-		constant absValue		: natural								:= abs(Value);
+		constant absValue		: natural								:= abs Value;
 		constant len		 		: positive							:= log10ceilnz(absValue);
 		variable power			: positive;
 		variable Result			: string(1 to len);
 	begin
 		power		:= 1;
 
-		if (base = 10) then
+		if base = 10 then
 			return integer'image(Value);
 		else
 			for i in len downto 1 loop
@@ -425,7 +425,7 @@ package body strings is
 				power				:= power * base;
 			end loop;
 
-			if (Value < 0) then
+			if Value < 0 then
 				return '-' & Result;
 			else
 				return Result;
@@ -564,7 +564,7 @@ package body strings is
 	begin
 		for i in str'range loop
 			Digit	:= to_digit_bin(str(i));
-			if (Digit /= -1) then
+			if Digit /= -1 then
 				Result	:= Result * 2 + Digit;
 			else
 				return -1;
@@ -580,7 +580,7 @@ package body strings is
 	begin
 		for i in str'range loop
 			Digit	:= to_digit_oct(str(i));
-			if (Digit /= -1) then
+			if Digit /= -1 then
 				Result	:= Result * 8 + Digit;
 			else
 				return -1;
@@ -602,7 +602,7 @@ package body strings is
 		--		implement a manual conversion using shift and multiply
 		for i in str'range loop
 			Digit	:= to_digit_dec(str(i));
-			if (Digit /= -1) then
+			if Digit /= -1 then
 				Result	:= Result * 10 + Digit;
 			else
 				return -1;
@@ -618,7 +618,7 @@ package body strings is
 	begin
 		for i in str'range loop
 			Digit	:= to_digit_hex(str(i));
-			if (Digit /= -1) then
+			if Digit /= -1 then
 				Result	:= Result * 16 + Digit;
 			else
 				return -1;
@@ -667,8 +667,8 @@ package body strings is
 		if (str'length > 0) then
 			-- WORKAROUND: for Altera Quartus-II
 			--	Version:	15.0
-			--	Issue:		array bounds are check regardless of the hierachy and control flow
-			Result(1 to imin(Size, imax(1, str'length))) := ite((str'length > 0), str(1 to imin(Size, str'length)), ConstNUL);
+			--	Issue:		array bounds are check regardless of the hierarchy and control flow
+			Result(1 to bound(Size, 1, str'length)) := ite((str'length > 0), str(1 to imin(Size, str'length)), ConstNUL);
 		end if;
 		return Result;
 	end function;
@@ -721,7 +721,7 @@ package body strings is
 	function str_length(str : string) return natural is
 	begin
 		for i in str'range loop
-			if (str(i) = C_POC_NUL) then
+			if str(i) = C_POC_NUL then
 				return i - str'low;
 			end if;
 		end loop;
@@ -729,7 +729,7 @@ package body strings is
 	end function;
 
 	-- compare two STRINGs for equality
-	-- pre-check the string lengthes to suppress warnings for unqual sized string comparisions.
+	-- pre-check the string lengthes to suppress warnings for unqual sized string comparisons.
 	-- QUESTION: overload "=" operator?
 	function str_equal(str1 : string; str2 : string) return boolean is
 	begin
@@ -773,7 +773,7 @@ package body strings is
 	begin
 		for i in imax(str'low, start) to str'high loop
 			exit when (str(i) = C_POC_NUL);
-			if (str(i) = chr) then
+			if str(i) = chr then
 				return i;
 			end if;
 		end loop;
@@ -866,8 +866,8 @@ package body strings is
 		variable pos		: integer;
 	begin
 		pos := str_pos(str, pattern);
-		if (pos > 0) then
-			if (pos = 1) then
+		if pos > 0 then
+			if pos = 1 then
 				return replace & str(pattern'length + 1 to str'length);
 			elsif (pos = str'length - pattern'length + 1) then
 				return str(1 to str'length - pattern'length) & replace;
@@ -893,17 +893,17 @@ package body strings is
 		variable StartOfString		: positive;
 		variable EndOfString			: positive;
 	begin
-		if (start < 0) then			-- start is negative -> start substring at right string boundary
+		if start < 0 then			-- start is negative -> start substring at right string boundary
 			StartOfString		:= str'high + start + 1;
-		elsif (start = 0) then	-- start is zero -> start substring at left string boundary
+		elsif start = 0 then	-- start is zero -> start substring at left string boundary
 			StartOfString		:= str'low;
 		else 										-- start is positive -> start substring at left string boundary + offset
 			StartOfString		:= start;
 		end if;
 
-		if (Length < 0) then		-- Length is negative -> end substring at length'th character before right string boundary
+		if Length < 0 then		-- Length is negative -> end substring at length'th character before right string boundary
 			EndOfString			:= str'high + Length;
-		elsif (Length = 0) then	-- Length is zero -> end substring at right string boundary
+		elsif Length = 0 then	-- Length is zero -> end substring at right string boundary
 			EndOfString			:= str'high;
 		else										-- Length is positive -> end substring at StartOfString + Length
 			EndOfString			:= StartOfString + Length - 1;
@@ -919,7 +919,7 @@ package body strings is
 	function str_ltrim(str : string; char : character := ' ') return string is
 	begin
 		for i in str'range loop
-			if (str(i) /= char) then
+			if str(i) /= char then
 				return str(i to str'high);
 			end if;
 		end loop;
@@ -930,7 +930,7 @@ package body strings is
 	function str_rtrim(str : string; char : character := ' ') return string is
 	begin
 		for i in str'reverse_range loop
-			if (str(i) /= char) then
+			if str(i) /= char then
 				return str(str'low to i);
 			end if;
 		end loop;

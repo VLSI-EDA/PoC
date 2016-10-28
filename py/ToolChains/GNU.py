@@ -43,7 +43,6 @@ else:
 # load dependencies
 import re
 
-from Base.Configuration      import Configuration as BaseConfiguration
 from Base.Exceptions         import PlatformNotSupportedException
 from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument
 from Base.Logging            import LogEntry, Severity
@@ -54,15 +53,6 @@ from lib.Functions           import Init, CallByRefParam
 
 class GNUException(ToolChainException):
 	pass
-
-
-class Configuration(BaseConfiguration):
-	_vendor =      "GNU"
-	_toolName =    "GNU Make"
-	_section =     None
-
-	def CheckDependency(self):
-		return False
 
 
 class Make(Executable):
@@ -90,10 +80,10 @@ class Make(Executable):
 
 	def RunCocotb(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):
-			self._LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
 			return
 
 		try:
@@ -111,9 +101,9 @@ class Make(Executable):
 			line = next(iterator)
 			line.IndentBy(self.Logger.BaseIndent + 1)
 			self._hasOutput = True
-			self._LogNormal("  Make messages")
-			self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
-			self._Log(line)
+			self.LogNormal("  Make messages")
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.Log(line)
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
@@ -121,13 +111,13 @@ class Make(Executable):
 
 				line = next(iterator)
 				line.IndentBy(self.Logger.BaseIndent + 1)
-				self._Log(line)
+				self.Log(line)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 		return simulationResult.value
 

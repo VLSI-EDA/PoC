@@ -124,6 +124,7 @@ class Tool(Enum):      # ID     Short Name       Long Name
 	Xilinx_CoreGen =     ("CG",     "Xilinx CoreGen",           "Xilinx Core Generator Tool (CoreGen)")
 	Xilinx_xSim =        ("XSIM",   "Xilinx xSim",              "Xilinx Vivado Simulator (xSim)")
 	Xilinx_Synth =       ("VIVADO", "Xilinx Vivado Synthesis",  "Xilinx Vivado Synthesis (synth)")
+	Xilinx_IPCatalog =   ("XCI",    "Xilinx Vivado IP Catalog", "Xilinx Vivado IP Catalog")
 
 	def __init__(self, *_):
 		"""Patch the embedded MAP dictionary"""
@@ -135,7 +136,8 @@ class Tool(Enum):      # ID     Short Name       Long Name
 		"QMAP":   Altera_Quartus_Map,
 		"LSE":    Lattice_LSE,
 		"CG":     Xilinx_CoreGen,
-		"XST":    Xilinx_XST
+		"XST":    Xilinx_XST,
+		"XCI":    Xilinx_IPCatalog
 	}
 
 	@classmethod
@@ -418,8 +420,8 @@ class FileSet:
 	def __init__(self, name, project = None):
 		# print("FileSet.__init__: name={0}  project={0}".format(name, project))
 		self._name =    name
-		self._project =  project
-		self._files =    []
+		self._project = project
+		self._files =   []
 
 	@property
 	def Name(self):
@@ -479,8 +481,8 @@ class FileSet:
 class VHDLLibrary:
 	def __init__(self, name, project = None):
 		self._name =    name
-		self._project =  project
-		self._files =    []
+		self._project = project
+		self._files =   []
 
 	@property
 	def Name(self):
@@ -522,8 +524,8 @@ class File:
 		if isinstance(file, str):
 			file = Path(file)
 		self._file =    file
-		self._project =  project
-		self._fileSet =  fileSet
+		self._project = project
+		self._fileSet = fileSet
 
 	@property
 	def Project(self):
@@ -543,8 +545,8 @@ class File:
 	def FileSet(self, value):
 		if (value is None):                              raise ValueError("'value' is None")
 		# print("File.FileSet(setter): value={0}".format(value))
-		self._fileSet =  value
-		self._project =  value.Project
+		self._fileSet = value
+		self._project = value.Project
 
 	@property
 	def FileType(self):

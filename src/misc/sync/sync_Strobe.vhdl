@@ -2,27 +2,26 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- =============================================================================
--- Authors:					Patrick Lehmann
---									Steffen Koehler
+-- Authors:         Patrick Lehmann
+--                  Steffen Koehler
 --
--- Entity:					Synchronizes a strobe signal across clock-domain boundaries
+-- Entity:          Synchronizes a strobe signal across clock-domain boundaries
 --
 -- Description:
 -- -------------------------------------
---		This module synchronizes multiple high-active bits from clock-domain
---		'Clock1' to clock-domain 'Clock2'. The clock-domain boundary crossing is
---		done by a T-FF, two synchronizer D-FFs and a reconstructive XOR. A busy
---		flag is additionally calculated and can be used to block new inputs. All
---		bits are independent from each other. Multiple consecutive strobes are
---		suppressed by a rising edge detection.
+-- This module synchronizes multiple high-active bits from clock-domain
+-- ``Clock1`` to clock-domain ``Clock2``. The clock-domain boundary crossing is
+-- done by a T-FF, two synchronizer D-FFs and a reconstructive XOR. A busy
+-- flag is additionally calculated and can be used to block new inputs. All
+-- bits are independent from each other. Multiple consecutive strobes are
+-- suppressed by a rising edge detection.
 --
---		ATTENTION:
---			Use this synchronizer only for one-cycle high-active signals (strobes).
+-- .. ATTENTION::
+--    Use this synchronizer only for one-cycle high-active signals (strobes).
 --
---		CONSTRAINTS:
---			General:
---				This module uses sub modules which need to be constrained. Please
---				attend to the notes of the instantiated sub modules.
+-- Constraints:
+--   This module uses sub modules which need to be constrained. Please
+--   attend to the notes of the instantiated sub modules.
 --
 -- License:
 -- =============================================================================
@@ -97,7 +96,7 @@ begin
 				D0		<= Input(i);
 
 				-- T-FF to converts a strobe to a flag signal
-				if (GATED_INPUT_BY_BUSY = TRUE) then
+				if GATED_INPUT_BY_BUSY then
 					T1	<= (Changed_Clk1 and not Busy_i) xor T1;
 				else
 					T1	<= Changed_Clk1 xor T1;

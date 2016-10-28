@@ -73,7 +73,7 @@ begin
 
 	-- Round Robin Arbiter
 	-- ==========================================================================================================================================================
-	genRR : if (STRATEGY = "RR") generate
+	genRR : if STRATEGY = "RR" generate
 		signal RequestLeft								: unsigned(PORTS - 1 downto 0);
 		signal SelectLeft									: unsigned(PORTS - 1 downto 0);
 		signal SelectRight								: unsigned(PORTS - 1 downto 0);
@@ -93,7 +93,7 @@ begin
 		ChannelPointer_nxt	<= std_logic_vector(ite((RequestLeft = (RequestLeft'range => '0')), SelectRight, SelectLeft));
 
 		-- generate ChannelPointer register and unregistered outputs
-		genREG0 : if (OUTPUT_REG = FALSE) generate
+		genREG0 : if not OUTPUT_REG generate
 			process(Clock)
 			begin
 				if rising_edge(Clock) then
@@ -111,7 +111,7 @@ begin
 		end generate;
 
 		-- generate ChannelPointer register and registered outputs
-		genREG1 : if (OUTPUT_REG = TRUE) generate
+		genREG1 : if OUTPUT_REG generate
 			signal ChannelPointer_bin_d				: std_logic_vector(log2ceilnz(PORTS) - 1 downto 0)		:= (others => '0');
 		begin
 			process(Clock)

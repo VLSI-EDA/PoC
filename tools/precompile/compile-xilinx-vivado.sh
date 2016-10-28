@@ -246,7 +246,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	CreateLocalModelsim_ini
 
 	Simulator=questa
-	Language=vhdl
+	Language=all
 	Library=all
 	Family=all			# all, virtex5, virtex6, virtex7, ...
 

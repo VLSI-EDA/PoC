@@ -89,7 +89,7 @@ package body FileIO is
 		variable OpenStatus		: FILE_OPEN_STATUS;
 	begin
 		file_open(OpenStatus, LogFile_FileHandle, FileName, OpenKind);
-		LogFile_State_IsOpen	:= (OpenStatus = OPEN_OK);
+		LogFile_State_IsOpen	:= OpenStatus = OPEN_OK;
 		Status								:= OpenStatus;
 	end procedure;
 
@@ -116,7 +116,7 @@ package body FileIO is
 
 	procedure LogFile_Close is
 	begin
-		if (LogFile_State_IsOpen = TRUE) then
+		if LogFile_State_IsOpen then
 			file_close(LogFile_FileHandle);
 			LogFile_State_IsOpen	:= FALSE;
 		end if;

@@ -91,9 +91,9 @@ contain underscores to denote implementation variants of a module.
 3. Modul names are valid VHDL identifiers prefixed with its parent namespace's name. |br|
 4. The first part of module name must not contain the parents namespace name. |br|
 
-	
+
 .. rubric:: Example 1 - ``PoC.fifo.cc_got``
-	
+
 For example a FIFO module with a common clock interface and a *got*
 semantic is named ``PoC.fifo.cc_got`` (fully qualified name). This name can
 be split at every dot and underscore sign, resulting in the following table of

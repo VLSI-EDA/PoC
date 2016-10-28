@@ -7,8 +7,8 @@
 # Common PoC packages for configuration, synthesis and simulation
 include				"src/common/common.files"										# load common packages
 
-# PoC.misc.sync
-include				"src/misc/sync/sync_Bits.files"							# 
+include				"src/misc/sync/sync_Bits.files"							# PoC.misc.sync
+include				"src/fifo/fifo_cc_got.files"								# PoC.fifo.cc_got
 
 # PoC.io.uart
 vhdl		poc		"src/io/uart/uart.pkg.vhdl"									# UART Package

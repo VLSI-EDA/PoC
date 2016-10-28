@@ -4,11 +4,12 @@
 -- =============================================================================
 -- Authors:					Thomas B. Preusser
 --
--- Entity:					TODO
+-- Entity:					Universal Asynchronous Receiver Transmitter (UART) - Transmitter
 --
 -- Description:
 -- -------------------------------------
--- UART (RS232) Transmitter: 1 Start + 8 Data + 1 Stop
+-- :abbr:`UART (Universal Asynchronous Receiver Transmitter)` Transmitter:
+-- 1 Start + 8 Data + 1 Stop
 --
 -- License:
 -- =============================================================================

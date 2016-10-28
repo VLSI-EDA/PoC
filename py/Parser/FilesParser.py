@@ -153,7 +153,7 @@ class FilesParserMixIn:
 			print("{DARK_GRAY}{line}{NOCOLOR}".format(line="*"*80, **Init.Foreground))
 
 	# FIXME: is there a better way to passthrough/access host?
-	def _Resolve(self, host, statements=None):
+	def _Resolve(self, host, statements=None): # mccabe:disable=MC0001
 		if (statements is None):
 			statements = self._document.Statements
 
@@ -233,7 +233,7 @@ class FilesParserMixIn:
 			else:
 				ParserException("Found unknown statement type '{0!s}'.".format(type(stmt)))
 
-	def _Evaluate(self, host, expr):
+	def _Evaluate(self, host, expr): # mccabe:disable=MC0001
 		if isinstance(expr, Identifier):
 			try:
 				return self._variables[expr.Name] #self._variables only available via late binding

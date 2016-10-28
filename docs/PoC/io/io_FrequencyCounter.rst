@@ -5,6 +5,7 @@ io_FrequencyCounter
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/io/io_FrequencyCounter.vhdl
@@ -16,4 +17,4 @@ io_FrequencyCounter
 Source file: `io/io_FrequencyCounter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_FrequencyCounter.vhdl>`_
 
 
-	 
+

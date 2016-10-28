@@ -115,7 +115,7 @@ begin
 
 	-- buffer some data before starting the icap, icap needs to be sync'ed before it can be paused
 	in_data_buffer_p : process (clk_icap) begin
-		if (rising_edge(clk_icap)) then
+		if rising_edge(clk_icap) then
 			if (reset_icap = '1') then
 				in_data_start <= '0';
 			else

@@ -10,28 +10,28 @@
 ##	Devices:				8
 ##		Channel 0:		UserClock
 ##			Location:			U34
-##			Vendor:				
+##			Vendor:
 ##			Device:				Si570
 ##			Address:			0xE0 (1110 000xb)
 ##		Channel 1:		FMC Connector 1
-##			Location:			
+##			Location:
 ##		Channel 2:		FMC Connector 2
-##			Location:			
+##			Location:
 ##		Channel 3:		EEPROM
-##			Location:			
-##			Vendor:				
-##			Device:				
+##			Location:
+##			Vendor:
+##			Device:
 ##			Address:			0xA8 (1010 100xb)
 ##		Channel 4:		SFP
 ##			Location:			P3
 ##			Address:			0xA0 (1010 000xb)
 ##		Channel 5:		HDMI
-##			Location:			
-##			Vendor:				
-##			Device:				
+##			Location:
+##			Vendor:
+##			Device:
 ##			Address:			0x72 (0111 001xb)
 ##		Channel 6:		DDR3
-##			Location:			
+##			Location:
 ##			Address:			0xA0, 0x30 (1010 000xb, 0011 000xb)
 ##		Channel 7:		SI5324
 ##			Location:			U24 (SI5324C-C-GM)

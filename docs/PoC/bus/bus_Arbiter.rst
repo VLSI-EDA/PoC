@@ -8,6 +8,7 @@ following arbitration strategies:
 * Round Robin (RR)
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/bus/bus_Arbiter.vhdl
@@ -19,4 +20,4 @@ following arbitration strategies:
 Source file: `bus/bus_Arbiter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/bus_Arbiter.vhdl>`_
 
 
-	 
+

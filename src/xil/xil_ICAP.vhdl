@@ -9,11 +9,11 @@
 -- Description:
 -- -------------------------------------
 -- This module wraps Xilinx "Internal Configuration Access Port" (ICAP) primitives in a generic
--- module. Supported devices are:
---
--- * Spartan-6
--- * Virtex-4, Virtex-5, Virtex-6
--- * Series-7 (Artix-7, Kintex-7, Virtex-7, Zynq-7000)
+-- module. |br|
+-- Supported devices are:
+--  * Spartan-6
+--  * Virtex-4, Virtex-5, Virtex-6
+--  * Series-7 (Artix-7, Kintex-7, Virtex-7, Zynq-7000)
 --
 -- License:
 -- =============================================================================

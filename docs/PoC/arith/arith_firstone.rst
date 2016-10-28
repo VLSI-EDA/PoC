@@ -18,6 +18,7 @@ the interface assumes this use case and provides some useful extras:
 This implementation uses carry chains for wider implementations.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/arith/arith_firstone.vhdl
@@ -29,4 +30,4 @@ This implementation uses carry chains for wider implementations.
 Source file: `arith/arith_firstone.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_firstone.vhdl>`_
 
 
-	 
+

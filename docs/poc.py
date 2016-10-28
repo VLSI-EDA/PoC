@@ -1,4 +1,34 @@
-
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+#
+# ==============================================================================
+#	Authors:          Patrick Lehmann
+#										Thomas B. Preußer
+#
+#	Python Script:    Extract embedded ReST documentation from VHDL primary units
+#
+# Description:
+# ------------------------------------
+#	undocumented
+#
+# License:
+# ==============================================================================
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+#											Chair for VLSI-Design, Diagnostics and Architecture
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#		http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
 from enum           import Enum
 from pathlib        import Path
 from re             import compile as re_compile
@@ -49,12 +79,12 @@ class Extract:
 		for item in sourceDirectory.iterdir():
 			if item.is_dir():
 				stem = item.stem
-				if (stem not in ["Altera", "altera", "Lattice", "lattice", "Xilinx", "xilinx"]):
+				if ((stem not in ["Altera", "altera", "Lattice", "lattice", "Xilinx", "xilinx"]) and not stem.startswith(("cvs_", "old_"))):
 					print("cd {0}".format(stem))
 					result[stem] = self.recursion(item)
 			elif item.is_file():
 				if (item.suffix == ".vhdl"):
-					if (not item.stem.endswith(("Altera", "altera", "Lattice", "lattice", "Xilinx", "xilinx"))):
+					if (not item.stem.endswith(("Altera", "altera", "Lattice", "lattice", "Xilinx", "xilinx")) and not item.stem.startswith(("cvs_", "old_"))):
 						try:
 							result[item.stem] = self.ExtractComments(item)
 						except Exception as ex:
@@ -101,113 +131,106 @@ class Extract:
 			restructuredTextHandle.write(outputContent)
 
 	def ExtractComments(self, sourceFile):
-		print("  Reading '{0!s}'...".format(sourceFile))
-
-		entityStartRegExpStr = r"(?i)\s*entity\s+(?P<EntityName>\w+)\s+is"
-		entityEndRegExpStr =   r"(?i)\s*end\s+entity(?:\s+\w+)?\s*;"
-
-		entityStartRegExp = re_compile(entityStartRegExpStr)
-		entityEndRegExp =   re_compile(entityEndRegExpStr)
-
+		"""
+		Extracts the documentation from the header of a PoC VHDL source.
+		 - The documentation header starts with a separator line matching /^--\s*={16,}$/.
+		 - The documentation header continues through all immediately following comment lines.
+		 - The contained information is added to the currently active section.
+		 - A specific section is opened by a line matching /^--\s*(?P<Section>\w+):/ with
+		   <Section> as one of Authors|Entity|Description|SeeAlso|License.
+		 - An underline /^-- -+$/ immediately following a section opening is ignored.
+		 - After the documentation header, the entity name is extracted from the entity declaration.
+		 """
 		class State(Enum):
-			StartOfDocument =   0
-			StartOfComments =   1
-			Authors =           2
-			Summary =           3
-			Description =       4
-			DescriptionLine =   5
-			SeeAlso =           6
-			License =           10
-			EntityStart =       20
-			EntityEnd =         21
+			BeforeDocHeader  = 0
+			InDocHeader      = 1
+			BeforeEntityDecl = 2
+			InEntityDecl     = 3
+			Done             = 4
 
+		sectionStrip = {
+			'Authors':     True,
+			'Entity':      True,
+			'Description': False,
+			'SeeAlso':     False,
+			'License':     False
+		}
+		sections = {
+			'Authors':     '',
+			'Entity':      '',
+			'Description': '',
+			'SeeAlso':     '',
+			'License':     ''
+		}
 
-		state = State.StartOfDocument
+		headerStartRE  = re_compile(r'^--\s*={16,}$')
+		sectionStartRE = re_compile(r'^--\s*(?P<Section>'+('|'.join(sections.keys()))+r'):\s*(?P<Content>.*)$')
+		underlineRE    = re_compile(r'^-- -+$')
+		commentStripRE = re_compile(r'^-- ?')
 
-		result = SourceFile(SourceCodeRange(sourceFile, 0, 0))
+		entityStartRE = re_compile(r"(?i)entity\s+(?P<EntityName>\w+)\s+is")
+		entityEndRE   = re_compile(r"(?i)end\s+(?P<EntityName>\w+)(\s+\w+)?\s*;")
 
 		entityName =          ""
 		entityStartLine =     0
 		entityEndLine =       0
 
-		authorsContent =      ""
-		summary =             ""
-		descriptionContent =  ""
-		seeAlsoContent =      ""
-
+		# Parse the Source File
+		print("  Reading '{0!s}'...".format(sourceFile))
+		state = State.BeforeDocHeader
 		with sourceFile.open('r') as vhdlFileHandle:
 			lineNumber = 0
 			for line in vhdlFileHandle:
 				lineNumber += 1
 
-				if (state is State.StartOfDocument):
-					if line.startswith("-- ============================================================================"):
-						state =           State.StartOfComments
+				# Parse Documentation Header into Sections
+				if state is State.BeforeDocHeader:
+					if headerStartRE.match(line):
+						section = None
+						state   = State.InDocHeader
 
-				elif (state is State.StartOfComments):
-					if line.startswith("-- Authors:"):
-						state =           State.Authors
-						authorsContent =  line[11:].lstrip()
-
-				elif (state is State.Authors):
-					if line.startswith("-- Entity:"):
-						state =           State.Summary
-						summary =         line[10:-1].lstrip()
+				elif state is State.InDocHeader:
+					if not line.startswith('--'):
+						state = State.BeforeEntityDecl
 					else:
-						authorsContent += line[3:].lstrip()
+						m = sectionStartRE.match(line)
+						if m:
+							section = m.group('Section')
+							sections[section] += m.group('Content')
+						elif sections[section] != '' or not underlineRE.match(line):
+							line = commentStripRE.sub('', line)
+							sections[section] += line.lstrip() if sectionStrip[section] else line
 
-				elif (state is State.Summary):
-					if line.startswith("-- Description:"):
-						state = State.DescriptionLine
-
-				elif (state is State.DescriptionLine):
-					if line.startswith("-- ------------------------------------"):
-						state = State.Description
-
-				elif (state is State.Description):
-					if line.startswith("-- SeeAlso:"):
-						state = State.SeeAlso
-					elif line.startswith("-- License:"):
-						state = State.License
-					else:
-						descriptionContent += line[3:]
-
-				elif (state is State.SeeAlso):
-					if line.startswith("-- License:"):
-						state =           State.License
-					else:
-						seeAlsoContent += line[3:]
-
-				elif (state is State.License):
-					entityStartMatch = entityStartRegExp.match(line)
-					if (entityStartMatch is not None):
-						entityName = entityStartMatch.group("EntityName")
+				# Parse Entity Declaration
+				if state is State.BeforeDocHeader or state is State.BeforeEntityDecl:
+					m = entityStartRE.match(line)
+					if m:
+						entityName      = m.group("EntityName")
 						entityStartLine = lineNumber
-						state =           State.EntityStart
+						state           = State.InEntityDecl
 
-				elif (state is State.EntityStart):
-					entityEndMatch =    entityEndRegExp.match(line)
-					if (entityEndMatch is not None):
-						entityEndLine =   lineNumber
-						state =           State.EntityEnd
-						break
+				elif state is State.InEntityDecl:
+					m = entityEndRE.match(line)
+					if m:
+						name = m.group('EntityName')
+						if name == 'entity' or name == entityName:
+							entityEndLine = lineNumber
+							state         = State.Done
+							break
 
-			else:
-				raise Exception("No entity found. LastState = {0}".format(state.name))
+		if state is not State.Done:
+			raise Exception("No entity found. LastState = {0}".format(state.name))
 
-		if (state is not State.EntityEnd):
-			raise Exception("Last state not reached. LastState = {0}".format(state.name))
-
-		result.Authors =      [author for author in authorsContent.splitlines()]
-		result.Summary =      summary
-		result.Description =  descriptionContent
-		result.SeeAlso =      seeAlsoContent
+		# Construct Result Object
+		result = SourceFile(SourceCodeRange(sourceFile, 0, 0))
+		result.Authors =      [author for author in sections['Authors'].splitlines()]
+		result.Summary =      sections['Entity']
+		result.Description =  sections['Description']
+		result.SeeAlso =      sections['SeeAlso']
 		result.EntityName =   entityName
 		result.EntitySourceCodeRange.StartRow = entityStartLine
 		result.EntitySourceCodeRange.EndRow = entityEndLine
-
 		return result
-
 
 if (__name__ == "__main__"):
 	e = Extract()

@@ -7,8 +7,8 @@ temperature values are overrun.
 
 .. rubric:: Temperature Curve
 
-.. code-block:: None
-   
+.. code-block:: none
+
                    |                      /-----\
    Temp_ov   on=80 | - - - - - - /-------/       \
                    |            /        |        \
@@ -22,6 +22,7 @@ temperature values are overrun.
    pwm =           |   min  |  medium    |   max        |   medium  |  min
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/xil/xil_SystemMonitor_Virtex6.vhdl
@@ -33,4 +34,4 @@ temperature values are overrun.
 Source file: `xil/xil_SystemMonitor_Virtex6.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_SystemMonitor_Virtex6.vhdl>`_
 
 
-	 
+

@@ -5,6 +5,7 @@ lcd_LCDBuffer
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/io/lcd/lcd_LCDBuffer.vhdl
@@ -16,4 +17,4 @@ lcd_LCDBuffer
 Source file: `io/lcd/lcd_LCDBuffer.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/lcd_LCDBuffer.vhdl>`_
 
 
-	 
+

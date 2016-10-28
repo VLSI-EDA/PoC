@@ -12,6 +12,7 @@ asserted exactly for one clock after DIVIDER cycles of an asserted increment
 input have been observed.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/arith/arith_counter_free.vhdl
@@ -23,4 +24,4 @@ input have been observed.
 Source file: `arith/arith_counter_free.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_free.vhdl>`_
 
 
-	 
+

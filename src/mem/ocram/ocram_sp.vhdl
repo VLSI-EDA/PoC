@@ -9,14 +9,30 @@
 --
 -- Description:
 -- -------------------------------------
--- Inferring / instantiating single-port RAM
+-- Inferring / instantiating single port memory, with:
 --
--- - single clock, clock enable
--- - 1 read/write port
+-- * single clock, clock enable,
+-- * 1 read/write port.
 --
--- Written data is passed through the memory and output again as read-data 'q'.
--- This is the normal behaviour of a single-port RAM and also known as
--- write-first mode or read-through-write behaviour.
+-- Command Truth Table:
+--
+-- == == ================
+-- ce we Command
+-- == == ================
+-- 0  X  No operation
+-- 1  0  Read from memory
+-- 1  1  Write to memory
+-- == == ================
+--
+-- Both reading and writing are synchronous to the rising-edge of the clock.
+-- Thus, when reading, the memory data will be outputted after the
+-- clock edge, i.e, in the following clock cycle.
+--
+-- When writing data, the read output will output the new data (in the
+-- following clock cycle) which is aka. "write-first behavior". This behavior
+-- also applies to Altera M20K memory blocks as described in the Altera:
+-- "Stratix 5 Device Handbook" (S5-5V1). The documentation in the Altera:
+-- "Embedded Memory User Guide" (UG-01068) is wrong.
 --
 -- License:
 -- =============================================================================
@@ -51,17 +67,17 @@ use			PoC.mem.all;
 
 entity ocram_sp is
 	generic (
-		A_BITS		: positive;
-		D_BITS		: positive;
-		FILENAME	: string		:= ""
+		A_BITS		: positive;															-- number of address bits
+		D_BITS		: positive;															-- number of data bits
+		FILENAME	: string		:= ""												-- file-name for RAM initialization
 	);
 	port (
-		clk : in	std_logic;
-		ce	: in	std_logic;
-		we	: in	std_logic;
-		a	 : in	unsigned(A_BITS-1 downto 0);
-		d	 : in	std_logic_vector(D_BITS-1 downto 0);
-		q	 : out std_logic_vector(D_BITS-1 downto 0)
+		clk : in	std_logic;															-- clock
+		ce	: in	std_logic;															-- clock enable
+		we	: in	std_logic;															-- write enable
+		a	 : in	unsigned(A_BITS-1 downto 0);							-- address
+		d	 : in	std_logic_vector(D_BITS-1 downto 0);			-- write data
+		q	 : out std_logic_vector(D_BITS-1 downto 0) 			-- read output
 	);
 end entity;
 
@@ -71,7 +87,7 @@ architecture rtl of ocram_sp is
 
 begin
 
-	gInfer : if ((VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
+	gInfer : if (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX) generate
 		-- RAM can be inferred correctly
 		-- XST Advanced HDL Synthesis generates single-port memory as expected.
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
@@ -82,10 +98,10 @@ begin
 			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
 			variable res			: ram_t;
 		begin
-			if (str_length(FilePath) = 0) then
+			if str_length(FilePath) = 0 then
         -- shortcut required by Vivado
 				return (others => (others => ite(SIMULATION, 'U', '0')));
-			elsif (mem_FileExtension(FilePath) = "mem") then
+			elsif mem_FileExtension(FilePath) = "mem" then
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
 			else
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_INTEL_HEX, MEM_CONTENT_HEX);
@@ -116,7 +132,8 @@ begin
 			end if;
 		end process;
 
-		q <= ram(to_integer(a_reg));					-- gets new data
+		q <= (others => 'X') when SIMULATION and is_x(std_logic_vector(a_reg)) else
+				 ram(to_integer(a_reg));					-- gets new data
 	end generate gInfer;
 
 	gAltera: if VENDOR = VENDOR_ALTERA generate

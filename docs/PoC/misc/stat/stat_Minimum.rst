@@ -5,6 +5,7 @@ stat_Minimum
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/misc/stat/stat_Minimum.vhdl
@@ -16,4 +17,4 @@ stat_Minimum
 Source file: `misc/stat/stat_Minimum.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/stat/stat_Minimum.vhdl>`_
 
 
-	 
+

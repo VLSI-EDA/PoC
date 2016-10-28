@@ -2,12 +2,31 @@
 ocram_sp
 ########
 
-Inferring / instantiating single-port RAM
-- single clock, clock enable
-- 1 read/write port
-Written data is passed through the memory and output again as read-data 'q'.
-This is the normal behaviour of a single-port RAM and also known as
-write-first mode or read-through-write behaviour.
+Inferring / instantiating single port memory, with:
+
+* single clock, clock enable,
+* 1 read/write port.
+
+Command Truth Table:
+
+== == ================
+ce we Command
+== == ================
+0  X  No operation
+1  0  Read from memory
+1  1  Write to memory
+== == ================
+
+Both reading and writing are synchronous to the rising-edge of the clock.
+Thus, when reading, the memory data will be outputted after the
+clock edge, i.e, in the following clock cycle.
+
+When writing data, the read output will output the new data (in the
+following clock cycle) which is aka. "write-first behavior". This behavior
+also applies to Altera M20K memory blocks as described in the Altera:
+"Stratix 5 Device Handbook" (S5-5V1). The documentation in the Altera:
+"Embedded Memory User Guide" (UG-01068) is wrong.
+
 
 
 .. rubric:: Entity Declaration:
@@ -16,9 +35,9 @@ write-first mode or read-through-write behaviour.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 52-66
+   :lines: 68-82
 
 Source file: `mem/ocram/ocram_sp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sp.vhdl>`_
 
 
-	 
+

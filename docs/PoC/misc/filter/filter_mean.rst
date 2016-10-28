@@ -5,6 +5,7 @@ filter_mean
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/misc/filter/filter_mean.vhdl
@@ -16,4 +17,4 @@ filter_mean
 Source file: `misc/filter/filter_mean.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/filter/filter_mean.vhdl>`_
 
 
-	 
+

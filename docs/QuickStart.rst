@@ -24,19 +24,20 @@ See :doc:`/UsingPoC/Requirements` for further details.
 
 * A :doc:`supported synthesis tool chain </WhatIsPoC/SupportedToolChains>`, if you want to synthezise IP cores.
 * A :doc:`supported simulator too chain </WhatIsPoC/SupportedToolChains>`, if you want to simulate IP cores.
-* The Python3 programming language and runtime, if you want to use PoC's infrastructure.
+* The **Python 3** programming language and runtime, if you want to use PoC's infrastructure.
 * A shell to execute shell scripts:
 
-  * Bash on Linux and OS X
-  * PowerShell on Windows
+  * **Bash** on Linux and OS X
+  * **PowerShell** on Windows
 
 
 .. rubric:: PoC optionally requires:
 
-* Git command line tools or a Git GUI, if you want to check out the latest 'master' or 'release' branch.
+* **Git command line** tools or
+* **Git User Interface**, if you want to check out the latest 'master' or 'release' branch.
 
 
-.. rubric:: PoC depends on third parts libraries:
+.. rubric:: PoC depends on third part libraries:
 
 * `Cocotb <https://github.com/potentialventures/cocotb>`_ |br|
   A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
@@ -80,7 +81,7 @@ more details. Run the following command line instructions to configure PoC on
 your local system:
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\poc.ps1 configure
 
@@ -118,26 +119,26 @@ list of steps can be found at :doc:`Integration </UsingPoC/Integration>`.
 
 .. rubric:: 2. Configuring PoC
 
-The PoC-Library should be configured to explore it's full potential. See
+The PoC-Library should be configured to explore its full potential. See
 :doc:`Configuration </UsingPoC/PoCConfiguration>` for more details. The
 following command lines will start the configuration process:
 
 .. code-block:: powershell
-   
+
    cd ProjectRoot
    .\lib\PoC\poc.ps1 configure
 
-	 
+
 .. rubric:: 3. Creating PoC's ``my_config.vhdl`` and ``my_project.vhdl`` Files
 
-The PoC-Library needs two VHDL files for it's configuration. These files are
+The PoC-Library needs two VHDL files for its configuration. These files are
 used to determine the most suitable implementation depending on the provided
 target information. Copy the following two template files into your project's
 source folder. Rename these files to \*.vhdl and configure the VHDL constants
 in the files:
 
 .. code-block:: powershell
-   
+
    cd ProjectRoot
    cp lib\PoC\src\common\my_config.vhdl.template src\common\my_config.vhdl
    cp lib\PoC\src\common\my_project.vhdl.template src\common\my_project.vhdl
@@ -145,7 +146,7 @@ in the files:
 `my_config.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_config.vhdl.template>`_ defines two global constants, which need to be adjusted:
 
 .. code-block:: vhdl
-   
+
    constant MY_BOARD            : string := "CHANGE THIS"; -- e.g. Custom, ML505, KC705, Atlys
    constant MY_DEVICE           : string := "CHANGE THIS"; -- e.g. None, XC5VLX50T-1FF1136, EP2SGX90FF1508C3
 
@@ -153,7 +154,7 @@ in the files:
 also defines two global constants, which need to be adjusted:
 
 .. code-block:: vhdl
-   
+
    constant MY_PROJECT_DIR      : string := "CHANGE THIS"; -- e.g. d:/vhdl/myproject/, /home/me/projects/myproject/"
    constant MY_OPERATING_SYSTEM : string := "CHANGE THIS"; -- e.g. WINDOWS, LINUX
 
@@ -162,7 +163,7 @@ Further informations are provided at
 
 .. rubric:: 4. Adding PoC's Common Packages to a Synthesis or Simulation Project
 
-PoC is shipped with a set of common packages, which are used by most of it's
+PoC is shipped with a set of common packages, which are used by most of its
 modules. These packages are stored in the ``PoCRoot\src\common`` directory.
 PoC also provides a VHDL context in ``common.vhdl`` , which can be used to
 reference all packages at once.
@@ -197,14 +198,14 @@ passed to the frontend script.
 .. rubric:: Example:
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\poc.ps1 ghdl PoC.arith.prng
 
 The CLI command ``ghdl`` chooses *GHDL Simulator* as the simulator and
 passes the fully qualified PoC entity name ``PoC.arith.prng`` as a parameter
 to the tool. All required source file are gathered and compiled to an
-executable. Afterwards this executable is launched in CLI mode and it's outputs
+executable. Afterwards this executable is launched in CLI mode and its outputs
 are displayed in console:
 
 .. image:: /_static/images/ghdl/arith_prng_tb.posh.png
@@ -232,7 +233,7 @@ unique name: ``PoC.arith.prng``, which is passed to the frontend script.
 .. rubric:: Example:
 
 .. code-block:: PowerShell
-   
+
    cd PoCRoot
    .\poc.ps1 xst PoC.arith.prng --board=KC705
 
@@ -254,13 +255,13 @@ The PoC-Library can be updated by using ``git fetch`` and ``git merge``.
 
 .. code-block:: PowerShell
 
-    cd PoCRoot
-    # update the local repository
-    git fetch --prune
-    # review the commit tree and messages, using the 'treea' alias
-    git treea
-    # if all changes are OK, do a fast-forward merge
-    git merge
+   cd PoCRoot
+   # update the local repository
+   git fetch --prune
+   # review the commit tree and messages, using the 'treea' alias
+   git treea
+   # if all changes are OK, do a fast-forward merge
+   git merge
 
 
 .. seealso::

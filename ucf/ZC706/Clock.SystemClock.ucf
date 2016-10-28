@@ -9,6 +9,6 @@
 NET "ZC706_SystemClock_200MHz_p"				LOC = "H9";						## {IN}		U64.4
 NET "ZC706_SystemClock_200MHz_n"				LOC = "G9";						## {IN}		U64.5
 NET "ZC706_SystemClock_200MHz_?"				IOSTANDARD = LVDS;
-NET "ZC706_SystemClock_200MHz_p"				TNM_NET = "NET_SystemClock_200MHz";
+NET "ZC706_SystemClock_200MHz_p"				TNM_NET = "PIN_SystemClock_200MHz";
 
-TIMESPEC "TS_SystemClock"	= PERIOD "NET_SystemClock_200MHz"		200 MHz	HIGH 50 %;
+TIMESPEC "TS_SystemClock"	= PERIOD "PIN_SystemClock_200MHz"		200 MHz	HIGH 50 %;

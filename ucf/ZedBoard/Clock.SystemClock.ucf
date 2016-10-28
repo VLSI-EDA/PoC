@@ -7,7 +7,9 @@
 ##			VCCO:					3.3V (VCC3V3)
 ##		Location:				IC17 (Fox Electronics FXO-HC53 SERIES 767-100-136)
 ##			Vendor:				Fox Electronics
-##			Device:				
+##			Device:
 ##			Frequency:		100 MHz, 50ppm
 NET "ZED_SystemClock_100MHz"						LOC = "Y9" | IOSTANDARD = LVCMOS33;			## {IN}		IC17.3
-NET "ZED_SystemClock_100MHz"						TNM_NET = "NET_SystemClock_100MHz";
+NET "ZED_SystemClock_100MHz"						TNM_NET = "PIN_SystemClock_100MHz";
+
+TIMESPEC "TS_SystemClock"	= PERIOD "PIN_SystemClock_100MHz"		100 MHz	HIGH 50 %;

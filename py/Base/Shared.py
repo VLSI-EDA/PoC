@@ -32,11 +32,6 @@
 # ==============================================================================
 #
 # entry point
-from datetime import datetime
-
-from PoC.TestCase import TestSuite
-
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -47,6 +42,7 @@ else:
 
 # load dependencies
 import shutil
+from datetime           import datetime
 from os                 import chdir
 
 from lib.Parser         import ParserException
@@ -54,7 +50,6 @@ from Base.Exceptions    import CommonException, SkipableCommonException
 from Base.Logging       import ILogable
 from Base.Project       import ToolChain, Tool, VHDLVersion, Environment
 from PoC.Solution       import VirtualProject, FileListFile
-from PoC.TestCase				import TestSuite
 
 
 # local helper function
@@ -113,13 +108,13 @@ class Shared(ILogable):
 		return result
 
 	def _Prepare(self):
-		self._LogNormal("Preparing {0}.".format(self._TOOL.LongName))
+		self.LogNormal("Preparing {0}.".format(self._TOOL.LongName))
 
 	def _PrepareEnvironment(self):
 		# create fresh temporary directory
-		self._LogVerbose("Creating fresh temporary directory.")
+		self.LogVerbose("Creating fresh temporary directory.")
 		if (self.Directories.Working.exists()):
-			self._LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
+			self.LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
 			for item in self.Directories.Working.iterdir():
 				try:
 					if item.is_dir():
@@ -129,15 +124,15 @@ class Shared(ILogable):
 				except OSError as ex:
 					raise CommonException("Error while deleting '{0!s}'.".format(item)) from ex
 		else:
-			self._LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
+			self.LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
 			try:
 				self.Directories.Working.mkdir(parents=True)
 			except OSError as ex:
 				raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
 
 		# change working directory to temporary path
-		self._LogVerbose("Changing working directory to temporary directory.")
-		self._LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
+		self.LogVerbose("Changing working directory to temporary directory.")
+		self.LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
 		try:
 			chdir(str(self.Directories.Working))
 		except OSError as ex:
@@ -145,7 +140,7 @@ class Shared(ILogable):
 
 	def _CreatePoCProject(self, projectName, board):
 		# create a PoCProject and read all needed files
-		self._LogVerbose("Creating PoC project '{0}'".format(projectName))
+		self.LogVerbose("Creating PoC project '{0}'".format(projectName))
 		pocProject = VirtualProject(projectName)
 
 		# configure the project
@@ -159,7 +154,7 @@ class Shared(ILogable):
 		self._pocProject = pocProject
 
 	def _AddFileListFile(self, fileListFilePath):
-		self._LogVerbose("Reading filelist '{0!s}'".format(fileListFilePath))
+		self.LogVerbose("Reading filelist '{0!s}'".format(fileListFilePath))
 		# add the *.files file, parse and evaluate it
 		# if (not fileListFilePath.exists()):    raise SimulatorException("Files file '{0!s}' not found.".format(fileListFilePath)) from FileNotFoundError(str(fileListFilePath))
 
@@ -172,11 +167,24 @@ class Shared(ILogable):
 		except (ParserException, CommonException) as ex:
 			raise SkipableCommonException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
 
-		self._LogDebug("=" * 78)
-		self._LogDebug("Pretty printing the PoCProject...")
-		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("=" * 78)
+		self.LogDebug("=" * 78)
+		self.LogDebug("Pretty printing the PoCProject...")
+		self.LogDebug(self._pocProject.pprint(2))
+		self.LogDebug("=" * 78)
 		if (len(fileListFile.Warnings) > 0):
 			for warn in fileListFile.Warnings:
-				self._LogWarning(warn)
+				self.LogWarning(warn)
 			raise SkipableCommonException("Found critical warnings while parsing '{0!s}'".format(fileListFilePath))
+
+	def _GetHDLParameters(self, configSectionName):
+		"""Parse option 'HDLParameters' for Verilog Parameters / VHDL Generics."""
+		result = {}
+		hdlParameters = self.Host.PoCConfig[configSectionName]["HDLParameters"]
+		if (len(hdlParameters) > 0):
+			for keyValuePair in hdlParameters.split(";"):
+				try:
+					key,value = keyValuePair.split("=")
+				except ValueError as ex:
+					raise CommonException("Syntax error in option 'HDLParameters' within section {section}.".format(section=configSectionName))
+				result[key.strip()] = value.strip()
+		return result

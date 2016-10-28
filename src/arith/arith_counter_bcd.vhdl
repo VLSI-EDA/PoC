@@ -76,7 +76,7 @@ begin
 		p(i) <= cnt_r(3) and cnt_r(0); -- Local Overflow at digit 9
 		process(clk)
 		begin
-			if(rising_edge(clk)) then
+			if rising_edge(clk) then
 				if rst = '1' then
 					cnt_r <= (others => '0');
 				elsif (inc and c(i)) = '1' then  -- short critical path for 'inc'

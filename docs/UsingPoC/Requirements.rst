@@ -20,24 +20,24 @@ Common requirements:
 ********************
 
 * Programming Languages and Runtime Environments:
-  
+
   * `Python 3 <https://www.python.org/downloads/>`_ (|geq| 3.5):
-    
+
     * `colorama <https://pypi.python.org/pypi/colorama>`_
     * `py-flags <https://pypi.python.org/pypi/py-flags>`_
-    
+
     All Python requirements are listed in `requirements.txt <https://github.com/VLSI-EDA/PoC/blob/master/requirements.txt>`_ and can be installed via: |br|
     ``sudo python3.5 -m pip install -r requirements.txt``
-  
+
 * Synthesis tool chains:
-  
+
   * Altera Quartus |geq| 13.0 or
   * Lattice Diamond or
   * Xilinx ISE 14.7 [#f1]_ or
   * Xilinx Vivado [#f2]_
-  
+
 * Simulation tool chains
-  
+
   * Aldec Active-HDL or
   * Mentor Graphics ModelSim Altera Edition or
   * Mentor Graphics QuestaSim or
@@ -50,7 +50,7 @@ Linux specific requirements:
 ****************************
 
 * Debian and Ubuntu specific:
-  
+
   * bash is configured as :file:`/bin/sh` (`read more <https://wiki.debian.org/DashAsBinSh>`_) |br|
     ``dpkg-reconfigure dash``
 
@@ -76,7 +76,7 @@ Mac OS specific requirements:
 * Bash |geq| 4.3
     Mac OS is shipped with Bash 3.2. Use Homebrew to install an up-to-date Bash |br|
     ``brew install bash``
-  
+
 * coreutils
     Mac OS' ``readlink`` program has a different behavior than the Linux version.
     The ``coreutils`` package installs a GNU readlink clone called ``greadlink``. |br|
@@ -106,7 +106,7 @@ Windows specific requirements:
     Management Framework. If the required version not already included in
     Windows, it can be downloaded from microsoft.com: `WMF 4.0 <http://www.microsoft.com/en-US/download/details.aspx?id=40855>`_,
     `WMF 5.0 <https://www.microsoft.com/en-US/download/details.aspx?id=50395>`_ (recommended).
-  
+
   * Allow local script execution (`read more <https://technet.microsoft.com/en-us/library/hh849812.aspx>`_) |br|
     ``Set-ExecutionPolicy RemoteSigned``
   * PowerShell Community Extensions (PSCX) |geq| 3.2 |br|
@@ -131,7 +131,7 @@ Optional Tools on Windows:
 
 .. rubric:: Footnotes
 
-.. [#f1] Xilinx discontinued ISE since Oct. 2013. The last release was 14.7. 
+.. [#f1] Xilinx discontinued ISE since Oct. 2013. The last release was 14.7.
 .. [#f2] Due to numerous bugs in the Xilinx Vivado Synthesis (incl. 2016.1), PoC
    can offer only a restricted Vivado support. See PoC's ``Vivado`` branch for a
    set of workarounds. The list of issues is documented on the

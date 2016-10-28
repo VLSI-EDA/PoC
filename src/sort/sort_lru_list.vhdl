@@ -2,10 +2,10 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- =============================================================================
--- Authors:				 	Patrick Lehmann
--- 									Martin Zabel
+-- Authors:          Patrick Lehmann
+--                   Martin Zabel
 --
--- Entity:				 	List storing key-value pairs in recently-used order.
+-- Entity:           List storing key-value pairs in recently-used order.
 --
 -- Description:
 -- -------------------------------------
@@ -17,13 +17,11 @@
 -- to the rising-edge of the clock ``clock``. All control signals are high-active.
 --
 -- Supported operations:
---
--- * Insert: Insert ``DataIn`` as	recently used ``(key, value)`` pair. If key is
---   already within the list, then the corresponding value is updated and the
---   pair is moved to the recently used position.
---
--- * Remove: Remove ``(key, value)`` pair with the given key. The list is not
---   modified if key is not within the list.
+--  * **Insert:** Insert ``DataIn`` as  recently used ``(key, value)`` pair. If
+--    key is already within the list, then the corresponding value is updated and
+--    the pair is moved to the recently used position.
+--  * **Remove:** Remove ``(key, value)`` pair with the given key. The list is not
+--    modified if key is not within the list.
 --
 -- License:
 -- =============================================================================

@@ -23,4 +23,4 @@ The generated number sequence includes the value all-zeros, but not all-ones.
 Source file: `arith/arith_prng.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_prng.vhdl>`_
 
 
-	 
+

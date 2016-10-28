@@ -132,7 +132,7 @@ begin
 	begin
 		if rising_edge(Clock1) then
 			for j in 0 to INPUT_CHUNKS - 2 loop
-				if (j = to_index(Select_us, COUNTER_MAX)) then					-- D-FF enable
+				if j = to_index(Select_us, COUNTER_MAX) then					-- D-FF enable
 					Data_d(j)		<= In_Data_d;
 				end if;
 			end loop;

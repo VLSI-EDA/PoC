@@ -92,7 +92,7 @@ class Compiler(BaseCompiler):
 					netlist = entity.VivadoNetlist
 					self.TryRun(netlist, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -107,19 +107,19 @@ class Compiler(BaseCompiler):
 		self._WriteTclFile(netlist,board.Device)
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing pre-processing tasks...")
+		self.LogNormal("Executing pre-processing tasks...")
 		self._state = CompileState.PreCopy
 		self._RunPreCopy(netlist)
 		self._state = CompileState.PrePatch
 		self._RunPreReplace(netlist)
 		self._preTasksTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running Xilinx Vivado Synthesis...")
+		self.LogNormal("Running Xilinx Vivado Synthesis...")
 		self._state = CompileState.Compile
 		self._RunCompile(netlist)
 		self._compileTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing post-processing tasks...")
+		self.LogNormal("Executing post-processing tasks...")
 		self._state = CompileState.PostCopy
 		self._RunPostCopy(netlist)
 		self._state = CompileState.PostPatch
@@ -160,27 +160,17 @@ class Compiler(BaseCompiler):
 				format(file=file.Path.as_posix())
 
 		topLevelGenerics =  ""
-		topLevelDefines =   ""
+		for keyValuePair in self._GetHDLParameters(netlist.ConfigSectionName).items():
+			topLevelGenerics += " -generic {{{0}={1}}}".format(*keyValuePair)
 
-		vhdlGenerics = self.Host.PoCConfig[netlist.ConfigSectionName]['VHDLGenerics']
-		if (len(vhdlGenerics) > 0):
-			for keyValuePair in vhdlGenerics.split(";"):
-				topLevelGenerics += " -generic {kvp}".format(kvp=keyValuePair.strip())
-
-		verilogGenerics = self.Host.PoCConfig[netlist.ConfigSectionName]['VerilogDefines']
-		if (len(verilogGenerics) > 0):
-			for keyValuePair in verilogGenerics.split(";"):
-				topLevelDefines += " -verilog_define {kvp}".format(kvp=keyValuePair.strip())
-
-		buffer += "synth_design -top {top} -part {part}{TopLevelGenerics}{TopLevelDefines}\n".format(
+		buffer += "synth_design -top {top} -part {part}{TopLevelGenerics}\n".format(
 			top=netlist.ModuleName,
 			part=device.ShortName,
-			TopLevelGenerics=topLevelGenerics,
-			TopLevelDefines=topLevelDefines
+			TopLevelGenerics=topLevelGenerics
 		)
 		buffer += "write_checkpoint -noxdef {top}.dcp \n".format(top=netlist.ModuleName)
 		buffer += "catch {{ report_utilization -file {top}_synth.rpt -pb {top}_synth.pb }}\n".format(top=netlist.ModuleName)
 
-		self._LogDebug("Writing Vivado TCL file to '{0!s}'".format(netlist.TclFile))
+		self.LogDebug("Writing Vivado TCL file to '{0!s}'".format(netlist.TclFile))
 		with netlist.TclFile.open('w') as tclFileHandle:
 			tclFileHandle.write(buffer)

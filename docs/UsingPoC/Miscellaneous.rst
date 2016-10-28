@@ -16,12 +16,12 @@ Git
 ***
 
 * ``git-alias.setup.ps1``/``git-alias.setup.sh`` registers new global aliasses in Git
-  
+
   * ``git tree`` - Prints the colored commit tree into the console
   * ``git treea`` - Prints the colored commit tree into the console
-    
+
   .. code-block:: Bash
-     
+
      git config --global alias.tree 'log --decorate --pretty=oneline --abbrev-commit --date-order --graph'
      git config --global alias.tree 'log --decorate --pretty=oneline --abbrev-commit --date-order --graph --all'
 
@@ -42,7 +42,3 @@ The following additional file types are supported:
 Browse the `Notepad++ directory <https://github.com/VLSI-EDA/PoC/tree/master/tools/Notepad%2B%2B>`_.
 
 
-Precompile
-**********
-
-Scripts to pre-compile vendor libraries for PoC into ``temp\precompiled\``.

@@ -8,17 +8,17 @@
 include				"src/common/common.files"										# load common packages
 
 # PoC.misc.sync
-vhdl		poc		"src/misc/sync/sync.pkg.vhdl"								#
+vhdl		poc		"src/misc/sync/sync.pkg.vhdl"
 if (DeviceVendor = "Altera") then
 	include			"lib/Altera.files"													# Altera primitives
-	vhdl 	poc		"src/misc/sync/sync_Bits_Altera.vhdl"				# 
+	vhdl 	poc		"src/misc/sync/sync_Bits_Altera.vhdl"
 elseif (DeviceVendor = "Xilinx") then
 	include			"lib/Xilinx.files"													# Xilinx primitives
-	vhdl 	poc		"src/misc/sync/sync_Bits_Xilinx.vhdl"				# 
+	vhdl 	poc		"src/misc/sync/sync_Bits_Xilinx.vhdl"
 	if (ToolChain = "Xilinx_ISE") then
-		ucf				"ucf/misc/sync/sync_Bits_Xilinx.ucf"				# 
+#		ucf				"ucf/misc/sync/sync_Bits_Xilinx.ucf"
 	elseif (ToolChain = "Xilinx_Vivado") then
-		xdc				"ucf/misc/sync/sync_Bits_Xilinx.xdc"				# 
+#		xdc				"ucf/misc/sync/sync_Bits_Xilinx.xdc"
 	end if
 end if
-vhdl 		poc		"src/misc/sync/sync_Bits.vhdl"							# 
+vhdl 		poc		"src/misc/sync/sync_Bits.vhdl"							# Top-Level

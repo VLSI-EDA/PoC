@@ -5,6 +5,7 @@ eth_GEMAC_GMII
 .. TODO:: No documentation available.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../../src/net/eth/eth_GEMAC_GMII.vhdl
@@ -16,4 +17,4 @@ eth_GEMAC_GMII
 Source file: `net/eth/eth_GEMAC_GMII.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_GMII.vhdl>`_
 
 
-	 
+

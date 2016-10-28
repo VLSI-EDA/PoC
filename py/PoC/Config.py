@@ -296,10 +296,10 @@ class Device:
 		else:
 			raise ConfigurationException("RegExp mismatch.")
 
-	def _DecodeLatticeICE(self, deviceString):
+	def _DecodeLatticeICE(self, deviceString): # pylint:disable=unused-argument
 		self.__vendor = Vendors.Lattice
 
-	def _DecodeLatticeLCM(self, deviceString):
+	def _DecodeLatticeLCM(self, deviceString): # pylint:disable=unused-argument
 		self.__vendor = Vendors.Lattice
 
 	def _DecodeLatticeLFE(self, deviceString):
@@ -400,12 +400,12 @@ class Device:
 				number_format = "{num:03d}"
 			else:
 				number_format = "{num}"
-			return ("XC%i%s%s%s%s" % (
-				self.__generation,
-				self.__family.Token,
-				subtype[0],
-				number_format.format(num=self.__number),
-				subtype[1]
+			return ("XC{gen}{fam}{st0}{num}{st1}".format(
+				gen=self.__generation,
+				fam=self.__family.Token,
+				st0=subtype[0],
+				num=number_format.format(num=self.__number),
+				st1=subtype[1]
 			)).upper()
 		elif (self.__vendor is Vendors.Altera):
 			if self.__generation == 5: return self.__deviceString[2:]
@@ -426,15 +426,43 @@ class Device:
 				number_format = "{num:03d}"
 			else:
 				number_format = "{num}"
-			return ("XC%i%s%s%s%s%i%s%i" % (
-				self.__generation,
-				self.__family.Token,
-				subtype[0],
-				number_format.format(num=self.__number),
-				subtype[1],
-				self.__speedGrade,
-				str(self.__package),
-				self.__pinCount
+			return ("XC{gen}{fam}{st0}{num}{st1}{sg}{pack}{pin}".format(
+				gen=self.__generation,
+				fam=self.__family.Token,
+				st0=subtype[0],
+				num=number_format.format(num=self.__number),
+				st1=subtype[1],
+				sg=self.__speedGrade,
+				pack=str(self.__package),
+				pin=self.__pinCount
+			)).upper()
+		elif (self.__vendor is Vendors.Altera):
+			return self.__deviceString
+		elif (self.__vendor is Vendors.Lattice):
+			return self.__deviceString
+		else:
+			raise NotImplementedError("Device.FullName() not implemented for vendor {0!s}".format(self.__vendor))
+
+	# @CachedReadOnlyProperty
+	@property
+	def FullName2(self):
+		if (self.__vendor is Vendors.Generic):
+			return "GENERIC"
+		elif (self.__vendor is Vendors.Xilinx):
+			subtype = self.__subtype.Groups
+			if (self.__family is XilinxFamilies.Zynq):
+				number_format = "{num:03d}"
+			else:
+				number_format = "{num}"
+			return ("XC{gen}{fam}{st0}{num}{st1}{pack}{pin}{sg}".format(
+				gen=self.__generation,
+				fam=self.__family.Token,
+				st0=subtype[0],
+				num=number_format.format(num=self.__number),
+				st1=subtype[1],
+				pack=str(self.__package),
+				pin=self.__pinCount,
+				sg=self.__speedGrade
 			)).upper()
 		elif (self.__vendor is Vendors.Altera):
 			return self.__deviceString

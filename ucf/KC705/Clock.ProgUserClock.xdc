@@ -6,7 +6,7 @@
 ##		Device:				XC7K325T
 ##		Package:			FFG900
 ##		Speedgrade:		-2
-##	
+##
 ##	Notes:
 ##		Power Rail 4 driving VADJ_FPGA is defaulted to 2.5V (choices: 1.8V, 2.5V, 3.3V)
 ##
@@ -28,4 +28,3 @@ set_property PACKAGE_PIN	K28			[get_ports KC705_ProgUserClock_p]
 set_property PACKAGE_PIN	K29			[get_ports KC705_ProgUserClock_n]
 # set I/O standard
 set_property IOSTANDARD		LVDS_25	[get_ports -regexp {KC705_ProgUserClock_[p|n]}]
-#$ NET "KC705_ProgUserClock_p"				TNM_NET = "NET_ProgUserClock";

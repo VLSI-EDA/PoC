@@ -12,7 +12,6 @@ GRC_URL="http://kassiopeia.juls.savba.sk/~garabik/software/grc/$GRC_FILE"
 # other variables
 # --------------------------------------
 GITROOT=$(pwd)
-POCROOT=$(pwd)
 GRC_DEB="grc.deb"
 
 # define color escape codes

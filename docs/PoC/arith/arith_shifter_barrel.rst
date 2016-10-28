@@ -11,6 +11,7 @@ This Barrel-Shifter supports:
 This is equivalent to the CPU instructions: SLL, SLA, SRL, SRA, RL, RR
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/arith/arith_shifter_barrel.vhdl
@@ -22,4 +23,4 @@ This is equivalent to the CPU instructions: SLL, SLA, SRL, SRA, RL, RR
 Source file: `arith/arith_shifter_barrel.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_shifter_barrel.vhdl>`_
 
 
-	 
+

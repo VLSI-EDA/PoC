@@ -62,6 +62,9 @@ function Open-Environment
 			return 1
 		}
 		Import-Module PSCX
+
+		Push-EnvironmentBlock -Description "Before loading Xilinx Vivado."
+
 		Invoke-BatchFile -path $Vivado_SettingsFile
 		return 0
 	}
@@ -75,6 +78,9 @@ function Open-Environment
 
 function Close-Environment
 {	Write-Host "Unloading Xilinx Vivado environment..." -ForegroundColor Yellow
+
+	Pop-EnvironmentBlock
+
 	$env:XILINX_VIVADO =		$null
 	return 0
 }

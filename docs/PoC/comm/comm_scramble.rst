@@ -7,6 +7,7 @@ bits in parallel. The mask are output in little endian. The generated bit
 sequence is independent from the chosen output width.
 
 
+
 .. rubric:: Entity Declaration:
 
 .. literalinclude:: ../../../src/comm/comm_scramble.vhdl
@@ -18,4 +19,4 @@ sequence is independent from the chosen output width.
 Source file: `comm/comm_scramble.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_scramble.vhdl>`_
 
 
-	 
+

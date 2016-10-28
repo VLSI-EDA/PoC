@@ -48,7 +48,7 @@ from pathlib                    import Path
 from Base.Project               import ToolChain, Tool
 from Base.Compiler              import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
 from PoC.Entity                 import WildCard
-from ToolChains.Altera.Quartus  import QuartusException, Quartus, QuartusSettingsFile, QuartusProjectFile
+from ToolChains.Altera.Quartus  import QuartusException, Quartus, QuartusSettings, QuartusProjectFile
 
 
 class Compiler(BaseCompiler):
@@ -89,7 +89,7 @@ class Compiler(BaseCompiler):
 					netlist = entity.QuartusNetlist
 					self.TryRun(netlist, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -106,19 +106,19 @@ class Compiler(BaseCompiler):
 		self._WriteQuartusProjectFile(netlist, board.Device)
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing pre-processing tasks...")
+		self.LogNormal("Executing pre-processing tasks...")
 		self._state = CompileState.PreCopy
 		self._RunPreCopy(netlist)
 		self._state = CompileState.PrePatch
 		self._RunPreReplace(netlist)
 		self._preTasksTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running Altera Quartus Map...")
+		self.LogNormal("Running Altera Quartus Map...")
 		self._state = CompileState.Compile
 		self._RunCompile(netlist)
 		self._compileTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Executing post-processing tasks...")
+		self.LogNormal("Executing post-processing tasks...")
 		self._state = CompileState.PostCopy
 		self._RunPostCopy(netlist)
 		self._state = CompileState.PostPatch
@@ -140,15 +140,17 @@ class Compiler(BaseCompiler):
 	def _WriteQuartusProjectFile(self, netlist, device):
 		quartusProjectFile = QuartusProjectFile(netlist.QsfFile)
 
-		quartusProject = QuartusSettingsFile(netlist.ModuleName, quartusProjectFile)
-		quartusProject.GlobalAssignments['FAMILY'] =              "\"{0}\"".format(device.Series)
-		quartusProject.GlobalAssignments['DEVICE'] =              device.ShortName
-		quartusProject.GlobalAssignments['TOP_LEVEL_ENTITY'] =    netlist.ModuleName
-		quartusProject.GlobalAssignments['VHDL_INPUT_VERSION'] =  "VHDL_2008"
+		quartusSettings = QuartusSettings(netlist.ModuleName, quartusProjectFile)
+		quartusSettings.GlobalAssignments['FAMILY'] =              "\"{0}\"".format(device.Series)
+		quartusSettings.GlobalAssignments['DEVICE'] =              device.ShortName
+		quartusSettings.GlobalAssignments['TOP_LEVEL_ENTITY'] =    netlist.ModuleName
+		quartusSettings.GlobalAssignments['VHDL_INPUT_VERSION'] =  "VHDL_2008"
+		quartusSettings.Parameters.update(self._GetHDLParameters(netlist.ConfigSectionName))
 
-		quartusProject.CopySourceFilesFromProject(self.PoCProject)
+		# transform files from PoCProject to global assignment commands in a QSF files
+		quartusSettings.CopySourceFilesFromProject(self.PoCProject)
 
-		quartusProject.Write()
+		quartusSettings.Write()
 
 	def _RunCompile(self, netlist):
 		q2map = self._toolChain.GetMap()

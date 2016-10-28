@@ -13,7 +13,7 @@
 ##		VCCO:					2,5V (VCC2V5_FPGA)
 ##	Location:				U80
 ##		Vendor:				Marvell
-##		Device:				M88E1111 - 
+##		Device:				M88E1111 -
 ##		MDIO-Address:	0x05 (---0 0111b)
 ##		I²C-Address:	I²C management mode is not enabled
 ##
@@ -21,10 +21,10 @@
 ## --------------------------
 ##	Bank:						116
 ##	Transceiver:
-##		Location:			
+##		Location:
 ##	ReferenceClock
 ##		Location:			U82 (ICS844021I_TSSOP8)
-##		Vendor:				
+##		Vendor:
 ##		Device:				ICS844021I
 ##		Frequency:		125 MHz
 NET "ML605_EthernetPHY_RefClock_125MHz_p"				LOC = "H6";														## {IN}			U82.7

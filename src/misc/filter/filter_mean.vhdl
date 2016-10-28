@@ -69,10 +69,10 @@ begin
 		FilterOut	<= to_sl(popcnt > (Delays'length - popcnt));
 	end process;
 
-	genOutReg0 : if (ADD_OUTPUT_REG = FALSE) generate
+	genOutReg0 : if not ADD_OUTPUT_REG generate
 		DataOut				<= FilterOut;
 	end generate;
-	genOutReg1 : if (ADD_OUTPUT_REG = TRUE) generate
+	genOutReg1 : if ADD_OUTPUT_REG generate
 		signal FilterOut_d	: std_logic	:= INIT;
 	begin
 		FilterOut_d		<= FilterOut when rising_edge(Clock);

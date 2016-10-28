@@ -14,34 +14,41 @@
 -- * dual clock, clock enable,
 -- * 2 read/write ports.
 --
+-- Command truth table for port 1, same applies to port 2:
+--
+-- === === ================
+-- ce1 we1 Command
+-- === === ================
+-- 0   X   No operation
+-- 1   0   Read from memory
+-- 1   1   Write to memory
+-- === === ================
+--
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
--- * Same-Port Read-During Write:
---	 At rising edge of "clk1", data "d1" written to port 1 (ce1 and we1 = '1')
---	 is directly passed to the output "q1". This is also known as write-first
---	 mode or read-through write behavior. Same applies for port 2 (d2 -> q2).
+-- Same-Port Read-During-Write
+--   When writing data through port 1, the read output of the same port
+--   (``q1``) will output the new data (``d1``, in the following clock cycle)
+--   which is aka. "write-first behavior". This behavior also applies to Altera
+--   M20K memory blocks as described in the Altera: "Stratix 5 Device Handbook"
+--   (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
+--   (UG-01068) is wrong.
 --
--- * Mixed-Port Read-During Write:
---	 Here, the Altera M512/M4K TriMatrix memory (as found e.g. in Stratix
---	 and Stratix II FPGAs) defines the minimum time after which the written data
---	 at one port can be read-out at the other again. As stated in the Stratix
---	 Handbook, Volume 2, page 2-13, data is actually written with the falling
---	 (instead of the rising) edge of the clock into the memory array. The write
---	 itself takes the write-cycle time which is less or equal to the minimum
---	 clock-period time. After this, the data can be read-out at the other port.
---	 Consequently, data "d1" written at the rising-edge of "clk1" at address
---	 "a1" can be read-out at the 2nd port from the same address with the
---	 2nd rising-edge of "clk2" following the falling-edge of "clk1".
---	 If the rising-edge of "clk2" coincides with the falling-edge of "clk1"
---	 (e.g. same clock signal), then it is counted as the 1st rising-edge of
---	 "clk2" in this timing. Same applies analogous to data written at port 2
---	 and read-out at port 1.
+--   Same applies to port 2.
 --
--- WARNING: The simulated behavior on RT-level is not correct.
+-- Mixed-Port Read-During-Write
+--   When reading at the write address, the read value will be unknown which is
+--   aka. "don't care behavior". This applies to all reads (at the same
+--   address) which are issued during the write-cycle time, which starts at the
+--   rising-edge of the write clock and (in the worst case) extends
+--   until the next rising-edge of that write clock.
 --
--- TODO: add timing diagram
--- TODO: implement correct behavior for RT-level simulation
+-- .. WARNING::
+--    The simulated behavior on RT-level is too optimistic. When reading
+--    at the write address always the new data will be returned.
+--
+-- .. TODO:: Implement correct behavior for RT-level simulation.
 --
 -- License:
 -- =============================================================================
@@ -76,23 +83,23 @@ use			PoC.mem.all;
 
 entity ocram_tdp is
 	generic (
-		A_BITS		: positive;
-		D_BITS		: positive;
-		FILENAME	: string		:= ""
+		A_BITS		: positive;															-- number of address bits
+		D_BITS		: positive;															-- number of data bits
+		FILENAME	: string		:= ""												-- file-name for RAM initialization
 	);
 	port (
-		clk1 : in	std_logic;
-		clk2 : in	std_logic;
-		ce1	: in	std_logic;
-		ce2	: in	std_logic;
-		we1	: in	std_logic;
-		we2	: in	std_logic;
-		a1	 : in	unsigned(A_BITS-1 downto 0);
-		a2	 : in	unsigned(A_BITS-1 downto 0);
-		d1	 : in	std_logic_vector(D_BITS-1 downto 0);
-		d2	 : in	std_logic_vector(D_BITS-1 downto 0);
-		q1	 : out std_logic_vector(D_BITS-1 downto 0);
-		q2	 : out std_logic_vector(D_BITS-1 downto 0)
+		clk1 : in	std_logic;															-- clock for 1st port
+		clk2 : in	std_logic;															-- clock for 2nd port
+		ce1	: in	std_logic;															-- clock-enable for 1st port
+		ce2	: in	std_logic;															-- clock-enable for 2nd port
+		we1	: in	std_logic;															-- write-enable for 1st port
+		we2	: in	std_logic;															-- write-enable for 2nd port
+		a1	 : in	unsigned(A_BITS-1 downto 0);						-- address for 1st port
+		a2	 : in	unsigned(A_BITS-1 downto 0);						-- address for 2nd port
+		d1	 : in	std_logic_vector(D_BITS-1 downto 0);		-- write-data for 1st port
+		d2	 : in	std_logic_vector(D_BITS-1 downto 0);		-- write-data for 2nd port
+		q1	 : out std_logic_vector(D_BITS-1 downto 0);		-- read-data from 1st port
+		q2	 : out std_logic_vector(D_BITS-1 downto 0) 		-- read-data from 2nd port
 	);
 end entity;
 
@@ -101,7 +108,7 @@ architecture rtl of ocram_tdp is
 	constant DEPTH : positive := 2**A_BITS;
 
 begin
-	gInfer : if ((VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
+	gInfer : if (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX) generate
 		-- RAM can be inferred correctly only if '-use_new_parser yes' is enabled in XST options
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		ram_t		is array(0 to DEPTH - 1) of word_t;
@@ -111,10 +118,10 @@ begin
 			variable Memory		: T_SLM(DEPTH - 1 downto 0, word_t'range);
 			variable res			: ram_t;
 		begin
-			if (str_length(FilePath) = 0) then
+			if str_length(FilePath) = 0 then
         -- shortcut required by Vivado
 				return (others => (others => ite(SIMULATION, 'U', '0')));
-			elsif (mem_FileExtension(FilePath) = "mem") then
+			elsif mem_FileExtension(FilePath) = "mem" then
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_XILINX_MEM, MEM_CONTENT_HEX);
 			else
 				Memory	:= mem_ReadMemoryFile(FilePath, DEPTH, word_t'length, MEM_FILEFORMAT_INTEL_HEX, MEM_CONTENT_HEX);
@@ -157,8 +164,10 @@ begin
 			end if;
 		end process;
 
-		q1 <= ram(to_integer(a1_reg));		-- returns new data
-		q2 <= ram(to_integer(a2_reg));		-- returns new data
+		q1 <= (others => 'X') when SIMULATION and is_x(std_logic_vector(a1_reg)) else
+					ram(to_integer(a1_reg));		-- returns new data
+		q2 <= (others => 'X') when SIMULATION and is_x(std_logic_vector(a2_reg)) else
+					ram(to_integer(a2_reg));		-- returns new data
 	end generate gInfer;
 
 	gAltera: if VENDOR = VENDOR_ALTERA generate
@@ -188,7 +197,7 @@ begin
 		-- declaration above) is not sufficient for ModelSim.
 		-- That requires also usage of altera_mf library.
 
-		i: ocram_tdp_altera
+		ram_tdp: ocram_tdp_altera
 			generic map (
 				A_BITS		=> A_BITS,
 				D_BITS		=> D_BITS,

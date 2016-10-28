@@ -80,7 +80,7 @@ architecture rtl of arith_convert_bin2bcd is
 	function nextBCD(Value : unsigned(4 downto 0)) return unsigned is
 		constant Temp : unsigned(4 downto 0)	:= Value - 10;
 	begin
-		if (Value > 9) then
+		if Value > 9 then
 			return '1' & Temp(3 downto 0);
 		else
 			return Value;
