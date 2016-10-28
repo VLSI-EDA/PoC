@@ -322,7 +322,7 @@ class SynthesisArgumentFile(File):
 		if (self.Logfile is not None):
 			buffer += "-logfile {0}\n".format(self.Logfile)
 		for keyValuePair in self._hdlParams.items():
-			buffer += "-hdl_param {0} {1}\n".format(keyValuePair)
+			buffer += "-hdl_param {0} {1}\n".format(*keyValuePair)
 
 		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
 			buffer += "-lib {library}\n-vhd {file}\n".format(file=file.Path.as_posix(), library=file.LibraryName)

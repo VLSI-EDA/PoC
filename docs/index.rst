@@ -3,7 +3,7 @@ and Architecture** - Faculty of Computer Science, Technische Universität Dresde
 Germany |br|
 `https://tu-dresden.de/ing/informatik/ti/vlsi <https://tu-dresden.de/ing/informatik/ti/vlsi>`_
 
-.. image:: _static/logocs/tu-dresden.jpg
+.. image:: _static/logos/tu-dresden.jpg
    :scale: 10
    :alt: Technische Universität Dresden
 

@@ -240,7 +240,7 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		if(len(hdlParameters)>0):
 			xstFileContent += "-generics {"
 			for keyValuePair in hdlParameters.items():
-				xstFileContent += " {0}={1}".format(keyValuePair)
+				xstFileContent += " {0}={1}".format(*keyValuePair)
 			xstFileContent += " }\n"
 
 		self.LogDebug("Writing Xilinx Compiler Tool option file to '{0!s}'".format(netlist.XstFile))
