@@ -32,9 +32,9 @@ and Architecture** - Faculty of Computer Science, Technische Universität Dresden
 Germany |br|
 `http://tu-dresden.de/inf/vlsi-eda <http://tu-dresden.de/inf/vlsi-eda>`_
 
-.. image:: docs/_static/images/logo_tud.jpg
+.. image:: docs/_static/logos/tu-dresden-resized.jpg
    :scale: 10
-   :alt: Logo: Technische Universität Dresden
+   :alt: Technische Universität Dresden
 
 .. contents:: Contents of this Page
    :local:
