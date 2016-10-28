@@ -877,7 +877,7 @@ package body physical is
 
 	-- calculate needed counter cycles to achieve a given 1. timing/delay and 2. frequency/period
 	-- ===========================================================================
-	--	@param Timing					A given timing or delay, which should be achived
+	--	@param Timing					A given timing or delay, which should be achieved
 	--	@param Clock_Period		The period of the circuits clock
 	--	@RoundingStyle				Default = ROUND_UP; other choises: ROUND_UP, ROUND_DOWN, ROUND_TO_NEAREST
 	function TimingToCycles(Timing : time; Clock_Period : time; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return natural is

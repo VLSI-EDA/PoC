@@ -667,7 +667,7 @@ package body strings is
 		if (str'length > 0) then
 			-- WORKAROUND: for Altera Quartus-II
 			--	Version:	15.0
-			--	Issue:		array bounds are check regardless of the hierachy and control flow
+			--	Issue:		array bounds are check regardless of the hierarchy and control flow
 			Result(1 to bound(Size, 1, str'length)) := ite((str'length > 0), str(1 to imin(Size, str'length)), ConstNUL);
 		end if;
 		return Result;
@@ -729,7 +729,7 @@ package body strings is
 	end function;
 
 	-- compare two STRINGs for equality
-	-- pre-check the string lengthes to suppress warnings for unqual sized string comparisions.
+	-- pre-check the string lengthes to suppress warnings for unqual sized string comparisons.
 	-- QUESTION: overload "=" operator?
 	function str_equal(str1 : string; str2 : string) return boolean is
 	begin

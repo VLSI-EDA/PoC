@@ -31,11 +31,19 @@ Table of Content:
 
 ## 1 Overview
 
-PoC - “Pile of Cores” provides implementations for often required hardware functions such as Arithmetic Units, Caches, Clock-Domain-Crossing Circuits, FIFOs, RAM wrappers, and I/O Controllers. The hardware modules are typically provided as VHDL or Verilog source code, so it can be easily re-used in a variety of hardware designs.
+PoC - “Pile of Cores” provides implementations for often required hardware functions such as
+Arithmetic Units, Caches, Clock-Domain-Crossing Circuits, FIFOs, RAM wrappers, and I/O Controllers.
+The hardware modules are typically provided as VHDL or Verilog source code, so it can be easily
+re-used in a variety of hardware designs.
 
-All hardware modules use a common set of VHDL packages to share new VHDL types, sub-programs and constants. Additionally, a set of simulation helper packages eases the writing of testbenches. Because PoC hosts a huge amount of IP cores, all cores are grouped into sub-namespaces to build a better hierachy.
+All hardware modules use a common set of VHDL packages to share new VHDL types, sub-programs and
+constants. Additionally, a set of simulation helper packages eases the writing of testbenches.
+Because PoC hosts a huge amount of IP cores, all cores are grouped into sub-namespaces to build a
+clear hierachy.
 
-Various simulation and synthesis tool chains are supported to interoperate with PoC. To generalize all supported free and commercial vendor tool chains, PoC is shipped with a Python based Infrastruture to offer a command line based frontend.
+Various simulation and synthesis tool chains are supported to interoperate with PoC. To generalize
+all supported free and commercial vendor tool chains, PoC is shipped with a Python based
+infrastructure to offer a command line based frontend.
 
 
 ## 2 Quick Start Guide
@@ -71,7 +79,7 @@ Windows. See [Requirements][211] for further details.
  -  **Git User Interface**, if you want to check out the latest 'master' or 'release' branch.
 
 
-#### PoC depends on third parts libraries:
+#### PoC depends on third part libraries:
  -  [Cocotb][2131]  
     A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
  -  [OS-VVM][2132]  
@@ -153,7 +161,7 @@ git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
 
 #### b) Configuring PoC
 
-The PoC-Library should be configured to explore it's full potential. See [Configuration][2421] for more
+The PoC-Library should be configured to explore its full potential. See [Configuration][2421] for more
 details. The following command lines will start the configuration process:
 
 ```powershell
@@ -165,7 +173,7 @@ cd ProjectRoot
 
 #### c) Creating PoC's `my_config.vhdl` and `my_project.vhdl` Files
 
-The PoC-Library needs two VHDL files for it's configuration. These files are used to determine the most
+The PoC-Library needs two VHDL files for its configuration. These files are used to determine the most
 suitable implementation depending on the provided target information. Copy the following two template
 files into your project's source folder. Rename these files to \*.vhdl and configure the VHDL constants
 in the files:
@@ -198,7 +206,7 @@ Further informations are provided at [Creating my_config/my_project.vhdl][2431].
 
 #### d) Adding PoC's Common Packages to a Synthesis or Simulation Project
 
-PoC is shipped with a set of common packages, which are used by most of it's modules. These packages are
+PoC is shipped with a set of common packages, which are used by most of its modules. These packages are
 stored in the `PoCRoot\src\common` directory. PoC also provides a VHDL context in `common.vhdl` , which
 can be used to reference all packages at once.
 
@@ -213,7 +221,7 @@ of a file.
 
 #### f) Compiling Shipped IP Cores
 
-Some IP Cores are shipped are pre-configured vendor IP Cores. If such IP cores shall be used in a HDL
+Some IP Cores are shipped as pre-configured vendor IP Cores. If such IP cores shall be used in a HDL
 project, it's recommended to use PoC to create, compile and if needed patch these IP cores. See
 [Synthesis][2461] for more details.
 
@@ -260,7 +268,7 @@ is always the same and based on PoC's sub-namespace tree.
  -  [`src`](src) - PoC's source files grouped into sub-folders according to the sub-namespace tree.
  -  [`tb`](tb) - Testbench files.
  -  [`tcl`](tcl) - Tcl files.
- -  [`temp`](temp) - A created temporary directors for various tools used by PoC's Python scripts.
+ -  [`temp`](temp) - Automatically created temporary directors for various tools used by PoC's Python scripts.
  -  [`tools`](tools) - Settings/highlighting files and helpers for supported tools.
  -  [`ucf`](ucf) - Pre-configured constraint files (\*.ucf, \*.xdc, \*.sdc) for supported FPGA boards.
  -  [`xst`](xst) - Configuration files to synthesize PoC modules with Xilinx XST into a netlist.
@@ -275,7 +283,7 @@ named `*.v93.vhdl` and `*.v08.vhdl` to denote the highest supported language ver
 
 If you are using the PoC-Library, please let us know. We are grateful for your project's reference.
 The PoC-Library hosted at [GitHub.com](https://www.github.com). Please use the following
-[bitlatex](https://www.ctan.org/pkg/biblatex) entry to cite us:
+[biblatex](https://www.ctan.org/pkg/biblatex) entry to cite us:
 
 ```bibtex
 # BibLaTex example entry
@@ -288,5 +296,3 @@ The PoC-Library hosted at [GitHub.com](https://www.github.com). Please use the f
   urldate={2016-10-28},
 }
 ```
- 
-If you are using the PoC-Library, please let us know. We are grateful for your project's reference.

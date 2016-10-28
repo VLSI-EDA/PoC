@@ -37,7 +37,7 @@ See :doc:`/UsingPoC/Requirements` for further details.
 * **Git User Interface**, if you want to check out the latest 'master' or 'release' branch.
 
 
-.. rubric:: PoC depends on third parts libraries:
+.. rubric:: PoC depends on third part libraries:
 
 * `Cocotb <https://github.com/potentialventures/cocotb>`_ |br|
   A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
@@ -119,7 +119,7 @@ list of steps can be found at :doc:`Integration </UsingPoC/Integration>`.
 
 .. rubric:: 2. Configuring PoC
 
-The PoC-Library should be configured to explore it's full potential. See
+The PoC-Library should be configured to explore its full potential. See
 :doc:`Configuration </UsingPoC/PoCConfiguration>` for more details. The
 following command lines will start the configuration process:
 
@@ -131,7 +131,7 @@ following command lines will start the configuration process:
 
 .. rubric:: 3. Creating PoC's ``my_config.vhdl`` and ``my_project.vhdl`` Files
 
-The PoC-Library needs two VHDL files for it's configuration. These files are
+The PoC-Library needs two VHDL files for its configuration. These files are
 used to determine the most suitable implementation depending on the provided
 target information. Copy the following two template files into your project's
 source folder. Rename these files to \*.vhdl and configure the VHDL constants
@@ -163,7 +163,7 @@ Further informations are provided at
 
 .. rubric:: 4. Adding PoC's Common Packages to a Synthesis or Simulation Project
 
-PoC is shipped with a set of common packages, which are used by most of it's
+PoC is shipped with a set of common packages, which are used by most of its
 modules. These packages are stored in the ``PoCRoot\src\common`` directory.
 PoC also provides a VHDL context in ``common.vhdl`` , which can be used to
 reference all packages at once.
@@ -205,7 +205,7 @@ passed to the frontend script.
 The CLI command ``ghdl`` chooses *GHDL Simulator* as the simulator and
 passes the fully qualified PoC entity name ``PoC.arith.prng`` as a parameter
 to the tool. All required source file are gathered and compiled to an
-executable. Afterwards this executable is launched in CLI mode and it's outputs
+executable. Afterwards this executable is launched in CLI mode and its outputs
 are displayed in console:
 
 .. image:: /_static/images/ghdl/arith_prng_tb.posh.png

@@ -49,7 +49,7 @@ all cores are grouped into sub-namespaces to build a better hierachy.
 
 Various simulation and synthesis tool chains are supported to interoperate with
 PoC. To generalize all supported free and commercial vendor tool chains, PoC is
-shipped with a Python based Infrastruture to offer a command line based frontend.
+shipped with a Python based infrastructure to offer a command line based frontend.
 
 
 News
@@ -67,7 +67,7 @@ Cite the PoC-Library
 ********************
 
 The PoC-Library hosted at `GitHub.com <https://www.github.com>`_. Please use the
-following `bitlatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
+following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
 
 .. code-block:: tex
 

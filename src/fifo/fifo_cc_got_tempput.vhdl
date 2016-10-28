@@ -128,7 +128,7 @@ architecture rtl of fifo_cc_got_tempput is
   signal IP1 : unsigned(A_BITS-1 downto 0);
   signal OP1 : unsigned(A_BITS-1 downto 0);
 
-  -- Commited Write Pointer (Commit Marker)
+  -- Committed Write Pointer (Commit Marker)
   signal IPm : unsigned(A_BITS-1 downto 0) := (others => '0');
 
   -----------------------------------------------------------------------------
