@@ -19,15 +19,14 @@ Faculty of Computer Science, Technische Universität Dresden, Germany
 Table of Content:
 --------------------------------------------------------------------------------
  1. [Overview](#1-overview)
- 2. [Quick Start Guide](#2-quick-start-guide)
-
- 3. [Requirements](#3-requirements)
- 4. [Dependencies](#4-dependencies)
- 5. [Configuring PoC on a Local System (Stand Alone)](#5-configuring-poc-on-a-local-system-stand-alone)
- 6. [Integrating PoC into Projects](#6-integrating-poc-into-projects)
- 7. [Using PoC](#7-using-poc)
- 8. [Updating PoC](#8-updating-poc)
- 9. [References](#9-references)
+ 2. [Quick Start Guide](#2-quick-start-guide)  
+    2.1. [Requirements and Dependencies](#21-requirements-and-dependencies)  
+    2.2. [Download](#22-download)  
+    2.3. [Configuring PoC on a Local System](#23-configuring-poc-on-a-local-system)  
+    2.4. [Integration](#24-integration)  
+    2.5. [Updating](#25-updating)
+ 3. [Common Notes](#3-common-notes)
+ 4. [Cite the PoC-Library](#4-cite-the-poc-library)
 
 --------------------------------------------------------------------------------
 
@@ -57,29 +56,29 @@ Windows. See [Requirements][211] for further details.
 
 
 #### PoC requires:
-* A [supported synthesis tool chain][2111], if you want to synthezise IP cores.
-* A [supported simulator too chain][2112], if you want to simulate IP cores.
-* The **Python 3** programming language and runtime, if you want to use PoC's infrastructure.
-* A shell to execute shell scripts:
-  * **Bash** on Linux and OS X
-  * **PowerShell** on Windows
+ -  A [supported synthesis tool chain][2111], if you want to synthezise IP cores.
+ -  A [supported simulator too chain][2112], if you want to simulate IP cores.
+ -  The **Python 3** programming language and runtime, if you want to use PoC's infrastructure.
+ -  A shell to execute shell scripts:
+    -  **Bash** on Linux and OS X
+    -  **PowerShell** on Windows
 
 [2111]: http://poc-library.readthedocs.io/en/latest/WhatIsPoC/SupportedToolChains.html
 [2112]: http://poc-library.readthedocs.io/en/latest/WhatIsPoC/SupportedToolChains.html
 
 
 #### PoC optionally requires:
-* **Git command line** tools or
-* **Git User Interface**, if you want to check out the latest 'master' or 'release' branch.
+ -  **Git command line** tools or
+ -  **Git User Interface**, if you want to check out the latest 'master' or 'release' branch.
 
 
 #### PoC depends on third parts libraries:
-* [Cocotb][2131]  
-  A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
-* [OS-VVM][2132]  
-  Open Source VHDL Verification Methodology.
-* [VUnit][2133]  
-  An unit testing framework for VHDL.
+ -  [Cocotb][2131]  
+    A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
+ -  [OS-VVM][2132]  
+    Open Source VHDL Verification Methodology.
+ -  [VUnit][2133]  
+    An unit testing framework for VHDL.
   
 All dependencies are available as GitHub repositories and are linked to PoC as Git submodules into the
 [`PoCRoot\lib`][205] directory. See [Third Party Libraries][206] for more details on these libraries.
@@ -237,16 +236,45 @@ git merge
 ```
 
 **See also:**
-* [**Running one or more testbenches**][251]  
-  The installation can be checked by running one or more of PoC's testbenches.
-* [**Running one or more netlist generation flows**][252]  
-  The installation can also be checked by running one or more of PoC's synthesis flows.
+ -  [**Running one or more testbenches**][251]  
+    The installation can be checked by running one or more of PoC's testbenches.
+ -  [**Running one or more netlist generation flows**][252]  
+    The installation can also be checked by running one or more of PoC's synthesis flows.
 
 [251]: http://poc-library.readthedocs.io/en/latest/UsingPoC/Simulation.html
 [252]: http://poc-library.readthedocs.io/en/latest/UsingPoC/Synthesis.html 
-      
-## 3 Cite the PoC-Library
 
+
+## 3. Common Notes
+
+**The PoC-Library** is structured into several sub-folders naming the purpose of the folder like
+[`src`][src] for sources files or [`tb`][tb] for testbench files. The structure within these folders
+is always the same and based on PoC's sub-namespace tree.
+
+**Main directory overview:**
+
+ -  [`lib`](lib) - Embedded or linked external libraries.
+ -  [`netlist`](netlist) - Configuration files and output directory for pre-configured netlist synthesis
+    results from vendor IP cores or from complex PoC controllers.
+ -  [`py`](py) - Supporting Python scripts.
+ -  [`sim`](sim) - Pre-configured waveform views for selected testbenches.
+ -  [`src`](src) - PoC's source files grouped into sub-folders according to the sub-namespace tree.
+ -  [`tb`](tb) - Testbench files.
+ -  [`tcl`](tcl) - Tcl files.
+ -  [`temp`](temp) - A created temporary directors for various tools used by PoC's Python scripts.
+ -  [`tools`](tools) - Settings/highlighting files and helpers for supported tools.
+ -  [`ucf`](ucf) - Pre-configured constraint files (\*.ucf, \*.xdc, \*.sdc) for supported FPGA boards.
+ -  [`xst`](xst) - Configuration files to synthesize PoC modules with Xilinx XST into a netlist.
+
+
+All VHDL source files should be compiled into the VHDL library `PoC`. If not indicated otherwise, all
+source files can be compiled using the VHDL-93 or VHDL-2008 language version. Incompatible files are
+named `*.v93.vhdl` and `*.v08.vhdl` to denote the highest supported language version.
+
+
+## 4 Cite the PoC-Library
+
+If you are using the PoC-Library, please let us know. We are grateful for your project's reference.
 The PoC-Library hosted at [GitHub.com](https://www.github.com). Please use the following
 [bitlatex](https://www.ctan.org/pkg/biblatex) entry to cite us:
 
@@ -261,24 +289,5 @@ The PoC-Library hosted at [GitHub.com](https://www.github.com). Please use the f
   urldate={2016-10-28},
 }
 ```
-
-
- [poc_ex]:  https://github.com/VLSI-EDA/PoC-Examples
- [q27]:			https://github.com/preusser/q27
- [pb_lib]:  https://github.com/Paebbels/PicoBlaze-Library
- [pb_ex]:		https://github.com/Paebbels/PicoBlaze-Examples
  
-If you are using the PoC-Library, please let us know. We are grateful for
-your project's reference.
-
- [lib]:					lib
- [netlist]:			netlist
- [py]:					py
- [sim]:					sim
- [src]:					src
- [tb]:					tb
- [tcl]:					tcl
- [temp]:				temp
- [tools]:				tools
- [ucf]:					ucf
- [xst]:					xst
+If you are using the PoC-Library, please let us know. We are grateful for your project's reference.
