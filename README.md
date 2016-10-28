@@ -42,14 +42,14 @@ Various simulation and synthesis tool chains are supported to interoperate with 
 
 ## 2 Quick Start Guide
 
-This **quick start guide** gives a fast and simple introduction into PoC. All topics can be found in the
-[Using PoC][201] section with much more details and examples.
+This **Quick Start Guide** gives a fast and simple introduction into PoC. All topics can be found in the
+[Using PoC][201] section at [ReadTheDocs.io][202] with much more details and examples.
 
 
 ### 2.1 Requirements and Dependencies
 
 The PoC-Library comes with some scripts to ease most of the common tasks, like running testbenches or
-generating IP cores. PoC uses **Python 3** as a platform independent scripting environment. All Python
+generating IP cores. PoC uses Python 3 as a platform independent scripting environment. All Python
 scripts are wrapped in Bash or PowerShell scripts, to hide some platform specifics of Darwin, Linux or
 Windows. See [Requirements][211] for further details.
 
@@ -59,17 +59,18 @@ Windows. See [Requirements][211] for further details.
 #### PoC requires:
 * A [supported synthesis tool chain][2111], if you want to synthezise IP cores.
 * A [supported simulator too chain][2112], if you want to simulate IP cores.
-* The Python3 programming language and runtime, if you want to use PoC's infrastructure.
+* The **Python 3** programming language and runtime, if you want to use PoC's infrastructure.
 * A shell to execute shell scripts:
-  * Bash on Linux and OS X
-  * PowerShell on Windows
+  * **Bash** on Linux and OS X
+  * **PowerShell** on Windows
 
 [2111]: http://poc-library.readthedocs.io/en/latest/WhatIsPoC/SupportedToolChains.html
 [2112]: http://poc-library.readthedocs.io/en/latest/WhatIsPoC/SupportedToolChains.html
 
 
 #### PoC optionally requires:
-* Git command line tools or a Git GUI, if you want to check out the latest 'master' or 'release' branch.
+* **Git command line** tools or
+* **Git User Interface**, if you want to check out the latest 'master' or 'release' branch.
 
 
 #### PoC depends on third parts libraries:
@@ -81,20 +82,21 @@ Windows. See [Requirements][211] for further details.
   An unit testing framework for VHDL.
   
 All dependencies are available as GitHub repositories and are linked to PoC as Git submodules into the
-[PoCRoot\lib][202] directory. See [Third Party Libraries][203] for more details on these libraries.
+[`PoCRoot\lib`][205] directory. See [Third Party Libraries][206] for more details on these libraries.
 
 [2131]: https://github.com/potentialventures/cocotb
 [2132]: https://github.com/JimLewis/OSVVM
 [2133]: https://github.com/VUnit/vunit
 
 [201]: http://poc-library.readthedocs.io/en/latest/UsingPoC/index.html
-[202]: https://github.com/VLSI-EDA/PoC/tree/master/lib
-[203]: http://poc-library.readthedocs.io/en/latest/Miscelaneous/ThirdParty.html
+[202]: http://poc-library.readthedocs.io/
+[205]: https://github.com/VLSI-EDA/PoC/tree/release/lib
+[206]: http://poc-library.readthedocs.io/en/latest/Miscelaneous/ThirdParty.html
 
 
 ### 2.2 Download
 
-The PoC-Library can be downloaded as a [zip-file][221] (latest 'master' branch), cloned with `git clone`
+The PoC-Library can be downloaded as a [zip-file][221] (latest 'release' branch), cloned with `git clone`
 or embedded with `git submodule add` from GitHub. GitHub offers HTTPS and SSH as transfer protocols. See
 the [Download][222] page for further details. The installation directory is referred to as `PoCRoot`.
 
@@ -103,7 +105,7 @@ Protocol | Git Clone Command
 HTTPS    | `git clone --recursive https://github.com/VLSI-EDA/PoC.git PoC`
 SSH      | `git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC`
 
-[221]: https://github.com/VLSI-EDA/PoC/archive/master.zip
+[221]: https://github.com/VLSI-EDA/PoC/archive/release.zip
 [222]: http://poc-library.readthedocs.io/en/latest/UsingPoC/Download.html
 
 ### 2.3 Configuring PoC on a Local System
@@ -234,9 +236,10 @@ git treea
 git merge
 ```
 
-[**Running one or more testbenches**][251]
+**See also:**
+* [**Running one or more testbenches**][251]  
   The installation can be checked by running one or more of PoC's testbenches.
-[**Running one or more netlist generation flows**][252]
+* [**Running one or more netlist generation flows**][252]  
   The installation can also be checked by running one or more of PoC's synthesis flows.
 
 [251]: http://poc-library.readthedocs.io/en/latest/UsingPoC/Simulation.html
