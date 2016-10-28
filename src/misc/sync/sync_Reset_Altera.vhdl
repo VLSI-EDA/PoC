@@ -8,8 +8,8 @@
 --
 -- Description:
 -- -------------------------------------
---    This is the Altera specific implementation of the entity
---    'PoC.misc.sync.sync_Reset'. See the description there on how to use this.
+-- This is the Altera specific implementation of the entity
+-- `PoC.misc.sync.Reset`. See the description there on how to use this.
 --
 -- License:
 -- =============================================================================

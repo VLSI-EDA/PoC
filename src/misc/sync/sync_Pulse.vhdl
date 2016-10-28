@@ -4,17 +4,17 @@
 -- =============================================================================
 -- Authors:         Patrick Lehmann
 --
--- Entity:          Synchronizes a flag signal across clock-domain boundaries
+-- Entity:          Synchronizes a very short pulse across clock-domain boundaries
 --
 -- Description:
 -- -------------------------------------
--- This module synchronizes multiple flag bits into clock-domain ``Clock``.
--- The clock-domain boundary crossing is done by two synchronizer D-FFs. All
--- bits are independent from each other. If a known vendor like Altera or Xilinx
--- are recognized, a vendor specific implementation is choosen.
+-- This module synchronizes multiple pulsed bits into the clock-domain ``Clock``.
+-- The clock-domain boundary crossing is done by two synchronizer D-FFs. All bits
+-- are independent from each other. If a known vendor like Altera or Xilinx are
+-- recognized, a vendor specific implementation is choosen.
 --
 -- .. ATTENTION::
---    Use this synchronizer only for long time stable signals (flags).
+--    Use this synchronizer for very short signals (pulse).
 --
 -- Constraints:
 --   General:
@@ -23,16 +23,16 @@
 --
 --   Xilinx:
 --     In case of a Xilinx device, this module will instantiate the optimized
---     module PoC.xil.sync.Bits. Please attend to the notes of sync_Bits.vhdl.
+--     module PoC.xil.sync.Pulse. Please attend to the notes of sync_Bits.vhdl.
 --
 --   Altera sdc file:
 --     TODO
 --
 -- SeeAlso:
+-- :doc:`PoC.misc.sync.Bits </PoC/misc/sync/sync_Bits>`
+--   For a common 2 D-FF synchronizer for *flag*-signals.
 -- :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`
 --   For a special 2 D-FF synchronizer for *reset*-signals.
--- :doc:`PoC.misc.sync.Pulse </PoC/misc/sync/sync_Pulse>`
---   For a special 1+2 D-FF synchronizer for *pulse*-signals.
 -- :doc:`PoC.misc.sync.Strobe </PoC/misc/sync/sync_Strobe>`
 --   For a synchronizer for *strobe*-signals.
 -- :doc:`PoC.misc.sync.Vector </PoC/misc/sync/sync_Vector>`
@@ -65,10 +65,9 @@ use			PoC.utils.all;
 use			PoC.sync.all;
 
 
-entity sync_Bits is
+entity sync_Pulse is
   generic (
 	  BITS					: positive						:= 1;									-- number of bit to be synchronized
-		INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 	);
   port (
@@ -79,14 +78,12 @@ entity sync_Bits is
 end entity;
 
 
-architecture rtl of sync_Bits is
-	constant INIT_I		: std_logic_vector		:= resize(descend(INIT), BITS);
+architecture rtl of sync_Pulse is
 	constant DEV_INFO : T_DEVICE_INFO				:= DEVICE_INFO;
 begin
 	genGeneric : if ((DEV_INFO.Vendor /= VENDOR_ALTERA) and (DEV_INFO.Vendor /= VENDOR_XILINX)) generate
 		attribute ASYNC_REG							: string;
 		attribute SHREG_EXTRACT					: string;
-
 	begin
 		gen : for i in 0 to BITS - 1 generate
 			signal Data_async							: std_logic;
@@ -101,7 +98,14 @@ begin
 			attribute SHREG_EXTRACT of Data_sync	: signal is "NO";
 
 		begin
-			Data_async			<= Input(i);
+			process(Input(i), Data_sync(Data_sync'high))
+			begin
+				if ((not Input(i) and Data_sync(Data_sync'high)) = '1') then
+					Data_async <= '0';
+				elsif rising_edge(Input) then
+					Data_async <= '1';
+				end if;
+			end process;
 
 			process(Clock)
 			begin
@@ -115,12 +119,11 @@ begin
 		end generate;
 	end generate;
 
-	-- use dedicated and optimized 2 D-FF synchronizer for Altera FPGAs
+	-- use dedicated and optimized 1+2 D-FF synchronizer for Altera FPGAs
 	genAltera : if (DEV_INFO.Vendor = VENDOR_ALTERA) generate
-		sync : sync_Bits_Altera
+		sync : sync_Pulse_Altera
 			generic map (
 				BITS				=> BITS,
-				INIT				=> INIT_I,
 				SYNC_DEPTH	=> SYNC_DEPTH
 			)
 			port map (
@@ -130,12 +133,11 @@ begin
 			);
 	end generate;
 
-	-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
+	-- use dedicated and optimized 1+2 D-FF synchronizer for Xilinx FPGAs
 	genXilinx : if (DEV_INFO.Vendor = VENDOR_XILINX) generate
-		sync : sync_Bits_Xilinx
+		sync : sync_Pulse_Xilinx
 			generic map (
 				BITS				=> BITS,
-				INIT				=> INIT_I,
 				SYNC_DEPTH	=> SYNC_DEPTH
 			)
 			port map (

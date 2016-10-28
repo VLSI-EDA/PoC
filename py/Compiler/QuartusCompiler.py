@@ -48,7 +48,7 @@ from pathlib                    import Path
 from Base.Project               import ToolChain, Tool
 from Base.Compiler              import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
 from PoC.Entity                 import WildCard
-from ToolChains.Altera.Quartus  import QuartusException, Quartus, QuartusSettingsFile, QuartusProjectFile
+from ToolChains.Altera.Quartus  import QuartusException, Quartus, QuartusSettings, QuartusProjectFile
 
 
 class Compiler(BaseCompiler):
@@ -140,15 +140,17 @@ class Compiler(BaseCompiler):
 	def _WriteQuartusProjectFile(self, netlist, device):
 		quartusProjectFile = QuartusProjectFile(netlist.QsfFile)
 
-		quartusProject = QuartusSettingsFile(netlist.ModuleName, quartusProjectFile)
-		quartusProject.GlobalAssignments['FAMILY'] =              "\"{0}\"".format(device.Series)
-		quartusProject.GlobalAssignments['DEVICE'] =              device.ShortName
-		quartusProject.GlobalAssignments['TOP_LEVEL_ENTITY'] =    netlist.ModuleName
-		quartusProject.GlobalAssignments['VHDL_INPUT_VERSION'] =  "VHDL_2008"
+		quartusSettings = QuartusSettings(netlist.ModuleName, quartusProjectFile)
+		quartusSettings.GlobalAssignments['FAMILY'] =              "\"{0}\"".format(device.Series)
+		quartusSettings.GlobalAssignments['DEVICE'] =              device.ShortName
+		quartusSettings.GlobalAssignments['TOP_LEVEL_ENTITY'] =    netlist.ModuleName
+		quartusSettings.GlobalAssignments['VHDL_INPUT_VERSION'] =  "VHDL_2008"
+		quartusSettings.Parameters.update(self._GetHDLParameters(netlist.ConfigSectionName))
 
-		quartusProject.CopySourceFilesFromProject(self.PoCProject)
+		# transform files from PoCProject to global assignment commands in a QSF files
+		quartusSettings.CopySourceFilesFromProject(self.PoCProject)
 
-		quartusProject.Write()
+		quartusSettings.Write()
 
 	def _RunCompile(self, netlist):
 		q2map = self._toolChain.GetMap()

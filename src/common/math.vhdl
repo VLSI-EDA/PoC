@@ -38,8 +38,8 @@ use			PoC.utils.all;
 
 package math is
 	-- figurate numbers
-	function squareNumber(N : positive) return positive;
-	function cubicNumber(N : positive) return positive;
+	function squareNumber(N : natural) return natural;
+	function cubicNumber(N : natural) return natural;
 	function triangularNumber(N : natural) return natural;
 
 	-- coefficients
@@ -54,12 +54,12 @@ end package;
 
 package body math is
 	-- figurate numbers
-	function squareNumber(N : positive) return positive is
+	function squareNumber(N : natural) return natural is
 	begin
 		return N*N;
 	end function;
 
-	function cubicNumber(N : positive) return positive is
+	function cubicNumber(N : natural) return natural is
 	begin
 		return N*N*N;
 	end function;

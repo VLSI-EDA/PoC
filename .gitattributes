@@ -1,6 +1,7 @@
 *.tpl		-whitespace
 *.md		-whitespace
 *.rst		-whitespace
+*.ini		-whitespace
 *.pl	filter=normalize
 *.ps1	filter=normalize
 *.psm1	filter=normalize

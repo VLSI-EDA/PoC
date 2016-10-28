@@ -338,13 +338,14 @@ class QuartusProject(BaseProject):
 		tclShell.ReadUntilBoundary()
 
 
-class QuartusSettingsFile(SettingsFile):
+class QuartusSettings(SettingsFile):
 	def __init__(self, name, settingsFile=None):
 		super().__init__(name)
 
 		self._projectFile =       settingsFile
 		self._sourceFiles =       []
 		self._globalAssignments = OrderedDict()
+		self._parameters =        {}
 
 	@property
 	def File(self):
@@ -359,6 +360,10 @@ class QuartusSettingsFile(SettingsFile):
 	def GlobalAssignments(self):
 		return self._globalAssignments
 
+	@property
+	def Parameters(self):
+		return self._parameters
+
 	def CopySourceFilesFromProject(self, project):
 		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
 			self._sourceFiles.append(file)
@@ -369,6 +374,10 @@ class QuartusSettingsFile(SettingsFile):
 		buffer = ""
 		for key,value in self._globalAssignments.items():
 			buffer += "set_global_assignment -name {key} {value!s}\n".format(key=key, value=value)
+
+		buffer += "\n"
+		for key,value in self._parameters.items():
+				buffer += "set_parameter -name {key} {value}\n".format(key=key, value=value)
 
 		buffer += "\n"
 		for file in self._sourceFiles:

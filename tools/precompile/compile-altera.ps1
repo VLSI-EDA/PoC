@@ -70,7 +70,7 @@ $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
 
-Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Scope Local -ArgumentList "$WorkingDir"
+Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -Scope Local -ArgumentList "$WorkingDir"
 
 # Display help if no command was selected
 $Help = $Help -or (-not ($All -or $GHDL -or $Questa))
@@ -112,7 +112,7 @@ if ($GHDL)
 
 	# export GHDL environment variable if not allready set
 	if (-not (Test-Path env:GHDL))
-	{	$env:GHDL = "$GHDLBinDir\ghdl.exe"		}
+	{	$env:GHDL = $GHDLBinDir		}
 
 	if ($VHDL93)
 	{	$Command = "$GHDLAlteraScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$AlteraDirName"

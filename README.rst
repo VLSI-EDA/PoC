@@ -1,17 +1,71 @@
+The PoC-Library
+***************
 
-Quick Start Guide
-#################
+.. image:: _static/logos/GitHub-Mark-32px.png
+   :scale: 60
+   :target: https://www.github.com/VLSI-EDA/PoC
+   :alt: Source Code on GitHub
+.. image:: https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat
+   :target: https://landscape.io/github/VLSI-EDA/PoC/release
+   :alt: Code Health
+.. image:: https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release
+   :target: https://travis-ci.org/VLSI-EDA/PoC
+   :alt: Build Results
+.. image:: https://badges.gitter.im/VLSI-EDA/PoC.svg
+   :target: https://gitter.im/VLSI-EDA/PoC
+   :alt: Join
+.. image:: https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat
+   :alt: Latest tag
+.. image:: https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat
+   :target: https://github.com/VLSI-EDA/PoC/releases
+   :alt: Latest release
+.. image:: https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat
+   :target: References/Licenses/License.html
+   :alt: Apache License 2.0
 
-This **quick start guide** gives a fast and simple introduction into PoC. All
-topics can be found in the :doc:`Using PoC </UsingPoC/index>` section with much
-more details and examples.
+This library is published and maintained by **Chair for VLSI Design, Diagnostics
+and Architecture** - Faculty of Computer Science, Technische Universität Dresden,
+Germany |br|
+`http://tu-dresden.de/inf/vlsi-eda <http://tu-dresden.de/inf/vlsi-eda>`_
+
+.. image:: _static/images/logo_tud.jpg
+   :scale: 10
+   :alt: Logo: Technische Universität Dresden
 
 .. contents:: Contents of this Page
    :local:
 
 
+Overview
+********
+
+PoC - "Pile of Cores" provides implementations for often required hardware
+functions such as Arithmetic Units, Caches, Clock-Domain-Crossing Circuits,
+FIFOs, RAM wrappers, and I/O Controllers. The hardware modules are typically
+provided as VHDL or Verilog source code, so it can be easily re-used in a
+variety of hardware designs.
+
+All hardware modules use a common set of VHDL packages to share new VHDL types,
+sub-programs and constants. Additionally, a set of simulation helper packages
+eases the writing of testbenches. Because PoC hosts a huge amount of IP cores,
+all cores are grouped into sub-namespaces to build a better hierachy.
+
+Various simulation and synthesis tool chains are supported to interoperate with
+PoC. To generalize all supported free and commercial vendor tool chains, PoC is
+shipped with a Python based Infrastruture to offer a command line based frontend.
+
+
+
+Quick Start Guide
+*****************
+
+This **quick start guide** gives a fast and simple introduction into PoC. All
+topics can be found in the :doc:`Using PoC </UsingPoC/index>` section with much
+more details and examples.
+
+
 Requirements and Dependencies
-*****************************
+=============================
 
 The PoC-Library comes with some scripts to ease most of the common tasks, like
 running testbenches or generating IP cores. PoC uses **Python 3** as a platform
@@ -51,7 +105,7 @@ directory. See :doc:`Third Party Libraries </Miscelaneous/ThirdParty>` for more 
 
 
 Download
-********
+========
 
 The PoC-Library can be downloaded as a `zip-file <https://github.com/VLSI-EDA/PoC/archive/master.zip>`_
 (latest 'master' branch), cloned with ``git clone`` or embedded with
@@ -69,7 +123,7 @@ details. The installation directory is referred to as ``PoCRoot``.
 
 
 Configuring PoC on a Local System
-*********************************
+=================================
 
 To explore PoC's full potential, it's required to configure some paths and
 synthesis or simulation tool chains. The following commands start a guided
@@ -89,7 +143,7 @@ skip/pass a step and :kbd:`Return` to accept a default value displayed in bracke
 
 
 Integration
-***********
+===========
 
 The PoC-Library is meant to be integrated into other HDL projects. Therefore
 it's recommended to create a library folder and add the PoC-Library as a Git
@@ -184,82 +238,19 @@ and if needed patch these IP cores. See :doc:`Synthesis </UsingPoC/Synthesis>`
 for more details.
 
 
-Run a Simulation
-****************
-
-The following quick example uses the GHDL Simulator to analyze, elaborate and
-simulate a testbench for the module ``arith_prng`` (Pseudo Random Number
-Generator - PRNG). The VHDL file ``arith_prng.vhdl`` is located at
-``PoCRoot\src\arith`` and virtually a member in the `PoC.arith` namespace.
-So the module can be identified by an unique name: ``PoC.arith.prng``, which is
-passed to the frontend script.
-
-.. rubric:: Example:
-
-.. code-block:: PowerShell
-
-   cd PoCRoot
-   .\poc.ps1 ghdl PoC.arith.prng
-
-The CLI command ``ghdl`` chooses *GHDL Simulator* as the simulator and
-passes the fully qualified PoC entity name ``PoC.arith.prng`` as a parameter
-to the tool. All required source file are gathered and compiled to an
-executable. Afterwards this executable is launched in CLI mode and it's outputs
-are displayed in console:
-
-.. image:: /_static/images/ghdl/arith_prng_tb.posh.png
-   :target: /_static/images/ghdl/arith_prng_tb.posh.png
-	 :alt: PowerShell console output after running PoC.arith.prng with GHDL.
-
-Each testbench uses PoC's simulation helper packages to count asserts and to
-track active stimuli and checker processes. After a completed simulation run,
-an report is written to STDOUT or the simulator's console. Note the line
-``SIMULATION RESULT = PASSED``. For each simulated PoC entity, a line in the
-overall report is created. It lists the runtime per testbench and the simulation
-status (``... ERROR``, ``FAILED``, ``NO ASSERTS`` or ``PASSED``). See
-:doc:`Simulation </UsingPoC/Simulation>` for more details.
-
-
-Run a Synthesis
-***************
-
-The following quick example uses the Xilinx Systesis Tool (XST) to synthesize a
-netlist for IP core ``arith_prng`` (Pseudo Random Number Generator - PRNG). The
-VHDL file ``arith_prng.vhdl`` is located at ``PoCRoot\src\arith`` and virtually
-a member in the `PoC.arith` namespace. So the module can be identified by an
-unique name: ``PoC.arith.prng``, which is passed to the frontend script.
-
-.. rubric:: Example:
-
-.. code-block:: PowerShell
-
-   cd PoCRoot
-   .\poc.ps1 xst PoC.arith.prng --board=KC705
-
-The CLI command ``xst`` chooses *Xilinx Synthesis Tool* as the synthesizer and
-passes the fully qualified PoC entity name ``PoC.arith.prng`` as a parameter
-to the tool. Additionally, the development board name is required to load the
-correct ``my_config.vhdl`` file. All required source file are gathered and
-synthesized to a netlist.
-
-.. image:: /_static/images/xst/arith_prng.posh.png
-   :target: /_static/images/xst/arith_prng.posh.png
-	 :alt: PowerShell console output after running PoC.arith.prng with XST.
-
-
 Updating
-********
+========
 
 The PoC-Library can be updated by using ``git fetch`` and ``git merge``.
 
 .. code-block:: PowerShell
 
    cd PoCRoot
-   # update the local repository
+   * update the local repository
    git fetch --prune
-   # review the commit tree and messages, using the 'treea' alias
+   * review the commit tree and messages, using the 'treea' alias
    git treea
-   # if all changes are OK, do a fast-forward merge
+   * if all changes are OK, do a fast-forward merge
    git merge
 
 
@@ -269,3 +260,22 @@ The PoC-Library can be updated by using ``git fetch`` and ``git merge``.
    :doc:`Running one or more netlist generation flows </UsingPoC/Synthesis>`
       The installation can also be checked by running one or more of PoC's
       synthesis flows.
+
+
+Cite the PoC-Library
+====================
+
+The PoC-Library hosted at `GitHub.com <https://www.github.com>`_. Please use the
+following `bitlatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
+
+.. code-block:: tex
+
+   * BibLaTex example entry
+   @online{poc,
+     title={{PoC - Pile of Cores}},
+     author={{Chair of VLSI Design, Diagnostics and Architecture}},
+     organization={{Technische Universität Dresden}},
+     year={2016},
+     url={https://github.com/VLSI-EDA/PoC},
+     urldate={2016-10-28},
+   }

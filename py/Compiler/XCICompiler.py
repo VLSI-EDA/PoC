@@ -225,3 +225,57 @@ class Compiler(BaseCompiler):
 			raise CompilerException("Error while compiling '{0!s}'.".format(netlist)) from ex
 		if coreGen.HasErrors:
 			raise SkipableCompilerException("Error while compiling '{0!s}'.".format(netlist))
+
+	def _WriteTclFile(self, netlist, device):
+		buffer = dedent("""\
+			create_project -in_memory -part {part}
+
+			set_param synth.vivado.isSynthRun true
+			set_property target_language VHDL [current_project]
+
+			read_ip -quiet {xciFile}go
+
+			synth_design -top {ipCoreName} -part {part} -mode out_of_context
+
+			write_checkpoint -noxdef {top}.dcp
+
+			if { [catch {
+				report_utilization -file {top}_synth.rpt -pb {top}_synth.pb
+			} _RESULT ] } {
+				puts "CRITICAL WARNING: Error reported: $_RESULT"
+			}
+
+			if { [catch {
+				write_verilog -force -mode synth_stub {xciFilebaseName}_stub.v
+			} _RESULT ] } {
+				puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. Error reported: $_RESULT"
+			}
+
+			if { [catch {
+				write_vhdl -force -mode synth_stub {xciFilebaseName}_stub.vhdl
+			} _RESULT ] } {
+				puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. Error reported: $_RESULT"
+			}
+
+			if { [catch {
+				write_verilog -force -mode funcsim {xciFilebaseName}_sim_netlist.v
+			} _RESULT ] } {
+				puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Error reported: $_RESULT"
+			}
+
+			if { [catch {
+				write_vhdl -force -mode funcsim {xciFilebaseName}_sim_netlist.vhdl
+			} _RESULT ] } {
+				puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Error reported: $_RESULT"
+			}
+			""").format(
+				part=device.FullName2,
+				xciFile=xciFile.as_posix(),
+				xciFilebaseName=xciFile.BaseName,
+				top=netlist.ModuleName,
+				ipCoreName="foo.xci"
+			)
+
+		self.LogDebug("Writing Vivado TCL file to '{0!s}'".format(netlist.TclFile))
+		with netlist.TclFile.open('w') as tclFileHandle:
+			tclFileHandle.write(buffer)

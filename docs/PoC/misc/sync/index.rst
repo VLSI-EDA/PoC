@@ -9,13 +9,13 @@ if the appropriate ``MY_DEVICE`` constant is configured in :doc:`my_config.vhdl 
 
 **Decision Table:**
 
-+-----------------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+
-| Signal Behavior | Flag [#f1]_                                     | Strobe [#f2]_                                     | Continuous Data    | Reset [#f3]_                                  |
-+=================+=================================================+===================================================+====================+===============================================+
-|      1 Bit      | :doc:`sync_Bits </PoC/misc/sync/sync_Bits>`     | :doc:`sync_Strobe </PoC/misc/sync/sync_Strobe>`   | fifo_ic_got [#f4]_ | :doc:`sync_Reset </PoC/misc/sync/sync_Reset>` |
-+-----------------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+
-|      n Bit      | :doc:`sync_Vector </PoC/misc/sync/sync_Vector>` | :doc:`sync_Command </PoC/misc/sync/sync_Command>` | fifo_ic_got [#f4]_ |                                               |
-+-----------------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+
++----------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+-----------------------------------------------+
+| Behavior | Flag [#f1]_                                     | Strobe [#f2]_                                     | Continuous Data    | Reset [#f4]_                                  | Pulse [#f3]_                                  |
++==========+=================================================+===================================================+====================+===============================================+===============================================+
+|   1 Bit  | :doc:`sync_Bits </PoC/misc/sync/sync_Bits>`     | :doc:`sync_Strobe </PoC/misc/sync/sync_Strobe>`   | fifo_ic_got [#f5]_ | :doc:`sync_Reset </PoC/misc/sync/sync_Reset>` | :doc:`sync_Pulse </PoC/misc/sync/sync_Pulse>` |
++----------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+-----------------------------------------------+
+|   n Bit  | :doc:`sync_Vector </PoC/misc/sync/sync_Vector>` | :doc:`sync_Command </PoC/misc/sync/sync_Command>` | fifo_ic_got [#f5]_ |                                               |                                               |
++----------+-------------------------------------------------+---------------------------------------------------+--------------------+-----------------------------------------------+-----------------------------------------------+
 
 .. rubric:: Basic 2 Flip-Flop Synchronizer
 
@@ -30,6 +30,10 @@ It's for ``Reset``-signals, implementing asynchronous assertion and synchronous
 deassertion. The vendor specific implementations are named ``sync_Reset_Altera``
 and ``sync_Reset_Xilinx`` respectivily.
 
+A third variant of a 2-FF synchronizer is called :doc:`sync_Pulse </PoC/misc/sync/sync_Pulse>`.
+It's for very short ``Pulsed``-signals. It uses an addition asynchronous capture FF to latch the
+very short pulse. The vendor specific implementations are named ``sync_Pulse_Altera`` and
+``sync_Pulse_Xilinx`` respectivily.
 
 .. rubric:: Special Synchronizers
 
@@ -58,15 +62,16 @@ Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
 
 .. [#f1] A *flag* or *status* signal is a continuous, long time stable signal.
 .. [#f2] A *strobe* signal is active for only one cycle.
-.. [#f3] To be documented
-.. [#f4] See the ``PoC.fifo`` namespace for cross-clock capable FIFOs.
-
+.. [#f3] A *pulse* signal is a very short event.
+.. [#f4] To be documented
+.. [#f5] See the ``PoC.fifo`` namespace for cross-clock capable FIFOs.
 
 .. toctree::
    :hidden:
 
    sync_Bits
    sync_Command
+   sync_Pulse
    sync_Reset
    sync_Strobe
    sync_Vector

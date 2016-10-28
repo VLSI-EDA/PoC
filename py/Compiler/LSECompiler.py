@@ -145,10 +145,7 @@ class Compiler(BaseCompiler):
 		argumentFile.LogFile =      self.Directories.Working / (netlist.ModuleName + ".lse.log")
 		argumentFile.VHDLVersion =  self._vhdlVersion
 
-		vhdlGenerics = self.Host.PoCConfig[netlist.ConfigSectionName]['VHDLGenerics']
-		if (len(vhdlGenerics) > 0):
-			for keyValuePair in vhdlGenerics.split(";"):
-				argumentFile.HDLParams.append(keyValuePair.split("="))
+		argumentFile.HDLParams.update(self._GetHDLParameters(netlist.ConfigSectionName))
 
 		argumentFile.Write(self.PoCProject)
 		return argumentFile

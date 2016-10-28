@@ -52,7 +52,9 @@ Mixed-Port Read During Write
    The simulated behavior on RT-level is too optimistic. When reading
    at the write address always the new data will be returned.
 
-.. TODO:: Implement correct behavior for RT-level simulation.
+.. TODO::
+   Implement correct behavior for RT-level simulation.
+   Xilinx Vivado synthesizes LUT-RAM, fix it.
 
 
 
@@ -62,7 +64,7 @@ Mixed-Port Read During Write
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 97-115
+   :lines: 99-117
 
 Source file: `mem/ocram/ocram_esdp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_esdp.vhdl>`_
 

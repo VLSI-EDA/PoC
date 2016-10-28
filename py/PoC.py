@@ -60,21 +60,21 @@ from PoC.Config                     import Board
 from PoC.Entity                     import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
 from PoC.Solution                   import Repository
 from PoC.Query                      import Query
-from Simulator.ActiveHDLSimulator   import Simulator as ActiveHDLSimulator
-from Simulator.CocotbSimulator      import Simulator as CocotbSimulator
-from Simulator.GHDLSimulator        import Simulator as GHDLSimulator
-from Simulator.ISESimulator         import Simulator as ISESimulator
-from Simulator.QuestaSimulator      import Simulator as QuestaSimulator
-from Simulator.VivadoSimulator      import Simulator as VivadoSimulator
-from ToolChains                     import Configurations
-from ToolChains.GHDL                import Configuration as GHDLConfiguration
-from lib.ArgParseAttributes         import ArgParseMixin
-from lib.ArgParseAttributes         import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
-from lib.ArgParseAttributes         import CommonArgumentAttribute, CommonSwitchArgumentAttribute
-from lib.ConfigParser               import ExtendedConfigParser
-from lib.Functions                  import Init, Exit
-from lib.Parser                     import ParserException
-from lib.pyAttribute                import Attribute
+from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
+from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
+from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
+from Simulator.ISESimulator             import Simulator as ISESimulator
+from Simulator.QuestaSimulator          import Simulator as QuestaSimulator
+from Simulator.VivadoSimulator          import Simulator as VivadoSimulator
+from ToolChains                         import Configurations
+from ToolChains.GHDL                    import Configuration as GHDLConfiguration
+from lib.pyAttribute.ArgParseAttributes import ArgParseMixin
+from lib.pyAttribute.ArgParseAttributes import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
+from lib.pyAttribute.ArgParseAttributes import CommonArgumentAttribute, CommonSwitchArgumentAttribute
+from lib.ConfigParser                   import ExtendedConfigParser
+from lib.Functions                      import Init, Exit
+from lib.Parser                         import ParserException
+from lib.pyAttribute                    import Attribute
 
 
 class PoCEntityAttribute(Attribute):
@@ -1017,7 +1017,7 @@ class PoC(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@NoCleanUpAttribute()
-	def HandleCoreGeneratorCompilation(self, args):
+	def HandleIpCatalogCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
 		self._CheckISEEnvironment()

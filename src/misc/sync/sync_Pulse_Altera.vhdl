@@ -4,18 +4,21 @@
 -- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Entity:				 	sync_Bits_Altera
+-- Entity:				 	sync_Pulse_Altera
 --
 -- Description:
 -- -------------------------------------
 -- This is a multi-bit clock-domain-crossing circuit optimized for Altera FPGAs.
--- It generates 2 flip flops per input bit and notifies Quartus, that these
--- flip flops are synchronizer flip flops. If you need a platform independent
--- version of this synchronizer, please use `PoC.misc.sync.Flag`, which
--- internally instantiates this module if an Altera FPGA is detected.
+-- It synchronizes multiple pulsed bits into the clock-domain ``Clock``.
+-- The clock-domain boundary crossing is done by two synchronizer D-FFs. All bits
+-- are independent from each other. It generates 3 flip flops per input bit and
+-- notifies Quartus, that these flip flops are synchronizer flip flops. If you
+-- need a platform independent version of this synchronizer, please use
+-- `PoC.misc.sync.Pulse`, which internally instantiates this module if an Altera
+-- FPGA is detected.
 --
--- .. ATTENTION:
--- 	  Use this synchronizer only for long time stable signals (flags).
+-- .. ATTENTION::
+--    Use this synchronizer for very short signals (pulse).
 --
 -- CONSTRAINTS:
 --
@@ -44,10 +47,9 @@ library	PoC;
 use			PoC.sync.all;
 
 
-entity sync_Bits_Altera is
+entity sync_Pulse_Altera is
 	generic (
 		BITS					: positive						:= 1;									-- number of bit to be synchronized
-		INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
@@ -58,12 +60,12 @@ entity sync_Bits_Altera is
 end entity;
 
 
-architecture rtl of sync_Bits_Altera is
+architecture rtl of sync_Pulse_Altera is
 	attribute PRESERVE					: boolean;
 	attribute ALTERA_ATTRIBUTE	: string;
 
 	-- Apply a SDC constraint to meta stable flip flop
-	attribute ALTERA_ATTRIBUTE of rtl				: architecture is "-name SDC_STATEMENT ""set_false_path -to [get_registers {*|sync_Bits_Altera:*|\gen:*:Data_meta}] """;
+	attribute ALTERA_ATTRIBUTE of rtl				: architecture is "-name SDC_STATEMENT ""set_false_path -to [get_registers {*|sync_Pulse_Altera:*|\gen:*:Data_meta}] """;
 begin
 	gen : for i in 0 to BITS - 1 generate
 		signal Data_async				: std_logic;
@@ -76,7 +78,14 @@ begin
 		-- Notity the synthesizer / timing analysator to identity a synchronizer circuit
 		attribute ALTERA_ATTRIBUTE of Data_meta		: signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
 	begin
-		Data_async	<= Input(i);
+		process(Input(i), Data_sync(Data_sync'high))
+		begin
+			if ((not Input(i) and Data_sync(Data_sync'high)) = '1') then
+				Data_async <= '0';
+			elsif rising_edge(Input) then
+				Data_async <= '1';
+			end if;
+		end process;
 
 		process(Clock)
 		begin
@@ -88,5 +97,4 @@ begin
 
 		Output(i)		<= Data_sync(Data_sync'high);
 	end generate;
-
 end architecture;

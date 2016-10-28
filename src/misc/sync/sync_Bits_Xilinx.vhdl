@@ -8,26 +8,37 @@
 --
 -- Description:
 -- -------------------------------------
---		This is a multi-bit clock-domain-crossing circuit optimized for Xilinx FPGAs.
---		It utilizes two 'FD' instances from UniSim.vComponents. If you need a
---		platform independent version of this synchronizer, please use
---		'PoC.misc.sync.sync_Flag', which internally instantiates this module if
---		a Xilinx FPGA is detected.
+-- This is a multi-bit clock-domain-crossing circuit optimized for Xilinx FPGAs.
+-- It utilizes two `FD` instances from `UniSim.vComponents`. If you need a
+-- platform independent version of this synchronizer, please use
+-- `PoC.misc.sync.Flag`, which internally instantiates this module if a Xilinx
+-- FPGA is detected.
 --
---		ATTENTION:
---			Use this synchronizer only for long time stable signals (flags).
+-- .. ATTENTION:
+-- 	  Use this synchronizer only for long time stable signals (flags).
 --
---		CONSTRAINTS:
---			This relative placement of the internal sites is constrained by RLOCs.
+-- CONSTRAINTS:
+-- 	 This relative placement of the internal sites are constrained by RLOCs.
 --
---			Xilinx ISE UCF or XCF file:
---				NET "*_async"		TIG;
---				INST "*FF1_METASTABILITY_FFS" TNM = "METASTABILITY_FFS";
---				TIMESPEC "TS_MetaStability" = FROM FFS TO "METASTABILITY_FFS" TIG;
+-- 	Xilinx ISE UCF or XCF file:
+--    .. code-block:: VHDL
 --
---			Xilinx Vivado xdc file:
---				TODO
---				TODO
+-- 	     NET "*_async"		TIG;
+-- 	     INST "*FF1_METASTABILITY_FFS" TNM = "METASTABILITY_FFS";
+-- 	     TIMESPEC "TS_MetaStability" = FROM FFS TO "METASTABILITY_FFS" TIG;
+--
+-- 	Xilinx Vivado xdc file:
+--    The XDC file `sync_Bits_Xilinx.xdc` must be directly applied to all
+--    instances of sync_Bits_Xilinx. To achieve this, set the property
+--    `SCOPED_TO_REF` to `sync_Bits_Xilinx` within the Vivado project.
+--    Load the XDC file defining the clocks before that XDC file by using the
+--    property `PROCESSING_ORDER`.
+--
+--    .. literalinclude:: ../../../ucf/misc/sync/sync_Bits_Xilinx.xdc
+--       :language: xdc
+--       :tab-width: 2
+--       :linenos:
+--       :lines: 4-8
 --
 -- License:
 -- =============================================================================
