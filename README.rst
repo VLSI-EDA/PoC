@@ -1,7 +1,11 @@
+.. |br| raw:: html
+
+   <br />
+
 The PoC-Library
 ***************
 
-.. image:: _static/logos/GitHub-Mark-32px.png
+.. image:: docs/_static/logos/GitHub-Mark-32px.png
    :scale: 60
    :target: https://www.github.com/VLSI-EDA/PoC
    :alt: Source Code on GitHub
@@ -28,7 +32,7 @@ and Architecture** - Faculty of Computer Science, Technische Universität Dresden
 Germany |br|
 `http://tu-dresden.de/inf/vlsi-eda <http://tu-dresden.de/inf/vlsi-eda>`_
 
-.. image:: _static/images/logo_tud.jpg
+.. image:: docs/_static/images/logo_tud.jpg
    :scale: 10
    :alt: Logo: Technische Universität Dresden
 
@@ -60,7 +64,7 @@ Quick Start Guide
 *****************
 
 This **quick start guide** gives a fast and simple introduction into PoC. All
-topics can be found in the :doc:`Using PoC </UsingPoC/index>` section with much
+topics can be found in the `Using PoC <http://poc-library.readthedocs.io/en/latest/UsingPoC/index.html>`_ section with much
 more details and examples.
 
 
@@ -71,13 +75,13 @@ The PoC-Library comes with some scripts to ease most of the common tasks, like
 running testbenches or generating IP cores. PoC uses **Python 3** as a platform
 independent scripting environment. All Python scripts are wrapped in Bash or
 PowerShell scripts, to hide some platform specifics of Darwin, Linux or Windows.
-See :doc:`/UsingPoC/Requirements` for further details.
+See `Requirements <http://poc-library.readthedocs.io/en/latest/UsingPoC/Requirements.html>`_ for further details.
 
 
 .. rubric:: PoC requires:
 
-* A :doc:`supported synthesis tool chain </WhatIsPoC/SupportedToolChains>`, if you want to synthezise IP cores.
-* A :doc:`supported simulator too chain </WhatIsPoC/SupportedToolChains>`, if you want to simulate IP cores.
+* A `supported synthesis tool chain <http://poc-library.readthedocs.io/en/latest/WhatIsPoC/SupportedToolChains.html>`_, if you want to synthezise IP cores.
+* A `supported simulator too chain <http://poc-library.readthedocs.io/en/latest/WhatIsPoC/SupportedToolChains.html>`_, if you want to simulate IP cores.
 * The Python3 programming language and runtime, if you want to use PoC's infrastructure.
 * A shell to execute shell scripts:
 
@@ -101,7 +105,7 @@ See :doc:`/UsingPoC/Requirements` for further details.
 
 All dependencies are available as GitHub repositories and are linked to
 PoC as Git submodules into the `PoCRoot\\lib <https://github.com/VLSI-EDA/PoC/tree/master/lib>`_
-directory. See :doc:`Third Party Libraries </Miscelaneous/ThirdParty>` for more details on these libraries.
+directory. See `Third Party Libraries <http://poc-library.readthedocs.io/en/latest/Miscelaneous/ThirdParty.html>`_ for more details on these libraries.
 
 
 Download
@@ -110,7 +114,7 @@ Download
 The PoC-Library can be downloaded as a `zip-file <https://github.com/VLSI-EDA/PoC/archive/master.zip>`_
 (latest 'master' branch), cloned with ``git clone`` or embedded with
 ``git submodule add`` from GitHub. GitHub offers HTTPS and SSH as transfer
-protocols. See the :doc:`Download </UsingPoC/Download>` page for further
+protocols. See the `Download <http://poc-library.readthedocs.io/en/latest/UsingPoC/Download.html>`_ page for further
 details. The installation directory is referred to as ``PoCRoot``.
 
 +----------+---------------------------------------------------------------------+
@@ -129,7 +133,7 @@ To explore PoC's full potential, it's required to configure some paths and
 synthesis or simulation tool chains. The following commands start a guided
 configuration process. Please follow the instructions on screen. It's possible
 to relaunch the process at any time, for example to register new tools or to
-update tool versions. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for
+update tool versions. See `Configuration <http://poc-library.readthedocs.io/en/latest/UsingPoC/PoCConfiguration.html>`_ for
 more details. Run the following command line instructions to configure PoC on
 your local system:
 
@@ -157,7 +161,7 @@ PoC.
 The following command line instructions will create the folder ``lib\PoC\`` and
 clone the PoC-Library as a Git `submodule <http://git-scm.com/book/en/v2/Git-Tools-Submodules>`_
 into that folder. ``ProjectRoot`` is the directory of the hosting Git. A detailed
-list of steps can be found at :doc:`Integration </UsingPoC/Integration>`.
+list of steps can be found at `Integration <http://poc-library.readthedocs.io/en/latest/UsingPoC/Integration.html>`_.
 
 .. code-block:: powershell
 
@@ -173,7 +177,7 @@ list of steps can be found at :doc:`Integration </UsingPoC/Integration>`.
 .. rubric:: 2. Configuring PoC
 
 The PoC-Library should be configured to explore it's full potential. See
-:doc:`Configuration </UsingPoC/PoCConfiguration>` for more details. The
+`Configuration <http://poc-library.readthedocs.io/en/latest/UsingPoC/PoCConfiguration.html>`_ for more details. The
 following command lines will start the configuration process:
 
 .. code-block:: powershell
@@ -212,7 +216,7 @@ also defines two global constants, which need to be adjusted:
    constant MY_OPERATING_SYSTEM : string := "CHANGE THIS"; -- e.g. WINDOWS, LINUX
 
 Further informations are provided at
-:doc:`Creating my_config/my_project.vhdl </UsingPoC/VHDLConfiguration>`.
+`Creating my_config/my_project.vhdl <http://poc-library.readthedocs.io/en/latest/UsingPoC/VHDLConfiguration.html>`_.
 
 .. rubric:: 4. Adding PoC's Common Packages to a Synthesis or Simulation Project
 
@@ -234,7 +238,7 @@ incompatible among each other, PoC uses version suffixes like ``*.v93.vhdl`` or
 
 Some IP Cores are shipped are pre-configured vendor IP Cores. If such IP cores
 shall be used in a HDL project, it's recommended to use PoC to create, compile
-and if needed patch these IP cores. See :doc:`Synthesis </UsingPoC/Synthesis>`
+and if needed patch these IP cores. See `Synthesis <http://poc-library.readthedocs.io/en/latest/UsingPoC/Synthesis.html>`_
 for more details.
 
 
@@ -255,9 +259,9 @@ The PoC-Library can be updated by using ``git fetch`` and ``git merge``.
 
 
 .. seealso::
-   :doc:`Running one or more testbenches </UsingPoC/Simulation>`
+   `Running one or more testbenches <http://poc-library.readthedocs.io/en/latest/UsingPoC/Simulation.html>`_
       The installation can be checked by running one or more of PoC's testbenches.
-   :doc:`Running one or more netlist generation flows </UsingPoC/Synthesis>`
+   `Running one or more netlist generation flows <http://poc-library.readthedocs.io/en/latest/UsingPoC/Synthesis.html>`_
       The installation can also be checked by running one or more of PoC's
       synthesis flows.
 
