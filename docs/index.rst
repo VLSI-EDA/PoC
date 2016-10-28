@@ -1,7 +1,7 @@
 This library is published and maintained by **Chair for VLSI Design, Diagnostics
 and Architecture** - Faculty of Computer Science, Technische Universität Dresden,
 Germany |br|
-`http://tu-dresden.de/inf/vlsi-eda <http://tu-dresden.de/inf/vlsi-eda>`_
+`https://tu-dresden.de/ing/informatik/ti/vlsi <https://tu-dresden.de/ing/informatik/ti/vlsi>`_
 
 .. image:: _static/logocs/tu-dresden.jpg
    :scale: 10

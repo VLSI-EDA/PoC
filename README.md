@@ -57,7 +57,7 @@ Windows. See [Requirements][211] for further details.
 
 #### PoC requires:
  -  A [supported synthesis tool chain][2111], if you want to synthezise IP cores.
- -  A [supported simulator too chain][2112], if you want to simulate IP cores.
+ -  A [supported simulator tool chain][2112], if you want to simulate IP cores.
  -  The **Python 3** programming language and runtime, if you want to use PoC's infrastructure.
  -  A shell to execute shell scripts:
     -  **Bash** on Linux and OS X
@@ -177,7 +177,7 @@ cp lib\PoC\src\common\my_config.vhdl.template src\common\my_config.vhdl
 cp lib\PoC\src\common\my_project.vhdl.template src\common\my_project.vhdl
 ```
 
-[my_config.vhdl](https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_config.vhdl.template) defines
+[my_config.vhdl](https://github.com/VLSI-EDA/PoC/blob/release/src/common/my_config.vhdl.template) defines
 two global constants, which need to be adjusted:
 
 ```vhdl
@@ -185,7 +185,7 @@ constant MY_BOARD            : string := "CHANGE THIS"; -- e.g. Custom, ML505, K
 constant MY_DEVICE           : string := "CHANGE THIS"; -- e.g. None, XC5VLX50T-1FF1136, EP2SGX90FF1508C3
 ```
 
-[my_project.vhdl](https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_project.vhdl.template) also
+[my_project.vhdl](https://github.com/VLSI-EDA/PoC/blob/release/src/common/my_project.vhdl.template) also
 defines two global constants, which need to be adjusted:
 
 ```vhdl
@@ -248,7 +248,7 @@ git merge
 ## 3. Common Notes
 
 **The PoC-Library** is structured into several sub-folders naming the purpose of the folder like
-[`src`][src] for sources files or [`tb`][tb] for testbench files. The structure within these folders
+[`src`](src) for sources files or [`tb`](tb) for testbench files. The structure within these folders
 is always the same and based on PoC's sub-namespace tree.
 
 **Main directory overview:**

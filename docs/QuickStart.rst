@@ -14,7 +14,7 @@ Requirements and Dependencies
 *****************************
 
 The PoC-Library comes with some scripts to ease most of the common tasks, like
-running testbenches or generating IP cores. PoC uses **Python 3** as a platform
+running testbenches or generating IP cores. PoC uses Python 3 as a platform
 independent scripting environment. All Python scripts are wrapped in Bash or
 PowerShell scripts, to hide some platform specifics of Darwin, Linux or Windows.
 See :doc:`/UsingPoC/Requirements` for further details.
@@ -24,16 +24,17 @@ See :doc:`/UsingPoC/Requirements` for further details.
 
 * A :doc:`supported synthesis tool chain </WhatIsPoC/SupportedToolChains>`, if you want to synthezise IP cores.
 * A :doc:`supported simulator too chain </WhatIsPoC/SupportedToolChains>`, if you want to simulate IP cores.
-* The Python3 programming language and runtime, if you want to use PoC's infrastructure.
+* The **Python 3** programming language and runtime, if you want to use PoC's infrastructure.
 * A shell to execute shell scripts:
 
-  * Bash on Linux and OS X
-  * PowerShell on Windows
+  * **Bash** on Linux and OS X
+  * **PowerShell** on Windows
 
 
 .. rubric:: PoC optionally requires:
 
-* Git command line tools or a Git GUI, if you want to check out the latest 'master' or 'release' branch.
+* **Git command line** tools or
+* **Git User Interface**, if you want to check out the latest 'master' or 'release' branch.
 
 
 .. rubric:: PoC depends on third parts libraries:
