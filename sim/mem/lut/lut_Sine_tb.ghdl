@@ -1,0 +1,24 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/lut_sine_tb/clock
+/lut_sine_tb/sim_stop
+/lut_sine_tb/lut_in
+/lut_sine_tb/lut_q1_in
+/lut_sine_tb/lut_q1_out
+/lut_sine_tb/lut_q2_in
+/lut_sine_tb/lut_q2_out
+/lut_sine_tb/lut_q3_in
+/lut_sine_tb/lut_q3_out
+/lut_sine_tb/lut_q4_in
+/lut_sine_tb/lut_q4_out
+/lut_sine_tb/lutq1/input
+/lut_sine_tb/lutq1/output
+/lut_sine_tb/lutq2/input
+/lut_sine_tb/lutq2/output
+/lut_sine_tb/lutq3/input
+/lut_sine_tb/lutq3/output
+/lut_sine_tb/lutq4/input
+/lut_sine_tb/lutq4/output

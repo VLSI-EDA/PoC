@@ -1,14 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Thomas B. Preusser
 --
 -- Entity:					arith_addw_xilinx
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --	Implements wide addition providing several options all based
 --	on an adaptation of a carry-select approach.
 --

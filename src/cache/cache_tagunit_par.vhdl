@@ -1,48 +1,53 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Martin Zabel
 --
--- Module:					Tag-unit with fully-parallel compare of tag.
+-- Entity:					Tag-unit with fully-parallel compare of tag.
 --
 -- Description:
--- ------------------------------------
--- All inputs are synchronous to the rising-edge of the clock `clock`.
+-- -------------------------------------
+-- All inputs are synchronous to the rising-edge of the clock ``clock``.
 --
--- Command truth table:
+-- **Command thruth table:**
 --
---	Request | ReadWrite | Invalidate	| Replace | Command
---	--------+-----------+-------------+---------+--------------------------------
---		0			|		0				|		0					|		0			| None
---		1			|		0				|		0					|		0			| Read cache line
---		1			|		1				|		0					|		0			| Update cache line
---		1			|		0				|		1					|		0			| Read cache line and discard it
---		1			|		1				|		1					|		0			| Write cache line and discard it
---		0			|		-				|		0					|		1			| Replace cache line.
---	--------+-----------+-------------+------------------------------------------
+-- +---------+-----------+-------------+---------+----------------------------------+
+-- | Request | ReadWrite | Invalidate  | Replace | Command                          |
+-- +=========+===========+=============+=========+==================================+
+-- |   0     |    0      |    0        |    0    | None                             |
+-- +---------+-----------+-------------+---------+----------------------------------+
+-- |   1     |    0      |    0        |    0    | Read cache line                  |
+-- +---------+-----------+-------------+---------+----------------------------------+
+-- |   1     |    1      |    0        |    0    | Update cache line                |
+-- +---------+-----------+-------------+---------+----------------------------------+
+-- |   1     |    0      |    1        |    0    | Read cache line and discard it   |
+-- +---------+-----------+-------------+---------+----------------------------------+
+-- |   1     |    1      |    1        |    0    | Write cache line and discard it  |
+-- +---------+-----------+-------------+---------+----------------------------------+
+-- |   0     |           |    0        |    1    | Replace cache line.              |
+-- +---------+-----------+-------------+---------+----------------------------------+
 --
--- All commands use `Address` to lookup (request) or replace a cache line.
+-- All commands use ``Address`` to lookup (request) or replace a cache line.
 -- Each command is completed within one clock cycle.
 --
--- Upon requests, the outputs `CacheMiss` and `CacheHit` indicate (high-active)
--- immediately (combinational) whether the `Address` is stored within the cache, or not.
+-- Upon requests, the outputs ``CacheMiss`` and ``CacheHit`` indicate (high-active)
+-- immediately (combinational) whether the ``Address`` is stored within the cache, or not.
 -- But, the cache-line usage is updated at the rising-edge of the clock.
--- If hit, `LineIndex` specifies the cache line where to find the content.
+-- If hit, ``LineIndex`` specifies the cache line where to find the content.
 --
--- The output `ReplaceLineIndex` indicates which cache line will be replaced as
--- next by a replace command. The output `OldAddress` specifies the old tag stored at this
--- index. The replace command will store the `NewAddress` and update the cache-line
+-- The output ``ReplaceLineIndex`` indicates which cache line will be replaced as
+-- next by a replace command. The output ``OldAddress`` specifies the old tag stored at this
+-- index. The replace command will store the ``NewAddress`` and update the cache-line
 -- usage at the rising-edge of the clock.
 --
--- For a direct-mapped cache, the number of CACHE_LINES must be a power of 2.
--- For a set-associative cache, the expression (CACHE_LINES / ASSOCIATIVITY)
+-- For a direct-mapped cache, the number of ``CACHE_LINES`` must be a power of 2.
+-- For a set-associative cache, the expression ``CACHE_LINES / ASSOCIATIVITY``
 -- must be a power of 2.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -57,15 +62,15 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.all;
-use IEEE.NUMERIC_STD.all;
+use			IEEE.STD_LOGIC_1164.all;
+use			IEEE.NUMERIC_STD.all;
 
 library PoC;
-use PoC.utils.all;
-use PoC.vectors.all;
+use			PoC.utils.all;
+use			PoC.vectors.all;
 
 entity cache_tagunit_par is
 	generic (
@@ -91,7 +96,7 @@ entity cache_tagunit_par is
 		TagHit		 : out std_logic;
 		TagMiss		 : out std_logic
 	);
-end;
+end entity;
 
 architecture rtl of cache_tagunit_par is
 	attribute KEEP : boolean;
@@ -102,7 +107,7 @@ begin
 	-- ===========================================================================
 	-- Full-Associative Cache
 	-- ===========================================================================
-	genFA : if (CACHE_LINES = ASSOCIATIVITY) generate
+	genFA : if CACHE_LINES = ASSOCIATIVITY generate
 		constant TAG_BITS		: positive := ADDRESS_BITS;
 		constant WAY_BITS 	: positive := log2ceilnz(ASSOCIATIVITY);
 
@@ -158,7 +163,7 @@ begin
 
 		-- hit/miss calculation
 		TagHit_i	<= slv_or(TagHits) and Request;
-		TagMiss_i <= not (slv_or(TagHits)) and Request;
+		TagMiss_i <= not slv_or(TagHits) and Request;
 
 		-- outputs
 		LineIndex <= std_logic_vector(HitWay);
@@ -192,7 +197,7 @@ begin
   -- ===========================================================================
   -- Direct-Mapped Cache
   -- ===========================================================================
-  genDM : if (ASSOCIATIVITY = 1) generate
+  genDM : if ASSOCIATIVITY = 1 generate
     -- Addresses are splitted into a tag part and an index part.
     constant INDEX_BITS : positive := log2ceilnz(CACHE_LINES);
     constant TAG_BITS   : positive := ADDRESS_BITS - INDEX_BITS;
@@ -249,7 +254,7 @@ begin
 
 		-- hit/miss calculation
 		TagHit_i	<= DM_TagHit and Request;
-		TagMiss_i <= not (DM_TagHit) and Request;
+		TagMiss_i <= not DM_TagHit and Request;
 
 		-- outputs
 		LineIndex <= std_logic_vector(Address_Index);
@@ -263,7 +268,7 @@ begin
 	-- ===========================================================================
 	-- Set-Assoziative Cache
 	-- ===========================================================================
-	genSA : if ((ASSOCIATIVITY > 1) and (SETS > 1)) generate
+	genSA : if (ASSOCIATIVITY > 1) and (SETS > 1) generate
     -- Addresses are splitted into a tag part and an index part.
 		constant CACHE_SETS : positive := CACHE_LINES / ASSOCIATIVITY;
     constant INDEX_BITS : positive := log2ceilnz(CACHE_SETS);
@@ -351,7 +356,7 @@ begin
 		-- Global hit / miss calculation and output
 		----------------------------------------------------------------------------
 		TagHit_i	<= slv_or(TagHits) and Request;
-		TagMiss_i <= not (slv_or(TagHits)) and Request;
+		TagMiss_i <= not slv_or(TagHits) and Request;
 
 		LineIndex <= std_logic_vector(HitWay) & std_logic_vector(Address_Index);
 		TagHit		<= TagHit_i;

@@ -1,19 +1,18 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
 -- Package:				 	VHDL package for component declarations, types and functions
 --									associated to the PoC.bus.stream namespace
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -28,7 +27,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS of ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -43,65 +42,65 @@ use			PoC.strings.all;
 package stream is
 	-- single dataword for TestRAM
 	type T_SIM_STREAM_WORD_8 is record
-		Valid			: STD_LOGIC;
+		Valid			: std_logic;
 		Data			: T_SLV_8;
-		SOF				: STD_LOGIC;
-		EOF				: STD_LOGIC;
-		Ready			: STD_LOGIC;
-		EOFG			: BOOLEAN;
+		SOF				: std_logic;
+		EOF				: std_logic;
+		Ready			: std_logic;
+		EOFG			: boolean;
 	end record;
 
 	type T_SIM_STREAM_WORD_32 is record
-		Valid			: STD_LOGIC;
+		Valid			: std_logic;
 		Data			: T_SLV_32;
-		SOF				: STD_LOGIC;
-		EOF				: STD_LOGIC;
-		Ready			: STD_LOGIC;
-		EOFG			: BOOLEAN;
+		SOF				: std_logic;
+		EOF				: std_logic;
+		Ready			: std_logic;
+		EOFG			: boolean;
 	end record;
 
 	-- define array indices
-	constant C_SIM_STREAM_MAX_PATTERN_COUNT			: POSITIVE			:= 128;-- * 1024;				-- max data size per testcase
-	constant C_SIM_STREAM_MAX_FRAMEGROUP_COUNT	: POSITIVE			:= 8;
+	constant C_SIM_STREAM_MAX_PATTERN_COUNT			: positive			:= 128;-- * 1024;				-- max data size per testcase
+	constant C_SIM_STREAM_MAX_FRAMEGROUP_COUNT	: positive			:= 8;
 
-	constant C_SIM_STREAM_WORD_INDEX_BW					: POSITIVE			:= log2ceilnz(C_SIM_STREAM_MAX_PATTERN_COUNT);
-	constant C_SIM_STREAM_FRAMEGROUP_INDEX_BW		: POSITIVE			:= log2ceilnz(C_SIM_STREAM_MAX_FRAMEGROUP_COUNT);
+	constant C_SIM_STREAM_WORD_INDEX_BW					: positive			:= log2ceilnz(C_SIM_STREAM_MAX_PATTERN_COUNT);
+	constant C_SIM_STREAM_FRAMEGROUP_INDEX_BW		: positive			:= log2ceilnz(C_SIM_STREAM_MAX_FRAMEGROUP_COUNT);
 
-	subtype T_SIM_STREAM_WORD_INDEX					is INTEGER range 0 to C_SIM_STREAM_MAX_PATTERN_COUNT - 1;
-	subtype T_SIM_STREAM_FRAMEGROUP_INDEX		is INTEGER range 0 to C_SIM_STREAM_MAX_FRAMEGROUP_COUNT - 1;
+	subtype T_SIM_STREAM_WORD_INDEX					is integer range 0 to C_SIM_STREAM_MAX_PATTERN_COUNT - 1;
+	subtype T_SIM_STREAM_FRAMEGROUP_INDEX		is integer range 0 to C_SIM_STREAM_MAX_FRAMEGROUP_COUNT - 1;
 
 	subtype T_SIM_DELAY											is T_UINT_16;
-	type		T_SIM_DELAY_VECTOR							is array (NATURAL range <>) of T_SIM_DELAY;
+	type		T_SIM_DELAY_VECTOR							is array (natural range <>) of T_SIM_DELAY;
 
 	-- define array of datawords
-	type		T_SIM_STREAM_WORD_VECTOR_8			is array (NATURAL range <>) of T_SIM_STREAM_WORD_8;
-	type		T_SIM_STREAM_WORD_VECTOR_32			is array (NATURAL range <>) of T_SIM_STREAM_WORD_32;
+	type		T_SIM_STREAM_WORD_VECTOR_8			is array (natural range <>) of T_SIM_STREAM_WORD_8;
+	type		T_SIM_STREAM_WORD_VECTOR_32			is array (natural range <>) of T_SIM_STREAM_WORD_32;
 
 	-- define link layer directions
 	type		T_SIM_STREAM_DIRECTION					is (Send, RECEIVE);
 
 	-- define framegroup information
 	type T_SIM_STREAM_FRAMEGROUP_8 is record
-		Active					: BOOLEAN;
-		Name						: STRING(1 to 64);
-		PrePause				: NATURAL;
-		PostPause				: NATURAL;
+		Active					: boolean;
+		Name						: string(1 to 64);
+		PrePause				: natural;
+		PostPause				: natural;
 		DataCount				: T_SIM_STREAM_WORD_INDEX;
 		Data						: T_SIM_STREAM_WORD_VECTOR_8(0 to C_SIM_STREAM_MAX_PATTERN_COUNT - 1);
 	end record;
 
 	type T_SIM_STREAM_FRAMEGROUP_32 is record
-		Active					: BOOLEAN;
-		Name						: STRING(1 to 64);
-		PrePause				: NATURAL;
-		PostPause				: NATURAL;
+		Active					: boolean;
+		Name						: string(1 to 64);
+		PrePause				: natural;
+		PostPause				: natural;
 		DataCount				: T_SIM_STREAM_WORD_INDEX;
 		Data						: T_SIM_STREAM_WORD_VECTOR_32(T_SIM_STREAM_WORD_INDEX);
 	end record;
 
 	-- define array of framegroups
-	type T_SIM_STREAM_FRAMEGROUP_VECTOR_8			is array (NATURAL range <>) of T_SIM_STREAM_FRAMEGROUP_8;
-	type T_SIM_STREAM_FRAMEGROUP_VECTOR_32		is array (NATURAL range <>) of T_SIM_STREAM_FRAMEGROUP_32;
+	type T_SIM_STREAM_FRAMEGROUP_VECTOR_8			is array (natural range <>) of T_SIM_STREAM_FRAMEGROUP_8;
+	type T_SIM_STREAM_FRAMEGROUP_VECTOR_32		is array (natural range <>) of T_SIM_STREAM_FRAMEGROUP_32;
 
 	-- define constants (stored in RAMB36's parity-bits)
 	constant C_SIM_STREAM_WORD_8_EMPTY			: T_SIM_STREAM_WORD_8		:= (Valid => '0', Data => (others => 'U'),	SOF => '0', EOF	=> '0', Ready => '0', EOFG => FALSE);
@@ -130,8 +129,8 @@ package stream is
 		Data							=> (others => C_SIM_STREAM_WORD_32_EMPTY)
 	);
 
-	function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8)		return NATURAL;
-	function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_32)	return NATURAL;
+	function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8)		return natural;
+	function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_32)	return natural;
 
 	function dat(slv		: T_SLV_8)										return T_SIM_STREAM_WORD_8;
 	function dat(slvv		: T_SLVV_8) 									return T_SIM_STREAM_WORD_VECTOR_8;
@@ -152,18 +151,18 @@ package stream is
 	function eofg(stmwv	: T_SIM_STREAM_WORD_VECTOR_8)	return T_SIM_STREAM_WORD_VECTOR_8;
 	function eofg(stmw	: T_SIM_STREAM_WORD_32)				return T_SIM_STREAM_WORD_32;
 
-	function to_string(stmw : T_SIM_STREAM_WORD_8)		return STRING;
-	function to_string(stmw : T_SIM_STREAM_WORD_32)		return STRING;
+	function to_string(stmw : T_SIM_STREAM_WORD_8)		return string;
+	function to_string(stmw : T_SIM_STREAM_WORD_32)		return string;
 
 	-- checksum functions
 	-- ================================================================
-	function sim_CRC8(words		: T_SIM_STREAM_WORD_VECTOR_8) return STD_LOGIC_VECTOR;
+	function sim_CRC8(words		: T_SIM_STREAM_WORD_VECTOR_8) return std_logic_vector;
 --	function sim_CRC16(words	: T_SIM_STREAM_WORD_VECTOR_8) return STD_LOGIC_VECTOR;
 end;
 
 
 package body stream is
-function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
+function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return natural is
 	begin
 		for i in 0 to Data'length - 1 loop
 			if (Data(i).EOFG = TRUE) then
@@ -174,7 +173,7 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 		return 0;
 	end;
 
-	function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_32) return NATURAL is
+	function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_32) return natural is
 	begin
 		for i in 0 to Data'length - 1 loop
 			if (Data(i).EOFG = TRUE) then
@@ -359,8 +358,8 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 		return result;
 	end;
 
-	function to_flag1_string(stmw : T_SIM_STREAM_WORD_8) return STRING is
-		variable flag : STD_LOGIC_VECTOR(2 downto 0)	:= to_sl(stmw.EOFG) & stmw.EOF & stmw.SOF;
+	function to_flag1_string(stmw : T_SIM_STREAM_WORD_8) return string is
+		variable flag : std_logic_vector(2 downto 0)	:= to_sl(stmw.EOFG) & stmw.EOF & stmw.SOF;
 	begin
 		case flag is
 			when "000" =>		return "";
@@ -375,8 +374,8 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 		end case;
 	end function;
 
-	function to_flag1_string(stmw : T_SIM_STREAM_WORD_32) return STRING is
-		variable flag : STD_LOGIC_VECTOR(2 downto 0)	:= to_sl(stmw.EOFG) & stmw.EOF & stmw.SOF;
+	function to_flag1_string(stmw : T_SIM_STREAM_WORD_32) return string is
+		variable flag : std_logic_vector(2 downto 0)	:= to_sl(stmw.EOFG) & stmw.EOF & stmw.SOF;
 	begin
 		case flag is
 			when "000" =>		return "";
@@ -391,8 +390,8 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 		end case;
 	end function;
 
-	function to_flag2_string(stmw : T_SIM_STREAM_WORD_8) return STRING is
-		variable flag : STD_LOGIC_VECTOR(1 downto 0)	:= stmw.Ready & stmw.Valid;
+	function to_flag2_string(stmw : T_SIM_STREAM_WORD_8) return string is
+		variable flag : std_logic_vector(1 downto 0)	:= stmw.Ready & stmw.Valid;
 	begin
 		case flag is
 			when "00" =>		return "  ";
@@ -405,8 +404,8 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 		end case;
 	end function;
 
-	function to_flag2_string(stmw : T_SIM_STREAM_WORD_32) return STRING is
-		variable flag : STD_LOGIC_VECTOR(1 downto 0)	:= stmw.Ready & stmw.Valid;
+	function to_flag2_string(stmw : T_SIM_STREAM_WORD_32) return string is
+		variable flag : std_logic_vector(1 downto 0)	:= stmw.Ready & stmw.Valid;
 	begin
 		case flag is
 			when "00" =>		return "  ";
@@ -419,12 +418,12 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 		end case;
 	end function;
 
-	function to_string(stmw : T_SIM_STREAM_WORD_8) return STRING is
+	function to_string(stmw : T_SIM_STREAM_WORD_8) return string is
 	begin
 		return to_flag2_string(stmw) & " 0x" & to_string(stmw.Data, 'h') & " " & to_flag1_string(stmw);
 	end function;
 
-	function to_string(stmw : T_SIM_STREAM_WORD_32) return STRING is
+	function to_string(stmw : T_SIM_STREAM_WORD_32) return string is
 	begin
 		return to_flag2_string(stmw) & " 0x" & to_string(stmw.Data, 'h') & " " & to_flag1_string(stmw);
 	end function;
@@ -437,14 +436,14 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 --	  return  to_stdlogicvector(to_bitvector(slv));
 --	end;
 
-	function sim_CRC8(words : T_SIM_STREAM_WORD_VECTOR_8) return STD_LOGIC_VECTOR is
+	function sim_CRC8(words : T_SIM_STREAM_WORD_VECTOR_8) return std_logic_vector is
 		constant CRC8_INIT					: T_SLV_8					:= x"FF";
 		constant CRC8_POLYNOMIAL		: T_SLV_8					:= x"31";			-- 0x131
 
 		variable CRC8_Value					: T_SLV_8					:= CRC8_INIT;
 
 --		variable Pattern						: T_DATAFifO_PATTERN;
-		variable Word								: UNSIGNED(T_SLV_8'range);
+		variable Word								: unsigned(T_SLV_8'range);
 	begin
 		report "Computing CRC8 for Words " & to_string(words'low) & " to " & to_string(words'high) severity NOTE;
 
@@ -452,7 +451,7 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 			if (words(i).Valid = '1') then
 				Word	:= to_01(unsigned(words(i).Data));
 
---					ASSERT (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
+--					assert (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
 
 				for j in Word'range loop
 						CRC8_Value := (CRC8_Value(CRC8_Value'high - 1 downto 0) & '0') xor (CRC8_POLYNOMIAL and (CRC8_POLYNOMIAL'range => (Word(j) xor CRC8_Value(CRC8_Value'high))));
@@ -483,15 +482,15 @@ function CountPatterns(Data : T_SIM_STREAM_WORD_VECTOR_8) return NATURAL is
 --
 ----			report Frames(i).Name severity NOTE;
 --
---			FOR J IN 1 to Frames(i).Count - 1 loop
+--			for j in 1 to Frames(i).Count - 1 loop
 --				Pattern		:= Frames(i).DataFifOPatterns(J);
 --
 --				if (Pattern.Valid = '1') then
 --					Word	:= to_01(Pattern.Data);
 --
-----					ASSERT (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
+----					assert (J > 9) report str_merge("  Word: 0x", hstr(Word), "    CRC16_Value: 0x", hstr(CRC16_Value)) severity NOTE;
 --
---					FOR K IN Word'range loop
+--					for k in Word'range loop
 --						CRC16_Value := (CRC16_Value(CRC16_Value'high - 1 downto 0) & '0') XOR (CRC16_POLYNOMIAL AND (CRC16_POLYNOMIAL'range => (Word(K) XOR CRC16_Value(CRC16_Value'high))));
 --					end loop;
 --				end if;

@@ -1,8 +1,7 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
 --									Martin Zabel
 --									Patrick Lehmann
@@ -10,12 +9,12 @@
 -- Package:					Global configuration settings.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This file evaluates the settings declared in the project specific package my_config.
 --		See also template file my_config.vhdl.template.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -30,7 +29,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -42,13 +41,13 @@ use			PoC.utils.all;
 package config_private is
 	-- TODO:
 	-- ===========================================================================
-	subtype T_BOARD_STRING					is STRING(1 to 16);
-	subtype T_BOARD_CONFIG_STRING		is STRING(1 to 64);
-	subtype T_DEVICE_STRING					is STRING(1 to 32);
+	subtype T_BOARD_STRING					is string(1 to 16);
+	subtype T_BOARD_CONFIG_STRING		is string(1 to 64);
+	subtype T_DEVICE_STRING					is string(1 to 32);
 
 	-- Data structures to describe UART / RS232
 	type T_BOARD_UART_DESC is record
-		IsDTE											: BOOLEAN;									-- Data terminal Equipment (e.g. PC, Printer)
+		IsDTE											: boolean;									-- Data terminal Equipment (e.g. PC, Printer)
 		FlowControl								: T_BOARD_CONFIG_STRING;		-- (NONE, SW, HW_CTS_RTS, HW_RTR_RTS)
 		BaudRate									: T_BOARD_CONFIG_STRING;		-- e.g. "115.2 kBd"
 		BaudRate_Max							: T_BOARD_CONFIG_STRING;
@@ -59,13 +58,13 @@ package config_private is
 		IPStyle										: T_BOARD_CONFIG_STRING;
 		RS_DataInterface					: T_BOARD_CONFIG_STRING;
 		PHY_Device								: T_BOARD_CONFIG_STRING;
-		PHY_DeviceAddress					: STD_LOGIC_VECTOR(7 downto 0);
+		PHY_DeviceAddress					: std_logic_vector(7 downto 0);
 		PHY_DataInterface					: T_BOARD_CONFIG_STRING;
 		PHY_ManagementInterface		: T_BOARD_CONFIG_STRING;
 	end record;
 
-	subtype T_BOARD_ETHERNET_DESC_INDEX		is NATURAL range 0 to 7;
-	type		T_BOARD_ETHERNET_DESC_VECTOR	is array(NATURAL range <>) of T_BOARD_ETHERNET_DESC;
+	subtype T_BOARD_ETHERNET_DESC_INDEX		is natural range 0 to 7;
+	type		T_BOARD_ETHERNET_DESC_VECTOR	is array(natural range <>) of T_BOARD_ETHERNET_DESC;
 
 	-- Data structures to describe a board layout
 	type T_BOARD_INFO is record
@@ -78,29 +77,29 @@ package config_private is
 
 	type T_BOARD_INFO_VECTOR	is array (natural range <>) of T_BOARD_INFO;
 
-	constant C_POC_NUL										: CHARACTER;
+	constant C_POC_NUL										: character;
 	constant C_BOARD_STRING_EMPTY					: T_BOARD_STRING;
 	constant C_BOARD_CONFIG_STRING_EMPTY	: T_BOARD_CONFIG_STRING;
 	constant C_DEVICE_STRING_EMPTY				: T_DEVICE_STRING;
-	CONSTANT C_BOARD_INFO_LIST						: T_BOARD_INFO_VECTOR;
+	constant C_BOARD_INFO_LIST						: T_BOARD_INFO_VECTOR;
 
 	function conf(str : string) return T_BOARD_CONFIG_STRING;
 end package;
 
 
 package body config_private is
-	constant C_POC_NUL										: CHARACTER								:= '~';
+	constant C_POC_NUL										: character								:= '~';
 	constant C_BOARD_STRING_EMPTY					: T_BOARD_STRING					:= (others => C_POC_NUL);
 	constant C_BOARD_CONFIG_STRING_EMPTY	: T_BOARD_CONFIG_STRING		:= (others => C_POC_NUL);
 	constant C_DEVICE_STRING_EMPTY				: T_DEVICE_STRING					:= (others => C_POC_NUL);
 
 	function conf(str : string) return T_BOARD_CONFIG_STRING is
-		constant ConstNUL		: STRING(1 to 1)				:= (others => C_POC_NUL);
-		variable Result			: STRING(1 to T_BOARD_CONFIG_STRING'length);
+		constant ConstNUL		: string(1 to 1)				:= (others => C_POC_NUL);
+		variable Result			: string(1 to T_BOARD_CONFIG_STRING'length);
 	begin
 		Result := (others => C_POC_NUL);
 		if (str'length > 0) then
-			Result(1 to imin(T_BOARD_CONFIG_STRING'length, imax(1, str'length))) := ite((str'length > 0), str(1 to imin(T_BOARD_CONFIG_STRING'length, str'length)), ConstNUL);
+			Result(1 to bound(T_BOARD_CONFIG_STRING'length, 1, str'length)) := ite((str'length > 0), str(1 to imin(T_BOARD_CONFIG_STRING'length, str'length)), ConstNUL);
 		end if;
 		return Result;
 	end function;
@@ -115,7 +114,7 @@ package body config_private is
 	);
 
 	-- predefined UART descriptions
-	function brd_CreateUART(IsDTE : BOOLEAN; FlowControl : STRING; BaudRate : STRING; BaudRate_Max : STRING := "") return T_BOARD_UART_DESC is
+	function brd_CreateUART(IsDTE : boolean; FlowControl : string; BaudRate : string; BaudRate_Max : string := "") return T_BOARD_UART_DESC is
 		variable Result			: T_BOARD_UART_DESC;
 	begin
 		Result.IsDTE				:= IsDTE;
@@ -133,7 +132,7 @@ package body config_private is
 	constant C_BOARD_UART_DCE_460800_NONE		: T_BOARD_UART_DESC	:= brd_CreateUART(FALSE,	"NONE",				"460.8 kBd");
 	constant C_BOARD_UART_DTE_921600_NONE		: T_BOARD_UART_DESC	:= brd_CreateUART(FALSE,	"NONE",				"921.6 kBd");
 
-	function brd_CreateEthernet(IPStyle : STRING; RS_DataInt : STRING; PHY_Device : STRING; PHY_DevAddress : STD_LOGIC_VECTOR(7 downto 0); PHY_DataInt : STRING; PHY_MgntInt : STRING) return T_BOARD_ETHERNET_DESC is
+	function brd_CreateEthernet(IPStyle : string; RS_DataInt : string; PHY_Device : string; PHY_DevAddress : std_logic_vector(7 downto 0); PHY_DataInt : string; PHY_MgntInt : string) return T_BOARD_ETHERNET_DESC is
 		variable Result		: T_BOARD_ETHERNET_DESC;
 	begin
 		Result.IPStyle									:= conf(IPStyle);
@@ -155,7 +154,7 @@ package body config_private is
 
 	-- Board Descriptions
 	-- ===========================================================================
-	CONSTANT C_BOARD_INFO_LIST		: T_BOARD_INFO_VECTOR		:= (
+	constant C_BOARD_INFO_LIST		: T_BOARD_INFO_VECTOR		:= (
 		(
 			BoardName =>			conf("GENERIC"),
 			FPGADevice =>			conf("GENERIC"),											-- GENERIC
@@ -244,10 +243,24 @@ package body config_private is
 			EthernetCount =>	1
 		),(
 			BoardName =>			conf("ZC706"),
-			FPGADevice =>			conf("XC7Z045-2FFG900"),						-- XC7K325T-2FFG900C
+			FPGADevice =>			conf("XC7Z045-2FFG900"),							-- XC7Z045-2FFG900C
 			UART =>						C_BOARD_UART_DTE_921600_NONE,
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
+		),(
+			BoardName =>			conf("ZedBoard"),
+			FPGADevice =>			conf("XC7Z020-1CLG484"),							-- XC7Z020-1CLG484
+			UART =>						C_BOARD_UART_DTE_921600_NONE,
+			Ethernet =>				C_BOARD_ETH_NONE,
+			EthernetCount =>	0
+		),(
+			BoardName =>			conf("AC701"),
+			FPGADevice =>			conf("XC7A200T-2FBG676C"),						-- XC7A200T-2FBG676C
+			UART =>						C_BOARD_UART_DTE_921600_NONE,
+			Ethernet => (
+				0 =>			C_BOARD_ETH_SOFT_GMII_88E1111,
+				others =>	C_BOARD_ETH_EMPTY),
+			EthernetCount =>	1
 		),(
 			BoardName =>			conf("KC705"),
 			FPGADevice =>			conf("XC7K325T-2FFG900C"),						-- XC7K325T-2FFG900C
@@ -310,12 +323,6 @@ package body config_private is
 			UART =>						C_BOARD_UART_DTE_921600_NONE,
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
-		),(
-			BoardName =>			conf("ZEDBOARD"),
-			FPGADevice =>			conf("XC7Z020-1CLG484"),							-- XC7Z020-1CLG484
-			UART =>						C_BOARD_UART_EMPTY,
-			Ethernet =>				C_BOARD_ETH_NONE,
-			EthernetCount =>	0
 		),
 		-- Custom Board (MUST BE LAST ONE)
 		-- =========================================================================
@@ -344,6 +351,7 @@ use			PoC.utils.all;
 package config is
 	constant PROJECT_DIR			: string	:= MY_PROJECT_DIR;
 	constant OPERATING_SYSTEM	: string	:= MY_OPERATING_SYSTEM;
+	constant POC_VERBOSE			: boolean := MY_VERBOSE;
 
 	-- List of known FPGA / Chip vendors
 	-- ---------------------------------------------------------------------------
@@ -418,7 +426,7 @@ package config is
 		DEVICE_ZYNQ7, DEVICE_ZYNQ_ULTRA_PLUS,																-- Xilinx.Zynq
 		DEVICE_ARTIX7,																											-- Xilinx.Artix
 		DEVICE_KINTEX7, DEVICE_KINTEX_ULTRA, DEVICE_KINTEX_ULTRA_PLUS,			-- Xilinx.Kintex
-		DEVICE_VIRTEX5,	DEVICE_VIRTEX6, DEVICE_VIRTEX7,											-- Xilinx.Virtex
+		DEVICE_VIRTEX4, DEVICE_VIRTEX5,	DEVICE_VIRTEX6, DEVICE_VIRTEX7,			-- Xilinx.Virtex
 			DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS											--
 	);
 
@@ -473,23 +481,23 @@ package config is
 		Vendor						: T_VENDOR;
 		Device						: T_DEVICE;
 		DevFamily					: T_DEVICE_FAMILY;
-		DevGeneration			: NATURAL;
-		DevNumber					: NATURAL;
+		DevGeneration			: natural;
+		DevNumber					: natural;
 		DevSubType				: T_DEVICE_SUBTYPE;
 		DevSeries					: T_DEVICE_SERIES;
 
 		TransceiverType		: T_TRANSCEIVER;
-		LUT_FanIn					: POSITIVE;
+		LUT_FanIn					: positive;
 	end record;
 
 	-- Functions extracting board and PCB properties from "MY_BOARD"
 	-- which is declared in package "my_config".
 	-- ===========================================================================
-	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY)								return NATURAL;
-	function BOARD_INFO(BoardConfig : STRING := C_BOARD_STRING_EMPTY)						return T_BOARD_INFO;
-	function BOARD_NAME(BoardConfig : STRING := C_BOARD_STRING_EMPTY) 					return STRING;
-	function BOARD_DEVICE(BoardConfig : STRING := C_BOARD_STRING_EMPTY) 				return STRING;
-	function BOARD_UART_BAUDRATE(BoardConfig : STRING := C_BOARD_STRING_EMPTY)	return STRING;
+	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY)								return natural;
+	function BOARD_INFO(BoardConfig : string := C_BOARD_STRING_EMPTY)						return T_BOARD_INFO;
+	function BOARD_NAME(BoardConfig : string := C_BOARD_STRING_EMPTY) 					return string;
+	function BOARD_DEVICE(BoardConfig : string := C_BOARD_STRING_EMPTY) 				return string;
+	function BOARD_UART_BAUDRATE(BoardConfig : string := C_BOARD_STRING_EMPTY)	return string;
 
 	-- Functions extracting device and architecture properties from "MY_DEVICE"
 	-- which is declared in package "my_config".
@@ -500,62 +508,67 @@ package config is
 	function DEVICE_FAMILY(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_FAMILY;
 	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_SUBTYPE;
 	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_SERIES;
-	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY)	return NATURAL;
-	function DEVICE_NUMBER(DeviceString : string := C_DEVICE_STRING_EMPTY)			return NATURAL;
+	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY)	return natural;
+	function DEVICE_NUMBER(DeviceString : string := C_DEVICE_STRING_EMPTY)			return natural;
 
 	function TRANSCEIVER_TYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_TRANSCEIVER;
-	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY)					return POSITIVE;
+	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY)					return positive;
 
 	function DEVICE_INFO(DeviceString : string := C_DEVICE_STRING_EMPTY)				return T_DEVICE_INFO;
 
+	-- Convert T_DEVICE to string representation as required by "altera_mf" library
+	-- ===========================================================================
+	function getAlteraDeviceName (device : T_DEVICE) return string;
+
 	-- force FSM to predefined encoding in debug mode
-	function getFSMEncoding_gray(debug : BOOLEAN) return STRING;
+	-- ===========================================================================
+	function getFSMEncoding_gray(debug : boolean) return string;
 end package;
 
 
 package body config is
 	-- inlined function from PoC.utils, to break dependency
 	-- ===========================================================================
-	function ite(cond : BOOLEAN; value1 : STRING; value2 : STRING) return STRING is begin
+	function ite(cond : boolean; value1 : string; value2 : string) return string is begin
 		if cond then	return value1;	else	return value2;	end if;
 	end function;
 
 	-- chr_is* function
-	function chr_isDigit(chr : CHARACTER) return boolean is
+	function chr_isDigit(chr : character) return boolean is
 	begin
-		return ((CHARACTER'pos('0') <= CHARACTER'pos(chr)) and (CHARACTER'pos(chr) <= CHARACTER'pos('9')));
+		return ((character'pos('0') <= CHARACTER'pos(chr)) and (character'pos(chr) <= CHARACTER'pos('9')));
 	end function;
 
 	function chr_isAlpha(chr : character) return boolean is
 	begin
-		return (((CHARACTER'pos('a') <= CHARACTER'pos(chr)) and (CHARACTER'pos(chr) <= CHARACTER'pos('z'))) or
-						((CHARACTER'pos('A') <= CHARACTER'pos(chr)) and (CHARACTER'pos(chr) <= CHARACTER'pos('Z'))));
+		return (((character'pos('a') <= CHARACTER'pos(chr)) and (character'pos(chr) <= CHARACTER'pos('z'))) or
+						((character'pos('A') <= CHARACTER'pos(chr)) and (character'pos(chr) <= CHARACTER'pos('Z'))));
 	end function;
 
-	function str_length(str : STRING) return NATURAL is
+	function str_length(str : string) return natural is
 	begin
 		for i in str'range loop
-			if (str(i) = C_POC_NUL) then
+			if str(i) = C_POC_NUL then
 				return i - str'low;
 			end if;
 		end loop;
 		return str'length;
 	end function;
 
-	function str_trim(str : STRING) return STRING is
+	function str_trim(str : string) return string is
 	begin
 		for i in str'range loop
-			if (str(i) = C_POC_NUL) then
+			if str(i) = C_POC_NUL then
 				return str(str'low to i-1);
 			end if;
 		end loop;
 		return str;
 	end function;
 
-	function str_imatch(str1 : STRING; str2 : STRING) return BOOLEAN is
-		constant len	: NATURAL 		:= imin(str1'length, str2'length);
-		variable chr1	: CHARACTER;
-		variable chr2	: CHARACTER;
+	function str_imatch(str1 : string; str2 : string) return boolean is
+		constant len	: natural 		:= imin(str1'length, str2'length);
+		variable chr1	: character;
+		variable chr2	: character;
 	begin
 		-- if both strings are empty
 		if ((str1'length = 0 ) and (str2'length = 0)) then		return TRUE;	end if;
@@ -563,17 +576,17 @@ package body config is
 		for i in 0 to len-1 loop
 			chr1	:= str1(str1'low + i);
 			chr2	:= str2(str2'low + i);
-			if (CHARACTER'pos('A') <= CHARACTER'pos(chr1)) and (CHARACTER'pos(chr1) <= CHARACTER'pos('Z')) then
-				chr1	:= CHARACTER'val(CHARACTER'pos(chr1) - CHARACTER'pos('A') + CHARACTER'pos('a'));
+			if (character'pos('A') <= CHARACTER'pos(chr1)) and (character'pos(chr1) <= CHARACTER'pos('Z')) then
+				chr1	:= character'val(CHARACTER'pos(chr1) - character'pos('A') + CHARACTER'pos('a'));
 			end if;
-			if (CHARACTER'pos('A') <= CHARACTER'pos(chr2)) and (CHARACTER'pos(chr2) <= CHARACTER'pos('Z')) then
-				chr2	:= CHARACTER'val(CHARACTER'pos(chr2) - CHARACTER'pos('A') + CHARACTER'pos('a'));
+			if (character'pos('A') <= CHARACTER'pos(chr2)) and (character'pos(chr2) <= CHARACTER'pos('Z')) then
+				chr2	:= character'val(CHARACTER'pos(chr2) - character'pos('A') + CHARACTER'pos('a'));
 			end if;
-			if (chr1 /= chr2) then
+			if chr1 /= chr2 then
 				return FALSE;
-			elsif ((chr1 = C_POC_NUL) xor (chr2 = C_POC_NUL)) then
+			elsif (chr1 = C_POC_NUL) xor (chr2 = C_POC_NUL) then
 				return FALSE;
-			elsif ((chr1 = C_POC_NUL) and (chr2 = C_POC_NUL)) then
+			elsif (chr1 = C_POC_NUL) and (chr2 = C_POC_NUL) then
 				return TRUE;
 			end if;
 		end loop;
@@ -587,7 +600,7 @@ package body config is
 		end if;
 	end function;
 
-	function str_find(str : STRING; pattern : STRING; start : NATURAL := 0) return BOOLEAN is
+	function str_find(str : string; pattern : string; start : natural := 0) return boolean is
 	begin
 		for i in imax(str'low, start) to (str'high - pattern'length + 1) loop
 			exit when (str(i) = C_POC_NUL);
@@ -601,34 +614,34 @@ package body config is
 	-- private functions required by board description
 	-- ModelSim requires that this functions is defined before it is used below.
 	-- ===========================================================================
-	function getLocalDeviceString(DeviceString : STRING) return STRING is
-		constant ConstNUL				: STRING(1 to 1)				:= (others => C_POC_NUL);
-		constant MY_DEVICE_STR	: STRING								:= BOARD_DEVICE;
-		variable Result					: STRING(1 to T_DEVICE_STRING'length);
+	function getLocalDeviceString(DeviceString : string) return string is
+		constant ConstNUL				: string(1 to 1)				:= (others => C_POC_NUL);
+		constant MY_DEVICE_STR	: string								:= BOARD_DEVICE;
+		variable Result					: string(1 to T_DEVICE_STRING'length);
 	begin
 		Result := (others => C_POC_NUL);
 		-- report DeviceString for debugging
-		if (POC_VERBOSE = TRUE) then
+		if POC_VERBOSE then
 			report "getLocalDeviceString: DeviceString='" & str_trim(DeviceString) & "' MY_DEVICE='" & str_trim(MY_DEVICE) & "' MY_DEVICE_STR='" & str_trim(MY_DEVICE_STR) & "'"  severity NOTE;
 		end if;
 		-- if DeviceString is populated
-		if ((str_length(DeviceString) /= 0) and (str_imatch(DeviceString, "None") = FALSE)) then
-			Result(1 to imin(T_DEVICE_STRING'length, imax(1, DeviceString'length)))		:= ite((DeviceString'length > 0), DeviceString(1 to imin(T_DEVICE_STRING'length, DeviceString'length)), ConstNUL);
+		if (str_length(DeviceString) /= 0) and not str_imatch(DeviceString, "None") then
+			Result(1 to bound(T_DEVICE_STRING'length, 1, DeviceString'length))	:= ite((DeviceString'length > 0), DeviceString(1 to imin(T_DEVICE_STRING'length, DeviceString'length)), ConstNUL);
 		-- if MY_DEVICE is set, prefer it
-		elsif ((str_length(MY_DEVICE) /= 0) and (str_imatch(MY_DEVICE, "None") = FALSE)) then
-			Result(1 to imin(T_DEVICE_STRING'length, imax(1, MY_DEVICE'length)))			:= ite((MY_DEVICE'length > 0), MY_DEVICE(1 to imin(T_DEVICE_STRING'length, MY_DEVICE'length)), ConstNUL);
+		elsif (str_length(MY_DEVICE) /= 0) and not str_imatch(MY_DEVICE, "None") then
+			Result(1 to bound(T_DEVICE_STRING'length, 1, MY_DEVICE'length))			:= ite((MY_DEVICE'length > 0), MY_DEVICE(1 to imin(T_DEVICE_STRING'length, MY_DEVICE'length)), ConstNUL);
 		-- otherwise use MY_BOARD
 		else
-			Result(1 to imin(T_DEVICE_STRING'length, imax(1, MY_DEVICE_STR'length)))	:= ite((MY_DEVICE_STR'length > 0), MY_DEVICE_STR(1 to imin(T_DEVICE_STRING'length, MY_DEVICE_STR'length)), ConstNUL);
+			Result(1 to bound(T_DEVICE_STRING'length, 1, MY_DEVICE_STR'length))	:= ite((MY_DEVICE_STR'length > 0), MY_DEVICE_STR(1 to imin(T_DEVICE_STRING'length, MY_DEVICE_STR'length)), ConstNUL);
 		end if;
 		return Result;
 	end function;
 
-	function extractFirstNumber(str : STRING) return NATURAL is
+	function extractFirstNumber(str : string) return natural is
 		variable low			: integer;
 		variable high			: integer;
-		variable Result		: NATURAL;
-		variable Digit		: INTEGER;
+		variable Result		: natural;
+		variable Digit		: integer;
 	begin
 		low			:= -1;
 		high		:= -1;
@@ -639,7 +652,7 @@ package body config is
 			end if;
 		end loop;
 		-- abort if no digit can be found
-		if (low = -1) then		return 0; end if;
+		if low = -1 then		return 0; end if;
 
 		for i in (low + 1) to str'high loop
 			if chr_isAlpha(str(i)) then
@@ -648,12 +661,12 @@ package body config is
 			end if;
 		end loop;
 
-		if (high = -1) then		return 0; end if;
+		if high = -1 then		return 0; end if;
 		-- return INTEGER'value(str(low to high));			-- 'value(...) is not supported by Vivado Synth 2014.1
 
 		-- convert substring to a number
 		for i in low to high loop
-			if (chr_isDigit(str(i)) = FALSE) then
+			if not chr_isDigit(str(i)) then
 				return 0;
 			end if;
 			Result	:= (Result * 10) + (character'pos(str(i)) - character'pos('0'));
@@ -664,11 +677,11 @@ package body config is
 	-- Public functions
 	-- ===========================================================================
 	-- TODO: comment
-	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY) return NATURAL is
+	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY) return natural is
 		constant MY_BRD			: T_BOARD_CONFIG_STRING	:= ite((BoardConfig /= C_BOARD_STRING_EMPTY), conf(BoardConfig), conf(MY_BOARD));
-		constant BOARD_NAME	: STRING								:= str_trim(MY_BRD);
+		constant BOARD_NAME	: string								:= str_trim(MY_BRD);
 	begin
-		if (POC_VERBOSE = TRUE) then	report "PoC configuration: Used board is '" & BOARD_NAME & "'" severity NOTE;		end if;
+		if POC_VERBOSE then	report "PoC configuration: Used board is '" & BOARD_NAME & "'" severity NOTE;		end if;
 		for i in C_BOARD_INFO_LIST'range loop
 			if str_imatch(BOARD_NAME, C_BOARD_INFO_LIST(i).BoardName) then
 				return  i;
@@ -679,28 +692,28 @@ package body config is
 		return C_BOARD_INFO_LIST'high;
 	end function;
 
-	function BOARD_INFO(BoardConfig : STRING := C_BOARD_STRING_EMPTY) return T_BOARD_INFO is
-		constant BRD	: NATURAL := BOARD(BoardConfig);
+	function BOARD_INFO(BoardConfig : string := C_BOARD_STRING_EMPTY) return T_BOARD_INFO is
+		constant BRD	: natural := BOARD(BoardConfig);
   begin
 		return  C_BOARD_INFO_LIST(BRD);
 	end function;
 
 	-- TODO: comment
-	function BOARD_NAME(BoardConfig : STRING := C_BOARD_STRING_EMPTY) return STRING is
-		constant BRD	: NATURAL := BOARD(BoardConfig);
+	function BOARD_NAME(BoardConfig : string := C_BOARD_STRING_EMPTY) return string is
+		constant BRD	: natural := BOARD(BoardConfig);
   begin
 		return str_trim(C_BOARD_INFO_LIST(BRD).BoardName);
 	end function;
 
 	-- TODO: comment
-	function BOARD_DEVICE(BoardConfig : STRING := C_BOARD_STRING_EMPTY) return STRING is
-		constant BRD	: NATURAL := BOARD(BoardConfig);
+	function BOARD_DEVICE(BoardConfig : string := C_BOARD_STRING_EMPTY) return string is
+		constant BRD	: natural := BOARD(BoardConfig);
   begin
 		return str_trim(C_BOARD_INFO_LIST(BRD).FPGADevice);
 	end function;
 
-	function BOARD_UART_BAUDRATE(BoardConfig : STRING := C_BOARD_STRING_EMPTY) return STRING is
-		constant BRD	: NATURAL := BOARD(BoardConfig);
+	function BOARD_UART_BAUDRATE(BoardConfig : string := C_BOARD_STRING_EMPTY) return string is
+		constant BRD	: natural := BOARD(BoardConfig);
   begin
 		return str_trim(C_BOARD_INFO_LIST(BRD).UART.BaudRate);
 	end function;
@@ -790,6 +803,7 @@ package body config is
 					when "KU"	 =>		return DEVICE_KINTEX_ULTRA;
 					when "3S"	 =>		return DEVICE_SPARTAN3;
 					when "6S"	 =>		return DEVICE_SPARTAN6;
+					when "4V"	 =>		return DEVICE_VIRTEX4;
 					when "5V"	 =>		return DEVICE_VIRTEX5;
 					when "6V"	 =>		return DEVICE_VIRTEX6;
 					when "7V"	 =>		return DEVICE_VIRTEX7;
@@ -863,10 +877,10 @@ package body config is
 		end case;
 	end function;
 
-	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY) return NATURAL is
+	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY) return natural is
 		constant SERIES		: T_DEVICE_SERIES		:= DEVICE_SERIES(DeviceString);
 	begin
-		if (SERIES = DEVICE_SERIES_7_SERIES) then
+		if SERIES = DEVICE_SERIES_7_SERIES then
 			return 7;
 		else
 			return 0;
@@ -915,14 +929,14 @@ package body config is
 					 DEVICE_CYCLONE5 =>																															return DEVICE_SUBTYPE_NONE;
 
 			when DEVICE_STRATIX2 =>
-				if		chr_isDigit(DEV_SUB_STR(1)) then																						return DEVICE_SUBTYPE_NONE;
-				elsif	(DEV_SUB_STR = "GX") then																										return DEVICE_SUBTYPE_GX;
+				if chr_isDigit(DEV_SUB_STR(1)) then																						return DEVICE_SUBTYPE_NONE;
+				elsif DEV_SUB_STR = "GX" then																										return DEVICE_SUBTYPE_GX;
 				else	report "Unknown Stratix II subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_STRATIX4 =>
 				if		(DEV_SUB_STR(1) = 'E') then																									return DEVICE_SUBTYPE_E;
-				elsif	(DEV_SUB_STR = "GX") then																										return DEVICE_SUBTYPE_GX;
+				elsif DEV_SUB_STR = "GX" then																										return DEVICE_SUBTYPE_GX;
 --				elsif	(DEV_SUB_STR = "GT") then																										return DEVICE_SUBTYPE_GT;
 				else	report "Unknown Stratix IV subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
@@ -934,7 +948,7 @@ package body config is
 
 			when DEVICE_ECP5 =>
 				if		(DEV_SUB_STR(1) = 'U') then																									return DEVICE_SUBTYPE_U;
-				elsif	(DEV_SUB_STR = "UM") then																										return DEVICE_SUBTYPE_UM;
+				elsif DEV_SUB_STR = "UM" then																										return DEVICE_SUBTYPE_UM;
 				else	report "Unknown Lattice ECP5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
@@ -943,36 +957,39 @@ package body config is
 				return DEVICE_SUBTYPE_NONE;
 
 			when DEVICE_SPARTAN6 =>
-				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
-				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
+				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
+				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
 				else	report "Unknown Virtex-5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
+		  when DEVICE_VIRTEX4 =>
+		    report "Unkown Virtex 4" severity failure;
+
 			when DEVICE_VIRTEX5 =>
-				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
-				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
-				elsif	((DEV_SUB_STR = "SX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_SXT;
-				elsif	((DEV_SUB_STR = "TX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_TXT;
-				elsif	((DEV_SUB_STR = "FX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_FXT;
+				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
+				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
+				elsif	((DEV_SUB_STR = "SX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_SXT;
+				elsif	((DEV_SUB_STR = "TX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_TXT;
+				elsif	((DEV_SUB_STR = "FX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_FXT;
 				else	report "Unknown Virtex-5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_VIRTEX6 =>
-				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
-				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
-				elsif	((DEV_SUB_STR = "SX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_SXT;
-				elsif	((DEV_SUB_STR = "CX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_CXT;
-				elsif	((DEV_SUB_STR = "HX") and (			str_find(MY_DEV(7 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_HXT;
+				if		((DEV_SUB_STR = "LX") and (not	str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LX;
+				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
+				elsif	((DEV_SUB_STR = "SX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_SXT;
+				elsif	((DEV_SUB_STR = "CX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_CXT;
+				elsif	((DEV_SUB_STR = "HX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_HXT;
 				else	report "Unknown Virtex-6 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_ARTIX7 =>
-				if		(													(			str_find(MY_DEV(5 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
+				if		(													(			str_find(MY_DEV(5 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
 				else	report "Unknown Artix-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
 			when DEVICE_KINTEX7 =>
-				if		(													(			str_find(MY_DEV(5 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
+				if		(													(			str_find(MY_DEV(5 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
 				else	report "Unknown Kintex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
@@ -980,9 +997,9 @@ package body config is
 			when DEVICE_KINTEX_ULTRA_PLUS =>																												return DEVICE_SUBTYPE_NONE;
 
 			when DEVICE_VIRTEX7 =>
-				if		(														(		str_find(MY_DEV(5 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
-				elsif	((DEV_SUB_STR(1) = 'X') and (		str_find(MY_DEV(6 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_XT;
-				elsif	((DEV_SUB_STR(1) = 'H') and (		str_find(MY_DEV(6 TO MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_HT;
+				if		(														(		str_find(MY_DEV(5 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_T;
+				elsif	((DEV_SUB_STR(1) = 'X') and (		str_find(MY_DEV(6 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_XT;
+				elsif	((DEV_SUB_STR(1) = 'H') and (		str_find(MY_DEV(6 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_HT;
 				else	report "Unknown Virtex-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 
@@ -1018,7 +1035,7 @@ package body config is
 
 			when DEVICE_SPARTAN3 =>																						return 4;
 			when DEVICE_SPARTAN6 =>																						return 6;
-			when DEVICE_VIRTEX5 | DEVICE_VIRTEX6 =>														return 6;
+			when DEVICE_VIRTEX4 | DEVICE_VIRTEX5 | DEVICE_VIRTEX6 =>					return 6;
 
 			when others => report "LUT fan-in is unknown for the given device." severity failure;
 									-- return statement is explicitly missing otherwise XST won't stop
@@ -1050,6 +1067,9 @@ package body config is
 					when others =>								report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
 
+			when DEVICE_VIRTEX4 =>
+					report "Unknown Virtex-4" severity failure;
+
 			when DEVICE_VIRTEX5 =>
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_LX =>			return TRANSCEIVER_NONE;
@@ -1075,7 +1095,7 @@ package body config is
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_T =>			return TRANSCEIVER_GTXE2;
 					when DEVICE_SUBTYPE_XT =>
-						if (DEV_NUM = 485) then			return TRANSCEIVER_GTXE2;
+						if DEV_NUM = 485 then			return TRANSCEIVER_GTXE2;
 						else												return TRANSCEIVER_GTHE2;
 						end if;
 					when DEVICE_SUBTYPE_HT =>			return TRANSCEIVER_GTHE2;
@@ -1110,10 +1130,36 @@ package body config is
 		return Result;
 	end function;
 
-	-- force FSM to predefined encoding in debug mode
-	function getFSMEncoding_gray(debug : BOOLEAN) return STRING is
+
+	-- Convert T_DEVICE to string representation as required by "altera_mf" library
+	function getAlteraDeviceName (device : T_DEVICE) return string is
 	begin
-		if (debug = true) then
+		case device is
+			when DEVICE_ARRIA1		=> return "Arria";
+			when DEVICE_ARRIA2		=> return "Arria II";
+			when DEVICE_ARRIA5		=> return "Arria V";
+			when DEVICE_ARRIA10		=> return "Arria 10";
+			when DEVICE_CYCLONE1	=> return "Cyclone";
+			when DEVICE_CYCLONE2	=> return "Cyclone II";
+			when DEVICE_CYCLONE3	=> return "Cyclone III";
+			when DEVICE_CYCLONE4	=> return "Cyclone IV";
+			when DEVICE_CYCLONE5	=> return "Cyclone V";
+			when DEVICE_STRATIX1	=> return "Stratix";
+			when DEVICE_STRATIX2	=> return "Stratix II";
+			when DEVICE_STRATIX3	=> return "Stratix III";
+			when DEVICE_STRATIX4	=> return "Stratix IV";
+			when DEVICE_STRATIX5	=> return "Stratix V";
+			when DEVICE_STRATIX10 => return "Stratix 10";
+			when others =>
+				report "Unknown Altera device." severity failure;
+		    -- return statement is explicitly missing otherwise XST won't stop
+		end case;
+	end function;
+
+	-- force FSM to predefined encoding in debug mode
+	function getFSMEncoding_gray(debug : boolean) return string is
+	begin
+		if debug then
 			return "gray";
 		else
 			case VENDOR is

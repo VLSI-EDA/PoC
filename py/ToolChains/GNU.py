@@ -38,13 +38,11 @@ if __name__ != "__main__":
 	pass
 else:
 	from lib.Functions import Exit
-
 	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GNU")
 
 # load dependencies
 import re
 
-from Base.Configuration      import Configuration as BaseConfiguration
 from Base.Exceptions         import PlatformNotSupportedException
 from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument
 from Base.Logging            import LogEntry, Severity
@@ -57,20 +55,11 @@ class GNUException(ToolChainException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      "GNU"
-	_toolName =    "GNU Make"
-	_section =     None
-
-	def CheckDependency(self):
-		return False
-
-
 class Make(Executable):
-	def __init__(self, platform, logger=None):
+	def __init__(self, platform, dryrun, logger=None):
 		if (platform == "Linux"):      executablePath = "/usr/bin/make"
-		else:                          raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, executablePath, logger=logger)
+		else:                          raise PlatformNotSupportedException(platform)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -91,7 +80,11 @@ class Make(Executable):
 
 	def RunCocotb(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -106,25 +99,25 @@ class Make(Executable):
 			iterator = iter(CocotbSimulationResultFilter(GNUMakeQuestaSimFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
-			line.IndentBy(2)
+			line.IndentBy(self.Logger.BaseIndent + 1)
 			self._hasOutput = True
-			self._LogNormal("    Make messages")
-			self._LogNormal("    " + ("-" * 76))
-			self._Log(line)
+			self.LogNormal("  Make messages")
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.Log(line)
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.IndentBy(2)
-				self._Log(line)
+				line.IndentBy(self.Logger.BaseIndent + 1)
+				self.Log(line)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 		return simulationResult.value
 

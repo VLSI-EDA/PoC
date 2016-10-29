@@ -1,59 +1,58 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================================================================================================
--- Module:					FIFO, common clock (cc), pipelined interface,
--- 									reads only become effective after explicit commit
---
+-- =============================================================================
 -- Authors:					Thomas B. Preusser
 --									Steffen Koehler
 --									Martin Zabel
 --									Patrick Lehmann
 --
+-- Entity:					FIFO, common clock (cc), pipelined interface, reads only become effective after explicit commit
+--
 -- Description:
--- ------------------------------------
---		The specified depth (MIN_DEPTH) is rounded up to the next suitable value.
+-- -------------------------------------
+-- The specified depth (``MIN_DEPTH``) is rounded up to the next suitable value.
 --
---		As uncommitted reads occupy FIFO space that is not yet available for
---		writing, an instance of this FIFO can, indeed, report 'full' and 'not vld'
---		at the same time. While a 'commit' would eventually make space available for
---		writing ('not ful'), a 'rollback' would re-iterate data for reading
---		('vld').
+-- As uncommitted reads occupy FIFO space that is not yet available for
+-- writing, an instance of this FIFO can, indeed, report ``full`` and ``not vld``
+-- at the same time. While a ``commit`` would eventually make space available for
+-- writing (``not ful``), a ``rollback`` would re-iterate data for reading
+-- (``vld``).
 --
---		'commit' and 'rollback' are inclusive and apply to all reads ('got') since
---		the previous 'commit' or 'rollback' up to and including a potentially
---		simultaneous read.
+-- ``commit`` and ``rollback`` are inclusive and apply to all reads (``got``) since
+-- the previous ``commit`` or ``rollback`` up to and including a potentially
+-- simultaneous read.
 --
---		The FIFO state upon a simultaneous assertion of 'commit' and 'rollback' is
---		*undefined*!
+-- The FIFO state upon a simultaneous assertion of ``commit`` and ``rollback`` is
+-- *undefined*!
 --
---		*STATE_*_BITS defines the granularity of the fill state indicator
---		'*state_*'. 'fstate_rd' is associated with the read clock domain and outputs
---		the guaranteed number of words available in the FIFO. 'estate_wr' is
---		associated with the write clock domain and outputs the number of words that
---		is guaranteed to be accepted by the FIFO without a capacity overflow. Note
---		that both these indicators cannot replace the 'full' or 'valid' outputs as
---		they may be implemented as giving pessimistic bounds that are minimally off
---		the true fill state.
+-- ``*STATE_*_BITS`` defines the granularity of the fill state indicator
+-- ``*state_*``. ``fstate_rd`` is associated with the read clock domain and outputs
+-- the guaranteed number of words available in the FIFO. ``estate_wr`` is
+-- associated with the write clock domain and outputs the number of words that
+-- is guaranteed to be accepted by the FIFO without a capacity overflow. Note
+-- that both these indicators cannot replace the ``full`` or ``valid`` outputs as
+-- they may be implemented as giving pessimistic bounds that are minimally off
+-- the true fill state.
 --
---		If a fill state is not of interest, set *STATE_*_BITS = 0.
+-- If a fill state is not of interest, set ``*STATE_*_BITS = 0``.
 --
---		'fstate_rd' and 'estate_wr' are combinatorial outputs and include an address
---		comparator (subtractor) in their path.
+-- ``fstate_rd`` and ``estate_wr`` are combinatorial outputs and include an address
+-- comparator (subtractor) in their path.
 --
---		Examples:
---		- FSTATE_RD_BITS = 1: fstate_rd == 0 => 0/2 full
---		                      fstate_rd == 1 => 1/2 full (half full)
+-- Examples:
+-- - FSTATE_RD_BITS = 1: fstate_rd == 0 => 0/2 full
+--                       fstate_rd == 1 => 1/2 full (half full)
 --
---		- FSTATE_RD_BITS = 2: fstate_rd == 0 => 0/4 full
---		                      fstate_rd == 1 => 1/4 full
---		                      fstate_rd == 2 => 2/4 full
---		                      fstate_rd == 3 => 3/4 full
+-- - FSTATE_RD_BITS = 2: fstate_rd == 0 => 0/4 full
+--                       fstate_rd == 1 => 1/4 full
+--                       fstate_rd == 2 => 2/4 full
+--                       fstate_rd == 3 => 3/4 full
 --
 -- License:
--- ============================================================================================================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany, Chair for VLSI-Design, Diagnostics and Architecture
+-- =============================================================================
+-- Copyright 2007-2014 Technische Universitaet Dresden - Germany,
+--										 Chair for VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -66,7 +65,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================================================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -107,7 +106,7 @@ entity fifo_cc_got_tempgot is
     commit    : in  std_logic;
     rollback  : in  std_logic
   );
-end fifo_cc_got_tempgot;
+end entity fifo_cc_got_tempgot;
 
 
 architecture rtl of fifo_cc_got_tempgot is
@@ -129,7 +128,7 @@ architecture rtl of fifo_cc_got_tempgot is
   signal IP1 : unsigned(A_BITS-1 downto 0);
   signal OP1 : unsigned(A_BITS-1 downto 0);
 
-  -- Commited Read Pointer (Commit Marker)
+  -- Committed Read Pointer (Commit Marker)
   signal OPm : unsigned(A_BITS-1 downto 0) := (others => '0');
 
   -----------------------------------------------------------------------------
@@ -152,10 +151,10 @@ begin
   -----------------------------------------------------------------------------
   -- Pointer Logic
 	blkPointer : block
-		signal IP0_slv		: STD_LOGIC_VECTOR(IP0'range);
-		signal IP1_slv		: STD_LOGIC_VECTOR(IP0'range);
-		signal OP0_slv		: STD_LOGIC_VECTOR(IP0'range);
-		signal OP1_slv		: STD_LOGIC_VECTOR(IP0'range);
+		signal IP0_slv		: std_logic_vector(IP0'range);
+		signal IP1_slv		: std_logic_vector(IP0'range);
+		signal OP0_slv		: std_logic_vector(IP0'range);
+		signal OP1_slv		: std_logic_vector(IP0'range);
 	begin
 		IP0_slv	<= std_logic_vector(IP0);
 		OP0_slv	<= std_logic_vector(OP0);
@@ -398,7 +397,7 @@ begin
     begin
       if rising_edge(clk) then
         --synthesis translate_off
-        if SIMULATION AND (rst = '1') then
+        if SIMULATION and (rst = '1') then
           regfile <= (others => (others => '-'));
         else
         --synthesis translate_on
@@ -419,4 +418,4 @@ begin
 
   end generate genSmall;
 
-end rtl;
+end architecture;

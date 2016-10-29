@@ -54,24 +54,24 @@ architecture tb of sim_Waveform_tb is
 
 	constant simTestID					: T_SIM_TEST_ID		:= simCreateTest("Test waveform generation");
 
-	signal Clock								: STD_LOGIC;
+	signal Clock								: std_logic;
 
-	signal Reset_1							: STD_LOGIC;
-	signal Reset_2							: STD_LOGIC;
-	signal Reset_3							: STD_LOGIC;
+	signal Reset_1							: std_logic;
+	signal Reset_2							: std_logic;
+	signal Reset_3							: std_logic;
 
-	signal Impulse_01						: STD_LOGIC;
-	signal Impulse_02						: STD_LOGIC;
-	signal Impulse_03						: STD_LOGIC;
+	signal Impulse_01						: std_logic;
+	signal Impulse_02						: std_logic;
+	signal Impulse_03						: std_logic;
 
-	signal Wave_01							: STD_LOGIC;
-	signal Wave_02							: STD_LOGIC;
-	signal Wave_03							: STD_LOGIC;
-	signal Wave_04							: STD_LOGIC;
-	signal Wave_05							: STD_LOGIC;
-	signal Wave_06							: STD_LOGIC;
+	signal Wave_01							: std_logic;
+	signal Wave_02							: std_logic;
+	signal Wave_03							: std_logic;
+	signal Wave_04							: std_logic;
+	signal Wave_05							: std_logic;
+	signal Wave_06							: std_logic;
 
-	signal Wave_11							: STD_LOGIC;
+	signal Wave_11							: std_logic;
 
 	signal Bus_01								: T_SLV_8;
 	signal Bus_02								: T_SLV_8;

@@ -1,23 +1,23 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Module:					Universal Barrel-Shifter
+-- Entity:					Universal Barrel-Shifter
 --
 -- Description:
--- ------------------------------------
---		This Barrel-Shifter supports:
---			- shifting and rotating
---			- right and left operations
---			- arithmetic and logic mode (only valid for shift operations)
---		This is equivalent to the CPU instructions: SLL, SLA, SRL, SRA, RL, RR
+-- -------------------------------------
+-- This Barrel-Shifter supports:
 --
+-- * shifting and rotating
+-- * right and left operations
+-- * arithmetic and logic mode (only valid for shift operations)
+--
+-- This is equivalent to the CPU instructions: SLL, SLA, SRL, SRA, RL, RR
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -32,7 +32,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -44,24 +44,24 @@ use			PoC.utils.all;
 
 entity arith_shifter_barrel is
 	generic (
-		BITS				: POSITIVE		:= 32
+		BITS				: positive		:= 32
 	);
   port (
-		Input						: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		ShiftAmount			: in	STD_LOGIC_VECTOR(log2ceilnz(BITS) - 1 downto 0);
-		ShiftRotate			: in	STD_LOGIC;
-		LeftRight				: in	STD_LOGIC;
-		ArithmeticLogic	: in	STD_LOGIC;
-		Output					: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		Input						: in	std_logic_vector(BITS - 1 downto 0);
+		ShiftAmount			: in	std_logic_vector(log2ceilnz(BITS) - 1 downto 0);
+		ShiftRotate			: in	std_logic;
+		LeftRight				: in	std_logic;
+		ArithmeticLogic	: in	std_logic;
+		Output					: out	std_logic_vector(BITS - 1 downto 0)
 	);
-end;
+end entity;
 
 
 architecture rtl of arith_shifter_barrel is
-	constant STAGES		: POSITIVE		:= log2ceilnz(BITS);
+	constant STAGES		: positive		:= log2ceilnz(BITS);
 
-	subtype	T_INTERMEDIATE_RESULT is STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	type		T_INTERMEDIATE_VECTOR is array (NATURAL range <>) of T_INTERMEDIATE_RESULT;
+	subtype	T_INTERMEDIATE_RESULT is std_logic_vector(BITS - 1 downto 0);
+	type		T_INTERMEDIATE_VECTOR is array (natural range <>) of T_INTERMEDIATE_RESULT;
 
 	signal IntermediateResults	: T_INTERMEDIATE_VECTOR(STAGES downto 0);
 
@@ -70,7 +70,7 @@ begin
 	Output									<= IntermediateResults(STAGES);
 
 	genStage : for i in 0 to STAGES - 1 generate
-		process(IntermediateResults(i), ShiftRotate, LeftRight, ArithmeticLogic)
+		process(IntermediateResults(i), ShiftRotate, LeftRight, ArithmeticLogic, ShiftAmount)
 		begin
 			if (ShiftAmount(i) = '0') then
 				IntermediateResults(i + 1) <= IntermediateResults(i);																																														-- NOP

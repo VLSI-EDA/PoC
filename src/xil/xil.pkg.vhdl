@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	VHDL package for component declarations, types and functions
+-- Entity:				 	VHDL package for component declarations, types and functions
 --									associated to the PoC.xil namespace
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This package declares types and components for
 --			- Xilinx ChipScope Pro IPCores (ICON, ILA, VIO)
 --			- Xilinx Dynamic Reconfiguration Port (DRP) related types
@@ -18,7 +17,7 @@
 --			- Component declarations for Xilinx related modules
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -33,7 +32,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -47,21 +46,21 @@ use			PoC.vectors.all;
 package xil is
 	-- ChipScope
 	-- ==========================================================================
-	subtype	T_XIL_CHIPSCOPE_CONTROL					is STD_LOGIC_VECTOR(35 downto 0);
-	type		T_XIL_CHIPSCOPE_CONTROL_VECTOR	is array (NATURAL range <>) of T_XIL_CHIPSCOPE_CONTROL;
+	subtype	T_XIL_CHIPSCOPE_CONTROL					is std_logic_vector(35 downto 0);
+	type		T_XIL_CHIPSCOPE_CONTROL_VECTOR	is array (natural range <>) of T_XIL_CHIPSCOPE_CONTROL;
 
 	-- Dynamic Reconfiguration Port (DRP)
 	-- ==========================================================================
 	subtype T_XIL_DRP_ADDRESS								is T_SLV_16;
 	subtype T_XIL_DRP_DATA									is T_SLV_16;
 
-	type		T_XIL_DRP_ADDRESS_VECTOR				is array (NATURAL range <>) of T_XIL_DRP_ADDRESS;
-	type		T_XIL_DRP_DATA_VECTOR						is array (NATURAL range <>) of T_XIL_DRP_DATA;
+	type		T_XIL_DRP_ADDRESS_VECTOR				is array (natural range <>) of T_XIL_DRP_ADDRESS;
+	type		T_XIL_DRP_DATA_VECTOR						is array (natural range <>) of T_XIL_DRP_DATA;
 
 	type T_XIL_DRP_BUS_IN is record
-		Clock					: STD_LOGIC;
-		Enable				: STD_LOGIC;
-		ReadWrite			: STD_LOGIC;
+		Clock					: std_logic;
+		Enable				: std_logic;
+		ReadWrite			: std_logic;
 		Address				: T_XIL_DRP_ADDRESS;
 		Data					: T_XIL_DRP_DATA;
 	end record;
@@ -75,8 +74,12 @@ package xil is
 
 	type T_XIL_DRP_BUS_OUT is record
 		Data					: T_XIL_DRP_DATA;
-		Ack						: STD_LOGIC;
+		Ack						: std_logic;
 	end record;
+
+	constant C_XIL_DRP_BUS_OUT_EMPTY : T_XIL_DRP_BUS_OUT := (
+		Ack				=> '0',
+		Data			=> (others => '0'));
 
 	type T_XIL_DRP_CONFIG is record
 		Address														: T_XIL_DRP_ADDRESS;
@@ -85,17 +88,17 @@ package xil is
 	end record;
 
 	-- define array indices
-	constant C_XIL_DRP_MAX_CONFIG_COUNT	: POSITIVE	:= 8;
+	constant C_XIL_DRP_MAX_CONFIG_COUNT	: positive	:= 8;
 
-	SUBtype T_XIL_DRP_CONFIG_INDEX			IS INTEGER range 0 TO C_XIL_DRP_MAX_CONFIG_COUNT - 1;
-	type		T_XIL_DRP_CONFIG_VECTOR			is array (NATURAL range <>) of T_XIL_DRP_CONFIG;
+	subtype T_XIL_DRP_CONFIG_INDEX			is integer range 0 to C_XIL_DRP_MAX_CONFIG_COUNT - 1;
+	type		T_XIL_DRP_CONFIG_VECTOR			is array (natural range <>) of T_XIL_DRP_CONFIG;
 
 	type T_XIL_DRP_CONFIG_SET is record
 		Configs														: T_XIL_DRP_CONFIG_VECTOR(T_XIL_DRP_CONFIG_INDEX);
 		LastIndex													: T_XIL_DRP_CONFIG_INDEX;
 	end record;
 
-	type T_XIL_DRP_CONFIG_ROM						is array (NATURAL range <>) of T_XIL_DRP_CONFIG_SET;
+	type T_XIL_DRP_CONFIG_ROM						is array (natural range <>) of T_XIL_DRP_CONFIG_SET;
 
 	constant C_XIL_DRP_CONFIG_EMPTY			: T_XIL_DRP_CONFIG				:= (
 		Address =>	(others => '0'),
@@ -110,7 +113,7 @@ package xil is
 
 	component xil_ChipScopeICON is
 		generic (
-			PORTS				: POSITIVE
+			PORTS				: positive
 		);
 		port (
 			ControlBus	: inout	T_XIL_CHIPSCOPE_CONTROL_VECTOR(PORTS - 1 downto 0)
@@ -119,25 +122,25 @@ package xil is
 
 	component xil_SystemMonitor_Virtex6 is
 		port (
-			Reset						: in	STD_LOGIC;				-- Reset signal for the System Monitor control logic
+			Reset						: in	std_logic;				-- Reset signal for the System Monitor control logic
 
-			Alarm_UserTemp	: out	STD_LOGIC;				-- Temperature-sensor alarm output
-			Alarm_OverTemp	: out	STD_LOGIC;				-- Over-Temperature alarm output
-			Alarm						: out	STD_LOGIC;				-- OR'ed output of all the alarms
-			VP							: in	STD_LOGIC;				-- Dedicated analog input pair
-			VN							: in	STD_LOGIC
+			Alarm_UserTemp	: out	std_logic;				-- Temperature-sensor alarm output
+			Alarm_OverTemp	: out	std_logic;				-- Over-Temperature alarm output
+			Alarm						: out	std_logic;				-- OR'ed output of all the alarms
+			VP							: in	std_logic;				-- Dedicated analog input pair
+			VN							: in	std_logic
 		);
 	end component;
 
 	component xil_SystemMonitor_Series7 is
 		port (
-			Reset						: in	STD_LOGIC;				-- Reset signal for the System Monitor control logic
+			Reset						: in	std_logic;				-- Reset signal for the System Monitor control logic
 
-			Alarm_UserTemp	: out	STD_LOGIC;				-- Temperature-sensor alarm output
-			Alarm_OverTemp	: out	STD_LOGIC;				-- Over-Temperature alarm output
-			Alarm						: out	STD_LOGIC;				-- OR'ed output of all the alarms
-			VP							: in	STD_LOGIC;				-- Dedicated analog input pair
-			VN							: in	STD_LOGIC
+			Alarm_UserTemp	: out	std_logic;				-- Temperature-sensor alarm output
+			Alarm_OverTemp	: out	std_logic;				-- Over-Temperature alarm output
+			Alarm						: out	std_logic;				-- OR'ed output of all the alarms
+			VP							: in	std_logic;				-- Dedicated analog input pair
+			VN							: in	std_logic
 		);
 	end component;
 

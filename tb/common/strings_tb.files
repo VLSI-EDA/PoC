@@ -5,4 +5,6 @@
 # Note: all files are relative to PoC root directory
 #
 # Testbench file(s)
+include "src/common/common.files"
+
 vhdl		test	"tb/common/strings_tb.vhdl"									# Testbench

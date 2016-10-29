@@ -12,12 +12,12 @@
 ## SGMII LVDS signal-pairs
 ## --------------------------
 ##	Bank:						117
-##		Quad117:		 
+##		Quad117:
 ##			RefClock0		SGMII RefClock (ICS844021I)
 ##			RefClock1		KC705_SMA_RefClock
 ##		Placement:
 ##			Lane:				Quad117.Channel1 (GTXE2_CHANNEL_X0Y9)
-##	ReferenceClock:	
+##	ReferenceClock:
 ##		RefClock:			Quad117.MGTRefClock0
 ##		Location:			U2 (ICS844021I)
 ##		Vendor:				Integrated Circuit Systems

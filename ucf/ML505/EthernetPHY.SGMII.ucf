@@ -2,7 +2,7 @@
 ## SGMII LVDS signal-pairs
 ## --------------------------
 ##	Bank:						112
-##	Transceiver:		
+##	Transceiver:
 ##		Location:			X0Y3 - Port 0
 ##	Device:					Ethernet PHY
 ##		Location:			U16 (M88E1111)

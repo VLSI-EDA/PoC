@@ -41,7 +41,7 @@ else:
 from pathlib              import Path
 
 from Base.Exceptions      import NotConfiguredException, PlatformNotSupportedException
-from Base.Configuration    import ConfigurationException
+from Base.Configuration   import ConfigurationException
 
 
 class Query:
@@ -68,8 +68,11 @@ class Query:
 			parts = query.split(":")
 			if (len(parts) == 2):
 				sectionName = parts[0]
-				optionName = parts[1]
-				result =  self.PoCConfig[sectionName][optionName]
+				optionName =  parts[1]
+				try:
+					result =  self.PoCConfig[sectionName][optionName]
+				except KeyError as ex:
+					raise ConfigurationException("Requested setting '{0}:{1}' not found.".format(sectionName, optionName)) from ex
 			else:
 				raise ConfigurationException("Syntax error in query string '{0}'".format(query))
 
@@ -93,19 +96,26 @@ class Query:
 			raise NotConfiguredException("ERROR: ModelSim is not configured on this system.")
 
 	def _GetXilinxISESettingsFile(self):
-		iseInstallationDirectoryPath = Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'])
-		if (self.Platform == "Windows"):
-			return iseInstallationDirectoryPath / "settings64.bat"
-		elif (self.Platform == "Linux"):
-			return iseInstallationDirectoryPath / "settings64.sh"
+		if (len(self.PoCConfig.options('INSTALL.Xilinx.ISE')) != 0):
+			iseInstallationDirectoryPath = Path(self.PoCConfig['INSTALL.Xilinx.ISE']['InstallationDirectory'])
+			if (self.Platform == "Windows"):
+				return iseInstallationDirectoryPath / "settings64.bat"
+			elif (self.Platform == "Linux"):
+				return iseInstallationDirectoryPath / "settings64.sh"
+			else:
+				raise PlatformNotSupportedException(self.Platform)
 		else:
-			raise PlatformNotSupportedException(self.Platform)
+			raise NotConfiguredException("ERROR: Xilinx ISE is not configured on this system.")
 
 	def _GetXilinxVivadoSettingsFile(self):
-		iseInstallationDirectoryPath = Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory'])
-		if (self.Platform == "Windows"):
-			return iseInstallationDirectoryPath / "settings64.bat"
-		elif (self.Platform == "Linux"):
-			return iseInstallationDirectoryPath / "settings64.sh"
+		if (len(self.PoCConfig.options('INSTALL.Xilinx.Vivado')) != 0):
+			iseInstallationDirectoryPath = Path(self.PoCConfig['INSTALL.Xilinx.Vivado']['InstallationDirectory'])
+			if (self.Platform == "Windows"):
+				return iseInstallationDirectoryPath / "settings64.bat"
+			elif (self.Platform == "Linux"):
+				return iseInstallationDirectoryPath / "settings64.sh"
+			else:
+				raise PlatformNotSupportedException(self.Platform)
 		else:
-			raise PlatformNotSupportedException(self.Platform)
+			raise NotConfiguredException("ERROR: Xilinx ISE is not configured on this system.")
+

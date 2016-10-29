@@ -1,16 +1,15 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ===========================================================================
--- Package:        UART (RS232) Components for PoC.io.uart
---
+-- =============================================================================
 -- Authors:        Martin Zabel
 --                 Thomas B. Preusser
 --		   					 Patrick Lehmann
 --
+-- Package:        UART (RS232) Components for PoC.io.uart
+--
 -- License:
--- ===========================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -25,7 +24,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ===========================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -52,7 +51,7 @@ package uart is
 		25 =>	460800 Bd,	26 =>	500000 Bd,	27 =>	576000 Bd,	28 =>	921600 Bd
 	);
 
-	function io_UART_IsTypicalBaudRate(br : BAUD) return BOOLEAN;
+	function io_UART_IsTypicalBaudRate(br : BAUD) return boolean;
 
   -- Bit Clock Generator: 8 Ticks per Bit
   component uart_bclk
@@ -133,15 +132,15 @@ package uart is
       Reset : in std_logic;
 
       -- FIFO interface
-      TX_put        : in  STD_LOGIC;
-      TX_Data       : in  STD_LOGIC_VECTOR(7 downto 0);
-      TX_Full       : out STD_LOGIC;
-      TX_EmptyState : out STD_LOGIC_VECTOR(TX_ESTATE_BITS - 1 downto 0);
+      TX_put        : in  std_logic;
+      TX_Data       : in  std_logic_vector(7 downto 0);
+      TX_Full       : out std_logic;
+      TX_EmptyState : out std_logic_vector(TX_ESTATE_BITS - 1 downto 0);
 
-      RX_Valid     : out STD_LOGIC;
-      RX_Data      : out STD_LOGIC_VECTOR(7 downto 0);
-      RX_got       : in  STD_LOGIC;
-      RX_FullState : out STD_LOGIC_VECTOR(RX_FSTATE_BITS - 1 downto 0);
+      RX_Valid     : out std_logic;
+      RX_Data      : out std_logic_vector(7 downto 0);
+      RX_got       : in  std_logic;
+      RX_FullState : out std_logic_vector(RX_FSTATE_BITS - 1 downto 0);
       RX_Overflow  : out std_logic;
 
       -- External Pins
@@ -183,7 +182,7 @@ end package;
 
 
 package body uart is
-	function io_UART_IsTypicalBaudRate(br : BAUD) return BOOLEAN is
+	function io_UART_IsTypicalBaudRate(br : BAUD) return boolean is
 	begin
 		for i in C_IO_UART_TYPICAL_BAUDRATES'range loop
 			next when (br /= C_IO_UART_TYPICAL_BAUDRATES(i));

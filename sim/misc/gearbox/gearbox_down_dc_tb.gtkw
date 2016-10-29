@@ -2,10 +2,8 @@
 [*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
 [*] Thu Jan 21 23:46:58 2016
 [*]
-[dumpfile] "D:\git\PoC\temp\ghdl\gearbox_down_dc_tb.ghw"
 [dumpfile_mtime] "Thu Jan 21 23:45:45 2016"
 [dumpfile_size] 21756
-[savefile] "D:\git\PoC\sim\misc\gearbox\gearbox_down_dc_tb.gtkw"
 [timestart] 0
 [size] 1920 996
 [pos] -1 -1

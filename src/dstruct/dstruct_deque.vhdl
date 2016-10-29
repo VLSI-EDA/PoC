@@ -1,20 +1,19 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- ============================================================================
+-- =============================================================================
 -- Authors:     Jens Voss
 --
--- Entity:      dstruct_deque
+-- Entity:      Double-ended queue
 --
 -- Description:
--- ------------
---   Implements a deque, i.e. a double-ended queue. This datastructures
---   allows two acting entities to queue data elements for the consumption
---   by the other while still being able to unqueue untaken ones in
---   LIFO fashion.
+-- -------------------------------------
+-- Implements a deque (double-ended queue). This data structure allows two
+-- acting entities to queue data elements for the consumption by the other while
+-- still being able to unqueue untaken ones in LIFO fashion.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -29,10 +28,11 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
-use IEEE.std_logic_1164.all;
+use			IEEE.std_logic_1164.all;
+
 
 entity dstruct_deque is
   generic (
@@ -59,7 +59,7 @@ entity dstruct_deque is
     validB : out std_logic;
     fullB  : out std_logic
   );
-end dstruct_deque;
+end entity dstruct_deque;
 
 
 library IEEE;
@@ -95,7 +95,7 @@ architecture rtl of dstruct_deque is
 
     -- Stackpointer
     -- A
-    signal stackpointerA : unsigned (A_BITS-1 downto 0) := shift_right(to_unsigned(MIN_DEPTH-1,A_BITS),1) ;
+    signal stackpointerA : unsigned (A_BITS-1 downto 0) := shift_right(to_unsigned(MIN_DEPTH-1,A_BITS),1);
     -- signal reA : std_logic := '0';
     signal weA : std_logic := '0';
     -- B
@@ -165,7 +165,7 @@ begin
                 -- reB <= '1';
                 adrB <= stackpointerB - 2;
                 last_op_ctrl <= UNSET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if(last_operation = '0') then
                         --> deque is empty!
                         -- B couldn't read a valid value => don't update SP!
@@ -173,7 +173,7 @@ begin
                         adrB <= stackpointerB - 1;
                         last_op_ctrl <= UNSET;
                     end if;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     --> only one element left
                     -- side B saw empty signal
                     -- so B couldn't read a valid value
@@ -186,7 +186,7 @@ begin
                 weB <= '1';
                 adrB <= stackpointerB;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if(last_operation = '1') then
                         --> deque is full!
                         -- B cant write => don't update SP!
@@ -198,7 +198,7 @@ begin
                         --> delay validA signal for one clk cycle
                         delay <= '1';
                     end if;
-                elsif (ctrl = "00") then
+                elsif ctrl = "00" then
                     --> only one spot left
                     -- B isn't allowed to write
                     -- B sees full signal atm
@@ -213,7 +213,7 @@ begin
                 adrB <= stackpointerB - 1;
                 weB <= '1';
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full!
                         -- B read a valid value but new value cant be pushed!
@@ -231,14 +231,14 @@ begin
                         last_op_ctrl <= SET;
                         delay <= '1';
                     end if;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     --> only one element left
                     -- B couldn't read it, but can write new value
                     ctrlB <= PUSH;
                     weB <= '1';
                     adrB <= stackpointerB;
                     last_op_ctrl <= SET;
-                elsif (ctrl = "00") then
+                elsif ctrl = "00" then
                     -- only one spot left
                     -- B read a valid value but cant write new value
                     ctrlB <= POP;
@@ -269,7 +269,7 @@ begin
                 -- reA <= '1';
                 adrA <= stackpointerA + 2;
                 last_op_ctrl <= UNSET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full
                         -- A and B read a valid value!
@@ -282,7 +282,7 @@ begin
                         adrA <= stackpointerA + 1;
                         adrB <= stackpointerB - 1;
                     end if;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     -- A and B both tried to read last value!
                     -- but only A was allowed to read value so only update stackpointerA
                     ctrlA <= POP;
@@ -298,7 +298,7 @@ begin
                 weB <= '1';
                 adrB <= stackpointerB;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if(last_operation = '1') then
                         --> deque is full!
                         -- A read a valid value, but B cant push!
@@ -315,12 +315,12 @@ begin
                         last_op_ctrl <= SET;
                         delay <= '1';
                     end if;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     --> only one element in deque
                     --> A read valid value and B can write new value
                     --> But validA has to be delayed!
                     delay <= '1';
-                elsif (ctrl = "00") then
+                elsif ctrl = "00" then
                     --> only one spot left
                     -- A read valid value, but B isn't allowed to write last value
                     ctrlB <= IDLE;
@@ -338,7 +338,7 @@ begin
                 adrA <= stackpointerA + 2;
                 -- reA <= '1';
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if last_operation = '1' then
                         --> deque is full!
                         -- A and B read a valid value, but B cant push!
@@ -358,7 +358,7 @@ begin
                         last_op_ctrl <= SET;
                         delay <= '1';
                     end if;
-                elsif (ctrl = "00") then
+                elsif ctrl = "00" then
                     --> only one spot left
                     -- A and B read valid values, but B isn't allowed to write new value
                     -- B sees full signal atm
@@ -366,7 +366,7 @@ begin
                     weB <= '0';
                     adrB <= stackpointerB - 2;
                     last_op_ctrl <= UNSET;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     --> only one element in deque
                     -- only A read a valid value, but B can write a new value
                     --> validA has to be delayed!
@@ -383,7 +383,7 @@ begin
                 weA <= '1';
                 adrA <= stackpointerA;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full
                         -- A cant write!
@@ -402,7 +402,7 @@ begin
                 adrA <= stackpointerA;
                 adrB <= stackpointerB - 2;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full!
                         -- A cant write, but B read a valid value!
@@ -417,7 +417,7 @@ begin
                         adrB <= stackpointerB - 1;
                         last_op_ctrl <= SET;
                     end if;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     --> only one element left
                     -- A can write new value, but B couldn't read a valid value
                     -- B sees empty signal atm
@@ -435,7 +435,7 @@ begin
                 weB <= '1';
                 adrB <= stackpointerB;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full!
                         -- A and B cant write!
@@ -451,7 +451,7 @@ begin
                         --> A and B can write!
                         last_op_ctrl <= SET;
                     end if;
-                elsif (ctrl = "00") then
+                elsif ctrl = "00" then
                     --> only one spot left.
                     -- only A is allowed to write
                     -- B got full signal
@@ -469,7 +469,7 @@ begin
                 weB <= '1';
                 adrB <= stackpointerB - 1;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full!
                         -- A and B cant write, but B read a valid value!
@@ -487,14 +487,14 @@ begin
                         adrB <= stackpointerB;
                         last_op_ctrl <= SET;
                     end if;
-                elsif (ctrl = "00") then
+                elsif ctrl = "00" then
                     --> only one spot left
                     -- only A can write last value
                     -- B only read a valid value
                     ctrlB <= POP;
                     weB <= '0';
                     adrB <= stackpointerB - 2;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     --> only one element left
                     --> B couldn't read value but A and B are allowed to write new values
                     ctrlB <= PUSH;
@@ -509,7 +509,7 @@ begin
                 weA <= '1';
                 adrA <= stackpointerA + 1;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full!
                         -- A cant write, but read a valid value!
@@ -536,7 +536,7 @@ begin
                 -- reB <= '1';
                 adrB <= stackpointerB - 2;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full!
                         -- A cant write new values, but A and B could read a valid value
@@ -554,7 +554,7 @@ begin
                         adrA <= stackpointerA;
                         last_op_ctrl <= SET;
                     end if;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     --> only one element in deque
                     -- only A read valid value and can write a new value
                     adrB <= stackpointerB - 1;
@@ -574,7 +574,7 @@ begin
                 weB <= '1';
                 adrB <= stackpointerB;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if (last_operation = '1') then
                         --> deque is full!
                         -- A and B cant write, but A could read valid value
@@ -593,7 +593,7 @@ begin
                         adrA <= stackpointerA;
                         last_op_ctrl <= SET;
                     end if;
-                elsif (ctrl = "00") then
+                elsif ctrl = "00" then
                     --> only one spot left
                     -- B cant write new value
                     ctrlB <= IDLE;
@@ -612,7 +612,7 @@ begin
                 -- reB <= '1';
                 adrB <= stackpointerB - 1;
                 last_op_ctrl <= SET;
-                if (ctrl = "01") then
+                if ctrl = "01" then
                     if last_operation = '1' then
                         --> deque is full
                         -- A and B could read valid values but cant write new values
@@ -632,14 +632,14 @@ begin
                         adrB <= stackpointerB;
                         last_op_ctrl <= SET;
                     end if;
-                elsif (ctrl = "10") then
+                elsif ctrl = "10" then
                     --> only one element left
                     -- only A read last value, A replaces the last element
                     -- B just writes new value
                     -- B sees empty signal atm
                     ctrlB <= PUSH;
                     adrB <= stackpointerB;
-                elsif (ctrl = "00") then
+                elsif ctrl = "00" then
                     --> only one spot left
                     -- B read a valid value, but isn't allowed to write
                     -- B sees full signal atm
@@ -656,7 +656,7 @@ begin
 
     process(clk)
     begin
-        if (rising_edge(clk)) then
+        if rising_edge(clk) then
             if (rst = '1') then
                 last_operation <= '0';
             else
@@ -677,7 +677,7 @@ begin
     --stackpointerA operations
     process(clk)
     begin
-        if (rising_edge(clk)) then
+        if rising_edge(clk) then
             if (rst = '1') then
                 stackpointerA <= shift_right(to_unsigned(MIN_DEPTH-1,A_BITS),1);
             else
@@ -698,7 +698,7 @@ begin
     -- stackpointerB operations
     process(clk)
     begin
-        if (rising_edge(clk)) then
+        if rising_edge(clk) then
             if (rst = '1') then
                 stackpointerB <= shift_right(to_unsigned(MIN_DEPTH-1,A_BITS),1) + 1;
             else
@@ -719,7 +719,7 @@ begin
     -- delayed_valid register
     process(clk)
     begin
-        if (rising_edge(clk)) then
+        if rising_edge(clk) then
             if(rst = '1') then
                 delayed_valid <= '0';
             else

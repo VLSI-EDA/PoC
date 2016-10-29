@@ -1,26 +1,24 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
--- Authors:					Steffen Koehler
---									Patrick Lehmann
+-- Authors:         Steffen Koehler
+--                  Patrick Lehmann
 --
--- Module:					Synchronizes a signal vector across clock-domain boundaries
+-- Entity:          Synchronizes a signal vector across clock-domain boundaries
 --
 -- Description:
--- ------------------------------------
---		This module synchronizes a vector of bits from clock-domain 'Clock1' to
---		clock-domain 'Clock2'. The clock-domain boundary crossing is done by a
---		change comparator, a T-FF, two synchronizer D-FFs and a reconstructive
---		XOR indicating a value change on the input. This changed signal is used
---		to capture the input for the new output. A busy flag is additionally
---		calculated for the input clock domain.
+-- -------------------------------------
+-- This module synchronizes a vector of bits from clock-domain ``Clock1`` to
+-- clock-domain ``Clock2``. The clock-domain boundary crossing is done by a
+-- change comparator, a T-FF, two synchronizer D-FFs and a reconstructive
+-- XOR indicating a value change on the input. This changed signal is used
+-- to capture the input for the new output. A busy flag is additionally
+-- calculated for the input clock domain.
 --
---		CONSTRAINTS:
---			General:
---				This module uses sub modules which need to be constrainted. Please
---				attend to the notes of the instantiated sub modules.
+-- Constraints:
+--   This module uses sub modules which need to be constrainted. Please
+--   attend to the notes of the instantiated sub modules.
 --
 -- License:
 -- =============================================================================
@@ -48,49 +46,49 @@ library PoC;
 use			PoC.utils.all;
 
 
-entity sync_Vector IS
+entity sync_Vector is
   generic (
-	  MASTER_BITS					: POSITIVE					:= 8;											-- number of bit to be synchronized
-		SLAVE_BITS					: NATURAL						:= 0;
-		INIT								: STD_LOGIC_VECTOR	:= x"00000000"						--
+	  MASTER_BITS					: positive					:= 8;											-- number of bit to be synchronized
+		SLAVE_BITS					: natural						:= 0;
+		INIT								: std_logic_vector	:= x"00000000"						--
 	);
-  PORT (
-		Clock1							: in	STD_LOGIC;																									-- <Clock>	input clock
-		Clock2							: in	STD_LOGIC;																									-- <Clock>	output clock
-		Input								: in	STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0);	-- @Clock1:	input vector
-		Output							: out STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0);	-- @Clock2:	output vector
-		Busy								: out	STD_LOGIC;																									-- @Clock1:	busy bit
-		Changed							: out	STD_LOGIC																										-- @Clock2:	changed bit
+  port (
+		Clock1							: in	std_logic;																									-- <Clock>	input clock
+		Clock2							: in	std_logic;																									-- <Clock>	output clock
+		Input								: in	std_logic_vector((MASTER_BITS + SLAVE_BITS) - 1 downto 0);	-- @Clock1:	input vector
+		Output							: out std_logic_vector((MASTER_BITS + SLAVE_BITS) - 1 downto 0);	-- @Clock2:	output vector
+		Busy								: out	std_logic;																									-- @Clock1:	busy bit
+		Changed							: out	std_logic																										-- @Clock2:	changed bit
 	);
-end;
+end entity;
 
 
 architecture rtl of sync_Vector is
-	attribute SHREG_EXTRACT				: STRING;
+	attribute SHREG_EXTRACT				: string;
 
-	constant INIT_I								: STD_LOGIC_VECTOR												:= descend(INIT)((MASTER_BITS + SLAVE_BITS) - 1 downto 0);
+	constant INIT_I								: std_logic_vector												:= descend(INIT)((MASTER_BITS + SLAVE_BITS) - 1 downto 0);
 
-	signal D0											: STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0)		:= INIT_I;
-	signal T1											: STD_LOGIC																										:= '0';
-	signal D2											: STD_LOGIC																										:= '0';
-	signal D3											: STD_LOGIC																										:= '0';
-	signal D4											: STD_LOGIC_VECTOR((MASTER_BITS + SLAVE_BITS) - 1 downto 0)		:= INIT_I;
+	signal D0											: std_logic_vector((MASTER_BITS + SLAVE_BITS) - 1 downto 0)		:= INIT_I;
+	signal T1											: std_logic																										:= '0';
+	signal D2											: std_logic																										:= '0';
+	signal D3											: std_logic																										:= '0';
+	signal D4											: std_logic_vector((MASTER_BITS + SLAVE_BITS) - 1 downto 0)		:= INIT_I;
 
-	signal Changed_Clk1						: STD_LOGIC;
-	signal Changed_Clk2						: STD_LOGIC;
-	signal Busy_i									: STD_LOGIC;
+	signal Changed_Clk1						: std_logic;
+	signal Changed_Clk2						: std_logic;
+	signal Busy_i									: std_logic;
 
 	-- Prevent XST from translating two FFs into SRL plus FF
-	attribute SHREG_EXTRACT of D0	: signal IS "NO";
-	attribute SHREG_EXTRACT of T1	: signal IS "NO";
-	attribute SHREG_EXTRACT of D2	: signal IS "NO";
-	attribute SHREG_EXTRACT of D3	: signal IS "NO";
-	attribute SHREG_EXTRACT of D4	: signal IS "NO";
+	attribute SHREG_EXTRACT of D0	: signal is "NO";
+	attribute SHREG_EXTRACT of T1	: signal is "NO";
+	attribute SHREG_EXTRACT of D2	: signal is "NO";
+	attribute SHREG_EXTRACT of D3	: signal is "NO";
+	attribute SHREG_EXTRACT of D4	: signal is "NO";
 
-	signal syncClk1_In		: STD_LOGIC;
-	signal syncClk1_Out		: STD_LOGIC;
-	signal syncClk2_In		: STD_LOGIC;
-	signal syncClk2_Out		: STD_LOGIC;
+	signal syncClk1_In		: std_logic;
+	signal syncClk1_Out		: std_logic;
+	signal syncClk2_In		: std_logic;
+	signal syncClk2_Out		: std_logic;
 
 begin
 

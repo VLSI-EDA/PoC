@@ -53,16 +53,16 @@ architecture tb of io_Debounce_tb is
 	constant CLOCK_FREQ			: FREQ					:= 100 MHz;
 
 	-- simulation signals
-	signal SimStop					: STD_LOGIC 		:= '0';
-	signal Clock						: STD_LOGIC			:= '1';
+	signal SimStop					: std_logic 		:= '0';
+	signal Clock						: std_logic			:= '1';
 
-	signal EventCounter			: NATURAL				:= 0;
+	signal EventCounter			: natural				:= 0;
 
 	-- unit Under Test (UUT) configuration
 	constant BOUNCE_TIME		:	T_TIME				:= 50.0e-9;
 
-	signal RawInput					: STD_LOGIC			:= '0';
-	signal deb_out					: STD_LOGIC;
+	signal RawInput					: std_logic			:= '0';
+	signal deb_out					: std_logic;
 
 begin
 	-- initialize global simulation status
@@ -107,7 +107,7 @@ begin
 		RawInput	<= '0';
 
 		-- final assertion
-		simAssertion((EventCounter = 6), "Events counted=" & INTEGER'image(EventCounter) &	" Expected=6");
+		simAssertion((EventCounter = 6), "Events counted=" & integer'image(EventCounter) &	" Expected=6");
 
 		-- This process is finished
 		simDeactivateProcess(simProcessID);

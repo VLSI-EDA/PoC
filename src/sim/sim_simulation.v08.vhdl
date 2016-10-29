@@ -1,7 +1,6 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Thomas B. Preusser
@@ -9,8 +8,8 @@
 -- Package:					Simulation constants, functions and utilities.
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -67,22 +66,22 @@ package simulation is
   -- alias simmFail								is globalSimulationStatus.fail[STRING];
 	-- alias simmWriteMessage				is globalSimulationStatus.writeMessage[STRING];
 
-	procedure				simInitialize(MaxAssertFailures : NATURAL := NATURAL'high; MaxSimulationRuntime : TIME := TIME'high);
+	procedure				simInitialize(MaxAssertFailures : natural := natural'high; MaxSimulationRuntime : TIME := TIME'high);
 	procedure				simFinalize;
 
-	impure function	simCreateTest(Name : STRING) return T_SIM_TEST_ID;
+	impure function	simCreateTest(Name : string) return T_SIM_TEST_ID;
 	procedure				simFinalizeTest(constant TestID : T_SIM_TEST_ID);
-	impure function	simRegisterProcess(Name : STRING; constant IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID;
-	impure function	simRegisterProcess(constant TestID : T_SIM_TEST_ID; Name : STRING; constant IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID;
+	impure function	simRegisterProcess(Name : string; constant IsLowPriority : boolean := FALSE) return T_SIM_PROCESS_ID;
+	impure function	simRegisterProcess(constant TestID : T_SIM_TEST_ID; Name : string; constant IsLowPriority : boolean := FALSE) return T_SIM_PROCESS_ID;
 	procedure				simDeactivateProcess(ProcID : T_SIM_PROCESS_ID);
 
-	impure function	simIsStopped(constant TestID		: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN;
-	impure function simIsFinalized(constant TestID	: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN;
-	impure function	simIsAllFinalized return BOOLEAN;
+	impure function	simIsStopped(constant TestID		: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return boolean;
+	impure function simIsFinalized(constant TestID	: T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return boolean;
+	impure function	simIsAllFinalized return boolean;
 
-	procedure				simAssertion(cond : in BOOLEAN; Message : in STRING := "");
-  procedure				simFail(Message : in STRING := "");
-	procedure				simWriteMessage(Message : in STRING := "");
+	procedure				simAssertion(cond : in boolean; Message : in string := "");
+  procedure				simFail(Message : in string := "");
+	procedure				simWriteMessage(Message : in string := "");
 
 	-- TODO: integrate VCD simulation functions and procedures from sim_value_change_dump.vhdl here
 
@@ -96,11 +95,11 @@ package body simulation is
 	-- legacy procedures
 	-- ===========================================================================
 	-- TODO: undocumented group
-	procedure simInitialize(MaxAssertFailures : NATURAL := NATURAL'high; MaxSimulationRuntime : TIME := TIME'high) is
+	procedure simInitialize(MaxAssertFailures : natural := natural'high; MaxSimulationRuntime : TIME := TIME'high) is
 	begin
 		globalSimulationStatus.initialize(MaxAssertFailures, MaxSimulationRuntime);
 		if C_SIM_VERBOSE then		report "simInitialize:" severity NOTE;			end if;
-		if (MaxSimulationRuntime /= TIME'high) then
+		if (MaxSimulationRuntime /= time'high) then
 			wait for MaxSimulationRuntime;
 			report "simInitialize: TIMEOUT" severity ERROR;
 			globalSimulationStatus.finalize;
@@ -112,7 +111,7 @@ package body simulation is
 		globalSimulationStatus.finalize;
 	end procedure;
 
-	impure function simCreateTest(Name : STRING) return T_SIM_TEST_ID is
+	impure function simCreateTest(Name : string) return T_SIM_TEST_ID is
 	begin
 		return globalSimulationStatus.createTest(Name);
 	end function;
@@ -122,12 +121,12 @@ package body simulation is
 		globalSimulationStatus.finalizeTest(TestID);
 	end procedure;
 
-	impure function simRegisterProcess(Name : STRING; constant IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID is
+	impure function simRegisterProcess(Name : string; constant IsLowPriority : boolean := FALSE) return T_SIM_PROCESS_ID is
 	begin
 		return globalSimulationStatus.registerProcess(Name, IsLowPriority);
 	end function;
 
-	impure function simRegisterProcess(constant TestID : T_SIM_TEST_ID; Name : STRING; constant IsLowPriority : BOOLEAN := FALSE) return T_SIM_PROCESS_ID is
+	impure function simRegisterProcess(constant TestID : T_SIM_TEST_ID; Name : string; constant IsLowPriority : boolean := FALSE) return T_SIM_PROCESS_ID is
 	begin
 		return globalSimulationStatus.registerProcess(TestID, Name, IsLowPriority);
 	end function;
@@ -137,33 +136,33 @@ package body simulation is
 		globalSimulationStatus.deactivateProcess(ProcID);
 	end procedure;
 
-	impure function simIsStopped(constant TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN is
+	impure function simIsStopped(constant TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return boolean is
 	begin
 		return globalSimulationStatus.isStopped(TestID);
 	end function;
 
-	impure function simIsFinalized(constant TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return BOOLEAN is
+	impure function simIsFinalized(constant TestID : T_SIM_TEST_ID := C_SIM_DEFAULT_TEST_ID) return boolean is
 	begin
 		return globalSimulationStatus.isFinalized(TestID);
 	end function;
 
-	impure function simIsAllFinalized return BOOLEAN is
+	impure function simIsAllFinalized return boolean is
 	begin
 		return globalSimulationStatus.isAllFinalized;
 	end function;
 
 	-- TODO: undocumented group
-	procedure simWriteMessage(Message : in STRING := "") is
+	procedure simWriteMessage(Message : in string := "") is
 	begin
 		globalSimulationStatus.writeMessage(Message);
 	end procedure;
 
-  procedure simFail(Message : in STRING := "") is
+  procedure simFail(Message : in string := "") is
   begin
 		globalSimulationStatus.fail(Message);
   end procedure;
 
-  procedure simAssertion(cond : in BOOLEAN; Message : in STRING := "") is
+  procedure simAssertion(cond : in boolean; Message : in string := "") is
 	begin
 		globalSimulationStatus.assertion(cond, Message);
 	end procedure;

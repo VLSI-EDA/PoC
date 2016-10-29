@@ -54,23 +54,23 @@ end entity;
 
 architecture tb of sortnet_BitonicSort_tb is
 
-	constant TAG_BITS								: POSITIVE	:= 4;
+	constant TAG_BITS								: positive	:= 4;
 
-	constant INPUTS									: POSITIVE	:= 64;
-	constant DATA_COLUMNS						: POSITIVE	:= 2;
+	constant INPUTS									: positive	:= 64;
+	constant DATA_COLUMNS						: positive	:= 2;
 
-	constant KEY_BITS								: POSITIVE	:= 8;
-	constant DATA_BITS							: POSITIVE	:= 32;
-	constant META_BITS							: POSITIVE	:= TAG_BITS;
-	constant PIPELINE_STAGE_AFTER		: NATURAL		:= 2;
+	constant KEY_BITS								: positive	:= 8;
+	constant DATA_BITS							: positive	:= 32;
+	constant META_BITS							: positive	:= TAG_BITS;
+	constant PIPELINE_STAGE_AFTER		: natural		:= 2;
 
-	constant LOOP_COUNT							: POSITIVE	:= 1024;
+	constant LOOP_COUNT							: positive	:= 1024;
 
-	constant STAGES									: POSITIVE	:= triangularNumber(log2ceil(INPUTS));
-	constant DELAY									: NATURAL		:= STAGES / PIPELINE_STAGE_AFTER;
+	constant STAGES									: positive	:= triangularNumber(log2ceil(INPUTS));
+	constant DELAY									: natural		:= STAGES / PIPELINE_STAGE_AFTER;
 
-	subtype T_DATA				is STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
-	type T_DATA_VECTOR		is array(NATURAL range <>) of T_DATA;
+	subtype T_DATA				is std_logic_vector(DATA_BITS - 1 downto 0);
+	type T_DATA_VECTOR		is array(natural range <>) of T_DATA;
 
 	function to_dv(slm : T_SLM) return T_DATA_VECTOR is
 		variable Result	: T_DATA_VECTOR(slm'range(1));
@@ -95,17 +95,17 @@ architecture tb of sortnet_BitonicSort_tb is
 	end function;
 
 	constant CLOCK_FREQ				: FREQ				:= 100 MHz;
-	signal Clock							: STD_LOGIC		:= '1';
+	signal Clock							: std_logic		:= '1';
 
-	signal Generator_Valid		: STD_LOGIC;
-	signal Generator_IsKey		: STD_LOGIC;
+	signal Generator_Valid		: std_logic;
+	signal Generator_IsKey		: std_logic;
 	signal Generator_Data			: T_DATA_VECTOR(INPUTS - 1 downto 0);
-	signal Generator_Meta			: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+	signal Generator_Meta			: std_logic_vector(META_BITS - 1 downto 0);
 
-	signal Sort_Valid					: STD_LOGIC;
-	signal Sort_IsKey					: STD_LOGIC;
+	signal Sort_Valid					: std_logic;
+	signal Sort_IsKey					: std_logic;
 	signal Sort_Data					: T_DATA_VECTOR(INPUTS - 1 downto 0);
-	signal Sort_Meta					: STD_LOGIC_VECTOR(META_BITS - 1 downto 0);
+	signal Sort_Meta					: std_logic_vector(META_BITS - 1 downto 0);
 
 	signal DataInputMatrix		: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
 	signal DataOutputMatrix		: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
@@ -115,10 +115,10 @@ begin
 	simInitialize;
 
 	simWriteMessage("SETTINGS");
-	simWriteMessage("  INPUTS:    " & INTEGER'image(INPUTS));
-	simWriteMessage("  KEY_BITS:  " & INTEGER'image(KEY_BITS));
-	simWriteMessage("  DATA_BITS: " & INTEGER'image(DATA_BITS));
-	simWriteMessage("  REG AFTER: " & INTEGER'image(PIPELINE_STAGE_AFTER));
+	simWriteMessage("  INPUTS:    " & integer'image(INPUTS));
+	simWriteMessage("  KEY_BITS:  " & integer'image(KEY_BITS));
+	simWriteMessage("  DATA_BITS: " & integer'image(DATA_BITS));
+	simWriteMessage("  REG AFTER: " & integer'image(PIPELINE_STAGE_AFTER));
 
 	simGenerateClock(Clock, CLOCK_FREQ);
 
@@ -126,9 +126,9 @@ begin
 		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Generator");
 		variable RandomVar		: RandomPType;					-- protected type from RandomPkg
 
-		variable KeyInput		: STD_LOGIC_VECTOR(KEY_BITS - 1 downto 0);
-		variable DataInput	: STD_LOGIC_VECTOR(DATA_BITS - KEY_BITS - 1 downto 0);
-		variable TagInput		: STD_LOGIC_VECTOR(TAG_BITS - 1 downto 0);
+		variable KeyInput		: std_logic_vector(KEY_BITS - 1 downto 0);
+		variable DataInput	: std_logic_vector(DATA_BITS - KEY_BITS - 1 downto 0);
+		variable TagInput		: std_logic_vector(TAG_BITS - 1 downto 0);
 
 	begin
 		RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
@@ -190,9 +190,9 @@ begin
 
 	procChecker : process
 		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Checker");
-		variable Check				: BOOLEAN;
-		variable CurValue			: UNSIGNED(KEY_BITS - 1 downto 0);
-		variable LastValue		: UNSIGNED(KEY_BITS - 1 downto 0);
+		variable Check				: boolean;
+		variable CurValue			: unsigned(KEY_BITS - 1 downto 0);
+		variable LastValue		: unsigned(KEY_BITS - 1 downto 0);
 	begin
 		wait until rising_edge(Sort_Valid);
 

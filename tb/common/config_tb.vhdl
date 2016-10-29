@@ -43,36 +43,36 @@ end config_tb;
 
 
 architecture tb of config_tb is
-	signal SimQuiet		: BOOLEAN		:= true;
+	signal SimQuiet		: boolean		:= true;
 begin
 
 	procChecker : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Checker");
 	begin
-		if (SimQuiet = FALSE) then
-			report "is simulation?:    " & BOOLEAN'image(SIMULATION)							severity note;
+		if not SimQuiet then
+			report "is simulation?:    " & boolean'image(SIMULATION)							severity note;
 			report "Vendor:            " & T_VENDOR'image(VENDOR)									severity note;
 			report "Device:            " & T_DEVICE'image(DEVICE)									severity note;
 			report "Device Family:     " & T_DEVICE_FAMILY'image(DEVICE_FAMILY)		severity note;
 			report "Device Subtype:    " & T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)	severity note;
 			report "Device Series:     " & T_DEVICE_SERIES'image(DEVICE_SERIES)		severity note;
-			report "Device Generation: " & INTEGER'image(DEVICE_GENERATION)				severity note;
-			report "Device Number:     " & INTEGER'image(DEVICE_NUMBER)						severity note;
+			report "Device Generation: " & integer'image(DEVICE_GENERATION)				severity note;
+			report "Device Number:     " & integer'image(DEVICE_NUMBER)						severity note;
 			report "--------------------------------------------------"						severity note;
-			report "LUT fan-in:        " & INTEGER'image(LUT_FANIN)								severity note;
+			report "LUT fan-in:        " & integer'image(LUT_FANIN)								severity note;
 			report "Transceiver:       " & T_TRANSCEIVER'image(TRANSCEIVER_TYPE)	severity note;
 		end if;
 
-		simAssertion((SIMULATION = TRUE),												"SIMULATION="					& BOOLEAN'image(SIMULATION)											&	"    Expected=TRUE");
-		simAssertion((VENDOR = VENDOR_XILINX),									"VENDOR= "						& T_VENDOR'image(VENDOR)												&	"    Expected=VENDOR_XILINX");
-		simAssertion((DEVICE = DEVICE_KINTEX7),									"DEVICE="							& T_DEVICE'image(DEVICE)												&	"    Expected=DEVICE_KINTEX7");
-		simAssertion((DEVICE_FAMILY = DEVICE_FAMILY_KINTEX),		"DEVICE_FAMILY="			& T_DEVICE_FAMILY'image(DEVICE_FAMILY)					&	"    Expected=DEVICE_FAMILY_KINTEX");
-		simAssertion((DEVICE_NUMBER = 325),											"DEVICE_NUMBER="			& INTEGER'image(DEVICE_NUMBER)									&	"    Expected=325");
-		simAssertion((DEVICE_SUBTYPE = DEVICE_SUBTYPE_T),				"DEVICE_SUBTYPE="			& T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)				&	"    Expected=DEVICE_SUBTYPE_T");
-		simAssertion((DEVICE_GENERATION = 7),										"DEVICE_GENERATION="	& INTEGER'image(DEVICE_GENERATION)							&	"    Expected=7");
-		simAssertion((DEVICE_SERIES = DEVICE_SERIES_7_SERIES),	"DEVICE_SERIES="			& T_DEVICE_SERIES'image(DEVICE_SERIES)					&	"    Expected=DEVICE_SERIES_7_SERIES");
-		simAssertion((LUT_FANIN = 6),														"LUT_FANIN="					& INTEGER'image(LUT_FANIN)											&	"    Expected=6");
-		simAssertion((TRANSCEIVER_TYPE = TRANSCEIVER_GTXE2),		"TRANSCEIVER_TYPE="		& T_TRANSCEIVER'image(TRANSCEIVER_TYPE)					&	"    Expected=TRANSCEIVER_GTXE2");
+		simAssertion((SIMULATION = TRUE),												"SIMULATION="					& boolean'image(SIMULATION)											&	"    Expected=TRUE");
+		simAssertion((VENDOR = VENDOR_GENERIC),									"VENDOR= "						& T_VENDOR'image(VENDOR)												&	"    Expected=VENDOR_XILINX");
+		simAssertion((DEVICE = DEVICE_GENERIC),									"DEVICE="							& T_DEVICE'image(DEVICE)												&	"    Expected=DEVICE_KINTEX7");
+		simAssertion((DEVICE_FAMILY = DEVICE_FAMILY_GENERIC),		"DEVICE_FAMILY="			& T_DEVICE_FAMILY'image(DEVICE_FAMILY)					&	"    Expected=DEVICE_FAMILY_KINTEX");
+		simAssertion((DEVICE_NUMBER = 0),												"DEVICE_NUMBER="			& integer'image(DEVICE_NUMBER)									&	"    Expected=325");
+		simAssertion((DEVICE_SUBTYPE = DEVICE_SUBTYPE_GENERIC),	"DEVICE_SUBTYPE="			& T_DEVICE_SUBTYPE'image(DEVICE_SUBTYPE)				&	"    Expected=DEVICE_SUBTYPE_T");
+		simAssertion((DEVICE_GENERATION = 0),										"DEVICE_GENERATION="	& integer'image(DEVICE_GENERATION)							&	"    Expected=7");
+		simAssertion((DEVICE_SERIES = DEVICE_SERIES_GENERIC),		"DEVICE_SERIES="			& T_DEVICE_SERIES'image(DEVICE_SERIES)					&	"    Expected=DEVICE_SERIES_7_SERIES");
+		simAssertion((LUT_FANIN = 6),														"LUT_FANIN="					& integer'image(LUT_FANIN)											&	"    Expected=6");
+		simAssertion((TRANSCEIVER_TYPE = TRANSCEIVER_GENERIC),	"TRANSCEIVER_TYPE="		& T_TRANSCEIVER'image(TRANSCEIVER_TYPE)					&	"    Expected=TRANSCEIVER_GTXE2");
 
 		-- This process is finished
 		simDeactivateProcess(simProcessID);

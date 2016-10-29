@@ -1,29 +1,27 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
--- Authors:					Patrick Lehmann
---									Steffen Koehler
+-- Authors:         Patrick Lehmann
+--                  Steffen Koehler
 --
--- Module:					Synchronizes a strobe signal across clock-domain boundaries
+-- Entity:          Synchronizes a strobe signal across clock-domain boundaries
 --
 -- Description:
--- ------------------------------------
---		This module synchronizes multiple high-active bits from clock-domain
---		'Clock1' to clock-domain 'Clock2'. The clock-domain boundary crossing is
---		done by a T-FF, two synchronizer D-FFs and a reconstructive XOR. A busy
---		flag is additionally calculated and can be used to block new inputs. All
---		bits are independent from each other. Multiple consecutive strobes are
---		suppressed by a rising edge detection.
+-- -------------------------------------
+-- This module synchronizes multiple high-active bits from clock-domain
+-- ``Clock1`` to clock-domain ``Clock2``. The clock-domain boundary crossing is
+-- done by a T-FF, two synchronizer D-FFs and a reconstructive XOR. A busy
+-- flag is additionally calculated and can be used to block new inputs. All
+-- bits are independent from each other. Multiple consecutive strobes are
+-- suppressed by a rising edge detection.
 --
---		ATTENTION:
---			Use this synchronizer only for one-cycle high-active signals (strobes).
+-- .. ATTENTION::
+--    Use this synchronizer only for one-cycle high-active signals (strobes).
 --
---		CONSTRAINTS:
---			General:
---				This module uses sub modules which need to be constrained. Please
---				attend to the notes of the instantiated sub modules.
+-- Constraints:
+--   This module uses sub modules which need to be constrained. Please
+--   attend to the notes of the instantiated sub modules.
 --
 -- License:
 -- =============================================================================
@@ -50,44 +48,44 @@ use			IEEE.NUMERIC_STD.all;
 library PoC;
 
 
-entity sync_Strobe IS
+entity sync_Strobe is
   generic (
-	  BITS								: POSITIVE		:= 1;														-- number of bit to be synchronized
-		GATED_INPUT_BY_BUSY	: BOOLEAN			:= TRUE													-- use gated input (by busy signal)
+	  BITS								: positive		:= 1;														-- number of bit to be synchronized
+		GATED_INPUT_BY_BUSY	: boolean			:= TRUE													-- use gated input (by busy signal)
 	);
   port (
-		Clock1							: in	STD_LOGIC;															-- <Clock>	input clock domain
-		Clock2							: in	STD_LOGIC;															-- <Clock>	output clock domain
-		Input								: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);		-- @Clock1:	input bits
-		Output							: out STD_LOGIC_VECTOR(BITS - 1 downto 0);		-- @Clock2:	output bits
-		Busy								: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)			-- @Clock1:	busy bits
+		Clock1							: in	std_logic;															-- <Clock>	input clock domain
+		Clock2							: in	std_logic;															-- <Clock>	output clock domain
+		Input								: in	std_logic_vector(BITS - 1 downto 0);		-- @Clock1:	input bits
+		Output							: out std_logic_vector(BITS - 1 downto 0);		-- @Clock2:	output bits
+		Busy								: out	std_logic_vector(BITS - 1 downto 0)			-- @Clock1:	busy bits
 	);
-end;
+end entity;
 
 
 architecture rtl of sync_Strobe is
-	attribute SHREG_EXTRACT										: STRING;
+	attribute SHREG_EXTRACT										: string;
 
-	signal syncClk1_In		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	signal syncClk1_Out		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	signal syncClk2_In		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-	signal syncClk2_Out		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+	signal syncClk1_In		: std_logic_vector(BITS - 1 downto 0);
+	signal syncClk1_Out		: std_logic_vector(BITS - 1 downto 0);
+	signal syncClk2_In		: std_logic_vector(BITS - 1 downto 0);
+	signal syncClk2_Out		: std_logic_vector(BITS - 1 downto 0);
 
-BEGIN
+begin
 
 	gen : for i in 0 to BITS - 1 generate
-		signal D0							: STD_LOGIC			:= '0';
-		signal T1							: STD_LOGIC			:= '0';
-		signal D2							: STD_LOGIC			:= '0';
+		signal D0							: std_logic			:= '0';
+		signal T1							: std_logic			:= '0';
+		signal D2							: std_logic			:= '0';
 
-		signal Changed_Clk1		: STD_LOGIC;
-		signal Changed_Clk2		: STD_LOGIC;
-		signal Busy_i					: STD_LOGIC;
+		signal Changed_Clk1		: std_logic;
+		signal Changed_Clk2		: std_logic;
+		signal Busy_i					: std_logic;
 
 		-- Prevent XST from translating two FFs into SRL plus FF
-		attribute SHREG_EXTRACT OF D0	: signal is "NO";
-		attribute SHREG_EXTRACT OF T1	: signal is "NO";
-		attribute SHREG_EXTRACT OF D2	: signal is "NO";
+		attribute SHREG_EXTRACT of D0	: signal is "NO";
+		attribute SHREG_EXTRACT of T1	: signal is "NO";
+		attribute SHREG_EXTRACT of D2	: signal is "NO";
 
 	begin
 
@@ -98,7 +96,7 @@ BEGIN
 				D0		<= Input(i);
 
 				-- T-FF to converts a strobe to a flag signal
-				if (GATED_INPUT_BY_BUSY = TRUE) then
+				if GATED_INPUT_BY_BUSY then
 					T1	<= (Changed_Clk1 and not Busy_i) xor T1;
 				else
 					T1	<= Changed_Clk1 xor T1;

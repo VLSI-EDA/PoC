@@ -4,18 +4,72 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-if (VHDL >= 2002) then
-	report "Altera primitives don't support VHDL-200x."
-else
-	if ((Tool = "GHDL") and ?("temp/precompiled/ghdl/altera")) then
-		library altera_mf "temp/precompiled/ghdl/altera"
-	elseif ((Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) and ?("temp/precompiled/vsim/altera")) then
-		library altera_mf "temp/precompiled/vsim/altera"
-	elseif (ToolChain = "Altera_Quartus") then
-		# implicitly referenced; nothing to reference
-	elseif (Tool = "Aldec_aSim") then
-		# Active-HDL is shipped with Xilinx libraries.
+path PreCompiled = ${CONFIG.DirectoryNames:PrecompiledFiles}
+
+if (Tool = "GHDL") then
+	path GHDL_Directory =   (PreCompiled / ${CONFIG.DirectoryNames:GHDLFiles})
+	path Altera_Directory = (GHDL_Directory / ${CONFIG.DirectoryNames:AlteraSpecificFiles})
+  if (VHDLVersion < 2002) then
+		if ?{Altera_Directory} then
+			if ?{(Altera_Directory / "lpm/v93/lpm-obj93.cf")} then
+				library lpm						Altera_Directory
+			end if
+			if ?{(Altera_Directory / "sgate/v93/sgate-obj93.cf")} then
+				library sgate					Altera_Directory
+			end if
+			if ?{(Altera_Directory / "altera/v93/altera-obj93.cf")} then
+				library altera				Altera_Directory
+			end if
+			if ?{(Altera_Directory / "altera_mf/v93/altera_mf-obj93.cf")} then
+				library altera_mf			Altera_Directory
+			end if
+			if ?{(Altera_Directory / "altera_lnsim/v93/altera_lnsim-obj93.cf")} then
+				library altera_lnsim	Altera_Directory
+			end if
+			# TODO: add device libraries if needed
+		else
+			report "No precompiled Altera primitives for GHDL and VHDL-93 found."
+		end if
+	elseif (VHDLVersion <= 2008) then
+		if ?{Altera_Directory} then
+			if ?{(Altera_Directory / "lpm/v08/lpm-obj08.cf")} then
+				library lpm						Altera_Directory
+			end if
+			if ?{(Altera_Directory / "sgate/v08/sgate-obj08.cf")} then
+				library sgate					Altera_Directory
+			end if
+			if ?{(Altera_Directory / "altera/v08/altera-obj08.cf")} then
+				library altera				Altera_Directory
+			end if
+			if ?{(Altera_Directory / "altera_mf/v08/altera_mf-obj08.cf")} then
+				library altera_mf			Altera_Directory
+			end if
+			if ?{(Altera_Directory / "altera_lnsim/v08/altera_lnsim-obj08.cf")} then
+				library altera_lnsim	Altera_Directory
+			end if
+			# TODO: add device libraries if needed
+		else
+			report "No precompiled Altera primitives for GHDL and VHDL-2008 found."
+		end if
 	else
-		report "No precompiled Altera primitives found."
+		report "No precompiled Altera primitives for GHDL found."
+  end if
+elseif (Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) then
+	path Altera_Directory = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / ${CONFIG.DirectoryNames:AlteraSpecificFiles}))
+	if ?{Altera_Directory} then
+		library lpm						Altera_Directory
+		library sgate					Altera_Directory
+		library altera				Altera_Directory
+		library altera_mf			Altera_Directory
+		library altera_lnsim	Altera_Directory
+		# TODO: add device libraries if needed
+	else
+		report "No precompiled Altera primitives for QuestaSim/ModelSim found."
 	end if
+elseif (ToolChain = "Altera_Quartus") then
+	# implicitly referenced; nothing to reference
+elseif (Tool = "Aldec_aSim") then
+	# Active-HDL is shipped with Altera libraries.
+else
+	report "No precompiled Altera primitives found."
 end if

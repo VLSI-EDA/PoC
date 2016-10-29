@@ -4,8 +4,8 @@
 ##			VCCO:						3.3V (VCC3V3)
 ##		Location:					X1; single-ended clock socket
 ##		Oscillator:				100 MHz
-##			Vendor:					
-##			Device:					
+##			Vendor:
+##			Device:
 ##			Frequency:			100.0 MHz
 NET "ML505_UserClock"				LOC = "AH15";						## {IN}			X1.Out
 NET "ML505_UserClock"				IOSTANDARD = LVCMOS33;

@@ -50,7 +50,7 @@ from Base.Configuration            import Configuration as BaseConfiguration, Co
 from Base.Exceptions              import PlatformNotSupportedException
 from Base.Executable              import Executable, CommandLineArgumentList, ExecutableArgument, ShortTupleArgument
 from Base.Logging                  import Severity, LogEntry
-from Base.Project                  import File, FileTypes
+from Base.Project                  import File, FileTypes, VHDLVersion
 from ToolChains.Lattice.Lattice    import LatticeException
 
 
@@ -136,33 +136,32 @@ class Configuration(BaseConfiguration):
 
 
 class DiamondMixIn:
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		self._platform = platform
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		self._platform =            platform
+		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
-		self._version = version
-		self._logger = logger
+		self._version =             version
+		self._Logger =              logger
 
 
 class Diamond(DiamondMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		DiamondMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		DiamondMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetSynthesizer(self):
-		return Synth(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+
 
 class Synth(Executable, DiamondMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		DiamondMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		DiamondMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
-		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "pnwrap.exe"
+		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "synthesis.exe"
 		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "synthesis"
 		else:                          raise PlatformNotSupportedException(platform)
-		Executable.__init__(self, platform, executablePath, logger=logger)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
-		if (platform == "Windows"):
-			bin2dir = (binaryDirectoryPath / "../../ispfpga/bin/nt64").resolve()
-			self.Parameters[self.SwitchExecutable] = bin2dir / "synthesis.exe"
 
 		self._hasOutput = False
 		self._hasWarnings = False
@@ -176,17 +175,12 @@ class Synth(Executable, DiamondMixIn):
 	class Executable(metaclass=ExecutableArgument):
 		pass
 
-	class SwitchExecutable(metaclass=ShortTupleArgument):
-		_name = "exec"
-		_value = None
-
 	class SwitchProjectFile(metaclass=ShortTupleArgument):
 		_name = "f"
 		_value = None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
-		SwitchExecutable,
 		SwitchProjectFile
 	)
 
@@ -201,7 +195,11 @@ class Synth(Executable, DiamondMixIn):
 
 	def Compile(self, logFile):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -212,28 +210,26 @@ class Synth(Executable, DiamondMixIn):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			if (self._platform == "Linux"): reader = self.GetReader() # parse stdout directly
-			else: reader = self.GetLogFileReader(logFile)
-			iterator = iter(CompilerFilter(reader))
+			iterator = iter(CompilerFilter(self.GetReader()))
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("    LSE messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
-			self._LogNormal("    " + ("-" * 76))
+			self.LogNormal("  LSE messages for '{0}'".format(self.Parameters[self.SwitchProjectFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
-				line.IndentBy(2)
-				self._Log(line)
+				line.IndentBy(self.Logger.BaseIndent + 1)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
 def MapFilter(gen):
@@ -250,7 +246,9 @@ class SynthesisArgumentFile(File):
 		self._speedGrade =    None
 		self._package =       None
 		self._topLevel =      None
-		self._logfile =       None
+		self.Logfile =        None
+		self._vhdlVersion =		VHDLVersion.Any
+		self._hdlParams =			{}
 
 	@property
 	def Architecture(self):
@@ -289,10 +287,21 @@ class SynthesisArgumentFile(File):
 
 	@property
 	def LogFile(self):
-		return self._logfile
+		return self.Logfile
 	@LogFile.setter
 	def LogFile(self, value):
-		self._logfile = value
+		self.Logfile = value
+
+	@property
+	def VHDLVersion(self):
+		return self._vhdlVersion
+	@VHDLVersion.setter
+	def VHDLVersion(self, value):
+		self._vhdlVersion = value
+
+	@property
+	def HDLParams(self):
+		return self._hdlParams
 
 	def Write(self, project):
 		if (self._file is None):    raise DiamondException("No file path for SynthesisArgumentFile provided.")
@@ -308,8 +317,12 @@ class SynthesisArgumentFile(File):
 		buffer += "-t {0}\n".format(self._package)
 		if (self._topLevel is None):      raise DiamondException("Argument 'TopLevel' (-top) is not set.")
 		buffer += "-top {0}\n".format(self._topLevel)
-		if (self._logfile is not None):
-			buffer += "-logfile {0}\n".format(self._logfile)
+		if (self._vhdlVersion is VHDLVersion.VHDL2008):
+			buffer += "-vh2008\n"
+		if (self.Logfile is not None):
+			buffer += "-logfile {0}\n".format(self.Logfile)
+		for keyValuePair in self._hdlParams.items():
+			buffer += "-hdl_param {0} {1}\n".format(*keyValuePair)
 
 		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
 			buffer += "-lib {library}\n-vhd {file}\n".format(file=file.Path.as_posix(), library=file.LibraryName)

@@ -1,7 +1,6 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --									Thomas B. Preusser
@@ -10,8 +9,8 @@
 -- Package:					Simulation constants, functions and utilities.
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -42,29 +41,29 @@ use			PoC.sim_unprotected.all;
 
 package simulation is
 	-- mimic definition of VHDL-2008
-	type TIME_VECTOR is array(natural range<>) of TIME;
+	type TIME_VECTOR is array(natural range<>) of time;
 
 	-- Testbench Status Management
 	-- ===========================================================================
 	-- alias simInitialize					is work.sim_unprotected.initialize[NATURAL, TIME];
-	procedure simInitialize(MaxAssertFailures : NATURAL := NATURAL'high; MaxSimulationRuntime : TIME := TIME'high);
+	procedure simInitialize(MaxAssertFailures : natural := natural'high; MaxSimulationRuntime : TIME := TIME'high);
 	alias simFinalize						is work.sim_unprotected.finalize[];
 
-	alias simCreateTest					is work.sim_unprotected.createTest[STRING return T_SIM_TEST_ID];
+	alias simCreateTest					is work.sim_unprotected.createTest[string return T_SIM_TEST_ID];
 	alias simFinalizeTest				is work.sim_unprotected.finalizeTest[T_SIM_TEST_ID];
-	alias simRegisterProcess		is work.sim_unprotected.registerProcess[T_SIM_TEST_ID, STRING, BOOLEAN return T_SIM_PROCESS_ID];
-	alias simRegisterProcess		is work.sim_unprotected.registerProcess[STRING, BOOLEAN return T_SIM_PROCESS_ID];
+	alias simRegisterProcess		is work.sim_unprotected.registerProcess[T_SIM_TEST_ID, string, boolean return T_SIM_PROCESS_ID];
+	alias simRegisterProcess		is work.sim_unprotected.registerProcess[string, boolean return T_SIM_PROCESS_ID];
 	alias simDeactivateProcess	is work.sim_unprotected.deactivateProcess[T_SIM_PROCESS_ID];
 
 	procedure simStopAllClocks;
 	--alias simStopAllClocks			is work.sim_unprotected.stopAllClocks[];
-	alias simIsStopped					is work.sim_unprotected.isStopped[T_SIM_TEST_ID return BOOLEAN];
-	alias simIsFinalized				is work.sim_unprotected.isFinalized[T_SIM_TEST_ID return BOOLEAN];
-	alias simIsAllFinalized			is work.sim_unprotected.isAllFinalized [return BOOLEAN];
+	alias simIsStopped					is work.sim_unprotected.isStopped[T_SIM_TEST_ID return boolean];
+	alias simIsFinalized				is work.sim_unprotected.isFinalized[T_SIM_TEST_ID return boolean];
+	alias simIsAllFinalized			is work.sim_unprotected.isAllFinalized [return boolean];
 
-	alias simAssertion					is work.sim_unprotected.assertion[BOOLEAN, STRING];
-  alias simFail								is work.sim_unprotected.fail[STRING];
-	alias simWriteMessage				is work.sim_unprotected.writeMessage[STRING];
+	alias simAssertion					is work.sim_unprotected.assertion[boolean, string];
+  alias simFail								is work.sim_unprotected.fail[string];
+	alias simWriteMessage				is work.sim_unprotected.writeMessage[string];
 
 	-- checksum functions
 	-- ===========================================================================
@@ -72,11 +71,11 @@ package simulation is
 end package;
 
 package body simulation is
-	procedure simInitialize(MaxAssertFailures : NATURAL := NATURAL'high; MaxSimulationRuntime : TIME := TIME'high) is
+	procedure simInitialize(MaxAssertFailures : natural := natural'high; MaxSimulationRuntime : TIME := TIME'high) is
 	begin
 		work.sim_unprotected.initialize(MaxAssertFailures, MaxSimulationRuntime);
 		if C_SIM_VERBOSE then		report "simInitialize:" severity NOTE;			end if;
-		if (MaxSimulationRuntime /= TIME'high) then
+		if (MaxSimulationRuntime /= time'high) then
 			wait for MaxSimulationRuntime;
 			report "simInitialize: TIMEOUT" severity ERROR;
 			work.sim_unprotected.finalize;

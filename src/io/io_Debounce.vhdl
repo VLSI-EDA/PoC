@@ -1,30 +1,29 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --									Thomas B. Preusser
 --
--- Module:				 	Debounce module for BITS many bouncing input pins.
+-- Entity:				 	Debounce module for BITS many bouncing input pins.
 --
 -- Description:
--- ------------------------------------
---		This module debounces several input pins preventing input changes
---    following a previous one within the configured BOUNCE_TIME to pass.
---    Internally, the forwarded state is locked for, at least, this BOUNCE_TIME.
---    As the backing timer is restarted on every input fluctuation, the next
---    passing input update must have seen a stabilized input.
+-- -------------------------------------
+-- This module debounces several input pins preventing input changes
+-- following a previous one within the configured ``BOUNCE_TIME`` to pass.
+-- Internally, the forwarded state is locked for, at least, this ``BOUNCE_TIME``.
+-- As the backing timer is restarted on every input fluctuation, the next
+-- passing input update must have seen a stabilized input.
 --
---    The parameter COMMON_LOCK uses a single internal timer for all processed
---    inputs. Thus, all inputs must stabilize before any one may pass changed.
---    This option is usually fully acceptable for user inputs such as push buttons.
+-- The parameter ``COMMON_LOCK`` uses a single internal timer for all processed
+-- inputs. Thus, all inputs must stabilize before any one may pass changed.
+-- This option is usually fully acceptable for user inputs such as push buttons.
 --
---    The parameter ADD_INPUT_SYNCHRONIZERS triggers the optional instantiation
---    of a two-FF input synchronizer on each input bit.
+-- The parameter ``ADD_INPUT_SYNCHRONIZERS`` triggers the optional instantiation
+-- of a two-FF input synchronizer on each input bit.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -39,7 +38,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -55,7 +54,7 @@ entity io_Debounce is
     CLOCK_FREQ 							: FREQ;
     BOUNCE_TIME							: t_time;
     BITS                    : positive := 1;
-		INIT										: STD_LOGIC_VECTOR		:= x"00000000";	-- initial state of Output
+		INIT										: std_logic_vector		:= x"00000000";	-- initial state of Output
     ADD_INPUT_SYNCHRONIZERS : boolean  := true;
     COMMON_LOCK             : boolean  := false
   );
@@ -65,7 +64,7 @@ entity io_Debounce is
     Input		: in	std_logic_vector(BITS-1 downto 0);
     Output	: out	std_logic_vector(BITS-1 downto 0) := resize(descend(INIT), BITS)
   );
-end;
+end entity;
 
 
 architecture rtl of io_Debounce is

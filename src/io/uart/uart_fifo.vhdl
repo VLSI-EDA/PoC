@@ -1,27 +1,26 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Martin Zabel
 --									Patrick Lehmann
 --
--- Module:				 	UART Wrapper with Embedded FIFOs and Optional Flow Control
+-- Entity:				 	UART Wrapper with Embedded FIFOs and Optional Flow Control
 --
 -- Description:
--- ------------------------------------
---	Small FIFOs are included in this module, if larger or asynchronous
---	transmit / receive FIFOs are required, then they must be connected
---	externally.
+-- -------------------------------------
+-- Small :abbr:`FIFO (first-in, first-out)` s are included in this module, if
+-- larger or asynchronous transmit / receive FIFOs are required, then they must
+-- be connected externally.
 --
---	old comments:
---		UART BAUD rate generator
---		bclk	    = bit clock is rising
---		bclk_x8		= bit clock times 8 is rising
+-- old comments:
+--   :abbr:`UART (Universal Asynchronous Receiver Transmitter)` BAUD rate generator
+--   bclk	    = bit clock is rising
+--   bclk_x8		= bit clock times 8 is rising
 --
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2008-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -36,7 +35,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 
 library	IEEE;
@@ -55,7 +54,7 @@ entity uart_fifo is
 		-- Communication Parameters
 		CLOCK_FREQ							: FREQ;
 		BAUDRATE								: BAUD;
-		ADD_INPUT_SYNCHRONIZERS	: BOOLEAN												:= TRUE;
+		ADD_INPUT_SYNCHRONIZERS	: boolean												:= TRUE;
 
 		-- Buffer Dimensioning
 		TX_MIN_DEPTH 						: positive											:= 16;
@@ -75,47 +74,47 @@ entity uart_fifo is
 		Reset					: in	std_logic;
 
 		-- FIFO interface
-		TX_put				: in	STD_LOGIC;
-		TX_Data				: in	STD_LOGIC_VECTOR(7 downto 0);
-		TX_Full				: out	STD_LOGIC;
-		TX_EmptyState	: out	STD_LOGIC_VECTOR(imax(0, TX_ESTATE_BITS-1) downto 0);
+		TX_put				: in	std_logic;
+		TX_Data				: in	std_logic_vector(7 downto 0);
+		TX_Full				: out	std_logic;
+		TX_EmptyState	: out	std_logic_vector(imax(0, TX_ESTATE_BITS-1) downto 0);
 
-		RX_Valid			: out	STD_LOGIC;
-		RX_Data				: out	STD_LOGIC_VECTOR(7 downto 0);
-		RX_got				: in	STD_LOGIC;
-		RX_FullState	: out	STD_LOGIC_VECTOR(imax(0, RX_FSTATE_BITS-1) downto 0);
+		RX_Valid			: out	std_logic;
+		RX_Data				: out	std_logic_vector(7 downto 0);
+		RX_got				: in	std_logic;
+		RX_FullState	: out	std_logic_vector(imax(0, RX_FSTATE_BITS-1) downto 0);
 		RX_Overflow		: out	std_logic;
 
 		-- External pins
 		UART_TX				: out	std_logic;
 		UART_RX				: in	std_logic;
-		UART_RTS			: out	STD_LOGIC;
-		UART_CTS			: in	STD_LOGIC
+		UART_RTS			: out	std_logic;
+		UART_CTS			: in	std_logic
 	);
 end entity;
 
 
 architecture rtl of uart_fifo is
 
-	signal FC_TX_Strobe		: STD_LOGIC;
+	signal FC_TX_Strobe		: std_logic;
 	signal FC_TX_Data			: T_SLV_8;
-	signal FC_TX_got			: STD_LOGIC;
-	signal FC_RX_put			: STD_LOGIC;
+	signal FC_TX_got			: std_logic;
+	signal FC_RX_put			: std_logic;
 	signal FC_RX_Data			: T_SLV_8;
 
-	signal TXFIFO_Valid		: STD_LOGIC;
+	signal TXFIFO_Valid		: std_logic;
 	signal TXFIFO_Data		: T_SLV_8;
 
-	signal RXFIFO_Full		: STD_LOGIC;
+	signal RXFIFO_Full		: std_logic;
 
-	signal TXUART_Full		: STD_LOGIC;
-	signal RXUART_Strobe	: STD_LOGIC;
+	signal TXUART_Full		: std_logic;
+	signal RXUART_Strobe	: std_logic;
 	signal RXUART_Data		: T_SLV_8;
 
-	signal BitClock				: STD_LOGIC;
-	signal BitClock_x8		: STD_LOGIC;
+	signal BitClock				: std_logic;
+	signal BitClock_x8		: std_logic;
 
-	signal UART_RX_sync		: STD_LOGIC;
+	signal UART_RX_sync		: std_logic;
 
 begin
 	assert FALSE report "uart_fifo: BAUDRATE=: " & to_string(BAUDRATE, 3)						severity NOTE;
@@ -171,7 +170,7 @@ begin
 			fstate_rd				=> RX_FullState
 		);
 
-	genNOFC : if (FLOWCONTROL = UART_FLOWCONTROL_NONE) generate
+	genNOFC : if FLOWCONTROL = UART_FLOWCONTROL_NONE generate
 		signal Overflow_r					: std_logic					:= '0';
 	begin
 
@@ -189,7 +188,7 @@ begin
 	-- ===========================================================================
 	-- Software Flow Control
 	-- ===========================================================================
-	genSWFC : if (FLOWCONTROL = UART_FLOWCONTROL_XON_XOFF) generate
+	genSWFC : if FLOWCONTROL = UART_FLOWCONTROL_XON_XOFF generate
 		constant XON				: std_logic_vector(7 downto 0)	:= x"11";	-- ^Q
 		constant XOFF				: std_logic_vector(7 downto 0)	:= x"13";	-- ^S
 
@@ -257,7 +256,7 @@ begin
 	-- ===========================================================================
 	-- Hardware Flow Control
 	-- ===========================================================================
-	genHWFC1 : if (FLOWCONTROL = UART_FLOWCONTROL_RTS_CTS) generate
+	genHWFC1 : if FLOWCONTROL = UART_FLOWCONTROL_RTS_CTS generate
 
 	begin
 
@@ -265,7 +264,7 @@ begin
 	-- ===========================================================================
 	-- Hardware Flow Control
 	-- ===========================================================================
-	genHWFC2 : if (FLOWCONTROL = UART_FLOWCONTROL_RTR_CTS) generate
+	genHWFC2 : if FLOWCONTROL = UART_FLOWCONTROL_RTR_CTS generate
 
 	begin
 
@@ -274,10 +273,10 @@ begin
 	-- ===========================================================================
 	-- BitClock, Transmitter, Receiver
 	-- ===========================================================================
-	genNoSync : if (ADD_INPUT_SYNCHRONIZERS = FALSE) generate
+	genNoSync : if not ADD_INPUT_SYNCHRONIZERS generate
 		UART_RX_sync <= UART_RX;
 	end generate;
-	genSync : if (ADD_INPUT_SYNCHRONIZERS = TRUE) generate
+	genSync : if ADD_INPUT_SYNCHRONIZERS generate
 		sync_i : entity PoC.sync_Bits
 			port map (
 				Clock			=> Clock,					-- Clock to be synchronized to

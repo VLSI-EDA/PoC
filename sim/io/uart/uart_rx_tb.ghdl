@@ -1,0 +1,20 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/uart_rx_tb/clock
+/uart_rx_tb/reset
+/uart_rx_tb/bitclock
+/uart_rx_tb/bitclock_x8
+/uart_rx_tb/uart_rx
+/uart_rx_tb/rx_strobe
+/uart_rx_tb/rx_data
+/uart_rx_tb/rx/rst
+/uart_rx_tb/rx/rx
+/uart_rx_tb/rx/do
+/uart_rx_tb/rx/stb
+/uart_rx_tb/rx/rxs
+/uart_rx_tb/rx/buf
+/uart_rx_tb/rx/cnt
+/uart_rx_tb/rx/vld

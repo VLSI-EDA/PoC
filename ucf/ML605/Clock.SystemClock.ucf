@@ -18,9 +18,9 @@
 ##			Vendor:				SiTime
 ##			Device:				SiT9102 - 1 to 220 MHz High Performance Oscillator
 ##			Frequency:		200 MHz, 50ppm
-NET "ML605_SystemClock_200MHz_n"		LOC = "H9";				## {IN}		U11.5
 NET "ML605_SystemClock_200MHz_p"		LOC = "J9";				## {IN}		U11.4
+NET "ML605_SystemClock_200MHz_n"		LOC = "H9";				## {IN}		U11.5
 NET "ML605_SystemClock_200MHz_?"		IOSTANDARD = LVDS_25;
 ##
-NET "ML605_SystemClock_200MHz_p"		TNM_NET = "NET_SystemClock_200MHz";
-TIMESPEC "TS_SystemClock"	= PERIOD "NET_SystemClock_200MHz"		200 MHz	HIGH 50 %;
+NET "ML605_SystemClock_200MHz_p"		TNM_NET = "PIN_SystemClock_200MHz";
+TIMESPEC "TS_SystemClock"	= PERIOD "PIN_SystemClock_200MHz"		200 MHz	HIGH 50 %;

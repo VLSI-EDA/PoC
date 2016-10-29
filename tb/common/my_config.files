@@ -13,6 +13,18 @@ vhdl		poc		"tb/common/my_project.vhdl"
 # ======================================
 if (BoardName = "GENERIC") then
 	vhdl	poc	"tb/common/my_config_GENERIC.vhdl"
+elseif (BoardName = "Custom") then
+	path TempDirectory =  ${CONFIG.DirectoryNames:TemporaryFiles}
+	if (Tool = "GHDL") then
+		path ToolDirectory = (TempDirectory / ${CONFIG.DirectoryNames:GHDLFiles})
+	elseif (Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) then
+		path ToolDirectory = (TempDirectory / ${CONFIG.DirectoryNames:ModelSimFiles})
+	else
+		report "Tool not supported."
+	end if
+	
+	path CustomConfigFile = (ToolDirectory / "my_config_Custom.vhdl")
+	vhdl	poc	CustomConfigFile
 
 # Altera boards
 # ======================================
@@ -50,9 +62,15 @@ elseif (BoardName = "Atlys") then
 	vhdl	poc	"tb/common/my_config_Atlys.vhdl"
 
 # Zynq-7000 boards
-	
-# Artix-7 BoardNames
+elseif (BoardName = "ZC706") then
+	vhdl	poc	"tb/common/my_config_ZC706.vhdl"
+elseif (BoardName = "ZedBoard") then
+	vhdl	poc	"tb/common/my_config_ZedBoard.vhdl"
 
+# Artix-7 BoardNames
+elseif (BoardName = "AC701") then
+	vhdl	poc	"tb/common/my_config_AC701.vhdl"
+	
 # Kintex-7 BoardNames
 elseif (BoardName = "KC705") then
 	vhdl	poc	"tb/common/my_config_KC705.vhdl"
@@ -72,8 +90,8 @@ elseif (BoardName = "ML605") then
 # Virtex-7 boards
 elseif (BoardName = "VC707") then
 	vhdl	poc	"tb/common/my_config_VC707.vhdl"
-#elseif (BoardName = "VC709") then
-#	vhdl	poc	"tb/common/my_config_VC709.vhdl"
+elseif (BoardName = "VC709") then
+	vhdl	poc	"tb/common/my_config_VC709.vhdl"
 
 # other boards
 else

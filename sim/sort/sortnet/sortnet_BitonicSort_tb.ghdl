@@ -1,0 +1,35 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/sortnet_bitonicsort_tb/clock
+/sortnet_bitonicsort_tb/generator_valid
+/sortnet_bitonicsort_tb/generator_iskey
+/sortnet_bitonicsort_tb/generator_data
+/sortnet_bitonicsort_tb/generator_meta
+/sortnet_bitonicsort_tb/sort_valid
+/sortnet_bitonicsort_tb/sort_iskey
+/sortnet_bitonicsort_tb/sort_data
+/sortnet_bitonicsort_tb/sort_meta
+/sortnet_bitonicsort_tb/datainputmatrix
+/sortnet_bitonicsort_tb/dataoutputmatrix
+/sortnet_bitonicsort_tb/sort/clock
+/sortnet_bitonicsort_tb/sort/reset
+/sortnet_bitonicsort_tb/sort/inverse
+/sortnet_bitonicsort_tb/sort/in_valid
+/sortnet_bitonicsort_tb/sort/in_iskey
+/sortnet_bitonicsort_tb/sort/in_data
+/sortnet_bitonicsort_tb/sort/in_meta
+/sortnet_bitonicsort_tb/sort/out_valid
+/sortnet_bitonicsort_tb/sort/out_iskey
+/sortnet_bitonicsort_tb/sort/out_data
+/sortnet_bitonicsort_tb/sort/out_meta
+/sortnet_bitonicsort_tb/sort/in_valid_d
+/sortnet_bitonicsort_tb/sort/in_iskey_d
+/sortnet_bitonicsort_tb/sort/in_data_d
+/sortnet_bitonicsort_tb/sort/in_meta_d
+/sortnet_bitonicsort_tb/sort/metavector
+/sortnet_bitonicsort_tb/sort/datamatrix
+/sortnet_bitonicsort_tb/sort/metaoutputs_d
+/sortnet_bitonicsort_tb/sort/dataoutputs_d

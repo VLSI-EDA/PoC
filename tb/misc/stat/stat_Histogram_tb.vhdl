@@ -55,22 +55,22 @@ end entity;
 architecture tb of stat_Histogram_tb is
 	constant CLOCK_FREQ					: FREQ			:= 100 MHz;
 
-	constant GNUPLOT_DATA_FILE	: STRING		:= "stat_Histogram.dat";
+	constant GNUPLOT_DATA_FILE	: string		:= "stat_Histogram.dat";
 
   -- component generics
-	constant DATA_BITS		: POSITIVE				:= 8;
-	constant COUNTER_BITS	: POSITIVE				:= 8;
-	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DATA_BITS=" & INTEGER'image(DATA_BITS));
+	constant DATA_BITS		: positive				:= 8;
+	constant COUNTER_BITS	: positive				:= 8;
+	constant simTestID		: T_SIM_TEST_ID		:= simCreateTest("Test setup for DATA_BITS=" & integer'image(DATA_BITS));
 
 	constant RESULT				: T_INTVEC				:= (0 to (2**DATA_BITS - 1) => 3);
-	constant SIM_COUNT		: POSITIVE				:= 10;
+	constant SIM_COUNT		: positive				:= 10;
 
   -- component ports
-  signal Clock					: STD_LOGIC;
-  signal Reset					: STD_LOGIC;
+  signal Clock					: std_logic;
+  signal Reset					: std_logic;
 
-  signal Enable					: STD_LOGIC;
-  signal DataIn					: STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
+  signal Enable					: std_logic;
+  signal DataIn					: std_logic_vector(DATA_BITS - 1 downto 0);
 
 	signal Histogram			: T_SLM(2**DATA_BITS - 1 downto 0, COUNTER_BITS - 1 downto 0);
 	signal Histogram_slvv	: T_SLVV_8(2**DATA_BITS - 1 downto 0);
@@ -105,8 +105,8 @@ begin
 	procStimuli : process
 		constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess(simTestID, "Generator and Checker");
 		variable RandomValue_real	: REAL;
-		variable RandomValue_int	: INTEGER;
-		variable good							: BOOLEAN;
+		variable RandomValue_int	: integer;
+		variable good							: boolean;
 
 		constant StandardDeviation	: REAL	:= 0.8;
 		constant Mean								: REAL	:= 0.0;

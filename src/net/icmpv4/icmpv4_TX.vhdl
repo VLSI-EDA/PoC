@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -42,45 +41,45 @@ use			PoC.net.all;
 
 entity icmpv4_TX is
 	generic (
-		DEBUG													: BOOLEAN											:= FALSE;
+		DEBUG													: boolean											:= FALSE;
 		SOURCE_IPV4ADDRESS						: T_NET_IPV4_ADDRESS					:= C_NET_IPV4_ADDRESS_EMPTY
 	);
 	port (
-		Clock													: in	STD_LOGIC;																	--
-		Reset													: in	STD_LOGIC;																	--
+		Clock													: in	std_logic;																	--
+		Reset													: in	std_logic;																	--
 		-- CSE interface
 		Command												: in	T_NET_ICMPV4_TX_COMMAND;
 		Status												: out	T_NET_ICMPV4_TX_STATUS;
 		Error													: out	T_NET_ICMPV4_TX_ERROR;
 		-- OUT port
-		Out_Valid											: out	STD_LOGIC;
+		Out_Valid											: out	std_logic;
 		Out_Data											: out	T_SLV_8;
-		Out_SOF												: out	STD_LOGIC;
-		Out_EOF												: out	STD_LOGIC;
-		Out_Ack												: in	STD_LOGIC;
-		Out_Meta_rst									: in	STD_LOGIC;
-		Out_Meta_SrcIPv4Address_nxt		: in	STD_LOGIC;
+		Out_SOF												: out	std_logic;
+		Out_EOF												: out	std_logic;
+		Out_Ack												: in	std_logic;
+		Out_Meta_rst									: in	std_logic;
+		Out_Meta_SrcIPv4Address_nxt		: in	std_logic;
 		Out_Meta_SrcIPv4Address_Data	: out	T_SLV_8;
-		Out_Meta_DestIPv4Address_nxt	: in	STD_LOGIC;
+		Out_Meta_DestIPv4Address_nxt	: in	std_logic;
 		Out_Meta_DestIPv4Address_Data	: out	T_SLV_8;
 		Out_Meta_Length								: out	T_SLV_16;
 		-- IN port
-		In_Meta_rst										: out	STD_LOGIC;
-		In_Meta_IPv4Address_nxt				: out	STD_LOGIC;
+		In_Meta_rst										: out	std_logic;
+		In_Meta_IPv4Address_nxt				: out	std_logic;
 		In_Meta_IPv4Address_Data			: in	T_SLV_8;
 		In_Meta_Type									: in	T_SLV_8;
 		In_Meta_Code									: in	T_SLV_8;
 		In_Meta_Identification				: in	T_SLV_16;
 		In_Meta_SequenceNumber				: in	T_SLV_16;
-		In_Meta_Payload_nxt						: out	STD_LOGIC;
-		In_Meta_Payload_last					: in	STD_LOGIC;
+		In_Meta_Payload_nxt						: out	std_logic;
+		In_Meta_Payload_last					: in	std_logic;
 		In_Meta_Payload_Data					: in	T_SLV_8
 	);
 end entity;
 
 
 architecture rtl of icmpv4_TX is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
 	type T_STATE		is (
 		ST_IDLE,
@@ -103,12 +102,12 @@ architecture rtl of icmpv4_TX is
 
 	signal Checksum												: T_SLV_16;
 
-	constant PAYLOAD											: STD_LOGIC_VECTOR(255 downto 0)	:= x"00010203" & x"04050607" & x"08090A0B" & x"0C0D0E0F" & x"10111213" & x"14151617" & x"18191A1B" & x"1C1D1E1F";
+	constant PAYLOAD											: std_logic_vector(255 downto 0)	:= x"00010203" & x"04050607" & x"08090A0B" & x"0C0D0E0F" & x"10111213" & x"14151617" & x"18191A1B" & x"1C1D1E1F";
 	constant PAYLOAD_ROM									: T_SLVV_8												:= to_slvv_8(PAYLOAD);
 
-	signal PayloadROM_Reader_nxt					: STD_LOGIC;
-	signal PayloadROM_Reader_ov						: STD_LOGIC;
-	signal PayloadROM_Reader_us						: UNSIGNED(log2ceilnz(PAYLOAD_ROM'length) - 1 downto 0)			:= (others => '0');
+	signal PayloadROM_Reader_nxt					: std_logic;
+	signal PayloadROM_Reader_ov						: std_logic;
+	signal PayloadROM_Reader_us						: unsigned(log2ceilnz(PAYLOAD_ROM'length) - 1 downto 0)			:= (others => '0');
 	signal PayloadROM_Data								: T_SLV_8;
 
 begin
@@ -141,7 +140,7 @@ begin
 
 		case State is
 			when ST_IDLE =>
-				case Command IS
+				case Command is
 					when NET_ICMPV4_TX_CMD_NONE =>
 						null;
 

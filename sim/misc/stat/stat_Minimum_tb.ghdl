@@ -1,0 +1,28 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/stat_minimum_tb/clock
+/stat_minimum_tb/reset
+/stat_minimum_tb/enable
+/stat_minimum_tb/datain
+/stat_minimum_tb/valids
+/stat_minimum_tb/minimums
+/stat_minimum_tb/counts
+/stat_minimum_tb/minimums_slvv
+/stat_minimum_tb/counts_slvv
+/stat_minimum_tb/uut/clock
+/stat_minimum_tb/uut/reset
+/stat_minimum_tb/uut/enable
+/stat_minimum_tb/uut/datain
+/stat_minimum_tb/uut/valids
+/stat_minimum_tb/uut/minimums
+/stat_minimum_tb/uut/counts
+/stat_minimum_tb/uut/datain_us
+/stat_minimum_tb/uut/taghit
+/stat_minimum_tb/uut/minimumhit
+/stat_minimum_tb/uut/tagmemory
+/stat_minimum_tb/uut/countermemory
+/stat_minimum_tb/uut/minimumindex
+/stat_minimum_tb/uut/validmemory

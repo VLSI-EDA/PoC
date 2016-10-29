@@ -5,7 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:      TODO
+# Python Class:     TODO
 #
 # Description:
 # ------------------------------------
@@ -171,7 +171,10 @@ class Solution(Base):
 		solutionConfigPath = self._path / ".poc"
 		if (not self._path.is_absolute()):
 			solutionConfigPath = self._host.Directories.Root / solutionConfigPath
-		solutionConfigPath.mkdir(parents=True)
+		try:
+			solutionConfigPath.mkdir(parents=True)
+		except OSError as ex:
+			raise ConfigurationException("Error while creating '{0!s}'.".format(solutionConfigPath)) from ex
 
 		solutionConfigFile = solutionConfigPath / self.__SOLUTION_CONFIG_FILE__
 		with solutionConfigFile.open('w') as fileHandle:
@@ -299,25 +302,23 @@ class FileListFile(File, FilesParserMixIn):
 		super().__init__(file, project=project, fileSet=fileSet)
 		FilesParserMixIn.__init__(self)
 
-		self._variables =                None
+		self._variables =               None
 
-		# self.__classInclude
-		self._classFileListFile =        FileListFile
-		self._classVHDLSourceFile =      VHDLSourceFile
+		self._classFileListFile =       FileListFile
+		self._classVHDLSourceFile =     VHDLSourceFile
 		self._classVerilogSourceFile =  VerilogSourceFile
-		self._classCocotbSourceFile =    CocotbSourceFile
+		self._classCocotbSourceFile =   CocotbSourceFile
 
-	def Parse(self):
-		# print("FileListFile.Parse:")
-		if (self._fileSet is None):                      raise CommonException("File '{0!s}' is not associated to a fileset.".format(self._file))
-		if (self._project is None):                      raise CommonException("File '{0!s}' is not associated to a project.".format(self._file))
-		if (self._project.RootDirectory is None):        raise CommonException("No RootDirectory configured for this project.")
+	def Parse(self, host):
+		if (self._fileSet is None):                 raise CommonException("File '{0!s}' is not associated to a fileset.".format(self._file))
+		if (self._project is None):                 raise CommonException("File '{0!s}' is not associated to a project.".format(self._file))
+		if (self._project.RootDirectory is None):   raise CommonException("No RootDirectory configured for this project.")
 
 		# prepare FilesParserMixIn environment
 		self._rootDirectory = self.Project.RootDirectory
-		self._variables =      self.Project.GetVariables()
+		self._variables =     self.Project.GetVariables()
 		self._Parse()
-		self._Resolve()
+		self._Resolve(host)
 
 	def CopyFilesToFileSet(self):
 		for file in self._files:
@@ -353,4 +354,3 @@ class RulesFile(File, RulesParserMixIn):
 
 	def __str__(self):
 		return "FileList file: '{0!s}".format(self._file)
-

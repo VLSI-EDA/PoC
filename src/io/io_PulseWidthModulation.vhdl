@@ -1,19 +1,18 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	Pulse Width Modulated (PWM) signal generator
+-- Entity:				 	Pulse Width Modulated (PWM) signal generator
 --
 -- Description:
--- ------------------------------------
---		This module generates a pulse width modulated signal, that can be configured
---		in frequency (PWM_FREQ) and modulation granularity (PWM_RESOLUTION).
+-- -------------------------------------
+-- This module generates a pulse width modulated signal, that can be configured
+-- in frequency (``PWM_FREQ``) and modulation granularity (``PWM_RESOLUTION``).
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -28,7 +27,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -43,27 +42,27 @@ entity io_PulseWidthModulation is
 	generic (
 		CLOCK_FREQ								: FREQ									:= 100 MHz;
 		PWM_FREQ									: FREQ									:= 1 kHz;
-		PWM_RESOLUTION						: POSITIVE							:= 8
+		PWM_RESOLUTION						: positive							:= 8
 	);
 	port (
-		Clock				: in	STD_LOGIC;
-		Reset				: in	STD_LOGIC;
-    PWMIn				: in	STD_LOGIC_VECTOR(PWM_RESOLUTION - 1 downto 0);
-		PWMOut			: out	STD_LOGIC
+		Clock				: in	std_logic;
+		Reset				: in	std_logic;
+    PWMIn				: in	std_logic_vector(PWM_RESOLUTION - 1 downto 0);
+		PWMOut			: out	std_logic
 	);
-end;
+end entity;
 
 
 architecture rtl of io_PulseWidthModulation is
-	constant PWM_STEPS									: POSITIVE																			:= 2**PWM_RESOLUTION;
+	constant PWM_STEPS									: positive																			:= 2**PWM_RESOLUTION;
 	constant PWM_STEP_FREQ							: FREQ																					:= PWM_FREQ * (PWM_STEPS - 1);
-	constant PWM_FREQUENCYCOUNTER_MAX		: POSITIVE																			:= (CLOCK_FREQ+PWM_STEP_FREQ-1 Hz) / PWM_STEP_FREQ; -- division with round-up
-	constant PWM_FREQUENCYCOUNTER_BITS	: POSITIVE																			:= log2ceilnz(PWM_FREQUENCYCOUNTER_MAX);
+	constant PWM_FREQUENCYCOUNTER_MAX		: positive																			:= (CLOCK_FREQ+PWM_STEP_FREQ-1 Hz) / PWM_STEP_FREQ; -- division with round-up
+	constant PWM_FREQUENCYCOUNTER_BITS	: positive																			:= log2ceilnz(PWM_FREQUENCYCOUNTER_MAX);
 
-	signal PWM_FrequencyCounter_us			: UNSIGNED(PWM_FREQUENCYCOUNTER_BITS downto 0)	:= (others => '0');
-	signal PWM_FrequencyCounter_ov			: STD_LOGIC;
-	signal PWM_PulseCounter_us					: UNSIGNED(PWM_RESOLUTION - 1 downto 0)					:= (others => '0');
-	signal PWM_PulseCounter_ov					: STD_LOGIC;
+	signal PWM_FrequencyCounter_us			: unsigned(PWM_FREQUENCYCOUNTER_BITS downto 0)	:= (others => '0');
+	signal PWM_FrequencyCounter_ov			: std_logic;
+	signal PWM_PulseCounter_us					: unsigned(PWM_RESOLUTION - 1 downto 0)					:= (others => '0');
+	signal PWM_PulseCounter_ov					: std_logic;
 
 begin
 	-- PWM frequency counter

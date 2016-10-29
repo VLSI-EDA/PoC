@@ -1,0 +1,46 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/arith_convert_bin2bcd_tb/clock
+/arith_convert_bin2bcd_tb/reset
+/arith_convert_bin2bcd_tb/start
+/arith_convert_bin2bcd_tb/conv1_binary
+/arith_convert_bin2bcd_tb/conv1_bcddigits
+/arith_convert_bin2bcd_tb/conv1_sign
+/arith_convert_bin2bcd_tb/conv2_binary
+/arith_convert_bin2bcd_tb/conv2_bcddigits
+/arith_convert_bin2bcd_tb/conv2_sign
+/arith_convert_bin2bcd_tb/conv1/clock
+/arith_convert_bin2bcd_tb/conv1/reset
+/arith_convert_bin2bcd_tb/conv1/start
+/arith_convert_bin2bcd_tb/conv1/busy
+/arith_convert_bin2bcd_tb/conv1/binary
+/arith_convert_bin2bcd_tb/conv1/issigned
+/arith_convert_bin2bcd_tb/conv1/bcddigits
+/arith_convert_bin2bcd_tb/conv1/sign
+/arith_convert_bin2bcd_tb/conv1/digit_shift_rst
+/arith_convert_bin2bcd_tb/conv1/digit_shift_en
+/arith_convert_bin2bcd_tb/conv1/digit_shift_in
+/arith_convert_bin2bcd_tb/conv1/binary_en
+/arith_convert_bin2bcd_tb/conv1/binary_rl
+/arith_convert_bin2bcd_tb/conv1/binary_d
+/arith_convert_bin2bcd_tb/conv1/sign_d
+/arith_convert_bin2bcd_tb/conv1/delayshifter
+/arith_convert_bin2bcd_tb/conv2/clock
+/arith_convert_bin2bcd_tb/conv2/reset
+/arith_convert_bin2bcd_tb/conv2/start
+/arith_convert_bin2bcd_tb/conv2/busy
+/arith_convert_bin2bcd_tb/conv2/binary
+/arith_convert_bin2bcd_tb/conv2/issigned
+/arith_convert_bin2bcd_tb/conv2/bcddigits
+/arith_convert_bin2bcd_tb/conv2/sign
+/arith_convert_bin2bcd_tb/conv2/digit_shift_rst
+/arith_convert_bin2bcd_tb/conv2/digit_shift_en
+/arith_convert_bin2bcd_tb/conv2/digit_shift_in
+/arith_convert_bin2bcd_tb/conv2/binary_en
+/arith_convert_bin2bcd_tb/conv2/binary_rl
+/arith_convert_bin2bcd_tb/conv2/binary_d
+/arith_convert_bin2bcd_tb/conv2/sign_d
+/arith_convert_bin2bcd_tb/conv2/delayshifter

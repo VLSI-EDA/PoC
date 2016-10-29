@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -43,20 +42,20 @@ use			PoC.net.all;
 
 entity arp_IPPool is
 	generic (
-		IPPOOL_SIZE										: POSITIVE;
+		IPPOOL_SIZE										: positive;
 		INITIAL_IPV4ADDRESSES					: T_NET_IPV4_ADDRESS_VECTOR			:= (0 to 7 => C_NET_IPV4_ADDRESS_EMPTY)
 	);
 	port (
-		Clock													: in	STD_LOGIC;																	--
-		Reset													: in	STD_LOGIC;																	--
+		Clock													: in	std_logic;																	--
+		Reset													: in	std_logic;																	--
 
 --		Command												: in	T_ETHERNET_ARP_IPPOOL_COMMAND;
 --		IPv4Address										: in	T_NET_IPV4_ADDRESS;
 --		MACAddress										: in	T_ETHERNET_MAC_ADDRESS;
 
-		Lookup												: in	STD_LOGIC;
-		IPv4Address_rst								: out	STD_LOGIC;
-		IPv4Address_nxt								: out	STD_LOGIC;
+		Lookup												: in	std_logic;
+		IPv4Address_rst								: out	std_logic;
+		IPv4Address_nxt								: out	std_logic;
 		IPv4Address_Data							: in	T_SLV_8;
 
 		PoolResult										: out	T_CACHE_RESULT
@@ -65,13 +64,13 @@ end entity;
 
 
 architecture rtl of arp_IPPool is
-	constant CACHE_LINES							: POSITIVE			:= imax(IPPOOL_SIZE, INITIAL_IPV4ADDRESSES'length);
-	constant TAG_BITS									: POSITIVE			:= 32;
-	constant TAGCHUNK_BITS						: POSITIVE			:= 8;
+	constant CACHE_LINES							: positive			:= imax(IPPOOL_SIZE, INITIAL_IPV4ADDRESSES'length);
+	constant TAG_BITS									: positive			:= 32;
+	constant TAGCHUNK_BITS						: positive			:= 8;
 
 --	constant TAGCHUNKS										: POSITIVE	:= div_ceil(TAG_BITS, CHUNK_BITS);
 --	constant CHUNK_INDEX_BITS					: POSITIVE	:= log2ceilnz(CHUNKS);
-	constant CACHEMEMORY_INDEX_BITS		: POSITIVE	:= log2ceilnz(CACHE_LINES);
+	constant CACHEMEMORY_INDEX_BITS		: positive	:= log2ceilnz(CACHE_LINES);
 
 	function to_TagData(CacheContent : T_NET_IPV4_ADDRESS_VECTOR) return T_SLM is
 		variable slvv		: T_SLVV_32(CACHE_LINES - 1 downto 0)	:= (others => (others => '0'));
@@ -84,33 +83,33 @@ architecture rtl of arp_IPPool is
 
 	constant INITIAL_TAGS						: T_SLM			:= to_TagData(INITIAL_IPV4ADDRESSES);
 
-	signal ReadWrite								: STD_LOGIC;
+	signal ReadWrite								: std_logic;
 
-	signal Insert										: STD_LOGIC;
-	signal TU_NewTag_rst						: STD_LOGIC;
-	signal TU_NewTag_nxt						: STD_LOGIC;
+	signal Insert										: std_logic;
+	signal TU_NewTag_rst						: std_logic;
+	signal TU_NewTag_nxt						: std_logic;
 	signal NewTag_Data							: T_SLV_8;
-	signal TU_Tag_rst								: STD_LOGIC;
-	signal TU_Tag_nxt								: STD_LOGIC;
+	signal TU_Tag_rst								: std_logic;
+	signal TU_Tag_nxt								: std_logic;
 	signal TU_Tag_Data							: T_SLV_8;
-	signal CacheHit									: STD_LOGIC;
-	signal CacheMiss								: STD_LOGIC;
+	signal CacheHit									: std_logic;
+	signal CacheMiss								: std_logic;
 
-	signal TU_Index									: STD_LOGIC_VECTOR(CACHEMEMORY_INDEX_BITS - 1 downto 0);
-	signal TU_Index_d								: STD_LOGIC_VECTOR(CACHEMEMORY_INDEX_BITS - 1 downto 0);
-	signal TU_Index_us							: UNSIGNED(CACHEMEMORY_INDEX_BITS - 1 downto 0);
-	signal TU_NewIndex							: STD_LOGIC_VECTOR(CACHEMEMORY_INDEX_BITS - 1 downto 0);
-	signal TU_Replace								: STD_LOGIC;
+	signal TU_Index									: std_logic_vector(CACHEMEMORY_INDEX_BITS - 1 downto 0);
+	signal TU_Index_d								: std_logic_vector(CACHEMEMORY_INDEX_BITS - 1 downto 0);
+	signal TU_Index_us							: unsigned(CACHEMEMORY_INDEX_BITS - 1 downto 0);
+	signal TU_NewIndex							: std_logic_vector(CACHEMEMORY_INDEX_BITS - 1 downto 0);
+	signal TU_Replace								: std_logic;
 
-	signal TU_TagHit								: STD_LOGIC;
-	signal TU_TagMiss								: STD_LOGIC;
+	signal TU_TagHit								: std_logic;
+	signal TU_TagMiss								: std_logic;
 
 begin
 --	process(Command)
 --	begin
 --		Insert		<= '0';
 --
---		case Command IS
+--		case Command is
 --			when NET_NDP_NeighborCache_CMD_NONE =>		null;
 --			when NET_NDP_NeighborCache_CMD_ADD =>		Insert <= '1';
 --
@@ -130,7 +129,7 @@ begin
 	PoolResult					<= to_Cache_Result(CacheHit, CacheMiss);
 
 	-- Cache TagUnit
---	TU : entity L_Global.Cache_TagUnit_seq
+--	TU : entity PoC.Cache_TagUnit_seq
 	TU : entity PoC.cache_TagUnit_seq
 		generic map (
 			REPLACEMENT_POLICY				=> "LRU",

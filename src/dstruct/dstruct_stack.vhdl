@@ -1,17 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
--- ============================================================================
+-- =============================================================================
 -- Authors:     Jens Voss
 --
--- Entity:      dstruct_stack
+-- Entity:      Stack (LIFO)
 --
 -- Description:
--- ------------
---   Implements a stack, i.e. a LIFO storage abstraction.
+-- -------------------------------------
+-- Implements a stack, a LIFO storage abstraction.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -26,10 +26,11 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
-use IEEE.std_logic_1164.all;
+use			IEEE.std_logic_1164.all;
+
 
 entity dstruct_stack is
   generic (
@@ -50,7 +51,7 @@ entity dstruct_stack is
     dout  : out std_logic_vector(D_BITS-1 downto 0);
     valid : out std_logic
   );
-end dstruct_stack;
+end entity dstruct_stack;
 
 
 library IEEE;
@@ -102,7 +103,7 @@ begin
 
     process(clk)
     begin
-        if(rising_edge(clk)) then
+        if rising_edge(clk) then
             if(rst = '1') then
                 current_state <= SEMPTY;
             else
@@ -146,7 +147,7 @@ begin
                     ctrl <= PUSH;
                     s_adr <= stackpointer;
                     we <= '1';
-                    if (stackpointer = (MIN_DEPTH - 1)) then
+                    if stackpointer = (MIN_DEPTH - 1) then
                         next_state <= SFULL;
                     end if;
                 elsif (got = '1' and put = '1') then
@@ -178,7 +179,7 @@ begin
 
     process(clk)
     begin
-        if (rising_edge(clk)) then
+        if rising_edge(clk) then
             case( ctrl ) is
                 when IDLE =>
                     stackpointer <= stackpointer;

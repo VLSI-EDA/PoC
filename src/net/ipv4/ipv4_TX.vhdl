@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -42,48 +41,48 @@ use			PoC.net.all;
 
 entity ipv4_TX is
 	generic (
-		DEBUG														: BOOLEAN							:= FALSE
+		DEBUG														: boolean							:= FALSE
 	);
 	port (
-		Clock														: in	STD_LOGIC;									--
-		Reset														: in	STD_LOGIC;									--
+		Clock														: in	std_logic;									--
+		Reset														: in	std_logic;									--
 		-- IN port
-		In_Valid												: in	STD_LOGIC;
+		In_Valid												: in	std_logic;
 		In_Data													: in	T_SLV_8;
-		In_SOF													: in	STD_LOGIC;
-		In_EOF													: in	STD_LOGIC;
-		In_Ack													: out	STD_LOGIC;
-		In_Meta_rst											: out	STD_LOGIC;
-		In_Meta_SrcIPv4Address_nxt			: out	STD_LOGIC;
+		In_SOF													: in	std_logic;
+		In_EOF													: in	std_logic;
+		In_Ack													: out	std_logic;
+		In_Meta_rst											: out	std_logic;
+		In_Meta_SrcIPv4Address_nxt			: out	std_logic;
 		In_Meta_SrcIPv4Address_Data			: in	T_SLV_8;
-		In_Meta_DestIPv4Address_nxt			: out	STD_LOGIC;
+		In_Meta_DestIPv4Address_nxt			: out	std_logic;
 		In_Meta_DestIPv4Address_Data		: in	T_SLV_8;
 		In_Meta_Length									: in	T_SLV_16;
 		In_Meta_Protocol								: in	T_SLV_8;
 		-- ARP port
-		ARP_IPCache_Query								: out	STD_LOGIC;
-		ARP_IPCache_IPv4Address_rst			: in	STD_LOGIC;
-		ARP_IPCache_IPv4Address_nxt			: in	STD_LOGIC;
+		ARP_IPCache_Query								: out	std_logic;
+		ARP_IPCache_IPv4Address_rst			: in	std_logic;
+		ARP_IPCache_IPv4Address_nxt			: in	std_logic;
 		ARP_IPCache_IPv4Address_Data		: out	T_SLV_8;
-		ARP_IPCache_Valid								: in	STD_LOGIC;
-		ARP_IPCache_MACAddress_rst			: out	STD_LOGIC;
-		ARP_IPCache_MACAddress_nxt			: out	STD_LOGIC;
+		ARP_IPCache_Valid								: in	std_logic;
+		ARP_IPCache_MACAddress_rst			: out	std_logic;
+		ARP_IPCache_MACAddress_nxt			: out	std_logic;
 		ARP_IPCache_MACAddress_Data			: in	T_SLV_8;
 		-- OUT port
-		Out_Valid												: out	STD_LOGIC;
+		Out_Valid												: out	std_logic;
 		Out_Data												: out	T_SLV_8;
-		Out_SOF													: out	STD_LOGIC;
-		Out_EOF													: out	STD_LOGIC;
-		Out_Ack													: in	STD_LOGIC;
-		Out_Meta_rst										: in	STD_LOGIC;
-		Out_Meta_DestMACAddress_nxt			: in	STD_LOGIC;
+		Out_SOF													: out	std_logic;
+		Out_EOF													: out	std_logic;
+		Out_Ack													: in	std_logic;
+		Out_Meta_rst										: in	std_logic;
+		Out_Meta_DestMACAddress_nxt			: in	std_logic;
 		Out_Meta_DestMACAddress_Data		: out	T_SLV_8
 	);
 end entity;
 
 
 architecture rtl of ipv4_TX is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
 	type T_STATE is (
 		ST_IDLE,
@@ -106,47 +105,47 @@ architecture rtl of ipv4_TX is
 
 	signal State											: T_STATE											:= ST_IDLE;
 	signal NextState									: T_STATE;
-	attribute FSM_ENCODING of State		: signal IS ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
+	attribute FSM_ENCODING of State		: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
-	signal In_Ack_i										: STD_LOGIC;
+	signal In_Ack_i										: std_logic;
 
-	signal UpperLayerPacketLength			: STD_LOGIC_VECTOR(15 downto 0);
+	signal UpperLayerPacketLength			: std_logic_vector(15 downto 0);
 
 	signal InternetHeaderLength				: T_SLV_4;
 	signal TypeOfService							: T_NET_IPV4_TYPE_OF_SERVICE;
 	signal TotalLength								: T_SLV_16;
 	signal Identification							: T_SLV_16;
-	signal Flag_DontFragment					: STD_LOGIC;
-	signal Flag_MoreFragments					: STD_LOGIC;
-	signal FragmentOffset							: STD_LOGIC_VECTOR(12 downto 0);
+	signal Flag_DontFragment					: std_logic;
+	signal Flag_MoreFragments					: std_logic;
+	signal FragmentOffset							: std_logic_vector(12 downto 0);
 	signal TimeToLive									: T_SLV_8;
 	signal Protocol										: T_SLV_8;
 	signal HeaderChecksum							: T_SLV_16;
 
-	signal IPv4SeqCounter_rst					: STD_LOGIC;
-	signal IPv4SeqCounter_en					: STD_LOGIC;
-	signal IPv4SeqCounter_us					: UNSIGNED(1 downto 0)				:= (others => '0');
+	signal IPv4SeqCounter_rst					: std_logic;
+	signal IPv4SeqCounter_en					: std_logic;
+	signal IPv4SeqCounter_us					: unsigned(1 downto 0)				:= (others => '0');
 
-	signal Checksum_rst								: STD_LOGIC;
-	signal Checksum_en								: STD_LOGIC;
-	signal Checksum_Addend0_us				: UNSIGNED(T_SLV_8'range);
-	signal Checksum_Addend1_us				: UNSIGNED(T_SLV_8'range);
-	signal Checksum0_nxt0_us					: UNSIGNED(T_SLV_8'high + 1 downto 0);
-	signal Checksum0_nxt1_us					: UNSIGNED(T_SLV_8'high + 1 downto 0);
-	signal Checksum0_d_us							: UNSIGNED(T_SLV_8'high downto 0)												:= (others => '0');
-	signal Checksum0_cy								: UNSIGNED(T_SLV_2'range);
-	signal Checksum1_nxt_us						: UNSIGNED(T_SLV_8'range);
-	signal Checksum1_d_us							: UNSIGNED(T_SLV_8'range)																:= (others => '0');
-	signal Checksum0_cy0							: STD_LOGIC;
-	signal Checksum0_cy0_d						: STD_LOGIC																							:= '0';
-	signal Checksum0_cy1							: STD_LOGIC;
-	signal Checksum0_cy1_d						: STD_LOGIC																							:= '0';
+	signal Checksum_rst								: std_logic;
+	signal Checksum_en								: std_logic;
+	signal Checksum_Addend0_us				: unsigned(T_SLV_8'range);
+	signal Checksum_Addend1_us				: unsigned(T_SLV_8'range);
+	signal Checksum0_nxt0_us					: unsigned(T_SLV_8'high + 1 downto 0);
+	signal Checksum0_nxt1_us					: unsigned(T_SLV_8'high + 1 downto 0);
+	signal Checksum0_d_us							: unsigned(T_SLV_8'high downto 0)												:= (others => '0');
+	signal Checksum0_cy								: unsigned(T_SLV_2'range);
+	signal Checksum1_nxt_us						: unsigned(T_SLV_8'range);
+	signal Checksum1_d_us							: unsigned(T_SLV_8'range)																:= (others => '0');
+	signal Checksum0_cy0							: std_logic;
+	signal Checksum0_cy0_d						: std_logic																							:= '0';
+	signal Checksum0_cy1							: std_logic;
+	signal Checksum0_cy1_d						: std_logic																							:= '0';
 
 	signal Checksum_i									: T_SLV_16;
 	signal Checksum										: T_SLV_16;
-	signal Checksum_mux_rst						: STD_LOGIC;
-	signal Checksum_mux_set						: STD_LOGIC;
-	signal Checksum_mux_r							: STD_LOGIC																							:= '0';
+	signal Checksum_mux_rst						: std_logic;
+	signal Checksum_mux_set						: std_logic;
+	signal Checksum_mux_r							: std_logic																							:= '0';
 
 begin
 
@@ -220,7 +219,7 @@ begin
 				IPv4SeqCounter_rst						<= '1';
 				Checksum_rst									<= '1';
 
-				if ((In_Valid AND In_SOF) = '1') then
+				if ((In_Valid and In_SOF) = '1') then
 					NextState										<= ST_ARP_QUERY;
 				end if;
 
@@ -484,7 +483,7 @@ begin
 				Out_EOF												<= In_EOF;
 				In_Ack_i											<= Out_Ack;
 
-				if ((In_EOF AND Out_Ack) = '1') then
+				if ((In_EOF and Out_Ack) = '1') then
 					In_Meta_rst									<= '1';
 					NextState										<= ST_IDLE;
 				end if;
@@ -501,7 +500,7 @@ begin
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset OR IPv4SeqCounter_rst) = '1') then
+			if ((Reset or IPv4SeqCounter_rst) = '1') then
 				IPv4SeqCounter_us		<= (others => '0');
 			elsif (IPv4SeqCounter_en = '1') then
 				IPv4SeqCounter_us		<= IPv4SeqCounter_us + 1;
@@ -544,7 +543,7 @@ Checksum0_nxt0_us		<= ("0" & Checksum1_d_us)
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset OR Checksum_mux_rst) = '1') then
+			if ((Reset or Checksum_mux_rst) = '1') then
 				Checksum_mux_r		<= '0';
 			elsif (Checksum_mux_set = '1') then
 				Checksum_mux_r		<= '1';

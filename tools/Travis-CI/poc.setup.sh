@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 # define color escape codes
 RED='\e[0;31m'			# Red
@@ -18,9 +18,20 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+echo -e "${CYAN}Test PoC front-end script.${NOCOLOR}"
+./poc.sh
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}Testing PoC front-end script [FAILED]${NOCOLOR}"
+	exit 1
+fi
+
 echo -e "${CYAN}Copy my_project.vhdl into ./tb/common directory${NOCOLOR}"
 cp ./tools/Travis-CI/my_project.vhdl ./tb/common
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${RED}Copy of ./tools/Travis-CI/my_project.vhdl [FAILED]${NOCOLOR}"
 	exit 1
 fi
+
+echo -e "${CYAN}Pre-compiling OSVVM with GHDL into ./temp/precompiled/ghdl/osvvm directory${NOCOLOR}"
+cd tools/precompile
+./compile-osvvm.sh --ghdl

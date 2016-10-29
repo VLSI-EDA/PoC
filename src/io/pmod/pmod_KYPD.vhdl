@@ -1,23 +1,22 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	Digilent Peripherial Module: 4x4 Keypad (Pmod_KYPD)
+-- Entity:				 	Digilent Peripherial Module: 4x4 Keypad (Pmod_KYPD)
 --
 -- Description:
--- ------------------------------------
---		This module drives a 4-bit one-cold encoded column vector to read back a
---		4-bit rows vector. By scanning column-by-column it's possible to extract
---		the current button state of the whole keypad. This wrapper converts the
---		high-active signals from io_KeyPadScanner to low-active signals for the
---		pmod. An additional debounce circuit filters the button signals. The scan
---		frequency and bounce time can be configured.
+-- -------------------------------------
+-- This module drives a 4-bit one-cold encoded column vector to read back a
+-- 4-bit rows vector. By scanning column-by-column it's possible to extract
+-- the current button state of the whole keypad. This wrapper converts the
+-- high-active signals from :doc:`PoC.io.KeypadScanner <../io_KeyPadScanner>`
+-- to low-active signals for the pmod. An additional debounce circuit filters
+-- the button signals. The scan frequency and bounce time can be configured.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -32,7 +31,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -51,24 +50,24 @@ entity pmod_KYPD is
 		BOUNCE_TIME		: T_TIME			:= 10.0e-3
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		Reset					: in	STD_LOGIC;
+		Clock					: in	std_logic;
+		Reset					: in	std_logic;
 		-- Matrix interface
 		Keys					: out T_PMOD_KYPD_KEYPAD;
 		-- KeyPad interface
-		Columns_n			: out	STD_LOGIC_VECTOR(3 downto 0);
-		Rows_n				: in	STD_LOGIC_VECTOR(3 downto 0)
+		Columns_n			: out	std_logic_vector(3 downto 0);
+		Rows_n				: in	std_logic_vector(3 downto 0)
 	);
 end entity;
 
 
 architecture rtl of pmod_KYPD is
-	signal ColumnVector			: STD_LOGIC_VECTOR(3 downto 0);
-	signal RowVector				: STD_LOGIC_VECTOR(3 downto 0);
+	signal ColumnVector			: std_logic_vector(3 downto 0);
+	signal RowVector				: std_logic_vector(3 downto 0);
 
 	signal KeyPadMatrix			: T_SLM(3 downto 0, 3 downto 0);
-	signal KeyPadMatrix_slv	: STD_LOGIC_VECTOR(15 downto 0);
-	signal KeyPadVector			: STD_LOGIC_VECTOR(15 downto 0);
+	signal KeyPadMatrix_slv	: std_logic_vector(15 downto 0);
+	signal KeyPadVector			: std_logic_vector(15 downto 0);
 	signal KeyPad						: T_SLM(3 downto 0, 3 downto 0);
 
 begin

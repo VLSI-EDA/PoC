@@ -6,7 +6,7 @@
 ##		Device:				XC7K325T
 ##		Package:			FFG900
 ##		Speedgrade:		-2
-##	
+##
 ##	Notes:
 ##		Power Rail 4 driving VADJ_FPGA is defaulted to 2.5V (choices: 1.8V, 2.5V, 3.3V)
 ##

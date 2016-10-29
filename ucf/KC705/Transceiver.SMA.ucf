@@ -2,8 +2,8 @@
 ## Transceiver - SMA interface
 ## -----------------------------------------------------------------------------
 ##	Bank:						117
-##		Quad117:		 
-##			RefClock0		
+##		Quad117:
+##			RefClock0
 ##			RefClock1		KC705_SMA_RefClock (see separate file "Transceiver.SMA_RefClock.ucf)
 ##
 ##		Placement:

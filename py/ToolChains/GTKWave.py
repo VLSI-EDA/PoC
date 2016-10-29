@@ -104,8 +104,8 @@ class Configuration(BaseConfiguration):
 	def _GetDefaultInstallationDirectory(self):
 		if (self._host.Platform in ["Linux", "Darwin"]):
 			try:
-				name = check_output(["which", "gtkwave"], universal_newlines=True)
-				if name != "": return str(Path(name[:-1]).parent)
+				name = check_output(["which", "gtkwave"], universal_newlines=True).strip()
+				if name != "": return Path(name).parent.as_posix()
 			except CalledProcessError:
 				pass # `which` returns non-zero exit code if executable is not in PATH
 
@@ -137,21 +137,21 @@ class Configuration(BaseConfiguration):
 
 
 class GTKWave(Executable):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		if (platform == "Windows"):      executablePath = binaryDirectoryPath/ "gtkwave.exe"
-		elif (platform == "Linux"):      executablePath = binaryDirectoryPath/ "gtkwave"
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		if (platform == "Windows"):     executablePath = binaryDirectoryPath/ "gtkwave.exe"
+		elif (platform == "Linux"):     executablePath = binaryDirectoryPath/ "gtkwave"
 		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath/ "gtkwave"
 		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, executablePath, logger=logger)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
-		self._binaryDirectoryPath =  binaryDirectoryPath
-		self._version =      version
+		self._binaryDirectoryPath = binaryDirectoryPath
+		self._version =             version
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 
 	@property
 	def BinaryDirectoryPath(self):
@@ -178,7 +178,11 @@ class GTKWave(Executable):
 
 	def View(self):
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -192,25 +196,25 @@ class GTKWave(Executable):
 			iterator = iter(GTKWaveFilter(self.GetReader()))
 
 			line = next(iterator)
-			line.IndentBy(2)
+			line.IndentBy(self.Logger.BaseIndent + 1)
 			self._hasOutput = True
-			self._LogNormal("    GTKWave messages for '{0}'".format(self.Parameters[self.SwitchDumpFile]))
-			self._LogNormal("    " + ("-" * 76))
-			self._Log(line)
+			self.LogNormal("  GTKWave messages for '{0}'".format(self.Parameters[self.SwitchDumpFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.Log(line)
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
 				line = next(iterator)
-				line.IndentBy(2)
-				self._Log(line)
+				line.IndentBy(self.Logger.BaseIndent + 1)
+				self.Log(line)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 def GTKWaveFilter(gen):
 	for line in gen:

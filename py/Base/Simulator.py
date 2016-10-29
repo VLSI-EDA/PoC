@@ -1,30 +1,30 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
-# 
+#
 # Python Class:      TODO
-# 
+#
 # Description:
 # ------------------------------------
 #		TODO:
-#		- 
-#		- 
+#		-
+#		-
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,19 +42,16 @@ else:
 
 
 # load dependencies
-import shutil
-from datetime          import datetime
-from enum              import Enum, unique
-from os                import chdir
+from datetime           import datetime
+from enum               import Enum, unique
 
-from lib.Functions     import Init
-from lib.Parser        import ParserException
-from Base.Exceptions   import ExceptionBase, CommonException
-from Base.Logging      import ILogable, LogEntry
-from Base.Project      import Environment, ToolChain, Tool, VHDLVersion
-from PoC.Entity        import WildCard
-from PoC.Solution      import VirtualProject, FileListFile
-from PoC.TestCase      import TestSuite, TestCase, Status
+from lib.Functions      import Init
+from Base.Exceptions    import ExceptionBase, SkipableException
+from Base.Logging       import LogEntry
+from Base.Project       import Environment, VHDLVersion
+from Base.Shared        import Shared, to_time
+from PoC.Entity         import WildCard
+from PoC.TestCase       import TestCase, SimulationStatus, TestSuite
 
 
 VHDL_TESTBENCH_LIBRARY_NAME = "test"
@@ -63,7 +60,7 @@ VHDL_TESTBENCH_LIBRARY_NAME = "test"
 class SimulatorException(ExceptionBase):
 	pass
 
-class SkipableSimulatorException(SimulatorException):
+class SkipableSimulatorException(SimulatorException, SkipableException):
 	pass
 
 
@@ -84,40 +81,19 @@ class SimulationResult(Enum):
 	NoAsserts =   3
 	Passed =      4
 
-# local helper function
-def to_time(seconds):
-	"""Convert n seconds to a str with pattern {min}:{sec:02}."""
-	minutes = int(seconds / 60)
-	seconds = seconds - (minutes * 60)
-	return "{min}:{sec:02}".format(min=minutes, sec=seconds)
 
-class Simulator(ILogable):
-	_TOOL_CHAIN =  ToolChain.Any
-	_TOOL =        Tool.Any
+class Simulator(Shared):
+	_ENVIRONMENT =    Environment.Simulation
+	_vhdlVersion =    VHDLVersion.VHDL2008
 
-	class __Directories__:
-		Working = None
-		PoCRoot = None
+	class __Directories__(Shared.__Directories__):
 		PreCompiled = None
 
-	def __init__(self, host):
-		if isinstance(host, ILogable):
-			ILogable.__init__(self, host.Logger)
-		else:
-			ILogable.__init__(self, None)
+	def __init__(self, host, dryRun):
+		super().__init__(host, dryRun)
 
-		self.__host =       host
-
-		self._vhdlVersion = VHDLVersion.VHDL2008
-		self._directories = self.__Directories__()
-		self._pocProject =  None
-		self._testSuite =   TestSuite()			# TODO: This includes not the read ini files phases ...
-
+		self._testSuite =       TestSuite()  # TODO: This includes not the read ini files phases ...
 		self._state =           SimulationState.Prepare
-		self._startAt =         datetime.now()
-		self._endAt =           None
-		self._lastEvent =       self._startAt
-		self._prepareTime =     None
 		self._analyzeTime =     None
 		self._elaborationTime = None
 		self._simulationTime =  None
@@ -126,58 +102,31 @@ class Simulator(ILogable):
 	# class properties
 	# ============================================================================
 	@property
-	def Host(self):           return self.__host
-	@property
-	def Directories(self):    return self._directories
-	@property
-	def PoCProject(self):     return self._pocProject
-	@property
 	def TestSuite(self):      return self._testSuite
 
-	def _GetTimeDeltaSinceLastEvent(self):
-		now = datetime.now()
-		result = now - self._lastEvent
-		self._lastEvent = now
-		return result
+	def _PrepareSimulator(self):
+		self._Prepare()
 
 	def _PrepareSimulationEnvironment(self):
-		self._LogNormal("Preparing simulation environment...")
-
-		# create fresh temporary directory
-		self._LogVerbose("Creating fresh temporary directory for simulator files.")
-		self._LogDebug("Temporary directory: {0!s}".format(self.Directories.Working))
-		if (self.Directories.Working.exists()):
-			try:
-				shutil.rmtree(str(self.Directories.Working))
-			except OSError as ex:
-				raise SimulatorException("Error while deleting '{0!s}'.".format(self.Directories.Working)) from ex
-		try:
-			self.Directories.Working.mkdir(parents=True)
-		except OSError as ex:
-			raise SimulatorException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
-
-		# change working directory to temporary path
-		self._LogVerbose("Changing working directory to temporary directory.")
-		self._LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
-		try:
-			chdir(str(self.Directories.Working))
-		except OSError as ex:
-			raise SimulatorException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
+		self.LogNormal("Preparing simulation environment...")
+		self._PrepareEnvironment()
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		"""Run a list of testbenches. Expand wildcards to all selected testbenches."""
 		self._testSuite.StartTimer()
+		self.Logger.BaseIndent = int(len(fqnList) > 1)
 		try:
 			for fqn in fqnList:
 				entity = fqn.Entity
 				if (isinstance(entity, WildCard)):
+					self.Logger.BaseIndent = 1
 					for testbench in entity.GetVHDLTestbenches():
 						self.TryRun(testbench, *args, **kwargs)
 				else:
 					testbench = entity.VHDLTestbench
 					self.TryRun(testbench, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -188,11 +137,11 @@ class Simulator(ILogable):
 	def TryRun(self, testbench, *args, **kwargs):
 		"""Try to run a testbench. Skip skipable exceptions by printing the error and its cause."""
 		__SIMULATION_STATE_TO_TESTCASE_STATUS__ = {
-			SimulationState.Prepare: Status.InternalError,
-			SimulationState.Analyze: Status.AnalyzeError,
-			SimulationState.Elaborate: Status.ElaborationError,
-			SimulationState.Optimize: Status.ElaborationError,
-			SimulationState.Simulate: Status.SimulationError
+			SimulationState.Prepare:   SimulationStatus.InternalError,
+			SimulationState.Analyze:   SimulationStatus.AnalyzeError,
+			SimulationState.Elaborate: SimulationStatus.ElaborationError,
+			SimulationState.Optimize:  SimulationStatus.ElaborationError,
+			SimulationState.Simulate:  SimulationStatus.SimulationError
 		}
 
 		testCase = TestCase(testbench)
@@ -204,95 +153,57 @@ class Simulator(ILogable):
 		except SkipableSimulatorException as ex:
 			testCase.Status = __SIMULATION_STATE_TO_TESTCASE_STATUS__[self._state]
 
-			self._LogQuiet("  {RED}ERROR:{NOCOLOR} {ExMsg}".format(ExMsg=ex.message, **Init.Foreground))
+			self.LogQuiet("  {RED}ERROR:{NOCOLOR} {ExMsg}".format(ExMsg=ex.message, **Init.Foreground))
 			cause = ex.__cause__
 			if (cause is not None):
-				self._LogQuiet("    {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
+				self.LogQuiet("    {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
 				cause = cause.__cause__
 				if (cause is not None):
-					self._LogQuiet("      {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
-			self._LogQuiet("  {RED}[SKIPPED DUE TO ERRORS]{NOCOLOR}".format(**Init.Foreground))
+					self.LogQuiet("      {YELLOW}{ExType}:{NOCOLOR} {ExMsg!s}".format(ExType=cause.__class__.__name__, ExMsg=cause, **Init.Foreground))
+			self.LogQuiet("  {RED}[SKIPPED DUE TO ERRORS]{NOCOLOR}".format(**Init.Foreground))
 		except SimulatorException:
 			testCase.Status = __SIMULATION_STATE_TO_TESTCASE_STATUS__[self._state]
 			raise
 		except ExceptionBase:
-			testCase.Status = Status.SystemError
+			testCase.Status = SimulationStatus.SystemError
 			raise
 		finally:
 			testCase.StopTimer()
 
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
 		"""Write the Testbench message line, create a PoCProject and add the first *.files file to it."""
-		self._LogQuiet("{CYAN}Testbench:{NOCOLOR} {0!s}".format(testbench.Parent, **Init.Foreground))
+		self.LogQuiet("{CYAN}Testbench: {0!s}{NOCOLOR}".format(testbench.Parent, **Init.Foreground))
 
-		self._vhdlVersion = vhdlVersion
+		self._vhdlVersion =  vhdlVersion
 		self._vhdlGenerics = vhdlGenerics
 
 		# setup all needed paths to execute fuse
-		self._CreatePoCProject(testbench, board)
+		self._CreatePoCProject(testbench.ModuleName, board)
 		self._AddFileListFile(testbench.FilesFile)
 
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running analysis for every vhdl file...")
+		self.LogNormal("Running analysis for every vhdl file...")
 		self._state = SimulationState.Analyze
 		self._RunAnalysis(testbench)
 		self._analyzeTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running elaboration...")
+		self.LogNormal("Running elaboration...")
 		self._state = SimulationState.Elaborate
 		self._RunElaboration(testbench)
 		self._elaborationTime = self._GetTimeDeltaSinceLastEvent()
 
-		self._LogNormal("Running simulation...")
+		self.LogNormal("Running simulation...")
 		self._state = SimulationState.Simulate
 		self._RunSimulation(testbench)
 		self._simulationTime = self._GetTimeDeltaSinceLastEvent()
 
 		if (guiMode is True):
-			self._LogNormal("Executing waveform viewer...")
+			self.LogNormal("Executing waveform viewer...")
 			self._state = SimulationState.View
 			self._RunView(testbench)
 
 		self._endAt = datetime.now()
-
-	def _CreatePoCProject(self, testbench, board):
-		# create a PoCProject and read all needed files
-		self._LogVerbose("Creating a PoC project '{0}'".format(testbench.ModuleName))
-		pocProject = VirtualProject(testbench.ModuleName)
-
-		# configure the project
-		pocProject.RootDirectory = self.Host.Directories.Root
-		pocProject.Environment = Environment.Simulation
-		pocProject.ToolChain = self._TOOL_CHAIN
-		pocProject.Tool = self._TOOL
-		pocProject.VHDLVersion = self._vhdlVersion
-		pocProject.Board = board
-
-		self._pocProject = pocProject
-
-	def _AddFileListFile(self, fileListFilePath):
-		self._LogVerbose("Reading filelist '{0!s}'".format(fileListFilePath))
-		# add the *.files file, parse and evaluate it
-		# if (not fileListFilePath.exists()):    raise SimulatorException("Files file '{0!s}' not found.".format(fileListFilePath)) from FileNotFoundError(str(fileListFilePath))
-
-		try:
-			fileListFile = self._pocProject.AddFile(FileListFile(fileListFilePath))
-			fileListFile.Parse()
-			fileListFile.CopyFilesToFileSet()
-			fileListFile.CopyExternalLibraries()
-			self._pocProject.ExtractVHDLLibrariesFromVHDLSourceFiles()
-		except (ParserException, CommonException) as ex:
-			raise SkipableSimulatorException("Error while parsing '{0!s}'.".format(fileListFilePath)) from ex
-
-		self._LogDebug("=" * 78)
-		self._LogDebug("Pretty printing the PoCProject...")
-		self._LogDebug(self._pocProject.pprint(2))
-		self._LogDebug("=" * 78)
-		if (len(fileListFile.Warnings) > 0):
-			for warn in fileListFile.Warnings:
-				self._LogWarning(warn)
-			raise SkipableSimulatorException("Found critical warnings while parsing '{0!s}'".format(fileListFilePath))
 
 	def _RunAnalysis(self, testbench):
 		pass
@@ -307,16 +218,16 @@ class Simulator(ILogable):
 		pass
 
 	def PrintOverallSimulationReport(self):
-		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
-		self._LogQuiet("{HEADLINE}{headline: ^80s}{NOCOLOR}".format(headline="Overall Simulation Report", **Init.Foreground))
-		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
+		self.LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
+		self.LogQuiet("{HEADLINE}{headline: ^80s}{NOCOLOR}".format(headline="Overall Simulation Report", **Init.Foreground))
+		self.LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
 		# table header
-		self._LogQuiet("{Name: <24} | {Duration: >5} | {Status: ^11}".format(Name="Name", Duration="Time", Status="Status"))
-		self._LogQuiet("-" * 80)
+		self.LogQuiet("{Name: <24} | {Duration: >5} | {Status: ^11}".format(Name="Name", Duration="Time", Status="Status"))
+		self.LogQuiet("-" * 80)
 		self.PrintSimulationReportLine(self._testSuite, 0, 24)
 
-		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
-		self._LogQuiet("Time: {time: >5}  Count: {count: <3}  Passed: {passed: <3}  No Asserts: {noassert: <2}  Failed: {failed: <2}  Errors: {error: <2}".format(
+		self.LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
+		self.LogQuiet("Time: {time: >5}  Count: {count: <3}  Passed: {passed: <3}  No Asserts: {noassert: <2}  Failed: {failed: <2}  Errors: {error: <2}".format(
 			time=to_time(self._testSuite.OverallRunTime),
 			count=self._testSuite.Count,
 			passed=self._testSuite.PassedCount,
@@ -324,42 +235,42 @@ class Simulator(ILogable):
 			failed=self._testSuite.FailedCount,
 			error=self._testSuite.ErrorCount
 		))
-		self._LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
+		self.LogQuiet("{HEADLINE}{line}{NOCOLOR}".format(line="=" * 80, **Init.Foreground))
 
 	__SIMULATION_REPORT_COLOR_TABLE__ = {
-		Status.Unknown:             "RED",
-		Status.InternalError:				"DARK_RED",
-		Status.SystemError:         "DARK_RED",
-		Status.AnalyzeError:        "DARK_RED",
-		Status.ElaborationError:    "DARK_RED",
-		Status.SimulationError:     "RED",
-		Status.SimulationFailed:    "RED",
-		Status.SimulationNoAsserts: "YELLOW",
-		Status.SimulationSuccess:   "GREEN"
+		SimulationStatus.Unknown:             "RED",
+		SimulationStatus.InternalError:       "DARK_RED",
+		SimulationStatus.SystemError:         "DARK_RED",
+		SimulationStatus.AnalyzeError:        "DARK_RED",
+		SimulationStatus.ElaborationError:    "DARK_RED",
+		SimulationStatus.SimulationError:     "RED",
+		SimulationStatus.SimulationFailed:    "RED",
+		SimulationStatus.SimulationNoAsserts: "YELLOW",
+		SimulationStatus.SimulationSuccess:   "GREEN"
 	}
 
 	__SIMULATION_REPORT_STATUS_TEXT_TABLE__ = {
-		Status.Unknown:             "-- ?? --",
-		Status.InternalError:				"INT. ERROR",
-		Status.SystemError:         "SYS. ERROR",
-		Status.AnalyzeError:        "ANA. ERROR",
-		Status.ElaborationError:    "ELAB. ERROR",
-		Status.SimulationError:     "SIM. ERROR",
-		Status.SimulationFailed:    "FAILED",
-		Status.SimulationNoAsserts: "NO ASSERTS",
-		Status.SimulationSuccess:   "PASSED"
+		SimulationStatus.Unknown:             "-- ?? --",
+		SimulationStatus.InternalError:       "INT. ERROR",
+		SimulationStatus.SystemError:         "SYS. ERROR",
+		SimulationStatus.AnalyzeError:        "ANA. ERROR",
+		SimulationStatus.ElaborationError:    "ELAB. ERROR",
+		SimulationStatus.SimulationError:     "SIM. ERROR",
+		SimulationStatus.SimulationFailed:    "FAILED",
+		SimulationStatus.SimulationNoAsserts: "NO ASSERTS",
+		SimulationStatus.SimulationSuccess:   "PASSED"
 	}
 
 	def PrintSimulationReportLine(self, testObject, indent, nameColumnWidth):
 		_indent = "  " * indent
-		for group in testObject.TestGroups.values():
+		for group in testObject.Groups.values():
 			pattern = "{indent}{{groupName: <{nameColumnWidth}}} |       | ".format(indent=_indent, nameColumnWidth=nameColumnWidth)
-			self._LogQuiet(pattern.format(groupName=group.Name))
+			self.LogQuiet(pattern.format(groupName=group.Name))
 			self.PrintSimulationReportLine(group, indent + 1, nameColumnWidth - 2)
 		for testCase in testObject.TestCases.values():
 			pattern = "{indent}{{testcaseName: <{nameColumnWidth}}} | {{duration: >5}} | {{{color}}}{{status: ^11}}{{NOCOLOR}}".format(
 				indent=_indent, nameColumnWidth=nameColumnWidth, color=self.__SIMULATION_REPORT_COLOR_TABLE__[testCase.Status])
-			self._LogQuiet(pattern.format(testcaseName=testCase.Name, duration=to_time(testCase.OverallRunTime),
+			self.LogQuiet(pattern.format(testcaseName=testCase.Name, duration=to_time(testCase.OverallRunTime),
 																		status=self.__SIMULATION_REPORT_STATUS_TEXT_TABLE__[testCase.Status], **Init.Foreground))
 
 

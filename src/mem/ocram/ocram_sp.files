@@ -13,6 +13,7 @@ vhdl    poc   "src/mem/mem.pkg.vhdl"        		      			# Memory package
 # PoC.mem.ocram
 vhdl    poc   "src/mem/ocram/ocram.pkg.vhdl"      					# On-Chip-RAM
 if (DeviceVendor = "Altera") then
+	include			"lib/Altera.files"
 	vhdl	poc		"src/mem/ocram/altera/ocram_sp_altera.vhdl"		# Altera specific single-port RAM
 end if
 vhdl    poc   "src/mem/ocram/ocram_sp.vhdl"									# Single-port RAM

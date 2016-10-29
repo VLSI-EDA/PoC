@@ -1,12 +1,13 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:            Patrick Lehmann
-# 
+#											Thomas B. Preusser
+#
 # Python functions:    Auxillary functions to exit a program and report an error message.
-# 
+#
 # Description:
 # ------------------------------------
 #		TODO:
@@ -64,6 +65,8 @@ class Init:
 	def init(cls):
 		from colorama import init
 		init()
+		from colorama import Back as Background
+		print(Background.BLACK, end="")
 
 	from colorama import Fore as Foreground
 	Foreground = {
@@ -78,13 +81,13 @@ class Init:
 		"DARK_CYAN":  Foreground.CYAN,
 		"GRAY":       Foreground.WHITE,
 		"DARK_GRAY":  Foreground.LIGHTBLACK_EX,
+		"WHITE":      Foreground.LIGHTWHITE_EX,
 		"NOCOLOR":    Foreground.RESET,
 
 		"HEADLINE":   Foreground.LIGHTMAGENTA_EX,
 		"ERROR":      Foreground.LIGHTRED_EX,
 		"WARNING":    Foreground.LIGHTYELLOW_EX
 	}
-
 
 class Exit:
 	@classmethod

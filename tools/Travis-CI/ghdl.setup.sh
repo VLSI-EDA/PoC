@@ -1,9 +1,9 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 # configure variables in the section below
 GHDL_BACKEND="llvm"
 GHDL_VERSION="0.34dev"
-RELEASE_DATE="2016-05-03"
+RELEASE_DATE="2016-09-14"
 
 GITHUB_SERVER="https://github.com"
 GITHUB_SLUG="tgingold/ghdl"
@@ -26,7 +26,6 @@ GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHU
 # other variables
 # --------------------------------------
 GITROOT=$(pwd)
-POCROOT=$(pwd)
 GHDL_TARBALL="ghdl.tgz"
 
 # define color escape codes
@@ -47,7 +46,7 @@ cd $TRAVIS_DIR
 
 # downloading GHDL
 echo -e "${CYAN}Downloading $GHDL_TARBALL from $GITHUB_URL...${NOCOLOR}"
-wget -q --show-progress $GITHUB_URL -O $GHDL_TARBALL
+wget -q $GITHUB_URL -O $GHDL_TARBALL
 if [ $? -eq 0 ]; then
 	echo -e "${GREEN}Download [SUCCESSFUL]${NOCOLOR}"
 else

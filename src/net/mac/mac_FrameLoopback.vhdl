@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -42,40 +41,40 @@ use			PoC.net.all;
 
 entity mac_FrameLoopback is
 	generic (
-		MAX_FRAMES										: POSITIVE						:= 4
+		MAX_FRAMES										: positive						:= 4
 	);
 	port (
-		Clock													: in	STD_LOGIC;
-		Reset													: in	STD_LOGIC;
+		Clock													: in	std_logic;
+		Reset													: in	std_logic;
 		-- IN Port
-		In_Valid											: in	STD_LOGIC;
+		In_Valid											: in	std_logic;
 		In_Data												: in	T_SLV_8;
-		In_SOF												: in	STD_LOGIC;
-		In_EOF												: in	STD_LOGIC;
-		In_Ack												: out	STD_LOGIC;
-		In_Meta_rst										: out	STD_LOGIC;
-		In_Meta_SrcMACAddress_nxt			: out	STD_LOGIC;
+		In_SOF												: in	std_logic;
+		In_EOF												: in	std_logic;
+		In_Ack												: out	std_logic;
+		In_Meta_rst										: out	std_logic;
+		In_Meta_SrcMACAddress_nxt			: out	std_logic;
 		In_Meta_SrcMACAddress_Data		: in	T_SLV_8;
-		In_Meta_DestMACAddress_nxt		: out	STD_LOGIC;
+		In_Meta_DestMACAddress_nxt		: out	std_logic;
 		In_Meta_DestMACAddress_Data		: in	T_SLV_8;
 		-- OUT Port
-		Out_Valid											: out	STD_LOGIC;
+		Out_Valid											: out	std_logic;
 		Out_Data											: out	T_SLV_8;
-		Out_SOF												: out	STD_LOGIC;
-		Out_EOF												: out	STD_LOGIC;
-		Out_Ack												: in	STD_LOGIC;
-		Out_Meta_rst									: in	STD_LOGIC;
-		Out_Meta_SrcMACAddress_nxt		: in	STD_LOGIC;
+		Out_SOF												: out	std_logic;
+		Out_EOF												: out	std_logic;
+		Out_Ack												: in	std_logic;
+		Out_Meta_rst									: in	std_logic;
+		Out_Meta_SrcMACAddress_nxt		: in	std_logic;
 		Out_Meta_SrcMACAddress_Data		: out	T_SLV_8;
-		Out_Meta_DestMACAddress_nxt		: in	STD_LOGIC;
+		Out_Meta_DestMACAddress_nxt		: in	std_logic;
 		Out_Meta_DestMACAddress_Data	: out	T_SLV_8
 	);
 end entity;
 
 
 architecture rtl of mac_FrameLoopback is
-	constant META_STREAMID_SRCADDR		: NATURAL					:= 0;
-	constant META_STREAMID_DESTADDR		: NATURAL					:= 1;
+	constant META_STREAMID_SRCADDR		: natural					:= 0;
+	constant META_STREAMID_DESTADDR		: natural					:= 1;
 
 	constant META_BITS								: T_POSVEC				:= (
 		META_STREAMID_SRCADDR			=> 8,
@@ -87,10 +86,10 @@ architecture rtl of mac_FrameLoopback is
 		META_STREAMID_DESTADDR		=> 6
 	);
 
-	signal LLBuf_MetaIn_nxt						: STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
-	signal LLBuf_MetaIn_Data					: STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
-	signal LLBuf_MetaOut_nxt					: STD_LOGIC_VECTOR(META_BITS'length - 1 downto 0);
-	signal LLBuf_MetaOut_Data					: STD_LOGIC_VECTOR(isum(META_BITS) - 1 downto 0);
+	signal LLBuf_MetaIn_nxt						: std_logic_vector(META_BITS'length - 1 downto 0);
+	signal LLBuf_MetaIn_Data					: std_logic_vector(isum(META_BITS) - 1 downto 0);
+	signal LLBuf_MetaOut_nxt					: std_logic_vector(META_BITS'length - 1 downto 0);
+	signal LLBuf_MetaOut_Data					: std_logic_vector(isum(META_BITS) - 1 downto 0);
 
 begin
 	LLBuf_MetaIn_Data(high(META_BITS, META_STREAMID_SRCADDR)	downto low(META_BITS, META_STREAMID_SRCADDR))		<= In_Meta_SrcMACAddress_Data;

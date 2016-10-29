@@ -1,25 +1,24 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Martin Zabel
 --									Patrick Lehmann
 --
--- Module:				 	UART bit clock / baud rate generator
+-- Entity:				 	UART bit clock / baud rate generator
 --
 -- Description:
--- ------------------------------------
---	TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
---	old comments:
---		UART BAUD rate generator
---		bclk_r    = bit clock is rising
---		bclk_x8_r = bit clock times 8 is rising
+-- old comments:
+--   :abbr:`UART (Universal Asynchronous Receiver Transmitter)` BAUD rate generator
+--   bclk_r    = bit clock is rising
+--   bclk_x8_r = bit clock times 8 is rising
 --
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2008-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -34,7 +33,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -63,10 +62,10 @@ end entity;
 
 
 architecture rtl of uart_bclk is
-	constant UART_OVERSAMPLING_RATE		: POSITIVE					:= 8;
+	constant UART_OVERSAMPLING_RATE		: positive					:= 8;
 	constant TIME_UNIT_INTERVAL				: T_TIME						:= 1.0 / (to_real(BAUDRATE, 1 Bd) * real(UART_OVERSAMPLING_RATE));
-	constant BAUDRATE_COUNTER_MAX			: POSITIVE					:= TimingToCycles(TIME_UNIT_INTERVAL, CLOCK_FREQ);
-	constant BAUDRATE_COUNTER_BITS		: POSITIVE					:= log2ceilnz(BAUDRATE_COUNTER_MAX + 1);
+	constant BAUDRATE_COUNTER_MAX			: positive					:= TimingToCycles(TIME_UNIT_INTERVAL, CLOCK_FREQ);
+	constant BAUDRATE_COUNTER_BITS		: positive					:= log2ceilnz(BAUDRATE_COUNTER_MAX + 1);
 
   -- registers
   signal x8_cnt : unsigned(BAUDRATE_COUNTER_BITS - 1 downto 0)	:= (others => '0');
@@ -76,15 +75,15 @@ architecture rtl of uart_bclk is
   signal x8_cnt_done : std_logic;
   signal x1_cnt_done : std_logic;
 
-	signal bclk_r			: STD_LOGIC		:= '0';
-	signal bclk_x8_r	: STD_LOGIC		:= '0';
+	signal bclk_r			: std_logic		:= '0';
+	signal bclk_x8_r	: std_logic		:= '0';
 begin
 	assert FALSE		-- LF works in QuartusII
 		report "uart_bclk:" & LF &
 					 "  CLOCK_FREQ="		& to_string(CLOCK_FREQ, 3) & LF &
 					 "  BAUDRATE="			& to_string(BAUDRATE, 3) & LF &
-					 "  COUNTER_MAX="		& INTEGER'image(BAUDRATE_COUNTER_MAX) & LF &
-					 "  COUNTER_BITS="	& INTEGER'image(BAUDRATE_COUNTER_BITS)
+					 "  COUNTER_MAX="		& integer'image(BAUDRATE_COUNTER_MAX) & LF &
+					 "  COUNTER_BITS="	& integer'image(BAUDRATE_COUNTER_BITS)
 		severity NOTE;
 
 	assert io_UART_IsTypicalBaudRate(BAUDRATE)

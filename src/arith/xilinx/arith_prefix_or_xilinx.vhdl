@@ -1,7 +1,6 @@
 -- EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Thomas B. Preusser
 --									Patrick Lehmann
@@ -9,7 +8,7 @@
 -- Entity:					Prefix OR computation
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --	Prefix OR computation:
 --		y(i) <= '0' when x(i downto 0) = (i downto 0 => '0') else '1';
 --	This implementation uses carry chains for wider implementations.

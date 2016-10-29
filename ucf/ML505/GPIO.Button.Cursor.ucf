@@ -10,7 +10,7 @@ NET "ML505_GPIO_Button_West"						LOC = "AJ7"	| IOSTANDARD = LVCMOS18;			## SW13
 NET "ML505_GPIO_Button_Center"					LOC = "AJ6"	| IOSTANDARD = LVCMOS18;			## SW14; high-active; external 4k7 pulldown resistor
 NET "ML505_GPIO_Button_East"						LOC = "AK7"	| IOSTANDARD = LVCMOS18;			## SW12; high-active; external 4k7 pulldown resistor
 NET "ML505_GPIO_Button_South"						LOC = "V8"	| IOSTANDARD = LVCMOS18;			## SW11; high-active; external 4k7 pulldown resistor
-NET "ML505_GPIO_Button_*"								IOSTANDARD = LVCMOS33;										## 
+NET "ML505_GPIO_Button_*"								IOSTANDARD = LVCMOS33;										##
 
 ## Ignore timings on async I/O pins
 NET "ML505_GPIO_Button_*"								TIG;

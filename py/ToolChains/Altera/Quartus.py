@@ -111,32 +111,33 @@ class Configuration(BaseConfiguration):
 
 
 class QuartusMixIn:
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
 		self._platform =            platform
-		self._binaryDirectoryPath =  binaryDirectoryPath
-		self._version =              version
-		self._logger =              logger
+		self._dryrun =              dryrun
+		self._binaryDirectoryPath = binaryDirectoryPath
+		self._version =             version
+		self._Logger =              logger
 
 
 class Quartus(QuartusMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 	def GetMap(self):
-		return Map(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return Map(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetTclShell(self):
-		return TclShell(self._platform, self._binaryDirectoryPath, self._version, logger=self._logger)
+		return TclShell(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 
 class Map(Executable, QuartusMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 		if (platform == "Windows") :      executablePath = binaryDirectoryPath / "quartus_map.exe"
 		elif (platform == "Linux") :      executablePath = binaryDirectoryPath / "quartus_map"
 		else :                            raise PlatformNotSupportedException(platform)
-		Executable.__init__(self, platform, executablePath, logger=logger)
+		Executable.__init__(self, platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -174,7 +175,11 @@ class Map(Executable, QuartusMixIn):
 
 	def Compile(self) :
 		parameterList = self.Parameters.ToArgumentList()
-		self._LogVerbose("command: {0}".format(" ".join(parameterList)))
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -189,31 +194,31 @@ class Map(Executable, QuartusMixIn):
 
 			line = next(iterator)
 			self._hasOutput = True
-			self._LogNormal("    quartus_map messages for '{0}'".format(self.Parameters[self.SwitchArgumentFile]))
-			self._LogNormal("    " + ("-" * 76))
+			self.LogNormal("  quartus_map messages for '{0}'".format(self.Parameters[self.SwitchArgumentFile]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 			while True:
 				self._hasWarnings |= (line.Severity is Severity.Warning)
 				self._hasErrors |= (line.Severity is Severity.Error)
 
-				line.IndentBy(2)
-				self._Log(line)
+				line.IndentBy(self.Logger.BaseIndent + 1)
+				self.Log(line)
 				line = next(iterator)
 
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self._LogNormal("    " + ("-" * 76))
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 class TclShell(Executable, QuartusMixIn):
-	def __init__(self, platform, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, binaryDirectoryPath, version, logger)
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
 		if (platform == "Windows") :      executablePath = binaryDirectoryPath / "quartus_sh.exe"
 		elif (platform == "Linux") :      executablePath = binaryDirectoryPath / "quartus_sh"
 		else :                            raise PlatformNotSupportedException(platform)
-		Executable.__init__(self, platform, executablePath, logger=logger)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -253,15 +258,54 @@ def MapFilter(gen):
 		else:
 			yield LogEntry(line, Severity.Normal)
 
+
+class QuartusSession:
+	def __init__(self, host):
+		self.TclShell = host.Toolchain.GetTclShell()
+		self.TclShell.Parameters[self.TclShell.SwitchShell] = True
+		self.TclShell.StartProcess()
+		self.TclShell.SendBoundary()
+		self.TclShell.ReadUntilBoundary()
+
+	def exit(self):
+		self.TclShell.Send("exit")
+		self.TclShell.ReadUntilBoundary()
+
+
 class QuartusProject(BaseProject):
 	def __init__(self, host, name, projectFile=None):
 		super().__init__(name)
 
 		self._host =        host
-		self._projectFile =  projectFile
+		self._projectFile = projectFile
 
-	def Save(self):
-		pass
+	def Create(self, session=None):
+		if (session is None):
+			tclShell = self._host.Toolchain.GetTclShell()
+			tclShell.Parameters[tclShell.SwitchShell] = True
+			tclShell.StartProcess()
+			tclShell.SendBoundary()
+			tclShell.ReadUntilBoundary()
+		else:
+			tclShell = session.TclShell
+
+		tclShell.Send("project_create {0}".format(self._name))
+		tclShell.SendBoundary()
+		tclShell.ReadUntilBoundary()
+
+		if (session is None):
+			tclShell.Send("project_close")
+			tclShell.SendBoundary()
+			tclShell.ReadUntilBoundary()
+
+			tclShell.Send("exit")
+			tclShell.ReadUntilBoundary()
+
+	def Save(self, session):
+		tclShell = session.TclShell
+		tclShell.Send("export_assignments")
+		tclShell.SendBoundary()
+		tclShell.ReadUntilBoundary()
 
 	def Read(self):
 		tclShell = self._host.Toolchain.GetSynthesizer()
@@ -276,21 +320,32 @@ class QuartusProject(BaseProject):
 		tclShell.Send("exit")
 		tclShell.ReadUntilBoundary()
 
-	def Open(self):
-		pass
+	def Open(self, session):
+		tclShell = session.TclShell
 
-	def Close(self):
-		pass
+		tclShell.Send("project_open {0}".format(self._name))
+		tclShell.SendBoundary()
+		tclShell.ReadUntilBoundary()
+
+	def Close(self, session):
+		tclShell = session.TclShell
+
+		tclShell.Send("project_close")
+		tclShell.SendBoundary()
+		tclShell.ReadUntilBoundary()
+
+		tclShell.Send("exit")
+		tclShell.ReadUntilBoundary()
 
 
-class QuartusSettingsFile(SettingsFile):
+class QuartusSettings(SettingsFile):
 	def __init__(self, name, settingsFile=None):
 		super().__init__(name)
 
-		self._projectFile =    settingsFile
-
-		self._sourceFiles =              []
-		self._globalAssignments =        OrderedDict()
+		self._projectFile =       settingsFile
+		self._sourceFiles =       []
+		self._globalAssignments = OrderedDict()
+		self._parameters =        {}
 
 	@property
 	def File(self):
@@ -305,6 +360,10 @@ class QuartusSettingsFile(SettingsFile):
 	def GlobalAssignments(self):
 		return self._globalAssignments
 
+	@property
+	def Parameters(self):
+		return self._parameters
+
 	def CopySourceFilesFromProject(self, project):
 		for file in project.Files(fileType=FileTypes.VHDLSourceFile):
 			self._sourceFiles.append(file)
@@ -315,6 +374,10 @@ class QuartusSettingsFile(SettingsFile):
 		buffer = ""
 		for key,value in self._globalAssignments.items():
 			buffer += "set_global_assignment -name {key} {value!s}\n".format(key=key, value=value)
+
+		buffer += "\n"
+		for key,value in self._parameters.items():
+				buffer += "set_parameter -name {key} {value}\n".format(key=key, value=value)
 
 		buffer += "\n"
 		for file in self._sourceFiles:

@@ -7,7 +7,7 @@
 #                   Martin Zabel
 #                   Thomas B. Preusser
 #
-# Python Class:      Altera ModelSim specific classes
+# Python Class:     Altera ModelSim specific classes
 #
 # Description:
 # ------------------------------------
@@ -85,12 +85,12 @@ class Configuration(BaseConfiguration):
 			else:
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
-				self.__GetQuestaSimVersion(binPath)
+				self.__GetModelSimVersion(binPath)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
 
-	def __GetQuestaSimVersion(self, binPath):
+	def __GetModelSimVersion(self, binPath):
 		if (self._host.Platform == "Windows"):
 			vsimPath = binPath / "vsim.exe"
 		else:

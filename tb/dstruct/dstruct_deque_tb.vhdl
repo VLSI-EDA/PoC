@@ -145,7 +145,7 @@ begin
 			simAssertion(fullA = '0', "fullA != 0!");
 			simAssertion(validA = '1', "validA != 1!");
 			simAssertion(fullB = '0', "fullB != 0!");
-			if (i = 1) then
+			if i = 1 then
 				simAssertion(validB = '0', "validB != 0!");
 			else
 				simAssertion(validB = '1', "validB != 1!");
@@ -227,10 +227,10 @@ begin
 			cycle;
 			gotB <= '0';
 			cycle;
-			if (i > MIN_DEPTH/2) then
+			if i > MIN_DEPTH/2 then
 				simAssertion(doutB = std_logic_vector(to_unsigned(j-2, D_BITS)), "doutB !=j-2");
 				j := j - 2;
-			elsif (i = MIN_DEPTH/2) then
+			elsif i = MIN_DEPTH/2 then
 				simAssertion(doutB = std_logic_vector(to_unsigned(j-1, D_BITS)), "doutB !=j-2");
 			else
 				simAssertion(doutB = std_logic_vector(to_unsigned(k+2, D_BITS)), "doutB !=k");
@@ -306,7 +306,7 @@ begin
 			simAssertion(fullA = '0', "fullA != 0!");
 			simAssertion(validA = '1', "validA != 1!");
 			simAssertion(fullB = '0', "fullB != 0!");
-			if (i = 1) then
+			if i = 1 then
 				simAssertion(validB = '0', "validB != 0!");
 			else
 				simAssertion(validB = '1', "validB != 1!");
@@ -997,7 +997,7 @@ begin
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '0', "fullB != 0!");
 		simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-1, D_BITS)), "doutB != MIN_DEPTH-1");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutA = std_logic_vector(to_unsigned(MIN_DEPTH-6, D_BITS)), "doutA != MIN_DEPTH-6");
 		else
 			simAssertion(doutA = std_logic_vector(to_unsigned(1, D_BITS)), "doutA != 0x01");
@@ -1010,7 +1010,7 @@ begin
 		dinB <= std_logic_vector(to_unsigned(0, D_BITS));
 		putB <= '0';
 		simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-1, D_BITS)), "doutB != MIN_DEPTH-1");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutA = std_logic_vector(to_unsigned(MIN_DEPTH-6, D_BITS)), "doutA != MIN_DEPTH-6");
 		else
 			simAssertion(doutA = std_logic_vector(to_unsigned(1, D_BITS)), "doutA != 0x01");
@@ -1053,7 +1053,7 @@ begin
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '1', "fullB != 1!");
 		simAssertion(doutB = std_logic_vector(to_unsigned(175, D_BITS)), "doutB != 0xAF");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutA = std_logic_vector(to_unsigned(MIN_DEPTH-6, D_BITS)), "doutA != MIN_DEPTH-6");
 		else
 			simAssertion(doutA = std_logic_vector(to_unsigned(1, D_BITS)), "doutA != 0x01");
@@ -1231,7 +1231,7 @@ begin
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '1', "fullB != 1!");
 		simAssertion(doutA = std_logic_vector(to_unsigned(222, D_BITS)), "doutA != 0xDE");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -1244,7 +1244,7 @@ begin
 		dinA <= std_logic_vector(to_unsigned(0, D_BITS));
 		putA <= '0';
 		simAssertion(doutA = std_logic_vector(to_unsigned(222, D_BITS)), "doutA != 0xDE");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -1255,7 +1255,7 @@ begin
 		simAssertion(fullB = '1', "fullB != 1!");
 		cycle;
 		simAssertion(doutA = std_logic_vector(to_unsigned(175, D_BITS)), "doutA != 0xAF");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -1274,7 +1274,7 @@ begin
 		dinA <= std_logic_vector(to_unsigned(0, D_BITS));
 		gotB <= '0';
 		simAssertion(doutA = std_logic_vector(to_unsigned(175, D_BITS)), "doutB != 0xAF");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -1289,7 +1289,7 @@ begin
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '1', "fullB != 1!");
 		simAssertion(doutA = std_logic_vector(to_unsigned(175, D_BITS)), "doutA != 0xAF");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-7, D_BITS)), "doutB != MIN_DEPTH-7");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(2, D_BITS)), "doutB != 0x02");
@@ -1473,7 +1473,7 @@ begin
 		simAssertion(validA = '1', "validA != 1!");
 		simAssertion(fullB = '0', "fullB != 0!");
 		simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-3, D_BITS)), "doutB != MIN_DEPTH-3");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutA = std_logic_vector(to_unsigned(MIN_DEPTH-6, D_BITS)), "doutA != MIN_DEPTH-6");
 			simAssertion(validB = '1', "validB != 1!");
 		else
@@ -1492,7 +1492,7 @@ begin
 		putB <= '0';
 		putA <= '0';
 		simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-3, D_BITS)), "doutB != MIN_DEPTH-3");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutA = std_logic_vector(to_unsigned(MIN_DEPTH-6, D_BITS)), "doutA != MIN_DEPTH-6");
 			simAssertion(validB = '1', "validB != 1!");
 		else
@@ -1722,7 +1722,7 @@ begin
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '0', "fullB != 0!");
 		simAssertion(doutA = std_logic_vector(to_unsigned(222, D_BITS)), "doutB != 0xDE");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutA != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -1739,7 +1739,7 @@ begin
 		putB <= '0';
 		putA <= '0';
 		simAssertion(doutA = std_logic_vector(to_unsigned(222, D_BITS)), "doutA != 0xDE");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -1778,7 +1778,7 @@ begin
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '0', "fullB != 0!");
 		simAssertion(doutA = std_logic_vector(to_unsigned(222, D_BITS)), "doutB != 0xDE");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -1835,7 +1835,7 @@ begin
 		simAssertion(fullA = '0', "fullA != 0!");
 		simAssertion(validA = '1', "validA != 1!");
 		simAssertion(validB = '1', "validB != 1!");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(fullB = '0', "fullB != 0!");
 		else
 			simAssertion(fullB = '1', "fullB != 1!");
@@ -1852,7 +1852,7 @@ begin
 		simAssertion(fullA = '0', "fullA != 0!");
 		simAssertion(validA = '1', "validA != 1!");
 		simAssertion(validB = '1', "validB != 1!");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(fullB = '0', "fullB != 0!");
 		else
 			simAssertion(fullB = '1', "fullB != 1!");
@@ -1886,7 +1886,7 @@ begin
 		simAssertion(fullA = '0', "fullA != 0!");
 		simAssertion(validA = '1', "validA != 1!");
 		simAssertion(validB = '1', "validB != 1!");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(fullB = '0', "fullB != 0!");
 		else
 			simAssertion(fullB = '1', "fullB != 1!");
@@ -2057,7 +2057,7 @@ begin
 		simAssertion(fullA = '0', "fullA != 0!");
 		simAssertion(validA = '1', "validA != 1!");
 		simAssertion(validB = '1', "validB != 1!");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(fullB = '0', "fullB != 0!");
 		else
 			simAssertion(fullB = '1', "fullB != 1!");
@@ -2098,7 +2098,7 @@ begin
 		simAssertion(fullA = '0', "fullA != 0!");
 		simAssertion(validA = '1', "validA != 1!");
 		simAssertion(validB = '1', "validB != 1!");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(fullB = '0', "fullB != 0!");
 		else
 			simAssertion(fullB = '1', "fullB != 1!");
@@ -2207,7 +2207,7 @@ begin
 		simAssertion(validA = '1', "validA != 1!");
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '1', "fullB != 1!");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -2382,7 +2382,7 @@ begin
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '0', "fullB != 0!");
 		simAssertion(doutA = std_logic_vector(to_unsigned(222, D_BITS)), "doutA != 0xDE");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -2399,7 +2399,7 @@ begin
 		dinB <= std_logic_vector(to_unsigned(0, D_BITS));
 		putB <= '0';
 		simAssertion(doutA = std_logic_vector(to_unsigned(222, D_BITS)), "doutA != 0xDE");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");
@@ -2442,7 +2442,7 @@ begin
 		simAssertion(validB = '1', "validB != 1!");
 		simAssertion(fullB = '0', "fullB != 0!");
 		simAssertion(doutA = std_logic_vector(to_unsigned(222, D_BITS)), "doutB != 0xDE");
-		if (MIN_DEPTH > 4) then
+		if MIN_DEPTH > 4 then
 			simAssertion(doutB = std_logic_vector(to_unsigned(MIN_DEPTH-5, D_BITS)), "doutB != MIN_DEPTH-5");
 		else
 			simAssertion(doutB = std_logic_vector(to_unsigned(0, D_BITS)), "doutB != 0x00");

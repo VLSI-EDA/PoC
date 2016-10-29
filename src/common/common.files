@@ -17,11 +17,13 @@ vhdl	poc		"src/common/physical.vhdl"							# PoC physical types package
 vhdl	poc		"src/common/components.vhdl"						# PoC components
 
 if (ToolChain not in ["Altera_QuartusII", "Lattice_Diamond"]) then
-	if (VHDL < 2002) then
+	if (VHDLVersion < 2002) then
 		vhdl	poc		"src/common/fileio.v93.vhdl"				# 
-	elseif (VHDL >= 2002) then
+	elseif (VHDLVersion <= 2008) then
 		vhdl	poc		"src/common/protected.v08.vhdl"			# PoC protected type implementations
 		vhdl	poc		"src/common/fileio.v08.vhdl"				# 
+	else
+		report "VHDL version not supported."
 	end if
 end if
 

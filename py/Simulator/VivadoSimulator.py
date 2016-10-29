@@ -1,30 +1,30 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
-# 
+#
 # Python Class:      TODO
-# 
+#
 # Description:
 # ------------------------------------
 #		TODO:
-#		- 
-#		- 
+#		-
+#		-
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,33 +55,29 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =            ToolChain.Xilinx_Vivado
 	_TOOL =                  Tool.Xilinx_xSim
 
-	def __init__(self, host, guiMode):
-		super().__init__(host)
+	def __init__(self, host, dryRun, guiMode):
+		super().__init__(host, dryRun)
 		XilinxProjectExportMixIn.__init__(self)
 
-		self._guiMode =        guiMode
-
-		self._entity =        None
-		self._testbenchFQN =  None
-		self._vhdlVersion =    None
+		self._guiMode =       guiMode
+		self._vhdlVersion =   None
 		self._vhdlGenerics =  None
+		self._toolChain =     None
 
-		self._vivado =        None
-
-		vivadoFilesDirectoryName = host.PoCConfig['CONFIG.DirectoryNames']['VivadoSimulatorFiles']
-		self.Directories.Working = host.Directories.Temp / vivadoFilesDirectoryName
-		self.Directories.PreCompiled = host.Directories.PreCompiled / vivadoFilesDirectoryName
+		vivadoFilesDirectoryName =      host.PoCConfig['CONFIG.DirectoryNames']['VivadoSimulatorFiles']
+		self.Directories.Working =      host.Directories.Temp / vivadoFilesDirectoryName
+		self.Directories.PreCompiled =  host.Directories.PreCompiled / vivadoFilesDirectoryName
 
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()
 
 	def _PrepareSimulator(self):
 		# create the Vivado executable factory
-		self._LogVerbose("Preparing Vivado simulator.")
+		self.LogVerbose("Preparing Vivado simulator.")
 		vivadoSection = self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
 		version =  vivadoSection['Version']
 		binaryPath = Path(vivadoSection['BinaryDirectory'])
-		self._vivado = Vivado(self.Host.Platform, binaryPath, version, logger=self.Logger)
+		self._toolChain = Vivado(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
 	def _RunElaboration(self, testbench):
 		xelabLogFilePath =  self.Directories.Working / (testbench.ModuleName + ".xelab.log")
@@ -89,7 +85,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		self._WriteXilinxProjectFile(prjFilePath, "xSim", self._vhdlVersion)
 
 		# create a VivadoLinker instance
-		xelab = self._vivado.GetElaborator()
+		xelab = self._toolChain.GetElaborator()
 		xelab.Parameters[xelab.SwitchTimeResolution] =  "1fs"	# set minimum time precision to 1 fs
 		xelab.Parameters[xelab.SwitchMultiThreading] =  "off" if self.Logger.LogLevel is Severity.Debug else "auto"		# disable multithreading support in debug mode
 		xelab.Parameters[xelab.FlagRangeCheck] =        True
@@ -117,7 +113,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		wcfgFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['xSimWaveformConfigFile']
 
 		# create a VivadoSimulator instance
-		xSim = self._vivado.GetSimulator()
+		xSim = self._toolChain.GetSimulator()
 		xSim.Parameters[xSim.SwitchLogFile] =          str(xSimLogFilePath)
 
 		if (not self._guiMode):
@@ -128,10 +124,10 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 			# if xSim save file exists, load it's settings
 			if wcfgFilePath.exists():
-				self._LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
+				self.LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
 				xSim.Parameters[xSim.SwitchWaveformFile] =  str(wcfgFilePath)
 			else:
-				self._LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
+				self.LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
 		xSim.Parameters[xSim.SwitchSnapshot] = testbench.ModuleName
 		testbench.Result = xSim.Simulate()

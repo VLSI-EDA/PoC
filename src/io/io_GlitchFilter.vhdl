@@ -1,19 +1,18 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	Glitch Filter
+-- Entity:				 	Glitch Filter
 --
 -- Description:
--- ------------------------------------
---		This module filters glitches on a wire. The high and low spike suppression
---		cycle counts can be configured.
+-- -------------------------------------
+-- This module filters glitches on a wire. The high and low spike suppression
+-- cycle counts can be configured.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -28,7 +27,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -41,21 +40,21 @@ use			PoC.utils.all;
 
 entity io_GlitchFilter is
   generic (
-		HIGH_SPIKE_SUPPRESSION_CYCLES			: NATURAL				:= 5;
-		LOW_SPIKE_SUPPRESSION_CYCLES			: NATURAL				:= 5
+		HIGH_SPIKE_SUPPRESSION_CYCLES			: natural				:= 5;
+		LOW_SPIKE_SUPPRESSION_CYCLES			: natural				:= 5
 	);
   port (
-		Clock		: in	STD_LOGIC;
-		Input		: in	STD_LOGIC;
-		Output	: out STD_LOGIC
+		Clock		: in	std_logic;
+		Input		: in	std_logic;
+		Output	: out std_logic
 	);
 end entity;
 
 
 architecture rtl of io_GlitchFilter is
 	-- Timing table ID
-	constant TTID_HIGH_SPIKE				: NATURAL		:= 0;
-	constant TTID_LOW_SPIKE					: NATURAL		:= 1;
+	constant TTID_HIGH_SPIKE				: natural		:= 0;
+	constant TTID_LOW_SPIKE					: natural		:= 1;
 
 	-- Timing table
 	constant TIMING_TABLE						: T_NATVEC	:= (
@@ -63,19 +62,19 @@ architecture rtl of io_GlitchFilter is
 		TTID_LOW_SPIKE			=> LOW_SPIKE_SUPPRESSION_CYCLES
 	);
 
-	signal State										: STD_LOGIC												:= '0';
-	signal NextState								: STD_LOGIC;
+	signal State										: std_logic												:= '0';
+	signal NextState								: std_logic;
 
-	signal TC_en										: STD_LOGIC;
-	signal TC_Load									: STD_LOGIC;
-	signal TC_Slot									: NATURAL;
-	signal TC_Timeout								: STD_LOGIC;
+	signal TC_en										: std_logic;
+	signal TC_Load									: std_logic;
+	signal TC_Slot									: natural;
+	signal TC_Timeout								: std_logic;
 
 begin
 	assert FALSE
 		report "GlitchFilter: " &
-					 "HighSpikeSuppressionCycles="	& INTEGER'image(TIMING_TABLE(TTID_HIGH_SPIKE))	& "  " &
-					 "LowSpikeSuppressionCycles="		& INTEGER'image(TIMING_TABLE(TTID_LOW_SPIKE))		& "  "
+					 "HighSpikeSuppressionCycles="	& integer'image(TIMING_TABLE(TTID_HIGH_SPIKE))	& "  " &
+					 "LowSpikeSuppressionCycles="		& integer'image(TIMING_TABLE(TTID_LOW_SPIKE))		& "  "
 		severity NOTE;
 
 	process(Clock)

@@ -7,19 +7,19 @@
 ##		Vendor:				Texas Instruments
 ##		Device:				TMDS141RHAR
 ## -----------------------------------------------------------------------------
-NET "Atlys_TMDS_RX_Clock_p"						LOC = "H17"								## {IN}		
-NET "Atlys_TMDS_RX_Clock_n"						LOC = "H18"								## {IN}		
-NET "Atlys_TMDS_RX_0_p"								LOC = "K17"								## {IN}		
-NET "Atlys_TMDS_RX_0_n"								LOC = "K18"								## {IN}		
-NET "Atlys_TMDS_RX_1_p"								LOC = "L17"								## {IN}		
-NET "Atlys_TMDS_RX_1_n"								LOC = "L18"								## {IN}		
-NET "Atlys_TMDS_RX_2_p"								LOC = "J16"								## {IN}		
-NET "Atlys_TMDS_RX_2_n"								LOC = "J18"								## {IN}		
+NET "Atlys_TMDS_RX_Clock_p"						LOC = "H17"								## {IN}
+NET "Atlys_TMDS_RX_Clock_n"						LOC = "H18"								## {IN}
+NET "Atlys_TMDS_RX_0_p"								LOC = "K17"								## {IN}
+NET "Atlys_TMDS_RX_0_n"								LOC = "K18"								## {IN}
+NET "Atlys_TMDS_RX_1_p"								LOC = "L17"								## {IN}
+NET "Atlys_TMDS_RX_1_n"								LOC = "L18"								## {IN}
+NET "Atlys_TMDS_RX_2_p"								LOC = "J16"								## {IN}
+NET "Atlys_TMDS_RX_2_n"								LOC = "J18"								## {IN}
 NET "Atlys_TMDS_RX_*_?"								IOSTANDARD = LVCMOS33;
 NET "Atlys_TMDS_RX_*_?"								SLEW = FAST;
 
-NET "Atlys_TMDS_RX_SerialClock"				LOC = "M16"								## {INOUT}	
-NET "Atlys_TMDS_RX_SerialData"				LOC = "M18"								## {INOUT}	
+NET "Atlys_TMDS_RX_SerialClock"				LOC = "M16"								## {INOUT}
+NET "Atlys_TMDS_RX_SerialData"				LOC = "M18"								## {INOUT}
 NET "Atlys_TMDS_RX_Serial*"						IOSTANDARD = LVCMOS33;
 NET "Atlys_TMDS_RX_Serial*"						SLEW = FAST;
 

@@ -1,0 +1,28 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/stat_maximum_tb/clock
+/stat_maximum_tb/reset
+/stat_maximum_tb/enable
+/stat_maximum_tb/datain
+/stat_maximum_tb/valids
+/stat_maximum_tb/maximums
+/stat_maximum_tb/counts
+/stat_maximum_tb/maximums_slvv
+/stat_maximum_tb/counts_slvv
+/stat_maximum_tb/uut/clock
+/stat_maximum_tb/uut/reset
+/stat_maximum_tb/uut/enable
+/stat_maximum_tb/uut/datain
+/stat_maximum_tb/uut/valids
+/stat_maximum_tb/uut/maximums
+/stat_maximum_tb/uut/counts
+/stat_maximum_tb/uut/datain_us
+/stat_maximum_tb/uut/taghit
+/stat_maximum_tb/uut/maximumhit
+/stat_maximum_tb/uut/tagmemory
+/stat_maximum_tb/uut/countermemory
+/stat_maximum_tb/uut/maximumindex
+/stat_maximum_tb/uut/validmemory

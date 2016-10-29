@@ -49,15 +49,15 @@ architecture sim of ddrio_in_tb is
 	constant CLOCK_FREQ	: FREQ					:= 100 MHz;
 
   -- component generics
-  constant BITS				: POSITIVE := 2;
-  constant INIT_VALUE	: BIT_VECTOR(1 downto 0) := "10";
+  constant BITS				: positive := 2;
+  constant INIT_VALUE	: bit_vector(1 downto 0) := "10";
 
   -- component ports
-  signal Clock				: STD_LOGIC := '1';
-  signal ClockEnable	: STD_LOGIC := '0';
-  signal DataIn_high	: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-  signal DataIn_low		: STD_LOGIC_VECTOR(BITS - 1 downto 0);
-  signal Pad					: STD_LOGIC_VECTOR(BITS - 1 downto 0);
+  signal Clock				: std_logic := '1';
+  signal ClockEnable	: std_logic := '0';
+  signal DataIn_high	: std_logic_vector(BITS - 1 downto 0);
+  signal DataIn_low		: std_logic_vector(BITS - 1 downto 0);
+  signal Pad					: std_logic_vector(BITS - 1 downto 0);
 
 	-- delay from "Clock" input to outputs of DUT
 	-- must be less than CLOCK_PERIOD

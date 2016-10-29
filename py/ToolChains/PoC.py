@@ -5,6 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
+#										Thomas B. Preusser
 #
 # Python Class:      PoC specific classes
 #
@@ -43,7 +44,7 @@ else:
 
 from os                   import environ
 from pathlib              import Path
-from subprocess           import check_output, CalledProcessError
+from subprocess           import check_output, check_call, CalledProcessError
 
 from Base.Configuration   import Configuration as BaseConfiguration
 
@@ -54,7 +55,7 @@ class Configuration(BaseConfiguration):
 	_template =    {
 		"ALL": {
 			"INSTALL.PoC": {
-				"Version":                "0.0.0",
+				"Version":                "1.0.0",
 				"InstallationDirectory":  None
 			},
 			"SOLUTION.Solutions": {}
@@ -63,39 +64,39 @@ class Configuration(BaseConfiguration):
 
 	def ConfigureForAll(self):
 		try:
-			latestTagHash = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True)
-			latestTagName = check_output(["git", "describe", "--tags", latestTagHash[:-1]], universal_newlines=True)
-			latestTagName = latestTagName[:-1]
-			self._host._LogNormal("  PoC version: {0} (found in git)".format(latestTagName))
+			latestTagHash = check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True).strip()
+			latestTagName = check_output(["git", "describe", "--tags", latestTagHash], universal_newlines=True).strip()
+			latestTagName = latestTagName
+			self._host.LogNormal("  PoC version: {0} (found in git)".format(latestTagName))
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = latestTagName
 		except CalledProcessError:
 			print("WARNING: Can't get version information from latest git tag.")
 			pocVersion = self._template['ALL']['INSTALL.PoC']['Version']
-			self._host._LogNormal("  PoC version: {0} (found in default configuration)".format(pocVersion))
+			self._host.LogNormal("  PoC version: {0} (found in default configuration)".format(pocVersion))
 			self._host.PoCConfig['INSTALL.PoC']['Version'] = pocVersion
 
 		pocInstallationDirectory = Path(environ.get('PoCRootDirectory'))
-		self._host._LogNormal("  Installation directory: {0!s} (found in environment variable)".format(pocInstallationDirectory))
+		self._host.LogNormal("  Installation directory: {0!s} (found in environment variable)".format(pocInstallationDirectory))
 		self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'] = pocInstallationDirectory.as_posix()
 
 	def __CheckForGit(self):
 		try:
-			check_output(["git", "--version"], universal_newlines=True)
+			check_call(["git", "--version"])
 			return True
 		except OSError:
 			return False
 
 	def __IsUnderGitControl(self):
 		try:
-			response = check_output(["git", "rev-parse", "--is-inside-work-tree"], universal_newlines=True)
-			return (response[:-1] == "true")
+			response = check_output(["git", "rev-parse", "--is-inside-work-tree"], universal_newlines=True).strip()
+			return (response == "true")
 		except OSError:
 			return False
 
 	def __GetCurrentBranchName(self):
 		try:
-			response = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], universal_newlines=True)
-			return response[:-1]
+			response = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], universal_newlines=True).strip()
+			return response
 		except OSError:
 			return False
 

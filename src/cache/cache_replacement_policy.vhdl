@@ -1,48 +1,60 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Patrick Lehmann
 -- 									Martin Zabel
 --
--- Module:					Wrap different cache replacement policies.
+-- Entity:					Wrap different cache replacement policies.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --
--- Policies														| supported
--- -----------------------------------#--------------------
---	RR			round robin								| not yet
---	RAND		random										| not yet
---	CLOCK		clock algorithm						| not yet
---	LRU			least recently used				| YES
---	LFU			least frequently used			| not yet
--- -----------------------------------#--------------------
+-- **Supported policies:**
 --
--- Command thruth table:
+-- +----------+-----------------------+-----------+
+-- | Abbr.    | Policies              | supported |
+-- +==========+=======================+===========+
+-- | RR       | round robin           | not yet   |
+-- +----------+-----------------------+-----------+
+-- | RAND     | random                | not yet   |
+-- +----------+-----------------------+-----------+
+-- | CLOCK    | clock algorithm       | not yet   |
+-- +----------+-----------------------+-----------+
+-- | LRU      | least recently used   | YES       |
+-- +----------+-----------------------+-----------+
+-- | LFU      | least frequently used | not yet   |
+-- +----------+-----------------------+-----------+
 --
---	TagAccess | ReadWrite | Invalidate	| Replace | Command
---	----------+-----------+-------------+---------+--------------------------------
---		0				|		-				|		-					|		0			| None
---		1				|		0				|		0					|		0			| TagHit and reading a cache line
---		1				|		1				|		0					|		0			| TagHit and writing a cache line
---		1				|		0				|		1					|		0			| TagHit and invalidate a	cache line (while reading)
---		1				|		1				|		1					|		0			| TagHit and invalidate a	cache line (while writing)
---		0				|		-				|		0					|		1			| Replace cache line
---	----------+-----------+-------------+------------------------------------------
+-- **Command thruth table:**
+--
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- | TagAccess | ReadWrite | Invalidate  | Replace | Command                                             |
+-- +===========+===========+=============+=========+=====================================================+
+-- |  0        |           |             |    0    | None                                                |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    0      |    0        |    0    | TagHit and reading a cache line                     |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    1      |    0        |    0    | TagHit and writing a cache line                     |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    0      |    1        |    0    | TagHit and invalidate a  cache line (while reading) |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  1        |    1      |    1        |    0    | TagHit and invalidate a  cache line (while writing) |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
+-- |  0        |           |    0        |    1    | Replace cache line                                  |
+-- +-----------+-----------+-------------+---------+-----------------------------------------------------+
 --
 -- In a set-associative cache, each cache-set has its own instance of this component.
 --
--- The input `HitWay` specifies the accessed way in a fully-associative or
+-- The input ``HitWay`` specifies the accessed way in a fully-associative or
 -- set-associative cache.
 --
--- The output `ReplaceWay` identifies the way which will be replaced as next by
+-- The output ``ReplaceWay`` identifies the way which will be replaced as next by
 -- a replace command. In a set-associative cache, this is the way in a specific
 -- cache set (see above).
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -57,7 +69,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -89,7 +101,7 @@ entity cache_replacement_policy is
 		Invalidate : in std_logic;
 		HitWay		 : in std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0)
 	);
-end;
+end entity;
 
 
 architecture rtl of cache_replacement_policy is
@@ -108,7 +120,7 @@ begin
 	-- ===========================================================================
 	-- policy: RR - round robin
 	-- ===========================================================================
-	genRR : if (str_equal(REPLACEMENT_POLICY, "RR") = true) generate
+	genRR : if str_equal(REPLACEMENT_POLICY, "RR") generate
 		constant VALID_BIT : natural := 0;
 
 		subtype T_OPTION_LINE is std_logic_vector(0 downto 0);
@@ -125,46 +137,46 @@ begin
 --		ValidHit		<= OptionMemory(to_integer(unsigned(HitWay)))(VALID_BIT);
 --		IsValid			<= ValidHit;
 --
---		PROCESS(Clock)
---		BEGIN
---			IF rising_edge(Clock) THEN
---				IF (Reset = '1') THEN
---					FOR I IN 0 TO CACHE_WAYS - 1 LOOP
+--		process(Clock)
+--		begin
+--			if rising_edge(Clock) then
+--				if (Reset = '1') then
+--					for i in 0 to CACHE_WAYS - 1 loop
 --						OptionMemory(I)(VALID_BIT)	<= '0';
---					END LOOP;
---				ELSE
---					IF (Insert = '1') THEN
+--					end loop;
+--				else
+--					if (Insert = '1') then
 --						OptionMemory(to_integer(Pointer_us))(VALID_BIT) <= '1';
---					END IF;
+--					end if;
 --
---					IF (Invalidate = '1') THEN
+--					if (Invalidate = '1') then
 --						OptionMemory(to_integer(unsigned(HitWay)))(VALID_BIT)			<= '0';
---					END IF;
---				END IF;
---			END IF;
---		END PROCESS;
+--					end if;
+--				end if;
+--			end if;
+--		end process;
 --
 --		Replace				<= Insert;
 --		ReplaceWay		<= std_logic_vector(Pointer_us);
 --
---		PROCESS(Clock)
---		BEGIN
---			IF rising_edge(Clock) THEN
---				IF (Reset = '1') THEN
---					Pointer_us		<= (OTHERS => '0');
---				ELSE
---					IF (Insert = '1') THEN
+--		process(Clock)
+--		begin
+--			if rising_edge(Clock) then
+--				if (Reset = '1') then
+--					Pointer_us		<= (others => '0');
+--				else
+--					if (Insert = '1') then
 --						Pointer_us	<= Pointer_us + 1;
---					END IF;
---				END IF;
---			END IF;
---		END PROCESS;
+--					end if;
+--				end if;
+--			end if;
+--		end process;
 	end generate;
 
 	-- ===========================================================================
 	-- policy: LRU - least recently used
 	-- ===========================================================================
-	genLRU : if (str_equal(REPLACEMENT_POLICY, "LRU") = true) generate
+	genLRU : if str_equal(REPLACEMENT_POLICY, "LRU") generate
 		signal LRU_Insert			: std_logic;
 		signal LRU_Invalidate : std_logic;
 		signal KeyIn					: std_logic_vector(log2ceilnz(CACHE_WAYS) - 1 downto 0);

@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Module:					Computes the overall average value of all data words
+-- Entity:					Computes the overall average value of all data words
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -41,40 +40,40 @@ use     PoC.arith.all;
 
 entity stat_Average is
 	generic (
-		DATA_BITS			: POSITIVE		:= 8;
-		COUNTER_BITS	: POSITIVE		:= 16
+		DATA_BITS			: positive		:= 8;
+		COUNTER_BITS	: positive		:= 16
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		Reset					: in	STD_LOGIC;
+		Clock					: in	std_logic;
+		Reset					: in	std_logic;
 
-		Enable				: in	STD_LOGIC;
-		DataIn				: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
+		Enable				: in	std_logic;
+		DataIn				: in	std_logic_vector(DATA_BITS - 1 downto 0);
 
-		Count					: out	STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-		Sum						: out	STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-		Average				: out	STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-		Valid					: out	STD_LOGIC
+		Count					: out	std_logic_vector(COUNTER_BITS - 1 downto 0);
+		Sum						: out	std_logic_vector(COUNTER_BITS - 1 downto 0);
+		Average				: out	std_logic_vector(COUNTER_BITS - 1 downto 0);
+		Valid					: out	std_logic
 	);
 end entity;
 
 
 architecture rtl of stat_Average is
-	signal DataIn_us	: UNSIGNED(DataIn'range);
+	signal DataIn_us	: unsigned(DataIn'range);
 
-	signal Counter_i	: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-	signal Counter_us	: UNSIGNED(COUNTER_BITS - 1 downto 0)						:= (others => '0');
+	signal Counter_i	: std_logic_vector(COUNTER_BITS - 1 downto 0);
+	signal Counter_us	: unsigned(COUNTER_BITS - 1 downto 0)						:= (others => '0');
 
-	signal Sum_i			: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-	signal Sum_us			: UNSIGNED(COUNTER_BITS - 1 downto 0)						:= (others => '0');
+	signal Sum_i			: std_logic_vector(COUNTER_BITS - 1 downto 0);
+	signal Sum_us			: unsigned(COUNTER_BITS - 1 downto 0)						:= (others => '0');
 
-	signal Quotient		: STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-	signal Valid_i		: STD_LOGIC;
+	signal Quotient		: std_logic_vector(COUNTER_BITS - 1 downto 0);
+	signal Valid_i		: std_logic;
 
-	type T_SUM_VECTOR		is array(NATURAL range <>) of STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
-	type T_COUNT_VECTOR	is array(NATURAL range <>) of STD_LOGIC_VECTOR(COUNTER_BITS - 1 downto 0);
+	type T_SUM_VECTOR		is array(natural range <>) of std_logic_vector(COUNTER_BITS - 1 downto 0);
+	type T_COUNT_VECTOR	is array(natural range <>) of std_logic_vector(COUNTER_BITS - 1 downto 0);
 
-	constant DELAY		: POSITIVE		:= COUNTER_BITS - 1;
+	constant DELAY		: positive		:= COUNTER_BITS - 1;
 
 	signal Count_d		: T_COUNT_VECTOR(DELAY downto 0)		:= (others => (others => '0'));
 	signal Sum_d			: T_SUM_VECTOR(DELAY downto 0)			:= (others => (others => '0'));

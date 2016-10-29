@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Patrick Lehmann
 --
 -- Package:					Math extension package.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --		This package provides additional math functions.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.std_logic_1164.all;
@@ -39,41 +38,41 @@ use			PoC.utils.all;
 
 package math is
 	-- figurate numbers
-	function squareNumber(N : POSITIVE) return POSITIVE;
-	function cubicNumber(N : POSITIVE) return POSITIVE;
-	function triangularNumber(N : NATURAL) return NATURAL;
+	function squareNumber(N : natural) return natural;
+	function cubicNumber(N : natural) return natural;
+	function triangularNumber(N : natural) return natural;
 
 	-- coefficients
 	-- binomial coefficient (N choose K)
-	function binomialCoefficient(N : POSITIVE; K : POSITIVE) return POSITIVE;
+	function binomialCoefficient(N : positive; K : positive) return positive;
 
 	-- greatest common divisor (gcd)
-	function greatestCommonDivisor(N1 : POSITIVE; N2 : POSITIVE) return POSITIVE;
+	function greatestCommonDivisor(N1 : positive; N2 : positive) return positive;
 	-- least common multiple (lcm)
-	function leastCommonMultiple(N1 : POSITIVE; N2 : POSITIVE) return POSITIVE;
+	function leastCommonMultiple(N1 : positive; N2 : positive) return positive;
 end package;
 
 package body math is
 	-- figurate numbers
-	function squareNumber(N : POSITIVE) return POSITIVE is
+	function squareNumber(N : natural) return natural is
 	begin
 		return N*N;
 	end function;
 
-	function cubicNumber(N : POSITIVE) return POSITIVE is
+	function cubicNumber(N : natural) return natural is
 	begin
 		return N*N*N;
 	end function;
 
-	function triangularNumber(N : NATURAL) return NATURAL is
-		variable T	: NATURAL;
+	function triangularNumber(N : natural) return natural is
+		variable T	: natural;
 	begin
 		return (N * (N + 1) / 2);
 	end function;
 
 	-- coefficients
-	function binomialCoefficient(N : POSITIVE; K : POSITIVE) return POSITIVE is
-		variable Result		: POSITIVE;
+	function binomialCoefficient(N : positive; K : positive) return positive is
+		variable Result		: positive;
 	begin
 		Result		:= 1;
 		for i in 1 to K loop
@@ -83,10 +82,10 @@ package body math is
 	end function;
 
 	-- greatest common divisor (gcd)
-	function greatestCommonDivisor(N1 : POSITIVE; N2 : POSITIVE) return POSITIVE is
-		variable M1				: POSITIVE;
-		variable M2				: NATURAL;
-		variable Remainer	: NATURAL;
+	function greatestCommonDivisor(N1 : positive; N2 : positive) return positive is
+		variable M1				: positive;
+		variable M2				: natural;
+		variable Remainer	: natural;
 	begin
 		M1	:= imax(N1, N2);
 		M2	:= imin(N1, N2);
@@ -99,7 +98,7 @@ package body math is
 	end function;
 
 	-- least common multiple (lcm)
-	function leastCommonMultiple(N1 : POSITIVE; N2 : POSITIVE) return POSITIVE is
+	function leastCommonMultiple(N1 : positive; N2 : positive) return positive is
 	begin
 		return ((N1 * N2) / greatestCommonDivisor(N1, N2));
 	end function;

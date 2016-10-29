@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -42,55 +41,55 @@ use			PoC.net.all;
 
 entity icmpv4_RX is
 	generic (
-		DEBUG													: BOOLEAN											:= FALSE
+		DEBUG													: boolean											:= FALSE
 	);
 	port (
-		Clock													: in	STD_LOGIC;																	--
-		Reset													: in	STD_LOGIC;																	--
+		Clock													: in	std_logic;																	--
+		Reset													: in	std_logic;																	--
 		-- CSE interface
 		Command												: in	T_NET_ICMPV4_RX_COMMAND;
 		Status												: out	T_NET_ICMPV4_RX_STATUS;
 		Error													: out	T_NET_ICMPV4_RX_ERROR;
 		-- IN port
-		In_Valid											: in	STD_LOGIC;
+		In_Valid											: in	std_logic;
 		In_Data												: in	T_SLV_8;
-		In_SOF												: in	STD_LOGIC;
-		In_EOF												: in	STD_LOGIC;
-		In_Ack												: out	STD_LOGIC;
-		In_Meta_rst										: out	STD_LOGIC;
-		In_Meta_SrcMACAddress_nxt			: out	STD_LOGIC;
+		In_SOF												: in	std_logic;
+		In_EOF												: in	std_logic;
+		In_Ack												: out	std_logic;
+		In_Meta_rst										: out	std_logic;
+		In_Meta_SrcMACAddress_nxt			: out	std_logic;
 		In_Meta_SrcMACAddress_Data		: in	T_SLV_8;
-		In_Meta_DestMACAddress_nxt		: out	STD_LOGIC;
+		In_Meta_DestMACAddress_nxt		: out	std_logic;
 		In_Meta_DestMACAddress_Data		: in	T_SLV_8;
-		In_Meta_SrcIPv4Address_nxt		: out	STD_LOGIC;
+		In_Meta_SrcIPv4Address_nxt		: out	std_logic;
 		In_Meta_SrcIPv4Address_Data		: in	T_SLV_8;
-		In_Meta_DestIPv4Address_nxt		: out	STD_LOGIC;
+		In_Meta_DestIPv4Address_nxt		: out	std_logic;
 		In_Meta_DestIPv4Address_Data	: in	T_SLV_8;
 		In_Meta_Length								: in	T_SLV_16;
 		-- OUT Port
-		Out_Meta_rst									: in	STD_LOGIC;
-		Out_Meta_SrcMACAddress_nxt		: in	STD_LOGIC;
+		Out_Meta_rst									: in	std_logic;
+		Out_Meta_SrcMACAddress_nxt		: in	std_logic;
 		Out_Meta_SrcMACAddress_Data		: out	T_SLV_8;
-		Out_Meta_DestMACAddress_nxt		: in	STD_LOGIC;
+		Out_Meta_DestMACAddress_nxt		: in	std_logic;
 		Out_Meta_DestMACAddress_Data	: out	T_SLV_8;
-		Out_Meta_SrcIPv4Address_nxt		: in	STD_LOGIC;
+		Out_Meta_SrcIPv4Address_nxt		: in	std_logic;
 		Out_Meta_SrcIPv4Address_Data	: out	T_SLV_8;
-		Out_Meta_DestIPv4Address_nxt	: in	STD_LOGIC;
+		Out_Meta_DestIPv4Address_nxt	: in	std_logic;
 		Out_Meta_DestIPv4Address_Data	: out	T_SLV_8;
 		Out_Meta_Length								: out	T_SLV_16;
 		Out_Meta_Type									: out	T_SLV_8;
 		Out_Meta_Code									: out	T_SLV_8;
 		Out_Meta_Identification				: out	T_SLV_16;
 		Out_Meta_SequenceNumber				: out	T_SLV_16;
-		Out_Meta_Payload_nxt					: in	STD_LOGIC;
-		Out_Meta_Payload_last					: out	STD_LOGIC;
+		Out_Meta_Payload_nxt					: in	std_logic;
+		Out_Meta_Payload_last					: out	std_logic;
 		Out_Meta_Payload_Data					: out	T_SLV_8
 	);
 end entity;
 
 
 architecture rtl of icmpv4_RX is
-	attribute FSM_ENCODING						: STRING;
+	attribute FSM_ENCODING						: string;
 
 	type T_STATE		is (
 		ST_IDLE,
@@ -111,17 +110,17 @@ architecture rtl of icmpv4_RX is
 	signal NextState											: T_STATE;
 	attribute FSM_ENCODING of State				: signal is ite(DEBUG, "gray", ite((VENDOR = VENDOR_XILINX), "auto", "default"));
 
-	signal Register_rst										: STD_LOGIC;
+	signal Register_rst										: std_logic;
 
 	-- UDP header fields
-	signal Type_en												: STD_LOGIC;
-	signal Code_en												: STD_LOGIC;
-	signal Checksum_en0										: STD_LOGIC;
-	signal Checksum_en1										: STD_LOGIC;
-	signal Identification_en0							: STD_LOGIC;
-	signal Identification_en1							: STD_LOGIC;
-	signal SequenceNumber_en0							: STD_LOGIC;
-	signal SequenceNumber_en1							: STD_LOGIC;
+	signal Type_en												: std_logic;
+	signal Code_en												: std_logic;
+	signal Checksum_en0										: std_logic;
+	signal Checksum_en1										: std_logic;
+	signal Identification_en0							: std_logic;
+	signal Identification_en1							: std_logic;
+	signal SequenceNumber_en0							: std_logic;
+	signal SequenceNumber_en1							: std_logic;
 
 	signal Type_d													: T_SLV_8											:= (others => '0');
 	signal Code_d													: T_SLV_8											:= (others => '0');
@@ -129,14 +128,14 @@ architecture rtl of icmpv4_RX is
 	signal Identification_d								: T_SLV_16										:= (others => '0');
 	signal SequenceNumber_d								: T_SLV_16										:= (others => '0');
 
-	signal MetaFIFO_put										: STD_LOGIC;
-	signal MetaFIFO_DataIn								: STD_LOGIC_VECTOR(8 downto 0);
-	signal MetaFIFO_Full									: STD_LOGIC;
-	signal MetaFIFO_Commit								: STD_LOGIC;
-	signal MetaFIFO_Rollback							: STD_LOGIC;
+	signal MetaFIFO_put										: std_logic;
+	signal MetaFIFO_DataIn								: std_logic_vector(8 downto 0);
+	signal MetaFIFO_Full									: std_logic;
+	signal MetaFIFO_Commit								: std_logic;
+	signal MetaFIFO_Rollback							: std_logic;
 --	signal MetaFIFO_Valid									: STD_LOGIC;
-	signal MetaFIFO_DataOut								: STD_LOGIC_VECTOR(8 downto 0);
-	signal MetaFIFO_got										: STD_LOGIC;
+	signal MetaFIFO_DataOut								: std_logic_vector(8 downto 0);
+	signal MetaFIFO_got										: std_logic;
 
 begin
 
@@ -359,7 +358,7 @@ begin
 	process(Clock)
 	begin
 		if rising_edge(Clock) then
-			if ((Reset OR Register_rst) = '1') then
+			if ((Reset or Register_rst) = '1') then
 				Type_d															<= (others => '0');
 				Code_d															<= (others => '0');
 				Checksum_d													<= (others => '0');

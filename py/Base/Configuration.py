@@ -77,13 +77,17 @@ class SkipConfigurationException(ExceptionBase):
 # 		return self._subclasses
 
 class Configuration:    #(ISubClassRegistration):
-	_vendor =      "Unknown"
-	_toolName =    "Unknown"
-	_section =    "ERROR"
-	_template =    {}
+	_vendor =       "Unknown"
+	_toolName =     "Unknown"
+	_section =      "ERROR"
+	_template =     {}
 
 	def __init__(self, host):
 		self._host =  host
+
+	@property
+	def Host(self):
+		return self._host
 
 	def IsSupportedPlatform(self):
 		if (self._host.Platform not in self._template):
@@ -198,8 +202,8 @@ class Configuration:    #(ISubClassRegistration):
 
 	def _ConfigureVersion(self):
 		"""
-			Asks for version and updates section. Returns version as string.
-			If no version was configured before, then _GetDefaultVersion is called.
+		If no version was configured before, then _GetDefaultVersion is called.
+		Asks for version and updates section. Returns version as string.
 		"""
 		if self._host.PoCConfig.has_option(self._section, 'Version'):
 			defaultVersion = self._host.PoCConfig[self._section]['Version']
@@ -229,13 +233,13 @@ class Configuration:    #(ISubClassRegistration):
 		unresolved = self._template[self._host.Platform][self._section]['BinaryDirectory']
 		self._host.PoCConfig[self._section]['BinaryDirectory'] = unresolved # create entry
 		defaultPath = Path(self._host.PoCConfig[self._section]['BinaryDirectory'])  # resolve entry
-		
+
 		binPath = defaultPath # may be more complex in the future
 
 		if (not binPath.exists()):
 			raise ConfigurationException("{0!s} binary directory '{1!s}' does not exist.".format(self, binPath)) \
 				from NotADirectoryError(str(binPath))
-		
+
 		return binPath
 
 	def RunPostConfigurationTasks(self):

@@ -1,0 +1,13 @@
+$ version 1.1
+
+# Signals in packages :
+
+# Signals in entities :
+/ocram_sdp_tb/rce
+/ocram_sdp_tb/wce
+/ocram_sdp_tb/we
+/ocram_sdp_tb/ra
+/ocram_sdp_tb/wa
+/ocram_sdp_tb/d
+/ocram_sdp_tb/q
+/ocram_sdp_tb/clk

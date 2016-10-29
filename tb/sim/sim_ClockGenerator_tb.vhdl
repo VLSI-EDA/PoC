@@ -59,67 +59,67 @@ architecture tb of sim_ClockGenerator_tb is
 
 	constant simTestID					: T_SIM_TEST_ID		:= simCreateTest("Test clock generation");
 
-	signal Clock								: STD_LOGIC;
-	signal ClockIsActive				: STD_LOGIC		:= '1';
+	signal Clock								: std_logic;
+	signal ClockIsActive				: std_logic		:= '1';
 
-	signal Clock_01							: STD_LOGIC;
-	signal Clock_02							: STD_LOGIC;
-	signal Clock_03							: STD_LOGIC;
-	signal Clock_04							: STD_LOGIC;
-	signal Clock_05							: STD_LOGIC;
-	signal Clock_06							: STD_LOGIC;
+	signal Clock_01							: std_logic;
+	signal Clock_02							: std_logic;
+	signal Clock_03							: std_logic;
+	signal Clock_04							: std_logic;
+	signal Clock_05							: std_logic;
+	signal Clock_06							: std_logic;
 
-	signal Clock_10							: STD_LOGIC;
-	signal Clock_11							: STD_LOGIC;
-	signal Clock_12							: STD_LOGIC;
-	signal Clock_13							: STD_LOGIC;
-	signal Clock_14							: STD_LOGIC;
-	signal Clock_15							: STD_LOGIC;
-	signal Clock_16							: STD_LOGIC;
-	signal Clock_17							: STD_LOGIC;
-	signal Clock_18							: STD_LOGIC;
-	signal Clock_19							: STD_LOGIC;
+	signal Clock_10							: std_logic;
+	signal Clock_11							: std_logic;
+	signal Clock_12							: std_logic;
+	signal Clock_13							: std_logic;
+	signal Clock_14							: std_logic;
+	signal Clock_15							: std_logic;
+	signal Clock_16							: std_logic;
+	signal Clock_17							: std_logic;
+	signal Clock_18							: std_logic;
+	signal Clock_19							: std_logic;
 
-	signal Clock_21							: STD_LOGIC;
-	signal Clock_22							: STD_LOGIC;
-	signal Clock_23							: STD_LOGIC;
-	signal Clock_24							: STD_LOGIC;
-	signal Clock_25							: STD_LOGIC;
+	signal Clock_21							: std_logic;
+	signal Clock_22							: std_logic;
+	signal Clock_23							: std_logic;
+	signal Clock_24							: std_logic;
+	signal Clock_25							: std_logic;
 
-	signal Clock_31							: STD_LOGIC;
-	signal Clock_32							: STD_LOGIC;
-	signal Clock_33							: STD_LOGIC;
-	signal Clock_34							: STD_LOGIC;
-	signal Clock_35							: STD_LOGIC;
+	signal Clock_31							: std_logic;
+	signal Clock_32							: std_logic;
+	signal Clock_33							: std_logic;
+	signal Clock_34							: std_logic;
+	signal Clock_35							: std_logic;
 
-	signal Clock_40							: STD_LOGIC;
-	signal Clock_41							: STD_LOGIC;
-	signal Clock_42							: STD_LOGIC;
-	signal Clock_43							: STD_LOGIC;
-	signal Counter_Clock_40_us	: UNSIGNED(15 downto 0)		:= (others => '0');
-	signal Counter_Clock_41_us	: UNSIGNED(15 downto 0)		:= (others => '0');
-	signal Counter_Clock_42_us	: UNSIGNED(15 downto 0)		:= (others => '0');
-	signal Counter_Clock_43_us	: UNSIGNED(15 downto 0)		:= (others => '0');
-	signal Counter_41_cmp				: UNSIGNED(1 downto 0);
-	signal Counter_42_cmp				: UNSIGNED(1 downto 0);
-	signal Counter_43_cmp				: UNSIGNED(1 downto 0);
-	signal Drift_Clock_41				: SIGNED(15 downto 0);
-	signal Drift_Clock_42				: SIGNED(15 downto 0);
-	signal Drift_Clock_43				: SIGNED(15 downto 0);
+	signal Clock_40							: std_logic;
+	signal Clock_41							: std_logic;
+	signal Clock_42							: std_logic;
+	signal Clock_43							: std_logic;
+	signal Counter_Clock_40_us	: unsigned(15 downto 0)		:= (others => '0');
+	signal Counter_Clock_41_us	: unsigned(15 downto 0)		:= (others => '0');
+	signal Counter_Clock_42_us	: unsigned(15 downto 0)		:= (others => '0');
+	signal Counter_Clock_43_us	: unsigned(15 downto 0)		:= (others => '0');
+	signal Counter_41_cmp				: unsigned(1 downto 0);
+	signal Counter_42_cmp				: unsigned(1 downto 0);
+	signal Counter_43_cmp				: unsigned(1 downto 0);
+	signal Drift_Clock_41				: signed(15 downto 0);
+	signal Drift_Clock_42				: signed(15 downto 0);
+	signal Drift_Clock_43				: signed(15 downto 0);
 
-	signal Clock_50							: STD_LOGIC;
-	signal Clock_51							: STD_LOGIC;
-	signal Counter_Clock_50_us	: UNSIGNED(15 downto 0)		:= (others => '0');
-	signal Counter_Clock_51_us	: UNSIGNED(15 downto 0)		:= (others => '0');
-	signal Mean_Clock_51				: SIGNED(15 downto 0);
-	signal Drift_Clock_51				: SIGNED(15 downto 0);
-	signal Drift_Clock_52				: SIGNED(15 downto 0);
+	signal Clock_50							: std_logic;
+	signal Clock_51							: std_logic;
+	signal Counter_Clock_50_us	: unsigned(15 downto 0)		:= (others => '0');
+	signal Counter_Clock_51_us	: unsigned(15 downto 0)		:= (others => '0');
+	signal Mean_Clock_51				: signed(15 downto 0);
+	signal Drift_Clock_51				: signed(15 downto 0);
+	signal Drift_Clock_52				: signed(15 downto 0);
 	signal Debug_Jitter					: REAL;
-	signal Debug2								: SIGNED(15 downto 0);
+	signal Debug2								: signed(15 downto 0);
 
 
-	signal Reset_1							: STD_LOGIC;
-	signal Reset_2							: STD_LOGIC;
+	signal Reset_1							: std_logic;
+	signal Reset_2							: std_logic;
 
 begin
 	-- initialize OSVVM transcript file
@@ -183,7 +183,7 @@ begin
 		Drift_Clock_41		<= (others => '0');
 		wait until rising_edge(Clock_40);
 		wait until rising_edge(Clock_41);
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_41);
 			Drift_Clock_41		<= to_signed((Clock_40'last_event - Clock_41'last_event) / 10 ps, Drift_Clock_41'length);
 		end loop;
@@ -200,7 +200,7 @@ begin
 		Drift_Clock_42		<= (others => '0');
 		wait until rising_edge(Clock_40);
 		wait until rising_edge(Clock_42);
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_42);
 			Drift_Clock_42		<= to_signed((Clock_40'last_event - Clock_42'last_event) / 10 ps, Drift_Clock_42'length);
 		end loop;
@@ -217,7 +217,7 @@ begin
 		Drift_Clock_43		<= (others => '0');
 		wait until rising_edge(Clock_40);
 		wait until rising_edge(Clock_43);
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_43);
 			Drift_Clock_43		<= to_signed((Clock_40'last_event - Clock_43'last_event) / 10 ps, Drift_Clock_43'length);
 		end loop;
@@ -238,13 +238,13 @@ begin
 	procHistogram : process
 		-- constant simProcessID	: T_SIM_PROCESS_ID := simRegisterProcess("Histogram");
 
-		variable Sum					: INTEGER;
-		variable Count				: NATURAL;
-		variable Rand					: INTEGER;
-		variable RandPointer	: NATURAL;
+		variable Sum					: integer;
+		variable Count				: natural;
+		variable Rand					: integer;
+		variable RandPointer	: natural;
 		variable RandBuffer		: T_INTVEC(0 to 15);
 
-		constant BIN_SIZE			: POSITIVE		:= 1000;
+		constant BIN_SIZE			: positive		:= 1000;
 		constant BIN_SIZE_2		: REAL				:= real(BIN_SIZE) / 2.0;
 		variable CovBin1			: CovPType;
 	begin
@@ -258,7 +258,7 @@ begin
 		RandBuffer			:= (others => (BIN_SIZE / 2));
 
 		wait until rising_edge(Clock_51);
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_51);
 			-- subtract old random value from mean aggregator
 			Sum												:= Sum - RandBuffer(RandPointer);
@@ -291,7 +291,7 @@ begin
 		wait until rising_edge(Clock_50);
 		wait until rising_edge(Clock_51);
 
-		while (not simIsStopped) loop
+		while not simIsStopped loop
 			wait until rising_edge(Clock_50);
 			Drift_Clock_51		<= to_signed((Clock_50'last_event - Clock_51'last_event) / 100 fs, Drift_Clock_51'length);
 			-- Drift_Clock_52		<= to_signed((Clock_51'last_event - Clock_50'last_event) / 100 fs, Drift_Clock_52'length);

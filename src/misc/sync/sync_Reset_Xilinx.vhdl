@@ -1,14 +1,13 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	sync_Reset_Xilinx
+-- Entity:				 	sync_Reset_Xilinx
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 --    This is the Xilinx specific implementation of the entity
 --    'PoC.misc.sync.sync_Reset'. See the description there on how to use this.
 --
@@ -25,7 +24,7 @@
 --				TODO
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -40,7 +39,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.STD_LOGIC_1164.all;
@@ -57,21 +56,21 @@ entity sync_Reset_Xilinx is
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2	-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
-		Clock					: in	STD_LOGIC;						-- Clock to be synchronized to
-		Input					: in	STD_LOGIC;						-- high active asynchronous reset
-		Output				: out	STD_LOGIC							-- "Synchronised" reset signal
+		Clock					: in	std_logic;						-- Clock to be synchronized to
+		Input					: in	std_logic;						-- high active asynchronous reset
+		Output				: out	std_logic							-- "Synchronised" reset signal
 	);
 end entity;
 
 
 architecture rtl of sync_Reset_Xilinx is
-	attribute ASYNC_REG											: STRING;
-	attribute SHREG_EXTRACT									: STRING;
-	attribute RLOC													: STRING;
+	attribute ASYNC_REG											: string;
+	attribute SHREG_EXTRACT									: string;
+	attribute RLOC													: string;
 
-	signal Reset_async											: STD_LOGIC;
-	signal Reset_meta												: STD_LOGIC;
-	signal Reset_sync												: STD_LOGIC;
+	signal Reset_async											: std_logic;
+	signal Reset_meta												: std_logic;
+	signal Reset_sync												: std_logic;
 
 	-- Mark register "Reset_meta" and "Output" as asynchronous
 	attribute ASYNC_REG of Reset_meta				: signal is "TRUE";

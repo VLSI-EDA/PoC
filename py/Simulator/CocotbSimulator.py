@@ -1,30 +1,30 @@
 # EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
-# 
+#
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
-# 
+#
 # Python Class:      TODO
-# 
+#
 # Description:
 # ------------------------------------
 #		TODO:
-#		- 
-#		- 
+#		-
+#		-
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair for VLSI-Design, Diagnostics and Architecture
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,15 +59,12 @@ class Simulator(BaseSimulator):
 	_TOOL =                  Tool.Cocotb_QuestaSim
 	_COCOTB_SIMBUILD_DIRECTORY = "sim_build"
 
-	def __init__(self, host, guiMode):
-		super().__init__(host)
+	def __init__(self, host, dryRun, guiMode):
+		super().__init__(host, dryRun)
 
-		self._guiMode =        guiMode
+		self._guiMode =       guiMode
 
-		self._entity =        None
-		self._testbenchFQN =  None
-
-		configSection =                  host.PoCConfig['CONFIG.DirectoryNames']
+		configSection =                 host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working =      host.Directories.Temp / configSection['CocotbFiles']
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / configSection['QuestaSimFiles']
 
@@ -76,7 +73,7 @@ class Simulator(BaseSimulator):
 
 	def _PrepareSimulator(self):
 		# create the Cocotb executable factory
-		self._LogVerbose("Preparing Cocotb simulator.")
+		self.LogVerbose("Preparing Cocotb simulator.")
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		self._testSuite.StartTimer()
@@ -90,7 +87,7 @@ class Simulator(BaseSimulator):
 					testbench = entity.CocoTestbench
 					self.TryRun(testbench, *args, **kwargs)
 		except KeyboardInterrupt:
-			self._LogError("Received a keyboard interrupt.")
+			self.LogError("Received a keyboard interrupt.")
 		finally:
 			self._testSuite.StopTimer()
 
@@ -98,12 +95,14 @@ class Simulator(BaseSimulator):
 
 		return self._testSuite.IsAllPassed
 
-	def _RunSimulation(self, testbench):
+	def _RunSimulation(self, testbench): # mccabe:disable=MC0001
 		# select modelsim.ini from precompiled
 		precompiledModelsimIniPath = self.Directories.PreCompiled
 		device_vendor = self._pocProject.Board.Device.Vendor
 		if device_vendor is Vendors.Altera:
 			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
+		elif device_vendor is Vendors.Lattice:
+			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
 		elif device_vendor is Vendors.Xilinx:
 			precompiledModelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
@@ -115,13 +114,21 @@ class Simulator(BaseSimulator):
 		simBuildPath = self.Directories.Working / self._COCOTB_SIMBUILD_DIRECTORY
 		# create temporary directory for Cocotb if not existent
 		if (not (simBuildPath).exists()):
-			self._LogVerbose("Creating build directory for simulator files.")
-			self._LogDebug("Build directory: {0!s}".format(simBuildPath))
-			simBuildPath.mkdir(parents=True)
+			self.LogVerbose("Creating build directory for simulator files.")
+			self.LogDebug("Build directory: {0!s}".format(simBuildPath))
+			try:
+				simBuildPath.mkdir(parents=True)
+			except OSError as ex:
+				raise SimulatorException("Error while creating '{0!s}'.".format(simBuildPath)) from ex
 
 		# write local modelsim.ini
 		modelsimIniPath = simBuildPath / "modelsim.ini"
-		if modelsimIniPath.exists(): modelsimIniPath.unlink()
+		if modelsimIniPath.exists():
+			try:
+				modelsimIniPath.unlink()
+			except OSError as ex:
+				raise SimulatorException("Error while deleting '{0!s}'.".format(modelsimIniPath)) from ex
+
 		with modelsimIniPath.open('w') as fileHandle:
 			fileContent = dedent("""\
 				[Library]
@@ -130,7 +137,7 @@ class Simulator(BaseSimulator):
 			fileHandle.write(fileContent)
 
 		#
-		self._LogNormal("Running simulation...")
+		self.LogNormal("Running simulation...")
 		cocotbTemplateFilePath = self.Host.Directories.Root / \
 															self.Host.PoCConfig[testbench.ConfigSectionName]['CocotbMakefile'] # depends on testbench
 		topLevel =      testbench.TopLevel
@@ -145,21 +152,21 @@ class Simulator(BaseSimulator):
 			vhdlSources += str(file.Path) + " "
 
 		# copy Cocotb (Python) files to temp directory
-		self._LogVerbose("Copying Cocotb (Python) files into temporary directory.")
+		self.LogVerbose("Copying Cocotb (Python) files into temporary directory.")
 		cocotbTempDir = str(self.Directories.Working)
 		for file in self._pocProject.Files(fileType=FileTypes.CocotbSourceFile):
 			if (not file.Path.exists()):
 				raise SimulatorException("Cannot copy '{0!s}' to Cocotb temp directory.".format(file.Path)) \
 					from FileNotFoundError(str(file.Path))
-			self._LogDebug("copy {0!s} {1}".format(file.Path, cocotbTempDir))
+			self.LogDebug("copy {0!s} {1}".format(file.Path, cocotbTempDir))
 			try:
 				shutil.copy(str(file.Path), cocotbTempDir)
 			except OSError as ex:
 				raise SimulatorException("Error while copying '{0!s}'.".format(file.Path)) from ex
 
 		# read/write Makefile template
-		self._LogVerbose("Generating Makefile...")
-		self._LogDebug("Reading Cocotb Makefile template file from '{0!s}'".format(cocotbTemplateFilePath))
+		self.LogVerbose("Generating Makefile...")
+		self.LogDebug("Reading Cocotb Makefile template file from '{0!s}'".format(cocotbTemplateFilePath))
 		with cocotbTemplateFilePath.open('r') as fileHandle:
 			cocotbMakefileContent = fileHandle.read()
 
@@ -168,11 +175,11 @@ class Simulator(BaseSimulator):
 																													TopLevel=topLevel, CocotbModule=cocotbModule)
 
 		cocotbMakefilePath = self.Directories.Working / "Makefile"
-		self._LogDebug("Writing Cocotb Makefile to '{0!s}'".format(cocotbMakefilePath))
+		self.LogDebug("Writing Cocotb Makefile to '{0!s}'".format(cocotbMakefilePath))
 		with cocotbMakefilePath.open('w') as fileHandle:
 			fileHandle.write(cocotbMakefileContent)
 
 		# execute make
-		make = Make(self.Host.Platform, logger=self.Host.Logger)
+		make = Make(self.Host.Platform, self.DryRun, logger=self.Logger)
 		if self._guiMode: make.Parameters[Make.SwitchGui] = 1
 		testbench.Result = make.RunCocotb()

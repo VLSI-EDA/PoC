@@ -1,26 +1,30 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
+-- =============================================================================
+-- Authors:					Thomas B. Preusser
 --
--- ===========================================================================
+-- Entity:					TODO
+--
 -- Description:
---   Computes from an input word, a word of the same size that has, at most,
---   one bit set. The output contains a set bit at the position of the
---   rightmost set bit of the input if and only if such a set bit exists in the
---   input.
---   A typical use case for this computation would be an arbitration over
---   requests with a fixed and strictly ordered priority. The terminology of
---   the interface assumes this use case and provides some useful extras:
+-- -------------------------------------
+-- Computes from an input word, a word of the same size that has, at most,
+-- one bit set. The output contains a set bit at the position of the rightmost
+-- set bit of the input if and only if such a set bit exists in the input.
 --
---    - Set tin <= '0' (no input token) to disallow grants altogether.
---    - Read tout (unused token) to see whether or any grant was issued.
---    - Read bin to obtain the binary index of the rightmost detected one bit.
---      The index starts at zero (0) in the rightmost bit position.
+-- A typical use case for this computation would be an arbitration over
+-- requests with a fixed and strictly ordered priority. The terminology of
+-- the interface assumes this use case and provides some useful extras:
 --
---   This implementation uses carry chains for wider implementations.
+-- * Set tin <= '0' (no input token) to disallow grants altogether.
+-- * Read tout (unused token) to see whether or any grant was issued.
+-- * Read bin to obtain the binary index of the rightmost detected one bit.
+--   The index starts at zero (0) in the rightmost bit position.
 --
--- Authors:     Thomas B. Preusser
--- ===========================================================================
+-- This implementation uses carry chains for wider implementations.
+--
+-- License:
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universität Dresden - Germany
 --                     Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -35,7 +39,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ===========================================================================
+-- =============================================================================
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -54,7 +58,7 @@ entity arith_firstone is
     tout : out std_logic;                       -- Inactive: Unused Token
     bin  : out std_logic_vector(log2ceil(N)-1 downto 0)  -- Binary Grant Index
   );
-end arith_firstone;
+end entity arith_firstone;
 
 
 library IEEE;

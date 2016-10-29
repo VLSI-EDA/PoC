@@ -1,18 +1,17 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
--- Module:				 	TODO
+-- Entity:				 	TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -27,7 +26,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library IEEE;
 use			IEEE.std_logic_1164.all;
@@ -41,29 +40,29 @@ use			PoC.strings.all;
 
 entity lut_Sine is
 	generic (
-		REG_OUTPUT		: BOOLEAN			:= TRUE;
-		MAX_AMPLITUDE	: POSITIVE		:= 255;
-		POINTS				: POSITIVE		:= 4096;
+		REG_OUTPUT		: boolean			:= TRUE;
+		MAX_AMPLITUDE	: positive		:= 255;
+		POINTS				: positive		:= 4096;
 		OFFSET_DEG		: REAL				:= 0.0;
-		QUARTERS			: POSITIVE		:= 4
+		QUARTERS			: positive		:= 4
 	);
 	port (
-		Clock				: in	STD_LOGIC;
-		Input				: in	STD_LOGIC_VECTOR(log2ceilnz(POINTS) - 1 downto 0);
-		Output			:	out	STD_LOGIC_VECTOR(log2ceilnz(MAX_AMPLITUDE + ((QUARTERS - 1) / 2)) downto 0)
+		Clock				: in	std_logic;
+		Input				: in	std_logic_vector(log2ceilnz(POINTS) - 1 downto 0);
+		Output			:	out	std_logic_vector(log2ceilnz(MAX_AMPLITUDE + ((QUARTERS - 1) / 2)) downto 0)
 	);
 end entity;
 
 
 architecture rtl of lut_Sine is
-	signal Output_nxt	: STD_LOGIC_VECTOR(Output'range);
+	signal Output_nxt	: std_logic_vector(Output'range);
 begin
 	-- ===========================================================================
 	-- 1 Qudrant LUT
 	-- ===========================================================================
-	genQ1 : if (QUARTERS = 1) generate
-		subtype T_RESULT	is NATURAL range 0 to MAX_AMPLITUDE;
-		type		T_LUT			is array (NATURAL range <>) of T_RESULT;
+	genQ1 : if QUARTERS = 1 generate
+		subtype T_RESULT	is natural range 0 to MAX_AMPLITUDE;
+		type		T_LUT			is array (natural range <>) of T_RESULT;
 
 		function generateLUT return T_LUT is
 			variable Result : T_LUT(0 to POINTS - 1)	:= (others => 0);
@@ -88,9 +87,9 @@ begin
 	-- ===========================================================================
 	-- 2 Qudrant LUT
 	-- ===========================================================================
-	genQ12 : if (QUARTERS = 2) generate
-		subtype T_RESULT	is NATURAL range 0 to MAX_AMPLITUDE;
-		type		T_LUT			is array (NATURAL range <>) of T_RESULT;
+	genQ12 : if QUARTERS = 2 generate
+		subtype T_RESULT	is natural range 0 to MAX_AMPLITUDE;
+		type		T_LUT			is array (natural range <>) of T_RESULT;
 
 		function generateLUT return T_LUT is
 			variable Result : T_LUT(0 to POINTS - 1)	:= (others => 0);
@@ -115,15 +114,15 @@ begin
 	-- ===========================================================================
 	-- 3 Qudrant LUT -> ERROR
 	-- ===========================================================================
-	genQ13 : if (QUARTERS = 3) generate
+	genQ13 : if QUARTERS = 3 generate
 		assert false report "QUARTERS=3 is not supported." severity FAILURE;
 	end generate;
 	-- ===========================================================================
 	-- 4 Qudrant LUT
 	-- ===========================================================================
-	genQ14 : if (QUARTERS = 4) generate
-		subtype T_RESULT	is INTEGER range -MAX_AMPLITUDE to MAX_AMPLITUDE;
-		type		T_LUT			is array (NATURAL range <>) of T_RESULT;
+	genQ14 : if QUARTERS = 4 generate
+		subtype T_RESULT	is integer range -MAX_AMPLITUDE to MAX_AMPLITUDE;
+		type		T_LUT			is array (natural range <>) of T_RESULT;
 
 		function generateLUT return T_LUT is
 			variable Result : T_LUT(0 to POINTS - 1)	:= (others => 0);
@@ -151,15 +150,15 @@ begin
 	-- ===========================================================================
 	-- No output registers
 	-- ===========================================================================
-	genNoReg : if (REG_OUTPUT = FALSE) generate
+	genNoReg : if not REG_OUTPUT generate
 	begin
 		Output		<= Output_nxt;
 	end generate;
 	-- ===========================================================================
 	-- Output registers
 	-- ===========================================================================
-	genReg : if (REG_OUTPUT = TRUE) generate
-		signal Output_d		: STD_LOGIC_VECTOR(Output'range)	:= (others => '0');
+	genReg : if REG_OUTPUT generate
+		signal Output_d		: std_logic_vector(Output'range)	:= (others => '0');
 	begin
 		Output_d	<= Output_nxt	when rising_edge(Clock);
 

@@ -8,6 +8,9 @@
 # ignore Python caches
 __pycache__
 
+# ignore build directories
+docs/_build/
+
 # ignore files in netlist/
 /netlist/
 !/netlist/configuration.ini
@@ -16,8 +19,14 @@ __pycache__
 !/netlist/template.cgc
 
 # ignore folders
-/temp/
-/vSim/
+/docs/_build/
+/py/Wrapper/Hooks/*
+!/py/Wrapper/Hooks/README.md
+/temp/*
+!/temp/.*
+!/temp/*.*
+/temp/precompiled/*
+!/temp/precompiled/.*
 
 # ignore files from PoC
 /py/config.private.ini
@@ -42,6 +51,17 @@ __pycache__
 /prj/QuestaSim/*.*
 /prj/QuestaSim/**/*.*
 !/prj/QuestaSim/PoC.mpf
+
+# ignore Lattice Diamond files
+other/diamond/._Real_._Math_.vhd
+other/diamond/.spread_sheet.ini
+other/diamond/.spreadsheet_view.ini
+/other/diamond/*/**/*
+/other/diamond/*.xml
+/other/diamond/*.html
+!/other/diamond/*/**/*.lpf
+!/other/diamond/*/**/*.ldc
+!/other/diamond/*/**/*.vhdl
 
 # ignore Xilinx ISE files
 /other/ise/**/*.*
@@ -73,4 +93,4 @@ __pycache__
 # general whitelist
 !.git*
 !.publish
-!.README.md
+!README.md

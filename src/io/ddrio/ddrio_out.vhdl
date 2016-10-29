@@ -1,34 +1,33 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Martin Zabel
 --									Patrick Lehmann
 --
--- Module:					Chip-Specific DDR Output Registers
+-- Entity:					Chip-Specific DDR Output Registers
 --
 -- Description:
--- ------------------------------------
---	Instantiates chip-specific DDR output registers.
+-- -------------------------------------
+-- Instantiates chip-specific :abbr:`DDR (Double Data Rate)` output registers.
 --
---	Both data "DataOut_high/low" as well as "OutputEnable" are sampled with
---	the rising_edge(Clock) from the on-chip logic. "DataOut_high" is brought
---	out with this rising edge. "DataOut_low" is brought out with the falling
---	edge.
+-- Both data ``DataOut_high/low`` as well as ``OutputEnable`` are sampled with
+-- the ``rising_edge(Clock)`` from the on-chip logic. ``DataOut_high`` is brought
+-- out with this rising edge. ``DataOut_low`` is brought out with the falling
+-- edge.
 --
---	"OutputEnable" (Tri-State) is high-active. It is automatically inverted if
---	necessary. If an output enable is not required, you may save some logic by
---	setting NO_OUTPUT_ENABLE = true.
+-- ``OutputEnable`` (Tri-State) is high-active. It is automatically inverted if
+-- necessary. If an output enable is not required, you may save some logic by
+-- setting ``NO_OUTPUT_ENABLE = true``.
 --
---  If NO_OUTPUT_ENABLE = false then output is disabled after power-up.
---  If NO_OUTPUT_ENABLE = true then output after power-up equals INIT_VALUE.
+-- If ``NO_OUTPUT_ENABLE = false`` then output is disabled after power-up.
+-- If ``NO_OUTPUT_ENABLE = true`` then output after power-up equals ``INIT_VALUE``.
 --
---	"Pad" must be connected to a PAD because FPGAs only have these registers in
---	IOBs.
+-- ``Pad`` must be connected to a PAD because FPGAs only have these registers in
+-- IOBs.
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -43,7 +42,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 
 library	IEEE;
@@ -57,17 +56,17 @@ use			PoC.ddrio.all;
 
 entity ddrio_out is
 	generic (
-		NO_OUTPUT_ENABLE		: BOOLEAN			:= false;
-		BITS								: POSITIVE;
-		INIT_VALUE					: BIT_VECTOR	:= x"FFFFFFFF"
+		NO_OUTPUT_ENABLE		: boolean			:= false;
+		BITS								: positive;
+		INIT_VALUE					: bit_vector	:= x"FFFFFFFF"
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		ClockEnable		: in	STD_LOGIC := '1';
-		OutputEnable	: in	STD_LOGIC := '1';
-		DataOut_high	: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		DataOut_low		: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		Pad						: out	STD_LOGIC_VECTOR(BITS - 1 downto 0)
+		Clock					: in	std_logic;
+		ClockEnable		: in	std_logic := '1';
+		OutputEnable	: in	std_logic := '1';
+		DataOut_high	: in	std_logic_vector(BITS - 1 downto 0);
+		DataOut_low		: in	std_logic_vector(BITS - 1 downto 0);
+		Pad						: out	std_logic_vector(BITS - 1 downto 0)
 	);
 end entity;
 
@@ -79,7 +78,7 @@ begin
 		report "PoC.io.ddrio.out is not implemented for given DEVICE."
 		severity FAILURE;
 
-	genXilinx : if (VENDOR = VENDOR_XILINX) generate
+	genXilinx : if VENDOR = VENDOR_XILINX generate
 		i : ddrio_out_xilinx
 			generic map (
 				NO_OUTPUT_ENABLE	=> NO_OUTPUT_ENABLE,
@@ -96,7 +95,7 @@ begin
 			);
 	end generate;
 
-	genAltera : if (VENDOR = VENDOR_ALTERA) generate
+	genAltera : if VENDOR = VENDOR_ALTERA generate
 		i : ddrio_out_altera
 			generic map (
 				NO_OUTPUT_ENABLE	=> NO_OUTPUT_ENABLE,
@@ -113,18 +112,18 @@ begin
 			);
 	end generate;
 
-	genGeneric : if ((SIMULATION = TRUE) and (VENDOR = VENDOR_GENERIC)) generate
-		signal DataOut_high_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
-		signal DataOut_low_d	: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
-		signal OutputEnable_d	: STD_LOGIC;
-		signal Pad_o					: STD_LOGIC_VECTOR(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+	genGeneric : if SIMULATION  and (VENDOR = VENDOR_GENERIC) generate
+		signal DataOut_high_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal DataOut_low_d	: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
+		signal OutputEnable_d	: std_logic;
+		signal Pad_o					: std_logic_vector(BITS - 1 downto 0) := to_stdlogicvector(INIT_VALUE);
 	begin
 		DataOut_high_d	<= DataOut_high		when rising_edge(Clock) and (ClockEnable = '1');
 		DataOut_low_d		<= DataOut_low		when rising_edge(Clock) and (ClockEnable = '1');
 		OutputEnable_d	<= OutputEnable		when rising_edge(Clock) and (ClockEnable = '1');
 
-		process(Clock, OutputEnable, DataOut_high_d, DataOut_low_d)
-			type T_MUX is array(BIT) of STD_LOGIC_VECTOR(BITS - 1 downto 0);
+		process(Clock, OutputEnable_d, DataOut_high_d, DataOut_low_d)
+			type T_MUX is array(bit) of std_logic_vector(BITS - 1 downto 0);
 			variable MuxInput		: T_MUX;
 		begin
 			MuxInput('1')	:= DataOut_high_d;

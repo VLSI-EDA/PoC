@@ -4,10 +4,58 @@
 # ==============================================================================
 # Note: all files are relative to PoC root directory
 #
-if ((Tool = "GHDL") and ?("temp/precompiled/ghdl/xilinx")) then
-	library unisim "temp/precompiled/ghdl/xilinx"
-elseif ((Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) and ?("temp/precompiled/vsim/xilinx")) then
-	library unisim "temp/precompiled/vsim/xilinx"
+path PreCompiled = ${CONFIG.DirectoryNames:PrecompiledFiles}
+
+if (Tool = "GHDL") then
+	path GHDL_Directory = (PreCompiled / ${CONFIG.DirectoryNames:GHDLFiles})
+	path Xilinx_Directory = (GHDL_Directory / ${CONFIG.DirectoryNames:XilinxSpecificFiles})
+	if (VHDLVersion < 2002) then
+		if ?{Xilinx_Directory} then
+			if ?{(Xilinx_Directory / "unisim/v93/unisim-obj93.cf")} then
+				library unisim		Xilinx_Directory
+			end if
+			if ?{(Xilinx_Directory / "unimacro/v93/unimacro-obj93.cf")} then
+				library unimacro	Xilinx_Directory
+			end if
+			if ?{(Xilinx_Directory / "secureip/v93/secureip-obj93.cf")} then
+				library secureip	Xilinx_Directory
+			end if
+			if ?{(Xilinx_Directory / "simprim/v93/simprim-obj93.cf")} then
+				library simprim		Xilinx_Directory
+			end if
+		else
+			report "No precompiled Xilinx primitives for GHDL and VHDL-93 found."
+		end if
+	elseif (VHDLVersion <= 2008) then
+		if ?{Xilinx_Directory} then
+			if ?{(Xilinx_Directory / "unisim/v08/unisim-obj08.cf")} then
+				library unisim		Xilinx_Directory
+			end if
+			if ?{(Xilinx_Directory / "unimacro/v08/unimacro-obj08.cf")} then
+				library unimacro	Xilinx_Directory
+			end if
+			if ?{(Xilinx_Directory / "secureip/v08/secureip-obj08.cf")} then
+				library secureip	Xilinx_Directory
+			end if
+			if ?{(Xilinx_Directory / "simprim/v08/simprim-obj08.cf")} then
+				library simprim		Xilinx_Directory
+			end if
+		else
+			report "No precompiled Xilinx primitives for GHDL and VHDL-2008 found."
+		end if
+	else
+		report "No precompiled Xilinx primitives for GHDL found."
+	end if
+elseif (Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) then
+	path Xilinx_Directory = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / ${CONFIG.DirectoryNames:XilinxSpecificFiles}))
+	if ?{Xilinx_Directory} then
+		library unisim		Xilinx_Directory
+		library unimacro	Xilinx_Directory
+		library secureip	Xilinx_Directory
+		library simprim		Xilinx_Directory
+	else
+		report "No precompiled Xilinx primitives for vSim found."
+	end if
 elseif (ToolChain in ["Xilinx_ISE", "Xilinx_Vivado"]) then
 	# implicitly referenced; nothing to reference
 elseif (Tool = "Aldec_aSim") then

@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
 -- Entity:					Converter binary numbers to BCD encoded numbers.
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -30,8 +29,8 @@
 -- =============================================================================
 
 library IEEE;
-use			IEEE.STD_LOGIC_1164.ALL;
-use			IEEE.NUMERIC_STD.ALL;
+use			IEEE.STD_LOGIC_1164.all;
+use			IEEE.NUMERIC_STD.all;
 
 library	PoC;
 use			PoC.utils.all;
@@ -40,48 +39,48 @@ use			PoC.components.all;
 
 entity arith_convert_bin2bcd is
 	generic (
-		BITS					: POSITIVE		:= 8;
-		DIGITS				: POSITIVE		:= 3;
-		RADIX					: POSITIVE		:= 2
+		BITS					: positive		:= 8;
+		DIGITS				: positive		:= 3;
+		RADIX					: positive		:= 2
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		Reset					: in	STD_LOGIC;
+		Clock					: in	std_logic;
+		Reset					: in	std_logic;
 
-		Start					: in	STD_LOGIC;
-		Busy					: out	STD_LOGIC;
+		Start					: in	std_logic;
+		Busy					: out	std_logic;
 
-		Binary				:	in	STD_LOGIC_VECTOR(BITS - 1 downto 0);
-		IsSigned			: in	STD_LOGIC															:= '0';
+		Binary				:	in	std_logic_vector(BITS - 1 downto 0);
+		IsSigned			: in	std_logic															:= '0';
 		BCDDigits			: out	T_BCD_VECTOR(DIGITS - 1 downto 0);
-		Sign					: out STD_LOGIC
+		Sign					: out std_logic
 	);
-end;
+end entity;
 
 
 architecture rtl of arith_convert_bin2bcd is
-	constant RADIX_BITS			: POSITIVE	:= log2ceil(RADIX);
-	constant BINARY_SHIFTS	: POSITIVE	:= div_ceil(BITS, RADIX_BITS);
-	constant BINARY_BITS		: POSITIVE	:= BINARY_SHIFTS * RADIX_BITS;
+	constant RADIX_BITS			: positive	:= log2ceil(RADIX);
+	constant BINARY_SHIFTS	: positive	:= div_ceil(BITS, RADIX_BITS);
+	constant BINARY_BITS		: positive	:= BINARY_SHIFTS * RADIX_BITS;
 
-	subtype T_CARRY					is UNSIGNED(RADIX_BITS - 1 downto 0);
-	type T_CARRY_VECTOR			is array(NATURAL range <>) of T_CARRY;
+	subtype T_CARRY					is unsigned(RADIX_BITS - 1 downto 0);
+	type T_CARRY_VECTOR			is array(natural range <>) of T_CARRY;
 
-	signal Digit_Shift_rst	: STD_LOGIC;
-	signal Digit_Shift_en		: STD_LOGIC;
+	signal Digit_Shift_rst	: std_logic;
+	signal Digit_Shift_en		: std_logic;
 	signal Digit_Shift_in		: T_CARRY_VECTOR(DIGITS downto 0);
 
-	signal Binary_en				: STD_LOGIC;
-	signal Binary_rl				: STD_LOGIC;
-	signal Binary_d					: STD_LOGIC_VECTOR(BINARY_BITS - 1 downto 0)	:= (others => '0');
+	signal Binary_en				: std_logic;
+	signal Binary_rl				: std_logic;
+	signal Binary_d					: std_logic_vector(BINARY_BITS - 1 downto 0)	:= (others => '0');
 
-	signal Sign_d						: STD_LOGIC																		:= '0';
-	signal DelayShifter			: STD_LOGIC_VECTOR(BINARY_SHIFTS downto 0)		:= '1' & (BINARY_SHIFTS - 1 downto 0 => '0');
+	signal Sign_d						: std_logic																		:= '0';
+	signal DelayShifter			: std_logic_vector(BINARY_SHIFTS downto 0)		:= '1' & (BINARY_SHIFTS - 1 downto 0 => '0');
 
-	function nextBCD(Value : UNSIGNED(4 downto 0)) return UNSIGNED is
-		constant Temp : UNSIGNED(4 downto 0)	:= Value - 10;
+	function nextBCD(Value : unsigned(4 downto 0)) return unsigned is
+		constant Temp : unsigned(4 downto 0)	:= Value - 10;
 	begin
-		if (Value > 9) then
+		if Value > 9 then
 			return '1' & Temp(3 downto 0);
 		else
 			return Value;
@@ -104,7 +103,7 @@ begin
 			elsif (Binary_en = '1') then
 				Binary_d(Binary_d'high downto Binary'high)	<= (others => '0');
 				if ((IsSigned and Binary(Binary'high)) = '1') then
-					Binary_d(Binary'high downto 0)						<= inc(not(Binary));
+					Binary_d(Binary'high downto 0)						<= std_logic_vector(-signed(Binary));
 					Sign_d																		<= '1';
 				else
 					Binary_d(Binary'high downto 0)						<= Binary;
@@ -123,11 +122,11 @@ begin
 
 	-- generate DIGITS many systolic elements
 	genDigits : for i in 0 to DIGITS - 1 generate
-		signal Digit_nxt	: UNSIGNED(3 + RADIX_BITS downto 0);
-		signal Digit_d		: UNSIGNED(3 downto 0)							:= (others => '0');
+		signal Digit_nxt	: unsigned(3 + RADIX_BITS downto 0);
+		signal Digit_d		: unsigned(3 downto 0)							:= (others => '0');
 	begin
 		process(Digit_d, Digit_Shift_in)
-			variable Temp : UNSIGNED(4 downto 0);
+			variable Temp : unsigned(4 downto 0);
 		begin
 			Temp := '0' & Digit_d;
 			for j in RADIX_BITS - 1 downto 0 loop
@@ -142,7 +141,7 @@ begin
 		begin
 			if rising_edge(Clock) then
 				if (Digit_Shift_rst = '1') then
-					Digit_d		<= "0000";
+					Digit_d	<= "0000";
 				elsif (Digit_Shift_en = '1') then
 					Digit_d	<= Digit_nxt(Digit_d'range);
 				end if;

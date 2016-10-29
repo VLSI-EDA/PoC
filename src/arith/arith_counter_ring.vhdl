@@ -1,19 +1,21 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
--- Module:				 	TODO
---
+-- =============================================================================
 -- Authors:				 	Patrick Lehmann
 --
+-- Entity:				 	Ring counter/Johnson Counter
+--
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- This module implements an up/down ring-counter with loadable initial value
+-- (``seed``) on reset. The counter can be configured to a Johnson counter by
+-- enabling ``INVERT_FEEDBACK``. The number of counter bits is configurable with
+-- ``BITS``.
 --
 -- License:
--- ============================================================================
--- Copyright 2007-2014 Technische Universitaet Dresden - Germany
+-- =============================================================================
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,51 +29,49 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
-LIBRARY IEEE;
-USE			IEEE.STD_LOGIC_1164.ALL;
+library IEEE;
+use			IEEE.STD_LOGIC_1164.all;
 
-LIBRARY PoC;
-USE			PoC.utils.ALL;
+library PoC;
+use			PoC.utils.all;
 
 
-ENTITY arith_counter_ring IS
-	GENERIC (
-		BITS						: POSITIVE;
-		INVERT_FEEDBACK	: BOOLEAN		:= FALSE																	-- FALSE -> ring counter;		TRUE -> johnson counter
+entity arith_counter_ring is
+	generic (
+		BITS						: positive;
+		INVERT_FEEDBACK	: boolean		:= FALSE																	-- FALSE -> ring counter;		TRUE -> johnson counter
 	);
-	PORT (
-		Clock		: IN	STD_LOGIC;																							-- Clock
-		Reset		: IN	STD_LOGIC;																							-- Reset
-		seed		: IN	STD_LOGIC_VECTOR(BITS - 1 DOWNTO 0)	:= (OTHERS => '0');	-- initial counter vector / load value
-		inc			: IN	STD_LOGIC														:= '0';							-- increment counter
-		dec			: IN	STD_LOGIC														:= '0';							-- decrement counter
-		value		: OUT STD_LOGIC_VECTOR(BITS - 1 DOWNTO 0)											-- counter value
+	port (
+		Clock		: in	std_logic;																							-- Clock
+		Reset		: in	std_logic;																							-- Reset
+		seed		: in	std_logic_vector(BITS - 1 downto 0)	:= (others => '0');	-- initial counter vector / load value
+		inc			: in	std_logic														:= '0';							-- increment counter
+		dec			: in	std_logic														:= '0';							-- decrement counter
+		value		: out std_logic_vector(BITS - 1 downto 0)											-- counter value
 	);
-END;
+end entity;
 
 
-ARCHITECTURE rtl OF arith_counter_ring IS
-	CONSTANT INVERT		: STD_LOGIC			:= to_sl(INVERT_FEEDBACK);
+architecture rtl of arith_counter_ring is
+	constant invert		: std_logic			:= to_sl(INVERT_FEEDBACK);
 
-	SIGNAL counter		: STD_LOGIC_VECTOR(BITS - 1 DOWNTO 0)	:= (OTHERS => '0');
+	signal Counter		: std_logic_vector(BITS - 1 downto 0)	:= (others => '0');
 
-BEGIN
-	PROCESS(Clock)
-	BEGIN
-		IF rising_edge(Clock) THEN
-			IF (Reset = '1') THEN
-				counter			<= seed;
-			ELSE
-				IF (inc = '1') THEN
-					counter		<= counter(counter'high - 1 DOWNTO 0) & (counter(counter'high) XOR INVERT);
-				ELSIF (dec = '1') THEN
-					counter		<= (counter(0) XOR INVERT) & counter(counter'high DOWNTO 1);
-				END IF;
-			END IF;
-		END IF;
-	END PROCESS;
+begin
+	process(Clock)
+	begin
+		if rising_edge(Clock) then
+			if (Reset = '1') then
+				Counter			<= seed;
+			elsif (inc = '1') then
+				Counter		<= Counter(Counter'high - 1 downto 0) & (Counter(Counter'high) xor invert);
+			elsif (dec = '1') then
+				Counter		<= (Counter(0) xor invert) & Counter(Counter'high downto 1);
+			end if;
+		end if;
+	end process;
 
-	value		<= counter;
-END;
+	value		<= Counter;
+end architecture;

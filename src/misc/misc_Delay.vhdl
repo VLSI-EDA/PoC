@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Package:					TODO
+-- Entity:					TODO
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -38,23 +37,23 @@ use			PoC.vectors.all;
 
 entity misc_Delay is
 	generic (
-		BITS					: POSITIVE;
+		BITS					: positive;
 		TAPS					: T_NATVEC					-- select one or multiple delay tap points
 	);
 	port (
-		Clock					: in	STD_LOGIC;																					-- clock
-		Reset					: in	STD_LOGIC		:= '0';																	-- reset; avoid reset to enable SRL16/SRL32 usage
-		Enable				: in	STD_LOGIC		:= '1';																	-- enable
-		DataIn				: in	STD_LOGIC_VECTOR(BITS - 1 downto 0);								-- data to delay
+		Clock					: in	std_logic;																					-- clock
+		Reset					: in	std_logic		:= '0';																	-- reset; avoid reset to enable SRL16/SRL32 usage
+		Enable				: in	std_logic		:= '1';																	-- enable
+		DataIn				: in	std_logic_vector(BITS - 1 downto 0);								-- data to delay
 		DataOut				: out	T_SLM(TAPS'length - 1 downto 0, BITS - 1 downto 0)	-- delayed ouputs, tapped at TAPS(i)
 	);
-end;
+end entity;
 
 
 architecture rtl of misc_Delay is
-	constant MAX_DELAY		: NATURAL			:= imax(TAPS);
+	constant MAX_DELAY		: natural			:= imax(TAPS);
 
-	type T_DELAY_VECTOR		is array (NATURAL range <>) of STD_LOGIC_VECTOR(BITS - 1 downto 0);
+	type T_DELAY_VECTOR		is array (natural range <>) of std_logic_vector(BITS - 1 downto 0);
 
 	signal Shifter_nxt		: T_DELAY_VECTOR(MAX_DELAY downto 0);
 	signal Shifter_d			: T_DELAY_VECTOR(MAX_DELAY - 1 downto 0)									:= (others => (others => '0'));

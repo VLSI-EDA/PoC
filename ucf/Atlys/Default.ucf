@@ -6,7 +6,7 @@
 ##		Device:				XC6SLX45
 ##		Package:			CSG324
 ##		Speedgrade:		-3
-##	
+##
 ##	Notes:
 ##		VCCB2 (Bank2) is defaulted to 2.5V (choices: 2.5V, 3.3V) by jumper JP12
 ##

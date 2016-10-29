@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
--- ============================================================================
+-- =============================================================================
 -- Authors:					Martin Zabel
 --									Patrick Lehmann
 --
--- Module:				 	Instantiate true dual-port memory on Altera FPGAs.
+-- Entity:				 	Instantiate true dual-port memory on Altera FPGAs.
 --
 -- Description:
--- ------------------------------------
+-- -------------------------------------
 -- Quartus synthesis does not infer this RAM type correctly.
 -- Instead, altsyncram is instantiated directly.
 --
@@ -17,7 +16,7 @@
 -- (src/mem/ocram/ocram_tdp.vhdl).
 --
 -- License:
--- ============================================================================
+-- =============================================================================
 -- Copyright 2008-2015 Technische Universitaet Dresden - Germany
 --										 Chair for VLSI-Design, Diagnostics and Architecture
 --
@@ -32,7 +31,7 @@
 -- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
--- ============================================================================
+-- =============================================================================
 
 library	IEEE;
 use			IEEE.std_logic_1164.all;
@@ -42,6 +41,7 @@ library	altera_mf;
 use			altera_mf.all;
 
 library PoC;
+use			PoC.config.all;
 use			PoC.utils.all;
 use			PoC.strings.all;
 
@@ -50,7 +50,7 @@ entity ocram_tdp_altera is
 	generic (
 		A_BITS		: positive;
 		D_BITS		: positive;
-		FILENAME	: STRING		:= ""
+		FILENAME	: string		:= ""
 	);
 	port (
 		clk1 : in	std_logic;
@@ -72,50 +72,50 @@ end ocram_tdp_altera;
 architecture rtl of ocram_tdp_altera is
 	component altsyncram
 		generic (
-			address_aclr_a						: STRING;
-			address_aclr_b						: STRING;
-			address_reg_b						 : STRING;
-			indata_aclr_a						 : STRING;
-			indata_aclr_b						 : STRING;
-			indata_reg_b							: STRING;
-			init_file								 : STRING;
-			intended_device_family		: STRING;
-			lpm_type									: STRING;
-			numwords_a								: NATURAL;
-			numwords_b								: NATURAL;
-			operation_mode						: STRING;
-			outdata_aclr_a						: STRING;
-			outdata_aclr_b						: STRING;
-			outdata_reg_a						 : STRING;
-			outdata_reg_b						 : STRING;
-			power_up_uninitialized		: STRING;
-			widthad_a								 : NATURAL;
-			widthad_b								 : NATURAL;
-			width_a									 : NATURAL;
-			width_b									 : NATURAL;
-			width_byteena_a					 : NATURAL;
-			width_byteena_b					 : NATURAL;
-			wrcontrol_aclr_a					: STRING;
-			wrcontrol_aclr_b					: STRING;
-			wrcontrol_wraddress_reg_b : STRING);
+			address_aclr_a						: string;
+			address_aclr_b						: string;
+			address_reg_b						 : string;
+			indata_aclr_a						 : string;
+			indata_aclr_b						 : string;
+			indata_reg_b							: string;
+			init_file								 : string;
+			intended_device_family		: string;
+			lpm_type									: string;
+			numwords_a								: natural;
+			numwords_b								: natural;
+			operation_mode						: string;
+			outdata_aclr_a						: string;
+			outdata_aclr_b						: string;
+			outdata_reg_a						 : string;
+			outdata_reg_b						 : string;
+			power_up_uninitialized		: string;
+			widthad_a								 : natural;
+			widthad_b								 : natural;
+			width_a									 : natural;
+			width_b									 : natural;
+			width_byteena_a					 : natural;
+			width_byteena_b					 : natural;
+			wrcontrol_aclr_a					: string;
+			wrcontrol_aclr_b					: string;
+			wrcontrol_wraddress_reg_b : string);
 		port (
-			clocken0	: IN	STD_LOGIC;
-			clocken1	: IN	STD_LOGIC;
-			wren_a		: IN	STD_LOGIC;
-			clock0		: IN	STD_LOGIC;
-			wren_b		: IN	STD_LOGIC;
-			clock1		: IN	STD_LOGIC;
-			address_a : IN	STD_LOGIC_VECTOR (widthad_a-1 DOWNTO 0);
-			address_b : IN	STD_LOGIC_VECTOR (widthad_b-1 DOWNTO 0);
-			q_a			 : OUT STD_LOGIC_VECTOR (width_a-1 DOWNTO 0);
-			q_b			 : OUT STD_LOGIC_VECTOR (width_b-1 DOWNTO 0);
-			data_a		: IN	STD_LOGIC_VECTOR (width_a-1 DOWNTO 0);
-			data_b		: IN	STD_LOGIC_VECTOR (width_b-1 DOWNTO 0)
+			clocken0	: in	std_logic;
+			clocken1	: in	std_logic;
+			wren_a		: in	std_logic;
+			clock0		: in	std_logic;
+			wren_b		: in	std_logic;
+			clock1		: in	std_logic;
+			address_a : in	std_logic_vector (widthad_a-1 downto 0);
+			address_b : in	std_logic_vector (widthad_b-1 downto 0);
+			q_a			 : out std_logic_vector (width_a-1 downto 0);
+			q_b			 : out std_logic_vector (width_b-1 downto 0);
+			data_a		: in	std_logic_vector (width_a-1 downto 0);
+			data_b		: in	std_logic_vector (width_b-1 downto 0)
 		);
 	end component;
 
 	constant DEPTH			: positive	:= 2**A_BITS;
-	constant INIT_FILE	: STRING		:= ite((str_length(FILENAME) = 0), "UNUSED", FILENAME);
+	constant INIT_FILE	: string		:= ite((str_length(FILENAME) = 0), "UNUSED", FILENAME);
 
 	signal a1_sl : std_logic_vector(A_BITS-1 downto 0);
 	signal a2_sl : std_logic_vector(A_BITS-1 downto 0);
@@ -134,7 +134,7 @@ begin
 			indata_aclr_b							=> "NONE",
 			indata_reg_b							=> "CLOCK1",
 			init_file									=> INIT_FILE,
-			intended_device_family		=> "Stratix",
+			intended_device_family		=> getAlteraDeviceName(DEVICE),
 			lpm_type									=> "altsyncram",
 			numwords_a								=> DEPTH,
 			numwords_b								=> DEPTH,

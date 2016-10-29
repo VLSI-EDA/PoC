@@ -1,15 +1,14 @@
 -- EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t -*-
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
---
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Module:					Creates a histogram of all input data
+-- Entity:					Creates a histogram of all input data
 --
 -- Description:
--- ------------------------------------
---		TODO
+-- -------------------------------------
+-- .. TODO:: No documentation available.
 --
 -- License:
 -- =============================================================================
@@ -40,15 +39,15 @@ use			PoC.vectors.all;
 
 entity stat_Histogram is
 	generic (
-		DATA_BITS			: POSITIVE		:= 16;
-		COUNTER_BITS	: POSITIVE		:= 16
+		DATA_BITS			: positive		:= 16;
+		COUNTER_BITS	: positive		:= 16
 	);
 	port (
-		Clock					: in	STD_LOGIC;
-		Reset					: in	STD_LOGIC;
+		Clock					: in	std_logic;
+		Reset					: in	std_logic;
 
-		Enable				: in	STD_LOGIC;
-		DataIn				: in	STD_LOGIC_VECTOR(DATA_BITS - 1 downto 0);
+		Enable				: in	std_logic;
+		DataIn				: in	std_logic_vector(DATA_BITS - 1 downto 0);
 
 		Histogram			: out	T_SLM(2**DATA_BITS - 1 downto 0, COUNTER_BITS - 1 downto 0)
 	);
@@ -56,7 +55,7 @@ end entity;
 
 
 architecture rtl of stat_Histogram is
-	type T_HISTOGRAM_MEMORY		is array(NATURAL range <>) of UNSIGNED(COUNTER_BITS downto 0);
+	type T_HISTOGRAM_MEMORY		is array(natural range <>) of unsigned(COUNTER_BITS downto 0);
 
 	-- create matrix from vector-vector
 	function to_slm(usv : T_HISTOGRAM_MEMORY) return T_SLM is
