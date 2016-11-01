@@ -59,8 +59,9 @@ class InputDriver(BusDriver):
 	def __init__(self, dut):
 		BusDriver.__init__(self, dut, None, dut.Clock)
 
+
 class InputTransaction(object):
-	"""Creates transaction to be send by InputDriver"""
+	"""Transaction to be send by InputDriver"""
 	def __init__(self, tb, request=0, readWrite=0, invalidate=0, replace=0, address=0, cacheLineIn=0):
 		"tb must be an instance of the Testbench class"
 		if (replace==1) and ((request==1) or (invalidate==1)):
@@ -73,6 +74,34 @@ class InputTransaction(object):
 		self.Invalidate = BinaryValue(invalidate, 1)
 		self.Address = BinaryValue(address, tb.address_bits, False)
 		self.CacheLineIn = BinaryValue(cacheLineIn, tb.data_bits, False)
+
+
+class OutputTransaction(object):
+	"""Transaction to be expected / received by OutputMonitor."""
+	def __init__(self, tb=None, cacheLineOut=None, cacheHit=0, cacheMiss=0, oldAddress=None):
+		"""For expected transactions, value 'None' means don't care. tb must be an instance of the Testbench class."""
+		if cacheLineOut is not None and isinstance(cacheLineOut, int): cacheLineOut = BinaryValue(cacheLineOut, tb.data_bits, False)
+		if cacheHit     is not None and isinstance(cacheHit, int):     cacheHit = BinaryValue(cacheHit, 1)
+		if cacheMiss    is not None and isinstance(cacheMiss, int):    cacheMiss = BinaryValue(cacheMiss, 1)
+		if oldAddress   is not None and isinstance(oldAddress, int):   oldAddress = BinaryValue(oldAddress, tb.address_bits, False)
+		self.value = (cacheLineOut, cacheHit, cacheMiss, oldAddress)
+
+	def __eq__(self, other):
+		if not isinstance(other, OutputTransaction):
+			raise ValueError("Other value in comparison is not an OutputTransaction, was {0!s} instead.".format(type(other)))
+
+		equal = True
+		for i, val1 in enumerate(self.value):
+			val2 = other.value[i]
+			if val1 is not None and val2 is not None:
+				if val1 != val2: equal = False
+		return equal
+
+	def __ne__(self, other):
+		return not self.__eq__(other)
+
+	def __str__(self):
+		return ", ".join([str(i) for i in self.value])
 
 # ==============================================================================
 class InputMonitor(BusMonitor):
@@ -103,9 +132,11 @@ class OutputMonitor(BusMonitor):
 	"""Observes outputs of DUT."""
 	_signals = [ "CacheLineOut", "CacheHit", "CacheMiss", "OldAddress" ]
 
-	def __init__(self, dut, callback=None, event=None):
+	def __init__(self, dut, tb, callback=None, event=None):
+		"""tb must be an instance of the Testbench class."""
 		BusMonitor.__init__(self, dut, None, dut.Clock, dut.Reset, callback=callback, event=event)
 		self.name = "out"
+		self.tb = tb
 
 	@coroutine
 	def _monitor_recv(self):
@@ -115,23 +146,19 @@ class OutputMonitor(BusMonitor):
 			# Capture signals at rising-edge of clock.
 			yield clkedge
 
-
-			vec = tuple([getattr(self.bus,i).value.integer for i in self._signals])
-			self._recv(vec)
+			self._recv(OutputTransaction(self.tb, self.bus.CacheLineOut.value, self.bus.CacheHit.value,
+																		self.bus.CacheMiss.value,	self.bus.OldAddress.value))
 
 # ==============================================================================
 class Testbench(object):
 	class MyScoreboard(Scoreboard):
 		def compare(self, got, exp, log, **_):
-			"""Ignore received output if expected value is None"""
-			for i, val in enumerate(exp):
-				if val is not None:
-					if val != got[i]:
-						self.errors += 1
-						log.error("Received transaction differed from expected output.")
-						log.warning("Expected: %s.\nReceived: %s." % (exp, got))
-						if self._imm:
-							raise TestFailure("Received transaction differed from expected transaction.")
+			if got != exp:
+				self.errors += 1
+				log.error("Received transaction differed from expected output.")
+				log.warning("Expected: {0!s}.\nReceived: {1!s}.".format(exp, got))
+				if self._imm:
+					raise TestFailure("Received transaction differed from expected transaction.")
 
 
 	def __init__(self, dut):
@@ -159,10 +186,10 @@ class Testbench(object):
 		# TODO: create LRU dictionary for each cache set
 		self.lrus = tuple([LeastRecentlyUsedDict(size_limit=self.associativity) for _ in range(self.cache_sets)])
 
-		init_val = (None, 0, 0, None)
+		init_val = OutputTransaction(self)
 
 		self.input_drv = InputDriver(dut)
-		self.output_mon = OutputMonitor(dut)
+		self.output_mon = OutputMonitor(dut, self)
 
 		# Create a scoreboard on the outputs
 		self.expected_output = [ init_val ]
@@ -209,7 +236,8 @@ class Testbench(object):
 				self.lrus[index][address] = cacheLineIn
 
 			if DEBUG >= 1: print("=== model: lrus[{0}] = {1!s}".format(index, self.lrus[index].items()))
-			self.expected_output.append( (cacheLineOut, cacheHit, cacheMiss, oldAddress) )
+			# convert all not None values to BinaryValue
+			self.expected_output.append( OutputTransaction(self, cacheLineOut, cacheHit, cacheMiss, oldAddress) )
 
 	def stop(self):
 		"""
