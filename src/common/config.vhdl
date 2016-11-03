@@ -735,7 +735,7 @@ package body config is
 			when "LCM" =>		return VENDOR_LATTICE;		-- MachXO device
 			when "LFE" =>		return VENDOR_LATTICE;		-- ECP devices
 			when others =>	report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
-										 -- return statement is explicitly missing otherwise XST won't stop
+											return VENDOR_UNKNOWN;
 		end case;
 	end function;
 
@@ -813,8 +813,8 @@ package body config is
 				end case;
 
 			when others => report "Unknown vendor in MY_DEVICE = " & MY_DEV & "." severity failure;
-										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
+		return DEVICE_UNKNOWN;
 	end function;
 
 	-- purpose: extract device from MY_DEVICE
@@ -851,8 +851,8 @@ package body config is
 				end case;
 
 			when others => report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
-										 -- return statement is explicitly missing otherwise XST won't stop
 		end case;
+		return DEVICE_FAMILY_UNKNOWN;
 	end function;
 
 	-- some devices share some common features: e.g. XADC, BlockRAM, ...
@@ -897,7 +897,7 @@ package body config is
 			when VENDOR_LATTICE =>	return extractFirstNumber(MY_DEV(6 to MY_DEV'high));
 			when VENDOR_XILINX =>		return extractFirstNumber(MY_DEV(5 to MY_DEV'high));
 			when others =>					report "Unknown vendor in MY_DEVICE = '" & MY_DEV & "'" severity failure;
-															-- return statement is explicitly missing otherwise XST won't stop
+															return 0;
 		end case;
 	end function;
 
@@ -1010,9 +1010,8 @@ package body config is
 			when DEVICE_ZYNQ_ULTRA_PLUS =>																													return DEVICE_SUBTYPE_NONE;
 
 			when others => report "Device sub-type is unknown for the given device." severity failure;
-									-- return statement is explicitly missing otherwise XST won't stop
 		end case;
-
+		return DEVICE_SUBTYPE_NONE;
 	end function;
 
 	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY) return positive is
@@ -1037,8 +1036,8 @@ package body config is
 			when DEVICE_SPARTAN6 =>																						return 6;
 			when DEVICE_VIRTEX4 | DEVICE_VIRTEX5 | DEVICE_VIRTEX6 =>					return 6;
 
-			when others => report "LUT fan-in is unknown for the given device." severity failure;
-									-- return statement is explicitly missing otherwise XST won't stop
+			when others => report "LUT fan-in is unknown for the given device, using default (4)." severity failure;
+										 return 4;
 		end case;
 	end function;
 
@@ -1109,8 +1108,8 @@ package body config is
 				end case;
 
 			when others => report "Unknown device." severity failure;
-									-- return statement is explicitly missing otherwise XST won't stop
 		end case;
+		return TRANSCEIVER_NONE;
 	end function;
 
 	-- purpose: extract architecture properties from DEVICE
@@ -1152,7 +1151,7 @@ package body config is
 			when DEVICE_STRATIX10 => return "Stratix 10";
 			when others =>
 				report "Unknown Altera device." severity failure;
-		    -- return statement is explicitly missing otherwise XST won't stop
+				return "";
 		end case;
 	end function;
 
@@ -1167,7 +1166,7 @@ package body config is
 				--when VENDOR_LATTICE =>	return "default";
 				when VENDOR_XILINX =>		return "auto";
 				when others =>					report "Unknown vendor." severity failure;
-																-- return statement is explicitly missing otherwise XST won't stop
+																return "";
 			end case;
 		end if;
 	end function;

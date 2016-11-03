@@ -53,7 +53,7 @@ package components is
 	function ffsr(q : std_logic;	rst : std_logic := '0'; set : std_logic := '0') return std_logic;				-- RS-FlipFlop with dominant set
 	-- D-FlipFlops (Delay)
 	function ffdre(q : std_logic;					d : std_logic;				rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic := '0')												return std_logic;					-- D-FlipFlop with reset and enable
-	function ffdre(q : std_logic_vector;	d : std_logic_vector;	rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic_vector := (7 downto 0 => '0'))	return std_logic_vector;	-- D-FlipFlop with reset and enable
+	function ffdre(q : std_logic_vector;	d : std_logic_vector;	rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic_vector := (0 to 0 => '0'))	return std_logic_vector;	-- D-FlipFlop with reset and enable
 	function ffdse(q : std_logic;					d : std_logic;				set : std_logic := '0'; en : std_logic := '1')																													return std_logic;					-- D-FlipFlop with set and enable
 	-- T-FlipFlops (Toggle)
 	function fftre(q : std_logic;					t : std_logic;				rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic := '0')												return std_logic;					-- T-FlipFlop with reset and enable
@@ -112,6 +112,7 @@ package body components is
 				return ((d and en) or (q and not en)) or rst;
 			else
 				report "Unsupported INIT value for synthesis." severity FAILURE;
+				return 'X';
 			end if;
 		elsif (rst = '1') then
 			return INIT;
@@ -120,7 +121,7 @@ package body components is
 		end if;
 	end function;
 
-	function ffdre(q : std_logic_vector; d : std_logic_vector; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic_vector := (7 downto 0 => '0')) return std_logic_vector is
+	function ffdre(q : std_logic_vector; d : std_logic_vector; rst : std_logic := '0'; en : std_logic := '1'; constant INIT : std_logic_vector := (0 to 0 => '0')) return std_logic_vector is
 		constant INIT_I		: std_logic_vector(q'range)		:= resize(INIT, q'length);
 		variable Result		: std_logic_vector(q'range);
 	begin
@@ -146,6 +147,7 @@ package body components is
 				return ((not q and (t and en)) or (q and not (t and en))) or rst;
 			else
 				report "Unsupported INIT value for synthesis." severity FAILURE;
+				return 'X';
 			end if;
 		elsif (rst = '1') then
 			return INIT;

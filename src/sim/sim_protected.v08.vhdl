@@ -480,6 +480,7 @@ package body sim_protected is
 					return TRUE;
 				end if;
 				report "isAllFinalized: " severity ERROR;
+				return FALSE;
 			else
 				return FALSE;
 			end if;
