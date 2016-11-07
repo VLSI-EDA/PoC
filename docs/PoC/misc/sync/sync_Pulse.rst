@@ -5,7 +5,7 @@ sync_Pulse
 This module synchronizes multiple pulsed bits into the clock-domain ``Clock``.
 The clock-domain boundary crossing is done by two synchronizer D-FFs. All bits
 are independent from each other. If a known vendor like Altera or Xilinx are
-recognized, a vendor specific implementation is choosen.
+recognized, a vendor specific implementation is chosen.
 
 .. ATTENTION::
    Use this synchronizer for very short signals (pulse).

@@ -195,7 +195,7 @@ class BinaryExpression(Expression):
 	__PARSER_NAME__ =             None
 	__PARSER_LHS_EXPRESSIONS__ =  None
 	__PARSER_RHS_EXPRESSIONS__ =  None
-	__PARSER_OPERATOR__ =     None
+	__PARSER_OPERATOR__ =         None
 
 	@classmethod
 	def GetParser(cls):

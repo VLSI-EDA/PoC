@@ -184,7 +184,7 @@ class GHDL(Executable):
 		#self.Parameters[self.Executable] = executablePath
 
 		if (platform == "Windows"):
-			if (backend not in ["mcode"]):                raise GHDLException("GHDL for Windows does not support backend '{0}'.".format(backend))
+			if (backend not in ["llvm", "mcode"]):        raise GHDLException("GHDL for Windows does not support backend '{0}'.".format(backend))
 		elif (platform == "Linux"):
 			if (backend not in ["gcc", "llvm", "mcode"]): raise GHDLException("GHDL for Linux does not support backend '{0}'.".format(backend))
 		elif (platform == "Darwin"):

@@ -175,4 +175,3 @@ class Exit:
 		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
 		print("  Please run {YELLOW}'poc.[sh/ps1] configure'{NOCOLOR} in PoC root directory.".format(**Init.Foreground))
 		Exit.exit(1)
-

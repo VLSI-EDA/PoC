@@ -76,7 +76,7 @@ begin
 		simWaitUntilRisingEdge(Clock, 4);
 
 		for i in 0 to 1023 loop
-			lut_in	<= to_slv(i, lut_in'length);
+			lut_in	<= to_slv(i mod 2**lut_in'length, lut_in'length);
 			wait until rising_edge(Clock);
 		end loop;
 

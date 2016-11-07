@@ -132,9 +132,7 @@ begin
 			variable y						: REAL;
 		begin
 			for i in Result'range loop
-				report "x=" & str_format(x, 3) & " y=" & str_format((sin(x) * AMPLITUDE_I), 3) severity note;
 				Result(i)	:= integer(sin(x) * AMPLITUDE_I);
-
 				x := x + STEP;
 			end loop;
 			return Result;

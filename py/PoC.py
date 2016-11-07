@@ -71,7 +71,7 @@ from ToolChains.GHDL                    import Configuration as GHDLConfiguratio
 from lib.pyAttribute.ArgParseAttributes import ArgParseMixin
 from lib.pyAttribute.ArgParseAttributes import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
 from lib.pyAttribute.ArgParseAttributes import CommonArgumentAttribute, CommonSwitchArgumentAttribute
-from lib.ConfigParser                   import ExtendedConfigParser
+from lib.ExtendedConfigParser           import ExtendedConfigParser
 from lib.Functions                      import Init, Exit
 from lib.Parser                         import ParserException
 from lib.pyAttribute                    import Attribute

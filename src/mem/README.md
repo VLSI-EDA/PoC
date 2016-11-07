@@ -6,6 +6,7 @@ implementations.
 
 ## Sub-Namespace(s)
 
+ - [`PoC.mem.ddr3`][mem_ddr3] - Adapter and Wrapper for DDR3 controllers
  - [`PoC.mem.is61lv`][mem_is61lv] - ISSI - IS61LV SRAM controller
  - [`PoC.mem.is61nlp`][mem_is61nlp] - ISSI - IS61NLP SRAM controller
  - [`PoC.mem.lut`][mem_lut] - Lookup-Table (LUT) implementations
@@ -21,6 +22,7 @@ The package [`PoC.mem`][mem.pkg] holds all component declarations for this names
 
  [mem.pkg]:				mem.pkg.vhdl
  
+ [mem_ddr3]:		ddr3
  [mem_is61lv]:		is61lv
  [mem_is61nlp]:		is61nlp
  [mem_lut]:				lut

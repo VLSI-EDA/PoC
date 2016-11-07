@@ -70,6 +70,13 @@ $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
 
+# set default values
+$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+
 Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -Scope Local -ArgumentList "$WorkingDir"
 
 # Display help if no command was selected
@@ -103,7 +110,7 @@ if ($GHDL)
 
 	$GHDLAlteraScript = "$GHDLScriptDir\compile-altera.ps1"
 	if (-not (Test-Path $GHDLAlteraScript -PathType Leaf))
-	{ Write-Host "[ERROR]: Altera compile script from GHDL is not executable." -ForegroundColor Red
+	{ Write-Host "[ERROR]: Altera compile script '$GHDLAlteraScript' from GHDL not found." -ForegroundColor Red
 		Exit-PrecompileScript -1
 	}
 
@@ -115,7 +122,7 @@ if ($GHDL)
 	{	$env:GHDL = $GHDLBinDir		}
 
 	if ($VHDL93)
-	{	$Command = "$GHDLAlteraScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$AlteraDirName"
+	{	$Command = "$GHDLAlteraScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$AlteraDirName -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -123,7 +130,7 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLAlteraScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$AlteraDirName"
+	{	$Command = "$GHDLAlteraScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$AlteraDirName -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
