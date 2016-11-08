@@ -1,5 +1,5 @@
 
-ddr3_mem2mig_adapter_Spartan6
+ddr2_mem2mig_adapter_Spartan6
 #############################
 
 Adapter between the :doc:`PoC.Mem </References/Interfaces/Memory>`
@@ -30,13 +30,13 @@ Containts only combinational logic.
 
 .. rubric:: Entity Declaration:
 
-.. literalinclude:: ../../../../src/mem/ddr3/ddr3_mem2mig_adapter_Spartan6.vhdl
+.. literalinclude:: ../../../../src/mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl
    :language: vhdl
    :tab-width: 2
    :linenos:
    :lines: 61-95
 
-Source file: `mem/ddr3/ddr3_mem2mig_adapter_Spartan6.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ddr3/ddr3_mem2mig_adapter_Spartan6.vhdl>`_
+Source file: `mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`_
 
 
 

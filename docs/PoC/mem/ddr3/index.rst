@@ -13,13 +13,9 @@ provide the same simple memory interface to the user application.
  * :doc:`PoC.mem.ddr3.mem2mig_adapter_Series7
    <ddr3_mem2mig_adapter_Series7>` - Adapter for the Xilinx MIG core
    for 7-Series FPGAs
- * :doc:`PoC.mem.ddr3.mem2mig_adapter_Spartan6
-   <ddr3_mem2mig_adapter_Spartan6>` - Adapter for the Xilinx MIG core
-   for Spartan-6 FPGAs
 
 
 .. toctree::
    :hidden:
 
    ddr3_mem2mig_adapter_Series7
-   ddr3_mem2mig_adapter_Spartan6
