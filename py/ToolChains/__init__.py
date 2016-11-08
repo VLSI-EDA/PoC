@@ -64,8 +64,8 @@ from .Xilinx.Vivado         import Configuration as Vivado_Configuration
 
 
 Configurations = [
-	PoC_Configuration,
 	Git_Configuration,
+	PoC_Configuration,
 	# Aldec products
 	Aldec_Configuration,
 	ActiveHDL_Configuration,

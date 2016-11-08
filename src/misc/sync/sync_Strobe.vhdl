@@ -19,6 +19,9 @@
 -- .. ATTENTION::
 --    Use this synchronizer only for one-cycle high-active signals (strobes).
 --
+-- .. image:: ../../../_static/misc/sync/sync_Strobe.svg
+--    :target: ../../../_static/misc/sync/sync_Strobe.svg
+--
 -- Constraints:
 --   This module uses sub modules which need to be constrained. Please
 --   attend to the notes of the instantiated sub modules.

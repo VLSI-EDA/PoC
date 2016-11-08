@@ -50,7 +50,8 @@ from shutil               import copy as shutil_copy
 
 from Base.Exceptions      import PlatformNotSupportedException, CommonException
 from Base.Configuration   import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
-from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList, CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument
+from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList, CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument, \
+	LongValuedFlagArgument, LongTupleArgument
 from Base.ToolChain       import ToolChainException
 
 
@@ -86,9 +87,13 @@ class Configuration(BaseConfiguration):
 
 	def ConfigureForAll(self):
 		try:
-			self._ConfigureInstallationDirectory()
-			binPath = self._ConfigureBinaryDirectory()
-			self.__WriteGitSection(binPath)
+			if (not self._AskInstalled("Is Git installed on your system?")):
+				self.ClearSection()
+			else:
+				self._host.PoCConfig[self._section]['Version'] = self._template[self._host.Platform][self._section]['Version']
+				self._ConfigureInstallationDirectory()
+				binPath = self._ConfigureBinaryDirectory()
+				self.__WriteGitSection(binPath)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
@@ -126,7 +131,6 @@ class Configuration(BaseConfiguration):
 				gitPath =             binaryDirectoryPath / "git.exe"
 				if gitPath.exists():
 					return binaryDirectoryPath.parent.as_posix()
-			raise GitException("No Git installation found.")
 		elif (self._host.Platform in ["Linux", "Darwin"]):
 			try:
 				name = check_output(["which", "git"], universal_newlines=True).strip()
@@ -161,7 +165,7 @@ class Configuration(BaseConfiguration):
 		# get version and backend
 		output = check_output([str(gitPath), "--version"], universal_newlines=True)
 		version = None
-		versionRegExpStr = r"^git version (\d\.\d\.\d+).*"
+		versionRegExpStr = r"^git version (\d+\.\d+\.\d+).*"
 		versionRegExp = re_compile(versionRegExpStr)
 		for line in output.split('\n'):
 			if version is None:
@@ -325,6 +329,20 @@ class Git(GitMixIn):
 
 		return git
 
+	def GetGitRevList(self):
+		git = GitRevList(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
+		git.Clear()
+		git.RevListParameters[GitRevList.Command] = True
+
+		return git
+
+	def GetGitDescribe(self):
+		git = GitDescribe(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
+		git.Clear()
+		git.DescribeParameters[GitDescribe.Command] = True
+
+		return git
+
 	def GetGitConfig(self):
 		git = GitConfig(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
 		git.Clear()
@@ -396,6 +414,98 @@ class GitRevParse(GitSCM):
 	def Execute(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList += self.RevParseParameters.ToArgumentList()
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise GitException("Failed to launch Git.") from ex
+
+		# FIXME: Replace GetReader with a shorter call to e.g. GetLine and/or GetLines
+		output = ""
+		for line in self.GetReader():
+			output += line
+
+		return output
+
+class GitRevList(GitSCM):
+	def Clear(self):
+		super().Clear()
+		for param in self.RevListParameters:
+			# if isinstance(param, ExecutableArgument):
+			# 	print("{0}".format(param.Value))
+			# elif isinstance(param, NamedCommandLineArgument):
+			# 	print("{0}".format(param.Name))
+			if (param is not self.Command):
+				# print("  clearing: {0} = {1} to None".format(param.Name, param.Value))
+				self.RevListParameters[param] = None
+
+	class Command(metaclass=CommandArgument):
+		_name = "rev-list"
+
+	class SwitchTags(metaclass=LongFlagArgument):
+		_name = "tags"
+
+	class SwitchMaxCount(metaclass=LongValuedFlagArgument):
+		_name = "max-count"
+
+	RevListParameters = CommandLineArgumentList(
+		Command,
+		SwitchTags,
+		SwitchMaxCount
+	)
+
+	def Execute(self):
+		parameterList = self.Parameters.ToArgumentList()
+		parameterList += self.RevListParameters.ToArgumentList()
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise GitException("Failed to launch Git.") from ex
+
+		# FIXME: Replace GetReader with a shorter call to e.g. GetLine and/or GetLines
+		output = ""
+		for line in self.GetReader():
+			output += line
+
+		return output
+
+class GitDescribe(GitSCM):
+	def Clear(self):
+		super().Clear()
+		for param in self.DescribeParameters:
+			# if isinstance(param, ExecutableArgument):
+			# 	print("{0}".format(param.Value))
+			# elif isinstance(param, NamedCommandLineArgument):
+			# 	print("{0}".format(param.Name))
+			if (param is not self.Command):
+				# print("  clearing: {0} = {1} to None".format(param.Name, param.Value))
+				self.DescribeParameters[param] = None
+
+	class Command(metaclass=CommandArgument):
+		_name = "describe"
+
+	class SwitchTags(metaclass=LongTupleArgument):
+		_name = "tags"
+
+	DescribeParameters = CommandLineArgumentList(
+		Command,
+		SwitchTags
+	)
+
+	def Execute(self):
+		parameterList = self.Parameters.ToArgumentList()
+		parameterList += self.DescribeParameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):

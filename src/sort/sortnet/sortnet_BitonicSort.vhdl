@@ -10,6 +10,9 @@
 -- -------------------------------------
 -- This sorting network uses the *bitonic sort* algorithm.
 --
+-- .. image:: ../../../_static/sort/sortnet/sortnet_BitonicSort.svg
+--    :target: ../../../_static/sort/sortnet/sortnet_BitonicSort.svg
+--
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany

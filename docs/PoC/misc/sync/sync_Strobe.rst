@@ -12,6 +12,9 @@ suppressed by a rising edge detection.
 .. ATTENTION::
    Use this synchronizer only for one-cycle high-active signals (strobes).
 
+.. image:: ../../../_static/misc/sync/sync_Strobe.svg
+   :target: ../../../_static/misc/sync/sync_Strobe.svg
+
 Constraints:
   This module uses sub modules which need to be constrained. Please
   attend to the notes of the instantiated sub modules.
@@ -24,7 +27,7 @@ Constraints:
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 51-63
+   :lines: 54-66
 
 Source file: `misc/sync/sync_Strobe.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Strobe.vhdl>`_
 
