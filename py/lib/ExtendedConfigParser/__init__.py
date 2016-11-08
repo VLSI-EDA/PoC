@@ -49,9 +49,9 @@ class ExtendedSectionProxy(SectionProxy):
 			raise KeyError(self._name + ":" + key)
 		return self._parser.get(self._name, key)
 
+
 # WORKAROUND: Required for ReadTheDocs, which doesn't support Python 3.5 yet.
 if (version_info < (3,5,0)):
-	print("Patching ConfigParser for ReadTheDocs. " + str(version_info))
 	class ConverterMapping(MutableMapping):
 		"""Enables reuse of get*() methods between the parser and section proxies.
 
