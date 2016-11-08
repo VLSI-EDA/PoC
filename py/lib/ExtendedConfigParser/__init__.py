@@ -32,16 +32,83 @@
 # limitations under the License.
 # ==============================================================================
 #
+import functools
 import re
-from collections  import OrderedDict as _default_dict, ChainMap as _ChainMap
+from sys        import version_info
+
+from collections  import OrderedDict as _default_dict, ChainMap as _ChainMap, MutableMapping
 from configparser import ConfigParser, SectionProxy, Interpolation, MAX_INTERPOLATION_DEPTH, DEFAULTSECT, _UNSET, ConverterMapping
 from configparser import NoSectionError, InterpolationDepthError, InterpolationSyntaxError, NoOptionError, InterpolationMissingOptionError
+
+import itertools
+
 
 class ExtendedSectionProxy(SectionProxy):
 	def __getitem__(self, key):
 		if not self._parser.has_option(self._name, key):
 			raise KeyError(self._name + ":" + key)
 		return self._parser.get(self._name, key)
+
+# WORKAROUND: Required for ReadTheDocs, which doesn't support Python 3.5 yet.
+if (version_info < (3,5,0)):
+	class ConverterMapping(MutableMapping):
+		"""Enables reuse of get*() methods between the parser and section proxies.
+
+		If a parser class implements a getter directly, the value for the given
+		key will be ``None``. The presence of the converter name here enables
+		section proxies to find and use the implementation on the parser class.
+		"""
+
+		GETTERCRE = re.compile(r"^get(?P<name>.+)$")
+
+		def __init__(self, parser):
+			self._parser = parser
+			self._data = {}
+			for getter in dir(self._parser):
+				m = self.GETTERCRE.match(getter)
+				if not m or not callable(getattr(self._parser, getter)):
+					continue
+				self._data[m.group('name')] = None  # See class docstring.
+
+		def __getitem__(self, key):
+			return self._data[key]
+
+		def __setitem__(self, key, value):
+			try:
+				k = 'get' + key
+			except TypeError:
+				raise ValueError('Incompatible key: {} (type: {})'
+												 ''.format(key, type(key)))
+			if k == 'get':
+				raise ValueError('Incompatible key: cannot use "" as a name')
+			self._data[key] = value
+			func = functools.partial(self._parser._get_conv, conv=value)
+			func.converter = value
+			setattr(self._parser, k, func)
+			for proxy in self._parser.values():
+				getter = functools.partial(proxy.get, _impl=func)
+				setattr(proxy, k, getter)
+
+		def __delitem__(self, key):
+			try:
+				k = 'get' + (key or None)
+			except TypeError:
+				raise KeyError(key)
+			del self._data[key]
+			for inst in itertools.chain((self._parser,), self._parser.values()):
+				try:
+					delattr(inst, k)
+				except AttributeError:
+					# don't raise since the entry was present in _data, silently
+					# clean up
+					continue
+
+		def __iter__(self):
+			return iter(self._data)
+
+		def __len__(self):
+			return len(self._data)
+
 
 # Monkey patching ... (a.k.a. duck punshing
 import configparser
