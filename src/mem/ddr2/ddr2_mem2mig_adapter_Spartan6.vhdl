@@ -58,7 +58,7 @@ use ieee.numeric_std.all;
 library poc;
 use poc.utils.all;
 
-entity ddr3_mem2mig_adapter_Spartan6 is
+entity ddr2_mem2mig_adapter_Spartan6 is
 
 	generic (
 		D_BITS     : positive;
@@ -92,9 +92,9 @@ entity ddr3_mem2mig_adapter_Spartan6 is
 		mig_rd_en         : out std_logic
 	);
 
-end entity ddr3_mem2mig_adapter_Spartan6;
+end entity ddr2_mem2mig_adapter_Spartan6;
 
-architecture rtl of ddr3_mem2mig_adapter_Spartan6 is
+architecture rtl of ddr2_mem2mig_adapter_Spartan6 is
 	-- The number of bits addressing the byte within the MIG address.
 	constant BYTE_ADDR_BITS : positive := log2ceil(D_BITS/8);
 

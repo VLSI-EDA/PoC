@@ -7,6 +7,7 @@ implementations.
 ## Sub-Namespace(s)
 
  - [`PoC.mem.ddr3`][mem_ddr3] - Adapter and Wrapper for DDR3 controllers
+ - [`PoC.mem.ddr2`][mem_ddr2] - Adapter and Wrapper for DDR3 controllers
  - [`PoC.mem.is61lv`][mem_is61lv] - ISSI - IS61LV SRAM controller
  - [`PoC.mem.is61nlp`][mem_is61nlp] - ISSI - IS61NLP SRAM controller
  - [`PoC.mem.lut`][mem_lut] - Lookup-Table (LUT) implementations
