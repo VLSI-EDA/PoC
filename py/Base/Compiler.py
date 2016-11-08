@@ -53,8 +53,8 @@ from Base.Exceptions    import ExceptionBase, SkipableException
 from Base.Project       import VHDLVersion, Environment, FileTypes
 from Base.Shared        import Shared, to_time
 from Parser.RulesParser import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn, AppendLineRuleMixIn
-from PoC.Solution       import RulesFile
-from PoC.TestCase       import SynthesisSuite, Synthesis, CompileStatus
+from DataBase.Solution       import RulesFile
+from DataBase.TestCase       import SynthesisSuite, Synthesis, CompileStatus
 
 
 class CompilerException(ExceptionBase):

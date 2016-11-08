@@ -32,9 +32,6 @@
 # ==============================================================================
 
 # entry point
-from PoC.Entity import Visibility
-
-
 if __name__ != "__main__":
 	# place library initialization code here
 	pass
@@ -44,16 +41,17 @@ else:
 
 
 # load dependencies
-from collections import OrderedDict
-from textwrap import dedent
+from collections        import OrderedDict
+from textwrap           import dedent
 
-from lib.Decorators      import ILazyLoadable, LazyLoadTrigger
+from lib.Decorators     import ILazyLoadable, LazyLoadTrigger
 from Base.Exceptions    import CommonException
 from Base.Configuration import ConfigurationException
-from Base.Project        import Project as BaseProject, File, FileTypes, VHDLSourceFile, VerilogSourceFile, CocotbSourceFile  #, ProjectFile
-from Parser.FilesParser  import FilesParserMixIn
-from Parser.RulesParser  import RulesParserMixIn
-from PoC                import __POC_SOLUTION_KEYWORD__
+from Base.Project       import Project as BaseProject, File, FileTypes, VHDLSourceFile, VerilogSourceFile, CocotbSourceFile  #, ProjectFile
+from Parser.FilesParser import FilesParserMixIn
+from Parser.RulesParser import RulesParserMixIn
+from DataBase           import __POC_SOLUTION_KEYWORD__
+from DataBase.Entity    import Visibility
 
 
 class Base(ILazyLoadable):

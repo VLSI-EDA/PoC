@@ -50,8 +50,8 @@ from Base.Exceptions    import ExceptionBase, SkipableException
 from Base.Logging       import LogEntry
 from Base.Project       import Environment, VHDLVersion
 from Base.Shared        import Shared, to_time
-from PoC.Entity         import WildCard
-from PoC.TestCase       import TestCase, SimulationStatus, TestSuite
+from DataBase.Entity         import WildCard
+from DataBase.TestCase       import TestCase, SimulationStatus, TestSuite
 
 
 VHDL_TESTBENCH_LIBRARY_NAME = "test"

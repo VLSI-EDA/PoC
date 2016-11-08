@@ -48,7 +48,7 @@ from pathlib                    import Path
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Compiler              import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
 from Base.Project               import ToolChain, Tool, VHDLVersion
-from PoC.Entity                 import WildCard
+from DataBase.Entity                 import WildCard
 from ToolChains.Lattice.Lattice import LatticeException
 from ToolChains.Lattice.Diamond import Diamond, SynthesisArgumentFile
 

@@ -45,7 +45,7 @@ from pathlib                      import Path
 from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
 from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
-from PoC.Config                   import Vendors
+from DataBase.Config                   import Vendors
 from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaSimException
 
 

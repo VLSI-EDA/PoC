@@ -5,7 +5,7 @@ The namespace ``PoC.misc.sync`` offers different clock-domain-crossing (CDC)
 synchronizer circuits. All synchronizers are based on the basic 2 flip-flop
 synchonizer called :doc:`sync_Bits </PoC/misc/sync/sync_Bits>`. PoC has two
 platform specific implementations for Altera and Xilinx, which are choosen,
-if the appropriate ``MY_DEVICE`` constant is configured in :doc:`my_config.vhdl </PoC/common/my_config_template>`.
+if the appropriate ``MY_DEVICE`` constant is configured in ``my_config.vhdl``.
 
 **Decision Table:**
 

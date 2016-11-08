@@ -38,7 +38,7 @@ from flags              import Flags
 from lib.Functions      import merge
 from Base.Exceptions    import CommonException
 from Parser.FilesParser import VHDLSourceFileMixIn, VerilogSourceFileMixIn, CocotbSourceFileMixIn
-from PoC.Config         import Board, Device
+from DataBase.Config         import Board, Device
 
 
 # TODO: nested filesets

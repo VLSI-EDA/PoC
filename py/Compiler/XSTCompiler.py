@@ -47,7 +47,7 @@ from pathlib                  import Path
 
 from Base.Project             import ToolChain, Tool
 from Base.Compiler            import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
-from PoC.Entity               import WildCard
+from DataBase.Entity               import WildCard
 from ToolChains.Xilinx.Xilinx import XilinxProjectExportMixIn
 from ToolChains.Xilinx.ISE    import ISE, ISEException
 

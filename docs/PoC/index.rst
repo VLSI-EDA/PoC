@@ -24,13 +24,5 @@ Namespaces for Entities:
    mem/index
    misc/index
    net/index
-
-.. only:: PoCInternal
-
-   .. toctree::
-      sata/index
-
-.. toctree::
-
    sort/index
    xil/index

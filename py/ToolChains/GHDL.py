@@ -309,8 +309,8 @@ class GHDL(Executable):
 	class SwitchGHDLWaveform(metaclass=LongValuedFlagArgument):
 		_name =     "wave"
 
-	class SwitchWaveformSelect(metaclass=LongValuedFlagArgument):
-		_name =     "wave-opt-file"		# requires GHDL update
+	class SwitchWaveformOptionFile(metaclass=LongValuedFlagArgument):
+		_name =     "read-opt-file"		# requires GHDL update
 
 	RunOptions = CommandLineArgumentList(
 		SwitchIEEEAsserts,
@@ -318,7 +318,7 @@ class GHDL(Executable):
 		SwitchVCDGZWaveform,
 		SwitchFastWaveform,
 		SwitchGHDLWaveform,
-		SwitchWaveformSelect
+		SwitchWaveformOptionFile
 	)
 
 	def GetGHDLAnalyze(self):

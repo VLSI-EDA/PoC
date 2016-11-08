@@ -201,7 +201,7 @@ class Simulator(BaseSimulator):
 
 			testbench.WaveformFile = waveformFilePath
 			if testbench.WaveformOptionFile.exists():
-				ghdl.RunOptions[ghdl.SwitchWaveformSelect] =  testbench.WaveformOptionFile
+				ghdl.RunOptions[ghdl.SwitchWaveformOptionFile] =  testbench.WaveformOptionFile
 
 		testbench.Result = ghdl.Run()
 

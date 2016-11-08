@@ -6,16 +6,16 @@ This module drives a dual-digit 7-segment display (Pmod_SSD). The module
 expects two binary encoded 4-bit ``Digit<i>`` signals and drives a 2x6 bit
 Pmod connector (7 anode bits, 1 cathode bit).
 
--- code-block:. none
+.. code-block:: none
 
-		Segment Pos./ Index
-			 AAA      |   000
-			F   B     |  5   1
-			F   B     |  5   1
-			 GGG      |   666
-			E   C     |  4   2
-			E   C     |  4   2
-			 DDD  DOT |   333  7
+   Segment Pos./ Index
+      AAA      |   000
+     F   B     |  5   1
+     F   B     |  5   1
+      GGG      |   666
+     E   C     |  4   2
+     E   C     |  4   2
+      DDD  DOT |   333  7
 
 
 

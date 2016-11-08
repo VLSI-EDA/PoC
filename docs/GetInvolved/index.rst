@@ -13,7 +13,7 @@ interresting project, please send us feedback or get listed on our
 If you are more familiar with PoC and it's components, you might start asking
 youself how components internally work. Please read our more advanced topics in
 the online help, read our inline source code comments or start a discussion on
-`Gitter <#discuss-with-us-on-gitter>`_ to ask us directly.
+`Gitter <#talk-to-us-on-gitter>`_ to ask us directly.
 
 Now you should be very familiar with our work and you might be interessted in
 developing own components and contribute them to the main repository. See the

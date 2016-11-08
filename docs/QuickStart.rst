@@ -106,7 +106,7 @@ clone the PoC-Library as a Git `submodule <http://git-scm.com/book/en/v2/Git-Too
 into that folder. ``ProjectRoot`` is the directory of the hosting Git. A detailed
 list of steps can be found at :doc:`Integration </UsingPoC/Integration>`.
 
-.. code-block:: powershell
+.. code-block:: PowerShell
 
    cd ProjectRoot
    mkdir lib | cd
@@ -117,13 +117,14 @@ list of steps can be found at :doc:`Integration </UsingPoC/Integration>`.
    git add .gitmodules lib\PoC
    git commit -m "Added new git submodule PoC in 'lib\PoC' (PoC-Library)."
 
+
 .. rubric:: 2. Configuring PoC
 
 The PoC-Library should be configured to explore its full potential. See
 :doc:`Configuration </UsingPoC/PoCConfiguration>` for more details. The
 following command lines will start the configuration process:
 
-.. code-block:: powershell
+.. code-block:: PowerShell
 
    cd ProjectRoot
    .\lib\PoC\poc.ps1 configure
@@ -137,7 +138,7 @@ target information. Copy the following two template files into your project's
 source folder. Rename these files to \*.vhdl and configure the VHDL constants
 in the files:
 
-.. code-block:: powershell
+.. code-block:: PowerShell
 
    cd ProjectRoot
    cp lib\PoC\src\common\my_config.vhdl.template src\common\my_config.vhdl

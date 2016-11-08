@@ -32,7 +32,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
+#
 from argparse                       import RawDescriptionHelpFormatter
 from collections                    import OrderedDict
 from configparser                   import Error as ConfigParser_Error, DuplicateOptionError
@@ -56,10 +56,10 @@ from Compiler.XCICompiler           import Compiler as XCICompiler
 from Compiler.XCOCompiler           import Compiler as XCOCompiler
 from Compiler.XSTCompiler           import Compiler as XSTCompiler
 from Compiler.VivadoCompiler        import Compiler as VivadoCompiler
-from PoC.Config                     import Board
-from PoC.Entity                     import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
-from PoC.Solution                   import Repository
-from PoC.Query                      import Query
+from DataBase.Config                    import Board
+from DataBase.Entity                    import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
+from DataBase.Solution                  import Repository
+from DataBase.Query                     import Query
 from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
 from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
 from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
@@ -140,7 +140,7 @@ class PoC(ILogable, ArgParseMixin):
 		Project =     None
 
 
-	def __init__(self, debug, verbose, quiet, dryRun):
+	def __init__(self, debug, verbose, quiet, dryRun, sphinx=False):
 		# Call the initializer of ILogable
 		# --------------------------------------------------------------------------
 		if quiet:      severity = Severity.Quiet
@@ -151,15 +151,12 @@ class PoC(ILogable, ArgParseMixin):
 		logger = Logger(self, severity, printToStdOut=True)
 		ILogable.__init__(self, logger=logger)
 
-		# Do some basic checks
-		self.__CheckEnvironment()
-
 		# Call the constructor of the ArgParseMixin
 		# --------------------------------------------------------------------------
 		description = dedent("""\
 			This is the PoC-Library Service Tool.
 			""")
-		epilog = "Epidingsbums"
+		epilog = "Pile-of-Cores"
 
 		class HelpFormatter(RawDescriptionHelpFormatter):
 			def __init__(self, *args, **kwargs):
@@ -167,6 +164,10 @@ class PoC(ILogable, ArgParseMixin):
 				super().__init__(*args, **kwargs)
 
 		ArgParseMixin.__init__(self, description=description, epilog=epilog, formatter_class=HelpFormatter, add_help=False)
+		if sphinx: return
+
+		# Do some basic checks
+		self.__CheckEnvironment()
 
 		# declare members
 		# --------------------------------------------------------------------------
@@ -1160,5 +1161,6 @@ def main(): # mccabe:disable=MC0001
 if __name__ == "__main__":
 	Exit.versionCheck((3,5,0))
 	main()
-else:
-	Exit.printThisIsNoLibraryFile(PoC.HeadLine)
+# else:
+# 	print(__name__)
+# 	Exit.printThisIsNoLibraryFile(PoC.HeadLine)

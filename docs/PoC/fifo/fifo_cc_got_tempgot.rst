@@ -31,14 +31,19 @@ If a fill state is not of interest, set ``*STATE_*_BITS = 0``.
 ``fstate_rd`` and ``estate_wr`` are combinatorial outputs and include an address
 comparator (subtractor) in their path.
 
-Examples:
-- FSTATE_RD_BITS = 1: fstate_rd == 0 => 0/2 full
-                      fstate_rd == 1 => 1/2 full (half full)
+**Examples:**
 
-- FSTATE_RD_BITS = 2: fstate_rd == 0 => 0/4 full
-                      fstate_rd == 1 => 1/4 full
-                      fstate_rd == 2 => 2/4 full
-                      fstate_rd == 3 => 3/4 full
+* FSTATE_RD_BITS = 1:
+
+  * fstate_rd == 0 => 0/2 full
+  * fstate_rd == 1 => 1/2 full (half full)
+
+* FSTATE_RD_BITS = 2:
+
+  * fstate_rd == 0 => 0/4 full
+  * fstate_rd == 1 => 1/4 full
+  * fstate_rd == 2 => 2/4 full
+  * fstate_rd == 3 => 3/4 full
 
 
 
@@ -48,7 +53,7 @@ Examples:
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 80-109
+   :lines: 85-114
 
 Source file: `fifo/fifo_cc_got_tempgot.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got_tempgot.vhdl>`_
 

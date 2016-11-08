@@ -49,7 +49,7 @@ from lib.Parser         import ParserException
 from Base.Exceptions    import CommonException, SkipableCommonException
 from Base.Logging       import ILogable
 from Base.Project       import ToolChain, Tool, VHDLVersion, Environment
-from PoC.Solution       import VirtualProject, FileListFile
+from DataBase.Solution       import VirtualProject, FileListFile
 
 
 # local helper function

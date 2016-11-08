@@ -43,7 +43,7 @@ else:
 # load dependencies
 from Base.Project           import ToolChain, Tool
 from Base.Compiler          import Compiler as BaseCompiler
-from PoC.Entity             import WildCard, FQN, EntityTypes
+from DataBase.Entity             import WildCard, FQN, EntityTypes
 from Compiler.XCOCompiler   import Compiler as XCOCompiler
 from Compiler.XSTCompiler   import Compiler as XSTCompiler
 
