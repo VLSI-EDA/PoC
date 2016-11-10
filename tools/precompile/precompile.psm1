@@ -823,9 +823,10 @@ function Write-ColoredGHDLLine
 
 		.PARAMETER InputObject
 		A object stream is required as an input.
-
 		.PARAMETER SuppressWarnings
 		Skip warning messages. (Show errors only.)
+		.PARAMETER Indent
+		Indentation string.
 	#>
 	[CmdletBinding()]
 	param(
@@ -833,27 +834,34 @@ function Write-ColoredGHDLLine
 		$InputObject,
 
 		[Parameter(Position=1)]
-		[switch]$SuppressWarnings = $false
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
 	)
 
 	begin
 	{	$ErrorRecordFound = $false	}
 
 	process
-	{	if (-not $InputObject)
-		{	Write-Host "Empty pipeline!"	}
-		elseif ($InputObject -is [string])
-		{	if ($InputObject.Contains("warning"))
+	{	if ($InputObject -is [String])
+		{	if ($InputObject -match ":\d+:\d+:warning:\s")
 			{	if (-not $SuppressWarnings)
-				{	Write-Host "WARNING: "	-NoNewline -ForegroundColor Yellow
+				{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
 					Write-Host $InputObject
 				}
 			}
-			else
+			elseif ($InputObject -match ":\d+:\d+:\s")
 			{	$ErrorRecordFound	= $true
-				Write-Host "ERROR: "		-NoNewline -ForegroundColor Red
+				Write-Host "${Indent}ERROR: "		-NoNewline -ForegroundColor Red
 				Write-Host $InputObject
 			}
+			elseif ($InputObject -match ":error:\s")
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}ERROR: "		-NoNewline -ForegroundColor Red
+				Write-Host $InputObject
+			}
+			else
+			{	Write-Host "${Indent}$InputObject"		}
 		}
 		else
 		{	Write-Host "Unsupported object in pipeline stream"		}
@@ -884,11 +892,21 @@ function Write-ColoredActiveHDLLine
 		$InputObject,
 
 		[Parameter(Position=1)]
-		[switch]$SuppressWarnings = $false
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
 	)
 
 	begin
-	{	$ErrorRecordFound = $false	}
+	{	# set default values
+		$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+		$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+		if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+		if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+
+		$ErrorRecordFound = $false
+	}
 
 	process
 	{	if (-not $InputObject)
@@ -896,19 +914,249 @@ function Write-ColoredActiveHDLLine
 		elseif ($InputObject -is [string])
 		{	if ($InputObject.Contains("WARNING"))
 			{	if (-not $SuppressWarnings)
-				{	Write-Host "WARNING: "	-NoNewline -ForegroundColor Yellow
+				{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
 					Write-Host $InputObject
 				}
 			}
 			elseif ($InputObject.Contains("ERROR"))
-			{	if (-not $SuppressWarnings)
-				{	Write-Host "ERROR: "	-NoNewline -ForegroundColor Red
-					Write-Host $InputObject
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject
+			}
+			else
+			{	Write-Host "${Indent}$InputObject"									}
+		}
+		else
+		{	Write-Host "Unsupported object in pipeline stream"		}
+	}
+
+	end
+	{	$ErrorRecordFound		}
+}
+
+function Write-ColoredQuestaVLibLine
+{	<#
+		.SYNOPSIS
+		This CmdLet colors QuestaSim/ModelSim output lines.
+
+		.DESCRIPTION
+		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
+		in yellow and errors are prefixed with 'ERROR: ' in red.
+
+		.PARAMETER InputObject
+		A object stream is required as an input.
+
+		.PARAMETER SuppressWarnings
+		Skip warning messages. (Show errors only.)
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline=$true)]
+		$InputObject,
+
+		[Parameter(Position=1)]
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
+	)
+
+	begin
+	{	# set default values
+		$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+		$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+		if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+		if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+
+		$ErrorRecordFound = $false
+	}
+
+	process
+	{	if (-not $InputObject)
+		{	Write-Host "Empty pipeline!"	}
+		elseif ($InputObject -is [string])
+		{	if ($InputObject.StartsWith("vlib "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("** Warning:") -and -not $SuppressWarnings)
+			{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
+				Write-Host $InputObject.Substring(12)
+			}
+			elseif ($InputObject.StartsWith("** Fatal:") -or $InputObject.StartsWith("# ** Fatal:"))
+			{	Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("** Error:") -or $InputObject.StartsWith("# ** Error:"))
+			{	Write-Host "${Indent}FATAL: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("QuestaSim-64 vlib"))
+			{	if ($EnableDebug)			{	Write-Host "${Indent}$InputObject" -ForegroundColor DarkGray		}		}
+			else
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}$InputObject"
+			}
+		}
+		else
+		{	Write-Host "Unsupported object in pipeline stream"		}
+	}
+
+	end
+	{	$ErrorRecordFound		}
+}
+function Write-ColoredQuestaVMapLine
+{	<#
+		.SYNOPSIS
+		This CmdLet colors QuestaSim/ModelSim output lines.
+
+		.DESCRIPTION
+		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
+		in yellow and errors are prefixed with 'ERROR: ' in red.
+
+		.PARAMETER InputObject
+		A object stream is required as an input.
+
+		.PARAMETER SuppressWarnings
+		Skip warning messages. (Show errors only.)
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline=$true)]
+		$InputObject,
+
+		[Parameter(Position=1)]
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
+	)
+
+	begin
+	{	# set default values
+		$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+		$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+		if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+		if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+
+		$ErrorRecordFound = $false
+	}
+
+	process
+	{	if (-not $InputObject)
+		{	Write-Host "Empty pipeline!"	}
+		elseif ($InputObject -is [string])
+		{	if ($InputObject.StartsWith("vmap "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("** Warning:") -and -not $SuppressWarnings)
+			{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
+				Write-Host $InputObject.Substring(12)
+			}
+			elseif ($InputObject.StartsWith("** Fatal:") -or $InputObject.StartsWith("# ** Fatal:"))
+			{	Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("** Error:") -or $InputObject.StartsWith("# ** Error:"))
+			{	Write-Host "${Indent}FATAL: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("QuestaSim-64 vmap"))
+			{	if ($EnableDebug)			{	Write-Host "${Indent}$InputObject" -ForegroundColor DarkGray		}		}
+			else
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}$InputObject"
+			}
+		}
+		else
+		{	Write-Host "Unsupported object in pipeline stream"		}
+	}
+
+	end
+	{	$ErrorRecordFound		}
+}
+function Write-ColoredQuestaVComLine
+{	<#
+		.SYNOPSIS
+		This CmdLet colors QuestaSim/ModelSim output lines.
+
+		.DESCRIPTION
+		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
+		in yellow and errors are prefixed with 'ERROR: ' in red.
+
+		.PARAMETER InputObject
+		A object stream is required as an input.
+
+		.PARAMETER SuppressWarnings
+		Skip warning messages. (Show errors only.)
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline=$true)]
+		$InputObject,
+
+		[Parameter(Position=1)]
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
+	)
+
+	begin
+	{	# set default values
+		$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+		$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+		if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+		if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+
+		$ErrorRecordFound = $false
+	}
+
+	process
+	{	if (-not $InputObject)
+		{	Write-Host "Empty pipeline!"	}
+		elseif ($InputObject -is [string])
+		{	if ($InputObject.StartsWith("vcom "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("-- Loading "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("-- Compiling "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("** Warning:") -and -not $SuppressWarnings)
+			{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
+				Write-Host $InputObject.Substring(12)
+			}
+			elseif ($InputObject.StartsWith("** Fatal:") -or $InputObject.StartsWith("# ** Fatal:"))
+			{	Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("** Error:") -or $InputObject.StartsWith("# ** Error:"))
+			{	Write-Host "${Indent}FATAL: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("Start time:"))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("End time:"))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("QuestaSim-64 vcom"))
+			{	if ($EnableDebug)			{	Write-Host "${Indent}$InputObject" -ForegroundColor DarkGray		}		}
+			elseif ($InputObject -match "Errors: (\d+), Warnings: (\d+)")
+			{	if ($EnableVerbose)
+				{	if ($Matches[1] -eq 0)
+					{	Write-Host "${Indent}Errors: 0" -NoNewline -ForegroundColor Gray 							}
+					else
+					{ Write-Host "${Indent}Errors: ${Matches[1]}" -NoNewline -ForegroundColor Red		}
+					Write-Host ", " -NoNewline
+					if ($Matches[2] -eq 0)
+					{	Write-Host "Warnings: 0" -ForegroundColor Gray 																}
+					else
+					{ Write-Host "Warnings: ${Matches[2]}" -ForegroundColor Yellow									}
+				}
+				else
+				{	if ($Matches[1] -gt 0)	{ Write-Host "${Indent}Errors:   ${Matches[1]}" -ForegroundColor Red				}
+					if ($Matches[2] -gt 0)	{	Write-Host "${Indent}Warnings: ${Matches[2]}" -ForegroundColor Yellow	}
 				}
 			}
 			else
 			{	$ErrorRecordFound	= $true
-				Write-Host $InputObject
+				Write-Host "${Indent}$InputObject"
 			}
 		}
 		else
@@ -957,3 +1205,6 @@ Export-ModuleMember -Function 'Close-VivadoEnvironment'
 Export-ModuleMember -Function 'Restore-NativeCommandStream'
 Export-ModuleMember -Function 'Write-ColoredGHDLLine'
 Export-ModuleMember -Function 'Write-ColoredActiveHDLLine'
+Export-ModuleMember -Function 'Write-ColoredQuestaVLibLine'
+Export-ModuleMember -Function 'Write-ColoredQuestaVMapLine'
+Export-ModuleMember -Function 'Write-ColoredQuestaVComLine'
