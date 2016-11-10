@@ -97,7 +97,7 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  on Linux."
 	echo ""
 	echo "Usage:"
-	echo "  compile-osvvm.sh [-c] [--help|--all|--ghdl|--vsim]"
+	echo "  compile-osvvm.sh [-c] [--help|--all|--ghdl|--questa]"
 	echo ""
 	echo "Common commands:"
 	echo "  -h --help             Print this help page"
@@ -239,4 +239,3 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 
 	cd $WorkingDir
 fi
-

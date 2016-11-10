@@ -101,7 +101,7 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  on Linux."
 	echo ""
 	echo "Usage:"
-	echo "  compile-altera.sh [-c] [--help|--all|--ghdl|--vsim] [<Options>]"
+	echo "  compile-altera.sh [-c] [--help|--all|--ghdl|--questa] [<Options>]"
 	echo ""
 	echo "Common commands:"
 	echo "  -h --help             Print this help page"

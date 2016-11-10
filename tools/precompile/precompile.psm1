@@ -866,7 +866,7 @@ function Write-ColoredGHDLLine
 function Write-ColoredActiveHDLLine
 {	<#
 		.SYNOPSIS
-		This CmdLet colors GHDL output lines.
+		This CmdLet colors ActiveHDL output lines.
 
 		.DESCRIPTION
 		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '

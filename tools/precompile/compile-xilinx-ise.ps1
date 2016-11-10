@@ -43,27 +43,27 @@
 #
 [CmdletBinding()]
 param(
-	# Pre-compile all libraries and packages for all simulators
+	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
-	# Pre-compile the Xilinx ISE libraries for GHDL
+	# Pre-compile the Xilinx ISE libraries for GHDL.
 	[switch]$GHDL =				$false,
 
-	# Pre-compile the Xilinx ISE libraries for QuestaSim
+	# Pre-compile the Xilinx ISE libraries for QuestaSim.
 	[switch]$Questa =			$false,
 
-	# Change the 'xilinx' symlink to 'xilinx-ise'
+	# Change the 'xilinx' symlink to 'xilinx-ise'.
 	[switch]$ReLink =			$false,
 
-	# Set VHDL Standard to '93
+	# Set VHDL Standard to '93.
 	[switch]$VHDL93 =			$false,
-	# Set VHDL Standard to '08
+	# Set VHDL Standard to '08.
 	[switch]$VHDL2008 =		$false,
 
 	# Clean up directory before analyzing.
 	[switch]$Clean =			$false,
 
-	# Show the embedded help page(s)
+	# Show the embedded help page(s).
 	[switch]$Help =				$false
 )
 
@@ -109,7 +109,7 @@ if ($GHDL)
 	$GHDLDirName =		Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir="$PoCRootDir\$PrecompiledDir\$GHDLDirName"
+	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir
 

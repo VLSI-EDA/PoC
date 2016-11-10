@@ -42,19 +42,19 @@
 #
 [CmdletBinding()]
 param(
-	# Pre-compile all libraries and packages for all simulators
+	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
-	# Pre-compile the OSVVM libraries for GHDL
+	# Pre-compile the OSVVM libraries for GHDL.
 	[switch]$GHDL =				$false,
 
-	# Pre-compile the OSVVM libraries for QuestaSim
+	# Pre-compile the OSVVM libraries for QuestaSim.
 	[switch]$Questa =			$false,
 
 	# Clean up directory before analyzing.
 	[switch]$Clean =			$false,
 
-	# Show the embedded help page(s)
+	# Show the embedded help page(s).
 	[switch]$Help =				$false
 )
 
