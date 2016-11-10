@@ -48,7 +48,7 @@ from lib.Functions              import CallByRefParam
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Logging               import LogEntry, Severity
 from Base.Configuration         import Configuration as BaseConfiguration, ConfigurationException
-from Base.Simulator             import SimulationResult, PoCSimulationResultFilter
+from Base.Simulator             import SimulationResult, PoCSimulationResultFilter, PoCSimulationResultNotFoundException
 from Base.Executable            import Executable
 from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
 from ToolChains.Mentor.Mentor   import MentorException
@@ -296,51 +296,54 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		_value =  None
 
 	class FlagQuietMode(metaclass=ShortFlagArgument):
-		_name =    "quiet"					# Do not report 'Loading...' messages"
+		_name =   "quiet"					# Do not report 'Loading...' messages"
 		_value =  None
 
 	class FlagBatchMode(metaclass=ShortFlagArgument):
-		_name =    "batch"
+		_name =   "batch"
 		_value =  None
 
 	class FlagGuiMode(metaclass=ShortFlagArgument):
-		_name =    "gui"
+		_name =   "gui"
 		_value =  None
 
 	class SwitchBatchCommand(metaclass=ShortTupleArgument):
-		_name =    "do"
+		_name =   "do"
 		_value =  None
 
 	class FlagCommandLineMode(metaclass=ShortFlagArgument):
-		_name =    "c"
+		_name =   "c"
 		_value =  None
 
 	class SwitchModelSimIniFile(metaclass=ShortTupleArgument):
-		_name =    "modelsimini"
+		_name =   "modelsimini"
 		_value =  None
 
 	class FlagOptimization(metaclass=ShortFlagArgument):
-		_name =    "vopt"
+		_name =   "vopt"
 		_value =  None
 
 	class FlagReportAsError(metaclass=ShortTupleArgument):
-		_name =    "error"
+		_name =   "error"
 		_value =  None
 
 	class SwitchTimeResolution(metaclass=ShortTupleArgument):
-		_name =    "t"			# -t [1|10|100]fs|ps|ns|us|ms|sec  Time resolution limit
+		_name =   "t"			# -t [1|10|100]fs|ps|ns|us|ms|sec  Time resolution limit
 		_value =  None
 
 	class ArgLogFile(metaclass=ShortTupleArgument):
-		_name =    "l"			# what's the difference to -logfile ?
+		_name =   "l"			# what's the difference to -logfile ?
 		_value =  None
 
+	class ArgKeepStdOut(metaclass=ShortFlagArgument):
+		_name =   "keepstdout"
+
 	class ArgVHDLLibraryName(metaclass=ShortTupleArgument):
-		_name =    "lib"
+		_name =   "lib"
 		_value =  None
 
 	class ArgOnFinishMode(metaclass=ShortTupleArgument):
-		_name =    "onfinish"
+		_name =   "onfinish"
 		_value =  None				# Customize the kernel shutdown behavior at the end of simulation; Valid modes: ask, stop, exit, final (Default: ask)
 
 	class SwitchTopLevel(metaclass=StringArgument):
@@ -357,6 +360,7 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		FlagOptimization,
 		FlagReportAsError,
 		ArgLogFile,
+		ArgKeepStdOut,
 		ArgVHDLLibraryName,
 		SwitchTimeResolution,
 		ArgOnFinishMode,
@@ -372,10 +376,10 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 		except Exception as ex:
 			raise QuestaSimException("Failed to launch vsim run.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
-		simulationResult = CallByRefParam(SimulationResult.Error)
+		self._hasErrors =   False
+		simulationResult =  CallByRefParam(SimulationResult.Error)
 		try:
 			iterator = iter(PoCSimulationResultFilter(QuestaVSimFilter(self.GetReader()), simulationResult))
 
@@ -394,6 +398,9 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 				line.IndentBy(self.Logger.BaseIndent + 1)
 				self.Log(line)
 
+		except PoCSimulationResultNotFoundException:
+			if self.Parameters[self.FlagGuiMode]:
+				simulationResult <<= SimulationResult.GUIRun
 		except StopIteration:
 			pass
 		finally:
@@ -401,6 +408,7 @@ class QuestaSimulator(Executable, QuestaSimMixIn):
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 		return simulationResult.value
+
 
 class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
@@ -425,7 +433,7 @@ class QuestaVHDLLibraryTool(Executable, QuestaSimMixIn):
 	def HasErrors(self):
 		return self._hasErrors
 
-	class Executable(metaclass=ExecutableArgument):      pass
+	class Executable(metaclass=ExecutableArgument):     pass
 	class SwitchLibraryName(metaclass=StringArgument):  pass
 
 	Parameters = CommandLineArgumentList(

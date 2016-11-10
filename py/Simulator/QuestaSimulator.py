@@ -158,7 +158,7 @@ class Simulator(BaseSimulator):
 
 	def _RunSimulationWithGUI(self, testbench):
 		tclGUIFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
-		tclWaveFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
+		tclWaveFilePath =     self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
 
 		# create a QuestaSimulator instance
 		vsim = self._toolChain.GetSimulator()

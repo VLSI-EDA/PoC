@@ -50,8 +50,8 @@ from Base.Exceptions    import ExceptionBase, SkipableException
 from Base.Logging       import LogEntry
 from Base.Project       import Environment, VHDLVersion
 from Base.Shared        import Shared, to_time
-from DataBase.Entity         import WildCard
-from DataBase.TestCase       import TestCase, SimulationStatus, TestSuite
+from DataBase.Entity    import WildCard
+from DataBase.TestCase  import TestCase, SimulationStatus, TestSuite
 
 
 VHDL_TESTBENCH_LIBRARY_NAME = "test"
@@ -61,6 +61,9 @@ class SimulatorException(ExceptionBase):
 	pass
 
 class SkipableSimulatorException(SimulatorException, SkipableException):
+	pass
+
+class PoCSimulationResultNotFoundException(SkipableSimulatorException):
 	pass
 
 
@@ -80,6 +83,7 @@ class SimulationResult(Enum):
 	Failed =      2
 	NoAsserts =   3
 	Passed =      4
+	GUIRun =      5
 
 
 class Simulator(Shared):
@@ -246,7 +250,8 @@ class Simulator(Shared):
 		SimulationStatus.SimulationError:     "RED",
 		SimulationStatus.SimulationFailed:    "RED",
 		SimulationStatus.SimulationNoAsserts: "YELLOW",
-		SimulationStatus.SimulationSuccess:   "GREEN"
+		SimulationStatus.SimulationSuccess:   "GREEN",
+		SimulationStatus.SimulationGUIRun:    "YELLOW"
 	}
 
 	__SIMULATION_REPORT_STATUS_TEXT_TABLE__ = {
@@ -258,7 +263,8 @@ class Simulator(Shared):
 		SimulationStatus.SimulationError:     "SIM. ERROR",
 		SimulationStatus.SimulationFailed:    "FAILED",
 		SimulationStatus.SimulationNoAsserts: "NO ASSERTS",
-		SimulationStatus.SimulationSuccess:   "PASSED"
+		SimulationStatus.SimulationSuccess:   "PASSED",
+		SimulationStatus.SimulationGUIRun:    "GUI RUN"
 	}
 
 	def PrintSimulationReportLine(self, testObject, indent, nameColumnWidth):
@@ -307,4 +313,4 @@ def PoCSimulationResultFilter(gen, simulationResult):
 
 		yield line
 
-	if (state != 6):    raise SkipableSimulatorException("No PoC Testbench Report in simulator output found.")
+	if (state != 6):    raise PoCSimulationResultNotFoundException("No PoC Testbench Report in simulator output found.")

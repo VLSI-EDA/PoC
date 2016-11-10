@@ -54,6 +54,7 @@ class SimulationStatus(Enum):
 	SimulationFailed =    10
 	SimulationNoAsserts = 15
 	SimulationSuccess =   20
+	SimulationGUIRun =    30
 
 @unique
 class CompileStatus(Enum):
@@ -282,14 +283,14 @@ class TestCase(TestBase):
 	@property
 	def Testbench(self):      return self._test
 
-
 	def UpdateStatus(self, testResult):
 		if (testResult is testResult.NotRun):       self._status = SimulationStatus.Unknown
 		elif (testResult is testResult.Error):      self._status = SimulationStatus.SimulationError
 		elif (testResult is testResult.Failed):     self._status = SimulationStatus.SimulationFailed
 		elif (testResult is testResult.NoAsserts):  self._status = SimulationStatus.SimulationNoAsserts
 		elif (testResult is testResult.Passed):     self._status = SimulationStatus.SimulationSuccess
-		else:                                       raise IndentationError("Wuhu1")
+		elif (testResult is testResult.GUIRun):     self._status = SimulationStatus.SimulationGUIRun
+		else:                                       raise ValueError("Unsupported value in 'testResult'.")
 
 
 class Synthesis(TestBase):
