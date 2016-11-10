@@ -57,6 +57,13 @@ package io is
 
 	type T_IO_DATARATE is (IO_DATARATE_SDR, IO_DATARATE_DDR, IO_DATARATE_QDR);
 
+	-- Drive a std_logic_vector from a Tri-State bus and in reverse.
+	-- Use this procedure only in simulation
+	procedure io_tristate_driver (
+		signal pad      : inout std_logic_vector;
+		signal tristate : inout T_IO_TRISTATE_VECTOR
+	);
+
 	type T_IO_7SEGMENT_CHAR is (
 		IO_7SEGMENT_CHAR_0, IO_7SEGMENT_CHAR_1, IO_7SEGMENT_CHAR_2, IO_7SEGMENT_CHAR_3,
 		IO_7SEGMENT_CHAR_4, IO_7SEGMENT_CHAR_5, IO_7SEGMENT_CHAR_6, IO_7SEGMENT_CHAR_7,
@@ -159,6 +166,19 @@ end package;
 
 
 package body io is
+	procedure io_tristate_driver (
+		signal pad      : inout std_logic_vector;
+		signal tristate : inout T_IO_TRISTATE_VECTOR
+	) is
+	begin
+		for k in pad'range loop
+			pad(k)        <= ite((tristate(k).t = '1'), 'Z', tristate(k).o);
+			tristate(k).i <= pad(k);
+			tristate(k).t <= 'Z';     -- drive all record members
+			tristate(k).o <= 'Z';     -- drive all record members
+		end loop;
+	end procedure;
+
 	function io_7SegmentDisplayEncoding(hex	: std_logic_vector(3 downto 0); dot : std_logic := '0'; WITH_DOT : boolean := FALSE) return std_logic_vector is
 		constant DOT_INDEX	: positive	:= ite(WITH_DOT, 7, 6);
 		variable Result			: std_logic_vector(ite(WITH_DOT, 7, 6) downto 0);
