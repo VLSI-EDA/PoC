@@ -9,23 +9,34 @@
 -- Description:
 -- -------------------------------------
 -- Complete controller for ISSI SDR-SDRAM for Altera DE0 Board.
+--
 -- SDRAM Device: IS42S16400F
 --
--- CLK_PERIOD = clock period in nano seconds. All SDRAM timings are
--- calculated for the device stated above.
+-- Configuration
+-- *************
 --
--- CL = cas latency, choose according to clock frequency.
--- BL = burst length.
---
--- Command, address and write data is sampled with clk.
+-- +------------+----------------------------------------------------+
+-- | Parameter  | Description                                        |
+-- +============+====================================================+
+-- | CLK_PERIOD | Clock period in nano seconds. All SDRAM timings are|
+-- |            | calculated for the device stated above.            |
+-- +------------+----------------------------------------------------+
+-- | CL         | CAS latency, choose according to clock frequency.  |
+-- +------------+----------------------------------------------------+
+-- | BL         | Burst length. Choose BL=1 for single cycle memory  |
+-- |            | transactions as required for the PoC.Mem interface.|
+-- +------------+----------------------------------------------------+
 --
 -- Tested with: CLK_PERIOD = 7.5 (133 MHz), CL=2, BL=1.
 --
--- Read data is aligned with clk. Either process data in this clock
--- domain, or connect a FIFO to transfer data into another clock domain of your
--- choice.
+-- Operation
+-- *********
 --
--- For description on 'clkout' see sdram_ctrl_phy_de0.vhdl.
+-- Command, address and write data is sampled with ``clk``.
+-- Read data is also aligned with ``clk``.
+--
+-- For description on ``clkout`` see
+-- :doc:`sdram_ctrl_phy_de0 <sdram_ctrl_phy_de0>`.
 --
 -- Synchronous resets are used.
 --

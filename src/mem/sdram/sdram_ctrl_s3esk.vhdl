@@ -9,19 +9,32 @@
 -- Description:
 -- -------------------------------------
 -- Controller for Micron DDR-SDRAM on Spartan-3E Starter Kit Board.
+--
 -- SDRAM Device: MT46V32M16-6T
 --
--- CLK_PERIOD = clock period in nano seconds. All SDRAM timings are
--- calculated for the device stated above.
+-- Configuration
+-- *************
 --
--- CL = cas latency, choose according to clock frequency.
--- BL = burst length.
+-- +------------+----------------------------------------------------+
+-- | Parameter  | Description                                        |
+-- +============+====================================================+
+-- | CLK_PERIOD | Clock period in nano seconds. All SDRAM timings are|
+-- |            | calculated for the device stated above.            |
+-- +------------+----------------------------------------------------+
+-- | CL         | CAS latency, choose according to clock frequency.  |
+-- +------------+----------------------------------------------------+
+-- | BL         | Burst length. Choose BL=2 for single cycle memory  |
+-- |            | transactions as required for the PoC.Mem interface.|
+-- +------------+----------------------------------------------------+
 --
 -- Tested with: CLK_PERIOD = 10.0, CL=2, BL=2.
 --
--- Command, address and write data is sampled with clk.
+-- Operation
+-- *********
 --
--- Read data is aligned with clk_fb90_n. Either process data in this clock
+-- Command, address and write data are sampled with the rising edge of ``clk``.
+--
+-- Read data is aligned with ``clk_fb90_n``. Either process data in this clock
 -- domain, or connect a FIFO to transfer data into another clock domain of your
 -- choice.  This FIFO should capable of storing at least one burst (size BL/2)
 -- + start of next burst (size 1).

@@ -2,7 +2,7 @@
 ocram
 =====
 
-These are On-Chip RAM (OCRAM) entities...
+The namespace ``PoC.mem.ocram`` offers different on-chip RAM abstractions.
 
 **Package**
 

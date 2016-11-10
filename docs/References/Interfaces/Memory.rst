@@ -37,7 +37,7 @@ For example, a 1 KiByte memory with a 32-bit datapath has the
 following configuration:
 
 * 4 bytes per memory word,
-* ADDR_BITS=8 because log_2(1 KiByte / 4 bytes) = 8, and
+* ADDR_BITS=8 because :math:`\log_2(1\,\mbox{KiByte} / 4\,\mbox{bytes}) = 8`, and
 * DATA_BITS=32 which is the datapath size in bits.
 
 

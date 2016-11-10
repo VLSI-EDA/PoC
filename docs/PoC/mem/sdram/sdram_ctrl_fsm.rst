@@ -3,12 +3,13 @@ sdram_ctrl_fsm
 ##############
 
 This file contains the FSM as well as parts of the datapath.
-The board specific physical layer is defined in another file
-sdram_ctrl_phy_*.vhdl
+The board specific physical layer is defined in another file.
 
-Generics:
----------
+Configuration
+*************
+
 SDRAM_TYPE activates some special cases:
+
 - 0 for SDR-SDRAM
 - 1 for DDR-SDRAM
 - 2 for DDR2-SDRAM (no special support yet like ODT)
@@ -23,16 +24,19 @@ by the physical interface for DDR interfaces.
 Furthermore, the memory array is divided into
 2**R_BITS rows, 2**C_BITS columns and 2**B_BITS banks.
 
-For example, the MT46V32M16 has 512 Mbit = 8M x 4 banks x 16 bit =
-32M cells x 16 bit, with 8K rows and 1K columns.
-- A_BITS = log2ceil(32M) = 25
-- D_BITS = 16
-- data-path width of phy on user side: 32-bit because of DDR
-- R_BITS = log2ceil(8K)  = 13
-- C_BITS = log2ceil(1K)  = 10
-- B_BITS = log2ceil(4)   =  2
+.. NOTE::
+   For example, the MT46V32M16 has 512 Mbit = 8M x 4 banks x 16 bit =
+   32M cells x 16 bit, with 8K rows and 1K columns. Thus, the configuration
+   is:
 
-Set cas latency (CL, MR_CL) and  burst length (BL, MR_BL) according to
+   - A_BITS = :math:`\log_2(32\,\mbox{M}) = 25`
+   - D_BITS = 16
+   - data-path width of phy on user side: 32-bit because of DDR
+   - R_BITS = :math:`\log_2(8\,\mbox{K})  = 13`
+   - C_BITS = :math:`\log_2(1\,\mbox{K})  = 10`
+   - B_BITS = :math:`\log_2(4)   =  2`
+
+Set CAS latency (CL, MR_CL) and  burst length (BL, MR_BL) according to
 your needs.
 
 If you have a DDR-SDRAM then set INIT_DLL = true, otherwise false.
@@ -52,8 +56,8 @@ specified in number of average refresh periods (specified by T_REFI):
 INIT_WAIT = ceil(wait_time / clock_period / T_REFI)
 e.g. INIT_WAIT = ceil(200 us / 10 ns / 700) = 29
 
-Signals:
---------
+Operation
+*********
 
 After user_cmd_valid is asserted high, the command (user_write) and address
 (user_addr) must be hold until user_got_cmd is asserted.
@@ -74,7 +78,7 @@ The write data must directly connected to the physical layer.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 120-164
+   :lines: 124-168
 
 Source file: `mem/sdram/sdram_ctrl_fsm.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_fsm.vhdl>`_
 
