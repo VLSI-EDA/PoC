@@ -10,7 +10,7 @@ __pycache__
 
 # ignore build directories
 /docs/_build/
-/docs/PyInfrastructure/
+/docs/PyInfrastructure/*
 !/docs/PyInfrastructure/.gitempty
 !/docs/PyInfrastructure/index.rst
 
