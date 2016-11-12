@@ -32,18 +32,19 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Base.PoCBase")
-
-
+# load dependencies
 from enum             import Enum, unique
 
 from lib.Functions    import Init
+
+
+__api__ = [
+	'Severity',
+	'LogEntry',
+	'Logger',
+	'ILogable'
+]
+__all__ = __api__
 
 
 @unique

@@ -32,18 +32,18 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
-
-
+# load dependencies
 from Base.Configuration    import Configuration as BaseConfiguration
 from Base.Project          import ConstraintFile, FileTypes
 from Base.ToolChain        import ToolChainException
+
+
+__api__ = [
+	'LatticeException',
+	'Configuration',
+	'LatticeDesignConstraintFile'
+]
+__all__ = __api__
 
 
 class LatticeException(ToolChainException):

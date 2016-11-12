@@ -30,15 +30,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.vSimSimulator")
-
-
 # load dependencies
 from pathlib                      import Path
 
@@ -49,14 +40,19 @@ from DataBase.Config                   import Vendors
 from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaSimException
 
 
+__api__ = [
+	'Simulator'
+]
+__all__ = __api__
+
+
 class Simulator(BaseSimulator):
 	_TOOL_CHAIN =            ToolChain.Mentor_QuestaSim
 	_TOOL =                  Tool.Mentor_vSim
 
 	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun)
+		super().__init__(host, dryRun, guiMode)
 
-		self._guiMode =       guiMode
 		self._vhdlVersion =   None
 		self._vhdlGenerics =  None
 		self._toolChain =     None
@@ -143,7 +139,8 @@ class Simulator(BaseSimulator):
 		if self._guiMode:
 			return self._RunSimulationWithGUI(testbench)
 
-		tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
+		tclBatchFilePath =        self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
+		tclDefaultBatchFilePath = self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultBatchScript']
 
 		# create a QuestaSimulator instance
 		vsim = self._toolChain.GetSimulator()
@@ -152,13 +149,29 @@ class Simulator(BaseSimulator):
 		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
 		vsim.Parameters[vsim.FlagCommandLineMode] =   True
-		vsim.Parameters[vsim.SwitchBatchCommand] =    "do {0}".format(tclBatchFilePath.as_posix())
 		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+
+		# find a Tcl batch script for the BATCH mode
+		vsimBatchCommand = ""
+		if (tclBatchFilePath.exists()):
+			self.LogDebug("Found Tcl script for BATCH mode: '{0!s}'".format(tclBatchFilePath))
+			vsimBatchCommand += "do {0};".format(tclBatchFilePath.as_posix())
+		elif (tclDefaultBatchFilePath.exists()):
+			self.LogDebug("Falling back to default Tcl script for BATCH mode: '{0!s}'".format(tclDefaultBatchFilePath))
+			vsimBatchCommand += "do {0};".format(tclDefaultBatchFilePath.as_posix())
+		else:
+			raise QuestaSimException("No Tcl batch script for BATCH mode found.") \
+				from FileNotFoundError(str(tclDefaultBatchFilePath))
+
+		vsim.Parameters[vsim.SwitchBatchCommand] = vsimBatchCommand
+
 		testbench.Result = vsim.Simulate()
 
 	def _RunSimulationWithGUI(self, testbench):
-		tclGUIFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
-		tclWaveFilePath =     self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
+		tclGUIFilePath =          self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimGUIScript']
+		tclWaveFilePath =         self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimWaveScript']
+		tclDefaultGUIFilePath =   self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultGUIScript']
+		tclDefaultWaveFilePath =  self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultWaveScript']
 
 		# create a QuestaSimulator instance
 		vsim = self._toolChain.GetSimulator()
@@ -170,11 +183,47 @@ class Simulator(BaseSimulator):
 		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 		# vsim.Parameters[vsim.SwitchTitle] =           testbenchName
 
-		if (tclWaveFilePath.exists()):
-			self.LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
-			vsim.Parameters[vsim.SwitchBatchCommand] =  "do {0}; do {1}".format(tclWaveFilePath.as_posix(), tclGUIFilePath.as_posix())
+		vsimDefaultWaveCommands = "add wave *"
+
+		# find a Tcl batch script to load predefined signals in the waveform window
+		vsimBatchCommand = ""
+		self.LogDebug("'{0!s}'\n    '{1!s}'".format(tclWaveFilePath, self.Host.Directories.Root))
+		if (tclWaveFilePath != self.Host.Directories.Root):
+			if (tclWaveFilePath.exists()):
+				self.LogDebug("Found waveform script: '{0!s}'".format(tclWaveFilePath))
+				vsimBatchCommand = "do {0};".format(tclWaveFilePath.as_posix())
+			elif (tclDefaultWaveFilePath != self.Host.Directories.Root):
+				if (tclDefaultWaveFilePath.exists()):
+					self.LogDebug("Found default waveform script: '{0!s}'".format(tclDefaultWaveFilePath))
+					vsimBatchCommand = "do {0};".format(tclDefaultWaveFilePath.as_posix())
+				else:
+					self.LogDebug("Couldn't find default waveform script: '{0!s}'. Loading default command '{1}'.".format(tclDefaultWaveFilePath, vsimDefaultWaveCommands))
+					vsimBatchCommand = "{0};".format(vsimDefaultWaveCommands)
+			else:
+				self.LogDebug("Couldn't find waveform script: '{0!s}'. Loading default command '{1}'.".format(tclWaveFilePath, vsimDefaultWaveCommands))
+				vsim.Parameters[vsim.SwitchBatchCommand] = "{0};".format(vsimDefaultWaveCommands)
+		elif (tclDefaultWaveFilePath != self.Host.Directories.Root):
+			if (tclDefaultWaveFilePath.exists()):
+				self.LogDebug("Falling back to default waveform script: '{0!s}'".format(tclDefaultWaveFilePath))
+				vsimBatchCommand = "do {0};".format(tclDefaultWaveFilePath.as_posix())
+			else:
+				self.LogDebug("Couldn't find default waveform script: '{0!s}'. Loading default command '{1}'.".format(tclDefaultWaveFilePath, vsimDefaultWaveCommands))
+				vsimBatchCommand = "{0};".format(vsimDefaultWaveCommands)
 		else:
-			self.LogDebug("Didn't find waveform script: '{0!s}'. Loading default commands.".format(tclWaveFilePath))
-			vsim.Parameters[vsim.SwitchBatchCommand] =  "add wave *; do {0}".format(tclGUIFilePath.as_posix())
+			self.LogWarning("No waveform script specified. Loading default command '{1}'.".format(vsimDefaultWaveCommands))
+			vsimBatchCommand = "{0};".format(vsimDefaultWaveCommands)
+
+		# find a Tcl batch script for the GUI mode
+		if (tclGUIFilePath.exists()):
+			self.LogDebug("Found Tcl script for GUI mode: '{0!s}'".format(tclGUIFilePath))
+			vsimBatchCommand +=  "do {0};".format(tclGUIFilePath.as_posix())
+		elif (tclDefaultGUIFilePath.exists()):
+			self.LogDebug("Falling back to default Tcl script for GUI mode: '{0!s}'".format(tclDefaultGUIFilePath))
+			vsimBatchCommand +=  "do {0};".format(tclDefaultGUIFilePath.as_posix())
+		else:
+			raise QuestaSimException("No Tcl batch script for GUI mode found.") \
+				from FileNotFoundError(str(tclDefaultGUIFilePath))
+
+		vsim.Parameters[vsim.SwitchBatchCommand] = vsimBatchCommand
 
 		testbench.Result = vsim.Simulate()

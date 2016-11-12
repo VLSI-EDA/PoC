@@ -31,15 +31,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Class PoCCompiler")
-
-
 # load dependencies
 import shutil
 from datetime           import datetime
@@ -50,6 +41,13 @@ from Base.Exceptions    import CommonException, SkipableCommonException
 from Base.Logging       import ILogable
 from Base.Project       import ToolChain, Tool, VHDLVersion, Environment
 from DataBase.Solution       import VirtualProject, FileListFile
+
+
+__api__ = [
+	'to_time',
+	'Shared'
+]
+__all__ = __api__
 
 
 # local helper function

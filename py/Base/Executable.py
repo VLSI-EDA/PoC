@@ -31,14 +31,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Base.Executable")
-
 # load dependencies
 from pathlib                import Path
 from subprocess              import Popen				as Subprocess_Popen
@@ -47,6 +39,25 @@ from subprocess              import STDOUT				as Subprocess_StdOut
 
 from Base.Exceptions        import CommonException
 from Base.Logging            import ILogable
+
+
+__api__ = [
+	'ExecutableException',
+	'CommandLineArgument',
+	'ExecutableArgument',
+	'NamedCommandLineArgument',
+	'CommandArgument',        'ShortCommandArgument',         'LongCommandArgument',        'WindowsCommandArgument',
+	'StringArgument',
+	'StringListArgument',
+	'PathArgument',
+	'FlagArgument',           'ShortFlagArgument',            'LongFlagArgument',           'WindowsFlagArgument',
+	'ValuedFlagArgument',     'ShortValuedFlagArgument',      'LongValuedFlagArgument',
+	'ValuedFlagListArgument', 'ShortValuedFlagListArgument',  'LongValuedFlagListArgument',
+	'TupleArgument',          'ShortTupleArgument',           'LongTupleArgument',
+	'CommandLineArgumentList',
+	'Executable'
+]
+__all__ = __api__
 
 
 class ExecutableException(BaseException):

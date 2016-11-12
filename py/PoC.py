@@ -33,6 +33,7 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
 from argparse                       import RawDescriptionHelpFormatter
 from collections                    import OrderedDict
 from configparser                   import Error as ConfigParser_Error, DuplicateOptionError
@@ -85,6 +86,18 @@ __version__ =     "1.1.0"
 __status__ =      "Production"
 __license__ =     "Apache License 2.0"
 
+__api__ = [
+	'PoCEntityAttribute',
+	'BoardDeviceAttributeGroup',
+	'VHDLVersionAttribute',
+	'GUIModeAttribute',
+	'NoCleanUpAttribute',
+	'PoC',
+	'main'
+]
+__all__ = __api__
+
+
 
 class PoCEntityAttribute(Attribute):
 	def __call__(self, func):
@@ -111,6 +124,7 @@ class NoCleanUpAttribute(Attribute):
 	def __call__(self, func):
 		self._AppendAttribute(func, SwitchArgumentAttribute("--no-cleanup", dest="NoCleanUp", help="Don't delete intermediate files. Skip post-delete rules."))
 		return func
+
 
 class PoC(ILogable, ArgParseMixin):
 	HeadLine =                "The PoC-Library - Service Tool"
@@ -805,6 +819,7 @@ class PoC(ILogable, ArgParseMixin):
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
 	@GUIModeAttribute()
+	@ArgumentAttribute("--reproducer", metavar="Name", dest="CreateReproducer", help="Create a bug reproducer")
 	def HandleGHDLSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -818,7 +833,7 @@ class PoC(ILogable, ArgParseMixin):
 		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
 
 		simulator = GHDLSimulator(self, self.DryRun, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion, guiMode=args.GUIMode)		#, vhdlGenerics=None)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)		#, vhdlGenerics=None)
 
 		Exit.exit(0 if allPassed else 1)
 
@@ -1114,6 +1129,15 @@ class PoC(ILogable, ArgParseMixin):
 
 # main program
 def main(): # mccabe:disable=MC0001
+	"""
+	This is the entry point for PoC.py written as a function.
+
+	1. It extracts common flags from the script's arguments list, before :py:class:`argparse.ArgumentParser` is fully loaded.
+	2. It initializes colorama for colored outputs
+	3. It creates an instance of PoC and hands over to class based execution. All is wrapped in a big ``try..except`` block to catch every unhandled exception.
+	4. Shutdown the script and return its exit code.
+	"""
+
 	dryRun =  "--dryrun"  in sys_argv
 	debug =   "-d"        in sys_argv
 	verbose = "-v"        in sys_argv

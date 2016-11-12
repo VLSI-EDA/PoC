@@ -29,18 +29,21 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module PoC.Query")
-
-
+#
+# load dependencies
 from collections      import OrderedDict
 from datetime         import datetime
 from enum             import Enum, unique
+
+
+__api__ = [
+	'SimulationStatus', 'CompileStatus',
+	'ElementBase',
+	'GroupBase', 'TestGroup', 'SynthesisGroup',
+	'SuiteMixIn', 'TestSuite', 'SynthesisSuite',
+	'TestBase', 'TestCase', 'Synthesis'
+]
+__all__ = __api__
 
 
 @unique

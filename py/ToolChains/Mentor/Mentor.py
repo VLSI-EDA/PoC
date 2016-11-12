@@ -32,17 +32,16 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
-
-
+# load dependencies
 from Base.Configuration import Configuration as BaseConfiguration
 from Base.ToolChain      import ToolChainException
+
+
+__api__ = [
+	'MentorException',
+	'Configuration'
+]
+__all__ = __api__
 
 
 class MentorException(ToolChainException):

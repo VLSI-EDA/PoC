@@ -32,15 +32,23 @@
 # limitations under the License.
 # ==============================================================================
 #
-import functools
-import re
-from sys        import version_info
+# load dependencies
+from itertools    import chain as itertools_chain
+from functools    import partial as functools_partial
+from re           import compile as re_compile, escape as re_escape, VERBOSE as RE_VERBOSE
+from sys          import version_info
 
 from collections  import OrderedDict as _default_dict, ChainMap as _ChainMap, MutableMapping
 from configparser import ConfigParser, SectionProxy, Interpolation, MAX_INTERPOLATION_DEPTH, DEFAULTSECT, _UNSET
 from configparser import NoSectionError, InterpolationDepthError, InterpolationSyntaxError, NoOptionError, InterpolationMissingOptionError
 
-import itertools
+
+__api__ = [
+	'ExtendedSectionProxy',
+	'ExtendedInterpolation',
+	'ExtendedConfigParser'
+]
+__all__ = __api__
 
 
 class ExtendedSectionProxy(SectionProxy):
@@ -60,7 +68,7 @@ if (version_info < (3,5,0)):
 		section proxies to find and use the implementation on the parser class.
 		"""
 
-		GETTERCRE = re.compile(r"^get(?P<name>.+)$")
+		GETTERCRE = re_compile(r"^get(?P<name>.+)$")
 
 		def __init__(self, parser):
 			self._parser = parser
@@ -83,11 +91,11 @@ if (version_info < (3,5,0)):
 			if k == 'get':
 				raise ValueError('Incompatible key: cannot use "" as a name')
 			self._data[key] = value
-			func = functools.partial(self._parser._get_conv, conv=value)
+			func = functools_partial(self._parser._get_conv, conv=value)
 			func.converter = value
 			setattr(self._parser, k, func)
 			for proxy in self._parser.values():
-				getter = functools.partial(proxy.get, _impl=func)
+				getter = functools_partial(proxy.get, _impl=func)
 				setattr(proxy, k, getter)
 
 		def __delitem__(self, key):
@@ -96,7 +104,7 @@ if (version_info < (3,5,0)):
 			except TypeError:
 				raise KeyError(key)
 			del self._data[key]
-			for inst in itertools.chain((self._parser,), self._parser.values()):
+			for inst in itertools_chain((self._parser,), self._parser.values()):
 				try:
 					delattr(inst, k)
 				except AttributeError:
@@ -119,8 +127,8 @@ configparser.SectionProxy = ExtendedSectionProxy
 
 
 class ExtendedInterpolation(Interpolation):
-	_KEYCRE = re.compile(r"\$\{(?P<ref>[^}]+)\}")
-	_KEYCRE2 = re.compile(r"\$\[(?P<ref>[^\]]+)\}")
+	_KEYCRE = re_compile(r"\$\{(?P<ref>[^}]+)\}")
+	_KEYCRE2 = re_compile(r"\$\[(?P<ref>[^\]]+)\}")
 
 	def __init__(self):
 		self._cache = dict()
@@ -315,9 +323,9 @@ class ExtendedConfigParser(ConfigParser):
 		if delimiters == ('=', ':'):
 			self._optcre =                self.OPTCRE_NV if allow_no_value else self.OPTCRE
 		else:
-			d = "|".join(re.escape(d) for d in delimiters)
-			if allow_no_value:            self._optcre = re.compile(self._OPT_NV_TMPL.format(delim=d), re.VERBOSE)
-			else:                         self._optcre = re.compile(self._OPT_TMPL.format(delim=d), re.VERBOSE)
+			d = "|".join(re_escape(d) for d in delimiters)
+			if allow_no_value:            self._optcre = re_compile(self._OPT_NV_TMPL.format(delim=d), RE_VERBOSE)
+			else:                         self._optcre = re_compile(self._OPT_TMPL.format(delim=d), RE_VERBOSE)
 
 		if (interpolation is None):     self._interpolation = Interpolation()
 		elif (interpolation is _UNSET): self._interpolation = ExtendedInterpolation()

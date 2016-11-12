@@ -4,7 +4,11 @@ Pre-Compiling Vendor Libraries
 
 .. contents:: Contents of this Page
    :local:
+   :depth: 2
+   :backlinks: entry
 
+.. index::
+   single: Pre-compilation
 
 Overview
 ********
@@ -21,6 +25,9 @@ and common storage for all supported vendor's pre-compile procedures. The script
 are located in ``\tools\precompile\`` and the output is stored in
 ``\temp\precompiled\<Simulator>\<Library>``.
 
+
+.. index::
+   pair: Pre-compilation; Supported Simulators
 
 Supported Simulators
 ********************
@@ -46,8 +53,14 @@ The current set of pre-compile scripts support these simulators:
 +------------+------------------------------+--------------+--------------+---------------+--------------------+
 
 
+.. index::
+   pair: Pre-compilation; Vendor Primitives
+
 FPGA Vendor's Primitive Libraries
 *********************************
+
+.. index::
+   pair: Pre-compilation; Altera
 
 Altera
 ======
@@ -118,6 +131,9 @@ On Windows
 +-----+-----------+-------------------------------+
 
 
+.. index::
+   pair: Pre-compilation; Lattice
+
 Lattice
 ========
 
@@ -185,6 +201,10 @@ On Windows
 +-----+-----------+-------------------------------+
 |     | -VHDL2008 | Compile only for VHDL-2008    |
 +-----+-----------+-------------------------------+
+
+
+.. index::
+   pair: Pre-compilation; Xilinx ISE
 
 Xilinx ISE
 ==========
@@ -254,6 +274,10 @@ On Windows
 |     | -VHDL2008 | Compile only for VHDL-2008    |
 +-----+-----------+-------------------------------+
 
+
+.. index::
+   pair: Pre-compilation; Xilinx Vivado
+
 Xilinx Vivado
 =============
 
@@ -322,8 +346,15 @@ On Windows
 |     | -VHDL2008 | Compile only for VHDL-2008    |
 +-----+-----------+-------------------------------+
 
+
+.. index::
+   pair: Pre-compilation; Third-Party Libraries
+
 Third-Party Libraries
 *********************
+
+.. index::
+   pair: Pre-compilation; OSVVM
 
 OSVVM
 =====
@@ -382,12 +413,77 @@ On Windows
 +-----+-----------+-------------------------------+
 
 
+.. index::
+   pair: Pre-compilation; UVVM
+
+UVVM
+====
+
+On Linux
+--------
+
+.. code-block:: Bash
+
+   # Example 1 - Compile for all Simulators
+   ./tools/precompile/compile-uvvm.sh --all
+   # Example 2 - Compile only for GHDL
+   ./tools/precompile/compile-uvvm.sh --ghdl
+
+**List of command line arguments:**
+
++------------------+-------------------------------+
+| Common Option    | Description                   |
++=====+============+===============================+
+| -h  | --help     | Print embedded help page(s)   |
++-----+------------+-------------------------------+
+| -c  | --clean    | Clean-up directories          |
++-----+------------+-------------------------------+
+| -a  | --all      | Compile for all simulators    |
++-----+------------+-------------------------------+
+|     | --ghdl     | Compile for GHDL              |
++-----+------------+-------------------------------+
+|     | --questa   | Compile for QuestaSim         |
++-----+------------+-------------------------------+
+
+
+On Windows
+----------
+
+.. code-block:: PowerShell
+
+   # Example 1 - Compile for all Simulators
+   .\tools\precompile\compile-uvvm.ps1 -All
+   # Example 2 - Compile only for GHDL
+   .\tools\precompile\compile-uvvm.ps1 -GHDL
+
+**List of command line arguments:**
+
++-----------------+-------------------------------+
+| Common Option   | Description                   |
++=====+===========+===============================+
+| -h  | -Help     | Print embedded help page(s)   |
++-----+-----------+-------------------------------+
+| -c  | -Clean    | Clean-up directories          |
++-----+-----------+-------------------------------+
+| -a  | -All      | Compile for all simulators    |
++-----+-----------+-------------------------------+
+|     | -GHDL     | Compile for GHDL              |
++-----+-----------+-------------------------------+
+|     | -Questa   | Compile for QuestaSim         |
++-----+-----------+-------------------------------+
+
+
+.. index::
+   pair: Pre-compilation; Simulator Adapters
+
 Simulator Adapters
 ******************
 
+.. index::
+   pair: Pre-compilation; Cocotb
+
 Cocotb
 ======
-
 
 On Linux
 --------

@@ -81,17 +81,37 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
      urldate={2016-10-28},
    }
 
-
 .. toctree::
+   :caption: Introduction
    :hidden:
 
    WhatIsPoC/index
    QuickStart
    UsingPoC/index
-   PoC/index
+   GetInvolved/index
+   References/Licenses/License
+
+.. toctree::
+   :caption: Main Documentation
+   :hidden:
+
+   Interfaces/index
+   IPCores/index
    Miscelaneous/ThirdParty
    ConstraintFiles/index
-   References/index
-   GetInvolved/index
+
+.. toctree::
+   :caption: References
+   :hidden:
+
+   References/CommandReference
+   References/Database
+   PyInfrastructure/index
+   More ... <References/more>
+
+.. toctree::
+   :caption: Appendix
+   :hidden:
+
    Miscelaneous/ChangeLog
-   References/Licenses/License
+   genindex

@@ -41,6 +41,19 @@ from Parser.FilesParser import VHDLSourceFileMixIn, VerilogSourceFileMixIn, Coco
 from DataBase.Config         import Board, Device
 
 
+__api__ = [
+	'FileTypes',
+	'Environment', 'ToolChain', 'Tool', 'VHDLVersion',
+	'Project',
+	'FileSet',
+	'VHDLLibrary',
+	'File',
+	'ProjectFile',    'ConstraintFile',     'SettingsFile',     'SourceFile',
+	'VHDLSourceFile', 'VerilogSourceFile',  'PythonSourceFile', 'CocotbSourceFile'
+]
+__all__ = __api__
+
+
 # TODO: nested filesets
 
 class FileTypes(Flags):

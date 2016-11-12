@@ -1,6 +1,6 @@
 
-Interfaces
-##########
+IP Core Interfaces
+##################
 
 .. toctree::
    :maxdepth: 1

@@ -29,9 +29,48 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
 from lib.Functions import Init
 from lib.Parser    import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult, GreedyMatchingParserResult
 from lib.Parser    import SpaceToken, CharacterToken, StringToken, NumberToken, Tokenizer
+
+
+__api__ = [
+	'CodeDOMMeta',
+	'CodeDOMObject',
+	'Expression',
+	'UnaryExpression',
+	'NotExpression',
+	'BinaryExpression',
+	'LogicalExpression',
+	'CompareExpression',
+	'EqualExpression',
+	'UnequalExpression',
+	'LessThanExpression',
+	'LessThanEqualExpression',
+	'GreaterThanExpression',
+	'GreaterThanEqualExpression',
+	'AndExpression',
+	'OrExpression',
+	'XorExpression',
+	'InExpression',
+	'NotInExpression',
+	'Function',
+	'ListElement',
+	'Literal',
+	'StringLiteral',
+	'IntegerLiteral',
+	'Identifier',
+	'Statement',
+	'BlockStatement',
+	'ConditionalBlockStatement',
+	'EmptyLine',
+	'CommentLine',
+	'BlockedStatement',
+	'ExpressionChoice'
+]
+__all__ = __api__
+
 
 DEBUG =   False#True
 

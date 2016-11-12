@@ -32,16 +32,8 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
+# load dependencies
 from subprocess import check_output
-
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.Vivado")
-
 
 from lib.Functions              import CallByRefParam
 from Base.Exceptions            import PlatformNotSupportedException
@@ -52,6 +44,24 @@ from Base.Simulator              import SimulationResult, PoCSimulationResultFil
 from Base.Executable            import Executable
 from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
 from ToolChains.Xilinx.Xilinx    import XilinxException
+
+
+__api__ = [
+	'VivadoException',
+	'Configuration',
+	'VivadoMixIn',
+	'Vivado',
+	'XElab',
+	'XSim',
+	'Synth',
+	'ElaborationFilter',
+	'SimulatorFilter',
+	'CompilerFilter',
+	'VivadoProject',
+	'VivadoProjectFile',
+	'XilinxDesignConstraintFile'
+]
+__all__ = __api__
 
 
 class VivadoException(XilinxException):

@@ -32,14 +32,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GNU")
-
 # load dependencies
 import re
 
@@ -49,6 +41,16 @@ from Base.Logging            import LogEntry, Severity
 from Base.Simulator          import SimulationResult
 from Base.ToolChain          import ToolChainException
 from lib.Functions           import Init, CallByRefParam
+
+
+__api__ = [
+	'GNUException',
+	# 'Configuration',
+	'Make',
+	'GNUMakeQuestaSimFilter',
+	'CocotbSimulationResultFilter'
+]
+__all__ = __api__
 
 
 class GNUException(ToolChainException):

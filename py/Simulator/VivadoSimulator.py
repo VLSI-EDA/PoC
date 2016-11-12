@@ -32,15 +32,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.VivadoSimulator")
-
-
 # load dependencies
 from pathlib                    import Path
 
@@ -51,15 +42,20 @@ from ToolChains.Xilinx.Xilinx   import XilinxProjectExportMixIn
 from ToolChains.Xilinx.Vivado   import Vivado, VivadoException
 
 
+__api__ = [
+	'Simulator'
+]
+__all__ = __api__
+
+
 class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =            ToolChain.Xilinx_Vivado
 	_TOOL =                  Tool.Xilinx_xSim
 
 	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun)
+		super().__init__(host, dryRun, guiMode)
 		XilinxProjectExportMixIn.__init__(self)
 
-		self._guiMode =       guiMode
 		self._vhdlVersion =   None
 		self._vhdlGenerics =  None
 		self._toolChain =     None

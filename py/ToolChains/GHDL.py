@@ -33,15 +33,7 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GHDL")
-
-
+# load dependencies
 from pathlib                import Path
 from re                     import compile as re_compile
 from subprocess             import check_output, CalledProcessError
@@ -55,6 +47,21 @@ from Base.Logging           import LogEntry, Severity
 from Base.Simulator         import PoCSimulationResultFilter, SimulationResult
 from Base.ToolChain         import ToolChainException
 from lib.Functions          import CallByRefParam
+
+
+__api__ = [
+	'GHDLException',
+	'GHDLReanalyzeException',
+	'Configuration',
+	'GHDL',
+	'GHDLAnalyze',
+	'GHDLElaborate',
+	'GHDLRun',
+	'GHDLAnalyzeFilter',
+	'GHDLElaborateFilter',
+	'GHDLRunFilter'
+]
+__all__ = __api__
 
 
 class GHDLException(ToolChainException):
@@ -389,6 +396,7 @@ class GHDLAnalyze(GHDL):
 			if self._hasOutput:
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
+
 class GHDLElaborate(GHDL):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, backend, logger=None):
 		super().__init__(platform, dryrun, binaryDirectoryPath, version, backend, logger=logger)
@@ -435,6 +443,7 @@ class GHDLElaborate(GHDL):
 		finally:
 			if self._hasOutput:
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+
 
 class GHDLRun(GHDL):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, backend, logger=None):

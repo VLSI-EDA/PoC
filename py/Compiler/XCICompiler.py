@@ -31,15 +31,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XCICompiler")
-
-
 # load dependencies
 import shutil
 from datetime                 import datetime
@@ -51,6 +42,12 @@ from Base.Project             import ToolChain, Tool
 from Base.Compiler            import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
 from DataBase.Entity               import WildCard
 from ToolChains.Xilinx.Vivado import Vivado, VivadoException
+
+
+__api__ = [
+	'Compiler'
+]
+__all__ = __api__
 
 
 class Compiler(BaseCompiler):

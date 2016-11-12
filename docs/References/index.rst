@@ -5,13 +5,14 @@ References
 .. toctree::
    :maxdepth: 1
 
-   CommandReference
-   WrapperScriptHookFiles
-   FileFormats/index
    Interfaces/index
    NamingConventions
+   CommandReference
+   Database
+   WrapperScriptHookFiles
+   PythonInfrastructure
+   FileFormats/index
    ListOfDevices
    ListOfBoards
-   Glossary
    KnownIssues
    Licenses/index

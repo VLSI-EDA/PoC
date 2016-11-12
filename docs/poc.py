@@ -57,7 +57,7 @@ class SourceFile:
 class Extract:
 	def __init__(self):
 		self.sourceDirectory =     Path("../src")
-		self.outputDirectory =     Path("PoC")
+		self.outputDirectory =     Path("IPCores")
 		self.relSourceDirectory =  Path("../../src")
 
 		self.templateFile =     Path("Entity.template")

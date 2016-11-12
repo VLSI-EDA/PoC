@@ -32,15 +32,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
-
-
 # load dependencies
 from datetime                 import datetime
 from pathlib                  import Path
@@ -50,6 +41,12 @@ from Base.Compiler            import Compiler as BaseCompiler, CompilerException
 from DataBase.Entity               import WildCard
 from ToolChains.Xilinx.Xilinx import XilinxProjectExportMixIn
 from ToolChains.Xilinx.ISE    import ISE, ISEException
+
+
+__api__ = [
+	'Compiler'
+]
+__all__ = __api__
 
 
 class Compiler(BaseCompiler, XilinxProjectExportMixIn):

@@ -33,15 +33,7 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.PoC")
-
-
+# load dependencies
 from pathlib              import Path
 from re                   import compile as re_compile
 from subprocess           import check_output, CalledProcessError
@@ -53,6 +45,20 @@ from Base.Configuration   import Configuration as BaseConfiguration, Configurati
 from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList, CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument, \
 	LongValuedFlagArgument, LongTupleArgument
 from Base.ToolChain       import ToolChainException
+
+
+__api__ = [
+	'GitException',
+	'Configuration',
+	'GitMixIn',
+	'Git',
+	'GitSCM',
+	'GitRevParse',
+	'GitRevList',
+	'GitDescribe',
+	'GitConfig'
+]
+__all__ = __api__
 
 
 class GitException(ToolChainException):

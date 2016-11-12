@@ -33,15 +33,7 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GTKWave")
-
-
+# load dependencies
 from pathlib                import Path
 from re                     import compile as RegExpCompile
 from subprocess             import check_output, CalledProcessError
@@ -51,6 +43,16 @@ from Base.Exceptions        import PlatformNotSupportedException
 from Base.Executable        import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
 from Base.Logging            import LogEntry, Severity
 from Base.ToolChain          import ToolChainException
+
+
+__api__ = [
+	'GTKWaveException',
+	'Configuration',
+	'GTKWave',
+	'GTKWaveFilter'
+]
+__all__ = __api__
+
 
 
 class GTKWaveException(ToolChainException):
@@ -135,7 +137,6 @@ class Configuration(BaseConfiguration):
 		self._host.PoCConfig[self._section]['Version'] = version
 
 
-
 class GTKWave(Executable):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
 		if (platform == "Windows"):     executablePath = binaryDirectoryPath/ "gtkwave.exe"
@@ -215,6 +216,7 @@ class GTKWave(Executable):
 		finally:
 			if self._hasOutput:
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+
 
 def GTKWaveFilter(gen):
 	for line in gen:

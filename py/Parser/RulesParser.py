@@ -30,15 +30,27 @@
 # ==============================================================================
 #
 from lib.Parser           import ParserException
-from Parser.RulesCodeDOM  import Document, PreProcessRulesStatement, PostProcessRulesStatement, CopyStatement, ReplaceStatement, FileStatement, DeleteStatement, \
-	AppendLineStatement
+from Parser.RulesCodeDOM  import Document, PreProcessRulesStatement, PostProcessRulesStatement, CopyStatement, ReplaceStatement, FileStatement, DeleteStatement, AppendLineStatement
+
+
+__api__ = [
+	'Rule',
+	'CopyRuleMixIn',
+	'DeleteRuleMixIn',
+	'ReplaceRuleMixIn',
+	'AppendLineRuleMixIn',
+	'RulesParserMixIn'
+]
+__all__ = __api__
 
 
 class Rule:
-	pass
+	"""Base class for all Rule and RuleMixIn classes."""
 
 
 class CopyRuleMixIn(Rule):
+	"""A partial class (MixIn) to represent a 'copy rule'."""
+
 	def __init__(self, sourcePath, destinationPath):
 		self._source =      sourcePath
 		self._destination = destinationPath
@@ -53,6 +65,8 @@ class CopyRuleMixIn(Rule):
 
 
 class DeleteRuleMixIn(Rule):
+	"""A partial class (MixIn) to represent a 'delete rule'."""
+
 	def __init__(self, filePath):
 		self._source =      filePath
 
@@ -64,6 +78,8 @@ class DeleteRuleMixIn(Rule):
 
 
 class ReplaceRuleMixIn(Rule):
+	"""A partial class (MixIn) to represent a 'replace rule'."""
+
 	def __init__(self, filePath, searchPattern, replacePattern, multiLine, dotAll, caseInSensitive):
 		self._filePath =        filePath
 		self._searchPattern =   searchPattern
@@ -89,6 +105,8 @@ class ReplaceRuleMixIn(Rule):
 		return "Replace rule: in '{0!s}' replace '{1}' with '{2}'".format(self._filePath, self._searchPattern, self._replacePattern)
 
 class AppendLineRuleMixIn(Rule):
+	"""A partial class (MixIn) to represent a 'append line rule'."""
+
 	def __init__(self, filePath, appendPattern):
 		self._filePath =        filePath
 		self._appendPattern =   appendPattern

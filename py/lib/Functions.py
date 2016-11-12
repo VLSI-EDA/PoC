@@ -30,9 +30,19 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
 from functools  import reduce
 from operator    import or_
 from sys        import version_info
+
+
+__api__ = [
+	'merge', 'merge_with',
+	'CallByRefParam',
+	'Init',
+	'Exit'
+]
+__all__ = __api__
 
 
 def merge(*dicts):

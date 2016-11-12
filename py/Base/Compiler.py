@@ -32,20 +32,11 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Class PoCCompiler")
-
-
 # load dependencies
-import re
-import shutil
 from enum               import Enum, unique
 from pathlib            import Path
+from re                 import compile as re_compile, subn as re_subn, DOTALL as RE_DOTALL, MULTILINE as RE_MULTILINE, IGNORECASE as RE_IGNORECASE
+from shutil             import copy as shutil_copy
 
 from lib.Functions      import Init
 from lib.Parser         import ParserException
@@ -53,31 +44,54 @@ from Base.Exceptions    import ExceptionBase, SkipableException
 from Base.Project       import VHDLVersion, Environment, FileTypes
 from Base.Shared        import Shared, to_time
 from Parser.RulesParser import CopyRuleMixIn, ReplaceRuleMixIn, DeleteRuleMixIn, AppendLineRuleMixIn
-from DataBase.Solution       import RulesFile
-from DataBase.TestCase       import SynthesisSuite, Synthesis, CompileStatus
+from DataBase.Solution  import RulesFile
+from DataBase.TestCase  import SynthesisSuite, Synthesis, CompileStatus
+
+
+# required for autoapi.sphinx
+__api__ = [
+	'CompilerException',
+	'SkipableCompilerException',
+	'CopyTask',
+	'DeleteTask',
+	'ReplaceTask',
+	'AppendLineTask',
+	'CompileState',
+	'CompileResult',
+	'Compiler'
+]
+__all__ = __api__
 
 
 class CompilerException(ExceptionBase):
+	"""Base exception for all CompilerExceptions."""
 	pass
 
 class SkipableCompilerException(CompilerException, SkipableException):
+	"""Base class for all skipable CompilerException."""
 	pass
 
 class CopyTask(CopyRuleMixIn):
+	"""This class represents a 'copy task' and inherits the partial class :ref:`CopyRuleMixIn`."""
 	pass
 
 class DeleteTask(DeleteRuleMixIn):
+	"""This class represents a 'delete task' and inherits the partial class :ref:`DeleteRuleMixIn`."""
 	pass
 
 class ReplaceTask(ReplaceRuleMixIn):
+	"""This class represents a 'replace task' and inherits the partial class :ref:`ReplaceRuleMixIn`."""
 	pass
 
 class AppendLineTask(AppendLineRuleMixIn):
+	"""This class represents a 'append line task' and inherits the partial class :ref:`AppendLineRuleMixIn`."""
 	pass
 
 
 @unique
 class CompileState(Enum):
+	"""Compile state enumeration."""
+
 	Prepare =     0
 	PreCopy =    10
 	PrePatch =   11
@@ -98,6 +112,8 @@ class CompileState(Enum):
 
 @unique
 class CompileResult(Enum):
+	"""Compilation result enumeration."""
+
 	NotRun =      0
 	Error =       1
 	Failed =      2
@@ -105,6 +121,17 @@ class CompileResult(Enum):
 
 
 class Compiler(Shared):
+	"""
+	Base class for all Compiler classes.
+
+	:param host: The hosting instance for this instance.
+	:type host: object
+	:param dryRun: Enable dry-run mode
+	:type dryRun: bool
+	:param noCleanUp: Don't clean up after a run.
+	:type noCleanUp: bool
+	"""
+
 	_ENVIRONMENT =    Environment.Synthesis
 	_vhdlVersion =    VHDLVersion.VHDL93
 
@@ -114,6 +141,7 @@ class Compiler(Shared):
 		Destination = None
 
 	def __init__(self, host, dryRun, noCleanUp):
+		"""Constructur"""
 		super().__init__(host, dryRun)
 
 		self._noCleanUp =       noCleanUp
@@ -128,10 +156,12 @@ class Compiler(Shared):
 	def NoCleanUp(self):      return self._noCleanUp
 
 	def _PrepareCompiler(self):
+		"""Prepare for compilation. This method forwards to :py:meth:`Base.Compiler.Compiler._Prepare`, which is un herited from:py:class:`Base.Shared.Shared`."""
 		self._Prepare()
 
 	def TryRun(self, netlist, *args, **kwargs):
 		"""Try to run a testbench. Skip skipable exceptions by printing the error and its cause."""
+
 		__COMPILE_STATE_TO_SYNTHESIS_STATUS__ = {
 			CompileState.Prepare:    CompileStatus.InternalError,
 			CompileState.PreCopy:    CompileStatus.SystemError,
@@ -170,6 +200,8 @@ class Compiler(Shared):
 			synthesis.StopTimer()
 
 	def Run(self, netlist, board):
+		"""Run a testbench."""
+
 		self.LogQuiet("{CYAN}IP core: {0!s}{NOCOLOR}".format(netlist.Parent, **Init.Foreground))
 		# # TODO: refactor
 		# self.LogNormal("Checking for dependencies:")
@@ -271,7 +303,7 @@ class Compiler(Shared):
 			copyRegExpStr  = r"^\s*(?P<SourceFilename>.*?)" # Source filename
 			copyRegExpStr += r"\s->\s"                      # Delimiter signs
 			copyRegExpStr += r"(?P<DestFilename>.*?)$"      # Destination filename
-			copyRegExp = re.compile(copyRegExpStr)
+			copyRegExp = re_compile(copyRegExpStr)
 
 			for item in rawList:
 				preCopyRegExpMatch = copyRegExp.match(item)
@@ -306,7 +338,7 @@ class Compiler(Shared):
 				self.LogDryRun("Copy '{0!s}' to '{1!s}'.".format(task.SourcePath, task.DestinationPath))
 			else:
 				try:
-					shutil.copy(str(task.SourcePath), str(task.DestinationPath))
+					shutil_copy(str(task.SourcePath), str(task.DestinationPath))
 				except OSError as ex:
 					raise CompilerException("Error while copying '{0!s}'.".format(task.SourcePath)) from ex
 
@@ -338,7 +370,7 @@ class Compiler(Shared):
 			rawList = rawList.split("\n")
 
 			deleteRegExpStr = r"^\s*(?P<Filename>.*?)$"  # filename
-			deleteRegExp = re.compile(deleteRegExpStr)
+			deleteRegExp = re_compile(deleteRegExpStr)
 
 			for item in rawList:
 				deleteRegExpMatch = deleteRegExp.match(item)
@@ -436,7 +468,7 @@ class Compiler(Shared):
 			replaceRegExpStr += r"(?P<Options>[dim]{0,3}):\s+"  # RegExp options
 			replaceRegExpStr += r"\"(?P<Search>.*?)\"\s+->\s+"  # Search regexp
 			replaceRegExpStr += r"\"(?P<Replace>.*?)\"$"  # Replace regexp
-			replaceRegExp = re.compile(replaceRegExpStr)
+			replaceRegExp = re_compile(replaceRegExpStr)
 
 			for item in rawList:
 				replaceRegExpMatch = replaceRegExp.match(item)
@@ -468,17 +500,17 @@ class Compiler(Shared):
 				self.LogDryRun("Patch '{0!s}'.".format(task.FilePath))
 			else:
 				regExpFlags = 0
-				if task.RegExpOption_CaseInsensitive: regExpFlags |= re.IGNORECASE
-				if task.RegExpOption_MultiLine:       regExpFlags |= re.MULTILINE
-				if task.RegExpOption_DotAll:          regExpFlags |= re.DOTALL
+				if task.RegExpOption_CaseInsensitive: regExpFlags |= RE_IGNORECASE
+				if task.RegExpOption_MultiLine:       regExpFlags |= RE_MULTILINE
+				if task.RegExpOption_DotAll:          regExpFlags |= RE_DOTALL
 
 				# compile regexp
-				regExp = re.compile(task.SearchPattern, regExpFlags)
+				regExp = re_compile(task.SearchPattern, regExpFlags)
 				# open file and read all lines
 				with task.FilePath.open('r') as fileHandle:
 					FileContent = fileHandle.read()
 				# replace
-				NewContent,replaceCount = re.subn(regExp, task.ReplacePattern, FileContent)
+				NewContent,replaceCount = re_subn(regExp, task.ReplacePattern, FileContent)
 				if (replaceCount == 0):
 					self.LogWarning("  Search pattern '{0}' not found in file '{1!s}'.".format(task.SearchPattern, task.FilePath))
 				# open file to write the replaced data

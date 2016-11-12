@@ -30,15 +30,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.ActiveHDLSimulator")
-
-
 # load dependencies
 from pathlib import Path
 
@@ -48,14 +39,19 @@ from Base.Simulator               import SimulatorException, Simulator as BaseSi
 from ToolChains.Aldec.ActiveHDL   import ActiveHDL, ActiveHDLException
 
 
+__api__ = [
+	'Simulator'
+]
+__all__ = __api__
+
+
 class Simulator(BaseSimulator):
 	_TOOL_CHAIN =            ToolChain.Aldec_ActiveHDL
 	_TOOL =                  Tool.Aldec_aSim
 
 	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun)
+		super().__init__(host, dryRun, guiMode)
 
-		self._guiMode =       guiMode
 		self._vhdlVersion =   None
 		self._vhdlGenerics =  None
 		self._toolChain =     None

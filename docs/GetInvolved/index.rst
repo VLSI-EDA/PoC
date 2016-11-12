@@ -212,7 +212,7 @@ Commit your porposed changes to your feature branch and push all changes to GitH
    :target: https://github.com/VLSI-EDA/PoC/pulls
 
 Go to your forked repository and klick on "Compare and Pull-Request" or go to
-our PoC repository and create a new `pull request <https://github.com/VLSI-EDA/PoC/pullrequest>`_.
+our PoC repository and create a new `pull request <https://github.com/VLSI-EDA/PoC/pulls>`_.
 
 If this is your first Pull-Request, you need to sign our Contributers License
 Agreement (CLA).

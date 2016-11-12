@@ -30,16 +30,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module PoC.Entity")
-
-
+#
 # load dependencies
 from collections          import OrderedDict
 from enum                 import Enum, unique
@@ -49,6 +40,26 @@ from flags                import Flags
 from lib.Functions        import Init
 from lib.Decorators       import LazyLoadTrigger, ILazyLoadable
 from Base.Configuration   import ConfigurationException
+
+
+__api__ = [
+	'EntityTypes',
+	'_PoCEntityTypes_parser',
+	'BaseFlags',
+	'TestbenchKind', 'NetlistKind',
+	'NamespaceRoot',
+	'Visibility',
+	'PathElement',
+	'Namespace',
+	'Library',
+	'WildCard', 'StarWildCard', 'AskWildCard',
+	'IPCore',
+	'LazyPathElement',
+	'Testbench', 'VHDLTestbench', 'CocoTestbench',
+	'Netlist', 'XstNetlist', 'QuartusNetlist', 'LatticeNetlist', 'CoreGeneratorNetlist', 'VivadoNetlist',
+	'FQN'
+]
+__all__ = __api__
 
 
 @unique
@@ -80,7 +91,7 @@ setattr(EntityTypes, '__new__', _PoCEntityTypes_parser)
 
 
 class BaseFlags(Flags):
-	__no_flags_name__ =    "Unknown"
+	__no_flags_name__ =   "Unknown"
 	__all_flags_name__ =  "All"
 
 

@@ -30,16 +30,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module PoC.Project")
-
-
+#
 # load dependencies
 from collections        import OrderedDict
 from textwrap           import dedent
@@ -52,6 +43,15 @@ from Parser.FilesParser import FilesParserMixIn
 from Parser.RulesParser import RulesParserMixIn
 from DataBase           import __POC_SOLUTION_KEYWORD__
 from DataBase.Entity    import Visibility
+
+
+__api__ = [
+	'Base',
+	'Repository', 'Solution', 'Project',
+	'ISEProject', 'VivadoProject', 'QuartusProject', 'LatticeProject', 'VirtualProject',
+	'FileListFile', 'RulesFile'
+]
+__all__ = __api__
 
 
 class Base(ILazyLoadable):

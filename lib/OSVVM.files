@@ -22,7 +22,7 @@ elseif (VHDLVersion = 2008) then
 		if ?{OSVVM_LibraryPath} then
 			library osvvm	OSVVM_LibraryPath
 		else
-			report "No precompiled QuestaSim/ModelSim library for GHDL found."
+			report "No precompiled OSVVM library for QuestaSim/ModelSim found."
 		end if
 	else
 		# TODO self-compile section?

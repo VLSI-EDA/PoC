@@ -30,6 +30,7 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
 from lib.Parser     import MismatchingParserResult, MatchingParserResult, GreedyMatchingParserResult, StartOfDocumentToken
 from lib.Parser     import SpaceToken, CharacterToken, StringToken, NumberToken
 from lib.CodeDOM    import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression, Literal, BinaryExpression
@@ -37,6 +38,28 @@ from lib.CodeDOM    import EmptyLine, CommentLine, BlockedStatement as BlockedSt
 from lib.CodeDOM    import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
 from lib.CodeDOM    import Statement, BlockStatement, ConditionalBlockStatement, Function, Expression, ListElement
 from lib.CodeDOM    import StringLiteral, IntegerLiteral, Identifier
+
+
+__api__ = [
+	'BlockedStatement',
+	'IfThenElseExpressions', 'ListElementExpressions', 'PathExpressions',
+	'ListConstructorExpression',
+	'SubDirectoryExpression',
+	'ConcatenateExpression',
+	'ExistsFunction',
+	'VHDLStatement', 'VerilogStatement', 'CocotbStatement',
+	'ConstraintStatement',
+	'LDCStatement', 'SDCStatement', 'UCFStatement', 'XDCStatement',
+	'InterpolateLiteral',
+	'PathStatement',
+	'ReportStatement',
+	'LibraryStatement',
+	'IncludeStatement',
+	'IfStatement', 'ElseIfStatement', 'ElseStatement', 'IfElseIfElseStatement',
+	'Document'
+]
+__all__ = __api__
+
 
 DEBUG =   False#True
 

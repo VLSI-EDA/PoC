@@ -32,15 +32,7 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Mentor.QuestaSim")
-
-
+# load dependencies
 from subprocess                 import check_output
 from textwrap                   import dedent
 
@@ -52,6 +44,21 @@ from Base.Simulator             import SimulationResult, PoCSimulationResultFilt
 from Base.Executable            import Executable
 from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
 from ToolChains.Mentor.Mentor   import MentorException
+
+
+__api__ = [
+	'QuestaSimException',
+	'Configuration',
+	'QuestaSimMixIn',
+	'QuestaSim',
+	'QuestaVHDLCompiler',
+	'QuestaSimulator',
+	'QuestaVHDLLibraryTool',
+	'QuestaVComFilter',
+	'QuestaVSimFilter',
+	'QuestaVLibFilter'
+]
+__all__ = __api__
 
 
 class QuestaSimException(MentorException):

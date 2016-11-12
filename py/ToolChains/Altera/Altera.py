@@ -32,17 +32,16 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XSTCompiler")
-
-
+# load dependencies
 from Base.Configuration          import Configuration as BaseConfiguration
 from Base.ToolChain              import ToolChainException
+
+
+__api__ = [
+	'AlteraException',
+	'Configuration'
+]
+__all__ = __api__
 
 
 class AlteraException(ToolChainException):

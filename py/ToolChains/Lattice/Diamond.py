@@ -32,16 +32,8 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
+# load dependencies
 import time
-
-
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Diamond")
 
 from pathlib import Path
 from subprocess                    import check_output, CalledProcessError, STDOUT
@@ -52,6 +44,19 @@ from Base.Executable              import Executable, CommandLineArgumentList, Ex
 from Base.Logging                  import Severity, LogEntry
 from Base.Project                  import File, FileTypes, VHDLVersion
 from ToolChains.Lattice.Lattice    import LatticeException
+
+
+__api__ = [
+	'DiamondException',
+	'Configuration',
+	'DiamondMixIn',
+	'Diamond',
+	'Synth',
+	'SynthesisArgumentFile',
+	'MapFilter',
+	'CompilerFilter'
+]
+__all__ = __api__
 
 
 class DiamondException(LatticeException):
@@ -232,11 +237,6 @@ class Synth(Executable, DiamondMixIn):
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
-def MapFilter(gen):
-	for line in gen:
-		yield LogEntry(line, Severity.Normal)
-
-
 class SynthesisArgumentFile(File):
 	def __init__(self, file):
 		super().__init__(file)
@@ -329,6 +329,11 @@ class SynthesisArgumentFile(File):
 
 		with self._file.open('w') as fileHandle:
 			fileHandle.write(buffer)
+
+
+def MapFilter(gen):
+	for line in gen:
+		yield LogEntry(line, Severity.Normal)
 
 
 def CompilerFilter(gen):

@@ -31,23 +31,21 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Lattice.Synopsys")
-
-
-# from collections        import OrderedDict
-# from pathlib            import Path
-
+# load dependencies
 from Base.Configuration import Configuration as BaseConfiguration
 from Base.ToolChain import ToolChainException
 
-class SynopsysException(ToolChainException):
+
+__api__ = [
+	'SynplifyException',
+	'Configuration'
+]
+__all__ = __api__
+
+
+class SynplifyException(ToolChainException):
 	pass
+
 
 class Configuration(BaseConfiguration):
 	def __init__(self, host):

@@ -1,5 +1,6 @@
-..
-   Include this file.
+.. This file is included. So it needs to marked as orphan to suppress warnings.
+
+:orphan:
 
 =========================  ============================================================
 Contributor [#f1]_         Contact E-Mail

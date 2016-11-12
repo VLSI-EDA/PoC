@@ -30,20 +30,24 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module PoC.Config")
-
-
 # load dependencies
 from enum                 import Enum, unique
-from re                   import compile as RegExpCompile
+from re                   import compile as re_compile
 
 from Base.Configuration   import ConfigurationException
+
+
+__api__ = [
+	'BaseEnum',
+	'Vendors',
+	'Families', 'GenericFamilies', 'XilinxFamilies', 'AlteraFamilies', 'LatticeFamilies',
+	'Devices',
+	'SubTypes',
+	'Packages',
+	'Device',
+	'Board'
+]
+__all__ = __api__
 
 
 class BaseEnum(Enum):
@@ -270,7 +274,7 @@ class Device:
 		deviceRegExpStr  = r"(?P<gen>\d{1,2})"  # generation
 		deviceRegExpStr += r"(?P<fam>[acms])"  # family
 		deviceRegExpStr += r"(?P<st>(ls|e|g|x|t|gs|gx|gt|gz|sx|st)?)"  # subtype
-		deviceRegExp = RegExpCompile(deviceRegExpStr)
+		deviceRegExp = re_compile(deviceRegExpStr)
 		deviceRegExpMatch = deviceRegExp.match(deviceString[2:].lower())
 
 		if (deviceRegExpMatch is not None):
@@ -351,7 +355,7 @@ class Device:
 		deviceRegExpStr += r"(?P<sg>[-1-5]{2})"     # speed grade
 		deviceRegExpStr += r"(?P<pack>[a-z]{1,3})"  # package
 		deviceRegExpStr += r"(?P<pins>\d{1,4})"     # pin count
-		deviceRegExp = RegExpCompile(deviceRegExpStr)
+		deviceRegExp = re_compile(deviceRegExpStr)
 		deviceRegExpMatch = deviceRegExp.match(deviceString[4:].lower())
 
 		if (deviceRegExpMatch is not None):
@@ -512,6 +516,7 @@ class Device:
 
 	def __str__(self):
 		return self.FullName
+
 
 class Board:
 	def __init__(self, host, boardName=None, device=None):

@@ -33,20 +33,19 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.ModelSim")
-
-
+# load dependencies
 from re                      import compile as RegExpCompile
 from subprocess             import check_output
 
 from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
 from ToolChains.Altera.Altera import AlteraException
+
+
+__api__ = [
+	'ModelSimException',
+	'Configuration'
+]
+__all__ = __api__
 
 
 class ModelSimException(AlteraException):

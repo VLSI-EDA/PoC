@@ -36,6 +36,13 @@
 # limitations under the License.
 # ============================================================================
 #
+__api__ = [
+	'Attribute',
+	'AttributeHelperMixin'
+]
+__all__ = __api__
+
+
 class Attribute:
 	__AttributesMemberName__ = "__pyattr__"
 	_debug = False

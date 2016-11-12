@@ -31,15 +31,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XCOCompiler")
-
-
 # load dependencies
 from Base.Project           import ToolChain, Tool
 from Base.Compiler          import Compiler as BaseCompiler
@@ -47,6 +38,11 @@ from DataBase.Entity             import WildCard, FQN, EntityTypes
 from Compiler.XCOCompiler   import Compiler as XCOCompiler
 from Compiler.XSTCompiler   import Compiler as XSTCompiler
 
+
+__api__ = [
+	'Compiler'
+]
+__all__ = __api__
 
 class Compiler(BaseCompiler):
 	_TOOL_CHAIN =  ToolChain.Xilinx_ISE

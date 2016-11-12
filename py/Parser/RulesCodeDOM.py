@@ -29,11 +29,29 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
 from lib.Parser     import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult, StartOfDocumentToken
 from lib.Parser     import SpaceToken, CharacterToken, StringToken
 from lib.CodeDOM    import EmptyLine, CommentLine, BlockedStatement as BlockStatementBase, StringLiteral
 from lib.CodeDOM    import Statement, BlockStatement
 
+
+__api__ = [
+	'InFileStatements',
+	'PreProcessStatements',
+	'PostProcessStatements',
+	'DocumentStatements',
+	'CopyStatement',
+	'DeleteStatement',
+	'ReplaceStatement',
+	'AppendLineStatement',
+	'FileStatement',
+	'ProcessRulesBlockStatement',
+	'PreProcessRulesStatement',
+	'PostProcessRulesStatement',
+	'Document'
+]
+__all__ = __api__
 
 # ==============================================================================
 # Blocked Statements (Forward declaration)

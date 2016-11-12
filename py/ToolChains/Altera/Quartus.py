@@ -32,15 +32,7 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.Quartus")
-
-
+# load dependencies
 from collections                import OrderedDict
 from subprocess                 import check_output, STDOUT
 
@@ -51,6 +43,22 @@ from Base.Executable            import Executable, CommandLineArgumentList
 from Base.Executable            import ExecutableArgument, ShortValuedFlagArgument, LongValuedFlagArgument, StringArgument, ShortFlagArgument
 from Base.Project                import Project as BaseProject, ProjectFile, FileTypes, SettingsFile
 from ToolChains.Altera.Altera    import AlteraException
+
+
+__api__ = [
+	'QuartusException',
+	'Configuration',
+	'QuartusMixIn',
+	'Quartus',
+	'Map',
+	'TclShell',
+	'MapFilter',
+	'QuartusSession',
+	'QuartusProject',
+	'QuartusSettings',
+	'QuartusProjectFile'
+]
+__all__ = __api__
 
 
 class QuartusException(AlteraException):
@@ -211,6 +219,7 @@ class Map(Executable, QuartusMixIn):
 			if self._hasOutput:
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
+
 class TclShell(Executable, QuartusMixIn):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
 		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
@@ -232,6 +241,7 @@ class TclShell(Executable, QuartusMixIn):
 			Executable,
 			SwitchShell
 	)
+
 
 def MapFilter(gen):
 	iterator = iter(gen)

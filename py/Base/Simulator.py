@@ -32,15 +32,6 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	pass
-	# place library initialization code here
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Simulator.Base")
-
-
 # load dependencies
 from datetime           import datetime
 from enum               import Enum, unique
@@ -54,21 +45,38 @@ from DataBase.Entity    import WildCard
 from DataBase.TestCase  import TestCase, SimulationStatus, TestSuite
 
 
+# required for autoapi.sphinx
+__api__ = [
+	'SimulatorException',
+	'SkipableSimulatorException',
+	'PoCSimulationResultNotFoundException',
+	'SimulationState',
+	'SimulationResult',
+	'Simulator',
+	'PoCSimulationResultFilter'
+]
+__all__ = __api__
+
+
 VHDL_TESTBENCH_LIBRARY_NAME = "test"
 
 
 class SimulatorException(ExceptionBase):
+	"""Base class for all SimulatorExceptions."""
 	pass
 
 class SkipableSimulatorException(SimulatorException, SkipableException):
+	"""Base class for all skipable SimulatorExceptions."""
 	pass
 
 class PoCSimulationResultNotFoundException(SkipableSimulatorException):
+	"""This exception is raised if the expected PoC simulation result string was	not found in the simulator's output."""
 	pass
 
 
 @unique
 class SimulationState(Enum):
+	"""Simulation state enumeration."""
 	Prepare =     0
 	Analyze =     1
 	Elaborate =   2
@@ -78,6 +86,7 @@ class SimulationState(Enum):
 
 @unique
 class SimulationResult(Enum):
+	"""Simulation result enumeration."""
 	NotRun =      0
 	Error =       1
 	Failed =      2
@@ -87,15 +96,18 @@ class SimulationResult(Enum):
 
 
 class Simulator(Shared):
+	"""Base class for all Simulator classes."""
+
 	_ENVIRONMENT =    Environment.Simulation
 	_vhdlVersion =    VHDLVersion.VHDL2008
 
 	class __Directories__(Shared.__Directories__):
 		PreCompiled = None
 
-	def __init__(self, host, dryRun):
+	def __init__(self, host, dryRun, guiMode):
 		super().__init__(host, dryRun)
 
+		self._guiMode =         guiMode
 		self._testSuite =       TestSuite()  # TODO: This includes not the read ini files phases ...
 		self._state =           SimulationState.Prepare
 		self._analyzeTime =     None
@@ -202,7 +214,7 @@ class Simulator(Shared):
 		self._RunSimulation(testbench)
 		self._simulationTime = self._GetTimeDeltaSinceLastEvent()
 
-		if (guiMode is True):
+		if (self._guiMode is True):
 			self.LogNormal("Executing waveform viewer...")
 			self._state = SimulationState.View
 			self._RunView(testbench)

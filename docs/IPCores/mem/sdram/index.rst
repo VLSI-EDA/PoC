@@ -8,8 +8,7 @@ columns. Different physical layers are provide for the single-data-rate (SDR) or
 double-data-rate (DDR, DDR2, ...) data bus. One has to instantiate the specific
 module required by the FPGA board.
 
-SDRAM Controller for the Altera DE0 Board
------------------------------------------
+.. rubric:: SDRAM Controller for the Altera DE0 Board
 
 The module :doc:`sdram_ctrl_de0 <sdram_ctrl_de0>` combines the finite state machine
 :doc:`sdram_ctrl_fsm <sdram_ctrl_fsm>` and the DE0 specific physical layer
@@ -18,8 +17,7 @@ IS42S16400F SDR memory at a frequency of 133 MHz. A usage example
 is given in PoC-Examples_.
 
 
-SDRAM Controller for the Xilinx Spartan-3E Starter Kit (S3ESK)
---------------------------------------------------------------
+.. rubric:: SDRAM Controller for the Xilinx Spartan-3E Starter Kit (S3ESK)
 
 The module :doc:`sdram_ctrl_s3esk <sdram_ctrl_s3esk>` combines the finite state
 machine :doc:`sdram_ctrl_fsm <sdram_ctrl_fsm>` and the S3ESK specific physical layer
@@ -27,8 +25,9 @@ machine :doc:`sdram_ctrl_fsm <sdram_ctrl_fsm>` and the S3ESK specific physical l
 MT46V32M16-6T DDR memory at a frequency of 100 MHz (DDR-200). A usage
 example is given in PoC-Examples_.
 
-*Note*: See also :doc:`PoC.xil.mig </PoC/xil/mig>` for board specific memory controller
-implementations created by Xilinx's Memory Interface Generator (MIG).
+.. Note::
+   See also :doc:`PoC.xil.mig </PoC/xil/mig/index>` for board specific memory controller
+   implementations created by Xilinx's Memory Interface Generator (MIG).
 
 
 

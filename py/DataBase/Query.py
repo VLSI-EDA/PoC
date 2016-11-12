@@ -29,19 +29,18 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module PoC.Query")
-
-
+#
+# load dependencies
 from pathlib              import Path
 
 from Base.Exceptions      import NotConfiguredException, PlatformNotSupportedException
 from Base.Configuration   import ConfigurationException
+
+
+__api__ = [
+	'Query'
+]
+__all__ = __api__
 
 
 class Query:

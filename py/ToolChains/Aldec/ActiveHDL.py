@@ -33,16 +33,7 @@
 # ==============================================================================
 #
 # entry point
-from subprocess import check_output
-
-
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Aldec.ActiveHDL")
-
+from subprocess             import check_output
 
 from lib.Functions          import CallByRefParam
 from Base.Exceptions        import PlatformNotSupportedException
@@ -53,6 +44,22 @@ from Base.Executable        import ExecutableArgument, PathArgument, StringArgum
 from Base.Executable        import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
 from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
 from ToolChains.Aldec.Aldec import AldecException
+
+
+__api__ = [
+	'ActiveHDLException',
+	'Configuration',
+	'ActiveHDLMixIn',
+	'ActiveHDL',
+	'VHDLCompiler',
+	'StandaloneSimulator',
+	'Simulator',
+	'ActiveHDLVHDLLibraryTool',
+	'VHDLCompilerFilter',
+	'SimulatorFilter',
+	'VHDLLibraryToolFilter'
+]
+__all__ = __api__
 
 
 class ActiveHDLException(AldecException):
