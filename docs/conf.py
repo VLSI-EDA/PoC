@@ -51,14 +51,14 @@ if (not (tags.has('PoCExternal') or tags.has('PoCInternal'))):
 
 # Extract Python documentation and generate ReST files.
 autoapi_modules = {
-  'PoC':        {'output': 'PyInfrastructure'},
-  'Base':       {'output': 'PyInfrastructure'},
-  'Compiler':   {'output': 'PyInfrastructure'},
-  'DataBase':   {'output': 'PyInfrastructure'},
-  'Parser':     {'output': 'PyInfrastructure'},
-  'Simulator':  {'output': 'PyInfrastructure'},
-  'ToolChains': {'output': 'PyInfrastructure'},
-  'lib':        {'output': 'PyInfrastructure'}
+  'PoC':        {'output': "PyInfrastructure", 'template': "script"},
+  'Base':       {'output': "PyInfrastructure"},
+  'Compiler':   {'output': "PyInfrastructure"},
+  'DataBase':   {'output': "PyInfrastructure"},
+  'Parser':     {'output': "PyInfrastructure"},
+  'Simulator':  {'output': "PyInfrastructure"},
+  'ToolChains': {'output': "PyInfrastructure"},
+  'lib':        {'output': "PyInfrastructure"}
 }
 
 # Add any paths that contain templates here, relative to this directory.

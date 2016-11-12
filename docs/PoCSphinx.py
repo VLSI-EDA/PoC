@@ -34,7 +34,7 @@ from sys import path as sys_path
 
 sys_path.append("../py")
 
-from PoC import PoC
+from PoC import PileOfCores
 
 # entry point
-parser = PoC(False, False, False, True, sphinx=True).MainParser
+parser = PileOfCores(False, False, False, True, sphinx=True).MainParser

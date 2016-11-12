@@ -126,7 +126,7 @@ class NoCleanUpAttribute(Attribute):
 		return func
 
 
-class PoC(ILogable, ArgParseMixin):
+class PileOfCores(ILogable, ArgParseMixin):
 	HeadLine =                "The PoC-Library - Service Tool"
 
 	# configure hard coded variables here
@@ -1149,7 +1149,7 @@ def main(): # mccabe:disable=MC0001
 	try:
 		Init.init()
 		# handover to a class instance
-		poc = PoC(debug, verbose, quiet, dryRun)
+		poc = PileOfCores(debug, verbose, quiet, dryRun)
 		poc.Run()
 		Exit.exit()
 
