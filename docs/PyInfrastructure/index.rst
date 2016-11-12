@@ -7,7 +7,7 @@ Frontend Scripts
 
 .. toctree::
 
-   PoC.py <PoC>
+   PoC
 
 
 Packages and Modules

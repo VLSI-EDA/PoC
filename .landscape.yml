@@ -5,7 +5,7 @@ python-targets:
 # - py-flags
 # doc-warnings: yes
 test-warnings: no
-strictness: medium
+strictness: high
 max-line-length: 180
 pylint:
   disable:
@@ -30,6 +30,7 @@ ignore-paths:
 - sim
 - src
 # - tb
+- tcl
 - temp
 # - tools
 - ucf
