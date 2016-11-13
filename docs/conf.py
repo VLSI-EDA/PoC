@@ -35,8 +35,8 @@ sys.path.insert(0, os.path.abspath('../py'))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.todo',
     # 'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
@@ -50,6 +50,8 @@ extensions = [
 
 if (not (tags.has('PoCExternal') or tags.has('PoCInternal'))):
 	tags.add('PoCExternal')
+
+autodoc_member_order = "bysource"
 
 # Extract Python documentation and generate ReST files.
 autoapi_modules = {
@@ -104,8 +106,6 @@ try:
 
 		version = ".".join(versionParts[:2])
 		release = latestTagName   # ".".join(versionParts[:3])
-		print(version)
-		print(release)
 except:
 	pass
 
@@ -350,6 +350,6 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-	'python': ('http://docs.python.org/3.5/', None),
-	'ghdl':   ('https://ghdl.readthedocs.io/en/latest/', None)
+	'python': ('https://docs.python.org/3.5/', None),
+	'ghdl':   ('http://ghdl.readthedocs.io/en/latest', None)
 }

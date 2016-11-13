@@ -63,6 +63,7 @@ At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergr
 sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
 accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
 
+
 Cite the PoC-Library
 ********************
 
@@ -87,7 +88,6 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
 
    WhatIsPoC/index
    QuickStart
-   UsingPoC/index
    GetInvolved/index
    References/Licenses/License
 
@@ -95,6 +95,7 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
    :caption: Main Documentation
    :hidden:
 
+   UsingPoC/index
    Interfaces/index
    IPCores/index
    Miscelaneous/ThirdParty

@@ -95,11 +95,11 @@
 .. autoexception:: {{ item }}
    :members:
    :undoc-members:
-
+{##}
    .. rubric:: Inheritance
    .. inheritance-diagram:: {{ item }}
-	 .. rubric:: Members
-
+{##}
+   .. rubric:: Members
 {##}
 {%- endfor -%}
 {%- endif -%}
@@ -114,13 +114,14 @@
 {% for item in node.classes %}
 .. autoclass:: {{ item }}
    :members:
+   :private-members:
    :undoc-members:
    :inherited-members:
-
+{##}
    .. rubric:: Inheritance
    .. inheritance-diagram:: {{ item }}
-	 .. rubric:: Members
-
+{##}
+   .. rubric:: Members
 {##}
 {%- endfor -%}
 {%- endif -%}

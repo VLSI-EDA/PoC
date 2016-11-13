@@ -194,8 +194,8 @@ class Tokenizer:
 		DelimiterChars =  3
 		OtherChars =      4
 
-	@classmethod
-	def GetCharacterTokenizer(cls, iterable):
+	@staticmethod
+	def GetCharacterTokenizer(iterable):
 		previousToken =  None
 		absolute =    0
 		column =      0

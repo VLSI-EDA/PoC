@@ -96,7 +96,16 @@ class SimulationResult(Enum):
 
 
 class Simulator(Shared):
-	"""Base class for all Simulator classes."""
+	"""
+	Base class for all Simulator classes.
+
+	:type  host:      object
+	:param host:      The hosting instance for this instance.
+	:type  dryRun:    bool
+	:param dryRun:    Enable dry-run mode
+	:type  noCleanUp: bool
+	:param noCleanUp: Don't clean up after a run.
+	"""
 
 	_ENVIRONMENT =    Environment.Simulation
 	_vhdlVersion =    VHDLVersion.VHDL2008

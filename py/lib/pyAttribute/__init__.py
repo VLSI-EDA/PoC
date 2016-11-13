@@ -92,14 +92,16 @@ class AttributeHelperMixin:
 				if hasattr(func, '__dict__')
 			}.items()
 
-	def HasAttribute(self, method):
+	@staticmethod
+	def HasAttribute(method):
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
 			attributeList = method.__dict__[Attribute.__AttributesMemberName__]
 			return (isinstance(attributeList, list) and (len(attributeList) != 0))
 		else:
 			return False
 
-	def GetAttributes(self, method):
+	@staticmethod
+	def GetAttributes(method):
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
 			attributeList = method.__dict__[Attribute.__AttributesMemberName__]
 			if isinstance(attributeList, list):

@@ -52,13 +52,32 @@ __all__ = __api__
 
 # local helper function
 def to_time(seconds):
-	"""Convert n seconds to a str with pattern {min}:{sec:02}."""
+	"""
+	Convert *n* seconds to a :py:class:`str` with this pattern: "{min}:{sec:02}".
+
+	:type seconds:  int
+	:param seconds: Number of seconds to be converted.
+	:rtype:         str
+	:return:        Returns a string formatted as #:##. E.g. "1:05"
+	"""
+
 	minutes = int(seconds / 60)
 	seconds = seconds - (minutes * 60)
 	return "{min}:{sec:02}".format(min=minutes, sec=seconds)
 
 
 class Shared(ILogable):
+	"""
+	Base class for Simulator and Compiler.
+
+	:type  host:      object
+	:param host:      The hosting instance for this instance.
+	:type  dryRun:    bool
+	:param dryRun:    Enable dry-run mode
+	:type  noCleanUp: bool
+	:param noCleanUp: Don't clean up after a run.
+	"""
+
 	_ENVIRONMENT =    Environment.Any
 	_TOOL_CHAIN =     ToolChain.Any
 	_TOOL =           Tool.Any

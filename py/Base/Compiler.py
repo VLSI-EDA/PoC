@@ -124,12 +124,12 @@ class Compiler(Shared):
 	"""
 	Base class for all Compiler classes.
 
-	:param host: The hosting instance for this instance.
-	:type host: object
-	:param dryRun: Enable dry-run mode
-	:type dryRun: bool
+	:type  host:      object
+	:param host:      The hosting instance for this instance.
+	:type  dryRun:    bool
+	:param dryRun:    Enable dry-run mode
+	:type  noCleanUp: bool
 	:param noCleanUp: Don't clean up after a run.
-	:type noCleanUp: bool
 	"""
 
 	_ENVIRONMENT =    Environment.Synthesis

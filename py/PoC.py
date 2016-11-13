@@ -1132,7 +1132,7 @@ def main(): # mccabe:disable=MC0001
 	"""
 	This is the entry point for PoC.py written as a function.
 
-	1. It extracts common flags from the script's arguments list, before :py:class:`argparse.ArgumentParser` is fully loaded.
+	1. It extracts common flags from the script's arguments list, before :py:class:`~argparse.ArgumentParser` is fully loaded.
 	2. It initializes colorama for colored outputs
 	3. It creates an instance of PoC and hands over to class based execution. All is wrapped in a big ``try..except`` block to catch every unhandled exception.
 	4. Shutdown the script and return its exit code.
