@@ -49,6 +49,39 @@ existing testbench or testbench models.
 +----------------+---------------------------------------------------------------------------------------+
 
 
+
+UVVM
+****
+
+The Open Source **UVVM (Universal VHDL Verification Methodology) - VVC (VHDL
+Verification Component) Framework** for making structured VHDL testbenches for
+verification of FPGA. UVVM consists currently of: Utility Library, VVC
+Framework and Verification IPs (VIP) for various protocols.
+
+**For what do I need this VVC Framework?** |br|
+The VVC Framework is a VHDL Verification Component system that allows multiple
+interfaces on a DUT to be stimulated/handled simultaneously in a very structured
+manner, and controlled by a very simple to understand software like a test
+sequencer. VVC Framework is unique as an open source VHDL approach to building
+a structured testbench architecture using Verification components and a simple
+protocol to access these. As an example a simple command like
+``uart_expect(UART_VVCT, my_data)``, or ``axilite_write(AXILITE_VVCT, my_addr, my_data, my_message)``
+will automatically tell the respective VVC (for UART or AXI-Lite) to execute
+the ``uart_receive()`` or ``axilite_write()`` BFM respectively.
+
++----------------+---------------------------------------------------------------------------------------+
+| **Folder:**    | ``<PoCRoot>\lib\uvvm\``                                                               |
++----------------+---------------------------------------------------------------------------------------+
+| **Copyright:** | Copyright © 2016 by `Bitvis AS <http://bitvis.no/>`_                                  |
++----------------+---------------------------------------------------------------------------------------+
+| **License:**   | :doc:`The MIT License (local copy) </References/Licenses/MIT_UVVM>`                   |
++----------------+---------------------------------------------------------------------------------------+
+| **Website:**   | `http://bitvis.no/ <http://bitvis.no/>`_                                              |
++----------------+---------------------------------------------------------------------------------------+
+| **Source:**    | `https://github.com/UVVM/UVVM_All <https://github.com/UVVM/UVVM_All>`_                |
++----------------+---------------------------------------------------------------------------------------+
+
+
 VUnit
 *****
 

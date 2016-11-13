@@ -1,0 +1,58 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+path PreCompiled =    ${CONFIG.DirectoryNames:PrecompiledFiles}
+path UVVM_Directory = "uvvm"
+
+if (VHDLVersion < 2002) then
+	report "UVVM requires VHDL-2002."
+elseif (VHDLVersion >= 2002) then
+	if (Tool = "GHDL") then
+		path GHDLPath = (PreCompiled / ${CONFIG.DirectoryNames:GHDLFiles})
+		path UVVM_LibraryPath = (GHDLPath / UVVM_Directory)
+		if ?{(UVVM_LibraryPath / "uvvm_util/v08/uvvm_util-obj08.cf")} then
+			library uvvm_util	UVVM_LibraryPath
+		end if
+		if ?{(UVVM_LibraryPath / "uvvm_vvc_framework/v08/uvvm_vvc_framework-obj08.cf")} then
+			library uvvm_vvc_framework	UVVM_LibraryPath
+		end if
+		if ?{(UVVM_LibraryPath / "bitvis_vip_axilite/v08/bitvis_vip_axilite-obj08.cf")} then
+			library bitvis_vip_axilite	UVVM_LibraryPath
+		end if
+		if ?{(UVVM_LibraryPath / "bitvis_vip_axistream/v08/bitvis_vip_axistream-obj08.cf")} then
+			library bitvis_vip_axistream	UVVM_LibraryPath
+		end if
+		if ?{(UVVM_LibraryPath / "bitvis_vip_i2c/v08/bitvis_vip_i2c-obj08.cf")} then
+			library bitvis_vip_i2c	UVVM_LibraryPath
+		end if
+		if ?{(UVVM_LibraryPath / "bitvis_vip_sbi/v08/bitvis_vip_sbi-obj08.cf")} then
+			library bitvis_vip_sbi	UVVM_LibraryPath
+		end if
+		if ?{(UVVM_LibraryPath / "bitvis_vip_uart/v08/bitvis_vip_uart-obj08.cf")} then
+			library bitvis_vip_uart	UVVM_LibraryPath
+		else
+			report "No precompiled UVVM libraries for GHDL found."
+		end if
+	elseif (Tool = "Mentor_vSim") then
+		path UVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / UVVM_Directory))
+		if ?{UVVM_LibraryPath} then
+			library uvvm_util             UVVM_LibraryPath
+			library uvvm_vvc_framework	  UVVM_LibraryPath
+			library bitvis_vip_axilite	  UVVM_LibraryPath
+			library bitvis_vip_axistream	UVVM_LibraryPath
+			library bitvis_vip_i2c	      UVVM_LibraryPath
+			library bitvis_vip_sbi	      UVVM_LibraryPath
+			library bitvis_vip_uart	      UVVM_LibraryPath
+		else
+			report "No precompiled UVVM libraries for QuestaSim/ModelSim found."
+		end if
+	else
+		# TODO self-compile section?
+		# vhdl	uvvm	"lib/uvvm/NamePkg.vhd"								# UVVM
+	end if
+else
+	report "VHDL version not supported by UVVM."
+end if

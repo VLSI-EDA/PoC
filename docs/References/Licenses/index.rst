@@ -15,6 +15,7 @@ which contains a link to the orginal license file source.
    CCLA
    ArtisticLicense2.0
    BSDLicense_Cocotb
+   MIT_UVVM
    MozillaPublicLicense2.0
 
 .. rubric:: Footnotes

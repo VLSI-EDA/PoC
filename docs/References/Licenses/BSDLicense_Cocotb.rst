@@ -12,8 +12,8 @@ BSD License for Cocotb
 
 Cocotb is licensed under the Revised BSD License.  Full license text below.
 
-**Copyright (c) 2013 Potential Ventures Ltd** |br|
-**Copyright (c) 2013 SolarFlare Communications Inc** |br|
+**Copyright © 2013 Potential Ventures Ltd** |br|
+**Copyright © 2013 SolarFlare Communications Inc** |br|
 **All rights reserved.**
 
 Redistribution and use in source and binary forms, with or without

@@ -61,7 +61,7 @@ Source:  [https://github.com/JimLewis/OSVVM][21]
 
 **Folder:**		`<PoCRoot>\lib\uvvm\`  
 **Copyright:**	Copyright © 2016 by [Bitvis AS](http://bitvis.no/)  
-**License:**	[The MIT License (MIT)](UVVM MIT.md)
+**License:**	[The MIT License (MIT)](MIT UVVM.md)
 
 The Open Source **UVVM (Universal VHDL Verification Methodology) - VVC (VHDL
 Verification Component) Framework** for making structured VHDL testbenches
