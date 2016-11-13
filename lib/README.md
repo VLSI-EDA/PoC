@@ -57,6 +57,35 @@ Source:  [https://github.com/JimLewis/OSVVM][21]
  [21]: https://github.com/JimLewis/OSVVM
 
 
+## Universal VHDL Verification Methodology (UVVM)
+
+**Folder:**		`<PoCRoot>\lib\uvvm\`  
+**Copyright:**	Copyright © 2016 by [Bitvis AS](http://bitvis.no/)  
+**License:**	[The MIT License (MIT)](UVVM MIT.md)
+
+The Open Source **UVVM (Universal VHDL Verification Methodology) - VVC (VHDL
+Verification Component) Framework** for making structured VHDL testbenches
+for verification of FPGA. UVVM consists currently of: Utility Library, VVC
+Framework and Verification IPs (VIP) for various protocols.
+
+**For what do I need this VVC Framework?**  
+The VVC Framework is a VHDL Verification Component system that allows multiple
+interfaces on a DUT to be stimulated/handled simultaneously in a very
+structured manner, and controlled by a very simple to understand software like
+a test sequencer. VVC Framework is unique as an open source VHDL approach to
+building a structured testbench architecture using Verification components and
+a simple protocol to access these. As an example a simple command like
+`uart_expect(UART_VVCT, my_data)`, or `axilite_write(AXILITE_VVCT, my_addr, my_data, my_message)`
+will automatically tell the respective VVC (for UART or AXI-Lite) to execute the
+`uart_receive()` or `axilite_write()` BFM respectively.
+
+Website: [http://bitvis.no/][30]
+Source:  [https://github.com/UVVM/UVVM_All][31]
+
+ [30]: http://bitvis.no/
+ [31]: https://github.com/UVVM/UVVM_All
+
+
 ## VUnit
 
 **Folder:**		`<PoCRoot>\lib\vunit\`  
@@ -69,11 +98,11 @@ needed to realize continuous and automated testing of your VHDL code. VUnit
 doesn't replace but rather complements traditional testing methodologies by
 supporting a "test early and often" approach through automation.
 
-Website: [https://vunit.github.io/][30]
-Source: [https://github.com/VUnit/vunit][31]
+Website: [https://vunit.github.io/][40]
+Source: [https://github.com/VUnit/vunit][41]
 
- [30]: https://vunit.github.io/
- [31]: https://github.com/VUnit/vunit
+ [40]: https://vunit.github.io/
+ [41]: https://github.com/VUnit/vunit
 
  
 ## Xillybus
@@ -82,13 +111,13 @@ Source: [https://github.com/VUnit/vunit][31]
 **Copyright:**	TODO
 **License:**	TODO, see [local copy](Xillybus License.md)
 
-[xillybus][40] TODO
+[xillybus][50] TODO
 
-Documentation: [http://xillybus.com][40]
-Source: [http://xillybus.com][41]
+Documentation: [http://xillybus.com][50]
+Source: [http://xillybus.com][51]
 
- [40]: http://xillybus.com
- [41]: http://xillybus.com
+ [50]: http://xillybus.com
+ [51]: http://xillybus.com
 
 
  [PAL2.0]:	http://www.perlfoundation.org/artistic_license_2_0
