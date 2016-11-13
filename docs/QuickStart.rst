@@ -43,6 +43,8 @@ See :doc:`/UsingPoC/Requirements` for further details.
   A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
 * `OS-VVM <https://github.com/JimLewis/OSVVM>`_ |br|
   Open Source VHDL Verification Methodology.
+* `UVVM <https://github.com/UVVM/UVVM_All>`_ |br|
+  Universal VHDL Verification Methodology.
 * `VUnit <https://github.com/VUnit/vunit>`_ |br|
   An unit testing framework for VHDL.
 

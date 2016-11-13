@@ -85,7 +85,9 @@ Windows. See [Requirements][211] for further details.
     A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
  -  [OS-VVM][2132]  
     Open Source VHDL Verification Methodology.
- -  [VUnit][2133]  
+ -  [UVVM][2133]  
+    Universal VHDL Verification Methodology.
+ -  [VUnit][2134]  
     An unit testing framework for VHDL.
   
 All dependencies are available as GitHub repositories and are linked to PoC as Git submodules into the
@@ -93,7 +95,8 @@ All dependencies are available as GitHub repositories and are linked to PoC as G
 
 [2131]: https://github.com/potentialventures/cocotb
 [2132]: https://github.com/JimLewis/OSVVM
-[2133]: https://github.com/VUnit/vunit
+[2133]: https://github.com/UVVM/UVVM_All
+[2134]: https://github.com/VUnit/vunit
 
 [201]: http://poc-library.readthedocs.io/en/latest/UsingPoC/index.html
 [202]: http://poc-library.readthedocs.io/

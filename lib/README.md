@@ -32,7 +32,7 @@ foreach($dir in (dir -Directory)) {
 Documentation: [http://cocotb.readthedocs.org/en/latest/index.html][10]
 Source: [https://github.com/potentialventures/cocotb][11]
 
- [10]: http://cocotb.readthedocs.org/en/latest/index.html  
+ [10]: http://cocotb.readthedocs.org/en/latest/index.html
  [11]: https://github.com/potentialventures/cocotb
 
 
@@ -50,7 +50,7 @@ needed. With OSVVM you can add advanced verification methodologies to your
 current testbench without having to learn a new language or throw out your
 existing testbench or testbench models.
 
-Website: [http://osvvm.org/][20]  
+Website: [http://osvvm.org/][20]
 Source:  [https://github.com/JimLewis/OSVVM][21]
 
  [20]: http://osvvm.org/
@@ -79,7 +79,7 @@ a simple protocol to access these. As an example a simple command like
 will automatically tell the respective VVC (for UART or AXI-Lite) to execute the
 `uart_receive()` or `axilite_write()` BFM respectively.
 
-Website: [http://bitvis.no/][30]  
+Website: [http://bitvis.no/][30]
 Source:  [https://github.com/UVVM/UVVM_All][31]
 
  [30]: http://bitvis.no/
@@ -98,7 +98,7 @@ needed to realize continuous and automated testing of your VHDL code. VUnit
 doesn't replace but rather complements traditional testing methodologies by
 supporting a "test early and often" approach through automation.
 
-Website: [https://vunit.github.io/][40]  
+Website: [https://vunit.github.io/][40]
 Source: [https://github.com/VUnit/vunit][41]
 
  [40]: https://vunit.github.io/
@@ -113,7 +113,7 @@ Source: [https://github.com/VUnit/vunit][41]
 
 [xillybus][50] TODO
 
-Documentation: [http://xillybus.com][50]  
+Documentation: [http://xillybus.com][50]
 Source: [http://xillybus.com][51]
 
  [50]: http://xillybus.com
