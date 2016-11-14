@@ -1,0 +1,20 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Common PoC packages for configuration, synthesis and simulation
+include				"src/common/common.files"										# load common packages
+
+# PoC.misc.sync
+include				"src/misc/sync/sync_Bits.files"							# Generic 2-FF synchronizer
+
+# PoC.io
+include				"src/io/io_TimingCounter.files"							# Timing counter
+include				"src/io/io_GlitchFilter.files"							# Glitch filter
+
+# PoC.io.iic
+vhdl		poc		"src/io/iic/iic.pkg.vhdl"										# I2C Package
+vhdl		poc		"src/io/iic/iic_BusController.vhdl"					# I2C BusController
+vhdl		poc		"src/io/iic/iic_Controller.vhdl"						# Top-Level

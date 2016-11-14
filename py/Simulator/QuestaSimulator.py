@@ -32,6 +32,7 @@
 #
 # load dependencies
 from pathlib                      import Path
+from textwrap import dedent
 
 from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
@@ -112,6 +113,10 @@ class Simulator(BaseSimulator):
 		vcom.Parameters[vcom.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 		vcom.Parameters[vcom.SwitchVHDLVersion] =     repr(self._vhdlVersion)
 
+		recompileScriptContent = dedent("""\
+			puts "Recompiling..."
+			""")
+
 		# run vcom compile for each VHDL file
 		for file in self._pocProject.Files(fileType=FileTypes.VHDLSourceFile):
 			if (not file.Path.exists()):              raise SimulatorException("Cannot analyse '{0!s}'.".format(file.Path)) from FileNotFoundError(str(file.Path))
@@ -134,6 +139,28 @@ class Simulator(BaseSimulator):
 					vcomLogFile.unlink()
 				except OSError as ex:
 					raise SimulatorException("Error while deleting '{0!s}'.".format(vcomLogFile)) from ex
+
+			# collecting all compile commands in a buffer
+			recompileScriptContent += dedent("""\
+				puts "  Compiling '{file}'..."
+				{tcl}
+				""").format(
+					file=file.Path.as_posix(),
+					tcl=vcom.GetTclCommand()
+				)
+
+		recompileScriptContent += dedent("""\
+			puts "Recompilation done"
+			puts "Restarting simulation..."
+			restart -force
+			puts "Simulation is restarted."
+			""")
+		recompileScriptContent = recompileScriptContent.replace("\\", "/")   # WORKAROUND: to convert all paths to Tcl compatible paths.
+
+		recompileScriptPath = self.Directories.Working / "recompile.do"
+		self.LogDebug("Writing recompile script to '{0!s}'".format(recompileScriptPath))
+		with recompileScriptPath.open('w') as fileHandle:
+			fileHandle.write(recompileScriptContent)
 
 	def _RunSimulation(self, testbench):
 		if self._guiMode:
@@ -214,16 +241,50 @@ class Simulator(BaseSimulator):
 			vsimBatchCommand = "{0};".format(vsimDefaultWaveCommands)
 
 		# find a Tcl batch script for the GUI mode
+		vsimRunScript = ""
 		if (tclGUIFilePath.exists()):
 			self.LogDebug("Found Tcl script for GUI mode: '{0!s}'".format(tclGUIFilePath))
-			vsimBatchCommand +=  "do {0};".format(tclGUIFilePath.as_posix())
+			vsimRunScript =     tclGUIFilePath.as_posix()
+			vsimBatchCommand += "do {0};".format(vsimRunScript)
 		elif (tclDefaultGUIFilePath.exists()):
 			self.LogDebug("Falling back to default Tcl script for GUI mode: '{0!s}'".format(tclDefaultGUIFilePath))
-			vsimBatchCommand +=  "do {0};".format(tclDefaultGUIFilePath.as_posix())
+			vsimRunScript =     tclDefaultGUIFilePath.as_posix()
+			vsimBatchCommand += "do {0};".format(vsimRunScript)
 		else:
 			raise QuestaSimException("No Tcl batch script for GUI mode found.") \
 				from FileNotFoundError(str(tclDefaultGUIFilePath))
 
 		vsim.Parameters[vsim.SwitchBatchCommand] = vsimBatchCommand
+
+		# writing a relaunch file
+		recompileScriptPath =     self.Directories.Working / "recompile.do"
+		relaunchScriptPath =      self.Directories.Working / "relaunch.do"
+		saveWaveformScriptPath =  self.Directories.Working / "saveWaveform.do"
+
+		relaunchScriptContent = dedent("""\
+			puts "Loading recompile script '{recompileScript}'..."
+			do {recompileScript}
+			puts "Loading run script '{runScript}'..."
+			do {runScript}
+			""").format(
+			recompileScript=recompileScriptPath.as_posix(),
+				runScript=vsimRunScript
+			)
+
+		self.LogDebug("Writing relaunch script to '{0!s}'".format(relaunchScriptPath))
+		with relaunchScriptPath.open('w') as fileHandle:
+			fileHandle.write(relaunchScriptContent)
+
+		# writing a saveWaveform file
+		saveWaveformScriptContent = dedent("""\
+			puts "Saving waveform settings to '{waveformFile}'..."
+			write format wave -window .main_pane.wave.interior.cs.body.pw.wf {waveformFile}
+			""").format(
+				waveformFile=tclWaveFilePath.as_posix()
+			)
+
+		self.LogDebug("Writing saveWaveform script to '{0!s}'".format(saveWaveformScriptPath))
+		with saveWaveformScriptPath.open('w') as fileHandle:
+			fileHandle.write(saveWaveformScriptContent)
 
 		testbench.Result = vsim.Simulate()
