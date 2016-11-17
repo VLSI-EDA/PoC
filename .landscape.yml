@@ -5,7 +5,7 @@ python-targets:
 # - py-flags
 # doc-warnings: yes
 test-warnings: no
-strictness: high
+strictness: medium
 max-line-length: 180
 pylint:
   disable:
