@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/iic/iic_Controller_SFF8431.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/iic/iic_Controller_SFF8431_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/iic/iic_Controller_SFF8431.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/iic/iic_Controller_SFF8431_tb.vhdl>`
+
+.. _IP:IICController_SFF8431:
 
 IICController_SFF8431
 #####################
@@ -12,7 +27,6 @@ IICController_SFF8431
    :linenos:
    :lines: 15-49
 
-Source file: `io/iic/iic_Controller_SFF8431.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/iic/iic_Controller_SFF8431.vhdl>`_
-
+Source file: :pocsrc:`io/iic/iic_Controller_SFF8431.vhdl <io/iic/iic_Controller_SFF8431.vhdl>`
 
 

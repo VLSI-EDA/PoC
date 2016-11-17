@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_ExpireList.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sort_ExpireList_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <sort/sort_ExpireList.vhdl>`
+   * |gh-tb| :poctb:`Testbench <sort/sort_ExpireList_tb.vhdl>`
+
+.. _IP:list_expire:
 
 list_expire
 ###########
@@ -14,7 +29,6 @@ list_expire
    :linenos:
    :lines: 42-61
 
-Source file: `sort/sort_ExpireList.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_ExpireList.vhdl>`_
-
+Source file: :pocsrc:`sort/sort_ExpireList.vhdl <sort/sort_ExpireList.vhdl>`
 
 

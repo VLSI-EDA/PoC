@@ -1,3 +1,4 @@
+.. _IP:mig_Atlys_1x128:
 
 mig_Atlys_1x128
 ###############

@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_out.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/ddrio/ddrio_out_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/ddrio/ddrio_out.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/ddrio/ddrio_out_tb.vhdl>`
+
+.. _IP:ddrio_out:
 
 ddrio_out
 #########
@@ -29,7 +44,6 @@ IOBs.
    :linenos:
    :lines: 57-71
 
-Source file: `io/ddrio/ddrio_out.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_out.vhdl>`_
-
+Source file: :pocsrc:`io/ddrio/ddrio_out.vhdl <io/ddrio/ddrio_out.vhdl>`
 
 

@@ -1,6 +1,8 @@
-.. image:: /_static/images/logo_tud.jpg
+.. image:: /_static/logos/tu-dresden.jpg
    :scale: 10
    :alt: Logo: Technische Universität Dresden
+
+-----------------------------------
 
 Modified Apache Contributor License Agreement v2.0
 ##################################################
@@ -86,7 +88,8 @@ and interest in and to Your Contributions.
     that you have received permission to make Contributions on behalf
     of that employer, that your employer has waived such rights for
     your Contributions to the Chair, or that your employer has
-    executed a separate :doc:`Corporate CLA <CCLA>` with the Chair.
+    executed a separate :doc:`Corporate CLA <ApacheLicense2.0_CCLA>`
+    with the Chair.
 
  5. You represent that each of Your Contributions is Your original
     creation (see section 7 for submissions on behalf of others). You

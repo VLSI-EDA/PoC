@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/gearbox/gearbox_down_cc.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/gearbox/gearbox_down_cc_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/gearbox/gearbox_down_cc.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/gearbox/gearbox_down_cc_tb.vhdl>`
+
+.. _IP:gearbox_down_cc:
 
 gearbox_down_cc
 ###############
@@ -18,7 +33,6 @@ gearbox_down_cc
    :linenos:
    :lines: 46-70
 
-Source file: `misc/gearbox/gearbox_down_cc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/gearbox/gearbox_down_cc.vhdl>`_
-
+Source file: :pocsrc:`misc/gearbox/gearbox_down_cc.vhdl <misc/gearbox/gearbox_down_cc.vhdl>`
 
 

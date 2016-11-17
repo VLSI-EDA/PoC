@@ -1,31 +1,32 @@
+.. _NS:sort:
 
-sort
-====
+PoC.sort
+========
 
 These are sorting entities....
 
 **Sub-Namespaces**
 
- * :doc:`PoC.sort.sortnet <sortnet/index>`
+ * :ref:`NS:sortnet`
 
 **Entities**
 
- * :doc:`PoC.sort.ExpireList <sort_ExpireList>`
- * :doc:`PoC.sort.InsertSort <sort_InsertSort>`
- * :doc:`PoC.sort.LeastFrequentlyUsed <sort_LeastFrequentlyUsed>`
- * :doc:`PoC.sort.lru_cache <sort_lru_cache>`
- * :doc:`PoC.sort.lru_list <sort_lru_list>`
+ * :ref:`IP:sort_ExpireList`
+ * :ref:`IP:sort_InsertSort`
+ * :ref:`IP:sort_LeastFrequentlyUsed`
+ * :ref:`IP:sort_lru_cache`
+ * :ref:`IP:sort_lru_list`
 
 .. toctree::
    :hidden:
 
-   sortnet/index
+   sortnet <sortnet/index>
 
 .. toctree::
    :hidden:
 
-   sort_ExpireList
-   sort_InsertSort
-   sort_LeastFrequentlyUsed
-   sort_lru_cache
-   sort_lru_list
+   sort_ExpireList <sort_ExpireList>
+   sort_InsertSort <sort_InsertSort>
+   sort_LeastFrequentlyUsed <sort_LeastFrequentlyUsed>
+   sort_lru_cache <sort_lru_cache>
+   sort_lru_list <sort_lru_list>

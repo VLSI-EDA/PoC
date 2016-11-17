@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv4/ipv4_RX.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/ipv4/ipv4_RX_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <net/ipv4/ipv4_RX.vhdl>`
+   * |gh-tb| :poctb:`Testbench <net/ipv4/ipv4_RX_tb.vhdl>`
+
+.. _IP:ipv4_RX:
 
 ipv4_RX
 #######
@@ -14,7 +29,6 @@ ipv4_RX
    :linenos:
    :lines: 42-82
 
-Source file: `net/ipv4/ipv4_RX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv4/ipv4_RX.vhdl>`_
-
+Source file: :pocsrc:`net/ipv4/ipv4_RX.vhdl <net/ipv4/ipv4_RX.vhdl>`
 
 

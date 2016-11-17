@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Pulse.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Pulse_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Pulse.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/sync/sync_Pulse_tb.vhdl>`
+
+.. _IP:sync_Pulse:
 
 sync_Pulse
 ##########
@@ -32,18 +47,17 @@ Constraints:
    :linenos:
    :lines: 68-78
 
-Source file: `misc/sync/sync_Pulse.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Pulse.vhdl>`_
+Source file: :pocsrc:`misc/sync/sync_Pulse.vhdl <misc/sync/sync_Pulse.vhdl>`
 
 .. seealso::
 
-   :doc:`PoC.misc.sync.Bits </PoC/misc/sync/sync_Bits>`
+   :doc:`PoC.misc.sync.Bits </IPCores/misc/sync/sync_Bits>`
      For a common 2 D-FF synchronizer for *flag*-signals.
-   :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`
+   :doc:`PoC.misc.sync.Reset </IPCores/misc/sync/sync_Reset>`
      For a special 2 D-FF synchronizer for *reset*-signals.
-   :doc:`PoC.misc.sync.Strobe </PoC/misc/sync/sync_Strobe>`
+   :doc:`PoC.misc.sync.Strobe </IPCores/misc/sync/sync_Strobe>`
      For a synchronizer for *strobe*-signals.
-   :doc:`PoC.misc.sync.Vector </PoC/misc/sync/sync_Vector>`
+   :doc:`PoC.misc.sync.Vector </IPCores/misc/sync/sync_Vector>`
      For a multiple bits capable synchronizer.
-
 
 

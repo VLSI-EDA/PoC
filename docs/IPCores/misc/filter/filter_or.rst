@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/filter/filter_or.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/filter/filter_or_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/filter/filter_or.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/filter/filter_or_tb.vhdl>`
+
+.. _IP:filter_or:
 
 filter_or
 #########
@@ -14,7 +29,6 @@ filter_or
    :linenos:
    :lines: 37-48
 
-Source file: `misc/filter/filter_or.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/filter/filter_or.vhdl>`_
-
+Source file: :pocsrc:`misc/filter/filter_or.vhdl <misc/filter/filter_or.vhdl>`
 
 

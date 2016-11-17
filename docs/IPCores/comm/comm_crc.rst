@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_crc.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/comm/comm_crc_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <comm/comm_crc.vhdl>`
+   * |gh-tb| :poctb:`Testbench <comm/comm_crc_tb.vhdl>`
+
+.. _IP:comm_crc:
 
 comm_crc
 ########
@@ -20,7 +35,6 @@ processing width.
    :linenos:
    :lines: 45-64
 
-Source file: `comm/comm_crc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_crc.vhdl>`_
-
+Source file: :pocsrc:`comm/comm_crc.vhdl <comm/comm_crc.vhdl>`
 
 

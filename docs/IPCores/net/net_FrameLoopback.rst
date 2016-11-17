@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/net_FrameLoopback.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/net_FrameLoopback_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <net/net_FrameLoopback.vhdl>`
+   * |gh-tb| :poctb:`Testbench <net/net_FrameLoopback_tb.vhdl>`
+
+.. _IP:FrameLoopback:
 
 FrameLoopback
 #############
@@ -14,7 +29,6 @@ FrameLoopback
    :linenos:
    :lines: 41-65
 
-Source file: `net/net_FrameLoopback.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/net_FrameLoopback.vhdl>`_
-
+Source file: :pocsrc:`net/net_FrameLoopback.vhdl <net/net_FrameLoopback.vhdl>`
 
 

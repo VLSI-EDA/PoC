@@ -287,6 +287,21 @@ QuestaSim:
    cd PoCRoot
    .\poc.ps1 vsim PoC.arith.prng --board=DE4 --gui
 
+If QuestaSim is started in GUI mode (:option:`--gui`), PoC will provide several
+Tcl files (:file:`*.do`) in the simulator's working directory to recompile,
+restart or rerun the current simulation. The rerun command is based on the saved
+IP core's run script, which may default to ``run -all``.
+
++--------------------------+---------------------------------------------------------+
+| Tcl Script               | Performed Tasks                                         |
++==========================+=========================================================+
+| :file:`recompile.do`     | recompile and restart                                   |
++--------------------------+---------------------------------------------------------+
+| :file:`relaunch.do`      | recompile, restart and rerun                            |
++--------------------------+---------------------------------------------------------+
+| :file:`saveWaveform.do`  | save the current waveform viewer settings               |
++--------------------------+---------------------------------------------------------+
+
 
 Xilinx ISE Simulator
 ====================

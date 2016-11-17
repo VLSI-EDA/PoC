@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/iic/iic_BusController.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/iic/iic_BusController_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/iic/iic_BusController.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/iic/iic_BusController_tb.vhdl>`
+
+.. _IP:iic_BusController:
 
 iic_BusController
 #################
@@ -15,9 +30,8 @@ controller is compatible to the System Management Bus (SMBus).
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 47-70
+   :lines: 47-65
 
-Source file: `io/iic/iic_BusController.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/iic/iic_BusController.vhdl>`_
-
+Source file: :pocsrc:`io/iic/iic_BusController.vhdl <io/iic/iic_BusController.vhdl>`
 
 

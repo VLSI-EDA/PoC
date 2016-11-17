@@ -38,6 +38,8 @@ from pathlib            import Path
 from re                 import compile as re_compile, subn as re_subn, DOTALL as RE_DOTALL, MULTILINE as RE_MULTILINE, IGNORECASE as RE_IGNORECASE
 from shutil             import copy as shutil_copy
 
+from flags import Flags
+
 from lib.Functions      import Init
 from lib.Parser         import ParserException
 from Base.Exceptions    import ExceptionBase, SkipableException
@@ -72,26 +74,42 @@ class SkipableCompilerException(CompilerException, SkipableException):
 	pass
 
 class CopyTask(CopyRuleMixIn):
-	"""This class represents a 'copy task' and inherits the partial class :ref:`CopyRuleMixIn`."""
+	"""This class represents a 'copy task' and inherits the partial class :class:`Parser.RulesParser.CopyRuleMixIn`."""
 	pass
 
 class DeleteTask(DeleteRuleMixIn):
-	"""This class represents a 'delete task' and inherits the partial class :ref:`DeleteRuleMixIn`."""
+	"""This class represents a 'delete task' and inherits the partial class :class:`Parser.RulesParser.DeleteRuleMixIn`."""
 	pass
 
 class ReplaceTask(ReplaceRuleMixIn):
-	"""This class represents a 'replace task' and inherits the partial class :ref:`ReplaceRuleMixIn`."""
+	"""This class represents a 'replace task' and inherits the partial class :class:`Parser.RulesParser.ReplaceRuleMixIn`."""
 	pass
 
 class AppendLineTask(AppendLineRuleMixIn):
-	"""This class represents a 'append line task' and inherits the partial class :ref:`AppendLineRuleMixIn`."""
+	"""This class represents a 'append line task' and inherits the partial class :class:`Parser.RulesParser.AppendLineRuleMixIn`."""
 	pass
 
 
 @unique
+class CompilerSteps(Flags):
+	"""Compiler step enumeration."""
+	Prepare =        1 << 0
+	CleanUpBefore =  1 << 1
+	CleanUpAfter =   1 << 2
+	Synthesize =     1 << 5
+	Merge =          1 << 6
+	AnalyzeTiming =  1 << 7
+	Place =          1 << 8
+	Route =          1 << 9
+	WriteBitfile =   1 << 10
+	ShowReport =     1 << 15
+	# Recompile =      1 << 25
+	# Resimulate =     1 << 26
+	# Review =         1 << 27
+
+@unique
 class CompileState(Enum):
 	"""Compile state enumeration."""
-
 	Prepare =     0
 	PreCopy =    10
 	PrePatch =   11
@@ -113,7 +131,6 @@ class CompileState(Enum):
 @unique
 class CompileResult(Enum):
 	"""Compilation result enumeration."""
-
 	NotRun =      0
 	Error =       1
 	Failed =      2

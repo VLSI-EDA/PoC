@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_LeastFrequentlyUsed.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sort_LeastFrequentlyUsed_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <sort/sort_LeastFrequentlyUsed.vhdl>`
+   * |gh-tb| :poctb:`Testbench <sort/sort_LeastFrequentlyUsed_tb.vhdl>`
+
+.. _IP:sort_LeastFrequentlyUsed:
 
 sort_LeastFrequentlyUsed
 ########################
@@ -14,7 +29,6 @@ sort_LeastFrequentlyUsed
    :linenos:
    :lines: 36-53
 
-Source file: `sort/sort_LeastFrequentlyUsed.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_LeastFrequentlyUsed.vhdl>`_
-
+Source file: :pocsrc:`sort/sort_LeastFrequentlyUsed.vhdl <sort/sort_LeastFrequentlyUsed.vhdl>`
 
 

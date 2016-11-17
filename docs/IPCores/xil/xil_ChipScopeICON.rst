@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ChipScopeICON.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_ChipScopeICON_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <xil/xil_ChipScopeICON.vhdl>`
+   * |gh-tb| :poctb:`Testbench <xil/xil_ChipScopeICON_tb.vhdl>`
+
+.. _IP:xil_ChipScopeICON:
 
 xil_ChipScopeICON
 #################
@@ -27,12 +42,11 @@ the needed source and netlist files on your local machine.
    :linenos:
    :lines: 56-63
 
-Source file: `xil/xil_ChipScopeICON.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ChipScopeICON.vhdl>`_
+Source file: :pocsrc:`xil/xil_ChipScopeICON.vhdl <xil/xil_ChipScopeICON.vhdl>`
 
 .. seealso::
 
    :doc:`Using PoC -> Synthesis </UsingPoC/Synthesis>`
      For how to run synthesis with PoC and CoreGenerator.
-
 
 

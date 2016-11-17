@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_firstone.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_firstone_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <arith/arith_firstone.vhdl>`
+   * |gh-tb| :poctb:`Testbench <arith/arith_firstone_tb.vhdl>`
+
+.. _IP:arith_firstone:
 
 arith_firstone
 ##############
@@ -27,7 +42,6 @@ This implementation uses carry chains for wider implementations.
    :linenos:
    :lines: 50-61
 
-Source file: `arith/arith_firstone.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_firstone.vhdl>`_
-
+Source file: :pocsrc:`arith/arith_firstone.vhdl <arith/arith_firstone.vhdl>`
 
 

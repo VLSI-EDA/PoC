@@ -37,7 +37,7 @@ import shutil
 from textwrap                import dedent
 
 from Base.Project            import FileTypes, ToolChain, Tool
-from Base.Simulator          import SimulatorException, Simulator as BaseSimulator
+from Base.Simulator          import SimulatorException, Simulator as BaseSimulator, SimulationSteps
 from DataBase.Config              import Vendors
 from DataBase.Entity              import WildCard
 from ToolChains.GNU          import Make
@@ -54,8 +54,8 @@ class Simulator(BaseSimulator):
 	_TOOL =                  Tool.Cocotb_QuestaSim
 	_COCOTB_SIMBUILD_DIRECTORY = "sim_build"
 
-	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun, guiMode)
+	def __init__(self, host, dryRun, simulationSteps):
+		super().__init__(host, dryRun, simulationSteps)
 
 		configSection =                 host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working =      host.Directories.Temp / configSection['CocotbFiles']
@@ -174,5 +174,5 @@ class Simulator(BaseSimulator):
 
 		# execute make
 		make = Make(self.Host.Platform, self.DryRun, logger=self.Logger)
-		if self._guiMode: make.Parameters[Make.SwitchGui] = 1
+		if (SimulationSteps.ShowWaveform in self._simulationSteps): make.Parameters[Make.SwitchGui] = 1
 		testbench.Result = make.RunCocotb()

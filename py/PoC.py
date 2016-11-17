@@ -48,7 +48,7 @@ from Base.Configuration             import ConfigurationException, SkipConfigura
 from Base.Exceptions                import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
 from Base.Logging                   import ILogable, Logger, Severity
 from Base.Project                   import VHDLVersion
-from Base.Simulator                 import SimulatorException, Simulator as BaseSimulator
+from Base.Simulator                 import SimulatorException, Simulator as BaseSimulator, SimulationSteps
 from Base.ToolChain                 import ToolChainException
 from Compiler.LSECompiler           import Compiler as LSECompiler
 from Compiler.QuartusCompiler       import Compiler as MapCompiler
@@ -91,8 +91,9 @@ __api__ = [
 	'BoardDeviceAttributeGroup',
 	'VHDLVersionAttribute',
 	'GUIModeAttribute',
-	'NoCleanUpAttribute',
-	'PoC',
+	'SimulationStepsAttribute',
+	'CompileStepsAttribute',
+	'PileOfCores',
 	'main'
 ]
 __all__ = __api__
@@ -115,14 +116,31 @@ class VHDLVersionAttribute(Attribute):
 		self._AppendAttribute(func, ArgumentAttribute("--std", metavar="VHDLVersion", dest="VHDLVersion", help="Simulate with VHDL-??"))
 		return func
 
-class GUIModeAttribute(Attribute):
+class SimulationStepsAttribute(Attribute):
 	def __call__(self, func):
-		self._AppendAttribute(func, SwitchArgumentAttribute("-g", "--gui", dest="GUIMode", help="show waveform in a GUI window."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-g", "--gui",        dest="GUIMode",     help="Run all steps (prepare, analysis, elaboration, optimization, simulation) and finally display the waveform in a GUI window."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-a", "--analyze",    dest="Analyze",     help="Run only the prepare and analysis step."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-e", "--elaborate",  dest="Elaborate",   help="Run only the prepare and elaboration step."))
+		# self._AppendAttribute(func, SwitchArgumentAttribute("-c", "--compile",    dest="Compile",     help="Run only the prepare and compile step."))
+		# self._AppendAttribute(func, SwitchArgumentAttribute("-o", "--optimize",   dest="Optimize",    help="Run only the prepare and optimization step."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-C", "--recompile",  dest="Recompile",   help="Run all compile steps (prepare, analysis, elaboration, optimization)."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-s", "--simulate",   dest="Simulate",    help="Run only the prepare and simulation step."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-w", "--showwave",   dest="ShowWave",    help="Run only the prepare step and display the waveform in a GUI window."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-W", "--review",     dest="Review",      help="Run only display the waveform in a GUI window."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-S", "--resimulate", dest="Resimulate",  help="Run all simulation steps (prepare, simulation) and finally display the waveform in a GUI window."))
+		self._AppendAttribute(func, SwitchArgumentAttribute("-r", "--showreport",     dest="ShowReport",    help="Show a simulation report."))
+		# self._AppendAttribute(func, SwitchArgumentAttribute(      "--cleanup-after",  dest="CleanUpAfter",  help="Don't delete intermediate files. Skip post-delete rules."))
 		return func
 
-class NoCleanUpAttribute(Attribute):
+class CompileStepsAttribute(Attribute):
 	def __call__(self, func):
-		self._AppendAttribute(func, SwitchArgumentAttribute("--no-cleanup", dest="NoCleanUp", help="Don't delete intermediate files. Skip post-delete rules."))
+		# synthesize
+		# merge
+		# place
+		# route
+		# bitfile
+		self._AppendAttribute(func, SwitchArgumentAttribute("-r", "--showreport", dest="ShowReport", help="Show a simulation report."))
+		self._AppendAttribute(func, SwitchArgumentAttribute(      "--no-cleanup", dest="NoCleanUp",  help="Don't delete intermediate files. Skip post-delete rules."))
 		return func
 
 
@@ -316,13 +334,13 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# ============================================================================
 	# common arguments valid for all commands
 	# ----------------------------------------------------------------------------
-	@CommonSwitchArgumentAttribute("-D",              dest="DEBUG",   help="enable script wrapper debug mode")
-	@CommonSwitchArgumentAttribute(      "--dryrun",  dest="DryRun",  help="enable script wrapper debug mode")
-	@CommonSwitchArgumentAttribute("-d", "--debug",   dest="debug",   help="enable debug mode")
-	@CommonSwitchArgumentAttribute("-v", "--verbose", dest="verbose", help="print out detailed messages")
-	@CommonSwitchArgumentAttribute("-q", "--quiet",   dest="quiet",   help="reduce messages to a minimum")
-	@CommonArgumentAttribute("--sln", metavar="SolutionID", dest="SolutionID", help="Solution name")
-	@CommonArgumentAttribute("--prj", metavar="ProjectID", dest="ProjectID", help="Solution name")
+	@CommonSwitchArgumentAttribute("-D",              dest="DEBUG",   help="Enable script wrapper debug mode. See also :option:`poc.ps1 -D`.")
+	@CommonSwitchArgumentAttribute(      "--dryrun",  dest="DryRun",  help="Don't execute external programs.")
+	@CommonSwitchArgumentAttribute("-d", "--debug",   dest="debug",   help="Enable debug mode.")
+	@CommonSwitchArgumentAttribute("-v", "--verbose", dest="verbose", help="Print out detailed messages.")
+	@CommonSwitchArgumentAttribute("-q", "--quiet",   dest="quiet",   help="Reduce messages to a minimum.")
+	@CommonArgumentAttribute("--sln", metavar="SolutionID", dest="SolutionID",  help="Solution name.")
+	@CommonArgumentAttribute("--prj", metavar="ProjectID",  dest="ProjectID",   help="Project name.")
 	def Run(self):
 		ArgParseMixin.Run(self)
 
@@ -704,6 +722,39 @@ class PileOfCores(ILogable, ArgParseMixin):
 		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) == 0):    raise NotConfiguredException("Xilinx ISE is not configured on this system.")
 		if (environ.get('XILINX') is None):                             raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
 
+	@staticmethod
+	def _ExtractSimulationSteps(guiMode, analyze, elaborate, optimize, recompile, simulate, showWaveform, resimulate, showReport, cleanUp):
+		simulationSteps = SimulationSteps.no_flags
+		if (not (analyze or elaborate or optimize or recompile or simulate or resimulate or showWaveform)):
+			simulationSteps |= SimulationSteps.Prepare | SimulationSteps.CleanUpBefore
+			simulationSteps |= SimulationSteps.Analyze | SimulationSteps.Elaborate #| SimulationSteps.Optimize
+			simulationSteps |= SimulationSteps.Simulate
+			simulationSteps |= SimulationSteps.ShowWaveform & guiMode
+			simulationSteps |= SimulationSteps.ShowReport
+			simulationSteps |= SimulationSteps.CleanUpAfter & cleanUp
+		elif (not (analyze or elaborate or optimize or simulate or resimulate or showWaveform or guiMode) and recompile):
+			simulationSteps |= SimulationSteps.Analyze | SimulationSteps.Elaborate #| SimulationSteps.Optimize
+			simulationSteps |= SimulationSteps.Recompile
+			simulationSteps |= SimulationSteps.ShowReport &   showReport
+			simulationSteps |= SimulationSteps.CleanUpAfter & cleanUp
+		elif (not (analyze or elaborate or optimize or recompile or simulate or showWaveform) and resimulate):
+			simulationSteps |= SimulationSteps.Simulate
+			simulationSteps |= SimulationSteps.ShowWaveform & guiMode
+			simulationSteps |= SimulationSteps.ShowReport &   showReport
+			simulationSteps |= SimulationSteps.CleanUpAfter & cleanUp
+		elif (recompile or resimulate):
+			raise SimulatorException("Combination of command line options is not allowed.")
+		else:
+			# simulationSteps |=  SimulationSteps.CleanUpBefore &  True   #cleanup
+			simulationSteps |=  SimulationSteps.Prepare &        True   #prepare
+			simulationSteps |=  SimulationSteps.Analyze &        analyze
+			simulationSteps |=  SimulationSteps.Elaborate &      elaborate
+			# simulationSteps |=  SimulationSteps.Optimize &       optimize
+			simulationSteps |=  SimulationSteps.Simulate &       simulate
+			simulationSteps |=  SimulationSteps.ShowWaveform &  (showWaveform or guiMode)
+			simulationSteps |=  SimulationSteps.ShowReport &     showReport
+		return simulationSteps
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-testbench" command
 	# ----------------------------------------------------------------------------
@@ -794,20 +845,21 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@GUIModeAttribute()
+	@SimulationStepsAttribute()
 	def HandleActiveHDLSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 
-		fqnList =      self._ExtractFQNs(args.FQN)
-		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
-		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
+		fqnList =         self._ExtractFQNs(args.FQN)
+		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
+		vhdlVersion =     self._ExtractVHDLVersion(args.VHDLVersion)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
 
 		# create a GHDLSimulator instance and prepare it
-		simulator = ActiveHDLSimulator(self, self.DryRun, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
+		simulator = ActiveHDLSimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)
 
-		Exit.exit(0 if allPassed else 1)
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
 
 
 # ----------------------------------------------------------------------------
@@ -818,7 +870,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@GUIModeAttribute()
+	@SimulationStepsAttribute()
 	@ArgumentAttribute("--reproducer", metavar="Name", dest="CreateReproducer", help="Create a bug reproducer")
 	def HandleGHDLSimulation(self, args):
 		self.PrintHeadline()
@@ -828,14 +880,15 @@ class PileOfCores(ILogable, ArgParseMixin):
 		if (not config.IsSupportedPlatform()):    raise PlatformNotSupportedException()
 		if (not config.IsConfigured()):            raise NotConfiguredException("GHDL is not configured on this system.")
 
-		fqnList =      self._ExtractFQNs(args.FQN)
-		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
-		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
+		fqnList =         self._ExtractFQNs(args.FQN)
+		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
+		vhdlVersion =     self._ExtractVHDLVersion(args.VHDLVersion)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
 
-		simulator = GHDLSimulator(self, self.DryRun, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)		#, vhdlGenerics=None)
+		simulator = GHDLSimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)
 
-		Exit.exit(0 if allPassed else 1)
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
 
 
 	# ----------------------------------------------------------------------------
@@ -845,19 +898,20 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("isim", help="Simulate a PoC Entity with Xilinx ISE Simulator (iSim)")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@GUIModeAttribute()
+	@SimulationStepsAttribute()
 	def HandleISESimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 		self._CheckISEEnvironment()
 
-		fqnList =      self._ExtractFQNs(args.FQN)
-		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
+		fqnList =         self._ExtractFQNs(args.FQN)
+		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
 
-		simulator = ISESimulator(self, self.DryRun, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL93)		#, vhdlGenerics=None)
+		simulator = ISESimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL93)
 
-		Exit.exit(0 if allPassed else 1)
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
 
 
 	# ----------------------------------------------------------------------------
@@ -868,19 +922,22 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@GUIModeAttribute()
+	@SimulationStepsAttribute()
 	def HandleQuestaSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 
-		fqnList =      self._ExtractFQNs(args.FQN)
-		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
-		vhdlVersion =  self._ExtractVHDLVersion(args.VHDLVersion)
+		fqnList =         self._ExtractFQNs(args.FQN)
+		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
+		vhdlVersion =     self._ExtractVHDLVersion(args.VHDLVersion)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
 
-		simulator = QuestaSimulator(self, self.DryRun, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
+		print(simulationSteps)
 
-		Exit.exit(0 if allPassed else 1)
+		simulator = QuestaSimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)
+
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
 
 
 	# ----------------------------------------------------------------------------
@@ -891,22 +948,23 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@GUIModeAttribute()
+	@SimulationStepsAttribute()
 	def HandleVivadoSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 
 		self._CheckVivadoEnvironment()
 
-		fqnList =      self._ExtractFQNs(args.FQN)
-		board =        self._ExtractBoard(args.BoardName, args.DeviceName)
+		fqnList =         self._ExtractFQNs(args.FQN)
+		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
 		# FIXME: VHDL-2008 is broken in Vivado 2016.1 -> use VHDL-93 by default
-		vhdlVersion = self._ExtractVHDLVersion(args.VHDLVersion, defaultVersion=VHDLVersion.VHDL93)
+		vhdlVersion =     self._ExtractVHDLVersion(args.VHDLVersion, defaultVersion=VHDLVersion.VHDL93)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
 
-		simulator = VivadoSimulator(self, self.DryRun, args.GUIMode)
-		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)  # , vhdlGenerics=None)
+		simulator = VivadoSimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)
 
-		Exit.exit(0 if allPassed else 1)
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
 
 
 	# ----------------------------------------------------------------------------
@@ -916,7 +974,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("cocotb", help="Simulate a PoC Entity with Cocotb and Questa Simulator")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@GUIModeAttribute()
+	@SimulationStepsAttribute()
 	def HandleCocotbSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -926,14 +984,15 @@ class PileOfCores(ILogable, ArgParseMixin):
 			if (len(self.PoCConfig.options("INSTALL.Altera.ModelSim")) == 0):
 				raise NotConfiguredException("Neither Mentor QuestaSim nor Altera ModelSim is not configured on this system.")
 
-		fqnList =  self._ExtractFQNs(args.FQN)
-		board =    self._ExtractBoard(args.BoardName, args.DeviceName)
+		fqnList =         self._ExtractFQNs(args.FQN)
+		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
 
 		# create a CocotbSimulator instance and prepare it
-		simulator = CocotbSimulator(self, self.DryRun, args.GUIMode)
+		simulator = CocotbSimulator(self, self.DryRun, simulationSteps)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL2008)
 
-		Exit.exit(0 if allPassed else 1)
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
 
 
 	# ============================================================================
@@ -980,7 +1039,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("ise", help="Generate any IP core for the Xilinx ISE tool chain")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@NoCleanUpAttribute()
+	@CompileStepsAttribute()
 	def HandleISECompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1001,7 +1060,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("coregen", help="Generate an IP core with Xilinx ISE Core Generator")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@NoCleanUpAttribute()
+	@CompileStepsAttribute()
 	def HandleCoreGeneratorCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1022,7 +1081,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("xst", help="Compile a PoC IP core with Xilinx ISE XST to a netlist")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@NoCleanUpAttribute()
+	@CompileStepsAttribute()
 	def HandleXstCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1043,7 +1102,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("xci", help="Generate an IP core from Xilinx Vivado IP Catalog")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@NoCleanUpAttribute()
+	@CompileStepsAttribute()
 	def HandleIpCatalogCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1064,7 +1123,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("vivado", help="Compile a PoC IP core with Xilinx Vivado Synth to a design checkpoint")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@NoCleanUpAttribute()
+	@CompileStepsAttribute()
 	def HandleVivadoCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1086,7 +1145,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("quartus", help="Compile a PoC IP core with Altera Quartus II Map to a netlist")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@NoCleanUpAttribute()
+	@CompileStepsAttribute()
 	def HandleQuartusCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1110,7 +1169,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandAttribute("lse", help="Compile a PoC IP core with Lattice Diamond LSE to a netlist")
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@NoCleanUpAttribute()
+	@CompileStepsAttribute()
 	def HandleLSECompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()

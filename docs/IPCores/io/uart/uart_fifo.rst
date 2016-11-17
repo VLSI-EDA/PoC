@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_fifo.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/uart/uart_fifo_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_fifo.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/uart/uart_fifo_tb.vhdl>`
+
+.. _IP:uart_fifo:
 
 uart_fifo
 #########
@@ -22,7 +37,6 @@ old comments:
    :linenos:
    :lines: 52-94
 
-Source file: `io/uart/uart_fifo.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_fifo.vhdl>`_
-
+Source file: :pocsrc:`io/uart/uart_fifo.vhdl <io/uart/uart_fifo.vhdl>`
 
 

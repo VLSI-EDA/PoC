@@ -1,7 +1,8 @@
+.. _PKG:io:
 
-Package
-========
+PoC.io Package
+==============
 
 This package holds all component declarations for this namespace.
 
-Source file: `io/io.pkg.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io.pkg.vhdl>`_
+Source file: :pocsrc:`io.pkg.vhdl <io/io.pkg.vhdl>`

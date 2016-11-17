@@ -39,14 +39,31 @@ See :doc:`/UsingPoC/Requirements` for further details.
 
 .. rubric:: PoC depends on third part libraries:
 
-* `Cocotb <https://github.com/potentialventures/cocotb>`_ |br|
+* :ref:`ThirdParty:Cocotb` |gh-cocotb| |br|
   A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
-* `OS-VVM <https://github.com/JimLewis/OSVVM>`_ |br|
+* :ref:`ThirdParty:OSVVM` |gh-osvvm| |br|
   Open Source VHDL Verification Methodology.
-* `UVVM <https://github.com/UVVM/UVVM_All>`_ |br|
+* :ref:`ThirdParty:UVVM` |gh-uvvm| |br|
   Universal VHDL Verification Methodology.
-* `VUnit <https://github.com/VUnit/vunit>`_ |br|
+* :ref:`ThirdParty:VUnit` |gh-vunit| |br|
   An unit testing framework for VHDL.
+
+.. |gh-cocotb| image:: _static/logos/GitHub-Mark-32px.png
+               :scale: 50
+               :target: https://github.com/potentialventures/cocotb
+               :alt: Source Code on GitHub
+.. |gh-osvvm| image:: _static/logos/GitHub-Mark-32px.png
+              :scale: 50
+              :target: https://github.com/JimLewis/OSVVM
+              :alt: Source Code on GitHub
+.. |gh-uvvm| image:: _static/logos/GitHub-Mark-32px.png
+             :scale: 50
+             :target: https://github.com/UVVM/UVVM_All
+             :alt: Source Code on GitHub
+.. |gh-vunit| image:: _static/logos/GitHub-Mark-32px.png
+              :scale: 50
+              :target: https://github.com/VUnit/vunit
+              :alt: Source Code on GitHub
 
 All dependencies are available as GitHub repositories and are linked to
 PoC as Git submodules into the `PoCRoot\\lib <https://github.com/VLSI-EDA/PoC/tree/master/lib>`_

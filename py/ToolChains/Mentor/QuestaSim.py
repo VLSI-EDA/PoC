@@ -36,7 +36,7 @@
 from subprocess                 import check_output
 from textwrap                   import dedent
 
-from lib.Functions              import CallByRefParam
+from lib.Functions              import CallByRefParam, Init
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Logging               import LogEntry, Severity
 from Base.Configuration         import Configuration as BaseConfiguration, ConfigurationException
@@ -186,42 +186,42 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 		return self._hasErrors
 
 	class Executable(metaclass=ExecutableArgument):
-		_value =  None
+		_value =    None
 
 	class FlagTime(metaclass=ShortFlagArgument):
-		_name =    "time"					# Print the compilation wall clock time
-		_value =  None
+		_name =     "time"					# Print the compilation wall clock time
+		_value =    None
 
 	class FlagExplicit(metaclass=ShortFlagArgument):
-		_name =    "explicit"
-		_value =  None
+		_name =     "explicit"
+		_value =    None
 
 	class FlagQuietMode(metaclass=ShortFlagArgument):
-		_name =    "quiet"					# Do not report 'Loading...' messages"
-		_value =  None
+		_name =     "quiet"					# Do not report 'Loading...' messages"
+		_value =    None
 
 	class SwitchModelSimIniFile(metaclass=ShortTupleArgument):
-		_name =    "modelsimini"
-		_value =  None
+		_name =     "modelsimini"
+		_value =    None
 
 	class FlagRangeCheck(metaclass=ShortFlagArgument):
-		_name =    "rangecheck"
-		_value =  None
+		_name =     "rangecheck"
+		_value =    None
 
 	class SwitchVHDLVersion(metaclass=StringArgument):
 		_pattern =  "-{0}"
 		_value =    None
 
 	class ArgLogFile(metaclass=ShortTupleArgument):
-		_name =    "l"			# what's the difference to -logfile ?
-		_value =  None
+		_name =     "l"			# what's the difference to -logfile ?
+		_value =    None
 
 	class SwitchVHDLLibrary(metaclass=ShortTupleArgument):
-		_name =    "work"
-		_value =  None
+		_name =     "work"
+		_value =    None
 
 	class ArgSourceFile(metaclass=PathArgument):
-		_value =  None
+		_value =    None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -275,6 +275,11 @@ class QuestaVHDLCompiler(Executable, QuestaSimMixIn):
 		finally:
 			if self._hasOutput:
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+
+	def GetTclCommand(self):
+		parameterList = self.Parameters.ToArgumentList()
+		return "vcom " + " ".join(parameterList[1:])
+
 
 class QuestaSimulator(Executable, QuestaSimMixIn):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
@@ -519,7 +524,12 @@ def QuestaVSimFilter(gen):
 			yield LogEntry(line, Severity.Error)
 		elif line.startswith("** Fatal: "):
 			yield LogEntry(line, Severity.Error)
-		elif line.startswith("# "):
+		elif line.startswith("# %%"):
+			if ("ERROR" in line):
+				yield LogEntry("{DARK_RED}{line}{NOCOLOR}".format(line=line[2:], **Init.Foreground), Severity.Error)
+			else:
+				yield LogEntry("{DARK_CYAN}{line}{NOCOLOR}".format(line=line[2:], **Init.Foreground), Severity.Normal)
+		elif line.startswith("#   "):
 			if (not PoCOutputFound):
 				yield LogEntry(line, Severity.Verbose)
 			else:

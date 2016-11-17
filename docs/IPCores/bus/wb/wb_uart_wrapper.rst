@@ -1,9 +1,24 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/wb/wb_uart_wrapper.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/wb/wb_uart_wrapper_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <bus/wb/wb_uart_wrapper.vhdl>`
+   * |gh-tb| :poctb:`Testbench <bus/wb/wb_uart_wrapper_tb.vhdl>`
+
+.. _IP:uart_wb:
 
 uart_wb
 #######
 
-Wrapper module for :doc:`PoC.io.uart.rx </PoC/io/uart/uart_rx>` and
-:doc:`PoC.io.uart.tx </PoC/io/uart/uart_tx>` to support the Wishbone
+Wrapper module for :doc:`PoC.io.uart.rx </IPCores/io/uart/uart_rx>` and
+:doc:`PoC.io.uart.tx </IPCores/io/uart/uart_tx>` to support the Wishbone
 interface. Synchronized reset is used.
 
 
@@ -16,7 +31,6 @@ interface. Synchronized reset is used.
    :linenos:
    :lines: 40-69
 
-Source file: `bus/wb/wb_uart_wrapper.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/wb/wb_uart_wrapper.vhdl>`_
-
+Source file: :pocsrc:`bus/wb/wb_uart_wrapper.vhdl <bus/wb/wb_uart_wrapper.vhdl>`
 
 

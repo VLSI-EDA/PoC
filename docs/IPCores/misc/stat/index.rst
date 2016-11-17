@@ -1,21 +1,22 @@
+.. _NS:stat:
 
-stat
-====
+PoC.misc.stat
+=============
 
 These are stat entities....
 
 **Entities**
 
- * :doc:`PoC.misc.stat.Average <stat_Average>`
- * :doc:`PoC.misc.stat.Histogram <stat_Histogram>`
- * :doc:`PoC.misc.stat.Maximum <stat_Maximum>`
- * :doc:`PoC.misc.stat.Minimum <stat_Minimum>`
+ * :ref:`IP:stat_Average`
+ * :ref:`IP:stat_Histogram`
+ * :ref:`IP:stat_Maximum`
+ * :ref:`IP:stat_Minimum`
 
 
 .. toctree::
    :hidden:
 
-   stat_Average
-   stat_Histogram
-   stat_Maximum
-   stat_Minimum
+   stat_Average <stat_Average>
+   stat_Histogram <stat_Histogram>
+   stat_Maximum <stat_Maximum>
+   stat_Minimum <stat_Minimum>

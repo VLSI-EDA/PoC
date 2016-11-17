@@ -35,7 +35,7 @@ from pathlib import Path
 
 from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
-from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException, SimulationSteps
 from ToolChains.Aldec.ActiveHDL   import ActiveHDL, ActiveHDLException
 
 
@@ -49,8 +49,8 @@ class Simulator(BaseSimulator):
 	_TOOL_CHAIN =            ToolChain.Aldec_ActiveHDL
 	_TOOL =                  Tool.Aldec_aSim
 
-	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun, guiMode)
+	def __init__(self, host, dryRun, simulationSteps):
+		super().__init__(host, dryRun, simulationSteps)
 
 		self._vhdlVersion =   None
 		self._vhdlGenerics =  None
@@ -109,7 +109,7 @@ class Simulator(BaseSimulator):
 				raise SkipableSimulatorException("Error while compiling '{0!s}'.".format(file.Path))
 
 	def _RunSimulation(self, testbench):
-		if self._guiMode:
+		if (SimulationSteps.ShowWaveform in self._simulationSteps):
 			return self._RunSimulationWithGUI(testbench)
 
 		# tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimBatchScript']

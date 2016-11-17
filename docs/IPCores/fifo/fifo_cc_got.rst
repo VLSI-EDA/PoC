@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_cc_got_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_cc_got.vhdl>`
+   * |gh-tb| :poctb:`Testbench <fifo/fifo_cc_got_tb.vhdl>`
+
+.. _IP:fifo_cc_got:
 
 fifo_cc_got
 ###########
@@ -60,16 +75,15 @@ comparator (subtractor) in their path.
    :linenos:
    :lines: 98-124
 
-Source file: `fifo/fifo_cc_got.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl>`_
+Source file: :pocsrc:`fifo/fifo_cc_got.vhdl <fifo/fifo_cc_got.vhdl>`
 
 .. seealso::
 
-   :doc:`PoC.fifo.dc_got </PoC/fifo/fifo_dc_got>`
+   :ref:`IP:fifo_dc_got`
      For a FIFO with dependent clocks.
-   :doc:`PoC.fifo.ic_got </PoC/fifo/fifo_ic_got>`
+   :ref:`IP:fifo_ic_got`
      For a FIFO with independent clocks (cross-clock FIFO).
-   :doc:`PoC.fifo.glue </PoC/fifo/fifo_glue>`
+   :ref:`IP:fifo_glue`
      For a minimal FIFO / pipeline decoupling.
-
 
 

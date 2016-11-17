@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_PulseTrain.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_PulseTrain_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/misc_PulseTrain.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/misc_PulseTrain_tb.vhdl>`
+
+.. _IP:misc_PulseTrain:
 
 misc_PulseTrain
 ###############
@@ -15,7 +30,6 @@ misc_PulseTrain
    :linenos:
    :lines: 41-51
 
-Source file: `misc/misc_PulseTrain.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_PulseTrain.vhdl>`_
-
+Source file: :pocsrc:`misc/misc_PulseTrain.vhdl <misc/misc_PulseTrain.vhdl>`
 
 

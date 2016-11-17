@@ -38,7 +38,7 @@ from pathlib                import Path
 from Base.Exceptions        import NotConfiguredException
 from Base.Logging           import Severity
 from Base.Project           import FileTypes, VHDLVersion, ToolChain, Tool
-from Base.Simulator         import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from Base.Simulator         import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException, SimulationSteps
 from ToolChains.GHDL        import GHDL, GHDLException, GHDLReanalyzeException
 from ToolChains.GTKWave     import GTKWave
 
@@ -58,9 +58,9 @@ class Simulator(BaseSimulator):
 	class __Directories__(BaseSimulator.__Directories__):
 		GTKWBinary = None
 
-	def __init__(self, host, dryRun, guiMode):
+	def __init__(self, host, dryRun, simulationSteps):
 		"""Constructor"""
-		super().__init__(host, dryRun, guiMode)
+		super().__init__(host, dryRun, simulationSteps)
 
 		self._vhdlGenerics =  None
 		self._toolChain =     None
@@ -69,7 +69,14 @@ class Simulator(BaseSimulator):
 		self.Directories.Working =      host.Directories.Temp / ghdlFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / ghdlFilesDirectoryName
 
-		if (self._guiMode is True):
+		self._PrepareSimulationEnvironment()
+		self._PrepareSimulator()
+
+		if (self._toolChain.Backend == "mcode"):
+			# A separate elaboration step is not implemented in GHDL (mcode)
+			self._simulationSteps &= ~SimulationSteps.Elaborate
+
+		if (SimulationSteps.ShowWaveform in self._simulationSteps):
 			# prepare paths for GTKWave, if configured
 			sectionName = 'INSTALL.GTKWave'
 			if (len(host.PoCConfig.options(sectionName)) != 0):
@@ -77,13 +84,8 @@ class Simulator(BaseSimulator):
 			else:
 				raise NotConfiguredException("No GHDL compatible waveform viewer is configured on this system.")
 
-		self._PrepareSimulationEnvironment()
-		self._PrepareSimulator()
-
 	def _PrepareSimulator(self):
-		""""""
-
-		# create the GHDL executable factory
+		"""Create the GHDL executable factory instance."""
 		self.LogVerbose("Preparing GHDL simulator.")
 		ghdlSection =     self.Host.PoCConfig['INSTALL.GHDL']
 		binaryPath =      Path(ghdlSection['BinaryDirectory'])
@@ -191,7 +193,7 @@ class Simulator(BaseSimulator):
 		# configure RUNOPTS
 		ghdl.RunOptions[ghdl.SwitchIEEEAsserts] = "disable-at-0"		# enable, disable, disable-at-0
 		# set dump format to save simulation results to *.vcd file
-		if (self._guiMode):
+		if (SimulationSteps.ShowWaveform in self._simulationSteps):
 			configSection = self.Host.PoCConfig[testbench.ConfigSectionName]
 			testbench.WaveformOptionFile = Path(configSection['ghdlWaveformOptionFile'])
 			testbench.WaveformFileFormat = configSection['ghdlWaveformFileFormat']

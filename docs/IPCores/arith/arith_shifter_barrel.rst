@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_shifter_barrel.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_shifter_barrel_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <arith/arith_shifter_barrel.vhdl>`
+   * |gh-tb| :poctb:`Testbench <arith/arith_shifter_barrel_tb.vhdl>`
+
+.. _IP:arith_shifter_barrel:
 
 arith_shifter_barrel
 ####################
@@ -20,7 +35,6 @@ This is equivalent to the CPU instructions: SLL, SLA, SRL, SRA, RL, RR
    :linenos:
    :lines: 45-57
 
-Source file: `arith/arith_shifter_barrel.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_shifter_barrel.vhdl>`_
-
+Source file: :pocsrc:`arith/arith_shifter_barrel.vhdl <arith/arith_shifter_barrel.vhdl>`
 
 

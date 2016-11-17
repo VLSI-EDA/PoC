@@ -34,18 +34,20 @@ sys.path.insert(0, os.path.abspath('../py'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.inheritance_diagram',
-    'sphinx.ext.todo',
-    # 'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
-    # 'sphinx.ext.githubpages',
-    'sphinxcontrib.autoprogram',
-    'autoapi.sphinx',
-    'poc'
+	'sphinx.ext.autodoc',
+	'sphinx.ext.extlinks',
+	'sphinx.ext.intersphinx',
+	'sphinx.ext.inheritance_diagram',
+	'sphinx.ext.todo',
+	# 'sphinx.ext.coverage',
+	'sphinx.ext.graphviz',
+	'sphinx.ext.mathjax',
+	'sphinx.ext.ifconfig',
+	'sphinx.ext.viewcode',
+	# 'sphinx.ext.githubpages',
+	'sphinxcontrib.autoprogram',
+	'autoapi.sphinx',
+	'poc'
 ]
 
 if (not (tags.has('PoCExternal') or tags.has('PoCInternal'))):
@@ -353,3 +355,12 @@ intersphinx_mapping = {
 	'python': ('https://docs.python.org/3.5/', None),
 	'ghdl':   ('http://ghdl.readthedocs.io/en/latest', None)
 }
+
+extlinks = {
+	'pocissue': ('https://github.com/VLSI-EDA/PoC/issues/%s', 'issue #'),
+	'pocpull':  ('https://github.com/VLSI-EDA/PoC/pull/%s', 'pull request #'),
+	'pocsrc':   ('https://github.com/VLSI-EDA/PoC/blob/master/src/%s?ts=2', None),
+	'poctb':    ('https://github.com/VLSI-EDA/PoC/blob/master/tb/%s?ts=2', None)
+}
+
+graphviz_output_format = "svg"

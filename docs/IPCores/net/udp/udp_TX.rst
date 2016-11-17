@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/udp/udp_TX.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/udp/udp_TX_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <net/udp/udp_TX.vhdl>`
+   * |gh-tb| :poctb:`Testbench <net/udp/udp_TX_tb.vhdl>`
+
+.. _IP:udp_TX:
 
 udp_TX
 ######
@@ -14,7 +29,6 @@ udp_TX
    :linenos:
    :lines: 42-78
 
-Source file: `net/udp/udp_TX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/udp/udp_TX.vhdl>`_
-
+Source file: :pocsrc:`net/udp/udp_TX.vhdl <net/udp/udp_TX.vhdl>`
 
 

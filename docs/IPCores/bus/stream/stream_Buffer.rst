@@ -1,9 +1,24 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Buffer.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/stream/stream_Buffer_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_Buffer.vhdl>`
+   * |gh-tb| :poctb:`Testbench <bus/stream/stream_Buffer_tb.vhdl>`
+
+.. _IP:stream_Buffer:
 
 stream_Buffer
 #############
 
 This module implements a generic buffer (FIFO) for the
-:doc:`PoC.Stream </References/Interfaces/Stream>` protocol. It is generic in
+:doc:`PoC.Stream </Interfaces/Stream>` protocol. It is generic in
 ``DATA_BITS`` and in ``META_BITS`` as well as in FIFO depths for data and
 meta information.
 
@@ -17,7 +32,6 @@ meta information.
    :linenos:
    :lines: 44-74
 
-Source file: `bus/stream/stream_Buffer.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Buffer.vhdl>`_
-
+Source file: :pocsrc:`bus/stream/stream_Buffer.vhdl <bus/stream/stream_Buffer.vhdl>`
 
 

@@ -1,8 +1,23 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ddr2/ddr2_mem2mig_adapter_Spartan6_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`
+   * |gh-tb| :poctb:`Testbench <mem/ddr2/ddr2_mem2mig_adapter_Spartan6_tb.vhdl>`
+
+.. _IP:ddr2_mem2mig_adapter_Spartan6:
 
 ddr2_mem2mig_adapter_Spartan6
 #############################
 
-Adapter between the :doc:`PoC.Mem </References/Interfaces/Memory>`
+Adapter between the :doc:`PoC.Mem </Interfaces/Memory>`
 interface and the User Interface of the Xilinx MIG IP core for the
 Spartan-6 FPGA Memory Controller Block (MCB). The MCB can be configured to
 have multiple ports. One instance of this adapter is required for every
@@ -13,7 +28,7 @@ Simplifies the User Interface ("user") of the Xilinx MIG IP core (UG388).
 The PoC.Mem interface provides single-cycle fully pipelined read/write access
 to the memory. All accesses are word-aligned. Always all bytes of a word are
 written to the memory. More details can be found
-:doc:`here </References/Interfaces/Memory>`.
+:doc:`here </Interfaces/Memory>`.
 
 Generic parameters:
 
@@ -36,7 +51,6 @@ Containts only combinational logic.
    :linenos:
    :lines: 61-95
 
-Source file: `mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`_
-
+Source file: :pocsrc:`mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl <mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`
 
 

@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/icmpv6/icmpv6_Wrapper.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/icmpv6/icmpv6_Wrapper_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <net/icmpv6/icmpv6_Wrapper.vhdl>`
+   * |gh-tb| :poctb:`Testbench <net/icmpv6/icmpv6_Wrapper_tb.vhdl>`
+
+.. _IP:icmpv6_Wrapper:
 
 icmpv6_Wrapper
 ##############
@@ -14,7 +29,6 @@ icmpv6_Wrapper
    :linenos:
    :lines: 42-67
 
-Source file: `net/icmpv6/icmpv6_Wrapper.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/icmpv6/icmpv6_Wrapper.vhdl>`_
-
+Source file: :pocsrc:`net/icmpv6/icmpv6_Wrapper.vhdl <net/icmpv6/icmpv6_Wrapper.vhdl>`
 
 

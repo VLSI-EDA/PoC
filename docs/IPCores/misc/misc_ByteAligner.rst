@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_ByteAligner.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_ByteAligner_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/misc_ByteAligner.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/misc_ByteAligner_tb.vhdl>`
+
+.. _IP:misc_ByteAligner:
 
 misc_ByteAligner
 ################
@@ -14,7 +29,6 @@ misc_ByteAligner
    :linenos:
    :lines: 40-53
 
-Source file: `misc/misc_ByteAligner.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_ByteAligner.vhdl>`_
-
+Source file: :pocsrc:`misc/misc_ByteAligner.vhdl <misc/misc_ByteAligner.vhdl>`
 
 

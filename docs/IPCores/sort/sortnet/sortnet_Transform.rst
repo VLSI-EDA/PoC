@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_Transform.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sortnet/sortnet_Transform_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet_Transform.vhdl>`
+   * |gh-tb| :poctb:`Testbench <sort/sortnet/sortnet_Transform_tb.vhdl>`
+
+.. _IP:sortnet_Transform:
 
 sortnet_Transform
 #################
@@ -14,7 +29,6 @@ sortnet_Transform
    :linenos:
    :lines: 41-61
 
-Source file: `sort/sortnet/sortnet_Transform.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_Transform.vhdl>`_
-
+Source file: :pocsrc:`sort/sortnet/sortnet_Transform.vhdl <sort/sortnet/sortnet_Transform.vhdl>`
 
 

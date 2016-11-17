@@ -365,8 +365,8 @@ class ExtendedConfigParser(ConfigParser):
 
 	def has_option(self, section, option):
 		"""Check for the existence of a given option in a given section.
-		If the specified `section' is None or an empty string, DEFAULT is
-		assumed. If the specified `section' does not exist, returns False."""
+		If the specified `section` is None or an empty string, DEFAULT is
+		assumed. If the specified `section` does not exist, returns False."""
 		option = self.optionxform(option)
 		if ((not section) or (section == self.default_section)):
 			sect = self._defaults

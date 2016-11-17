@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/wb/wb_fifo_adapter.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/wb/wb_fifo_adapter_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <bus/wb/wb_fifo_adapter.vhdl>`
+   * |gh-tb| :poctb:`Testbench <bus/wb/wb_fifo_adapter_tb.vhdl>`
+
+.. _IP:wb_fifo_adapter:
 
 wb_fifo_adapter
 ###############
@@ -21,7 +36,6 @@ old comments:
    :linenos:
    :lines: 80-104
 
-Source file: `bus/wb/wb_fifo_adapter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/wb/wb_fifo_adapter.vhdl>`_
-
+Source file: :pocsrc:`bus/wb/wb_fifo_adapter.vhdl <bus/wb/wb_fifo_adapter.vhdl>`
 
 

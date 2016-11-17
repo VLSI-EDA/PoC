@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/mdio/mdio_Controller.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/mdio/mdio_Controller_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/mdio/mdio_Controller.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/mdio/mdio_Controller_tb.vhdl>`
+
+.. _IP:mdio_Controller:
 
 mdio_Controller
 ###############
@@ -14,7 +29,6 @@ mdio_Controller
    :linenos:
    :lines: 44-73
 
-Source file: `io/mdio/mdio_Controller.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/mdio/mdio_Controller.vhdl>`_
-
+Source file: :pocsrc:`io/mdio/mdio_Controller.vhdl <io/mdio/mdio_Controller.vhdl>`
 
 

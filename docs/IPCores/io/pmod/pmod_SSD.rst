@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_SSD.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/pmod/pmod_SSD_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/pmod/pmod_SSD.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/pmod/pmod_SSD_tb.vhdl>`
+
+.. _IP:pmod_SSD:
 
 pmod_SSD
 ########
@@ -27,7 +42,6 @@ Pmod connector (7 anode bits, 1 cathode bit).
    :linenos:
    :lines: 56-69
 
-Source file: `io/pmod/pmod_SSD.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_SSD.vhdl>`_
-
+Source file: :pocsrc:`io/pmod/pmod_SSD.vhdl <io/pmod/pmod_SSD.vhdl>`
 
 

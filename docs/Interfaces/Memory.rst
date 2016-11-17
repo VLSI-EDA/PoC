@@ -1,6 +1,7 @@
+.. _Int:PoC.Mem:
 
-PoC.Mem
-#######
+PoC.Mem Interface
+#################
 
 PoC.Mem is a single-cycle, pipelined memory interface used by various
 memory controllers and related components like caches. Memory accesses

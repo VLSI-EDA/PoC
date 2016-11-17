@@ -11,11 +11,11 @@ which contains a link to the orginal license file source.
    :maxdepth: 1
 
    ApacheLicense2.0
-   ICLA
-   CCLA
+   Apache License 2.0 - ICLA <ApacheLicense2.0_ICLA>
+   Apache License 2.0 - CCLA <ApacheLicense2.0_CCLA>
    ArtisticLicense2.0
-   BSDLicense_Cocotb
-   MIT_UVVM
+   Cocotb - BSD License <Cocotb_BSDLicense>
+   UVVM - MIT License <UVVM_MIT>
    MozillaPublicLicense2.0
 
 .. rubric:: Footnotes

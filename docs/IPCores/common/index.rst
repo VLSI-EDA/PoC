@@ -1,3 +1,4 @@
+.. _PKG_Common:
 
 Common Packages
 ===============

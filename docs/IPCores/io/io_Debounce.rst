@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_Debounce.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_Debounce_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/io_Debounce.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/io_Debounce_tb.vhdl>`
+
+.. _IP:io_Debounce:
 
 io_Debounce
 ###########
@@ -25,7 +40,6 @@ of a two-FF input synchronizer on each input bit.
    :linenos:
    :lines: 52-67
 
-Source file: `io/io_Debounce.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_Debounce.vhdl>`_
-
+Source file: :pocsrc:`io/io_Debounce.vhdl <io/io_Debounce.vhdl>`
 
 

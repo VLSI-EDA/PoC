@@ -29,13 +29,13 @@
 --     TODO
 --
 -- SeeAlso:
--- :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`
+-- :doc:`PoC.misc.sync.Reset </IPCores/misc/sync/sync_Reset>`
 --   For a special 2 D-FF synchronizer for *reset*-signals.
--- :doc:`PoC.misc.sync.Pulse </PoC/misc/sync/sync_Pulse>`
+-- :doc:`PoC.misc.sync.Pulse </IPCores/misc/sync/sync_Pulse>`
 --   For a special 1+2 D-FF synchronizer for *pulse*-signals.
--- :doc:`PoC.misc.sync.Strobe </PoC/misc/sync/sync_Strobe>`
+-- :doc:`PoC.misc.sync.Strobe </IPCores/misc/sync/sync_Strobe>`
 --   For a synchronizer for *strobe*-signals.
--- :doc:`PoC.misc.sync.Vector </PoC/misc/sync/sync_Vector>`
+-- :doc:`PoC.misc.sync.Vector </IPCores/misc/sync/sync_Vector>`
 --   For a multiple bits capable synchronizer.
 --
 -- License:

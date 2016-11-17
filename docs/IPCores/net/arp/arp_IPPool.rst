@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/arp/arp_IPPool.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/arp/arp_IPPool_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_IPPool.vhdl>`
+   * |gh-tb| :poctb:`Testbench <net/arp/arp_IPPool_tb.vhdl>`
+
+.. _IP:arp_IPPool:
 
 arp_IPPool
 ##########
@@ -14,7 +29,6 @@ arp_IPPool
    :linenos:
    :lines: 43-63
 
-Source file: `net/arp/arp_IPPool.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/arp/arp_IPPool.vhdl>`_
-
+Source file: :pocsrc:`net/arp/arp_IPPool.vhdl <net/arp/arp_IPPool.vhdl>`
 
 

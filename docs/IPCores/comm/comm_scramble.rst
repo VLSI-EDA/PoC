@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_scramble.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/comm/comm_scramble_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <comm/comm_scramble.vhdl>`
+   * |gh-tb| :poctb:`Testbench <comm/comm_scramble_tb.vhdl>`
+
+.. _IP:comm_scramble:
 
 comm_scramble
 #############
@@ -16,7 +31,6 @@ sequence is independent from the chosen output width.
    :linenos:
    :lines: 37-51
 
-Source file: `comm/comm_scramble.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_scramble.vhdl>`_
-
+Source file: :pocsrc:`comm/comm_scramble.vhdl <comm/comm_scramble.vhdl>`
 
 

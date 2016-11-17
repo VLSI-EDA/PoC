@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_s3esk.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/sdram/sdram_ctrl_s3esk_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_s3esk.vhdl>`
+   * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_s3esk_tb.vhdl>`
+
+.. _IP:sdram_ctrl_s3esk:
 
 sdram_ctrl_s3esk
 ################
@@ -45,7 +60,6 @@ Synchronous resets are used.
    :linenos:
    :lines: 89-132
 
-Source file: `mem/sdram/sdram_ctrl_s3esk.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_s3esk.vhdl>`_
-
+Source file: :pocsrc:`mem/sdram/sdram_ctrl_s3esk.vhdl <mem/sdram/sdram_ctrl_s3esk.vhdl>`
 
 

@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ICAP.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_ICAP_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <xil/xil_ICAP.vhdl>`
+   * |gh-tb| :poctb:`Testbench <xil/xil_ICAP_tb.vhdl>`
+
+.. _IP:xil_ICAP:
 
 xil_ICAP
 ########
@@ -19,7 +34,6 @@ Supported devices are:
    :linenos:
    :lines: 47-66
 
-Source file: `xil/xil_ICAP.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ICAP.vhdl>`_
-
+Source file: :pocsrc:`xil/xil_ICAP.vhdl <xil/xil_ICAP.vhdl>`
 
 

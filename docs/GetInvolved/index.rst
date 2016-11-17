@@ -67,7 +67,7 @@ Contributers License Agreement
 We require all contributers to sign a Contributor License Agreement (CLA). If
 you don't know whatfore a CLA is needed and how it prevents legal issues on both
 sides, read `this short blog <https://www.clahub.com/pages/why_cla>`_ post.PoC
-uses the :doc:`Apache Contributor License Agreement </References/Licenses/ICLA>`
+uses the :doc:`Apache Contributor License Agreement </References/Licenses/ApacheLicense2.0_ICLA>`
 to match the :doc:`Apache License 2.0 </References/Licenses/ApacheLicense2.0>`.
 
 So to get started, `sign the Contributor License Agreement (CLA) <https://www.clahub.com/agreements/VLSI-EDA/PoC>`_

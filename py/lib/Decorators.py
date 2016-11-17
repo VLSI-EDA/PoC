@@ -35,11 +35,20 @@ import functools
 
 
 __api__ = [
+	'MethodAlias',
 	'ILazyLoadable',
 	'LazyLoadTrigger',
 	'CachedReadOnlyProperty'
 ]
 __all__ = __api__
+
+
+class MethodAlias:
+	def __init__(self, method):
+		self.method = method
+
+	def __call__(self, func):
+		return self.method
 
 
 class ILazyLoadable:

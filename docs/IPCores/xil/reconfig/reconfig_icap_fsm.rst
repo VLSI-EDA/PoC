@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/reconfig/reconfig_icap_fsm.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/reconfig/reconfig_icap_fsm_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <xil/reconfig/reconfig_icap_fsm.vhdl>`
+   * |gh-tb| :poctb:`Testbench <xil/reconfig/reconfig_icap_fsm_tb.vhdl>`
+
+.. _IP:reconfig_icap_fsm:
 
 reconfig_icap_fsm
 #################
@@ -18,7 +33,6 @@ primitives to generate control signals. Tested on:
    :linenos:
    :lines: 42-63
 
-Source file: `xil/reconfig/reconfig_icap_fsm.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/reconfig/reconfig_icap_fsm.vhdl>`_
-
+Source file: :pocsrc:`xil/reconfig/reconfig_icap_fsm.vhdl <xil/reconfig/reconfig_icap_fsm.vhdl>`
 
 

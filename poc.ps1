@@ -59,7 +59,7 @@ if ($Debug -eq $true ) {
 	Write-Host "This is the PoC-Library script wrapper operating in debug mode." -ForegroundColor Yellow
 	Write-Host ""
 	Write-Host "Directories:" -ForegroundColor Yellow
-	Write-Host "  PoC Root        $PoC_RootDir" -ForegroundColor Yellow
+	Write-Host "  PoC Root        $PoCRootDir" -ForegroundColor Yellow
 	Write-Host "  Working         $PyWrapper_WorkingDir" -ForegroundColor Yellow
 	Write-Host "Script:" -ForegroundColor Yellow
 	Write-Host "  Filename        $PoC_ScriptPy" -ForegroundColor Yellow
@@ -74,9 +74,9 @@ if ($Debug -eq $true ) {
 
 # execute script with appropriate Python interpreter and all given parameters
 if ($PoC_Solution -eq "")
-{	$Command = "$Python_Interpreter $Python_Parameters $PoC_RootDir\$PoC_ScriptPy $args"													}
+{	$Command = "$Python_Interpreter $Python_Parameters $PoCRootDir\$PoC_ScriptPy $args"													}
 else
-{	$Command = "$Python_Interpreter $Python_Parameters $PoC_RootDir\$PoC_ScriptPy --sln=$PoC_Solution $args"			}
+{	$Command = "$Python_Interpreter $Python_Parameters $PoCRootDir\$PoC_ScriptPy --sln=$PoC_Solution $args"			}
 
 # execute script with appropriate Python interpreter and all given parameters
 if ($Debug -eq $true)	{	Write-Host "launching: '$Command'" -ForegroundColor Yellow	}

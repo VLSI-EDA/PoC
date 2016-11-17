@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_same.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_same_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <arith/arith_same.vhdl>`
+   * |gh-tb| :poctb:`Testbench <arith/arith_same_tb.vhdl>`
+
+.. _IP:arith_same:
 
 arith_same
 ##########
@@ -21,7 +36,6 @@ bit position as to avoid an undetected sign change between the slices.
    :linenos:
    :lines: 48-57
 
-Source file: `arith/arith_same.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_same.vhdl>`_
-
+Source file: :pocsrc:`arith/arith_same.vhdl <arith/arith_same.vhdl>`
 
 

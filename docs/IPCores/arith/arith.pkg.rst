@@ -1,6 +1,7 @@
+.. _PKG:arith:
 
-Package
-========
+PoC.arith Package
+=================
 
 This package holds all component declarations for this namespace.
 
@@ -16,19 +17,18 @@ This package holds all component declarations for this namespace.
 
 .. rubric:: Exported Components
 
-* :doc:`PoC.arith.addw <arith_addw>`
+* :ref:`PoC.arith.addw <IP:arith_addw>`
 * PoC.arith.carrychain_inc_xilinx
-* :doc:`PoC.arith.counter_bcd <arith_counter_bcd>`
-* :doc:`PoC.arith.counter_gray <arith_counter_gray>`
-* :doc:`PoC.arith.div <arith_div>`
-* :doc:`PoC.arith.firstone <arith_firstone>`
+* :ref:`PoC.arith.counter_bcd <IP:arith_counter_bcd>`
+* :ref:`PoC.arith.counter_gray <IP:arith_counter_gray>`
+* :ref:`PoC.arith.div <IP:arith_div>`
+* :ref:`PoC.arith.firstone <IP:arith_firstone>`
 * PoC.arith.inc_ovcy_xilinx
-* :doc:`PoC.arith.muls_wide <arith_muls_wide>`
+* :ref:`PoC.arith.muls_wide <IP:arith_muls_wide>`
 * PoC.arith.prefix_and_xilinx
 * PoC.arith.prefix_or_xilinx
-* :doc:`PoC.arith.prng <arith_prng>`
-* :doc:`PoC.arith.same <arith_same>`
-* :doc:`PoC.arith.sqrt <arith_sqrt>`
+* :ref:`PoC.arith.prng <IP:arith_prng>`
+* :ref:`PoC.arith.same <IP:arith_same>`
+* :ref:`PoC.arith.sqrt <IP:arith_sqrt>`
 
-Source file: `arith/arith.pkg.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith.pkg.vhdl>`_
-
+Source file: :pocsrc:`arith.pkg.vhdl <arith/arith.pkg.vhdl>`

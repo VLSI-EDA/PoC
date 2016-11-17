@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Strobe.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Strobe_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Strobe.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/sync/sync_Strobe_tb.vhdl>`
+
+.. _IP:sync_Strobe:
 
 sync_Strobe
 ###########
@@ -29,7 +44,6 @@ Constraints:
    :linenos:
    :lines: 54-66
 
-Source file: `misc/sync/sync_Strobe.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Strobe.vhdl>`_
-
+Source file: :pocsrc:`misc/sync/sync_Strobe.vhdl <misc/sync/sync_Strobe.vhdl>`
 
 

@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_replacement_policy.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/cache/cache_replacement_policy_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <cache/cache_replacement_policy.vhdl>`
+   * |gh-tb| :poctb:`Testbench <cache/cache_replacement_policy_tb.vhdl>`
+
+.. _IP:cache_replacement_policy:
 
 cache_replacement_policy
 ########################
@@ -56,7 +71,6 @@ cache set (see above).
    :linenos:
    :lines: 85-104
 
-Source file: `cache/cache_replacement_policy.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_replacement_policy.vhdl>`_
-
+Source file: :pocsrc:`cache/cache_replacement_policy.vhdl <cache/cache_replacement_policy.vhdl>`
 
 

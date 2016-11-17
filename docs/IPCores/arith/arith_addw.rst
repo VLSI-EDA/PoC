@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_addw.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_addw_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <arith/arith_addw.vhdl>`
+   * |gh-tb| :poctb:`Testbench <arith/arith_addw_tb.vhdl>`
+
+.. _IP:arith_addw:
 
 arith_addw
 ##########
@@ -28,7 +43,6 @@ arith_addw
    :linenos:
    :lines: 53-70
 
-Source file: `arith/arith_addw.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_addw.vhdl>`_
-
+Source file: :pocsrc:`arith/arith_addw.vhdl <arith/arith_addw.vhdl>`
 
 

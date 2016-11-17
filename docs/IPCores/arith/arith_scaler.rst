@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_scaler.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_scaler_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <arith/arith_scaler.vhdl>`
+   * |gh-tb| :poctb:`Testbench <arith/arith_scaler_tb.vhdl>`
+
+.. _IP:arith_scaler:
 
 arith_scaler
 ############
@@ -28,7 +43,6 @@ highest scaling ratio to be used in order to avoid a truncation overflow.
    :linenos:
    :lines: 52-69
 
-Source file: `arith/arith_scaler.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_scaler.vhdl>`_
-
+Source file: :pocsrc:`arith/arith_scaler.vhdl <arith/arith_scaler.vhdl>`
 
 

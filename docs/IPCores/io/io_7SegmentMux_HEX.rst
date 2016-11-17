@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_7SegmentMux_HEX.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_7SegmentMux_HEX_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/io_7SegmentMux_HEX.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/io_7SegmentMux_HEX_tb.vhdl>`
+
+.. _IP:io_7SegmentMux_HEX:
 
 io_7SegmentMux_HEX
 ##################
@@ -16,7 +31,6 @@ are HEX encoded. A dot per digit is optional.
    :linenos:
    :lines: 45-60
 
-Source file: `io/io_7SegmentMux_HEX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_7SegmentMux_HEX.vhdl>`_
-
+Source file: :pocsrc:`io/io_7SegmentMux_HEX.vhdl <io/io_7SegmentMux_HEX.vhdl>`
 
 

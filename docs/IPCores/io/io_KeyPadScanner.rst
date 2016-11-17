@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_KeyPadScanner.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_KeyPadScanner_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/io_KeyPadScanner.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/io_KeyPadScanner_tb.vhdl>`
+
+.. _IP:io_KeyPadScanner:
 
 io_KeyPadScanner
 ################
@@ -18,7 +33,6 @@ matrix is not debounced.
    :linenos:
    :lines: 46-63
 
-Source file: `io/io_KeyPadScanner.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_KeyPadScanner.vhdl>`_
-
+Source file: :pocsrc:`io/io_KeyPadScanner.vhdl <io/io_KeyPadScanner.vhdl>`
 
 

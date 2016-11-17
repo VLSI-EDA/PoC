@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_inout.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/ddrio/ddrio_inout_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/ddrio/ddrio_inout.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/ddrio/ddrio_inout_tb.vhdl>`
+
+.. _IP:ddrio_inout:
 
 ddrio_inout
 ###########
@@ -42,7 +57,6 @@ IOBs.
    :linenos:
    :lines: 70-88
 
-Source file: `io/ddrio/ddrio_inout.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_inout.vhdl>`_
-
+Source file: :pocsrc:`io/ddrio/ddrio_inout.vhdl <io/ddrio/ddrio_inout.vhdl>`
 
 

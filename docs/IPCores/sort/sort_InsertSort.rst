@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_InsertSort.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sort_InsertSort_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <sort/sort_InsertSort.vhdl>`
+   * |gh-tb| :poctb:`Testbench <sort/sort_InsertSort_tb.vhdl>`
+
+.. _IP:list_lru_systolic:
 
 list_lru_systolic
 #################
@@ -14,7 +29,6 @@ list_lru_systolic
    :linenos:
    :lines: 44-64
 
-Source file: `sort/sort_InsertSort.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_InsertSort.vhdl>`_
-
+Source file: :pocsrc:`sort/sort_InsertSort.vhdl <sort/sort_InsertSort.vhdl>`
 
 

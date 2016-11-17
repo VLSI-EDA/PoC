@@ -1,3 +1,4 @@
+.. _Int:
 
 IP Core Interfaces
 ##################
@@ -5,7 +6,8 @@ IP Core Interfaces
 .. toctree::
    :maxdepth: 1
 
-   CommandStatusError
-   Memory
-   Stream
+   PoC.CSE <CommandStatusError>
+   PoC.FIFO <FIFO>
+   PoC.Mem <Memory>
+   PoC.Stream <Stream>
 

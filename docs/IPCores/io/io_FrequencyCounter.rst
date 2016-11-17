@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_FrequencyCounter.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_FrequencyCounter_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/io_FrequencyCounter.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/io_FrequencyCounter_tb.vhdl>`
+
+.. _IP:io_FrequencyCounter:
 
 io_FrequencyCounter
 ###################
@@ -14,7 +29,6 @@ io_FrequencyCounter
    :linenos:
    :lines: 40-52
 
-Source file: `io/io_FrequencyCounter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_FrequencyCounter.vhdl>`_
-
+Source file: :pocsrc:`io/io_FrequencyCounter.vhdl <io/io_FrequencyCounter.vhdl>`
 
 

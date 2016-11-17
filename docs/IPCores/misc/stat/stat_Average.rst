@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/stat/stat_Average.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/stat/stat_Average_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/stat/stat_Average.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/stat/stat_Average_tb.vhdl>`
+
+.. _IP:stat_Average:
 
 stat_Average
 ############
@@ -14,7 +29,6 @@ stat_Average
    :linenos:
    :lines: 41-58
 
-Source file: `misc/stat/stat_Average.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/stat/stat_Average.vhdl>`_
-
+Source file: :pocsrc:`misc/stat/stat_Average.vhdl <misc/stat/stat_Average.vhdl>`
 
 

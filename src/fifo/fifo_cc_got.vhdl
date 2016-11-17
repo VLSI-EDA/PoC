@@ -60,16 +60,16 @@
 --   +-----------+----------------------+
 --
 -- SeeAlso:
--- :doc:`PoC.fifo.dc_got </PoC/fifo/fifo_dc_got>`
+-- :ref:`IP:fifo_dc_got`
 --   For a FIFO with dependent clocks.
--- :doc:`PoC.fifo.ic_got </PoC/fifo/fifo_ic_got>`
+-- :ref:`IP:fifo_ic_got`
 --   For a FIFO with independent clocks (cross-clock FIFO).
--- :doc:`PoC.fifo.glue </PoC/fifo/fifo_glue>`
+-- :ref:`IP:fifo_glue`
 --   For a minimal FIFO / pipeline decoupling.
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
 --										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");

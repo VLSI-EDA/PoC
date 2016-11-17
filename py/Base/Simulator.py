@@ -36,6 +36,9 @@
 from datetime           import datetime
 from enum               import Enum, unique
 
+from flags import Flags
+
+from lib.Decorators import MethodAlias
 from lib.Functions      import Init
 from Base.Exceptions    import ExceptionBase, SkipableException
 from Base.Logging       import LogEntry
@@ -50,6 +53,7 @@ __api__ = [
 	'SimulatorException',
 	'SkipableSimulatorException',
 	'PoCSimulationResultNotFoundException',
+	'SimulationSteps',
 	'SimulationState',
 	'SimulationResult',
 	'Simulator',
@@ -73,6 +77,29 @@ class PoCSimulationResultNotFoundException(SkipableSimulatorException):
 	"""This exception is raised if the expected PoC simulation result string was	not found in the simulator's output."""
 	pass
 
+
+@unique
+class SimulationSteps(Flags):
+	"""Simulation step enumeration."""
+	Prepare =        1 << 0
+	CleanUpBefore =  1 << 1
+	CleanUpAfter =   1 << 2
+	Analyze =        1 << 5
+	Elaborate =      1 << 6
+	# Compile =        1 << 7
+	# Optimize =       1 << 8
+	Simulate =       1 << 9
+	ShowWaveform =   1 << 10
+	ShowReport =     1 << 15
+	Recompile =      1 << 25
+	Resimulate =     1 << 26
+	# Review =         1 << 27
+
+	def __and__(self, other):
+		if isinstance(other, bool):
+			return self if other else self.__class__.no_flags
+		else:
+			return super().__and__(other)
 
 @unique
 class SimulationState(Enum):
@@ -113,28 +140,32 @@ class Simulator(Shared):
 	class __Directories__(Shared.__Directories__):
 		PreCompiled = None
 
-	def __init__(self, host, dryRun, guiMode):
+	def __init__(self, host, dryRun, simulationSteps : SimulationSteps):
 		super().__init__(host, dryRun)
 
-		self._guiMode =         guiMode
+		self._simulationSteps = simulationSteps
 		self._testSuite =       TestSuite()  # TODO: This includes not the read ini files phases ...
 		self._state =           SimulationState.Prepare
 		self._analyzeTime =     None
 		self._elaborationTime = None
 		self._simulationTime =  None
 
-
 	# class properties
 	# ============================================================================
 	@property
 	def TestSuite(self):      return self._testSuite
 
-	def _PrepareSimulator(self):
-		self._Prepare()
-
 	def _PrepareSimulationEnvironment(self):
 		self.LogNormal("Preparing simulation environment...")
 		self._PrepareEnvironment()
+
+	def _PrepareEnvironment_PurgeDirectory(self):
+		if (SimulationSteps.CleanUpBefore in self._simulationSteps):
+			super()._PrepareEnvironment_PurgeDirectory()
+
+	@MethodAlias(Shared._Prepare)
+	def _PrepareSimulator(self):
+		pass
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		"""Run a list of testbenches. Expand wildcards to all selected testbenches."""
@@ -155,7 +186,8 @@ class Simulator(Shared):
 		finally:
 			self._testSuite.StopTimer()
 
-		self.PrintOverallSimulationReport()
+		if (SimulationSteps.ShowReport in self._simulationSteps):
+			self.PrintOverallSimulationReport()
 
 		return self._testSuite.IsAllPassed
 
@@ -165,7 +197,7 @@ class Simulator(Shared):
 			SimulationState.Prepare:   SimulationStatus.InternalError,
 			SimulationState.Analyze:   SimulationStatus.AnalyzeError,
 			SimulationState.Elaborate: SimulationStatus.ElaborationError,
-			SimulationState.Optimize:  SimulationStatus.ElaborationError,
+			# SimulationState.Optimize:  SimulationStatus.ElaborationError,
 			SimulationState.Simulate:  SimulationStatus.SimulationError
 		}
 
@@ -195,9 +227,11 @@ class Simulator(Shared):
 		finally:
 			testCase.StopTimer()
 
-	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
+	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None):
 		"""Write the Testbench message line, create a PoCProject and add the first *.files file to it."""
 		self.LogQuiet("{CYAN}Testbench: {0!s}{NOCOLOR}".format(testbench.Parent, **Init.Foreground))
+
+		testbench.Result = SimulationResult.NotRun
 
 		self._vhdlVersion =  vhdlVersion
 		self._vhdlGenerics = vhdlGenerics
@@ -208,22 +242,34 @@ class Simulator(Shared):
 
 		self._prepareTime = self._GetTimeDeltaSinceLastEvent()
 
-		self.LogNormal("Running analysis for every vhdl file...")
-		self._state = SimulationState.Analyze
-		self._RunAnalysis(testbench)
-		self._analyzeTime = self._GetTimeDeltaSinceLastEvent()
+		if self._simulationSteps.CleanUpBefore:
+			pass
 
-		self.LogNormal("Running elaboration...")
-		self._state = SimulationState.Elaborate
-		self._RunElaboration(testbench)
-		self._elaborationTime = self._GetTimeDeltaSinceLastEvent()
+		if self._simulationSteps.Prepare:
+			pass
 
-		self.LogNormal("Running simulation...")
-		self._state = SimulationState.Simulate
-		self._RunSimulation(testbench)
-		self._simulationTime = self._GetTimeDeltaSinceLastEvent()
+		if self._simulationSteps.Analyze:
+			self.LogNormal("Running analysis for every vhdl file...")
+			self._state = SimulationState.Analyze
+			self._RunAnalysis(testbench)
+			self._analyzeTime = self._GetTimeDeltaSinceLastEvent()
 
-		if (self._guiMode is True):
+		if self._simulationSteps.Elaborate:
+			self.LogNormal("Running elaboration...")
+			self._state = SimulationState.Elaborate
+			self._RunElaboration(testbench)
+			self._elaborationTime = self._GetTimeDeltaSinceLastEvent()
+
+		# if self._simulationSteps.Optimize:
+		# 	pass
+
+		if self._simulationSteps.Simulate:
+			self.LogNormal("Running simulation...")
+			self._state = SimulationState.Simulate
+			self._RunSimulation(testbench)
+			self._simulationTime = self._GetTimeDeltaSinceLastEvent()
+
+		if self._simulationSteps.ShowWaveform:
 			self.LogNormal("Executing waveform viewer...")
 			self._state = SimulationState.View
 			self._RunView(testbench)

@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_PHYController.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_PHYController_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_PHYController.vhdl>`
+   * |gh-tb| :poctb:`Testbench <net/eth/eth_PHYController_tb.vhdl>`
+
+.. _IP:Eth_PHYController:
 
 Eth_PHYController
 #################
@@ -14,7 +29,6 @@ Eth_PHYController
    :linenos:
    :lines: 45-68
 
-Source file: `net/eth/eth_PHYController.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_PHYController.vhdl>`_
-
+Source file: :pocsrc:`net/eth/eth_PHYController.vhdl <net/eth/eth_PHYController.vhdl>`
 
 

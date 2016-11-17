@@ -36,7 +36,7 @@
 from pathlib                    import Path
 
 from Base.Project               import ToolChain, Tool
-from Base.Simulator             import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from Base.Simulator             import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException, SimulationSteps
 from Base.Logging               import Severity
 from ToolChains.Xilinx.Xilinx   import XilinxProjectExportMixIn
 from ToolChains.Xilinx.Vivado   import Vivado, VivadoException
@@ -52,8 +52,8 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	_TOOL_CHAIN =            ToolChain.Xilinx_Vivado
 	_TOOL =                  Tool.Xilinx_xSim
 
-	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun, guiMode)
+	def __init__(self, host, dryRun, simulationSteps):
+		super().__init__(host, dryRun, simulationSteps)
 		XilinxProjectExportMixIn.__init__(self)
 
 		self._vhdlVersion =   None
@@ -110,18 +110,18 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 		# create a VivadoSimulator instance
 		xSim = self._toolChain.GetSimulator()
-		xSim.Parameters[xSim.SwitchLogFile] =          str(xSimLogFilePath)
+		xSim.Parameters[xSim.SwitchLogFile] =         str(xSimLogFilePath)
 
-		if (not self._guiMode):
-			xSim.Parameters[xSim.SwitchTclBatchFile] =  str(tclBatchFilePath)
+		if (SimulationSteps.ShowWaveform not in self._simulationSteps):
+			xSim.Parameters[xSim.SwitchTclBatchFile] =  tclBatchFilePath.as_posix()
 		else:
-			xSim.Parameters[xSim.SwitchTclBatchFile] =  str(tclGUIFilePath)
-			xSim.Parameters[xSim.FlagGuiMode] =          True
+			xSim.Parameters[xSim.SwitchTclBatchFile] =  tclGUIFilePath.as_posix()
+			xSim.Parameters[xSim.FlagGuiMode] =         True
 
 			# if xSim save file exists, load it's settings
 			if wcfgFilePath.exists():
 				self.LogDebug("Found waveform config file: '{0!s}'".format(wcfgFilePath))
-				xSim.Parameters[xSim.SwitchWaveformFile] =  str(wcfgFilePath)
+				xSim.Parameters[xSim.SwitchWaveformFile] = str(wcfgFilePath)
 			else:
 				self.LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 

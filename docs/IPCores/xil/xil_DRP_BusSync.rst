@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_DRP_BusSync.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_DRP_BusSync_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <xil/xil_DRP_BusSync.vhdl>`
+   * |gh-tb| :poctb:`Testbench <xil/xil_DRP_BusSync_tb.vhdl>`
+
+.. _IP:xil_DRP_BusSync:
 
 xil_DRP_BusSync
 ###############
@@ -14,7 +29,6 @@ xil_DRP_BusSync
    :linenos:
    :lines: 40-58
 
-Source file: `xil/xil_DRP_BusSync.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_DRP_BusSync.vhdl>`_
-
+Source file: :pocsrc:`xil/xil_DRP_BusSync.vhdl <xil/xil_DRP_BusSync.vhdl>`
 
 

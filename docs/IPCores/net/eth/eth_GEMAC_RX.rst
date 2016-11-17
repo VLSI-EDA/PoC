@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_RX.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_GEMAC_RX_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_GEMAC_RX.vhdl>`
+   * |gh-tb| :poctb:`Testbench <net/eth/eth_GEMAC_RX_tb.vhdl>`
+
+.. _IP:Eth_GEMAC_RX:
 
 Eth_GEMAC_RX
 ############
@@ -14,7 +29,6 @@ Eth_GEMAC_RX
    :linenos:
    :lines: 42-62
 
-Source file: `net/eth/eth_GEMAC_RX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_RX.vhdl>`_
-
+Source file: :pocsrc:`net/eth/eth_GEMAC_RX.vhdl <net/eth/eth_GEMAC_RX.vhdl>`
 
 

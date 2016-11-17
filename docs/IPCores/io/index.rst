@@ -1,6 +1,7 @@
+.. _NS:io:
 
-io
-==
+PoC.io
+======
 
 The namespace ``PoC.io`` offers different general purpose I/O (GPIO) implementations,
 as well as low-speed bus protocol controllers.
@@ -32,22 +33,29 @@ The package :doc:`PoC.io <io.pkg>` holds all enum, function and component declar
  * :doc:`PoC.io.PulseWidthModulation <io_PulseWidthModulation>`
  * :doc:`PoC.io.TimingCounter <io_TimingCounter>`
 
+
 .. toctree::
    :hidden:
 
-   ddrio/index
-   iic/index
-   jtag/index
-   lcd/index
-   mdio/index
-   ow/index
-   pio/index
-   pmod/index
-   ps2/index
-   uart/index
-   vga/index
+   ddrio <ddrio/index>
+   iic <iic/index>
+   jtag <jtag/index>
+   lcd <lcd/index>
+   mdio <mdio/index>
+   ow <ow/index>
+   pio <pio/index>
+   pmod <pmod/index>
+   ps2 <ps2/index>
+   uart <uart/index>
+   vga <vga/index>
 
-   io.pkg
+.. toctree::
+   :hidden:
+
+   Package <io.pkg>
+
+.. toctree::
+   :hidden:
 
    io_7SegmentMux_BCD
    io_7SegmentMux_HEX

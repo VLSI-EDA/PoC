@@ -1,6 +1,8 @@
-.. image:: /_static/images/logo_tud.jpg
+.. image:: /_static/logos/tu-dresden.jpg
    :scale: 10
    :alt: Logo: Technische Universität Dresden
+
+-----------------------------------
 
 Modified Apache Corporate Contributor License Agreement v2.0
 ############################################################

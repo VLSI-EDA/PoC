@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Reset.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Reset_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Reset.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/sync/sync_Reset_tb.vhdl>`
+
+.. _IP:sync_Reset:
 
 sync_Reset
 ##########
@@ -34,7 +49,6 @@ Constraints:
    :linenos:
    :lines: 60-69
 
-Source file: `misc/sync/sync_Reset.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Reset.vhdl>`_
-
+Source file: :pocsrc:`misc/sync/sync_Reset.vhdl <misc/sync/sync_Reset.vhdl>`
 
 

@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_tagunit_seq.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/cache/cache_tagunit_seq_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <cache/cache_tagunit_seq.vhdl>`
+   * |gh-tb| :poctb:`Testbench <cache/cache_tagunit_seq_tb.vhdl>`
+
+.. _IP:cache_tagunit_seq:
 
 cache_tagunit_seq
 #################
@@ -14,7 +29,6 @@ cache_tagunit_seq
    :linenos:
    :lines: 39-73
 
-Source file: `cache/cache_tagunit_seq.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_tagunit_seq.vhdl>`_
-
+Source file: :pocsrc:`cache/cache_tagunit_seq.vhdl <cache/cache_tagunit_seq.vhdl>`
 
 

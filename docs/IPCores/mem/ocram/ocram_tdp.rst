@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_tdp.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ocram/ocram_tdp_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_tdp.vhdl>`
+   * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_tdp_tb.vhdl>`
+
+.. _IP:ocram_tdp:
 
 ocram_tdp
 #########
@@ -53,7 +68,6 @@ Mixed-Port Read-During-Write
    :linenos:
    :lines: 84-104
 
-Source file: `mem/ocram/ocram_tdp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_tdp.vhdl>`_
-
+Source file: :pocsrc:`mem/ocram/ocram_tdp.vhdl <mem/ocram/ocram_tdp.vhdl>`
 
 

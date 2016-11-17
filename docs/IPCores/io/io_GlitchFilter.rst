@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_GlitchFilter.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_GlitchFilter_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <io/io_GlitchFilter.vhdl>`
+   * |gh-tb| :poctb:`Testbench <io/io_GlitchFilter_tb.vhdl>`
+
+.. _IP:io_GlitchFilter:
 
 io_GlitchFilter
 ###############
@@ -15,7 +30,6 @@ cycle counts can be configured.
    :linenos:
    :lines: 41-51
 
-Source file: `io/io_GlitchFilter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_GlitchFilter.vhdl>`_
-
+Source file: :pocsrc:`io/io_GlitchFilter.vhdl <io/io_GlitchFilter.vhdl>`
 
 

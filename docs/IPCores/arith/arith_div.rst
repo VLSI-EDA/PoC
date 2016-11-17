@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_div.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_div_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <arith/arith_div.vhdl>`
+   * |gh-tb| :poctb:`Testbench <arith/arith_div_tb.vhdl>`
+
+.. _IP:arith_div:
 
 arith_div
 #########
@@ -18,7 +33,6 @@ outputs are undefined in this case.
    :linenos:
    :lines: 38-61
 
-Source file: `arith/arith_div.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_div.vhdl>`_
-
+Source file: :pocsrc:`arith/arith_div.vhdl <arith/arith_div.vhdl>`
 
 

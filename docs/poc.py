@@ -43,6 +43,7 @@ class SourceCodeRange:
 		self.StartRow =   startRow
 		self.EndRow =     endRow
 
+
 class SourceFile:
 	def __init__(self, entitySourceCodeRange):    #, entityName, entitySourceCodeRange, summary, description, seeAlso):
 		self.File =                   entitySourceCodeRange.SourceFile
@@ -56,9 +57,10 @@ class SourceFile:
 
 class Extract:
 	def __init__(self):
-		self.sourceDirectory =     Path("../src")
-		self.outputDirectory =     Path("IPCores")
-		self.relSourceDirectory =  Path("../../src")
+		self.sourceDirectory =       Path("../src")
+		self.outputDirectory =       Path("IPCores")
+		self.relSourceDirectory =    Path("../../src")
+		self.relTestbenchDirectory = Path("../../tb")
 
 		self.templateFile =     Path("Entity.template")
 		self.templateContent =  ""
@@ -100,9 +102,11 @@ class Extract:
 				self.writeReST(item)
 
 	def writeReST(self, sourceFile):
-		relPath =     sourceFile.File.relative_to(self.sourceDirectory)
-		outputFile =  self.outputDirectory / relPath.with_suffix(".rst")
-		relSourceFile = ("../" * (len(relPath.parents) - 1)) / self.relSourceDirectory / relPath
+		sourceRelPath =     sourceFile.File.relative_to(self.sourceDirectory)
+		outputFile =  self.outputDirectory / sourceRelPath.with_suffix(".rst")
+		relSourceFile = ("../" * (len(sourceRelPath.parents) - 1)) / self.relSourceDirectory / sourceRelPath
+
+		testbenchRelPath = Path(sourceRelPath.with_name(sourceRelPath.stem + "_tb.vhdl"))
 
 		print("Writing reST file '{0!s}'.".format(outputFile))
 
@@ -123,7 +127,8 @@ class Extract:
 			EntityDescription=sourceFile.Description,
 			EntityFilePath=relSourceFile.as_posix(),
 			EntityDeclarationFromTo="{0}-{1}".format(sourceFile.EntitySourceCodeRange.StartRow, sourceFile.EntitySourceCodeRange.EndRow),
-			GitHubSourceFile="`{relPath} <https://github.com/VLSI-EDA/PoC/blob/master/src/{relPath}>`_".format(relPath=relPath.as_posix()),
+			SourceRelPath=sourceRelPath.as_posix(),
+			TestbenchRelPath=testbenchRelPath.as_posix(),
 			SeeAlsoBox=seeAlsoBox
 		)
 
@@ -133,14 +138,15 @@ class Extract:
 	def ExtractComments(self, sourceFile):
 		"""
 		Extracts the documentation from the header of a PoC VHDL source.
-		 - The documentation header starts with a separator line matching /^--\s*={16,}$/.
-		 - The documentation header continues through all immediately following comment lines.
-		 - The contained information is added to the currently active section.
-		 - A specific section is opened by a line matching /^--\s*(?P<Section>\w+):/ with
-		   <Section> as one of Authors|Entity|Description|SeeAlso|License.
-		 - An underline /^-- -+$/ immediately following a section opening is ignored.
-		 - After the documentation header, the entity name is extracted from the entity declaration.
-		 """
+
+		* The documentation header starts with a separator line matching /^--\s*={16,}$/.
+		* The documentation header continues through all immediately following comment lines.
+		* The contained information is added to the currently active section.
+		* A specific section is opened by a line matching /^--\s*(?P<Section>\w+):/ with
+		  <Section> as one of Authors|Entity|Description|SeeAlso|License.
+		* An underline /^-- -+$/ immediately following a section opening is ignored.
+		* After the documentation header, the entity name is extracted from the entity declaration.
+		"""
 		class State(Enum):
 			BeforeDocHeader  = 0
 			InDocHeader      = 1

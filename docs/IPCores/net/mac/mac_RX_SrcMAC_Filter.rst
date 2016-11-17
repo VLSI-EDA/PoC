@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/mac/mac_RX_SrcMAC_Filter.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/mac/mac_RX_SrcMAC_Filter_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <net/mac/mac_RX_SrcMAC_Filter.vhdl>`
+   * |gh-tb| :poctb:`Testbench <net/mac/mac_RX_SrcMAC_Filter_tb.vhdl>`
+
+.. _IP:mac_RX_SrcMAC_Filter:
 
 mac_RX_SrcMAC_Filter
 ####################
@@ -14,7 +29,6 @@ mac_RX_SrcMAC_Filter
    :linenos:
    :lines: 42-72
 
-Source file: `net/mac/mac_RX_SrcMAC_Filter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/mac/mac_RX_SrcMAC_Filter.vhdl>`_
-
+Source file: :pocsrc:`net/mac/mac_RX_SrcMAC_Filter.vhdl <net/mac/mac_RX_SrcMAC_Filter.vhdl>`
 
 

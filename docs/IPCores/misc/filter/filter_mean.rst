@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/filter/filter_mean.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/filter/filter_mean_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <misc/filter/filter_mean.vhdl>`
+   * |gh-tb| :poctb:`Testbench <misc/filter/filter_mean_tb.vhdl>`
+
+.. _IP:filter_mean:
 
 filter_mean
 ###########
@@ -14,7 +29,6 @@ filter_mean
    :linenos:
    :lines: 37-48
 
-Source file: `misc/filter/filter_mean.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/filter/filter_mean.vhdl>`_
-
+Source file: :pocsrc:`misc/filter/filter_mean.vhdl <misc/filter/filter_mean.vhdl>`
 
 

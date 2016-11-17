@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocrom/ocrom_dp.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ocrom/ocrom_dp_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <mem/ocrom/ocrom_dp.vhdl>`
+   * |gh-tb| :poctb:`Testbench <mem/ocrom/ocrom_dp_tb.vhdl>`
+
+.. _IP:ocrom_dp:
 
 ocrom_dp
 ########
@@ -25,7 +40,6 @@ TODO: implement correct behavior for RT-level simulation
    :linenos:
    :lines: 60-76
 
-Source file: `mem/ocrom/ocrom_dp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocrom/ocrom_dp.vhdl>`_
-
+Source file: :pocsrc:`mem/ocrom/ocrom_dp.vhdl <mem/ocrom/ocrom_dp.vhdl>`
 
 

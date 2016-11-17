@@ -36,6 +36,7 @@ import shutil
 from datetime           import datetime
 from os                 import chdir
 
+from lib.Functions import Init
 from lib.Parser         import ParserException
 from Base.Exceptions    import CommonException, SkipableCommonException
 from Base.Logging       import ILogable
@@ -124,36 +125,66 @@ class Shared(ILogable):
 		self._lastEvent = now
 		return result
 
-	def _Prepare(self):
-		self.LogNormal("Preparing {0}.".format(self._TOOL.LongName))
-
 	def _PrepareEnvironment(self):
 		# create fresh temporary directory
 		self.LogVerbose("Creating fresh temporary directory.")
 		if (self.Directories.Working.exists()):
-			self.LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
-			for item in self.Directories.Working.iterdir():
-				try:
-					if item.is_dir():
-						shutil.rmtree(str(item))
-					elif item.is_file():
-						item.unlink()
-				except OSError as ex:
-					raise CommonException("Error while deleting '{0!s}'.".format(item)) from ex
+			self._PrepareEnvironment_PurgeDirectory()
+			# self.LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
+			# for item in self.Directories.Working.iterdir():
+			# 	try:
+			# 		if item.is_dir():
+			# 			shutil.rmtree(str(item))
+			# 		elif item.is_file():
+			# 			item.unlink()
+			# 	except OSError as ex:
+			# 		raise CommonException("Error while deleting '{0!s}'.".format(item)) from ex
 		else:
-			self.LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
-			try:
-				self.Directories.Working.mkdir(parents=True)
-			except OSError as ex:
-				raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
+			self._PrepareEnvironment_CreatingDirectory()
+			# self.LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
+			# try:
+			# 	self.Directories.Working.mkdir(parents=True)
+			# except OSError as ex:
+			# 	raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
 
+		self._PrepareEnvironment_ChangeDirectory()
 		# change working directory to temporary path
+		# self.LogVerbose("Changing working directory to temporary directory.")
+		# self.LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
+		# try:
+		# 	chdir(str(self.Directories.Working))
+		# except OSError as ex:
+		# 	raise CommonException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
+
+	def _PrepareEnvironment_PurgeDirectory(self):
+		self.LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
+		for item in self.Directories.Working.iterdir():
+			try:
+				if item.is_dir():
+					shutil.rmtree(str(item))
+				elif item.is_file():
+					item.unlink()
+			except OSError as ex:
+				raise CommonException("Error while deleting '{0!s}'.".format(item)) from ex
+
+	def _PrepareEnvironment_CreatingDirectory(self):
+		self.LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
+		try:
+			self.Directories.Working.mkdir(parents=True)
+		except OSError as ex:
+			raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
+
+	def _PrepareEnvironment_ChangeDirectory(self):
+		"""Change working directory to temporary path 'temp/<tool>'."""
 		self.LogVerbose("Changing working directory to temporary directory.")
 		self.LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
 		try:
 			chdir(str(self.Directories.Working))
 		except OSError as ex:
 			raise CommonException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
+
+	def _Prepare(self):
+		self.LogNormal("Preparing {0}.".format(self._TOOL.LongName))
 
 	def _CreatePoCProject(self, projectName, board):
 		# create a PoCProject and read all needed files
@@ -186,7 +217,8 @@ class Shared(ILogable):
 
 		self.LogDebug("=" * 78)
 		self.LogDebug("Pretty printing the PoCProject...")
-		self.LogDebug(self._pocProject.pprint(2))
+		self.LogDebug("{DARK_RED}Disabled{NOCOLOR}".format(**Init.Foreground))
+		# self.LogDebug(self._pocProject.pprint(2))
 		self.LogDebug("=" * 78)
 		if (len(fileListFile.Warnings) > 0):
 			for warn in fileListFile.Warnings:

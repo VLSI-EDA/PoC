@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_tagunit_par.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/cache/cache_tagunit_par_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <cache/cache_tagunit_par.vhdl>`
+   * |gh-tb| :poctb:`Testbench <cache/cache_tagunit_par_tb.vhdl>`
+
+.. _IP:cache_tagunit_par:
 
 cache_tagunit_par
 #################
@@ -49,7 +64,6 @@ must be a power of 2.
    :linenos:
    :lines: 75-99
 
-Source file: `cache/cache_tagunit_par.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_tagunit_par.vhdl>`_
-
+Source file: :pocsrc:`cache/cache_tagunit_par.vhdl <cache/cache_tagunit_par.vhdl>`
 
 

@@ -82,6 +82,12 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
      urldate={2016-10-28},
    }
 
+------------------------------------
+
+.. |docdate| date:: %b %d, %Y - %H:%M
+
+This document was generated on |docdate|.
+
 .. toctree::
    :caption: Introduction
    :hidden:

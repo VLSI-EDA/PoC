@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_SystemMonitor_Series7.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_SystemMonitor_Series7_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <xil/xil_SystemMonitor_Series7.vhdl>`
+   * |gh-tb| :poctb:`Testbench <xil/xil_SystemMonitor_Series7_tb.vhdl>`
+
+.. _IP:xil_SystemMonitor_Series7:
 
 xil_SystemMonitor_Series7
 #########################
@@ -31,7 +46,6 @@ are overrun. The XADC was formerly known as "System Monitor".
    :linenos:
    :lines: 56-66
 
-Source file: `xil/xil_SystemMonitor_Series7.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_SystemMonitor_Series7.vhdl>`_
-
+Source file: :pocsrc:`xil/xil_SystemMonitor_Series7.vhdl <xil/xil_SystemMonitor_Series7.vhdl>`
 
 

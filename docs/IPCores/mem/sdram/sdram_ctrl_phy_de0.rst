@@ -1,3 +1,18 @@
+.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_phy_de0.vhdl
+            :alt: Source Code on GitHub
+.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+            :scale: 40
+            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/sdram/sdram_ctrl_phy_de0_tb.vhdl
+            :alt: Source Code on GitHub
+
+.. sidebar:: GitHub Links
+
+   * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_phy_de0.vhdl>`
+   * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_phy_de0_tb.vhdl>`
+
+.. _IP:sdram_ctrl_phy_de0:
 
 sdram_ctrl_phy_de0
 ##################
@@ -46,7 +61,6 @@ Synchronous resets are used. Reset must be hold for at least two cycles.
    :linenos:
    :lines: 89-122
 
-Source file: `mem/sdram/sdram_ctrl_phy_de0.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_phy_de0.vhdl>`_
-
+Source file: :pocsrc:`mem/sdram/sdram_ctrl_phy_de0.vhdl <mem/sdram/sdram_ctrl_phy_de0.vhdl>`
 
 
