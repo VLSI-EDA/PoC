@@ -48,8 +48,8 @@ __all__ = __api__
 
 
 class Simulator(BaseSimulator):
-	_TOOL_CHAIN =            ToolChain.Mentor_QuestaSim
-	_TOOL =                  Tool.Mentor_vSim
+	TOOL_CHAIN =      ToolChain.Mentor_QuestaSim
+	TOOL =            Tool.Mentor_vSim
 
 	def __init__(self, host, dryRun, simulationSteps):
 		# A separate elaboration step is not implemented in QuestaSim

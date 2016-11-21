@@ -49,8 +49,8 @@ __all__ = __api__
 
 
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =  ToolChain.Altera_Quartus
-	_TOOL =        Tool.Altera_Quartus_Map
+	TOOL_CHAIN =      ToolChain.Altera_Quartus
+	TOOL =            Tool.Altera_Quartus_Map
 
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)

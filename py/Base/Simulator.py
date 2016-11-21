@@ -131,8 +131,8 @@ class SimulationResult(Enum):
 class Simulator(Shared):
 	"""Base class for all Simulator classes."""
 
-	_ENVIRONMENT =    Environment.Simulation
-	_vhdlVersion =    VHDLVersion.VHDL2008
+	ENVIRONMENT =     Environment.Simulation
+	VHDL_VERSION =    VHDLVersion.VHDL2008
 
 	class __Directories__(Shared.__Directories__):
 		PreCompiled = None

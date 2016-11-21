@@ -51,8 +51,8 @@ __all__ = __api__
 
 
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =  ToolChain.Lattice_Diamond
-	_TOOL =        Tool.Lattice_LSE
+	TOOL_CHAIN =      ToolChain.Lattice_Diamond
+	TOOL =            Tool.Lattice_LSE
 
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)

@@ -46,8 +46,8 @@ __all__ = __api__
 
 
 class Simulator(BaseSimulator):
-	_TOOL_CHAIN =            ToolChain.Aldec_ActiveHDL
-	_TOOL =                  Tool.Aldec_aSim
+	TOOL_CHAIN =      ToolChain.Aldec_ActiveHDL
+	TOOL =            Tool.Aldec_aSim
 
 	def __init__(self, host, dryRun, simulationSteps):
 		super().__init__(host, dryRun, simulationSteps)

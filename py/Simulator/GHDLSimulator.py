@@ -52,8 +52,8 @@ __all__ = __api__
 class Simulator(BaseSimulator):
 	"""This class encapsulates the GHDL simulator."""
 
-	_TOOL_CHAIN =            ToolChain.GHDL_GTKWave
-	_TOOL =                  Tool.GHDL
+	TOOL_CHAIN =      ToolChain.GHDL_GTKWave
+	TOOL =            Tool.GHDL
 
 	class __Directories__(BaseSimulator.__Directories__):
 		GTKWBinary = None

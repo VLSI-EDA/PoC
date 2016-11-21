@@ -149,8 +149,8 @@ class CompileResult(Enum):
 class Compiler(Shared):
 	"""Base class for all Compiler classes."""
 
-	_ENVIRONMENT =    Environment.Synthesis
-	_vhdlVersion =    VHDLVersion.VHDL93
+	ENVIRONMENT =     Environment.Synthesis
+	VHDL_VERSION =    VHDLVersion.VHDL93
 
 	class __Directories__(Shared.__Directories__):
 		Netlist =     None

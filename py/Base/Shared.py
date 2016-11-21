@@ -36,12 +36,12 @@ import shutil
 from datetime           import datetime
 from os                 import chdir
 
-from lib.Functions import Init
+from lib.Functions      import Init
 from lib.Parser         import ParserException
 from Base.Exceptions    import CommonException, SkipableCommonException
 from Base.Logging       import ILogable
 from Base.Project       import ToolChain, Tool, VHDLVersion, Environment
-from DataBase.Solution       import VirtualProject, FileListFile
+from DataBase.Solution  import VirtualProject, FileListFile
 
 
 __api__ = [
@@ -79,10 +79,10 @@ class Shared(ILogable):
 	:param noCleanUp: Don't clean up after a run.
 	"""
 
-	_ENVIRONMENT =    Environment.Any
-	_TOOL_CHAIN =     ToolChain.Any
-	_TOOL =           Tool.Any
-	_vhdlVersion =    VHDLVersion.VHDL2008
+	ENVIRONMENT =     Environment.Any
+	TOOL_CHAIN =      ToolChain.Any
+	TOOL =            Tool.Any
+	VHDL_VERSION =    VHDLVersion.VHDL2008
 
 	class __Directories__:
 		Working = None
@@ -113,7 +113,7 @@ class Shared(ILogable):
 	@property
 	def DryRun(self):       return self._dryRun
 	@property
-	def VHDLVersion(self):  return self._vhdlVersion
+	def VHDLVersion(self):  return self.VHDL_VERSION
 	@property
 	def PoCProject(self):   return self._pocProject
 	@property
@@ -184,7 +184,7 @@ class Shared(ILogable):
 			raise CommonException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
 
 	def _Prepare(self):
-		self.LogNormal("Preparing {0}.".format(self._TOOL.LongName))
+		self.LogNormal("Preparing {0}.".format(self.TOOL.LongName))
 
 	def _CreatePoCProject(self, projectName, board):
 		# create a PoCProject and read all needed files
@@ -193,10 +193,10 @@ class Shared(ILogable):
 
 		# configure the project
 		pocProject.RootDirectory =  self.Host.Directories.Root
-		pocProject.Environment =    self._ENVIRONMENT
-		pocProject.ToolChain =      self._TOOL_CHAIN
-		pocProject.Tool =           self._TOOL
-		pocProject.VHDLVersion =    self._vhdlVersion
+		pocProject.Environment =    self.ENVIRONMENT
+		pocProject.ToolChain =      self.TOOL_CHAIN
+		pocProject.Tool =           self.TOOL
+		pocProject.VHDLVersion =    self.VHDL_VERSION
 		pocProject.Board =          board
 
 		self._pocProject = pocProject
@@ -233,7 +233,7 @@ class Shared(ILogable):
 			for keyValuePair in hdlParameters.split(";"):
 				try:
 					key,value = keyValuePair.split("=")
-				except ValueError as ex:
+				except ValueError:
 					raise CommonException("Syntax error in option 'HDLParameters' within section {section}.".format(section=configSectionName))
 				result[key.strip()] = value.strip()
 		return result

@@ -49,8 +49,8 @@ __all__ = __api__
 
 
 class Simulator(BaseSimulator, XilinxProjectExportMixIn):
-	_TOOL_CHAIN =            ToolChain.Xilinx_Vivado
-	_TOOL =                  Tool.Xilinx_xSim
+	TOOL_CHAIN =      ToolChain.Xilinx_Vivado
+	TOOL =            Tool.Xilinx_xSim
 
 	def __init__(self, host, dryRun, simulationSteps):
 		super().__init__(host, dryRun, simulationSteps)

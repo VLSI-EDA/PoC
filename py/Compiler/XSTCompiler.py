@@ -50,8 +50,8 @@ __all__ = __api__
 
 
 class Compiler(BaseCompiler, XilinxProjectExportMixIn):
-	_TOOL_CHAIN =  ToolChain.Xilinx_ISE
-	_TOOL =        Tool.Xilinx_XST
+	TOOL_CHAIN =      ToolChain.Xilinx_ISE
+	TOOL =            Tool.Xilinx_XST
 
 	class __Directories__(BaseCompiler.__Directories__):
 		XSTFiles =    None
