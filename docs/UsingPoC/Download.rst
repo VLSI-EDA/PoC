@@ -15,11 +15,11 @@ Downloading from GitHub
 The PoC-Library can be downloaded as a zip-file from GitHub. See the following
 table, to choose your desired git branch.
 
-.. |zip-master| image:: /_static/icons/ZIP.png
+.. |zip-master| image:: _static/icons/ZIP.png
    :scale: 40
    :target: https://github.com/VLSI-EDA/PoC/archive/master.zip
    :alt: Source Code from GitHub - 'master' branch.
-.. |zip-release| image:: /_static/icons/ZIP.png
+.. |zip-release| image:: _static/icons/ZIP.png
    :scale: 40
    :target: https://github.com/VLSI-EDA/PoC/archive/release.zip
    :alt: Source Code from GitHub - 'release' branch.
