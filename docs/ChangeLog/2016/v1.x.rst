@@ -1,0 +1,6 @@
+.. _CHANGE:v1.x:
+
+New in 1.x (upcomming)
+=======================
+
+Already documented changes are available on the ``release`` branch at GitHub.

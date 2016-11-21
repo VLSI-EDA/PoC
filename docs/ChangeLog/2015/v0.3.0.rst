@@ -1,0 +1,72 @@
+.. :CHANGE:v0.3.0:
+
+New in v0.3.0 (31.03.20015)
+================================================================================================================================================================
+
+* Added Python infrastructure
+
+  * Added platform wrapper scripts (\*.sh, \*.ps1)
+  * Added IP-core compiler scripts Netlist.py
+
+* Added Tools
+
+  * Notepad++ syntax file for Xilinx UCF/XCF files
+  * Git configuration script to register global aliases
+
+* New packages:
+
+  * components - hardware described as functions
+  * physical - physical types like frequency, memory and baudrate
+  * io
+
+* New modules:
+
+  * PoC.misc
+
+    * misc_FrequencyMeasurement
+
+  * PoC.io - Low-speed I/O interfaces
+
+    * io_7SegmentMux_BCD
+    * io_7SegmentMux_HEX
+    * io_FanControl
+    * io_PulseWidthModulation
+    * io_TimingCounter
+    * io_Debounce
+    * io_GlitchFilter
+
+* New IP-cores:
+
+  * PoC.xil - Xilinx specific modules
+
+    * xil_ChipScopeICON_1
+    * xil_ChipScopeICON_2
+    * xil_ChipScopeICON_3
+    * xil_ChipScopeICON_4
+    * xil_ChipScopeICON_6
+    * xil_ChipScopeICON_7
+    * xil_ChipScopeICON_8
+    * xil_ChipScopeICON_9
+    * xil_ChipScopeICON_10
+    * xil_ChipScopeICON_11
+    * xil_ChipScopeICON_12
+    * xil_ChipScopeICON_13
+    * xil_ChipScopeICON_14
+    * xil_ChipScopeICON_15
+
+* New constraint files:
+
+  * ML605
+  * KC705
+  * VC707
+  * MetaStability
+  * xil_Sync
+
+* Updated packages:
+
+  * board
+  * config
+
+* Updated modules:
+
+  * xil_BSCAN

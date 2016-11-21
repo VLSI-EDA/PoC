@@ -1,0 +1,25 @@
+.. :CHANGE:v0.5.0:
+
+New in v0.5 (27.05.2015)
+================================================================================================================================================================
+
+* Updated Python infrastructure
+* New testbenches:
+
+  * sync_Reset_tb
+  * sync_Flag_tb
+  * sync_Strobe_tb
+  * sync_Vector_tb
+  * sync_Command_tb
+
+* Updated modules:
+
+  * sync_Vector
+  * sync_Command
+
+* Updated packages:
+
+  * physical
+  * utils
+  * vectors
+  * xil
