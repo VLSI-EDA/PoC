@@ -72,6 +72,11 @@ Based on the 2-FF synchronizer, several "high-level" synchronizers are build.
 .. toctree::
    :hidden:
 
+   Package <sync.pkg>
+
+.. toctree::
+   :hidden:
+
    sync_Bits <sync_Bits>
    sync_Command <sync_Command>
    sync_Pulse <sync_Pulse>

@@ -42,6 +42,10 @@ __api__ = [
 ]
 __all__ = __api__
 
+# TODO: implement class, method, function attributes
+# TODO: implement unique attributes
+# TODO: add an attacheHelper methods option
+# TODO: implement a static HasAttribute method
 
 class Attribute:
 	__AttributesMemberName__ = "__pyattr__"
@@ -93,7 +97,7 @@ class AttributeHelperMixin:
 			}.items()
 
 	@staticmethod
-	def HasAttribute(method):
+	def HasAttribute(method): # TODO: add a tuple based type filer
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
 			attributeList = method.__dict__[Attribute.__AttributesMemberName__]
 			return (isinstance(attributeList, list) and (len(attributeList) != 0))
@@ -101,7 +105,7 @@ class AttributeHelperMixin:
 			return False
 
 	@staticmethod
-	def GetAttributes(method):
+	def GetAttributes(method): # TODO: add a tuple based type filer
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
 			attributeList = method.__dict__[Attribute.__AttributesMemberName__]
 			if isinstance(attributeList, list):

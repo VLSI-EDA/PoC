@@ -93,7 +93,7 @@ The write data must directly connected to the physical layer.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 124-168
+   :lines: 104-148
 
 Source file: :pocsrc:`mem/sdram/sdram_ctrl_fsm.vhdl <mem/sdram/sdram_ctrl_fsm.vhdl>`
 

@@ -1,9 +1,10 @@
+.. _CONST:
 
 Constraint Files
 ################
 
-IP Core Contraint Files
-***********************
+IP Core Constraint Files
+************************
 
  * fifo
  * misc
@@ -11,12 +12,6 @@ IP Core Contraint Files
  * net
     * eth
 
-.. only:: PoCInternal
-
-    * sata
-       * xilinx
-
-.. #PoCInternal
 
 .. toctree::
    :hidden:
@@ -25,17 +20,9 @@ IP Core Contraint Files
    misc/index
    net/index
 
-.. only:: PoCInternal
 
-   .. toctree::
-      :hidden:
-
-      sata/index
-.. #PoCInternal
-
-
-Board Contraint Files
-*********************
+Board Constraint Files
+**********************
 
  * Altera Boards
     * Cyclone III

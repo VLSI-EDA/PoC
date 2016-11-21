@@ -155,22 +155,27 @@ if ($Questa)
 		"RandomBasePkg.vhd",
 		"RandomPkg.vhd",
 		"CoveragePkg.vhd",
+		"ScoreboardGenericPkg.vhd",
+		"ScoreboardPkg.vhd",
 		"OsvvmContext.vhd"
 	)
 	$SourceFiles = $Files | % { "$SourceDirectory\$_" }
 
 	# Compile libraries with vcom, executed in destination directory
 	Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow
-	& "$VSimBinDir\vlib.exe" $Library
-	& "$VSimBinDir\vmap.exe" -del $Library
-	& "$VSimBinDir\vmap.exe" $Library "$DestDir"
+	$InvokeExpr = "$VSimBinDir\vlib.exe " + $Library + " 2>&1"
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVLibLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	$InvokeExpr = "$VSimBinDir\vmap.exe -del " + $Library + " 2>&1"
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	$InvokeExpr = "$VSimBinDir\vmap.exe " + $Library + " $DestDir\$Library 2>&1"
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	Write-Host "Compiling library '$Library' with vcom..." -ForegroundColor Yellow
 	$ErrorCount += 0
 	foreach ($File in $SourceFiles)
 	{	Write-Host "Compiling '$File'..." -ForegroundColor DarkCyan
 		$InvokeExpr = "$VSimBinDir\vcom.exe -suppress 1246 -2008 -work $Library " + $File + " 2>&1"
-		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVComLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 		if ($LastExitCode -ne 0)
 		{	$ErrorCount += 1
 			if ($HaltOnError)

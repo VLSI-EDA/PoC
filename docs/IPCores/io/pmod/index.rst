@@ -15,6 +15,11 @@ These are Pmod entities....
 .. toctree::
    :hidden:
 
+   Package <pmod.pkg>
+
+.. toctree::
+   :hidden:
+
    pmod_KYPD <pmod_KYPD>
    pmod_SSD <pmod_SSD>
    pmod_USBUART <pmod_USBUART>

@@ -19,6 +19,11 @@ This sub-namespace contains sorting network implementations.
 .. toctree::
    :hidden:
 
+   Package <sortnet.pkg>
+
+.. toctree::
+   :hidden:
+
    sortnet_BitonicSort <sortnet_BitonicSort>
    sortnet_MergeSort_Streamed <sortnet_MergeSort_Streamed>
    sortnet_OddEvenMergeSort <sortnet_OddEvenMergeSort>

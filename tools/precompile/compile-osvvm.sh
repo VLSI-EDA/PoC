@@ -210,6 +210,8 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		RandomBasePkg.vhd
 		RandomPkg.vhd
 		CoveragePkg.vhd
+		ScoreboardGenericPkg.vhd
+		ScoreboardPkg.vhd
 		OsvvmContext.vhd
 	)
 

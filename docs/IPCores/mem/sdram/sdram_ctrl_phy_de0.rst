@@ -17,7 +17,7 @@
 sdram_ctrl_phy_de0
 ##################
 
-Physical layer used by module :doc:`sdram_ctrl_de0 <sdram_ctrl_de0>`.
+Physical layer used by module :ref:`sdram_ctrl_de0 <IP:sdram_ctrl_de0>`.
 
 Instantiates input and output buffer components and adjusts the timing for
 the Altera DE0 board.

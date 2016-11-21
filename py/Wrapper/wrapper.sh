@@ -126,7 +126,7 @@ declare -A Env_Lattice_ActiveHDL=(
 declare -A Env_Mentor=(
 	["PreHookFile"]="Mentor.pre.sh"
 	["PostHookFile"]="Mentor.post.sh"
-	["Tools"]="PrecisionRTL QuestaSim"
+	["Tools"]="PrecisionRTL ModelSimPE QuestaSim"
 )
 declare -A Env_Mentor_PrecisionRTL=(
 	["Load"]=0
@@ -134,6 +134,13 @@ declare -A Env_Mentor_PrecisionRTL=(
 	["BashModule"]="Mentor.PrecisionRTL.sh"
 	["PreHookFile"]="Mentor.PrecisionRTL.pre.sh"
 	["PostHookFile"]="Mentor.PrecisionRTL.post.sh"
+)
+declare -A Env_Mentor_ModelSimPE=(
+	["Load"]=0
+	["Commands"]="vsim"
+	["BashModule"]="Mentor.ModelSimPE.sh"
+	["PreHookFile"]="Mentor.ModelSimPE.pre.sh"
+	["PostHookFile"]="Mentor.ModelSimPE.post.sh"
 )
 declare -A Env_Mentor_QuestaSim=(
 	["Load"]=0

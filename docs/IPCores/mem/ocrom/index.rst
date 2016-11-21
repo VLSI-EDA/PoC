@@ -24,5 +24,10 @@ The package PoC.mem.ocrom holds all component declarations for this namespace.
 .. toctree::
    :hidden:
 
+   Package <ocrom.pkg>
+
+.. toctree::
+   :hidden:
+
    ocrom_sp <ocrom_sp>
    ocrom_dp <ocrom_dp>

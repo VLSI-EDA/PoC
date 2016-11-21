@@ -58,7 +58,7 @@ Synchronous resets are used.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 89-132
+   :lines: 69-112
 
 Source file: :pocsrc:`mem/sdram/sdram_ctrl_s3esk.vhdl <mem/sdram/sdram_ctrl_s3esk.vhdl>`
 

@@ -1,3 +1,8 @@
+.. index::
+   single: Third-Party Libraries
+
+.. _THIRD:
+
 Third Party Libraries
 #####################
 
@@ -5,7 +10,13 @@ The PoC-Library is shiped with different third party libraries, which are
 located in the ``<PoCRoot>/lib/`` folder. This document lists all these
 libraries, their websites and licenses.
 
-.. _ThirdParty:Cocotb:
+
+.. # ===========================================================================================================================================================
+
+.. index::
+   pair: Third-Party Libraries; Cocotb
+
+.. _THIRD:Cocotb:
 
 Cocotb
 ******
@@ -25,7 +36,13 @@ library for writing VHDL and Verilog testbenches in Python.
 | **Source:**        | `https://github.com/potentialventures/cocotb <https://github.com/potentialventures/cocotb>`_              |
 +--------------------+-----------------------------------------------------------------------------------------------------------+
 
-.. _ThirdParty:OSVVM:
+
+.. # ===========================================================================================================================================================
+
+.. index::
+   pair: Third-Party Libraries; OSVVM
+
+.. _THIRD:OSVVM:
 
 OSVVM
 *****
@@ -50,7 +67,13 @@ existing testbench or testbench models.
 | **Source:**    | `https://github.com/JimLewis/OSVVM <https://github.com/JimLewis/OSVVM>`_              |
 +----------------+---------------------------------------------------------------------------------------+
 
-.. _ThirdParty:UVVM:
+
+.. # ===========================================================================================================================================================
+
+.. index::
+   pair: Third-Party Libraries; UVVM
+
+.. _THIRD:UVVM:
 
 UVVM
 ****
@@ -83,7 +106,13 @@ the ``uart_receive()`` or ``axilite_write()`` BFM respectively.
 | **Source:**    | `https://github.com/UVVM/UVVM_All <https://github.com/UVVM/UVVM_All>`_                |
 +----------------+---------------------------------------------------------------------------------------+
 
-.. _ThirdParty:VUnit:
+
+.. # ===========================================================================================================================================================
+
+.. index::
+   pair: Third-Party Libraries; VUnit
+
+.. _THIRD:VUnit:
 
 VUnit
 *****

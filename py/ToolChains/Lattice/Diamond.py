@@ -43,13 +43,13 @@ from Base.Exceptions              import PlatformNotSupportedException
 from Base.Executable              import Executable, CommandLineArgumentList, ExecutableArgument, ShortTupleArgument
 from Base.Logging                  import Severity, LogEntry
 from Base.Project                  import File, FileTypes, VHDLVersion
+from ToolChains import ToolMixIn
 from ToolChains.Lattice.Lattice    import LatticeException
 
 
 __api__ = [
 	'DiamondException',
 	'Configuration',
-	'DiamondMixIn',
 	'Diamond',
 	'Synth',
 	'SynthesisArgumentFile',
@@ -140,31 +140,21 @@ class Configuration(BaseConfiguration):
 		return binPath
 
 
-class DiamondMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		self._version =             version
-		self._Logger =              logger
-
-
-class Diamond(DiamondMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		DiamondMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-
+class Diamond(ToolMixIn):
 	def GetSynthesizer(self):
-		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return Synth(self)
 
 
-class Synth(Executable, DiamondMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		DiamondMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
+class Synth(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._Logger)
 
-		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "synthesis.exe"
-		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "synthesis"
-		else:                          raise PlatformNotSupportedException(platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "synthesis.exe"
+		elif (self._platform == "Linux"):    executablePath = self._binaryDirectoryPath / "synthesis"
+		else:                          raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._Logger)
 
 		self.Parameters[self.Executable] = executablePath
 

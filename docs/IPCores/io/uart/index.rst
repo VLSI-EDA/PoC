@@ -16,6 +16,11 @@ These are :abbr:`UART (Universal Asynchronous Receiver Transmitter)` entities...
 .. toctree::
    :hidden:
 
+   Package <uart.pkg>
+
+.. toctree::
+   :hidden:
+
    uart_bclk <uart_bclk>
    uart_rx <uart_rx>
    uart_tx <uart_tx>

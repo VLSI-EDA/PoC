@@ -60,7 +60,7 @@ class Configuration(BaseConfiguration):
 		},
 		"Linux": {
 			_section: {
-			#	"InstallationDirectory":  "/opt/Aldec"
+				"InstallationDirectory":  "/opt/Aldec"
 			}
 		}
 	}

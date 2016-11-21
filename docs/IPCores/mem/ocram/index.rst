@@ -25,6 +25,12 @@ The package PoC.mem.ocram holds all component declarations for this namespace.
 
  * :ref:`IP:ocram_esdp` - An on-chip RAM with an extended simple dual port interface.
 
+
+.. toctree::
+   :hidden:
+
+   Package <ocram.pkg>
+
 .. toctree::
    :hidden:
 

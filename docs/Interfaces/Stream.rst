@@ -1,4 +1,4 @@
-.. _Int:PoC.Stream:
+.. _INT:PoC.Stream:
 
 PoC.Stream Interface
 ####################

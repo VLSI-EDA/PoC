@@ -15,6 +15,11 @@ These are :abbr:`DDR-I/O (Double Data Rate - Input/Output)` entities....
 .. toctree::
    :hidden:
 
+   Package <ddrio.pkg>
+
+.. toctree::
+   :hidden:
+
    ddrio_in <ddrio_in>
    ddrio_inout <ddrio_inout>
    ddrio_out <ddrio_out>

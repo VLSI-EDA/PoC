@@ -59,14 +59,7 @@ function Open-Environment
 		}
 
 		Write-Host "Loading Xilinx ISE environment '$ISE_SettingsFile'" -ForegroundColor Yellow
-		if (-not (Get-Module -ListAvailable PSCX))
-		{	Write-Host "[ERROR]: PowerShell Community Extensions (PSCX) is not installed." -ForegroundColor Red
-			return 1
-		}
-		Import-Module PSCX
-
 		Push-EnvironmentBlock -Description "Before loading Xilinx ISE."
-
 		Invoke-BatchFile -path $ISE_SettingsFile
 		return 0
 	}

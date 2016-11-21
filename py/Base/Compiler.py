@@ -51,6 +51,9 @@ from DataBase.TestCase  import SynthesisSuite, Synthesis, CompileStatus
 
 
 # required for autoapi.sphinx
+from lib.SphinxExtensions import DocumentMemberAttribute
+
+
 __api__ = [
 	'CompilerException',
 	'SkipableCompilerException',
@@ -66,28 +69,34 @@ __all__ = __api__
 
 
 class CompilerException(ExceptionBase):
-	"""Base exception for all CompilerExceptions."""
-	pass
+	"""Base class for all CompilerException classes. It is raised while running
+	compiler (synthesis) tasks in PoC.
+	"""
 
 class SkipableCompilerException(CompilerException, SkipableException):
-	"""Base class for all skipable CompilerException."""
-	pass
+	"""``SkipableCompilerException`` is a :py:exc:`CompilerException`, which
+	can be skipped.
+	"""
 
 class CopyTask(CopyRuleMixIn):
-	"""This class represents a 'copy task' and inherits the partial class :class:`Parser.RulesParser.CopyRuleMixIn`."""
-	pass
+	"""This class represents a 'copy task' and inherits the partial class
+	:class:`CopyRuleMixIn <Parser.RulesParser.CopyRuleMixIn>`.
+	"""
 
 class DeleteTask(DeleteRuleMixIn):
-	"""This class represents a 'delete task' and inherits the partial class :class:`Parser.RulesParser.DeleteRuleMixIn`."""
-	pass
+	"""This class represents a 'delete task' and inherits the partial class
+	:class:`DeleteRuleMixIn <Parser.RulesParser.DeleteRuleMixIn>`.
+	"""
 
 class ReplaceTask(ReplaceRuleMixIn):
-	"""This class represents a 'replace task' and inherits the partial class :class:`Parser.RulesParser.ReplaceRuleMixIn`."""
-	pass
+	"""This class represents a 'replace task' and inherits the partial class
+	:class:`ReplaceRuleMixIn <Parser.RulesParser.ReplaceRuleMixIn>`.
+	"""
 
 class AppendLineTask(AppendLineRuleMixIn):
-	"""This class represents a 'append line task' and inherits the partial class :class:`Parser.RulesParser.AppendLineRuleMixIn`."""
-	pass
+	"""This class represents a 'append line task' and inherits the partial class
+	:class:`AppendLineRuleMixIn <Parser.RulesParser.AppendLineRuleMixIn>`.
+	"""
 
 
 @unique
@@ -138,16 +147,7 @@ class CompileResult(Enum):
 
 
 class Compiler(Shared):
-	"""
-	Base class for all Compiler classes.
-
-	:type  host:      object
-	:param host:      The hosting instance for this instance.
-	:type  dryRun:    bool
-	:param dryRun:    Enable dry-run mode
-	:type  noCleanUp: bool
-	:param noCleanUp: Don't clean up after a run.
-	"""
+	"""Base class for all Compiler classes."""
 
 	_ENVIRONMENT =    Environment.Synthesis
 	_vhdlVersion =    VHDLVersion.VHDL93
@@ -157,8 +157,17 @@ class Compiler(Shared):
 		Source =      None
 		Destination = None
 
+	@DocumentMemberAttribute()
 	def __init__(self, host, dryRun, noCleanUp):
-		"""Constructur"""
+		"""Class initializer
+
+		:type  host:      object
+		:param host:      The hosting instance for this instance.
+		:type  dryRun:    bool
+		:param dryRun:    Enable dry-run mode
+		:type  noCleanUp: bool
+		:param noCleanUp: Don't clean up after a run.
+		"""
 		super().__init__(host, dryRun)
 
 		self._noCleanUp =       noCleanUp
@@ -173,8 +182,9 @@ class Compiler(Shared):
 	def NoCleanUp(self):      return self._noCleanUp
 
 	def _PrepareCompiler(self):
-		"""Prepare for compilation. This method forwards to :py:meth:`Base.Compiler.Compiler._Prepare`, which is un herited from:py:class:`Base.Shared.Shared`."""
-		self._Prepare()
+		"""Prepare for compilation. This method forwards to :py:meth:`Base.Compiler.Compiler._Prepare`,
+		which is inherited from :py:class:`Base.Shared.Shared`.
+		"""
 
 	def TryRun(self, netlist, *args, **kwargs):
 		"""Try to run a testbench. Skip skipable exceptions by printing the error and its cause."""

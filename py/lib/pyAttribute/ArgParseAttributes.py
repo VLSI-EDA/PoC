@@ -84,11 +84,11 @@ class CommandAttribute(Attribute):
 
 	def __init__(self, command, **kwargs):
 		super().__init__()
-		self.__command = command
-		self.__kwargs = kwargs
+		self.__command =  command
+		self.__kwargs =   kwargs
 
 	def __call__(self, func):
-		self.__handler = func
+		self.__handler =  func
 		return super().__call__(func)
 
 	@property

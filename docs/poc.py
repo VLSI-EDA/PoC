@@ -115,9 +115,10 @@ class Extract:
 		# print("  Entity '{0}' at {1}..{2}.".format(sourceFile.EntityName, sourceFile.EntitySourceCodeRange.StartRow, sourceFile.EntitySourceCodeRange.EndRow))
 
 		if (sourceFile.SeeAlso != ""):
-			seeAlsoBox = ".. seealso::\n   \n"
+			seeAlsoBox = ".. seealso::\n\n"
 			for line in sourceFile.SeeAlso.splitlines():
-				seeAlsoBox += "   {line}\n".format(line=line)
+				if line == "": seeAlsoBox += "\n"
+				else: seeAlsoBox += "   {line}\n".format(line=line)
 		else:
 			seeAlsoBox = ""
 

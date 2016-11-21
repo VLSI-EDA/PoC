@@ -14,11 +14,11 @@
 -- * dual clock, clock enable,
 -- * 1 read/write port (1st port) plus 1 read port (2nd port).
 --
--- .. NOTE::
---    This component is **deprecated**.
---    Please use :doc:`PoC.mem.ocram.tdp <ocram_tdp>` for new designs.
+-- .. deprecated:: 1.1
+--
+--    :color:`Please use <Maroon>` :ref:`IP:ocram_tdp` :color:`for new designs.
 --    This component has been provided because older FPGA compilers where not
---    able to infer true dual-port memory from an RTL description.
+--    able to infer true dual-port memory from an RTL description. <Maroon>`
 --
 -- Command truth table for port 1:
 --

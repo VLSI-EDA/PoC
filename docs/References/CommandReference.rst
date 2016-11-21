@@ -9,5 +9,5 @@ This is the command line option reference for all provided scripts
 .. toctree::
 
    CmdRefs/Wrapper
-   CmdRefs/PoC
+   Main Program <CmdRefs/PoC>
    CmdRefs/Compile

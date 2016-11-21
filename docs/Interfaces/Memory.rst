@@ -1,4 +1,4 @@
-.. _Int:PoC.Mem:
+.. _INT:PoC.Mem:
 
 PoC.Mem Interface
 #################

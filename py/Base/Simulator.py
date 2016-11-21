@@ -49,6 +49,9 @@ from DataBase.TestCase  import TestCase, SimulationStatus, TestSuite
 
 
 # required for autoapi.sphinx
+from lib.SphinxExtensions import DocumentMemberAttribute
+
+
 __api__ = [
 	'SimulatorException',
 	'SkipableSimulatorException',
@@ -66,16 +69,19 @@ VHDL_TESTBENCH_LIBRARY_NAME = "test"
 
 
 class SimulatorException(ExceptionBase):
-	"""Base class for all SimulatorExceptions."""
-	pass
+	"""Base class for all SimulatorException classes. It is raised while running
+	simulation tasks in PoC.
+	"""
 
 class SkipableSimulatorException(SimulatorException, SkipableException):
-	"""Base class for all skipable SimulatorExceptions."""
-	pass
+	"""``SkipableSimulatorException`` is a :py:exc:`SimulatorException`, which
+	can be skipped.
+	"""
 
 class PoCSimulationResultNotFoundException(SkipableSimulatorException):
-	"""This exception is raised if the expected PoC simulation result string was	not found in the simulator's output."""
-	pass
+	"""This exception is raised if the expected PoC simulation result string was
+	not found in the simulator's output.
+	"""
 
 
 @unique
@@ -123,16 +129,7 @@ class SimulationResult(Enum):
 
 
 class Simulator(Shared):
-	"""
-	Base class for all Simulator classes.
-
-	:type  host:      object
-	:param host:      The hosting instance for this instance.
-	:type  dryRun:    bool
-	:param dryRun:    Enable dry-run mode
-	:type  noCleanUp: bool
-	:param noCleanUp: Don't clean up after a run.
-	"""
+	"""Base class for all Simulator classes."""
 
 	_ENVIRONMENT =    Environment.Simulation
 	_vhdlVersion =    VHDLVersion.VHDL2008
@@ -140,7 +137,17 @@ class Simulator(Shared):
 	class __Directories__(Shared.__Directories__):
 		PreCompiled = None
 
+	@DocumentMemberAttribute()
 	def __init__(self, host, dryRun, simulationSteps : SimulationSteps):
+		"""Class initializer
+
+		:type  host:            object
+		:param host:            The hosting instance for this instance.
+		:type  dryRun:          bool
+		:param dryRun:          Enable dry-run mode
+		:type  simulationSteps: SimulationSteps
+		:param simulationSteps: A set of simulation step to precess.
+		"""
 		super().__init__(host, dryRun)
 
 		self._simulationSteps = simulationSteps

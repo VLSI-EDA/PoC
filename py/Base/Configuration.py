@@ -46,10 +46,17 @@ __all__ = __api__
 
 
 class ConfigurationException(ExceptionBase):
-	pass
+	"""``ConfigurationException`` is raise while running configuration or database
+	tasks in PoC
+	"""
 
 class SkipConfigurationException(ExceptionBase):
-	pass
+	"""``SkipConfigurationException`` is a :py:exc:`ConfigurationException`,
+	which can be skipped.
+	"""
+
+
+
 
 # class RegisterSubClassesMeta(type):
 # 	def __new__(mcs, name, bases, members):
@@ -77,6 +84,7 @@ class SkipConfigurationException(ExceptionBase):
 # 		return self._subclasses
 
 class Configuration:    #(ISubClassRegistration):
+	"""base class for all Configuration classes."""
 	_vendor =       "Unknown"
 	_toolName =     "Unknown"
 	_section =      "ERROR"
@@ -229,7 +237,9 @@ class Configuration:    #(ISubClassRegistration):
 		return self._template[self._host.Platform][self._section]['Version']
 
 	def _ConfigureBinaryDirectory(self):
-		"""Updates section with value from _template and returns directory as Path object."""
+		"""Updates section with value from :attr:`_template` and returns directory
+		as :class:`Path <pathlib.Path>` object.
+		"""
 		unresolved = self._template[self._host.Platform][self._section]['BinaryDirectory']
 		self._host.PoCConfig[self._section]['BinaryDirectory'] = unresolved # create entry
 		defaultPath = Path(self._host.PoCConfig[self._section]['BinaryDirectory'])  # resolve entry
@@ -243,5 +253,5 @@ class Configuration:    #(ISubClassRegistration):
 		return binPath
 
 	def RunPostConfigurationTasks(self):
-		"""Virtual method. Overwrite to execute post-configuration tasks"""
+		"""Virtual method. Overwrite to execute post-configuration tasks."""
 		pass

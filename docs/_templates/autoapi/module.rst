@@ -3,13 +3,13 @@
 =={{ '=' * node.name|length }}==
 
 .. automodule:: {{ node.name }}
-
+   :noindex:
 
 {##}
 {%- block modules -%}
 {%- if subnodes %}
 
------------------------------------
+.. #-----------------------------------
 {##}
 **Submodules**
 
@@ -24,7 +24,7 @@
 .. currentmodule:: {{ node.name }}
 {##}
 
------------------------------------
+.. #-----------------------------------
 {##}
 {%- if node.variables %}
 **Variables**
@@ -75,6 +75,7 @@
 {%- if node.variables %}
 {% for item, obj in node.variables.items() %}
 .. autodata:: {{ item }}
+   :noindex:
    :annotation:
 
    .. code-block:: guess
@@ -89,11 +90,14 @@
 {%- block exceptions -%}
 {%- if node.exceptions %}
 
------------------------------------
+.. #-----------------------------------
 
 {% for item in node.exceptions %}
 .. autoexception:: {{ item }}
    :members:
+   :noindex:
+   :private-members:
+   :inherited-members:
    :undoc-members:
 {##}
    .. rubric:: Inheritance
@@ -109,11 +113,12 @@
 {%- block classes -%}
 {%- if node.classes %}
 
------------------------------------
+.. #-----------------------------------
 
 {% for item in node.classes %}
 .. autoclass:: {{ item }}
    :members:
+   :noindex:
    :private-members:
    :undoc-members:
    :inherited-members:
@@ -131,12 +136,13 @@
 {%- block functions -%}
 {%- if node.functions %}
 
------------------------------------
+.. #-----------------------------------
 
 **Functions**
 
 {% for item in node.functions %}
 .. autofunction:: {{ item }}
+   :noindex:
 {##}
 {%- endfor -%}
 {%- endif -%}

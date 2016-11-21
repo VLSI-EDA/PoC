@@ -72,6 +72,37 @@ architecture tb of sortnet_BitonicSort_tb is
 	subtype T_DATA				is std_logic_vector(DATA_BITS - 1 downto 0);
 	type T_DATA_VECTOR		is array(natural range <>) of T_DATA;
 
+	type T_SB_KEY_VECTOR		is array(natural range <>) of std_logic_vector(KEY_BITS - 1 downto 0);
+	type T_SB_DATA_VECTOR		is array(natural range <>) of std_logic_vector((DATA_BITS - KEY_BITS) - 1 downto 0);
+
+	type T_SCOREBOARD_DATA is record
+		IsKey : std_logic;
+		Meta  : std_logic_vector(META_BITS - 1 downto 0);
+		Key   : T_SB_KEY_VECTOR(INPUTS - 1 downto 0);
+		Data  : T_SB_DATA_VECTOR(INPUTS - 1 downto 0);
+	end record;
+
+	function match(expected : T_SCOREBOARD_DATA; actual : T_SCOREBOARD_DATA) return boolean is
+	begin
+		report "checking: "; -- & to_string(expected.Meta) severity note;
+		return TRUE;
+	end function;
+
+	function to_string(vector : T_SCOREBOARD_DATA) return string is
+	begin
+		return "to_string";
+	end function;
+
+	package P_Scoreboard is new osvvm.ScoreboardGenericPkg
+		generic map (
+			ExpectedType        => T_SCOREBOARD_DATA,
+			ActualType          => T_SCOREBOARD_DATA,
+			Match               => match,
+			expected_to_string  => to_string, --[T_SCOREBOARD_DATA return string],
+			actual_to_string    => to_string
+		);
+	alias T_SCOREBOARD is P_Scoreboard.ScoreBoardPType;
+
 	function to_dv(slm : T_SLM) return T_DATA_VECTOR is
 		variable Result	: T_DATA_VECTOR(slm'range(1));
 	begin
@@ -94,21 +125,23 @@ architecture tb of sortnet_BitonicSort_tb is
 		return Result;
 	end function;
 
-	constant CLOCK_FREQ				: FREQ				:= 100 MHz;
-	signal Clock							: std_logic		:= '1';
+	constant CLOCK_FREQ					: FREQ																			:= 100 MHz;
+	signal Clock								: std_logic																	:= '1';
 
-	signal Generator_Valid		: std_logic;
-	signal Generator_IsKey		: std_logic;
-	signal Generator_Data			: T_DATA_VECTOR(INPUTS - 1 downto 0);
-	signal Generator_Meta			: std_logic_vector(META_BITS - 1 downto 0);
+	signal Generator_Valid			: std_logic																	:= '0';
+	signal Generator_IsKey			: std_logic																	:= '0';
+	signal Generator_Data				: T_DATA_VECTOR(INPUTS - 1 downto 0)				:= (others => (others => '0'));
+	signal Generator_Meta				: std_logic_vector(META_BITS - 1 downto 0)	:= (others => '0');
 
-	signal Sort_Valid					: std_logic;
-	signal Sort_IsKey					: std_logic;
-	signal Sort_Data					: T_DATA_VECTOR(INPUTS - 1 downto 0);
-	signal Sort_Meta					: std_logic_vector(META_BITS - 1 downto 0);
+	signal Sort_Valid						: std_logic;
+	signal Sort_IsKey						: std_logic;
+	signal Sort_Data						: T_DATA_VECTOR(INPUTS - 1 downto 0);
+	signal Sort_Meta						: std_logic_vector(META_BITS - 1 downto 0);
 
-	signal DataInputMatrix		: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
-	signal DataOutputMatrix		: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
+	signal DataInputMatrix			: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
+	signal DataOutputMatrix			: T_SLM(INPUTS - 1 downto 0, DATA_BITS - 1 downto 0);
+
+	shared variable ScoreBoard	: T_SCOREBOARD;
 
 begin
 	-- initialize global simulation status
@@ -123,13 +156,14 @@ begin
 	simGenerateClock(Clock, CLOCK_FREQ);
 
 	procGenerator : process
-		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Generator");
-		variable RandomVar		: RandomPType;					-- protected type from RandomPkg
+		constant simProcessID		: T_SIM_PROCESS_ID		:= simRegisterProcess("Generator");
+		variable RandomVar			: RandomPType;					-- protected type from RandomPkg
 
-		variable KeyInput		: std_logic_vector(KEY_BITS - 1 downto 0);
-		variable DataInput	: std_logic_vector(DATA_BITS - KEY_BITS - 1 downto 0);
-		variable TagInput		: std_logic_vector(TAG_BITS - 1 downto 0);
+		variable KeyInput				: std_logic_vector(KEY_BITS - 1 downto 0);
+		variable DataInput			: std_logic_vector(DATA_BITS - KEY_BITS - 1 downto 0);
+		variable TagInput				: std_logic_vector(TAG_BITS - 1 downto 0);
 
+		variable ScoreBoardData : T_SCOREBOARD_DATA;
 	begin
 		RandomVar.InitSeed(RandomVar'instance_name);		-- Generate initial seeds
 
@@ -141,15 +175,22 @@ begin
 
 		Generator_Valid		<= '1';
 		for i in 0 to LOOP_COUNT - 1 loop
-			Generator_IsKey			<= to_sl(i mod DATA_COLUMNS = 0);
-			for j in 0 to INPUTS - 1 loop
-				KeyInput					:= RandomVar.RandSlv(KEY_BITS);
-				DataInput					:= RandomVar.RandSlv(DATA_BITS - KEY_BITS);
-				TagInput					:= RandomVar.RandSlv(TAG_BITS);
+			TagInput							:= RandomVar.RandSlv(TAG_BITS);
 
-				Generator_Data(j)	<= DataInput & KeyInput;
-				Generator_Meta		<= resize(TagInput, META_BITS);
+			ScoreBoardData.IsKey	:= to_sl(i mod DATA_COLUMNS = 0);
+			ScoreBoardData.Meta		:= resize(TagInput, META_BITS);
+			for j in 0 to INPUTS - 1 loop
+				KeyInput						:= RandomVar.RandSlv(KEY_BITS);
+				DataInput						:= RandomVar.RandSlv(DATA_BITS - KEY_BITS);
+
+				ScoreBoardData.Key(j)		:= KeyInput;
+				ScoreBoardData.Data(j)	:= DataInput;
+				Generator_Data(j)				<= DataInput & KeyInput;
 			end loop;
+			ScoreBoard.Push(ScoreBoardData);
+
+			Generator_IsKey			<= ScoreBoardData.IsKey;
+			Generator_Meta			<= ScoreBoardData.Meta;
 			wait until rising_edge(Clock);
 		end loop;
 
@@ -189,10 +230,12 @@ begin
 	Sort_Data	<= to_dv(DataOutputMatrix);
 
 	procChecker : process
-		constant simProcessID	: T_SIM_PROCESS_ID		:= simRegisterProcess("Checker");
-		variable Check				: boolean;
-		variable CurValue			: unsigned(KEY_BITS - 1 downto 0);
-		variable LastValue		: unsigned(KEY_BITS - 1 downto 0);
+		constant simProcessID		: T_SIM_PROCESS_ID		:= simRegisterProcess("Checker");
+		variable Check					: boolean;
+		variable CurValue				: unsigned(KEY_BITS - 1 downto 0);
+		variable LastValue			: unsigned(KEY_BITS - 1 downto 0);
+
+		variable ScoreBoardData	: T_SCOREBOARD_DATA;
 	begin
 		wait until rising_edge(Sort_Valid);
 
@@ -200,6 +243,13 @@ begin
 			wait until falling_edge(Clock);
 
 			Check		:= TRUE;
+			ScoreBoardData.IsKey	:= Sort_IsKey;
+			ScoreBoardData.Meta		:= Sort_Meta;
+			for j in 0 to INPUTS - 1 loop
+				ScoreBoardData.Key(j)		:= Sort_Data(j)(KEY_BITS - 1 downto 0);
+				ScoreBoardData.Data(j)	:= Sort_Data(j)(DATA_BITS - 1 downto KEY_BITS);
+			end loop;
+
 			if (Sort_IsKey = '1') then
 				LastValue	:= (others => '0');
 				for j in 0 to INPUTS - 1 loop
@@ -211,6 +261,8 @@ begin
 			else
 				-- no routine implemented to check if sorting network is switched as in the previous cycles
 			end if;
+
+			ScoreBoard.Check(ScoreBoardData);
 		end loop;
 
 		-- This process is finished

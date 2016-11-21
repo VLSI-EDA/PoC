@@ -55,7 +55,7 @@ if (Tool = "GHDL") then
 		report "No precompiled Altera primitives for GHDL found."
   end if
 elseif (Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) then
-	path Altera_Directory = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / ${CONFIG.DirectoryNames:AlteraSpecificFiles}))
+	path Altera_Directory = (PreCompiled / (${CONFIG.DirectoryNames:QuestaSimFiles} / ${CONFIG.DirectoryNames:AlteraSpecificFiles}))
 	if ?{Altera_Directory} then
 		library lpm						Altera_Directory
 		library sgate					Altera_Directory

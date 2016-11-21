@@ -9,7 +9,7 @@
 --
 -- Description:
 -- ------------------------------------
--- Adapter between the :doc:`PoC.Mem </Interfaces/Memory>`
+-- Adapter between the :ref:`PoC.Mem <INT:PoC.Mem>`
 -- interface and the User Interface of the Xilinx MIG IP core for the
 -- Spartan-6 FPGA Memory Controller Block (MCB). The MCB can be configured to
 -- have multiple ports. One instance of this adapter is required for every
@@ -20,7 +20,7 @@
 -- The PoC.Mem interface provides single-cycle fully pipelined read/write access
 -- to the memory. All accesses are word-aligned. Always all bytes of a word are
 -- written to the memory. More details can be found
--- :doc:`here </Interfaces/Memory>`.
+-- :ref:`here <INT:PoC.Mem>`.
 --
 -- Generic parameters:
 --

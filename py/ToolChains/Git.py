@@ -45,6 +45,33 @@ from Base.Configuration   import Configuration as BaseConfiguration, Configurati
 from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList, CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument, \
 	LongValuedFlagArgument, LongTupleArgument
 from Base.ToolChain       import ToolChainException
+from ToolChains import ToolMixIn
+
+__api__ = [
+	'GitException',
+	'Configuration',
+	'Git',
+	'GitSCM',
+	'GitRevParse',
+	'GitRevList',
+	'GitDescribe',
+	'GitConfig'
+]
+__all__ = __api__
+
+
+__api__ = [
+	'GitException',
+	'Configuration',
+	'GitMixIn',
+	'Git',
+	'GitSCM',
+	'GitRevParse',
+	'GitRevList',
+	'GitDescribe',
+	'GitConfig'
+]
+__all__ = __api__
 
 
 __api__ = [
@@ -110,7 +137,7 @@ class Configuration(BaseConfiguration):
 
 		try:
 			binaryDirectoryPath = binPath
-			self._git = Git(self._host.Platform, self._host.DryRun, binaryDirectoryPath, logger=self._host.Logger)
+			self._git = Git(self._host.Platform, self._host.DryRun, binaryDirectoryPath, "", logger=self._host.Logger)
 		except Exception as ex:
 			self._host.LogWarning(str(ex))
 
@@ -318,54 +345,47 @@ class Configuration(BaseConfiguration):
 		return gitDirectoryPath
 
 
-class GitMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		# self._version =             version
-		self._Logger =              logger
-
-
-class Git(GitMixIn):
+class Git(ToolMixIn):
 	def GetGitRevParse(self):
-		git = GitRevParse(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
+		git = GitRevParse(self)
 		git.Clear()
 		git.RevParseParameters[GitRevParse.Command] = True
 
 		return git
 
 	def GetGitRevList(self):
-		git = GitRevList(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
+		git = GitRevList(self)
 		git.Clear()
 		git.RevListParameters[GitRevList.Command] = True
 
 		return git
 
 	def GetGitDescribe(self):
-		git = GitDescribe(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
+		git = GitDescribe(self)
 		git.Clear()
 		git.DescribeParameters[GitDescribe.Command] = True
 
 		return git
 
 	def GetGitConfig(self):
-		git = GitConfig(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
+		git = GitConfig(self)
 		git.Clear()
 		git.ConfigParameters[GitConfig.Command] = True
 
 		return git
 
 
-class GitSCM(Executable, GitMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, logger=None):
-		GitMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, logger=logger)
+class GitSCM(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._Logger)
 
-		if (platform == "Windows"):     executablePath = binaryDirectoryPath / "git.exe"
-		elif (platform == "Linux"):     executablePath = binaryDirectoryPath / "git"
-		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath / "git"
-		else:                           raise PlatformNotSupportedException(platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		if (self._platform == "Windows"):     executablePath = self._binaryDirectoryPath / "git.exe"
+		elif (self._platform == "Linux"):     executablePath = self._binaryDirectoryPath / "git"
+		elif (self._platform == "Darwin"):    executablePath = self._binaryDirectoryPath / "git"
+		else:                           raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._Logger)
 
 		self.Parameters[self.Executable] = executablePath
 

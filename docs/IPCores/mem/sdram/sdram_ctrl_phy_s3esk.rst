@@ -17,7 +17,7 @@
 sdram_ctrl_phy_s3esk
 ####################
 
-Physical layer used by module :doc:`sdram_ctrl_s3esk <sdram_ctrl_s3esk>`.
+Physical layer used by module :ref:`sdram_ctrl_s3esk <IP:sdram_ctrl_s3esk>`.
 
 Instantiates input and output buffer components and adjusts the timing for
 the Spartan-3E Starter Kit Board.
@@ -97,7 +97,7 @@ Synchronous resets are used. Reset must be hold for at least two cycles.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 127-171
+   :lines: 107-151
 
 Source file: :pocsrc:`mem/sdram/sdram_ctrl_phy_s3esk.vhdl <mem/sdram/sdram_ctrl_phy_s3esk.vhdl>`
 

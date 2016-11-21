@@ -90,14 +90,12 @@ __api__ = [
 	'PoCEntityAttribute',
 	'BoardDeviceAttributeGroup',
 	'VHDLVersionAttribute',
-	'GUIModeAttribute',
 	'SimulationStepsAttribute',
 	'CompileStepsAttribute',
 	'PileOfCores',
 	'main'
 ]
 __all__ = __api__
-
 
 
 class PoCEntityAttribute(Attribute):
@@ -446,8 +444,6 @@ class PileOfCores(ILogable, ArgParseMixin):
 					nxt = True
 				except SkipConfigurationException:
 					break
-				except ConfigurationException:
-					raise
 				except ExceptionBase as ex:
 					print("  {RED}FAULT:{NOCOLOR} {0}".format(ex.message, **Init.Foreground))
 
@@ -468,7 +464,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 				self.__pocConfig[sectionName] = OrderedDict()
 
 	def __UpdateConfiguration(self):
-		pocSections =      set([sectionName for sectionName in self.__pocConfig])
+		pocSections =     set([sectionName for sectionName in self.__pocConfig])
 		configSections =  set([sectionName for config in Configurations for sectionName in config.GetSections(self.Platform)])
 
 		addSections = configSections.difference(pocSections)
@@ -488,7 +484,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "add-solution" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("add-solution", help="Add a solution to PoC.")
+	@CommandAttribute("add-solution", help="Add a solution to PoC.", description=dedent("""\
+		Add a solution to PoC.
+		"""))
 	def HandleAddSolution(self, _): #args
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -499,7 +497,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 		solutionID = input("  Solution id:   ")
 		if (solutionID == ""):          raise ConfigurationException("Empty input. Aborting!")
-		if (solutionID in self.__repo):  raise ConfigurationException("Solution ID is already used.")
+		if (solutionID in self.__repo): raise ConfigurationException("Solution ID is already used.")
 
 		solutionRootPath = input("  Solution path: ")
 		if (solutionRootPath == ""):    raise ConfigurationException("Empty input. Aborting!")
@@ -527,7 +525,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "list-solution" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("list-solution", help="List all solutions registered in PoC.")
+	@CommandAttribute("list-solution", help="List all solutions registered in PoC.", description=dedent("""\
+		List all solutions registered in PoC.
+		"""))
 	def HandleListSolution(self, _): #args
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -548,7 +548,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "remove-solution" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("remove-solution", help="Add a solution to PoC.")
+	@CommandAttribute("remove-solution", help="Remove a solution from PoC.", description=dedent("""\
+		Remove a solution from PoC.
+		"""))
 	@ArgumentAttribute(metavar="SolutionID", dest="SolutionID", type=str, help="Solution name.")
 	def HandleRemoveSolution(self, args):
 		self.PrintHeadline()
@@ -583,7 +585,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "list-project" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("list-project", help="List all projects registered in PoC.")
+	@CommandAttribute("list-project", help="List all projects registered in PoC.", description=dedent("""\
+		List all projects registered in PoC.
+		"""))
 	def HandleListProject(self, args):
 		self.PrintHeadline()
 		self.__PrepareForConfiguration()
@@ -668,7 +672,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "query" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands")
-	@CommandAttribute("query", help="Simulate a PoC Entity with Aldec Active-HDL")
+	@CommandAttribute("query", help="Query PoC's database.", description=dedent("""\
+		Query PoC's database.
+		"""))
 	@ArgumentAttribute(metavar="Query", dest="Query", type=str, help="todo help")
 	def HandleQueryConfiguration(self, args):
 		self.__PrepareForConfiguration()
@@ -759,7 +765,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "list-testbench" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands") # mccabe:disable=MC0001
-	@CommandAttribute("list-testbench", help="List all testbenches")
+	@CommandAttribute("list-testbench", help="List all testbenches.", description=dedent("""\
+		List all testbenches.
+		"""))
 	@PoCEntityAttribute()
 	@ArgumentAttribute("--kind", metavar="Kind", dest="TestbenchKind", help="Testbench kind: VHDL | COCOTB")
 	def HandleListTestbenches(self, args):
@@ -841,7 +849,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "asim" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
-	@CommandAttribute("asim", help="Simulate a PoC Entity with Aldec Active-HDL")
+	@CommandAttribute("asim", help="Simulate a PoC Entity with Aldec Active-HDL.", description=dedent("""\
+		Simulate a PoC Entity with Aldec Active-HDL.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
@@ -866,7 +876,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "ghdl" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
-	@CommandAttribute("ghdl", help="Simulate a PoC Entity with GHDL")
+	@CommandAttribute("ghdl", help="Simulate a PoC Entity with GHDL.", description=dedent("""\
+		Simulate a PoC Entity with GHDL.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
@@ -895,7 +907,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "isim" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
-	@CommandAttribute("isim", help="Simulate a PoC Entity with Xilinx ISE Simulator (iSim)")
+	@CommandAttribute("isim", help="Simulate a PoC Entity with Xilinx ISE Simulator (iSim).", description=dedent("""\
+		Simulate a PoC Entity with Xilinx ISE Simulator (iSim).
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@SimulationStepsAttribute()
@@ -918,7 +932,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "vsim" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
-	@CommandAttribute("vsim", help="Simulate a PoC Entity with Mentor QuestaSim or ModelSim (vsim)")
+	@CommandAttribute("vsim", help="Simulate a PoC Entity with Mentor QuestaSim or ModelSim (vsim).", description=dedent("""\
+		Simulate a PoC Entity with Mentor QuestaSim or ModelSim (vsim).
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
@@ -944,7 +960,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "xsim" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
-	@CommandAttribute("xsim", help="Simulate a PoC Entity with Xilinx Vivado Simulator (xSim)")
+	@CommandAttribute("xsim", help="Simulate a PoC Entity with Xilinx Vivado Simulator (xSim).", description=dedent("""\
+		Simulate a PoC Entity with Xilinx Vivado Simulator (xSim).
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
@@ -971,7 +989,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "cocotb" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
-	@CommandAttribute("cocotb", help="Simulate a PoC Entity with Cocotb and Questa Simulator")
+	@CommandAttribute("cocotb", help="Simulate a PoC Entity with Cocotb and QuestaSim.", description=dedent("""\
+		Simulate a PoC Entity with Cocotb and QuestaSim.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@SimulationStepsAttribute()
@@ -982,7 +1002,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		# check if QuestaSim is configured
 		if (len(self.PoCConfig.options("INSTALL.Mentor.QuestaSim")) == 0):
 			if (len(self.PoCConfig.options("INSTALL.Altera.ModelSim")) == 0):
-				raise NotConfiguredException("Neither Mentor QuestaSim nor Altera ModelSim is not configured on this system.")
+				raise NotConfiguredException("Neither Mentor QuestaSim, Mentor ModelSimPE nor ModelSim Altera Edition are configured on this system.")
 
 		fqnList =         self._ExtractFQNs(args.FQN)
 		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -1001,7 +1021,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "list-netlist" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
-	@CommandAttribute("list-netlist", help="List all netlists")
+	@CommandAttribute("list-netlist", help="List all netlists.", description=dedent("""\
+		List all netlists.
+		"""))
 	@PoCEntityAttribute()
 	@ArgumentAttribute("--kind", metavar="Kind", dest="NetlistKind", help="Netlist kind: Lattice | Quartus | XST | CoreGen")
 	def HandleListNetlist(self, args):
@@ -1036,7 +1058,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "ise" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("ise", help="Generate any IP core for the Xilinx ISE tool chain")
+	@CommandAttribute("ise", help="Generate any IP core for the Xilinx ISE tool chain.", description=dedent("""\
+		Generate any IP core for the Xilinx ISE tool chain.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@CompileStepsAttribute()
@@ -1057,7 +1081,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "coregen" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("coregen", help="Generate an IP core with Xilinx ISE Core Generator")
+	@CommandAttribute("coregen", help="Generate an IP core with Xilinx ISE Core Generator.", description=dedent("""\
+		Generate an IP core with Xilinx ISE Core Generator.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@CompileStepsAttribute()
@@ -1078,7 +1104,11 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "xst" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("xst", help="Compile a PoC IP core with Xilinx ISE XST to a netlist")
+	@CommandAttribute("xst", help="Compile a PoC IP core with Xilinx ISE XST to a netlist.", description=dedent("""\
+		Compile a PoC IP core with Xilinx ISE XST to a netlist.
+		:ref:`IP:PoC.Mem`
+		foooo baaarr.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@CompileStepsAttribute()
@@ -1099,7 +1129,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "xci" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("xci", help="Generate an IP core from Xilinx Vivado IP Catalog")
+	@CommandAttribute("xci", help="Generate an IP core from Xilinx Vivado IP Catalog.", description=dedent("""\
+		Generate an IP core from Xilinx Vivado IP Catalog.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@CompileStepsAttribute()
@@ -1120,7 +1152,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "vivado" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("vivado", help="Compile a PoC IP core with Xilinx Vivado Synth to a design checkpoint")
+	@CommandAttribute("vivado", help="Compile a PoC IP core with Xilinx Vivado Synth to a design checkpoint.", description=dedent("""\
+		Compile a PoC IP core with Xilinx Vivado Synth to a design checkpoint.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@CompileStepsAttribute()
@@ -1142,7 +1176,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "quartus" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("quartus", help="Compile a PoC IP core with Altera Quartus II Map to a netlist")
+	@CommandAttribute("quartus", help="Compile a PoC IP core with Altera Quartus II Map to a netlist.", description=dedent("""\
+		Compile a PoC IP core with Altera Quartus II Map to a netlist.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@CompileStepsAttribute()
@@ -1166,7 +1202,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# create the sub-parser for the "lattice" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Synthesis commands")
-	@CommandAttribute("lse", help="Compile a PoC IP core with Lattice Diamond LSE to a netlist")
+	@CommandAttribute("lse", help="Compile a PoC IP core with Lattice Diamond LSE to a netlist.", description=dedent("""\
+		Compile a PoC IP core with Lattice Diamond LSE to a netlist.
+		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@CompileStepsAttribute()

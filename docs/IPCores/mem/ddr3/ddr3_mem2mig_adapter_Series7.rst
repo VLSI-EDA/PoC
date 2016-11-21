@@ -17,15 +17,14 @@
 ddr3_mem2mig_adapter_Series7
 ############################
 
-Adapter between the :doc:`PoC.Mem </Interfaces/Memory>`
-interface and the application interface ("app")
-of the Xilinx MIG IP core for 7-Series	FPGAs.
+Adapter between the :ref:`PoC.Mem <INT:PoC.Mem>` interface and the
+application interface ("app") of the Xilinx MIG IP core for 7-Series	FPGAs.
 
 Simplifies the application interface ("app") of the Xilinx MIG IP core.
 The PoC.Mem interface provides single-cycle fully pipelined read/write access
 to the memory. All accesses are word-aligned. Always all bytes of a word are
 written to the memory. More details can be found
-:doc:`here </Interfaces/Memory>`.
+:ref:`here <INT:PoC.Mem>`.
 
 Generic parameters:
 
@@ -49,7 +48,7 @@ Containts only combinational logic.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 61-96
+   :lines: 60-95
 
 Source file: :pocsrc:`mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl <mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl>`
 

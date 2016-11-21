@@ -42,6 +42,7 @@ from Base.Executable            import ExecutableArgument, ShortFlagArgument, Sh
 from Base.Logging                import LogEntry, Severity
 from Base.Project                import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
 from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
+from ToolChains import ToolMixIn
 from ToolChains.Xilinx.Xilinx    import XilinxException
 from lib.Functions              import CallByRefParam
 
@@ -49,7 +50,6 @@ from lib.Functions              import CallByRefParam
 __api__ = [
 	'ISEException',
 	'Configuration',
-	'ISEMixIn',
 	'ISE',
 	'Fuse',
 	'ISESimulator',
@@ -59,7 +59,7 @@ __api__ = [
 	'FuseFilter',
 	'SimulatorFilter',
 	'XstFilter',
-	'CoreGeneratorFilter'
+	'CoreGeneratorFilter',
 	'ISEProject',
 	'ISEProjectFile',
 	'UserConstraintFile'
@@ -124,40 +124,31 @@ class Configuration(BaseConfiguration):
 			raise ConfigurationException("ISE version mismatch. Expected version 14.7 (P.20131013).")
 
 
-class ISEMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		self._version =             version
-		self._Logger =              logger
-
-
-class ISE(ISEMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-
+class ISE(ToolMixIn):
 	def GetVHDLCompiler(self):
 		raise NotImplementedError("ISE.GetVHDLCompiler")
 		# return ISEVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
 
 	def GetFuse(self):
-		return Fuse(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return Fuse(self)
 
 	def GetXst(self):
-		return Xst(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return Xst(self)
 
 	def GetCoreGenerator(self):
-		return CoreGenerator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return CoreGenerator(self)
 
 
-class Fuse(Executable, ISEMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "fuse.exe"
-		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "fuse"
+class Fuse(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._Logger)
+
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "fuse.exe"
+		elif (self._platform == "Linux"):    executablePath = self._binaryDirectoryPath / "fuse"
 		else:                          raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._Logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -329,13 +320,16 @@ class ISESimulator(Executable):
 		return simulationResult.value
 
 
-class Xst(Executable, ISEMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):      executablePath = binaryDirectoryPath / "xst.exe"
-		elif (platform == "Linux"):      executablePath = binaryDirectoryPath / "xst"
-		else:                            raise PlatformNotSupportedException(platform)
-		Executable.__init__(self, platform, dryrun, executablePath, logger=logger)
+class Xst(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._Logger)
+
+		if (self._platform == "Windows"):      executablePath = self._binaryDirectoryPath / "xst.exe"
+		elif (self._platform == "Linux"):      executablePath = self._binaryDirectoryPath / "xst"
+		else:                            raise PlatformNotSupportedException(self._platform)
+		Executable.__init__(self, self._platform, self._dryrun, executablePath, logger=self._Logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -409,13 +403,16 @@ class Xst(Executable, ISEMixIn):
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
-class CoreGenerator(Executable, ISEMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):      executablePath = binaryDirectoryPath / "coregen.exe"
-		elif (platform == "Linux"):      executablePath = binaryDirectoryPath / "coregen"
-		else:                            raise PlatformNotSupportedException(platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+class CoreGenerator(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._Logger)
+
+		if (self._platform == "Windows"):      executablePath = self._binaryDirectoryPath / "coregen.exe"
+		elif (self._platform == "Linux"):      executablePath = self._binaryDirectoryPath / "coregen"
+		else:                            raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._Logger)
 
 		self.Parameters[self.Executable] = executablePath
 

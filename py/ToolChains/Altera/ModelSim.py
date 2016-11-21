@@ -34,11 +34,12 @@
 # ==============================================================================
 #
 # load dependencies
-from re                      import compile as RegExpCompile
-from subprocess             import check_output
+from re                           import compile as RegExpCompile
+from subprocess                   import check_output
 
-from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
-from ToolChains.Altera.Altera import AlteraException
+from Base.Configuration           import ConfigurationException
+from ToolChains.Mentor.ModelSimPE import Configuration as ModelSimPE_Configuration
+from ToolChains.Altera.Altera     import AlteraException
 
 
 __api__ = [
@@ -52,10 +53,10 @@ class ModelSimException(AlteraException):
 	pass
 
 
-class Configuration(BaseConfiguration):
+class Configuration(ModelSimPE_Configuration):
 	_vendor =    "Altera"
 	_toolName =  "ModelSim Altera Edition"
-	_section =  "INSTALL.Altera.ModelSim"
+	_section =   "INSTALL.Altera.ModelSim"
 	_template = {
 		"Windows": {
 			_section: {

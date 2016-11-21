@@ -31,13 +31,13 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
+class ToolMixIn:
+	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
+		self._platform =            platform
+		self._dryrun =              dryrun
+		self._binaryDirectoryPath = binaryDirectoryPath
+		self._version =             version
+		self._Logger =              logger
 
 
 from .PoC                   import Configuration as PoC_Configuration
@@ -55,6 +55,7 @@ from .Lattice.ActiveHDL     import Configuration as LatticeActiveHDL_Configurati
 # from .Lattice.Symplify      import Configuration as LatticeSymplify_Configuration
 from .Mentor.Mentor         import Configuration as Mentor_Configuration
 from .Mentor.QuestaSim      import Configuration as Questa_Configuration
+from .Mentor.ModelSimPE       import Configuration as ModelSimPE_Configuration
 # from .Mentor.PrecisionRTL   import Configuration as PrecisionRTL_Configuration
 # from .Synopsys.Synopsys     import Configuration as Synopsys_Configuration
 # from .Synopsys.Symplify     import Configuration as Symplify_Configuration
@@ -80,6 +81,7 @@ Configurations = [
 	# Mentor products
 	Mentor_Configuration,
 	Questa_Configuration,
+	ModelSimPE_Configuration,
 	# Xilinx products
 	Xilinx_Configuration,
 	ISE_Configuration,

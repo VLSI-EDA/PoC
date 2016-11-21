@@ -1,4 +1,4 @@
-.. _Int:PoC.CSE:
+.. _INT:PoC.CSE:
 
 Command-Status-Error (PoC.CSE) Interface
 ########################################

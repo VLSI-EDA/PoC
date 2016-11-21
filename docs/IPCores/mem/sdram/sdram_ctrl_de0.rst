@@ -45,7 +45,7 @@ Command, address and write data is sampled with ``clk``.
 Read data is also aligned with ``clk``.
 
 For description on ``clkout`` see
-:doc:`sdram_ctrl_phy_de0 <sdram_ctrl_phy_de0>`.
+:ref:`sdram_ctrl_phy_de0 <IP:sdram_ctrl_phy_de0>`.
 
 Synchronous resets are used.
 
@@ -57,7 +57,7 @@ Synchronous resets are used.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 88-120
+   :lines: 68-100
 
 Source file: :pocsrc:`mem/sdram/sdram_ctrl_de0.vhdl <mem/sdram/sdram_ctrl_de0.vhdl>`
 

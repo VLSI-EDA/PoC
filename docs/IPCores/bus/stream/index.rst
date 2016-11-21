@@ -6,6 +6,12 @@ PoC.bus.stream
 PoC.Stream modules ...
 
 .. toctree::
+   :hidden:
+
+   Package <stream.pkg>
+
+.. toctree::
+   :hidden:
 
    stream_Buffer <stream_Buffer>
    stream_DeMux <stream_DeMux>

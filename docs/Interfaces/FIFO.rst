@@ -1,4 +1,4 @@
-.. _Int:PoC.FIFO:
+.. _INT:PoC.FIFO:
 
 PoC.FIFO Interface
 ##################

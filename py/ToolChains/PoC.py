@@ -67,7 +67,7 @@ class Configuration(BaseConfiguration):
 		if (len(self._host.PoCConfig['INSTALL.Git']) != 0):
 			try:
 				binaryDirectoryPath = Path(self._host.PoCConfig['INSTALL.Git']['BinaryDirectory'])
-				git = Git(self._host.Platform, self._host.DryRun, binaryDirectoryPath, logger=self._host.Logger)
+				git = Git(self._host.Platform, self._host.DryRun, binaryDirectoryPath, "", logger=self._host.Logger)
 				gitRevList = git.GetGitRevList()
 				gitRevList.RevListParameters[gitRevList.SwitchTags] = True
 				gitRevList.RevListParameters[gitRevList.SwitchMaxCount] = 1
