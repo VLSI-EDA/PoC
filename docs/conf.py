@@ -51,7 +51,7 @@ extensions = [
 	# 'sphinxcontrib.actdiag',
 	# 'sphinxcontrib.seqdiag',
 	'sphinxcontrib.wavedrom',
-	'sphinxcontrib.textstyle',
+	# 'sphinxcontrib.textstyle',
 	# 'sphinxcontrib.spelling',
 	'autoapi.sphinx',
 	# 'changelog',
