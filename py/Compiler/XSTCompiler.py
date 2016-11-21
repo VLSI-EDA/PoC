@@ -60,12 +60,10 @@ class Compiler(BaseCompiler, XilinxProjectExportMixIn):
 		super().__init__(host, dryRun, noCleanUp)
 		XilinxProjectExportMixIn.__init__(self)
 
-		self._toolChain =    None
-
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
-		self.Directories.Working = host.Directories.Temp / configSection['ISESynthesisFiles']
+		self.Directories.Working =  host.Directories.Temp / configSection['ISESynthesisFiles']
 		self.Directories.XSTFiles = host.Directories.Root / configSection['ISESynthesisFiles']
-		self.Directories.Netlist = host.Directories.Root / configSection['NetlistFiles']
+		self.Directories.Netlist =  host.Directories.Root / configSection['NetlistFiles']
 
 		self._PrepareCompiler()
 

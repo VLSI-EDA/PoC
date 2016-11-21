@@ -52,10 +52,6 @@ class Simulator(BaseSimulator):
 	def __init__(self, host, dryRun, simulationSteps):
 		super().__init__(host, dryRun, simulationSteps)
 
-		self._vhdlVersion =   None
-		self._vhdlGenerics =  None
-		self._toolChain =     None
-
 		activeHDLFilesDirectoryName =   host.PoCConfig['CONFIG.DirectoryNames']['ActiveHDLFiles']
 		self.Directories.Working =      host.Directories.Temp / activeHDLFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / activeHDLFilesDirectoryName

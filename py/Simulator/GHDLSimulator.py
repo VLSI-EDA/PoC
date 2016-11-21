@@ -62,9 +62,6 @@ class Simulator(BaseSimulator):
 		"""Constructor"""
 		super().__init__(host, dryRun, simulationSteps)
 
-		self._vhdlGenerics =  None
-		self._toolChain =     None
-
 		ghdlFilesDirectoryName =        host.PoCConfig['CONFIG.DirectoryNames']['GHDLFiles']
 		self.Directories.Working =      host.Directories.Temp / ghdlFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / ghdlFilesDirectoryName

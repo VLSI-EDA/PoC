@@ -56,10 +56,6 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		super().__init__(host, dryRun, simulationSteps)
 		XilinxProjectExportMixIn.__init__(self)
 
-		self._vhdlVersion =   None
-		self._vhdlGenerics =  None
-		self._toolChain =     None
-
 		vivadoFilesDirectoryName =      host.PoCConfig['CONFIG.DirectoryNames']['VivadoSimulatorFiles']
 		self.Directories.Working =      host.Directories.Temp / vivadoFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / vivadoFilesDirectoryName

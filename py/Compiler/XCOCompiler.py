@@ -58,8 +58,6 @@ class Compiler(BaseCompiler):
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)
 
-		self._toolChain =    None
-
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working = host.Directories.Temp / configSection['ISECoreGeneratorFiles']
 		self.Directories.Netlist = host.Directories.Root / configSection['NetlistFiles']

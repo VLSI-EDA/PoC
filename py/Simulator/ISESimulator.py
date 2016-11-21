@@ -55,9 +55,6 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		super().__init__(host, dryRun, simulationSteps)
 		XilinxProjectExportMixIn.__init__(self)
 
-		self._vhdlGenerics =  None
-		self._toolChain =     None
-
 		iseFilesDirectoryName =         host.PoCConfig['CONFIG.DirectoryNames']['ISESimulatorFiles']
 		self.Directories.Working =      host.Directories.Temp / iseFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / iseFilesDirectoryName

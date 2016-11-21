@@ -216,7 +216,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		self.__repo =         None
 		self.__directories =  {}
 
-		self.__SimulationDefaultVHDLVersion = BaseSimulator._vhdlVersion
+		self.__SimulationDefaultVHDLVersion = BaseSimulator.VHDL_VERSION
 		self.__SimulationDefaultBoard =       None
 
 		self._directories =             self.__Directories__()

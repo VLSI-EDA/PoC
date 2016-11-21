@@ -96,9 +96,11 @@ class Shared(ILogable):
 
 		self._host =            host
 		self._dryRun =          dryRun
-
 		self._pocProject =      None
 		self._directories =     self.__Directories__()
+		self._toolChain =       None
+		self._vhdlVersion =     self.VHDL_VERSION
+		self._vhdlGenerics =    None
 
 		self._testSuite =       None
 		self._startAt =         datetime.now()
@@ -113,7 +115,7 @@ class Shared(ILogable):
 	@property
 	def DryRun(self):       return self._dryRun
 	@property
-	def VHDLVersion(self):  return self.VHDL_VERSION
+	def VHDLVersion(self):  return self._vhdlVersion
 	@property
 	def PoCProject(self):   return self._pocProject
 	@property
@@ -196,7 +198,7 @@ class Shared(ILogable):
 		pocProject.Environment =    self.ENVIRONMENT
 		pocProject.ToolChain =      self.TOOL_CHAIN
 		pocProject.Tool =           self.TOOL
-		pocProject.VHDLVersion =    self.VHDL_VERSION
+		pocProject.VHDLVersion =    self._vhdlVersion
 		pocProject.Board =          board
 
 		self._pocProject = pocProject

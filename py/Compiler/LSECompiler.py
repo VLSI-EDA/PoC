@@ -57,8 +57,7 @@ class Compiler(BaseCompiler):
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)
 
-		self._toolChain =       None
-		self._vhdlVersion =     VHDLVersion.VHDL2008
+		self._vhdlVersion = VHDLVersion.VHDL2008
 
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working = host.Directories.Temp / configSection['LatticeSynthesisFiles']

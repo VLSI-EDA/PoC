@@ -150,6 +150,10 @@ class Simulator(Shared):
 		"""
 		super().__init__(host, dryRun)
 
+		self._vhdlVersion =     None
+		self._vhdlGenerics =    None
+		self._toolChain =       None
+
 		self._simulationSteps = simulationSteps
 		self._testSuite =       TestSuite()  # TODO: This includes not the read ini files phases ...
 		self._state =           SimulationState.Prepare

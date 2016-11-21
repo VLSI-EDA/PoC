@@ -54,9 +54,6 @@ class Compiler(BaseCompiler):
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)
 
-		self._device =      None
-		self._toolChain =   None
-
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working =  host.Directories.Temp / configSection['VivadoSynthesisFiles']
 		self.Directories.XSTFiles = host.Directories.Root / configSection['VivadoSynthesisFiles']
