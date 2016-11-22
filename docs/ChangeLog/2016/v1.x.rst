@@ -1,6 +1,37 @@
 .. _CHANGE:v1.x:
 
-New in 1.x (upcomming)
+New in 1.x (upcoming)
 =======================
 
 Already documented changes are available on the ``release`` branch at GitHub.
+
+* Python Infrastructure
+
+  * Common changes
+  * All Simulators
+  * Aldec Active-HDL
+  * GHDL
+  * Mentor QuestaSim
+  * Xilinx ISE Simulator
+  * Xilinx Vivado Simulator
+  * All Compilers
+  * Altera Quartus Synthesis
+  * Lattice Diamond (LSE)
+  * Xilinx ISE (XST)
+  * Xilinx ISE Core Generator
+  * Xilinx Vivado Synthesis
+
+* Documentation
+* VHDL common packages
+* VHDL Simulation helpers
+
+* New Entities
+
+  * :ref:`IP:ocram_sdp_wf`
+
+* New Testbenches
+
+  * Testbench for :ref:`IP:ocram_sdp_wf`
+
+* New Constraints
+* Shipped Tool and Helper Scripts

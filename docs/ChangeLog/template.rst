@@ -8,6 +8,7 @@ New in 1.x (upcomming)
 Already documented changes are available on the ``release`` branch at GitHub.
 
 * Python Infrastructure
+
   * Common changes
   * All Simulators
   * Aldec Active-HDL
@@ -21,6 +22,7 @@ Already documented changes are available on the ``release`` branch at GitHub.
   * Xilinx ISE (XST)
   * Xilinx ISE Core Generator
   * Xilinx Vivado Synthesis
+
 * Documentation
 * VHDL common packages
 * VHDL Simulation helpers
