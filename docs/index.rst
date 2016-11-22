@@ -1,3 +1,7 @@
+.. raw:: latex
+
+   \part{Introduction}
+
 This library is published and maintained by **Chair for VLSI Design, Diagnostics
 and Architecture** - Faculty of Computer Science, Technische Universität Dresden,
 Germany |br|
@@ -14,6 +18,8 @@ Germany |br|
    .. image:: /_static/logos/tu-dresden.jpg
       :scale: 80
       :alt: Technische Universität Dresden
+
+--------------------------------------------------------------------------------
 
 .. only:: html
 
@@ -39,7 +45,8 @@ Germany |br|
       :target: References/Licenses/License.html
       :alt: Apache License 2.0
 
---------------------------------------------------------------------------------
+   -----------------------------------------------------------------------------
+
 
 The PoC-Library Documentation
 #############################
@@ -120,6 +127,10 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
    GetInvolved/index
    References/Licenses/License
 
+.. raw:: latex
+
+   \part{Main Documentation}
+
 .. toctree::
    :caption: Main Documentation
    :hidden:
@@ -130,6 +141,10 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
    Miscelaneous/ThirdParty
    ConstraintFiles/index
 
+.. raw:: latex
+
+   \part{References}
+
 .. toctree::
    :caption: References
    :hidden:
@@ -139,6 +154,10 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
    PyInfrastructure/index
    More ... <References/more>
 
+.. raw:: latex
+
+   \part{Appendix}
+
 .. toctree::
    :caption: Appendix
    :hidden:
@@ -147,6 +166,10 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
    genindex
 
 .. ifconfig:: visibility in ('PoCInternal')
+
+   .. raw:: latex
+
+      \part{Main Internal}
 
    .. toctree::
       :caption: Internal
