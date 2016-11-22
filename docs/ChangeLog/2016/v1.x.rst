@@ -28,10 +28,22 @@ Already documented changes are available on the ``release`` branch at GitHub.
 * New Entities
 
   * :ref:`IP:ocram_sdp_wf`
+  * :ref:`IP:cache_par2`
+  * :ref:`IP:cache_cpu`
+  * :ref:`IP:cache_mem`
+
+* Updated Entities
+
+  * Interface of :ref:`IP:cache_tagunit_par` changed slightly.
+  * New port "write-mask" in :ref:`IP:ddr3_mem2mig_adapter_Series7`.
+  * New port "write-mask" in :ref:`IP:ddr2_mem2mig_adapter_Spartan6`.
 
 * New Testbenches
 
   * Testbench for :ref:`IP:ocram_sdp_wf`
+  * Testbench for :ref:`IP:cache_par2`
+  * Testbench for :ref:`IP:cache_cpu`
+  * Testbench for :ref:`IP:cache_mem`
 
 * New Constraints
 * Shipped Tool and Helper Scripts

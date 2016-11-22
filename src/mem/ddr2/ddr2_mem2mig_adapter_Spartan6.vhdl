@@ -72,6 +72,7 @@ entity ddr2_mem2mig_adapter_Spartan6 is
 		mem_write : in  std_logic;
 		mem_addr  : in  unsigned(MEM_A_BITS-1 downto 0);
 		mem_wdata : in  std_logic_vector(D_BITS-1 downto 0);
+		mem_wmask : in  std_logic_vector(D_BITS/8-1 downto 0) := (others => '0');
 		mem_rdy   : out std_logic;
 		mem_rstb  : out std_logic;
 		mem_rdata : out std_logic_vector(D_BITS-1 downto 0);
@@ -120,7 +121,7 @@ begin  -- architecture rtl
 
 	-- write data & mask
 	mig_wr_data <= mem_wdata;
-	mig_wr_mask <= (others => '0'); -- all bytes
+	mig_wr_mask <= mem_wmask;
 
 	-- read reply
 	mig_rd_en <= not mig_rd_empty;

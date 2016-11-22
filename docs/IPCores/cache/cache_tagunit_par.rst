@@ -20,9 +20,28 @@
 cache_tagunit_par
 #################
 
-All inputs are synchronous to the rising-edge of the clock ``clock``.
+Tag-unit with fully-parallel compare of tag.
 
-**Command thruth table:**
+Configuration
+*************
+
++--------------------+----------------------------------------------------+
+| Parameter          | Description                                        |
++====================+====================================================+
+| REPLACEMENT_POLICY | Replacement policy. For supported policies see     |
+|                    | PoC.cache_replacement_policy.                      |
++--------------------+----------------------------------------------------+
+| CACHE_LINES        | Number of cache lines.                             |
++--------------------+----------------------------------------------------+
+| ASSOCIATIVITY      | Associativity of the cache.                        |
++--------------------+----------------------------------------------------+
+| ADDRESS_BITS       | Number of address bits. Each address identifies    |
+|                    | exactly one cache line in memory.                  |
++--------------------+----------------------------------------------------+
+
+
+Command truth table
+*******************
 
 +---------+-----------+-------------+---------+----------------------------------+
 | Request | ReadWrite | Invalidate  | Replace | Command                          |
@@ -40,6 +59,12 @@ All inputs are synchronous to the rising-edge of the clock ``clock``.
 |   0     |           |    0        |    1    | Replace cache line.              |
 +---------+-----------+-------------+---------+----------------------------------+
 
+
+Operation
+*********
+
+All inputs are synchronous to the rising-edge of the clock `clock`.
+
 All commands use ``Address`` to lookup (request) or replace a cache line.
 Each command is completed within one clock cycle.
 
@@ -50,12 +75,26 @@ If hit, ``LineIndex`` specifies the cache line where to find the content.
 
 The output ``ReplaceLineIndex`` indicates which cache line will be replaced as
 next by a replace command. The output ``OldAddress`` specifies the old tag stored at this
-index. The replace command will store the ``NewAddress`` and update the cache-line
+index. The replace command will store the ``Address`` and update the cache-line
 usage at the rising-edge of the clock.
 
 For a direct-mapped cache, the number of ``CACHE_LINES`` must be a power of 2.
 For a set-associative cache, the expression ``CACHE_LINES / ASSOCIATIVITY``
 must be a power of 2.
+
+.. NOTE::
+   The port ``NewAddress`` has been removed. Use ``Address`` instead as
+   described above.
+
+   If ``Address`` is fed from a register and an Altera FPGA is used, then
+   Quartus Map converts the tag memory from a memory with asynchronous read to a
+   memory with synchronous read by adding a pass-through logic. Quartus Map
+   reports warning 276020 which is intended.
+
+.. WARNING::
+
+   If the design is synthesized with Xilinx ISE / XST, then the synthesis
+   option "Keep Hierarchy" must be set to SOFT or TRUE.
 
 
 
@@ -65,7 +104,7 @@ must be a power of 2.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 75-99
+   :lines: 114-137
 
 
 

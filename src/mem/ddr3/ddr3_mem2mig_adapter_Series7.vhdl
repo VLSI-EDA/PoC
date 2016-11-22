@@ -68,13 +68,14 @@ entity ddr3_mem2mig_adapter_Series7 is
 
 	port (
 		-- PoC.Mem interface
-    mem_req   : in  std_logic;
-    mem_write : in  std_logic;
-    mem_addr  : in  unsigned(MEM_A_BITS-1 downto 0);
-    mem_wdata : in  std_logic_vector(D_BITS-1 downto 0);
-    mem_rdy   : out std_logic;
-    mem_rstb  : out std_logic;
-    mem_rdata : out std_logic_vector(D_BITS-1 downto 0);
+		mem_req   : in  std_logic;
+		mem_write : in  std_logic;
+		mem_addr  : in  unsigned(MEM_A_BITS-1 downto 0);
+		mem_wdata : in  std_logic_vector(D_BITS-1 downto 0);
+		mem_wmask : in  std_logic_vector(D_BITS/8-1 downto 0) := (others => '0');
+		mem_rdy   : out std_logic;
+		mem_rstb  : out std_logic;
+		mem_rdata : out std_logic_vector(D_BITS-1 downto 0);
 
 		-- Xilinx MIG IP Core interface
 		init_calib_complete : in	std_logic;
@@ -123,7 +124,7 @@ begin  -- architecture rtl
 
 	-- write data & mask
 	app_wdf_data <= mem_wdata;
-	app_wdf_mask <= (others => '0'); -- all bytes
+	app_wdf_mask <= mem_wmask;
 
 	-- read reply
 	mem_rstb	<= app_rd_data_valid;

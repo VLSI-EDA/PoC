@@ -51,7 +51,7 @@ Containts only combinational logic.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 60-95
+   :lines: 60-96
 
 
 

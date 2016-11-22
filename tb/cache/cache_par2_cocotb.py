@@ -9,7 +9,7 @@
 #
 # Description:
 # ------------------------------------
-#	Automated testbench for PoC.cache_par
+#	Automated testbench for PoC.cache_par2
 #
 # Supported configuration:
 # * REPLACEMENT_POLICY = "LRU"
@@ -164,7 +164,7 @@ class Testbench(object):
 	def __init__(self, dut):
 		self.dut = dut
 		self.stopped = False
-		self.address_bits = dut.ADDRESS_BITS.value
+		self.address_bits = dut.ADDR_BITS.value
 		self.data_bits = dut.DATA_BITS.value
 
 		cache_lines = dut.CACHE_LINES.value      # total number of cache lines
@@ -228,12 +228,14 @@ class Testbench(object):
 					cacheMiss = 1
 
 			elif replace == 1:
-				# check if a valid cache line will be replaced
-				if len(self.lrus[index]) == self.associativity:
-					oldAddress, cacheLineOut = self.lrus[index].iteritems().next()
+				if readWrite == 0: # step 1
+					# check if a valid cache line will be replaced
+					if len(self.lrus[index]) == self.associativity:
+						oldAddress, cacheLineOut = self.lrus[index].iteritems().next()
 
-				# actual replace
-				self.lrus[index][address] = cacheLineIn
+				else: # step 2
+					# actual replace
+					self.lrus[index][address] = cacheLineIn
 
 			if DEBUG >= 1: print("=== model: lrus[{0}] = {1!s}".format(index, self.lrus[index].items()))
 			# convert all not None values to BinaryValue
@@ -291,6 +293,12 @@ def random_input_gen(tb,n=100000):
 					lru_tags[index][tag] = 1 # tag access
 		elif replace == 1:
 			lru_tags[index][tag] = 1 # allocate cache line
+
+			#replace step 1:
+			yield InputTransaction(tb, request, 0, invalidate, replace, address, random.randint(0,data_high))
+
+			#replace step 2:
+			readWrite = 1		# ... and continue below
 
 		if DEBUG >= 2: print("=== random_input_gen: request={0}, readWrite={1}, invalidate={2}, replace={3}, address={4}".format(request, readWrite, invalidate, replace, address))
 		if DEBUG >= 2: print("=== random_input_gen: lru_tags[{0}]={1!s}".format(index, lru_tags[index].items()))
