@@ -38,6 +38,7 @@ from pathlib                import Path
 from re                     import compile as re_compile
 from subprocess             import check_output, CalledProcessError
 
+from lib.Functions          import CallByRefParam
 from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
 from Base.Exceptions        import PlatformNotSupportedException
 from Base.Executable        import Executable, LongValuedFlagArgument
@@ -46,7 +47,7 @@ from Base.Executable        import ShortFlagArgument, LongFlagArgument, CommandL
 from Base.Logging           import LogEntry, Severity
 from Base.Simulator         import PoCSimulationResultFilter, SimulationResult
 from Base.ToolChain         import ToolChainException
-from lib.Functions          import CallByRefParam
+from ToolChains             import ToolMixIn
 
 
 __api__ = [
@@ -179,8 +180,10 @@ class Configuration(BaseConfiguration):
 		self._host.PoCConfig[self._section]['Backend'] = backend
 
 
-class GHDL(Executable):
+class GHDL(Executable, ToolMixIn):
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, backend, logger=None):
+		ToolMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
+
 		if (platform == "Windows"):     executablePath = binaryDirectoryPath / "ghdl.exe"
 		elif (platform == "Linux"):     executablePath = binaryDirectoryPath / "ghdl"
 		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath / "ghdl"

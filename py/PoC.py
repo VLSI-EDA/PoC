@@ -446,6 +446,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 					break
 				except ExceptionBase as ex:
 					print("  {RED}FAULT:{NOCOLOR} {0}".format(ex.message, **Init.Foreground))
+				except KeyboardInterrupt:
+					print("\n\n{RED}Abort configuration.\nNo files have been created or changed.{NOCOLOR}".format(**Init.Foreground))
+					return
 
 		# write and re-read configuration
 		self.__WritePoCConfiguration()

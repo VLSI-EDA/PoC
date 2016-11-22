@@ -42,42 +42,15 @@ from shutil               import copy as shutil_copy
 
 from Base.Exceptions      import PlatformNotSupportedException, CommonException
 from Base.Configuration   import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
-from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList, CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument, \
-	LongValuedFlagArgument, LongTupleArgument
+from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList
+from Base.Executable      import CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument, LongValuedFlagArgument, LongTupleArgument
 from Base.ToolChain       import ToolChainException
-from ToolChains import ToolMixIn
-
-__api__ = [
-	'GitException',
-	'Configuration',
-	'Git',
-	'GitSCM',
-	'GitRevParse',
-	'GitRevList',
-	'GitDescribe',
-	'GitConfig'
-]
-__all__ = __api__
+from ToolChains           import ToolMixIn
 
 
 __api__ = [
 	'GitException',
 	'Configuration',
-	'GitMixIn',
-	'Git',
-	'GitSCM',
-	'GitRevParse',
-	'GitRevList',
-	'GitDescribe',
-	'GitConfig'
-]
-__all__ = __api__
-
-
-__api__ = [
-	'GitException',
-	'Configuration',
-	'GitMixIn',
 	'Git',
 	'GitSCM',
 	'GitRevParse',
