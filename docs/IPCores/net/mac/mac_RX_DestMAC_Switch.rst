@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/mac/mac_RX_DestMAC_Switch.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/mac/mac_RX_DestMAC_Switch_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/mac/mac_RX_DestMAC_Switch.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/mac/mac_RX_DestMAC_Switch_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/mac/mac_RX_DestMAC_Switch.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/mac/mac_RX_DestMAC_Switch_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/mac/mac_RX_DestMAC_Switch.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/mac/mac_RX_DestMAC_Switch_tb.vhdl>`
+
 
 .. _IP:mac_RX_DestMAC_Switch:
 
@@ -29,6 +32,8 @@ mac_RX_DestMAC_Switch
    :linenos:
    :lines: 42-67
 
-Source file: :pocsrc:`net/mac/mac_RX_DestMAC_Switch.vhdl <net/mac/mac_RX_DestMAC_Switch.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/mac/mac_RX_DestMAC_Switch.vhdl <net/mac/mac_RX_DestMAC_Switch.vhdl>`

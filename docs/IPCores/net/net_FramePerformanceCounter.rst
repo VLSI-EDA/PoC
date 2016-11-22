@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/net_FramePerformanceCounter.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/net_FramePerformanceCounter_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/net_FramePerformanceCounter.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/net_FramePerformanceCounter_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/net_FramePerformanceCounter.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/net_FramePerformanceCounter_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/net_FramePerformanceCounter.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/net_FramePerformanceCounter_tb.vhdl>`
+
 
 .. _IP:LocalLink_PerformanceCounter:
 
@@ -27,6 +30,8 @@ LocalLink_PerformanceCounter
    :linenos:
    :lines: 11-35
 
-Source file: :pocsrc:`net/net_FramePerformanceCounter.vhdl <net/net_FramePerformanceCounter.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/net_FramePerformanceCounter.vhdl <net/net_FramePerformanceCounter.vhdl>`

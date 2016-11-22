@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/ndp/ndp_DestinationCache.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/ndp/ndp_DestinationCache_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/ndp/ndp_DestinationCache.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/ndp/ndp_DestinationCache_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/ndp/ndp_DestinationCache.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/ndp/ndp_DestinationCache_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/ndp/ndp_DestinationCache.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/ndp/ndp_DestinationCache_tb.vhdl>`
+
 
 .. _IP:ndp_DestinationCache:
 
@@ -29,6 +32,8 @@ ndp_DestinationCache
    :linenos:
    :lines: 42-65
 
-Source file: :pocsrc:`net/ndp/ndp_DestinationCache.vhdl <net/ndp/ndp_DestinationCache.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/ndp/ndp_DestinationCache.vhdl <net/ndp/ndp_DestinationCache.vhdl>`

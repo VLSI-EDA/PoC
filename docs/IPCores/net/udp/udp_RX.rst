@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/udp/udp_RX.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/udp/udp_RX_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/udp/udp_RX.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/udp/udp_RX_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/udp/udp_RX.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/udp/udp_RX_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/udp/udp_RX.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/udp/udp_RX_tb.vhdl>`
+
 
 .. _IP:udp_RX:
 
@@ -29,6 +32,8 @@ udp_RX
    :linenos:
    :lines: 42-95
 
-Source file: :pocsrc:`net/udp/udp_RX.vhdl <net/udp/udp_RX.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/udp/udp_RX.vhdl <net/udp/udp_RX.vhdl>`

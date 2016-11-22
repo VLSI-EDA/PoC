@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/stack/stack_UDPv4.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/stack/stack_UDPv4_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/stack/stack_UDPv4.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/stack/stack_UDPv4_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/stack/stack_UDPv4.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/stack/stack_UDPv4_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/stack/stack_UDPv4.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/stack/stack_UDPv4_tb.vhdl>`
+
 
 .. _IP:stack_UDPv4:
 
@@ -29,6 +32,8 @@ stack_UDPv4
    :linenos:
    :lines: 44-111
 
-Source file: :pocsrc:`net/stack/stack_UDPv4.vhdl <net/stack/stack_UDPv4.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/stack/stack_UDPv4.vhdl <net/stack/stack_UDPv4.vhdl>`

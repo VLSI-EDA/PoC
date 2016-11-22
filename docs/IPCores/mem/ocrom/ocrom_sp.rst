@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocrom/ocrom_sp.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ocrom/ocrom_sp_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocrom/ocrom_sp.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ocrom/ocrom_sp_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <mem/ocrom/ocrom_sp.vhdl>`
-   * |gh-tb| :poctb:`Testbench <mem/ocrom/ocrom_sp_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/ocrom/ocrom_sp.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/ocrom/ocrom_sp_tb.vhdl>`
+
 
 .. _IP:ocrom_sp:
 
@@ -33,6 +36,8 @@ Inferring / instantiating single-port read-only memory
    :linenos:
    :lines: 53-65
 
-Source file: :pocsrc:`mem/ocrom/ocrom_sp.vhdl <mem/ocrom/ocrom_sp.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/ocrom/ocrom_sp.vhdl <mem/ocrom/ocrom_sp.vhdl>`

@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_ic_got.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_ic_got_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_ic_got.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_ic_got_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_ic_got.vhdl>`
-   * |gh-tb| :poctb:`Testbench <fifo/fifo_ic_got_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_ic_got.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_ic_got_tb.vhdl>`
+
 
 .. _IP:fifo_ic_got:
 
@@ -64,6 +67,8 @@ Examples:
    :linenos:
    :lines: 77-103
 
-Source file: :pocsrc:`fifo/fifo_ic_got.vhdl <fifo/fifo_ic_got.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`fifo/fifo_ic_got.vhdl <fifo/fifo_ic_got.vhdl>`

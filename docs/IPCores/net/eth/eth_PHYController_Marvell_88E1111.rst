@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_PHYController_Marvell_88E1111.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_PHYController_Marvell_88E1111_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_PHYController_Marvell_88E1111.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_PHYController_Marvell_88E1111_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_PHYController_Marvell_88E1111.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/eth/eth_PHYController_Marvell_88E1111_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_PHYController_Marvell_88E1111.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/eth/eth_PHYController_Marvell_88E1111_tb.vhdl>`
+
 
 .. _IP:Eth_PHYController_Marvell_88E1111:
 
@@ -29,6 +32,8 @@ Eth_PHYController_Marvell_88E1111
    :linenos:
    :lines: 44-71
 
-Source file: :pocsrc:`net/eth/eth_PHYController_Marvell_88E1111.vhdl <net/eth/eth_PHYController_Marvell_88E1111.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/eth/eth_PHYController_Marvell_88E1111.vhdl <net/eth/eth_PHYController_Marvell_88E1111.vhdl>`

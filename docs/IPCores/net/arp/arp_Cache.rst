@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/arp/arp_Cache.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/arp/arp_Cache_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/arp/arp_Cache.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/arp/arp_Cache_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_Cache.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/arp/arp_Cache_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_Cache.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/arp/arp_Cache_tb.vhdl>`
+
 
 .. _IP:arp_Cache:
 
@@ -29,6 +32,8 @@ arp_Cache
    :linenos:
    :lines: 44-75
 
-Source file: :pocsrc:`net/arp/arp_Cache.vhdl <net/arp/arp_Cache.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/arp/arp_Cache.vhdl <net/arp/arp_Cache.vhdl>`

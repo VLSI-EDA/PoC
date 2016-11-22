@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Mirror.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/stream/stream_Mirror_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Mirror.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/stream/stream_Mirror_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_Mirror.vhdl>`
-   * |gh-tb| :poctb:`Testbench <bus/stream/stream_Mirror_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_Mirror.vhdl>`
+      * |gh-tb| :poctb:`Testbench <bus/stream/stream_Mirror_tb.vhdl>`
+
 
 .. _IP:stream_Mirror:
 
@@ -29,6 +32,8 @@ stream_Mirror
    :linenos:
    :lines: 41-70
 
-Source file: :pocsrc:`bus/stream/stream_Mirror.vhdl <bus/stream/stream_Mirror.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`bus/stream/stream_Mirror.vhdl <bus/stream/stream_Mirror.vhdl>`

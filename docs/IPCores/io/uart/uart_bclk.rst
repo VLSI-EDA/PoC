@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_bclk.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/uart/uart_bclk_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_bclk.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/uart/uart_bclk_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_bclk.vhdl>`
-   * |gh-tb| :poctb:`Testbench <io/uart/uart_bclk_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_bclk.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/uart/uart_bclk_tb.vhdl>`
+
 
 .. _IP:uart_bclk:
 
@@ -35,6 +38,8 @@ old comments:
    :linenos:
    :lines: 50-61
 
-Source file: :pocsrc:`io/uart/uart_bclk.vhdl <io/uart/uart_bclk.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`io/uart/uart_bclk.vhdl <io/uart/uart_bclk.vhdl>`

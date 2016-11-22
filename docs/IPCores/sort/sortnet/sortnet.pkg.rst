@@ -1,11 +1,13 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet.pkg.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet.pkg.vhdl
+               :alt: Source Code on GitHub
 
-   |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet.pkg.vhdl>`
+   .. sidebar:: GitHub Links
+
+      |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet.pkg.vhdl>`
 
 .. _PKG:sortnet:
 
@@ -32,5 +34,6 @@ PoC.sort.sortnet Package
      Instantiate a :ref:`IP:sortnet_BitonicSort` sorting network.
 
 
-Source file: :pocsrc:`sortnet.pkg.vhdl <sort/sortnet/sortnet.pkg.vhdl>`
+.. only:: latex
 
+   Source file: :pocsrc:`sortnet.pkg.vhdl <sort/sortnet/sortnet.pkg.vhdl>`

@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Pulse.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Pulse_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Pulse.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Pulse_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Pulse.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/sync/sync_Pulse_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Pulse.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/sync/sync_Pulse_tb.vhdl>`
+
 
 .. _IP:sync_Pulse:
 
@@ -47,8 +50,6 @@ Constraints:
    :linenos:
    :lines: 68-78
 
-Source file: :pocsrc:`misc/sync/sync_Pulse.vhdl <misc/sync/sync_Pulse.vhdl>`
-
 .. seealso::
 
    :doc:`PoC.misc.sync.Bits </IPCores/misc/sync/sync_Bits>`
@@ -61,3 +62,7 @@ Source file: :pocsrc:`misc/sync/sync_Pulse.vhdl <misc/sync/sync_Pulse.vhdl>`
      For a multiple bits capable synchronizer.
 
 
+
+.. only:: latex
+
+   Source file: :pocsrc:`misc/sync/sync_Pulse.vhdl <misc/sync/sync_Pulse.vhdl>`

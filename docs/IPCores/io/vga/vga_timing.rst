@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_timing.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/vga/vga_timing_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_timing.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/vga/vga_timing_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_timing.vhdl>`
-   * |gh-tb| :poctb:`Testbench <io/vga/vga_timing_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_timing.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/vga/vga_timing_tb.vhdl>`
+
 
 .. _IP:vga_timing:
 
@@ -68,6 +71,8 @@ differ between SMT and CVT.
    :linenos:
    :lines: 80-96
 
-Source file: :pocsrc:`io/vga/vga_timing.vhdl <io/vga/vga_timing.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`io/vga/vga_timing.vhdl <io/vga/vga_timing.vhdl>`

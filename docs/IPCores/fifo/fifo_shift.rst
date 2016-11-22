@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_shift.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_shift_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_shift.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_shift_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_shift.vhdl>`
-   * |gh-tb| :poctb:`Testbench <fifo/fifo_shift_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_shift.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_shift_tb.vhdl>`
+
 
 .. _IP:fifo_shift:
 
@@ -35,6 +38,8 @@ The specified depth (``MIN_DEPTH``) is rounded up to the next suitable value.
    :linenos:
    :lines: 44-64
 
-Source file: :pocsrc:`fifo/fifo_shift.vhdl <fifo/fifo_shift.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`fifo/fifo_shift.vhdl <fifo/fifo_shift.vhdl>`

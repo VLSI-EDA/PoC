@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_lru_list.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sort_lru_list_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_lru_list.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sort_lru_list_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <sort/sort_lru_list.vhdl>`
-   * |gh-tb| :poctb:`Testbench <sort/sort_lru_list_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <sort/sort_lru_list.vhdl>`
+      * |gh-tb| :poctb:`Testbench <sort/sort_lru_list_tb.vhdl>`
+
 
 .. _IP:sort_lru_list:
 
@@ -41,6 +44,8 @@ Supported operations:
    :linenos:
    :lines: 55-74
 
-Source file: :pocsrc:`sort/sort_lru_list.vhdl <sort/sort_lru_list.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`sort/sort_lru_list.vhdl <sort/sort_lru_list.vhdl>`

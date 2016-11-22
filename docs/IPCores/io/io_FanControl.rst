@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_FanControl.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_FanControl_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_FanControl.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_FanControl_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <io/io_FanControl.vhdl>`
-   * |gh-tb| :poctb:`Testbench <io/io_FanControl_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/io_FanControl.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/io_FanControl_tb.vhdl>`
+
 
 .. _IP:io_FanControl:
 
@@ -48,6 +51,8 @@ io_FanControl
    :linenos:
    :lines: 63-81
 
-Source file: :pocsrc:`io/io_FanControl.vhdl <io/io_FanControl.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`io/io_FanControl.vhdl <io/io_FanControl.vhdl>`

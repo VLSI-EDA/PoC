@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_rx.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/uart/uart_rx_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_rx.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/uart/uart_rx_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_rx.vhdl>`
-   * |gh-tb| :poctb:`Testbench <io/uart/uart_rx_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_rx.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/uart/uart_rx_tb.vhdl>`
+
 
 .. _IP:uart_rx:
 
@@ -30,6 +33,8 @@ uart_rx
    :linenos:
    :lines: 39-56
 
-Source file: :pocsrc:`io/uart/uart_rx.vhdl <io/uart/uart_rx.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`io/uart/uart_rx.vhdl <io/uart/uart_rx.vhdl>`

@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_GMII.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_GEMAC_GMII_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_GMII.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_GEMAC_GMII_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_GEMAC_GMII.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/eth/eth_GEMAC_GMII_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_GEMAC_GMII.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/eth/eth_GEMAC_GMII_tb.vhdl>`
+
 
 .. _IP:eth_GEMAC_GMII:
 
@@ -29,6 +32,8 @@ eth_GEMAC_GMII
    :linenos:
    :lines: 42-101
 
-Source file: :pocsrc:`net/eth/eth_GEMAC_GMII.vhdl <net/eth/eth_GEMAC_GMII.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/eth/eth_GEMAC_GMII.vhdl <net/eth/eth_GEMAC_GMII.vhdl>`

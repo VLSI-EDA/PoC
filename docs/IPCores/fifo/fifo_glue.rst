@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_glue.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_glue_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_glue.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_glue_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_glue.vhdl>`
-   * |gh-tb| :poctb:`Testbench <fifo/fifo_glue_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_glue.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_glue_tb.vhdl>`
+
 
 .. _IP:fifo_glue:
 
@@ -31,6 +34,8 @@ the ``ful``  and the ``vld`` indicators to be driven by registers.
    :linenos:
    :lines: 36-55
 
-Source file: :pocsrc:`fifo/fifo_glue.vhdl <fifo/fifo_glue.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`fifo/fifo_glue.vhdl <fifo/fifo_glue.vhdl>`

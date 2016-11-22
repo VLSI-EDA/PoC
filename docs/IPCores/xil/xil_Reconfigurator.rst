@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_Reconfigurator.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_Reconfigurator_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_Reconfigurator.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_Reconfigurator_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <xil/xil_Reconfigurator.vhdl>`
-   * |gh-tb| :poctb:`Testbench <xil/xil_Reconfigurator_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <xil/xil_Reconfigurator.vhdl>`
+      * |gh-tb| :poctb:`Testbench <xil/xil_Reconfigurator_tb.vhdl>`
+
 
 .. _IP:xil_Reconfigurator:
 
@@ -37,6 +40,8 @@ completes with another strobe on ``ReconfigDone``.
    :linenos:
    :lines: 51-72
 
-Source file: :pocsrc:`xil/xil_Reconfigurator.vhdl <xil/xil_Reconfigurator.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`xil/xil_Reconfigurator.vhdl <xil/xil_Reconfigurator.vhdl>`

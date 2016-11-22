@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_prng.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_prng_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_prng.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_prng_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <arith/arith_prng.vhdl>`
-   * |gh-tb| :poctb:`Testbench <arith/arith_prng_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <arith/arith_prng.vhdl>`
+      * |gh-tb| :poctb:`Testbench <arith/arith_prng_tb.vhdl>`
+
 
 .. _IP:arith_prng:
 
@@ -35,6 +38,8 @@ The generated number sequence includes the value all-zeros, but not all-ones.
    :linenos:
    :lines: 46-57
 
-Source file: :pocsrc:`arith/arith_prng.vhdl <arith/arith_prng.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`arith/arith_prng.vhdl <arith/arith_prng.vhdl>`

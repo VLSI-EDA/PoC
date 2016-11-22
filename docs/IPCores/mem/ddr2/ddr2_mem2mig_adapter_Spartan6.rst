@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ddr2/ddr2_mem2mig_adapter_Spartan6_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ddr2/ddr2_mem2mig_adapter_Spartan6_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`
-   * |gh-tb| :poctb:`Testbench <mem/ddr2/ddr2_mem2mig_adapter_Spartan6_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/ddr2/ddr2_mem2mig_adapter_Spartan6_tb.vhdl>`
+
 
 .. _IP:ddr2_mem2mig_adapter_Spartan6:
 
@@ -51,6 +54,8 @@ Containts only combinational logic.
    :linenos:
    :lines: 61-95
 
-Source file: :pocsrc:`mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl <mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl <mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`

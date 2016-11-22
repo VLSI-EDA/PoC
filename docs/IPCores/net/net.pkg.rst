@@ -1,15 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/net.pkg.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/net.pkg.vhdl
+               :alt: Source Code on GitHub
 
-   |gh-src| :pocsrc:`Sourcecode <net/net.pkg.vhdl>`
+   .. sidebar:: GitHub Links
+
+      |gh-src| :pocsrc:`Sourcecode <net/net.pkg.vhdl>`
 
 .. _PKG:net:
 
 PoC.net Package
 ===============
 
-Source file: :pocsrc:`net.pkg.vhdl <net/net.pkg.vhdl>`
+.. only:: latex
+
+   Source file: :pocsrc:`net.pkg.vhdl <net/net.pkg.vhdl>`

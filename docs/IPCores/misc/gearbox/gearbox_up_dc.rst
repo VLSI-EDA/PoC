@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/gearbox/gearbox_up_dc.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/gearbox/gearbox_up_dc_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/gearbox/gearbox_up_dc.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/gearbox/gearbox_up_dc_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/gearbox/gearbox_up_dc.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/gearbox/gearbox_up_dc_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/gearbox/gearbox_up_dc.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/gearbox/gearbox_up_dc_tb.vhdl>`
+
 
 .. _IP:gearbox_up_dc:
 
@@ -39,6 +42,8 @@ Assertions:
    :linenos:
    :lines: 51-66
 
-Source file: :pocsrc:`misc/gearbox/gearbox_up_dc.vhdl <misc/gearbox/gearbox_up_dc.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`misc/gearbox/gearbox_up_dc.vhdl <misc/gearbox/gearbox_up_dc.vhdl>`

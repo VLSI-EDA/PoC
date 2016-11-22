@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/lcd_LCDSynchronizer.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/lcd/lcd_LCDSynchronizer_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/lcd_LCDSynchronizer.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/lcd/lcd_LCDSynchronizer_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <io/lcd/lcd_LCDSynchronizer.vhdl>`
-   * |gh-tb| :poctb:`Testbench <io/lcd/lcd_LCDSynchronizer_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/lcd/lcd_LCDSynchronizer.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/lcd/lcd_LCDSynchronizer_tb.vhdl>`
+
 
 .. _IP:lcd_LCDSynchronizer:
 
@@ -29,6 +32,8 @@ lcd_LCDSynchronizer
    :linenos:
    :lines: 42-64
 
-Source file: :pocsrc:`io/lcd/lcd_LCDSynchronizer.vhdl <io/lcd/lcd_LCDSynchronizer.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`io/lcd/lcd_LCDSynchronizer.vhdl <io/lcd/lcd_LCDSynchronizer.vhdl>`

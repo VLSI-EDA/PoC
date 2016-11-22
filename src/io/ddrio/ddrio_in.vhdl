@@ -21,25 +21,29 @@
 --
 --    { signal: [
 --        {name: 'clk',             wave: 'H.L.H.L.H.L.H.L.H'},
---        {name: 'pad',             wave: 'x2.3.4.5.2.3.x...', data: ['0', '1', '2', '3', '4', '5'], node: '..a.b.c.d.e.f..'},
---        ['DataIn',
---          {name: 'DataIn_low',    wave: 'x...2...4...2...x', data: ['0',      '2',      '4'],      node: '.....k...m...o.'},
---          {name: 'DataIn_high',   wave: 'x...3...5...3...x', data: ['1',      '3',      '5'],      node: '.....l...n...p.'},
---        ],
+--        {name: 'pad',             wave: 'x2.3.4.5.2.3.x...', data: ['0', '1', '2', '3', '4', '5'], node: '.a.b.c.d.e.f...'},
+--        {name: 'DataIn_low',    wave: 'x...2...4...2...x', data: ['0',      '2',      '4'],      node: '....k...m...o..'},
+--        {name: 'DataIn_high',   wave: 'x...3...5...3...x', data: ['1',      '3',      '5'],      node: '....l...n...p..'}
 --      ],
---      edge: ['a~k', 'b~l', 'c~m', 'd~n', 'e~o', 'f~p'],
---      foot: {text: 'PoC.io.ddrio.in'}
+--      edge: ['a|->k', 'b|->l', 'c|->m', 'd|->n', 'e|->o', 'f|->p'],
+--      foot: {
+--        text: ['tspan',
+--          ['tspan', {'font-weight': 'bold'}, 'PoC.io.ddrio.in'],
+--          ' -- DDR Data Input sampled from pad.'
+--        ]
+--      }
 --    }
 --
--- .. code-block:: none
+-- .. only:: latex
 --
---                 __      ____      ____      __
---    Clock          |____|    |____|    |____|
---    Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
---    DataIn_low      ... >< 0      >< 2      ><
---    DataIn_high     ... >< 1      >< 3      ><
+--    .. code-block:: none
+--                    __      ____      ____      __
+--       Clock          |____|    |____|    |____|
+--       Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
+--       DataIn_low      ... >< 0      >< 2      ><
+--       DataIn_high     ... >< 1      >< 3      ><
 --
---    < i > is the value of the i-th data bit on the line.
+--       < i > is the value of the i-th data bit on the line.
 --
 -- After power-up, the output ports ``DataIn_high`` and ``DataIn_low`` both equal
 -- INIT_VALUE.

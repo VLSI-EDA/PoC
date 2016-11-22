@@ -1,11 +1,13 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith.pkg.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith.pkg.vhdl
+               :alt: Source Code on GitHub
 
-   |gh-src| :pocsrc:`Sourcecode <arith/arith.pkg.vhdl>`
+   .. sidebar:: GitHub Links
+
+      |gh-src| :pocsrc:`Sourcecode <arith/arith.pkg.vhdl>`
 
 .. _PKG:arith:
 
@@ -40,4 +42,6 @@ This package holds all component declarations for this namespace.
 * :ref:`PoC.arith.same <IP:arith_same>`
 * :ref:`PoC.arith.sqrt <IP:arith_sqrt>`
 
-Source file: :pocsrc:`arith.pkg.vhdl <arith/arith.pkg.vhdl>`
+.. only:: latex
+
+   Source file: :pocsrc:`arith.pkg.vhdl <arith/arith.pkg.vhdl>`

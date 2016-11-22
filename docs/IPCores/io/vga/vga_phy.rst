@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/vga/vga_phy_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/vga/vga_phy_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_phy.vhdl>`
-   * |gh-tb| :poctb:`Testbench <io/vga/vga_phy_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_phy.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/vga/vga_phy_tb.vhdl>`
+
 
 .. _IP:vga_phy:
 
@@ -33,6 +36,8 @@ vga_phy
    :linenos:
    :lines: 43-55
 
-Source file: :pocsrc:`io/vga/vga_phy.vhdl <io/vga/vga_phy.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`io/vga/vga_phy.vhdl <io/vga/vga_phy.vhdl>`

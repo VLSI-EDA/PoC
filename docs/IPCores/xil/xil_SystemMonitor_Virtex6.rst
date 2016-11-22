@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_SystemMonitor_Virtex6.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_SystemMonitor_Virtex6_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_SystemMonitor_Virtex6.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_SystemMonitor_Virtex6_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <xil/xil_SystemMonitor_Virtex6.vhdl>`
-   * |gh-tb| :poctb:`Testbench <xil/xil_SystemMonitor_Virtex6_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <xil/xil_SystemMonitor_Virtex6.vhdl>`
+      * |gh-tb| :poctb:`Testbench <xil/xil_SystemMonitor_Virtex6_tb.vhdl>`
+
 
 .. _IP:xil_SystemMonitor_Virtex6:
 
@@ -46,6 +49,8 @@ temperature values are overrun.
    :linenos:
    :lines: 56-66
 
-Source file: :pocsrc:`xil/xil_SystemMonitor_Virtex6.vhdl <xil/xil_SystemMonitor_Virtex6.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`xil/xil_SystemMonitor_Virtex6.vhdl <xil/xil_SystemMonitor_Virtex6.vhdl>`

@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_Delay.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_Delay_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_Delay.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_Delay_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/misc_Delay.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/misc_Delay_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/misc_Delay.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/misc_Delay_tb.vhdl>`
+
 
 .. _IP:misc_Delay:
 
@@ -29,6 +32,8 @@ misc_Delay
    :linenos:
    :lines: 38-50
 
-Source file: :pocsrc:`misc/misc_Delay.vhdl <misc/misc_Delay.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`misc/misc_Delay.vhdl <misc/misc_Delay.vhdl>`

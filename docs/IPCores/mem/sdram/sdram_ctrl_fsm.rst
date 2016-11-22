@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_fsm.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/sdram/sdram_ctrl_fsm_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_fsm.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/sdram/sdram_ctrl_fsm_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_fsm.vhdl>`
-   * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_fsm_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_fsm.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_fsm_tb.vhdl>`
+
 
 .. _IP:sdram_ctrl_fsm:
 
@@ -95,6 +98,8 @@ The write data must directly connected to the physical layer.
    :linenos:
    :lines: 104-148
 
-Source file: :pocsrc:`mem/sdram/sdram_ctrl_fsm.vhdl <mem/sdram/sdram_ctrl_fsm.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/sdram/sdram_ctrl_fsm.vhdl <mem/sdram/sdram_ctrl_fsm.vhdl>`

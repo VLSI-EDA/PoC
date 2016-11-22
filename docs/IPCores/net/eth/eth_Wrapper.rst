@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_Wrapper.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_Wrapper_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_Wrapper.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_Wrapper_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_Wrapper.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/eth/eth_Wrapper_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_Wrapper.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/eth/eth_Wrapper_tb.vhdl>`
+
 
 .. _IP:Eth_Wrapper:
 
@@ -29,6 +32,8 @@ Eth_Wrapper
    :linenos:
    :lines: 68-112
 
-Source file: :pocsrc:`net/eth/eth_Wrapper.vhdl <net/eth/eth_Wrapper.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/eth/eth_Wrapper.vhdl <net/eth/eth_Wrapper.vhdl>`

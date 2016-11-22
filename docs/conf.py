@@ -246,7 +246,7 @@ html_last_updated_fmt = "%b %d, %Y"
 #html_use_index = True
 
 # If true, the index is split into individual pages for each letter.
-#html_split_index = False
+# html_split_index = True
 
 # If true, links to the reST sources are added to the pages.
 #html_show_sourcelink = True
@@ -313,7 +313,7 @@ latex_documents = [
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
-#latex_use_parts = False
+latex_use_parts = True
 
 # If true, show page references after internal links.
 #latex_show_pagerefs = False

@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/net_FrameChecksum.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/net_FrameChecksum_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/net_FrameChecksum.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/net_FrameChecksum_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/net_FrameChecksum.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/net_FrameChecksum_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/net_FrameChecksum.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/net_FrameChecksum_tb.vhdl>`
+
 
 .. _IP:net_FrameChecksum:
 
@@ -29,6 +32,8 @@ net_FrameChecksum
    :linenos:
    :lines: 41-72
 
-Source file: :pocsrc:`net/net_FrameChecksum.vhdl <net/net_FrameChecksum.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/net_FrameChecksum.vhdl <net/net_FrameChecksum.vhdl>`

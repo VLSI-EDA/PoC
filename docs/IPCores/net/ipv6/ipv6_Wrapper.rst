@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv6/ipv6_Wrapper.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/ipv6/ipv6_Wrapper_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv6/ipv6_Wrapper.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/ipv6/ipv6_Wrapper_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/ipv6/ipv6_Wrapper.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/ipv6/ipv6_Wrapper_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/ipv6/ipv6_Wrapper.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/ipv6/ipv6_Wrapper_tb.vhdl>`
+
 
 .. _IP:ipv6_Wrapper:
 
@@ -29,6 +32,8 @@ ipv6_Wrapper
    :linenos:
    :lines: 42-116
 
-Source file: :pocsrc:`net/ipv6/ipv6_Wrapper.vhdl <net/ipv6/ipv6_Wrapper.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/ipv6/ipv6_Wrapper.vhdl <net/ipv6/ipv6_Wrapper.vhdl>`

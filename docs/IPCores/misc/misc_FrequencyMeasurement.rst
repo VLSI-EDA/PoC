@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_FrequencyMeasurement.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_FrequencyMeasurement_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_FrequencyMeasurement.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_FrequencyMeasurement_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/misc_FrequencyMeasurement.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/misc_FrequencyMeasurement_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/misc_FrequencyMeasurement.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/misc_FrequencyMeasurement_tb.vhdl>`
+
 
 .. _IP:misc_FrequencyMeasurement:
 
@@ -31,6 +34,8 @@ value is the measured frequency in Hz.
    :linenos:
    :lines: 44-56
 
-Source file: :pocsrc:`misc/misc_FrequencyMeasurement.vhdl <misc/misc_FrequencyMeasurement.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`misc/misc_FrequencyMeasurement.vhdl <misc/misc_FrequencyMeasurement.vhdl>`

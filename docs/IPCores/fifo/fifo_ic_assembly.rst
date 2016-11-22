@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_ic_assembly.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_ic_assembly_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_ic_assembly.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_ic_assembly_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_ic_assembly.vhdl>`
-   * |gh-tb| :poctb:`Testbench <fifo/fifo_ic_assembly_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_ic_assembly.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_ic_assembly_tb.vhdl>`
+
 
 .. _IP:fifo_ic_assembly:
 
@@ -40,6 +43,8 @@ the transmission of data blocks. This applies to many DMA implementations.
    :linenos:
    :lines: 45-78
 
-Source file: :pocsrc:`fifo/fifo_ic_assembly.vhdl <fifo/fifo_ic_assembly.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`fifo/fifo_ic_assembly.vhdl <fifo/fifo_ic_assembly.vhdl>`

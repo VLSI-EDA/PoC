@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Vector.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Vector_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Vector.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Vector_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Vector.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/sync/sync_Vector_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Vector.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/sync/sync_Vector_tb.vhdl>`
+
 
 .. _IP:sync_Vector:
 
@@ -38,6 +41,8 @@ Constraints:
    :linenos:
    :lines: 49-63
 
-Source file: :pocsrc:`misc/sync/sync_Vector.vhdl <misc/sync/sync_Vector.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`misc/sync/sync_Vector.vhdl <misc/sync/sync_Vector.vhdl>`

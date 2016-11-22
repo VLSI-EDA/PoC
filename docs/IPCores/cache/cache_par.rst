@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_par.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/cache/cache_par_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/cache/cache_par.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/cache/cache_par_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <cache/cache_par.vhdl>`
-   * |gh-tb| :poctb:`Testbench <cache/cache_par_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <cache/cache_par.vhdl>`
+      * |gh-tb| :poctb:`Testbench <cache/cache_par_tb.vhdl>`
+
 
 .. _IP:cache_par:
 
@@ -64,6 +67,8 @@ both with a latency of one clock cycle.
    :linenos:
    :lines: 76-100
 
-Source file: :pocsrc:`cache/cache_par.vhdl <cache/cache_par.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`cache/cache_par.vhdl <cache/cache_par.vhdl>`

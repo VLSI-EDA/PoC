@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_bit_lz.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_bit_lz_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_bit_lz.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_bit_lz_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/misc_bit_lz.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/misc_bit_lz_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/misc_bit_lz.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/misc_bit_lz_tb.vhdl>`
+
 
 .. _IP:misc_bit_lz:
 
@@ -65,6 +68,8 @@ misc_bit_lz
    :linenos:
    :lines: 69-91
 
-Source file: :pocsrc:`misc/misc_bit_lz.vhdl <misc/misc_bit_lz.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`misc/misc_bit_lz.vhdl <misc/misc_bit_lz.vhdl>`

@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/bus_Arbiter.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/bus_Arbiter_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/bus_Arbiter.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/bus_Arbiter_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <bus/bus_Arbiter.vhdl>`
-   * |gh-tb| :poctb:`Testbench <bus/bus_Arbiter_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <bus/bus_Arbiter.vhdl>`
+      * |gh-tb| :poctb:`Testbench <bus/bus_Arbiter_tb.vhdl>`
+
 
 .. _IP:bus_Arbiter:
 
@@ -32,6 +35,8 @@ following arbitration strategies:
    :linenos:
    :lines: 42-60
 
-Source file: :pocsrc:`bus/bus_Arbiter.vhdl <bus/bus_Arbiter.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`bus/bus_Arbiter.vhdl <bus/bus_Arbiter.vhdl>`

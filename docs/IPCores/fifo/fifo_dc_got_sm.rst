@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_dc_got_sm.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_dc_got_sm_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_dc_got_sm.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_dc_got_sm_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_dc_got_sm.vhdl>`
-   * |gh-tb| :poctb:`Testbench <fifo/fifo_dc_got_sm_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_dc_got_sm.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_dc_got_sm_tb.vhdl>`
+
 
 .. _IP:fifo_dc_got_sm:
 
@@ -52,6 +55,8 @@ Synchronous reset is used. Both resets must overlap.
    :linenos:
    :lines: 62-85
 
-Source file: :pocsrc:`fifo/fifo_dc_got_sm.vhdl <fifo/fifo_dc_got_sm.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`fifo/fifo_dc_got_sm.vhdl <fifo/fifo_dc_got_sm.vhdl>`

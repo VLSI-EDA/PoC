@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_cc_got_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_cc_got_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_cc_got.vhdl>`
-   * |gh-tb| :poctb:`Testbench <fifo/fifo_cc_got_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_cc_got.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_cc_got_tb.vhdl>`
+
 
 .. _IP:fifo_cc_got:
 
@@ -75,8 +78,6 @@ comparator (subtractor) in their path.
    :linenos:
    :lines: 98-124
 
-Source file: :pocsrc:`fifo/fifo_cc_got.vhdl <fifo/fifo_cc_got.vhdl>`
-
 .. seealso::
 
    :ref:`IP:fifo_dc_got`
@@ -87,3 +88,7 @@ Source file: :pocsrc:`fifo/fifo_cc_got.vhdl <fifo/fifo_cc_got.vhdl>`
      For a minimal FIFO / pipeline decoupling.
 
 
+
+.. only:: latex
+
+   Source file: :pocsrc:`fifo/fifo_cc_got.vhdl <fifo/fifo_cc_got.vhdl>`

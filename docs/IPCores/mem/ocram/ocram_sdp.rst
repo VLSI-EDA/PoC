@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sdp.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ocram/ocram_sdp_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sdp.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ocram/ocram_sdp_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_sdp.vhdl>`
-   * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_sdp_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_sdp.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_sdp_tb.vhdl>`
+
 
 .. _IP:ocram_sdp:
 
@@ -49,6 +52,8 @@ Mixed-Port Read-During-Write
    :linenos:
    :lines: 65-82
 
-Source file: :pocsrc:`mem/ocram/ocram_sdp.vhdl <mem/ocram/ocram_sdp.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/ocram/ocram_sdp.vhdl <mem/ocram/ocram_sdp.vhdl>`

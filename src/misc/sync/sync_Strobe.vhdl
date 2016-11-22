@@ -19,7 +19,7 @@
 -- .. ATTENTION::
 --    Use this synchronizer only for one-cycle high-active signals (strobes).
 --
--- .. image:: ../../../_static/misc/sync/sync_Strobe.svg
+-- .. image:: /_static/misc/sync/sync_Strobe.*
 --    :target: ../../../_static/misc/sync/sync_Strobe.svg
 --
 -- Constraints:

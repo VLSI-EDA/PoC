@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Bits.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Bits_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Bits.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Bits_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Bits.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/sync/sync_Bits_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Bits.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/sync/sync_Bits_tb.vhdl>`
+
 
 .. _IP:sync_Bits:
 
@@ -47,8 +50,6 @@ Constraints:
    :linenos:
    :lines: 68-79
 
-Source file: :pocsrc:`misc/sync/sync_Bits.vhdl <misc/sync/sync_Bits.vhdl>`
-
 .. seealso::
 
    :doc:`PoC.misc.sync.Reset </IPCores/misc/sync/sync_Reset>`
@@ -61,3 +62,7 @@ Source file: :pocsrc:`misc/sync/sync_Bits.vhdl <misc/sync/sync_Bits.vhdl>`
      For a multiple bits capable synchronizer.
 
 
+
+.. only:: latex
+
+   Source file: :pocsrc:`misc/sync/sync_Bits.vhdl <misc/sync/sync_Bits.vhdl>`

@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv6/ipv6_RX.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/ipv6/ipv6_RX_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv6/ipv6_RX.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/ipv6/ipv6_RX_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <net/ipv6/ipv6_RX.vhdl>`
-   * |gh-tb| :poctb:`Testbench <net/ipv6/ipv6_RX_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/ipv6/ipv6_RX.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/ipv6/ipv6_RX_tb.vhdl>`
+
 
 .. _IP:ipv6_RX:
 
@@ -29,6 +32,8 @@ ipv6_RX
    :linenos:
    :lines: 42-84
 
-Source file: :pocsrc:`net/ipv6/ipv6_RX.vhdl <net/ipv6/ipv6_RX.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`net/ipv6/ipv6_RX.vhdl <net/ipv6/ipv6_RX.vhdl>`

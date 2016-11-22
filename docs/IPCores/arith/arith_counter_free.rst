@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_free.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_counter_free_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_free.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_counter_free_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <arith/arith_counter_free.vhdl>`
-   * |gh-tb| :poctb:`Testbench <arith/arith_counter_free_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <arith/arith_counter_free.vhdl>`
+      * |gh-tb| :poctb:`Testbench <arith/arith_counter_free_tb.vhdl>`
+
 
 .. _IP:arith_counter_free:
 
@@ -36,6 +39,8 @@ input have been observed.
    :linenos:
    :lines: 41-53
 
-Source file: :pocsrc:`arith/arith_counter_free.vhdl <arith/arith_counter_free.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`arith/arith_counter_free.vhdl <arith/arith_counter_free.vhdl>`

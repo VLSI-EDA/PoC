@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_Sequencer.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_Sequencer_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_Sequencer.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_Sequencer_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/misc_Sequencer.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/misc_Sequencer_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/misc_Sequencer.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/misc_Sequencer_tb.vhdl>`
+
 
 .. _IP:misc_Sequencer:
 
@@ -29,6 +32,8 @@ misc_Sequencer
    :linenos:
    :lines: 40-56
 
-Source file: :pocsrc:`misc/misc_Sequencer.vhdl <misc/misc_Sequencer.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`misc/misc_Sequencer.vhdl <misc/misc_Sequencer.vhdl>`

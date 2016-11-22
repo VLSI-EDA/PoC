@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/lut/lut_Sine.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/lut/lut_Sine_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/lut/lut_Sine.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/lut/lut_Sine_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <mem/lut/lut_Sine.vhdl>`
-   * |gh-tb| :poctb:`Testbench <mem/lut/lut_Sine_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/lut/lut_Sine.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/lut/lut_Sine_tb.vhdl>`
+
 
 .. _IP:lut_Sine:
 
@@ -29,6 +32,8 @@ lut_Sine
    :linenos:
    :lines: 41-54
 
-Source file: :pocsrc:`mem/lut/lut_Sine.vhdl <mem/lut/lut_Sine.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/lut/lut_Sine.vhdl <mem/lut/lut_Sine.vhdl>`

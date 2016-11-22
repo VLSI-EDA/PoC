@@ -1,16 +1,19 @@
-.. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_StrobeGenerator.vhdl
-            :alt: Source Code on GitHub
-.. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
-            :scale: 40
-            :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_StrobeGenerator_tb.vhdl
-            :alt: Source Code on GitHub
+.. only:: html
 
-.. sidebar:: GitHub Links
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_StrobeGenerator.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_StrobeGenerator_tb.vhdl
+               :alt: Source Code on GitHub
 
-   * |gh-src| :pocsrc:`Sourcecode <misc/misc_StrobeGenerator.vhdl>`
-   * |gh-tb| :poctb:`Testbench <misc/misc_StrobeGenerator_tb.vhdl>`
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/misc_StrobeGenerator.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/misc_StrobeGenerator_tb.vhdl>`
+
 
 .. _IP:misc_StrobeGenerator:
 
@@ -29,6 +32,8 @@ misc_StrobeGenerator
    :linenos:
    :lines: 40-49
 
-Source file: :pocsrc:`misc/misc_StrobeGenerator.vhdl <misc/misc_StrobeGenerator.vhdl>`
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`misc/misc_StrobeGenerator.vhdl <misc/misc_StrobeGenerator.vhdl>`
