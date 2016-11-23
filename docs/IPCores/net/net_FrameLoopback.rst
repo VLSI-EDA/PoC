@@ -1,3 +1,8 @@
+.. _IP:FrameLoopback:
+
+PoC.net.FrameLoopback
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/net_FrameLoopback.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/net_FrameLoopback_tb.vhdl>`
-
-
-.. _IP:FrameLoopback:
-
-FrameLoopback
-#############
 
 .. TODO:: No documentation available.
 

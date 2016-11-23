@@ -1,3 +1,8 @@
+.. _IP:xil_BSCAN:
+
+PoC.xil.BSCAN
+#############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_BSCAN.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_BSCAN_tb.vhdl>`
-
-
-.. _IP:xil_BSCAN:
-
-xil_BSCAN
-#########
 
 This module wraps Xilinx "Boundary Scan" (JTAG) primitives in a generic
 module. |br|

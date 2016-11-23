@@ -1,3 +1,8 @@
+.. _IP:ipv6_FrameLoopback:
+
+PoC.net.ipv6.FrameLoopback
+##########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ipv6/ipv6_FrameLoopback.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ipv6/ipv6_FrameLoopback_tb.vhdl>`
-
-
-.. _IP:ipv6_FrameLoopback:
-
-ipv6_FrameLoopback
-##################
 
 .. TODO:: No documentation available.
 

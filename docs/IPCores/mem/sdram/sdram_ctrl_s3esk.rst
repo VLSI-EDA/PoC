@@ -1,3 +1,8 @@
+.. _IP:sdram_ctrl_s3esk:
+
+PoC.mem.sdram.ctrl_s3esk
+########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_s3esk.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_s3esk_tb.vhdl>`
-
-
-.. _IP:sdram_ctrl_s3esk:
-
-sdram_ctrl_s3esk
-################
 
 Controller for Micron DDR-SDRAM on Spartan-3E Starter Kit Board.
 

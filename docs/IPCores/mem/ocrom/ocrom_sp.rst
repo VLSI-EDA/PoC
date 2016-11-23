@@ -1,3 +1,8 @@
+.. _IP:ocrom_sp:
+
+PoC.mem.ocrom.sp
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ocrom/ocrom_sp.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ocrom/ocrom_sp_tb.vhdl>`
-
-
-.. _IP:ocrom_sp:
-
-ocrom_sp
-########
 
 Inferring / instantiating single-port read-only memory
 

@@ -1,3 +1,8 @@
+.. _IP:misc_Sequencer:
+
+PoC.misc.Sequencer
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_Sequencer.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_Sequencer_tb.vhdl>`
-
-
-.. _IP:misc_Sequencer:
-
-misc_Sequencer
-##############
 
 .. TODO:: No documentation available.
 

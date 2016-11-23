@@ -1,3 +1,8 @@
+.. _IP:io_KeyPadScanner:
+
+PoC.io.KeyPadScanner
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/io_KeyPadScanner.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/io_KeyPadScanner_tb.vhdl>`
-
-
-.. _IP:io_KeyPadScanner:
-
-io_KeyPadScanner
-################
 
 This module drives a one-hot encoded column vector to read back a rows
 vector. By scanning column-by-column it's possible to extract the current

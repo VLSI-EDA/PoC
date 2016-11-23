@@ -1,3 +1,8 @@
+.. _IP:ocram_sdp:
+
+PoC.mem.ocram.sdp
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_sdp.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_sdp_tb.vhdl>`
-
-
-.. _IP:ocram_sdp:
-
-ocram_sdp
-#########
 
 Inferring / instantiating simple dual-port memory, with:
 

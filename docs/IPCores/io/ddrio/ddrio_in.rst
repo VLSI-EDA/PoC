@@ -1,3 +1,8 @@
+.. _IP:ddrio_in:
+
+PoC.io.ddrio.in
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -14,12 +19,6 @@
       * |gh-src| :pocsrc:`Sourcecode <io/ddrio/ddrio_in.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/ddrio/ddrio_in_tb.vhdl>`
 
-
-.. _IP:ddrio_in:
-
-ddrio_in
-########
-
 Instantiates chip-specific :abbr:`DDR (Double Data Rate)` input registers.
 
 Both data ``DataIn_high/low`` are synchronously outputted to the on-chip logic
@@ -31,30 +30,22 @@ the falling edge of the clock as depicted in the following waveform.
 .. wavedrom::
 
    { signal: [
-       {name: 'clk',             wave: 'H.L.H.L.H.L.H.L.H'},
-       {name: 'pad',             wave: 'x2.3.4.5.2.3.x...', data: ['0', '1', '2', '3', '4', '5'], node: '.a.b.c.d.e.f...'},
-       {name: 'DataIn_low',    wave: 'x...2...4...2...x', data: ['0',      '2',      '4'],      node: '....k...m...o..'},
-       {name: 'DataIn_high',   wave: 'x...3...5...3...x', data: ['1',      '3',      '5'],      node: '....l...n...p..'}
+     ['DataIn',
+       {name: 'ClockIn',         wave: 'L.H.L.H.L.H.L.H.L.'},
+       {name: 'ClockInEnable',   wave: '01............0...'},
+       {name: 'DataIn_low',      wave: 'x.....2...4...x...', data: ['0',      '2'],      node: '......u...w.'},
+       {name: 'DataIn_high',     wave: 'x.....3...5...x...', data: ['1',      '3'],      node: '......v...x.'}
      ],
-     edge: ['a|->k', 'b|->l', 'c|->m', 'd|->n', 'e|->o', 'f|->p'],
+     {name: 'Pad',             wave: 'x2.3.4.5.x........', data: ['0', '1', '2', '3'], node: '.a.b.c.d.....'},
+     ],
+     edge: ['a~>u', 'b~>v', 'c~>w', 'd~>x'],
      foot: {
        text: ['tspan',
-         ['tspan', {'font-weight': 'bold'}, 'PoC.io.ddrio.in'],
-         ' -- DDR Data Input sampled from pad.'
+         ['tspan', {'font-weight': 'bold'}, 'PoC.io.ddrio.inout'],
+         ' -- DDR Data Input/Output sampled from pad.'
        ]
      }
    }
-
-.. only:: latex
-
-   .. code-block:: none
-                   __      ____      ____      __
-      Clock          |____|    |____|    |____|
-      Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
-      DataIn_low      ... >< 0      >< 2      ><
-      DataIn_high     ... >< 1      >< 3      ><
-
-      < i > is the value of the i-th data bit on the line.
 
 After power-up, the output ports ``DataIn_high`` and ``DataIn_low`` both equal
 INIT_VALUE.
@@ -70,7 +61,7 @@ IOBs.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 82-94
+   :lines: 74-86
 
 
 

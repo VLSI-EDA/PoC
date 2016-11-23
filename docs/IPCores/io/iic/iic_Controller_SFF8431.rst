@@ -1,3 +1,8 @@
+.. _IP:IICController_SFF8431:
+
+PoC.io.iic.Controller_SFF8431
+#############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/iic/iic_Controller_SFF8431.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/iic/iic_Controller_SFF8431_tb.vhdl>`
-
-
-.. _IP:IICController_SFF8431:
-
-IICController_SFF8431
-#####################
 
 
 

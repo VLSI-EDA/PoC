@@ -1,3 +1,8 @@
+.. _IP:misc_PulseTrain:
+
+PoC.misc.PulseTrain
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_PulseTrain.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_PulseTrain_tb.vhdl>`
-
-
-.. _IP:misc_PulseTrain:
-
-misc_PulseTrain
-###############
 
 		This module generates pulse trains. This module was written as a answer for
 		a StackOverflow question: http://stackoverflow.com/questions/25783320

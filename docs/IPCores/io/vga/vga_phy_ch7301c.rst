@@ -1,3 +1,8 @@
+.. _IP:vga_phy_ch7301c:
+
+PoC.io.vga.phy_ch7301c
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_phy_ch7301c.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/vga/vga_phy_ch7301c_tb.vhdl>`
-
-
-.. _IP:vga_phy_ch7301c:
-
-vga_phy_ch7301c
-###############
 
 The clock frequency must be the same as used for the timing module,
 e.g., 25 MHZ for VGA 640x480. A phase-shifted clock must be provided:

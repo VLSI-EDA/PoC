@@ -1,3 +1,8 @@
+.. _IP:sortnet_OddEvenSort:
+
+PoC.sort.sortnet.OddEvenSort
+############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet_OddEvenSort.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sortnet/sortnet_OddEvenSort_tb.vhdl>`
-
-
-.. _IP:sortnet_OddEvenSort:
-
-sortnet_OddEvenSort
-###################
 
 .. TODO:: No documentation available.
 

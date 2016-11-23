@@ -1,3 +1,8 @@
+.. _IP:ocram_tdp_sim:
+
+PoC.mem.ocram.tdp_sim
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_tdp_sim.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_tdp_sim_tb.vhdl>`
-
-
-.. _IP:ocram_tdp_sim:
-
-ocram_tdp_sim
-#############
 
 Simulation model for true dual-port memory, with:
 

@@ -1,3 +1,8 @@
+.. _IP:sync_Reset:
+
+PoC.misc.sync.Reset
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Reset.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/sync/sync_Reset_tb.vhdl>`
-
-
-.. _IP:sync_Reset:
-
-sync_Reset
-##########
 
 This module synchronizes an asynchronous reset signal to the clock
 ``Clock``. The ``Input`` can be asserted and de-asserted at any time.

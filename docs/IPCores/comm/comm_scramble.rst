@@ -1,3 +1,8 @@
+.. _IP:comm_scramble:
+
+PoC.comm.scramble
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <comm/comm_scramble.vhdl>`
       * |gh-tb| :poctb:`Testbench <comm/comm_scramble_tb.vhdl>`
-
-
-.. _IP:comm_scramble:
-
-comm_scramble
-#############
 
 The LFSR computation is unrolled to generate an arbitrary number of mask
 bits in parallel. The mask are output in little endian. The generated bit

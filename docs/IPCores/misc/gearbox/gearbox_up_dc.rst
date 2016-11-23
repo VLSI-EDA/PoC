@@ -1,3 +1,8 @@
+.. _IP:gearbox_up_dc:
+
+PoC.misc.gearbox.up_dc
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/gearbox/gearbox_up_dc.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/gearbox/gearbox_up_dc_tb.vhdl>`
-
-
-.. _IP:gearbox_up_dc:
-
-gearbox_up_dc
-#############
 
 	This module provides a upscaling gearbox with a dependent clock (dc)
 	interface. It perfoems a 'byte' to 'word' collection. The default order is

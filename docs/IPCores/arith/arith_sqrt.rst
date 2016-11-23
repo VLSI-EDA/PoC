@@ -1,3 +1,8 @@
+.. _IP:arith_sqrt:
+
+PoC.arith.sqrt
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_sqrt.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_sqrt_tb.vhdl>`
-
-
-.. _IP:arith_sqrt:
-
-arith_sqrt
-##########
 
 Iterative Square Root Extractor.
 

@@ -1,3 +1,8 @@
+.. _IP:stream_Sink:
+
+PoC.bus.stream.Sink
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_Sink.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/stream/stream_Sink_tb.vhdl>`
-
-
-.. _IP:stream_Sink:
-
-stream_Sink
-###########
 
 .. TODO:: No documentation available.
 

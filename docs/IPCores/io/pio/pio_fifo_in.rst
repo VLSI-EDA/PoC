@@ -1,3 +1,8 @@
+.. _IP:pio_fifo_in:
+
+PoC.io.pio.fifo_in
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/pio/pio_fifo_in.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/pio/pio_fifo_in_tb.vhdl>`
-
-
-.. _IP:pio_fifo_in:
-
-pio_fifo_in
-###########
 
 
 

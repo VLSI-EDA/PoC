@@ -1,3 +1,8 @@
+.. _IP:cache_tagunit_seq:
+
+PoC.cache.tagunit_seq
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <cache/cache_tagunit_seq.vhdl>`
       * |gh-tb| :poctb:`Testbench <cache/cache_tagunit_seq_tb.vhdl>`
-
-
-.. _IP:cache_tagunit_seq:
-
-cache_tagunit_seq
-#################
 
 .. TODO:: No documentation available.
 

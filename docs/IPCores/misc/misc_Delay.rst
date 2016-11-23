@@ -1,3 +1,8 @@
+.. _IP:misc_Delay:
+
+PoC.misc.Delay
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_Delay.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_Delay_tb.vhdl>`
-
-
-.. _IP:misc_Delay:
-
-misc_Delay
-##########
 
 .. TODO:: No documentation available.
 

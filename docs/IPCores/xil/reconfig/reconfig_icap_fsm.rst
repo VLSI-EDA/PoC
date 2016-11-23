@@ -1,3 +1,8 @@
+.. _IP:reconfig_icap_fsm:
+
+PoC.xil.reconfig.icap_fsm
+#########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/reconfig/reconfig_icap_fsm.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/reconfig/reconfig_icap_fsm_tb.vhdl>`
-
-
-.. _IP:reconfig_icap_fsm:
-
-reconfig_icap_fsm
-#################
 
 This module parses the data stream to the Xilinx "Internal Configuration Access Port" (ICAP)
 primitives to generate control signals. Tested on:

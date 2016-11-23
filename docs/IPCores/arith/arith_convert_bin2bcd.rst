@@ -1,3 +1,8 @@
+.. _IP:arith_convert_bin2bcd:
+
+PoC.arith.convert_bin2bcd
+#########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_convert_bin2bcd.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_convert_bin2bcd_tb.vhdl>`
-
-
-.. _IP:arith_convert_bin2bcd:
-
-arith_convert_bin2bcd
-#####################
 
 .. TODO:: No documentation available.
 

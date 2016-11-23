@@ -1,3 +1,8 @@
+.. _IP:stream_FrameGenerator:
+
+PoC.bus.stream.FrameGenerator
+#############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_FrameGenerator.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/stream/stream_FrameGenerator_tb.vhdl>`
-
-
-.. _IP:stream_FrameGenerator:
-
-stream_FrameGenerator
-#####################
 
 .. TODO:: No documentation available.
 

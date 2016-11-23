@@ -1,3 +1,8 @@
+.. _IP:arp_UniCast_Receiver:
+
+PoC.net.arp.UniCast_Receiver
+############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_UniCast_Receiver.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/arp/arp_UniCast_Receiver_tb.vhdl>`
-
-
-.. _IP:arp_UniCast_Receiver:
-
-arp_UniCast_Receiver
-####################
 
 .. TODO:: No documentation available.
 

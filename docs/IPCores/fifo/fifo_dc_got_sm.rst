@@ -1,3 +1,8 @@
+.. _IP:fifo_dc_got_sm:
+
+PoC.fifo.dc_got_sm
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_dc_got_sm.vhdl>`
       * |gh-tb| :poctb:`Testbench <fifo/fifo_dc_got_sm_tb.vhdl>`
-
-
-.. _IP:fifo_dc_got_sm:
-
-fifo_dc_got_sm
-##############
 
 Dependent clocks meens, that one clock must be a multiple of the other one.
 And your synthesis tool must check for setup- and hold-time violations.

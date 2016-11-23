@@ -1,3 +1,8 @@
+.. _IP:ocrom_dp:
+
+PoC.mem.ocrom.dp
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ocrom/ocrom_dp.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ocrom/ocrom_dp_tb.vhdl>`
-
-
-.. _IP:ocrom_dp:
-
-ocrom_dp
-########
 
 Inferring / instantiating dual-port read-only memory, with:
 

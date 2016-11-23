@@ -1,3 +1,8 @@
+.. _IP:sdram_ctrl_de0:
+
+PoC.mem.sdram.ctrl_de0
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_de0.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_de0_tb.vhdl>`
-
-
-.. _IP:sdram_ctrl_de0:
-
-sdram_ctrl_de0
-##############
 
 Complete controller for ISSI SDR-SDRAM for Altera DE0 Board.
 

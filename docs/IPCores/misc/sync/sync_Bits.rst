@@ -1,3 +1,8 @@
+.. _IP:sync_Bits:
+
+PoC.misc.sync.Bits
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Bits.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/sync/sync_Bits_tb.vhdl>`
-
-
-.. _IP:sync_Bits:
-
-sync_Bits
-#########
 
 This module synchronizes multiple flag bits into clock-domain ``Clock``.
 The clock-domain boundary crossing is done by two synchronizer D-FFs. All

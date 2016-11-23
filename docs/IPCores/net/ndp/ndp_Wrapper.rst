@@ -1,3 +1,8 @@
+.. _IP:NDP_Wrapper:
+
+PoC.net.ndp.Wrapper
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ndp/ndp_Wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ndp/ndp_Wrapper_tb.vhdl>`
-
-
-.. _IP:NDP_Wrapper:
-
-NDP_Wrapper
-###########
 
 .. TODO:: No documentation available.
 

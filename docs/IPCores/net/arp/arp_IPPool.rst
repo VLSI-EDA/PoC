@@ -1,3 +1,8 @@
+.. _IP:arp_IPPool:
+
+PoC.net.arp.IPPool
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_IPPool.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/arp/arp_IPPool_tb.vhdl>`
-
-
-.. _IP:arp_IPPool:
-
-arp_IPPool
-##########
 
 .. TODO:: No documentation available.
 

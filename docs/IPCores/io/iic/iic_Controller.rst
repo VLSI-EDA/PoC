@@ -1,3 +1,8 @@
+.. _IP:iic_Controller:
+
+PoC.io.iic.Controller
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/iic/iic_Controller.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/iic/iic_Controller_tb.vhdl>`
-
-
-.. _IP:iic_Controller:
-
-iic_Controller
-##############
 
 The I2C Controller transmitts words over the I2C bus (SerialClock - SCL,
 SerialData - SDA) and also receives them. This controller utilizes the

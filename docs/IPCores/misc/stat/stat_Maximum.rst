@@ -1,3 +1,8 @@
+.. _IP:stat_Maximum:
+
+PoC.misc.stat.Maximum
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/stat/stat_Maximum.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/stat/stat_Maximum_tb.vhdl>`
-
-
-.. _IP:stat_Maximum:
-
-stat_Maximum
-############
 
 .. TODO:: No documentation available.
 

@@ -1,3 +1,8 @@
+.. _IP:vga_timing:
+
+PoC.io.vga.timing
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_timing.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/vga/vga_timing_tb.vhdl>`
-
-
-.. _IP:vga_timing:
-
-vga_timing
-##########
 
 Configuration:
 --------------

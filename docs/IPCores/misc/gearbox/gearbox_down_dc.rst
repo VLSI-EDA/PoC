@@ -1,3 +1,8 @@
+.. _IP:gearbox_down_dc:
+
+PoC.misc.gearbox.down_dc
+########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/gearbox/gearbox_down_dc.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/gearbox/gearbox_down_dc_tb.vhdl>`
-
-
-.. _IP:gearbox_down_dc:
-
-gearbox_down_dc
-###############
 
 	This module provides a downscaling gearbox with a dependent clock (dc)
 	interface. It perfoems a 'word' to 'byte' splitting. The default order is

@@ -1,3 +1,8 @@
+.. _IP:iic_BusController:
+
+PoC.io.iic.BusController
+########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/iic/iic_BusController.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/iic/iic_BusController_tb.vhdl>`
-
-
-.. _IP:iic_BusController:
-
-iic_BusController
-#################
 
 The I2C BusController transmitts bits over the I2C bus (SerialClock - SCL,
 SerialData - SDA) and also receives them.	To send/receive words over the

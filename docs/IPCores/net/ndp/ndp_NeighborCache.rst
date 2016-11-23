@@ -1,3 +1,8 @@
+.. _IP:ndp_NeighborCache:
+
+PoC.net.ndp.NeighborCache
+#########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ndp/ndp_NeighborCache.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ndp/ndp_NeighborCache_tb.vhdl>`
-
-
-.. _IP:ndp_NeighborCache:
-
-ndp_NeighborCache
-#################
 
 .. TODO:: No documentation available.
 

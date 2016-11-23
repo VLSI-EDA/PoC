@@ -1,3 +1,8 @@
+.. _IP:stat_Average:
+
+PoC.misc.stat.Average
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/stat/stat_Average.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/stat/stat_Average_tb.vhdl>`
-
-
-.. _IP:stat_Average:
-
-stat_Average
-############
 
 .. TODO:: No documentation available.
 

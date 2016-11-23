@@ -1,3 +1,8 @@
+.. _IP:io_Debounce:
+
+PoC.io.Debounce
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/io_Debounce.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/io_Debounce_tb.vhdl>`
-
-
-.. _IP:io_Debounce:
-
-io_Debounce
-###########
 
 This module debounces several input pins preventing input changes
 following a previous one within the configured ``BOUNCE_TIME`` to pass.

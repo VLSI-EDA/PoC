@@ -1,3 +1,8 @@
+.. _IP:pmod_KYPD:
+
+PoC.io.pmod.KYPD
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/pmod/pmod_KYPD.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/pmod/pmod_KYPD_tb.vhdl>`
-
-
-.. _IP:pmod_KYPD:
-
-pmod_KYPD
-#########
 
 This module drives a 4-bit one-cold encoded column vector to read back a
 4-bit rows vector. By scanning column-by-column it's possible to extract

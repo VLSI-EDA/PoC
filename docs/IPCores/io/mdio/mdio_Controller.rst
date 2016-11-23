@@ -1,3 +1,8 @@
+.. _IP:mdio_Controller:
+
+PoC.io.mdio.Controller
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/mdio/mdio_Controller.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/mdio/mdio_Controller_tb.vhdl>`
-
-
-.. _IP:mdio_Controller:
-
-mdio_Controller
-###############
 
 .. TODO:: No documentation available.
 

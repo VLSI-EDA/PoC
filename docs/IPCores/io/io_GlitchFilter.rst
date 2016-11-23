@@ -1,3 +1,8 @@
+.. _IP:io_GlitchFilter:
+
+PoC.io.GlitchFilter
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/io_GlitchFilter.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/io_GlitchFilter_tb.vhdl>`
-
-
-.. _IP:io_GlitchFilter:
-
-io_GlitchFilter
-###############
 
 This module filters glitches on a wire. The high and low spike suppression
 cycle counts can be configured.

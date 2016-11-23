@@ -1,3 +1,8 @@
+.. _IP:arith_firstone:
+
+PoC.arith.firstone
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_firstone.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_firstone_tb.vhdl>`
-
-
-.. _IP:arith_firstone:
-
-arith_firstone
-##############
 
 Computes from an input word, a word of the same size that has, at most,
 one bit set. The output contains a set bit at the position of the rightmost

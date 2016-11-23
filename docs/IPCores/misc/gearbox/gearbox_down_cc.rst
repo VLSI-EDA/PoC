@@ -1,3 +1,8 @@
+.. _IP:gearbox_down_cc:
+
+PoC.misc.gearbox.down_cc
+########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/gearbox/gearbox_down_cc.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/gearbox/gearbox_down_cc_tb.vhdl>`
-
-
-.. _IP:gearbox_down_cc:
-
-gearbox_down_cc
-###############
 
 	This module provides a downscaling gearbox with a common clock (cc)
 	interface. It perfoems a 'word' to 'byte' splitting. The default order is

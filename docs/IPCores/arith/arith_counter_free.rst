@@ -1,3 +1,8 @@
+.. _IP:arith_counter_free:
+
+PoC.arith.counter_free
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_counter_free.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_counter_free_tb.vhdl>`
-
-
-.. _IP:arith_counter_free:
-
-arith_counter_free
-##################
 
 Implements a free-running counter that generates a strobe signal every
 DIVIDER-th cycle the increment input was asserted. There is deliberately no

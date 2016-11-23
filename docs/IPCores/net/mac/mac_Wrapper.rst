@@ -1,3 +1,8 @@
+.. _IP:mac_Wrapper:
+
+PoC.net.mac.Wrapper
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/mac/mac_Wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/mac/mac_Wrapper_tb.vhdl>`
-
-
-.. _IP:mac_Wrapper:
-
-mac_Wrapper
-###########
 
 .. TODO:: No documentation available.
 

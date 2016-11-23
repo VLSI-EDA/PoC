@@ -1,3 +1,8 @@
+.. _IP:io_PulseWidthModulation:
+
+PoC.io.PulseWidthModulation
+###########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/io_PulseWidthModulation.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/io_PulseWidthModulation_tb.vhdl>`
-
-
-.. _IP:io_PulseWidthModulation:
-
-io_PulseWidthModulation
-#######################
 
 This module generates a pulse width modulated signal, that can be configured
 in frequency (``PWM_FREQ``) and modulation granularity (``PWM_RESOLUTION``).

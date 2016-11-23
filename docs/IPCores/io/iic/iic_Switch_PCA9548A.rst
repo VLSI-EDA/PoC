@@ -1,3 +1,8 @@
+.. _IP:iic_Switch_PCA9548A:
+
+PoC.io.iic.Switch_PCA9548A
+##########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/iic/iic_Switch_PCA9548A.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/iic/iic_Switch_PCA9548A_tb.vhdl>`
-
-
-.. _IP:iic_Switch_PCA9548A:
-
-iic_Switch_PCA9548A
-###################
 
 .. TODO:: No documentation available. TODO
 

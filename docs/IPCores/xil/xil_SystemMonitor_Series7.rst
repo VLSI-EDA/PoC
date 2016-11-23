@@ -1,3 +1,8 @@
+.. _IP:xil_SystemMonitor_Series7:
+
+PoC.xil.SystemMonitor_Series7
+#############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_SystemMonitor_Series7.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_SystemMonitor_Series7_tb.vhdl>`
-
-
-.. _IP:xil_SystemMonitor_Series7:
-
-xil_SystemMonitor_Series7
-#########################
 
 This module wraps a Series-7 XADC to report if preconfigured temperature values
 are overrun. The XADC was formerly known as "System Monitor".

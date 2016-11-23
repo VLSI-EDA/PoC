@@ -1,3 +1,8 @@
+.. _IP:uart_wb:
+
+PoC.bus.wb.uart_wrapper
+#######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/wb/wb_uart_wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/wb/wb_uart_wrapper_tb.vhdl>`
-
-
-.. _IP:uart_wb:
-
-uart_wb
-#######
 
 Wrapper module for :doc:`PoC.io.uart.rx </IPCores/io/uart/uart_rx>` and
 :doc:`PoC.io.uart.tx </IPCores/io/uart/uart_tx>` to support the Wishbone

@@ -1,3 +1,8 @@
+.. _IP:xil_Reconfigurator:
+
+PoC.xil.Reconfigurator
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_Reconfigurator.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_Reconfigurator_tb.vhdl>`
-
-
-.. _IP:xil_Reconfigurator:
-
-xil_Reconfigurator
-##################
 
 Many complex primitives in a Xilinx device offer a Dynamic Reconfiguration
 Port (DRP) to reconfigure a primitive at runtime without reconfiguring the

@@ -1,3 +1,8 @@
+.. _IP:stat_Minimum:
+
+PoC.misc.stat.Minimum
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/stat/stat_Minimum.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/stat/stat_Minimum_tb.vhdl>`
-
-
-.. _IP:stat_Minimum:
-
-stat_Minimum
-############
 
 .. TODO:: No documentation available.
 

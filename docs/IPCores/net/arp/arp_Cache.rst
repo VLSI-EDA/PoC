@@ -1,3 +1,8 @@
+.. _IP:arp_Cache:
+
+PoC.net.arp.Cache
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_Cache.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/arp/arp_Cache_tb.vhdl>`
-
-
-.. _IP:arp_Cache:
-
-arp_Cache
-#########
 
 .. TODO:: No documentation available.
 

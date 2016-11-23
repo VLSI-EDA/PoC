@@ -1,3 +1,8 @@
+.. _IP:lcd_LCDController_KS0066U:
+
+PoC.io.lcd.LCDController_KS0066U
+################################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/lcd/lcd_LCDController_KS0066U.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/lcd/lcd_LCDController_KS0066U_tb.vhdl>`
-
-
-.. _IP:lcd_LCDController_KS0066U:
-
-lcd_LCDController_KS0066U
-#########################
 
 .. TODO:: No documentation available.
 

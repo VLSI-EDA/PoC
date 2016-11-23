@@ -1,3 +1,8 @@
+.. _IP:vga_phy:
+
+PoC.io.vga.phy
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_phy.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/vga/vga_phy_tb.vhdl>`
-
-
-.. _IP:vga_phy:
-
-vga_phy
-#######
 
 	The clock frequency must be the same as used for the timing module.
 

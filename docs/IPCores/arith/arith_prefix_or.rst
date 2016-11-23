@@ -1,3 +1,8 @@
+.. _IP:arith_prefix_or:
+
+PoC.arith.prefix_or
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_prefix_or.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_prefix_or_tb.vhdl>`
-
-
-.. _IP:arith_prefix_or:
-
-arith_prefix_or
-###############
 
 Prefix OR computation:
 ``y(i) <= '0' when x(i downto 0) = (i downto 0 => '0') else '1';``

@@ -1,3 +1,8 @@
+.. _IP:icmpv6_TX:
+
+PoC.net.icmpv6.TX
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/icmpv6/icmpv6_TX.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/icmpv6/icmpv6_TX_tb.vhdl>`
-
-
-.. _IP:icmpv6_TX:
-
-icmpv6_TX
-#########
 
 .. TODO:: No documentation available.
 

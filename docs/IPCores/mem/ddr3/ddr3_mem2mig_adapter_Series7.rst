@@ -1,3 +1,8 @@
+.. _IP:ddr3_mem2mig_adapter_Series7:
+
+PoC.mem.ddr3.mem2mig_adapter_Series7
+####################################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ddr3/ddr3_mem2mig_adapter_Series7_tb.vhdl>`
-
-
-.. _IP:ddr3_mem2mig_adapter_Series7:
-
-ddr3_mem2mig_adapter_Series7
-############################
 
 Adapter between the :ref:`PoC.Mem <INT:PoC.Mem>` interface and the
 application interface ("app") of the Xilinx MIG IP core for 7-Series	FPGAs.

@@ -1,3 +1,8 @@
+.. _IP:arith_shifter_barrel:
+
+PoC.arith.shifter_barrel
+########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_shifter_barrel.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_shifter_barrel_tb.vhdl>`
-
-
-.. _IP:arith_shifter_barrel:
-
-arith_shifter_barrel
-####################
 
 This Barrel-Shifter supports:
 

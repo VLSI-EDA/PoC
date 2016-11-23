@@ -1,3 +1,8 @@
+.. _IP:sortnet_MergeSort_Streamed:
+
+PoC.sort.sortnet.MergeSort_Streamed
+###################################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet_MergeSort_Streamed.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sortnet/sortnet_MergeSort_Streamed_tb.vhdl>`
-
-
-.. _IP:sortnet_MergeSort_Streamed:
-
-sortnet_MergeSort_Streamed
-##########################
 
 .. TODO:: No documentation available.
 

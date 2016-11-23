@@ -1,3 +1,8 @@
+.. _IP:fifo_cc_got:
+
+PoC.fifo.cc_got
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_cc_got.vhdl>`
       * |gh-tb| :poctb:`Testbench <fifo/fifo_cc_got_tb.vhdl>`
-
-
-.. _IP:fifo_cc_got:
-
-fifo_cc_got
-###########
 
 This module implements a regular FIFO with common clock (cc), pipelined
 interface. Common clock means read and write port use the same clock. The

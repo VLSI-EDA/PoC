@@ -1,3 +1,8 @@
+.. _IP:icmpv6_Wrapper:
+
+PoC.net.icmpv6.Wrapper
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/icmpv6/icmpv6_Wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/icmpv6/icmpv6_Wrapper_tb.vhdl>`
-
-
-.. _IP:icmpv6_Wrapper:
-
-icmpv6_Wrapper
-##############
 
 .. TODO:: No documentation available.
 

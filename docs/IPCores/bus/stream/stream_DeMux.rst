@@ -1,3 +1,8 @@
+.. _IP:stream_DeMux:
+
+PoC.bus.stream.DeMux
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_DeMux.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/stream/stream_DeMux_tb.vhdl>`
-
-
-.. _IP:stream_DeMux:
-
-stream_DeMux
-############
 
 .. TODO:: No documentation available.
 

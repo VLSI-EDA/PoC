@@ -1,3 +1,8 @@
+.. _IP:io_FrequencyCounter:
+
+PoC.io.FrequencyCounter
+#######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/io_FrequencyCounter.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/io_FrequencyCounter_tb.vhdl>`
-
-
-.. _IP:io_FrequencyCounter:
-
-io_FrequencyCounter
-###################
 
 .. TODO:: No documentation available.
 

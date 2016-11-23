@@ -1,3 +1,8 @@
+.. _IP:lcd_LCDBusController:
+
+PoC.io.lcd.LCDBusController
+###########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/lcd/lcd_LCDBusController.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/lcd/lcd_LCDBusController_tb.vhdl>`
-
-
-.. _IP:lcd_LCDBusController:
-
-lcd_LCDBusController
-####################
 
 .. TODO:: No documentation available.
 

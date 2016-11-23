@@ -1,3 +1,8 @@
+.. _IP:arp_BroadCast_Requester:
+
+PoC.net.arp.BroadCast_Requester
+###############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_BroadCast_Requester.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/arp/arp_BroadCast_Requester_tb.vhdl>`
-
-
-.. _IP:arp_BroadCast_Requester:
-
-arp_BroadCast_Requester
-#######################
 
 .. TODO:: No documentation available.
 

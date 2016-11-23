@@ -1,3 +1,8 @@
+.. _IP:list_lru_systolic:
+
+PoC.sort.InsertSort
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sort_InsertSort.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sort_InsertSort_tb.vhdl>`
-
-
-.. _IP:list_lru_systolic:
-
-list_lru_systolic
-#################
 
 .. TODO:: No documentation available.
 

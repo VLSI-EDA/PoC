@@ -1,3 +1,8 @@
+.. _IP:sync_Pulse:
+
+PoC.misc.sync.Pulse
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Pulse.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/sync/sync_Pulse_tb.vhdl>`
-
-
-.. _IP:sync_Pulse:
-
-sync_Pulse
-##########
 
 This module synchronizes multiple pulsed bits into the clock-domain ``Clock``.
 The clock-domain boundary crossing is done by two synchronizer D-FFs. All bits

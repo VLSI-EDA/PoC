@@ -1,3 +1,8 @@
+.. _IP:fifo_cc_got_tempput:
+
+PoC.fifo.cc_got_tempput
+#######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_cc_got_tempput.vhdl>`
       * |gh-tb| :poctb:`Testbench <fifo/fifo_cc_got_tempput_tb.vhdl>`
-
-
-.. _IP:fifo_cc_got_tempput:
-
-fifo_cc_got_tempput
-###################
 
 The specified depth (``MIN_DEPTH``) is rounded up to the next suitable value.
 

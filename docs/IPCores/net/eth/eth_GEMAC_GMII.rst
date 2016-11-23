@@ -1,3 +1,8 @@
+.. _IP:eth_GEMAC_GMII:
+
+PoC.net.eth.GEMAC_GMII
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_GEMAC_GMII.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/eth/eth_GEMAC_GMII_tb.vhdl>`
-
-
-.. _IP:eth_GEMAC_GMII:
-
-eth_GEMAC_GMII
-##############
 
 .. TODO:: No documentation available.
 

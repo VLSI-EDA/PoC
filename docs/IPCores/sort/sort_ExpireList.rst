@@ -1,3 +1,8 @@
+.. _IP:list_expire:
+
+PoC.sort.ExpireList
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sort_ExpireList.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sort_ExpireList_tb.vhdl>`
-
-
-.. _IP:list_expire:
-
-list_expire
-###########
 
 .. TODO:: No documentation available.
 

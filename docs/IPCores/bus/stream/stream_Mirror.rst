@@ -1,3 +1,8 @@
+.. _IP:stream_Mirror:
+
+PoC.bus.stream.Mirror
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_Mirror.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/stream/stream_Mirror_tb.vhdl>`
-
-
-.. _IP:stream_Mirror:
-
-stream_Mirror
-#############
 
 .. TODO:: No documentation available.
 

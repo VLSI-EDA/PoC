@@ -1,3 +1,8 @@
+.. _IP:lcd_dotmatrix:
+
+PoC.io.lcd.dotmatrix
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/lcd/lcd_dotmatrix.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/lcd/lcd_dotmatrix_tb.vhdl>`
-
-
-.. _IP:lcd_dotmatrix:
-
-lcd_dotmatrix
-#############
 
 .. TODO:: No documentation available.
 

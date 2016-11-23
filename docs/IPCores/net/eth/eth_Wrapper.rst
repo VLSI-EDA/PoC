@@ -1,3 +1,8 @@
+.. _IP:Eth_Wrapper:
+
+PoC.net.eth.Wrapper
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_Wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/eth/eth_Wrapper_tb.vhdl>`
-
-
-.. _IP:Eth_Wrapper:
-
-Eth_Wrapper
-###########
 
 .. TODO:: No documentation available.
 

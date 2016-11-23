@@ -1,3 +1,8 @@
+.. _IP:sortnet_BitonicSort:
+
+PoC.sort.sortnet.BitonicSort
+############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet_BitonicSort.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sortnet/sortnet_BitonicSort_tb.vhdl>`
-
-
-.. _IP:sortnet_BitonicSort:
-
-sortnet_BitonicSort
-###################
 
 This sorting network uses the *bitonic sort* algorithm.
 

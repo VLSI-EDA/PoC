@@ -1,3 +1,8 @@
+.. _IP:lcd_LCDSynchronizer:
+
+PoC.io.lcd.LCDSynchronizer
+##########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/lcd/lcd_LCDSynchronizer.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/lcd/lcd_LCDSynchronizer_tb.vhdl>`
-
-
-.. _IP:lcd_LCDSynchronizer:
-
-lcd_LCDSynchronizer
-###################
 
 .. TODO:: No documentation available.
 

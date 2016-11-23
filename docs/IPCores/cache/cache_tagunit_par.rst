@@ -1,3 +1,8 @@
+.. _IP:cache_tagunit_par:
+
+PoC.cache.tagunit_par
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <cache/cache_tagunit_par.vhdl>`
       * |gh-tb| :poctb:`Testbench <cache/cache_tagunit_par_tb.vhdl>`
-
-
-.. _IP:cache_tagunit_par:
-
-cache_tagunit_par
-#################
 
 Tag-unit with fully-parallel compare of tag.
 

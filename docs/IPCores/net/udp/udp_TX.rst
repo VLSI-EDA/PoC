@@ -1,3 +1,8 @@
+.. _IP:udp_TX:
+
+PoC.net.udp.TX
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/udp/udp_TX.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/udp/udp_TX_tb.vhdl>`
-
-
-.. _IP:udp_TX:
-
-udp_TX
-######
 
 .. TODO:: No documentation available.
 

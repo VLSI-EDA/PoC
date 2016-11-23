@@ -1,3 +1,8 @@
+.. _IP:arith_counter_gray:
+
+PoC.arith.counter_gray
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_counter_gray.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_counter_gray_tb.vhdl>`
-
-
-.. _IP:arith_counter_gray:
-
-arith_counter_gray
-##################
 
 .. TODO:: No documentation available.
 

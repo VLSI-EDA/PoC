@@ -1,3 +1,8 @@
+.. _IP:bus_Arbiter:
+
+PoC.bus.Arbiter
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/bus_Arbiter.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/bus_Arbiter_tb.vhdl>`
-
-
-.. _IP:bus_Arbiter:
-
-bus_Arbiter
-###########
 
 This module implements a generic arbiter. It currently supports the
 following arbitration strategies:

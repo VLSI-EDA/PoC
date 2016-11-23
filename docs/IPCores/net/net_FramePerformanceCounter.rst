@@ -1,3 +1,8 @@
+.. _IP:LocalLink_PerformanceCounter:
+
+PoC.net.FramePerformanceCounter
+###############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/net_FramePerformanceCounter.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/net_FramePerformanceCounter_tb.vhdl>`
-
-
-.. _IP:LocalLink_PerformanceCounter:
-
-LocalLink_PerformanceCounter
-############################
 
 
 

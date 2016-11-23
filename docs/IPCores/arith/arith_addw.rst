@@ -1,3 +1,8 @@
+.. _IP:arith_addw:
+
+PoC.arith.addw
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_addw.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_addw_tb.vhdl>`
-
-
-.. _IP:arith_addw:
-
-arith_addw
-##########
 
 	Implements wide addition providing several options all based
 	on an adaptation of a carry-select approach.

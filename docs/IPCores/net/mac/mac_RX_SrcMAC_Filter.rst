@@ -1,3 +1,8 @@
+.. _IP:mac_RX_SrcMAC_Filter:
+
+PoC.net.mac.RX_SrcMAC_Filter
+############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/mac/mac_RX_SrcMAC_Filter.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/mac/mac_RX_SrcMAC_Filter_tb.vhdl>`
-
-
-.. _IP:mac_RX_SrcMAC_Filter:
-
-mac_RX_SrcMAC_Filter
-####################
 
 .. TODO:: No documentation available.
 

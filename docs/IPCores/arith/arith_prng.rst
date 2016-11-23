@@ -1,3 +1,8 @@
+.. _IP:arith_prng:
+
+PoC.arith.prng
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_prng.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_prng_tb.vhdl>`
-
-
-.. _IP:arith_prng:
-
-arith_prng
-##########
 
 This module implementes a Pseudo-Random Number Generator (PRNG) with
 configurable bit count (``BITS``). This module uses an internal list of FPGA

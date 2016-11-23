@@ -1,3 +1,8 @@
+.. _IP:uart_rx:
+
+PoC.io.uart.rx
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_rx.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/uart/uart_rx_tb.vhdl>`
-
-
-.. _IP:uart_rx:
-
-uart_rx
-#######
 
 :abbr:`UART (Universal Asynchronous Receiver Transmitter)` Receiver:
 1 Start + 8 Data + 1 Stop

@@ -1,3 +1,8 @@
+.. _IP:mac_TX_SrcMAC_Prepender:
+
+PoC.net.mac.TX_SrcMAC_Prepender
+###############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/mac/mac_TX_SrcMAC_Prepender.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/mac/mac_TX_SrcMAC_Prepender_tb.vhdl>`
-
-
-.. _IP:mac_TX_SrcMAC_Prepender:
-
-mac_TX_SrcMAC_Prepender
-#######################
 
 .. TODO:: No documentation available.
 

@@ -1,3 +1,8 @@
+.. _IP:fifo_ic_got:
+
+PoC.fifo.ic_got
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_ic_got.vhdl>`
       * |gh-tb| :poctb:`Testbench <fifo/fifo_ic_got_tb.vhdl>`
-
-
-.. _IP:fifo_ic_got:
-
-fifo_ic_got
-###########
 
 Independent clocks meens that read and write clock are unrelated.
 

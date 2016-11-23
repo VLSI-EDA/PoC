@@ -1,3 +1,8 @@
+.. _IP:xil_DRP_BusSync:
+
+PoC.xil.DRP_BusSync
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_DRP_BusSync.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_DRP_BusSync_tb.vhdl>`
-
-
-.. _IP:xil_DRP_BusSync:
-
-xil_DRP_BusSync
-###############
 
 .. TODO:: No documentation available.
 

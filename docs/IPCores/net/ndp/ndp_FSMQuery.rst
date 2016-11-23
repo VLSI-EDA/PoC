@@ -1,3 +1,8 @@
+.. _IP:ndp_FSMQuery:
+
+PoC.net.ndp.FSMQuery
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ndp/ndp_FSMQuery.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ndp/ndp_FSMQuery_tb.vhdl>`
-
-
-.. _IP:ndp_FSMQuery:
-
-ndp_FSMQuery
-############
 
 .. TODO:: No documentation available.
 

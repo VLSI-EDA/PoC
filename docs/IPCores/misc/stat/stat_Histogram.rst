@@ -1,3 +1,8 @@
+.. _IP:stat_Histogram:
+
+PoC.misc.stat.Histogram
+#######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/stat/stat_Histogram.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/stat/stat_Histogram_tb.vhdl>`
-
-
-.. _IP:stat_Histogram:
-
-stat_Histogram
-##############
 
 .. TODO:: No documentation available.
 

@@ -1,3 +1,8 @@
+.. _IP:io_7SegmentMux_HEX:
+
+PoC.io.7SegmentMux_HEX
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/io_7SegmentMux_HEX.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/io_7SegmentMux_HEX_tb.vhdl>`
-
-
-.. _IP:io_7SegmentMux_HEX:
-
-io_7SegmentMux_HEX
-##################
 
 This module is a 7 segment display controller that uses time multiplexing
 to control a common anode for each digit in the display. The shown characters

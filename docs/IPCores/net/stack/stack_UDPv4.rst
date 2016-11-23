@@ -1,3 +1,8 @@
+.. _IP:stack_UDPv4:
+
+PoC.net.stack.UDPv4
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/stack/stack_UDPv4.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/stack/stack_UDPv4_tb.vhdl>`
-
-
-.. _IP:stack_UDPv4:
-
-stack_UDPv4
-###########
 
 .. TODO:: No documentation available.
 

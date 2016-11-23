@@ -1,3 +1,8 @@
+.. _IP:arp_UniCast_Responder:
+
+PoC.net.arp.UniCast_Responder
+#############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_UniCast_Responder.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/arp/arp_UniCast_Responder_tb.vhdl>`
-
-
-.. _IP:arp_UniCast_Responder:
-
-arp_UniCast_Responder
-#####################
 
 .. TODO:: No documentation available.
 

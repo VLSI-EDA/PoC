@@ -1,3 +1,8 @@
+.. _IP:pio_out:
+
+PoC.io.pio.out
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/pio/pio_out.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/pio/pio_out_tb.vhdl>`
-
-
-.. _IP:pio_out:
-
-pio_out
-#######
 
 
 

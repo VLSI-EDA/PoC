@@ -1,3 +1,8 @@
+.. _IP:ocram_tdp:
+
+PoC.mem.ocram.tdp
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_tdp.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_tdp_tb.vhdl>`
-
-
-.. _IP:ocram_tdp:
-
-ocram_tdp
-#########
 
 Inferring / instantiating true dual-port memory, with:
 

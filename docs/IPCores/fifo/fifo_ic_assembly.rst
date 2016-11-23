@@ -1,3 +1,8 @@
+.. _IP:fifo_ic_assembly:
+
+PoC.fifo.ic_assembly
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_ic_assembly.vhdl>`
       * |gh-tb| :poctb:`Testbench <fifo/fifo_ic_assembly_tb.vhdl>`
-
-
-.. _IP:fifo_ic_assembly:
-
-fifo_ic_assembly
-################
 
 This module assembles a FIFO stream from data blocks that may arrive
 slightly out of order. The arriving data is ordered according to their

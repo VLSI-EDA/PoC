@@ -1,3 +1,8 @@
+.. _IP:sort_lru_cache:
+
+PoC.sort.lru_cache
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sort_lru_cache.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sort_lru_cache_tb.vhdl>`
-
-
-.. _IP:sort_lru_cache:
-
-sort_lru_cache
-##############
 
 This is an optimized implementation of ``sort_lru_list`` to be used for caches.
 Only keys are stored within this list, and these keys are the index of the

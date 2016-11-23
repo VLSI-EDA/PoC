@@ -1,3 +1,8 @@
+.. _IP:sortnet_Transform:
+
+PoC.sort.sortnet.Transform
+##########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet_Transform.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sortnet/sortnet_Transform_tb.vhdl>`
-
-
-.. _IP:sortnet_Transform:
-
-sortnet_Transform
-#################
 
 .. TODO:: No documentation available.
 

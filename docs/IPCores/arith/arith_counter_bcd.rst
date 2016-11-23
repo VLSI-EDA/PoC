@@ -1,3 +1,8 @@
+.. _IP:arith_counter_bcd:
+
+PoC.arith.counter_bcd
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_counter_bcd.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_counter_bcd_tb.vhdl>`
-
-
-.. _IP:arith_counter_bcd:
-
-arith_counter_bcd
-#################
 
 Counter with output in binary coded decimal (BCD). The number of BCD digits
 is configurable by ``DIGITS``.

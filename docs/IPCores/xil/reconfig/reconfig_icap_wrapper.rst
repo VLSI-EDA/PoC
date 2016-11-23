@@ -1,3 +1,8 @@
+.. _IP:reconfig_icap_wrapper:
+
+PoC.xil.reconfig.icap_wrapper
+#############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/reconfig/reconfig_icap_wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/reconfig/reconfig_icap_wrapper_tb.vhdl>`
-
-
-.. _IP:reconfig_icap_wrapper:
-
-reconfig_icap_wrapper
-#####################
 
 This module was designed to connect the Xilinx "Internal Configuration Access Port" (ICAP)
 to a PCIe endpoint on a Dini board. Tested on:

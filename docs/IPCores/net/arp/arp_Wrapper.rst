@@ -1,3 +1,8 @@
+.. _IP:arp_Wrapper:
+
+PoC.net.arp.Wrapper
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_Wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/arp/arp_Wrapper_tb.vhdl>`
-
-
-.. _IP:arp_Wrapper:
-
-arp_Wrapper
-###########
 
 .. TODO:: No documentation available.
 

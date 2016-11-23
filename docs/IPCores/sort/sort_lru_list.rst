@@ -1,3 +1,8 @@
+.. _IP:sort_lru_list:
+
+PoC.sort.lru_list
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sort_lru_list.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sort_lru_list_tb.vhdl>`
-
-
-.. _IP:sort_lru_list:
-
-sort_lru_list
-#############
 
 List storing ``(key, value)`` pairs. The least-recently inserted pair is
 outputed on ``DataOut`` if ``Valid = '1'``. If ``Valid = '0'``, then the list

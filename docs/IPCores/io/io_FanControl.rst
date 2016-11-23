@@ -1,3 +1,8 @@
+.. _IP:io_FanControl:
+
+PoC.io.FanControl
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/io_FanControl.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/io_FanControl_tb.vhdl>`
-
-
-.. _IP:io_FanControl:
-
-io_FanControl
-#############
 
 .. code-block:: none
 

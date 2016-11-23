@@ -1,3 +1,8 @@
+.. _IP:ipv6_TX:
+
+PoC.net.ipv6.TX
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ipv6/ipv6_TX.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ipv6/ipv6_TX_tb.vhdl>`
-
-
-.. _IP:ipv6_TX:
-
-ipv6_TX
-#######
 
 .. TODO:: No documentation available.
 

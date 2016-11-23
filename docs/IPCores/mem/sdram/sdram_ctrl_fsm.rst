@@ -1,3 +1,8 @@
+.. _IP:sdram_ctrl_fsm:
+
+PoC.mem.sdram.ctrl_fsm
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_fsm.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_fsm_tb.vhdl>`
-
-
-.. _IP:sdram_ctrl_fsm:
-
-sdram_ctrl_fsm
-##############
 
 This file contains the FSM as well as parts of the datapath.
 The board specific physical layer is defined in another file.

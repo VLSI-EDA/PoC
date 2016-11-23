@@ -23,6 +23,28 @@
 -- If ``NO_OUTPUT_ENABLE = false`` then output is disabled after power-up.
 -- If ``NO_OUTPUT_ENABLE = true`` then output after power-up equals ``INIT_VALUE``.
 --
+-- .. wavedrom::
+--
+--    { signal: [
+--      ['DataOut',
+--        {name: 'ClockOut',        wave: 'L.H.L.H.L.H.L.H.'},
+--        {name: 'ClockOutEnable',  wave: '01...........0..'},
+--        {name: 'OutputEnable',    wave: '01.......0......'},
+--        {name: 'DataOut_low',     wave: 'x2...4...x......', data: ['0',      '2'],      node: '.k...m'},
+--        {name: 'DataOut_high',    wave: 'x3...5...x......', data: ['1',      '3'],      node: '.l...n'}
+--        ],
+--        {},
+--        {name: 'Pad',             wave: 'x.....2.3.4.5.z.', data: ['0', '1', '2', '3'], node: '......a.b.c.d.'},
+--      ],
+--      edge: ['k~>a', 'l~>b', 'm~>c', 'n~>d'],
+--      foot: {
+--        text: ['tspan',
+--          ['tspan', {'font-weight': 'bold'}, 'PoC.io.ddrio.out'],
+--          ' -- DDR Data Output sampled from pad.'
+--        ]
+--      }
+--    }
+--
 -- ``Pad`` must be connected to a PAD because FPGAs only have these registers in
 -- IOBs.
 --

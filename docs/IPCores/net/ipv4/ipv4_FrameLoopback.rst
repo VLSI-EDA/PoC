@@ -1,3 +1,8 @@
+.. _IP:ipv4_FrameLoopback:
+
+PoC.net.ipv4.FrameLoopback
+##########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ipv4/ipv4_FrameLoopback.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ipv4/ipv4_FrameLoopback_tb.vhdl>`
-
-
-.. _IP:ipv4_FrameLoopback:
-
-ipv4_FrameLoopback
-##################
 
 .. TODO:: No documentation available.
 

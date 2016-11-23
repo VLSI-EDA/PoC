@@ -1,3 +1,8 @@
+.. _IP:misc_FrequencyMeasurement:
+
+PoC.misc.FrequencyMeasurement
+#############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_FrequencyMeasurement.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_FrequencyMeasurement_tb.vhdl>`
-
-
-.. _IP:misc_FrequencyMeasurement:
-
-misc_FrequencyMeasurement
-#########################
 
 This module counts 1 second in a reference timer at reference clock. This
 reference time is used to start and stop a timer at input clock. The counter

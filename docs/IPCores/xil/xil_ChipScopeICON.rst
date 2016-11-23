@@ -1,3 +1,8 @@
+.. _IP:xil_ChipScopeICON:
+
+PoC.xil.ChipScopeICON
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_ChipScopeICON.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_ChipScopeICON_tb.vhdl>`
-
-
-.. _IP:xil_ChipScopeICON:
-
-xil_ChipScopeICON
-#################
 
 This module wraps 15 ChipScope ICON IP core netlists generated from ChipScope
 ICON xco files. The generic parameter ``PORTS`` selects the apropriate ICON

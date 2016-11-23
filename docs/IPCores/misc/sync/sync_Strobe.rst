@@ -1,3 +1,8 @@
+.. _IP:sync_Strobe:
+
+PoC.misc.sync.Strobe
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Strobe.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/sync/sync_Strobe_tb.vhdl>`
-
-
-.. _IP:sync_Strobe:
-
-sync_Strobe
-###########
 
 This module synchronizes multiple high-active bits from clock-domain
 ``Clock1`` to clock-domain ``Clock2``. The clock-domain boundary crossing is

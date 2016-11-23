@@ -1,3 +1,8 @@
+.. _IP:ipv4_Wrapper:
+
+PoC.net.ipv4.Wrapper
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ipv4/ipv4_Wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ipv4/ipv4_Wrapper_tb.vhdl>`
-
-
-.. _IP:ipv4_Wrapper:
-
-ipv4_Wrapper
-############
 
 .. TODO:: No documentation available.
 

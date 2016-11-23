@@ -1,3 +1,8 @@
+.. _IP:ocram_sp:
+
+PoC.mem.ocram.sp
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_sp.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_sp_tb.vhdl>`
-
-
-.. _IP:ocram_sp:
-
-ocram_sp
-########
 
 Inferring / instantiating single port memory, with:
 

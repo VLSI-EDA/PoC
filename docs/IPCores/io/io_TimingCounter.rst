@@ -1,3 +1,8 @@
+.. _IP:io_TimingCounter:
+
+PoC.io.TimingCounter
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/io_TimingCounter.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/io_TimingCounter_tb.vhdl>`
-
-
-.. _IP:io_TimingCounter:
-
-io_TimingCounter
-################
 
 This down-counter can be configured with a ``TIMING_TABLE`` (a ROM), from which
 the initial counter value is loaded. The table index can be selected by

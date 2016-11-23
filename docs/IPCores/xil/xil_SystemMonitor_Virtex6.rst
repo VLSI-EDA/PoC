@@ -1,3 +1,8 @@
+.. _IP:xil_SystemMonitor_Virtex6:
+
+PoC.xil.SystemMonitor_Virtex6
+#############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_SystemMonitor_Virtex6.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_SystemMonitor_Virtex6_tb.vhdl>`
-
-
-.. _IP:xil_SystemMonitor_Virtex6:
-
-xil_SystemMonitor_Virtex6
-#########################
 
 This module wraps a Virtex-6 System Monitor primitive to report if preconfigured
 temperature values are overrun.

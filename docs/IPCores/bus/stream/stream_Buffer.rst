@@ -1,3 +1,8 @@
+.. _IP:stream_Buffer:
+
+PoC.bus.stream.Buffer
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_Buffer.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/stream/stream_Buffer_tb.vhdl>`
-
-
-.. _IP:stream_Buffer:
-
-stream_Buffer
-#############
 
 This module implements a generic buffer (FIFO) for the
 :doc:`PoC.Stream </Interfaces/Stream>` protocol. It is generic in

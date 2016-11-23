@@ -1,3 +1,8 @@
+.. _IP:icmpv4_RX:
+
+PoC.net.icmpv4.RX
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/icmpv4/icmpv4_RX.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/icmpv4/icmpv4_RX_tb.vhdl>`
-
-
-.. _IP:icmpv4_RX:
-
-icmpv4_RX
-#########
 
 .. TODO:: No documentation available.
 

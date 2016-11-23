@@ -1,3 +1,8 @@
+.. _IP:fifo_shift:
+
+PoC.fifo.shift
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_shift.vhdl>`
       * |gh-tb| :poctb:`Testbench <fifo/fifo_shift_tb.vhdl>`
-
-
-.. _IP:fifo_shift:
-
-fifo_shift
-##########
 
 This FIFO implementation is based on an internal shift register. This is
 especially useful for smaller FIFO sizes, which can be implemented in LUT

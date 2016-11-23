@@ -1,3 +1,8 @@
+.. _IP:mac_FrameLoopback:
+
+PoC.net.mac.FrameLoopback
+#########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/mac/mac_FrameLoopback.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/mac/mac_FrameLoopback_tb.vhdl>`
-
-
-.. _IP:mac_FrameLoopback:
-
-mac_FrameLoopback
-#################
 
 .. TODO:: No documentation available.
 

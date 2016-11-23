@@ -1,3 +1,8 @@
+.. _IP:pmod_USBUART:
+
+PoC.io.pmod.USBUART
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/pmod/pmod_USBUART.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/pmod/pmod_USBUART_tb.vhdl>`
-
-
-.. _IP:pmod_USBUART:
-
-pmod_USBUART
-############
 
 This module abstracts a FTDI FT232R USB-UART bridge by instantiating a
 :doc:`PoC.io.uart.fifo <../uart/uart_fifo>`. The FT232R supports up to

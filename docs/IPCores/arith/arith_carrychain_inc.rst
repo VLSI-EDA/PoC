@@ -1,3 +1,8 @@
+.. _IP:arith_carrychain_inc:
+
+PoC.arith.carrychain_inc
+########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_carrychain_inc.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_carrychain_inc_tb.vhdl>`
-
-
-.. _IP:arith_carrychain_inc:
-
-arith_carrychain_inc
-####################
 
 	This is a generic carry-chain abstraction for increment by one operations.
 

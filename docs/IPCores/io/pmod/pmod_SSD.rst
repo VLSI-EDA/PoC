@@ -1,3 +1,8 @@
+.. _IP:pmod_SSD:
+
+PoC.io.pmod.SSD
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/pmod/pmod_SSD.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/pmod/pmod_SSD_tb.vhdl>`
-
-
-.. _IP:pmod_SSD:
-
-pmod_SSD
-########
 
 This module drives a dual-digit 7-segment display (Pmod_SSD). The module
 expects two binary encoded 4-bit ``Digit<i>`` signals and drives a 2x6 bit

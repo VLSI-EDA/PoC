@@ -1,3 +1,8 @@
+.. _IP:mdio_IIC_Adapter:
+
+PoC.io.mdio.IIC_Adapter
+#######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/mdio/mdio_IIC_Adapter.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/mdio/mdio_IIC_Adapter_tb.vhdl>`
-
-
-.. _IP:mdio_IIC_Adapter:
-
-mdio_IIC_Adapter
-################
 
 .. TODO:: No documentation available.
 

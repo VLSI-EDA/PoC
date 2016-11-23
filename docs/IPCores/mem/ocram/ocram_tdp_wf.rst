@@ -1,3 +1,8 @@
+.. _IP:ocram_tdp_wf:
+
+PoC.mem.ocram.tdp_wf
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_tdp_wf.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_tdp_wf_tb.vhdl>`
-
-
-.. _IP:ocram_tdp_wf:
-
-ocram_tdp_wf
-############
 
 Inferring / instantiating true dual-port memory, with:
 

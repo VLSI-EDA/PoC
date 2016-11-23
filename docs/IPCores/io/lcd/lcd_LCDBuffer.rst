@@ -1,3 +1,8 @@
+.. _IP:lcd_LCDBuffer:
+
+PoC.io.lcd.LCDBuffer
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/lcd/lcd_LCDBuffer.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/lcd/lcd_LCDBuffer_tb.vhdl>`
-
-
-.. _IP:lcd_LCDBuffer:
-
-lcd_LCDBuffer
-#############
 
 .. TODO:: No documentation available.
 

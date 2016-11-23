@@ -1,3 +1,8 @@
+.. _IP:arp_Tester:
+
+PoC.net.arp.Tester
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_Tester.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/arp/arp_Tester_tb.vhdl>`
-
-
-.. _IP:arp_Tester:
-
-arp_Tester
-##########
 
 .. TODO:: No documentation available.
 

@@ -1,3 +1,8 @@
+.. _IP:sync_Command:
+
+PoC.misc.sync.Command
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Command.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/sync/sync_Command_tb.vhdl>`
-
-
-.. _IP:sync_Command:
-
-sync_Command
-############
 
 This module synchronizes a vector of bits from clock-domain ``Clock1`` to
 clock-domain ``Clock2``. The clock-domain boundary crossing is done by a

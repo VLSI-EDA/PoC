@@ -1,3 +1,8 @@
+.. _IP:filter_mean:
+
+PoC.misc.filter.mean
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/filter/filter_mean.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/filter/filter_mean_tb.vhdl>`
-
-
-.. _IP:filter_mean:
-
-filter_mean
-###########
 
 .. TODO:: No documentation available.
 

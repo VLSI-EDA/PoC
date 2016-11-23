@@ -1,3 +1,8 @@
+.. _IP:misc_ByteAligner:
+
+PoC.misc.ByteAligner
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_ByteAligner.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_ByteAligner_tb.vhdl>`
-
-
-.. _IP:misc_ByteAligner:
-
-misc_ByteAligner
-################
 
 .. TODO:: No documentation available.
 

@@ -1,3 +1,8 @@
+.. _IP:ipv4_TX:
+
+PoC.net.ipv4.TX
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ipv4/ipv4_TX.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ipv4/ipv4_TX_tb.vhdl>`
-
-
-.. _IP:ipv4_TX:
-
-ipv4_TX
-#######
 
 .. TODO:: No documentation available.
 

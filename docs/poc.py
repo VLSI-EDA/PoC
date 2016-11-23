@@ -48,6 +48,7 @@ class SourceFile:
 	def __init__(self, entitySourceCodeRange):    #, entityName, entitySourceCodeRange, summary, description, seeAlso):
 		self.File =                   entitySourceCodeRange.SourceFile
 		self.EntityName =             ""  # entityName
+		self.EntityFullName =         ""  # entityName
 		self.EntitySourceCodeRange =  entitySourceCodeRange
 		self.Authors =                []
 		self.Summary =                ""  # summary
@@ -124,7 +125,8 @@ class Extract:
 
 		outputContent = self.templateContent.format(
 			EntityName=sourceFile.EntityName,
-			EntityNameUnderline="#" * len(sourceFile.EntityName),
+			EntityFullName=sourceFile.EntityFullName,
+			EntityNameUnderline="#" * len(sourceFile.EntityFullName),
 			EntityDescription=sourceFile.Description,
 			EntityFilePath=relSourceFile.as_posix(),
 			EntityDeclarationFromTo="{0}-{1}".format(sourceFile.EntitySourceCodeRange.StartRow, sourceFile.EntitySourceCodeRange.EndRow),
@@ -230,11 +232,12 @@ class Extract:
 
 		# Construct Result Object
 		result = SourceFile(SourceCodeRange(sourceFile, 0, 0))
-		result.Authors =      [author for author in sections['Authors'].splitlines()]
-		result.Summary =      sections['Entity']
-		result.Description =  sections['Description']
-		result.SeeAlso =      sections['SeeAlso']
-		result.EntityName =   entityName
+		result.Authors =        [author for author in sections['Authors'].splitlines()]
+		result.Summary =        sections['Entity']
+		result.Description =    sections['Description']
+		result.SeeAlso =        sections['SeeAlso']
+		result.EntityName =     entityName
+		result.EntityFullName = "PoC." + ".".join(sourceFile.parts[2:-1]) + "." + sourceFile.stem[len(sourceFile.parts[-2])+1:]
 		result.EntitySourceCodeRange.StartRow = entityStartLine
 		result.EntitySourceCodeRange.EndRow = entityEndLine
 		return result

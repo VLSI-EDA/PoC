@@ -1,3 +1,8 @@
+.. _IP:misc_StrobeGenerator:
+
+PoC.misc.StrobeGenerator
+########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_StrobeGenerator.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_StrobeGenerator_tb.vhdl>`
-
-
-.. _IP:misc_StrobeGenerator:
-
-misc_StrobeGenerator
-####################
 
 .. TODO:: No documentation available.
 

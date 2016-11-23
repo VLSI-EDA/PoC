@@ -1,3 +1,8 @@
+.. _IP:ddr2_mem2mig_adapter_Spartan6:
+
+PoC.mem.ddr2.mem2mig_adapter_Spartan6
+#####################################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ddr2/ddr2_mem2mig_adapter_Spartan6.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ddr2/ddr2_mem2mig_adapter_Spartan6_tb.vhdl>`
-
-
-.. _IP:ddr2_mem2mig_adapter_Spartan6:
-
-ddr2_mem2mig_adapter_Spartan6
-#############################
 
 Adapter between the :ref:`PoC.Mem <INT:PoC.Mem>`
 interface and the User Interface of the Xilinx MIG IP core for the

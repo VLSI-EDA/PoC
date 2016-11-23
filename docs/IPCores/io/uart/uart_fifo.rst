@@ -1,3 +1,8 @@
+.. _IP:uart_fifo:
+
+PoC.io.uart.fifo
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_fifo.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/uart/uart_fifo_tb.vhdl>`
-
-
-.. _IP:uart_fifo:
-
-uart_fifo
-#########
 
 Small :abbr:`FIFO (first-in, first-out)` s are included in this module, if
 larger or asynchronous transmit / receive FIFOs are required, then they must

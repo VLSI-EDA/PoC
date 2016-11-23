@@ -1,3 +1,8 @@
+.. _IP:xil_ICAP:
+
+PoC.xil.ICAP
+############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_ICAP.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_ICAP_tb.vhdl>`
-
-
-.. _IP:xil_ICAP:
-
-xil_ICAP
-########
 
 This module wraps Xilinx "Internal Configuration Access Port" (ICAP) primitives in a generic
 module. |br|

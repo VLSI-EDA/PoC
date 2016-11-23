@@ -1,3 +1,8 @@
+.. _IP:stream_Mux:
+
+PoC.bus.stream.Mux
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_Mux.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/stream/stream_Mux_tb.vhdl>`
-
-
-.. _IP:stream_Mux:
-
-stream_Mux
-##########
 
 .. TODO:: No documentation available.
 

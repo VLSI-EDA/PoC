@@ -1,3 +1,8 @@
+.. _IP:arith_prefix_and:
+
+PoC.arith.prefix_and
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_prefix_and.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_prefix_and_tb.vhdl>`
-
-
-.. _IP:arith_prefix_and:
-
-arith_prefix_and
-################
 
 Prefix AND computation:
 ``y(i) <= '1' when x(i downto 0) = (i downto 0 => '1') else '0';``

@@ -1,3 +1,8 @@
+.. _IP:udp_Wrapper:
+
+PoC.net.udp.Wrapper
+###################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/udp/udp_Wrapper.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/udp/udp_Wrapper_tb.vhdl>`
-
-
-.. _IP:udp_Wrapper:
-
-udp_Wrapper
-###########
 
 .. TODO:: No documentation available.
 

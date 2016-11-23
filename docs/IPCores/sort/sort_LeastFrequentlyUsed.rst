@@ -1,3 +1,8 @@
+.. _IP:sort_LeastFrequentlyUsed:
+
+PoC.sort.LeastFrequentlyUsed
+############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sort_LeastFrequentlyUsed.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sort_LeastFrequentlyUsed_tb.vhdl>`
-
-
-.. _IP:sort_LeastFrequentlyUsed:
-
-sort_LeastFrequentlyUsed
-########################
 
 .. TODO:: No documentation available.
 

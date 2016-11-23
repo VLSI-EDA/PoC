@@ -1,3 +1,8 @@
+.. _IP:cache_cpu:
+
+PoC.cache.cpu
+#############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <cache/cache_cpu.vhdl>`
       * |gh-tb| :poctb:`Testbench <cache/cache_cpu_tb.vhdl>`
-
-
-.. _IP:cache_cpu:
-
-cache_cpu
-#########
 
 This unit provides a cache (:ref:`IP:cache_par2`) together
 with a cache controller which reads / writes cache lines from / to memory.

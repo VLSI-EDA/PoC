@@ -1,3 +1,8 @@
+.. _IP:misc_StrobeLimiter:
+
+PoC.misc.StrobeLimiter
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_StrobeLimiter.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_StrobeLimiter_tb.vhdl>`
-
-
-.. _IP:misc_StrobeLimiter:
-
-misc_StrobeLimiter
-##################
 
 .. TODO:: No documentation available.
 

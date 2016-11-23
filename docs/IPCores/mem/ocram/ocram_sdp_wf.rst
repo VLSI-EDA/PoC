@@ -1,3 +1,8 @@
+.. _IP:ocram_sdp_wf:
+
+PoC.mem.ocram.sdp_wf
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_sdp_wf.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_sdp_wf_tb.vhdl>`
-
-
-.. _IP:ocram_sdp_wf:
-
-ocram_sdp_wf
-############
 
 Inferring / instantiating simple dual-port memory, with:
 

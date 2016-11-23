@@ -1,3 +1,8 @@
+.. _IP:ocram_wb:
+
+PoC.bus.wb.ocram
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/wb/wb_ocram.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/wb/wb_ocram_tb.vhdl>`
-
-
-.. _IP:ocram_wb:
-
-ocram_wb
-########
 
 This slave supports Wishbone Registered Feedback bus cycles (aka. burst
 transfers / advanced synchronous cycle termination). The mode "Incrementing

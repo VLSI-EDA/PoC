@@ -1,3 +1,8 @@
+.. _IP:lut_Sine:
+
+PoC.mem.lut.Sine
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <mem/lut/lut_Sine.vhdl>`
       * |gh-tb| :poctb:`Testbench <mem/lut/lut_Sine_tb.vhdl>`
-
-
-.. _IP:lut_Sine:
-
-lut_Sine
-########
 
 .. TODO:: No documentation available.
 

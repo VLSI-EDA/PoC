@@ -1,3 +1,8 @@
+.. _IP:mac_RX_DestMAC_Switch:
+
+PoC.net.mac.RX_DestMAC_Switch
+#############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/mac/mac_RX_DestMAC_Switch.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/mac/mac_RX_DestMAC_Switch_tb.vhdl>`
-
-
-.. _IP:mac_RX_DestMAC_Switch:
-
-mac_RX_DestMAC_Switch
-#####################
 
 .. TODO:: No documentation available.
 

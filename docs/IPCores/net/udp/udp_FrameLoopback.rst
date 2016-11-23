@@ -1,3 +1,8 @@
+.. _IP:udp_FrameLoopback:
+
+PoC.net.udp.FrameLoopback
+#########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/udp/udp_FrameLoopback.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/udp/udp_FrameLoopback_tb.vhdl>`
-
-
-.. _IP:udp_FrameLoopback:
-
-udp_FrameLoopback
-#################
 
 .. TODO:: No documentation available.
 

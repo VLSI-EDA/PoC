@@ -1,3 +1,8 @@
+.. _IP:Eth_PHYController:
+
+PoC.net.eth.PHYController
+#########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_PHYController.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/eth/eth_PHYController_tb.vhdl>`
-
-
-.. _IP:Eth_PHYController:
-
-Eth_PHYController
-#################
 
 .. TODO:: No documentation available.
 

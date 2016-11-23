@@ -1,3 +1,8 @@
+.. _IP:filter_or:
+
+PoC.misc.filter.or
+##################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/filter/filter_or.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/filter/filter_or_tb.vhdl>`
-
-
-.. _IP:filter_or:
-
-filter_or
-#########
 
 .. TODO:: No documentation available.
 

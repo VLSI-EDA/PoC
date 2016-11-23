@@ -1,3 +1,8 @@
+.. _IP:arith_counter_ring:
+
+PoC.arith.counter_ring
+######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_counter_ring.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_counter_ring_tb.vhdl>`
-
-
-.. _IP:arith_counter_ring:
-
-arith_counter_ring
-##################
 
 This module implements an up/down ring-counter with loadable initial value
 (``seed``) on reset. The counter can be configured to a Johnson counter by

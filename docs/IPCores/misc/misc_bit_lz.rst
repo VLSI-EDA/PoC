@@ -1,3 +1,8 @@
+.. _IP:misc_bit_lz:
+
+PoC.misc.bit_lz
+###############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_bit_lz.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_bit_lz_tb.vhdl>`
-
-
-.. _IP:misc_bit_lz:
-
-misc_bit_lz
-###########
 
 
  An LZ77-based bit stream compressor.

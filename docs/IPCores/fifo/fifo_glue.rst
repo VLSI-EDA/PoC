@@ -1,3 +1,8 @@
+.. _IP:fifo_glue:
+
+PoC.fifo.glue
+#############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_glue.vhdl>`
       * |gh-tb| :poctb:`Testbench <fifo/fifo_glue_tb.vhdl>`
-
-
-.. _IP:fifo_glue:
-
-fifo_glue
-#########
 
 Its primary use is the decoupling of enable domains in a processing
 pipeline. Data storage is limited to two words only so as to allow both

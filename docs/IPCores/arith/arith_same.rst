@@ -1,3 +1,8 @@
+.. _IP:arith_same:
+
+PoC.arith.same
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_same.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_same_tb.vhdl>`
-
-
-.. _IP:arith_same:
-
-arith_same
-##########
 
 This circuit may, for instance, be used to detect the first sign change
 and, thus, the range of a two's complement number.

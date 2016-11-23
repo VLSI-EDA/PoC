@@ -1,3 +1,8 @@
+.. _IP:ndp_DestinationCache:
+
+PoC.net.ndp.DestinationCache
+############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/ndp/ndp_DestinationCache.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/ndp/ndp_DestinationCache_tb.vhdl>`
-
-
-.. _IP:ndp_DestinationCache:
-
-ndp_DestinationCache
-####################
 
 .. TODO:: No documentation available.
 

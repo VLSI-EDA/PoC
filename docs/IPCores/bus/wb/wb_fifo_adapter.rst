@@ -1,3 +1,8 @@
+.. _IP:wb_fifo_adapter:
+
+PoC.bus.wb.fifo_adapter
+#######################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <bus/wb/wb_fifo_adapter.vhdl>`
       * |gh-tb| :poctb:`Testbench <bus/wb/wb_fifo_adapter_tb.vhdl>`
-
-
-.. _IP:wb_fifo_adapter:
-
-wb_fifo_adapter
-###############
 
 Small FIFOs are included in this module, if larger or asynchronous
 transmit / receive FIFOs are required, then they must be connected

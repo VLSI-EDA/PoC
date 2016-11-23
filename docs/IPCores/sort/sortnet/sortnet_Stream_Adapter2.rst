@@ -1,3 +1,8 @@
+.. _IP:sortnet_Stream_Adapter2:
+
+PoC.sort.sortnet.Stream_Adapter2
+################################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet_Stream_Adapter2.vhdl>`
       * |gh-tb| :poctb:`Testbench <sort/sortnet/sortnet_Stream_Adapter2_tb.vhdl>`
-
-
-.. _IP:sortnet_Stream_Adapter2:
-
-sortnet_Stream_Adapter2
-#######################
 
 .. TODO:: No documentation available.
 

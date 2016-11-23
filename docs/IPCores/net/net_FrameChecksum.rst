@@ -1,3 +1,8 @@
+.. _IP:net_FrameChecksum:
+
+PoC.net.FrameChecksum
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/net_FrameChecksum.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/net_FrameChecksum_tb.vhdl>`
-
-
-.. _IP:net_FrameChecksum:
-
-net_FrameChecksum
-#################
 
 .. TODO:: No documentation available.
 

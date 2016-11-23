@@ -1,3 +1,8 @@
+.. _IP:misc_BitwidthConverter:
+
+PoC.misc.BitwidthConverter
+##########################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_BitwidthConverter.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_BitwidthConverter_tb.vhdl>`
-
-
-.. _IP:misc_BitwidthConverter:
-
-misc_BitwidthConverter
-######################
 
 
 

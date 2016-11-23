@@ -1,3 +1,8 @@
+.. _IP:xil_SystemMonitor:
+
+PoC.xil.SystemMonitor
+#####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_SystemMonitor.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_SystemMonitor_tb.vhdl>`
-
-
-.. _IP:xil_SystemMonitor:
-
-xil_SystemMonitor
-#################
 
 This module generates a PWM signal for a 3-pin (transistor controlled) or
 4-pin fan header. The FPGAs temperature is read from device specific system

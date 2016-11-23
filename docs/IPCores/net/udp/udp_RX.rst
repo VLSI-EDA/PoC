@@ -1,3 +1,8 @@
+.. _IP:udp_RX:
+
+PoC.net.udp.RX
+##############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/udp/udp_RX.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/udp/udp_RX_tb.vhdl>`
-
-
-.. _IP:udp_RX:
-
-udp_RX
-######
 
 .. TODO:: No documentation available.
 

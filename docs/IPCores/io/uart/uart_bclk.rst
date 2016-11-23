@@ -1,3 +1,8 @@
+.. _IP:uart_bclk:
+
+PoC.io.uart.bclk
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_bclk.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/uart/uart_bclk_tb.vhdl>`
-
-
-.. _IP:uart_bclk:
-
-uart_bclk
-#########
 
 .. TODO:: No documentation available.
 

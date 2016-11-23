@@ -1,3 +1,8 @@
+.. _IP:comm_crc:
+
+PoC.comm.crc
+############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <comm/comm_crc.vhdl>`
       * |gh-tb| :poctb:`Testbench <comm/comm_crc_tb.vhdl>`
-
-
-.. _IP:comm_crc:
-
-comm_crc
-########
 
 Computes the Cyclic Redundancy Check (CRC) for a data packet as remainder
 of the polynomial division of the message by the given generator

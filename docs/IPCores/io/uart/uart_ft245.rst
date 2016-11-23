@@ -1,3 +1,8 @@
+.. _IP:uart_ft245:
+
+PoC.io.uart.ft245
+#################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_ft245.vhdl>`
       * |gh-tb| :poctb:`Testbench <io/uart/uart_ft245_tb.vhdl>`
-
-
-.. _IP:uart_ft245:
-
-uart_ft245
-##########
 
 .. TODO:: No documentation available.
 

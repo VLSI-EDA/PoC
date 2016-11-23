@@ -1,3 +1,8 @@
+.. _IP:arith_scaler:
+
+PoC.arith.scaler
+################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_scaler.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_scaler_tb.vhdl>`
-
-
-.. _IP:arith_scaler:
-
-arith_scaler
-############
 
 A flexible scaler for fixed-point values. The scaler is implemented for a set
 of multiplier and divider values. Each individual scaling operation can

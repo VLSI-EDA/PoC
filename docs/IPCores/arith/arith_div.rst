@@ -1,3 +1,8 @@
+.. _IP:arith_div:
+
+PoC.arith.div
+#############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_div.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_div_tb.vhdl>`
-
-
-.. _IP:arith_div:
-
-arith_div
-#########
 
 Implementation of a Non-Performing restoring divider with a configurable radix.
 The multi-cycle division is controlled by 'start' / 'rdy'. A new division is

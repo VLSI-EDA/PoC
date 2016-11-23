@@ -1,3 +1,8 @@
+.. _IP:cache_par:
+
+PoC.cache.par
+#############
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <cache/cache_par.vhdl>`
       * |gh-tb| :poctb:`Testbench <cache/cache_par_tb.vhdl>`
-
-
-.. _IP:cache_par:
-
-cache_par
-#########
 
 Implements a cache with parallel tag-unit and data memory.
 

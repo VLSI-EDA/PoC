@@ -1,3 +1,8 @@
+.. _IP:cache_replacement_policy:
+
+PoC.cache.replacement_policy
+############################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <cache/cache_replacement_policy.vhdl>`
       * |gh-tb| :poctb:`Testbench <cache/cache_replacement_policy_tb.vhdl>`
-
-
-.. _IP:cache_replacement_policy:
-
-cache_replacement_policy
-########################
 
 
 **Supported policies:**

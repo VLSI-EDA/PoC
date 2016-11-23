@@ -1,3 +1,8 @@
+.. _IP:Eth_PHYController_Marvell_88E1111:
+
+PoC.net.eth.PHYController_Marvell_88E1111
+#########################################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_PHYController_Marvell_88E1111.vhdl>`
       * |gh-tb| :poctb:`Testbench <net/eth/eth_PHYController_Marvell_88E1111_tb.vhdl>`
-
-
-.. _IP:Eth_PHYController_Marvell_88E1111:
-
-Eth_PHYController_Marvell_88E1111
-#################################
 
 .. TODO:: No documentation available.
 

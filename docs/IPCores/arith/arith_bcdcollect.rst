@@ -1,3 +1,8 @@
+.. _IP:arith_bcdcollect:
+
+PoC.arith.bcdcollect
+####################
+
 .. only:: html
 
    .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
@@ -13,12 +18,6 @@
 
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_bcdcollect.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_bcdcollect_tb.vhdl>`
-
-
-.. _IP:arith_bcdcollect:
-
-arith_bcdcollect
-################
 
 .. TODO:: No documentation available.
 
