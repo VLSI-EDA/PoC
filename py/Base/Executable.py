@@ -33,12 +33,12 @@
 #
 # load dependencies
 from pathlib                import Path
-from subprocess              import Popen				as Subprocess_Popen
-from subprocess              import PIPE					as Subprocess_Pipe
-from subprocess              import STDOUT				as Subprocess_StdOut
+from subprocess             import Popen				as Subprocess_Popen
+from subprocess             import PIPE					as Subprocess_Pipe
+from subprocess             import STDOUT				as Subprocess_StdOut
 
-from Base.Exceptions        import CommonException
-from Base.Logging            import ILogable
+from Base.Exceptions        import CommonException, ExceptionBase
+from Base.Logging           import ILogable
 
 
 __api__ = [
@@ -60,10 +60,11 @@ __api__ = [
 __all__ = __api__
 
 
-class ExecutableException(BaseException):
+class ExecutableException(ExceptionBase):
 	def __init__(self, message=""):
 		super().__init__(message)
 		self.message = message
+
 
 class CommandLineArgument(type):
 	_value = None
@@ -71,6 +72,7 @@ class CommandLineArgument(type):
 	# def __new__(mcls, name, bases, nmspc):
 	# 	print("CommandLineArgument.new: %s - %s" % (name, nmspc))
 	# 	return super(CommandLineArgument, mcls).__new__(mcls, name, bases, nmspc)
+
 
 class ExecutableArgument(CommandLineArgument):
 	@property
