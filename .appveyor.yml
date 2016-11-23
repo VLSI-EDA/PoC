@@ -5,15 +5,14 @@ init:
   - ps: Write-Host "Initializing virtual machine ..."
   - ps: git --version
   - ps: dir c:\
+  - ps: $env:Path = $env:Path.Replace("Python27", "Python35-x64")
 
 install:
   - ps: Write-Host "Installing requirements..."
+  - ps: python -m pip install -r .\requirements.txt
+  - ps: Write-Host "Configuring PoC..."
   - ps: cp .\tools\AppVeyor\config.private.ini .\py\
   - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
-  - ps: dir "env:"
-  - ps: Write-Host $env:PATH
-  - ps: python --version
-  - ps: python -m pip install -r .\requirements.txt
   - ps: .\poc.ps1
 
 build: off
