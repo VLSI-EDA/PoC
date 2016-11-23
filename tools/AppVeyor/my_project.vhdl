@@ -42,6 +42,6 @@ library PoC;
 
 package my_project is
 	-- Change these lines to setup configuration.
-	constant MY_PROJECT_DIR				: string	:= "/home/travis/build/VLSI-EDA/PoC/";
-	constant MY_OPERATING_SYSTEM	: string	:= "LINUX";
+	constant MY_PROJECT_DIR				: string	:= "C:\projects\poc\";
+	constant MY_OPERATING_SYSTEM	: string	:= "WINDOWS";
 end package;

@@ -37,7 +37,7 @@ class ToolMixIn:
 		self._dryrun =              dryrun
 		self._binaryDirectoryPath = binaryDirectoryPath
 		self._version =             version
-		self._Logger =              logger
+		self._logger =              logger
 
 
 from .PoC                   import Configuration as PoC_Configuration

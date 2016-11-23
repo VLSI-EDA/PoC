@@ -352,13 +352,13 @@ class GitSCM(Executable, ToolMixIn):
 	def __init__(self, toolchain : ToolMixIn):
 		ToolMixIn.__init__(
 			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
-			toolchain._Logger)
+			toolchain._logger)
 
 		if (self._platform == "Windows"):     executablePath = self._binaryDirectoryPath / "git.exe"
 		elif (self._platform == "Linux"):     executablePath = self._binaryDirectoryPath / "git"
 		elif (self._platform == "Darwin"):    executablePath = self._binaryDirectoryPath / "git"
 		else:                           raise PlatformNotSupportedException(self._platform)
-		super().__init__(self._platform, self._dryrun, executablePath, logger=self._Logger)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 

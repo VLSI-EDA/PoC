@@ -190,64 +190,67 @@ class Logger:
 
 
 class ILogable:
+	"""A mixin class to support local logging methods."""
 	def __init__(self, logger=None):
-		self._Logger = logger
+		self._logger = logger
 
 	@property
 	def Logger(self):
-		return self._Logger
+		"""Return the local logger instance."""
+		return self._logger
 
 	def Log(self, entry):
-		if self._Logger is not None:
-			return self._Logger.Write(entry)
+		"""Write an entry to the local logger."""
+		if self._logger is not None:
+			return self._logger.Write(entry)
 		return False
 
 	def _TryLog(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.TryWrite(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.TryWrite(*args, **kwargs)
 		return False
 
 	def LogFatal(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteFatal(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteFatal(*args, **kwargs)
 		return False
 
 	def LogError(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteError(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteError(*args, **kwargs)
 		return False
 
 	def LogWarning(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteWarning(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteWarning(*args, **kwargs)
 		return False
 
 	def LogInfo(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteInfo(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteInfo(*args, **kwargs)
 		return False
 
 	def LogQuiet(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteQuiet(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteQuiet(*args, **kwargs)
 		return False
 
 	def LogNormal(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteNormal(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteNormal(*args, **kwargs)
 		return False
 
 	def LogVerbose(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteVerbose(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteVerbose(*args, **kwargs)
 		return False
 
 	def LogDebug(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteDebug(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteDebug(*args, **kwargs)
 		return False
 
 	def LogDryRun(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteDryRun(*args, **kwargs)
+		if self._logger is not None:
+			return self._logger.WriteDryRun(*args, **kwargs)
 		return False
