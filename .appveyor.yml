@@ -10,6 +10,8 @@ install:
   - ps: Write-Host "Installing requirements..."
   - ps: cp .\tools\AppVeyor\config.private.ini .\py\
   - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
+  - ps: dir env:
+  - ps: $env:PATH
   - ps: python --version
   - ps: python -m pip install -r .\requirements.txt
   - ps: .\poc.ps1
