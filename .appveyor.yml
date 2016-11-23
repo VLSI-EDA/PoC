@@ -1,0 +1,14 @@
+version: 1.1.0-b{build}
+clone_folder: c:\projects\poc
+init:
+  # Checking that DEP is enabled
+  - ps: Write-Host "Initializing virtual machine ..."
+  - ps: git --version
+
+install:
+  - ps: Write-Host "Installing requirements..."
+  - ps: cp .\tools\AppVeyor\config.private.ini .\py\
+  - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
+  - ps: .\poc.ps1
+
+build: off
