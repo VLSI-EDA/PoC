@@ -32,7 +32,10 @@ Germany |br|
       :alt: Code Health
    .. image:: https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release
       :target: https://travis-ci.org/VLSI-EDA/PoC
-      :alt: Build Results
+      :alt: Build status by Travis-CI
+   .. image:: https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/release?svg=true
+      :target: https://ci.appveyor.com/project/Paebbels/poc/branch/release
+      :alt: Build status by AppVeyor
    .. image:: https://badges.gitter.im/VLSI-EDA/PoC.svg
       :target: https://gitter.im/VLSI-EDA/PoC
       :alt: Join

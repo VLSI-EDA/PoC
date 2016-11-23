@@ -3,6 +3,7 @@
 
 [![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/{@BRANCH@}/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/{@BRANCH@})
 [![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch={@BRANCH@})](https://travis-ci.org/VLSI-EDA/PoC/branches)
+[![Build status by AppVeyor](https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/release?svg=true)](https://ci.appveyor.com/project/Paebbels/poc/branch/release)
 [![Documentation Status](https://readthedocs.org/projects/poc-library/badge/?version=latest)](http://poc-library.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC)
 ![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)

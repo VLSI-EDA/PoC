@@ -5,23 +5,6 @@ New in 1.x (upcoming)
 
 Already documented changes are available on the ``release`` branch at GitHub.
 
-* Python Infrastructure
-
-  * Common changes
-  * All Simulators
-  * Aldec Active-HDL
-  * GHDL
-  * Mentor QuestaSim
-  * Xilinx ISE Simulator
-  * Xilinx Vivado Simulator
-  * All Compilers
-  * Altera Quartus Synthesis
-  * Lattice Diamond (LSE)
-  * Xilinx ISE (XST)
-  * Xilinx ISE Core Generator
-  * Xilinx Vivado Synthesis
-
-* Documentation
 * VHDL common packages
 * VHDL Simulation helpers
 
@@ -51,9 +34,36 @@ Already documented changes are available on the ``release`` branch at GitHub.
 
 * Updated Testbenches
 
-    * Testbench for :ref:`IP:ocram_sdp`
-    * Testbench for :ref:`IP:ocram_esdp`
-    * Testbench for :ref:`IP:ocram_tdp`
+  * Testbench for :ref:`IP:ocram_sdp`
+  * Testbench for :ref:`IP:ocram_esdp`
+  * Testbench for :ref:`IP:ocram_tdp`
+  * Testbench for :ref:`IP:sortnet_BitonicSort`
+  * Testbench for :ref:`IP:sortnet_OddEvenSort`
+  * Testbench for :ref:`IP:sortnet_OddEvenMergeSort`
 
 * New Constraints
+* Updated Constraints
 * Shipped Tool and Helper Scripts
+* Python Infrastructure
+
+  * Common changes
+  * All Simulators
+  * Aldec Active-HDL
+  * GHDL
+  * Mentor QuestaSim
+  * Xilinx ISE Simulator
+  * Xilinx Vivado Simulator
+  * All Compilers
+  * Altera Quartus Synthesis
+  * Lattice Diamond (LSE)
+  * Xilinx ISE (XST)
+  * Xilinx ISE Core Generator
+  * Xilinx Vivado Synthesis
+
+* Continuous Integration
+
+  * Implemented a simple Python infrastructe test on AppVeyor
+
+* Documentation
+
+  * Improved PDF rendering
