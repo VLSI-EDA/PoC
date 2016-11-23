@@ -206,6 +206,8 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		AlertLogPkg.vhd
 		MemoryPkg.vhd
 		MessagePkg.vhd
+		SortListGenericPkg.vhd
+		SortListPkg.vhd
 		SortListPkg_int.vhd
 		RandomBasePkg.vhd
 		RandomPkg.vhd
