@@ -10,7 +10,7 @@ init:
 install:
   - ps: Write-Host "Installing requirements..."
   - ps: python --version
-  - ps: python -m pip --upgrade pip
+  - ps: python -m pip install pip --upgrade
   - ps: python -m pip install -r .\requirements.txt
   - ps: python -m pip list
   - ps: Write-Host "Configuring PoC..."
