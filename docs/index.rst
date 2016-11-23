@@ -143,6 +143,7 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
    IPCores/index
    Miscelaneous/ThirdParty
    ConstraintFiles/index
+   ToolChains/index
 
 .. raw:: latex
 

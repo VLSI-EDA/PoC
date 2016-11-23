@@ -65,6 +65,10 @@ class ExceptionBase(Exception):
 		"""Returns the exception's message text."""
 		return self.message
 
+	@DocumentMemberAttribute(False)
+	def with_traceback(self, tb):
+		super().with_traceback(tb)
+
 	# @DocumentMemberAttribute(False)
 	# @MethodAlias(Exception.with_traceback)
 	# def with_traceback(self): pass

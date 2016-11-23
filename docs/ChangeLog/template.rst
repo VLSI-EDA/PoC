@@ -7,6 +7,15 @@ New in 1.x (upcomming)
 
 Already documented changes are available on the ``release`` branch at GitHub.
 
+* VHDL common packages
+* VHDL Simulation helpers
+* New Entities
+* Updated Entities
+* New Testbenches
+* Updated Testbenches
+* New Constraints
+* Updated Constraints
+* Shipped Tool and Helper Scripts
 * Python Infrastructure
 
   * Common changes
@@ -23,10 +32,5 @@ Already documented changes are available on the ``release`` branch at GitHub.
   * Xilinx ISE Core Generator
   * Xilinx Vivado Synthesis
 
+* Continuous Integration
 * Documentation
-* VHDL common packages
-* VHDL Simulation helpers
-* New Entities
-* New Testbenches
-* New Constraints
-* Shipped Tool and Helper Scripts
