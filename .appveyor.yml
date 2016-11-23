@@ -4,7 +4,7 @@ init:
   # Checking that DEP is enabled
   - ps: Write-Host "Initializing virtual machine ..."
   - ps: git --version
-  - ps: ll c:\
+  - ps: dir c:\
 
 install:
   - ps: Write-Host "Installing requirements..."
