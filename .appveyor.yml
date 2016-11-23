@@ -9,7 +9,10 @@ init:
 
 install:
   - ps: Write-Host "Installing requirements..."
+  - ps: python --version
+  - ps: python -m pip --upgrade pip
   - ps: python -m pip install -r .\requirements.txt
+  - ps: python -m pip list
   - ps: Write-Host "Configuring PoC..."
   - ps: cp .\tools\AppVeyor\config.private.ini .\py\
   - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
