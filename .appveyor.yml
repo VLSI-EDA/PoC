@@ -4,11 +4,14 @@ init:
   # Checking that DEP is enabled
   - ps: Write-Host "Initializing virtual machine ..."
   - ps: git --version
+  - ps: ll c:\
 
 install:
   - ps: Write-Host "Installing requirements..."
   - ps: cp .\tools\AppVeyor\config.private.ini .\py\
   - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
+  - ps: python --version
+  - ps: python -m pip install -r .\requirements.txt
   - ps: .\poc.ps1
 
 build: off
