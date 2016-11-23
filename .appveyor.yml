@@ -4,7 +4,6 @@ init:
   # Checking that DEP is enabled
   - ps: Write-Host "Initializing virtual machine ..."
   - ps: git --version
-  - ps: dir c:\
   - ps: $env:Path = $env:Path.Replace("Python27", "Python35-x64")
 
 install:
@@ -12,7 +11,7 @@ install:
   - ps: python --version
   - ps: python -m pip install pip --upgrade
   - ps: python -m pip install -r .\requirements.txt
-  - ps: python -m pip list
+  - ps: python -m pip list --format=columns
   - ps: Write-Host "Configuring PoC..."
   - ps: cp .\tools\AppVeyor\config.private.ini .\py\
   - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
