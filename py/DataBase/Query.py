@@ -117,4 +117,3 @@ class Query:
 				raise PlatformNotSupportedException(self.Platform)
 		else:
 			raise NotConfiguredException("ERROR: Xilinx ISE is not configured on this system.")
-

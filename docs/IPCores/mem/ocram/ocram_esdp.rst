@@ -60,10 +60,7 @@ Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 Same-Port Read-During-Write
   When writing data through port 1, the read output of the same port
   (``q1``) will output the new data (``d1``, in the following clock cycle)
-  which is aka. "write-first behavior". This behavior also applies to Altera
-  M20K memory blocks as described in the Altera: "Stratix 5 Device Handbook"
-  (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
-  (UG-01068) is wrong.
+  which is aka. "write-first behavior".
 
 Mixed-Port Read-During-Write
   When reading at the write address, the read value will be unknown which is
@@ -72,9 +69,8 @@ Mixed-Port Read-During-Write
   rising-edge of the write clock (``clk1``) and (in the worst case) extends
   until the next rising-edge of the write clock.
 
-.. WARNING::
-   The simulated behavior on RT-level is too optimistic. When reading
-   at the write address always the new data will be returned.
+For simulation, always our dedicated simulation model :ref:`IP:ocram_tdp_sim`
+is used.
 
 
 
@@ -84,7 +80,7 @@ Mixed-Port Read-During-Write
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 101-119
+   :lines: 97-115
 
 
 

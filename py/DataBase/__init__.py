@@ -43,4 +43,3 @@ else:
 
 __POC_SOLUTION_KEYWORD__ =  "Solution"
 __POC_PROJECT_KEYWORD__ =    "Project"
-

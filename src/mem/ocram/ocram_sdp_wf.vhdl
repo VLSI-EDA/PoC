@@ -13,6 +13,20 @@
 -- * single clock, clock enable,
 -- * 1 read port plus 1 write port.
 --
+-- Command truth table:
+--
+-- == == ===============================
+-- ce we Command
+-- == == ===============================
+-- 0   X   No operation
+-- 1   0   Read only from memory
+-- 1   1   Read from and Write to memory
+-- == == ===============================
+--
+-- Both reading and writing are synchronous to the rising-edge of the clock.
+-- Thus, when reading, the memory data will be outputted after the
+-- clock edge, i.e, in the following clock cycle.
+--
 -- Mixed-Port Read-During-Write
 --   When reading at the write address, the read value will be the new data,
 --   aka. "write-first behavior". Of course, the read is still synchronous,
