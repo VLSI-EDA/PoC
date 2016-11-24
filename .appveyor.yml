@@ -17,4 +17,18 @@ install:
   - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
   - ps: .\poc.ps1
 
-build: off
+build:
+  - ps: Write-Host "Testing query interface..."
+  - ps: .\poc.ps1 query INSTALL.PoC:InstallationDirectory
+  - ps: Write-Host "Testing information interface..."
+  - ps: .\poc.ps1 list-testbench
+  - ps: .\poc.ps1 list-netlist
+  - ps: Write-Host "Testing simulators..."
+  - ps: .\poc.ps1 --dryrun ghdl PoC.arith.prng --analyze --elaborate
+  - ps: Write-Host "Testing synthesizers..."
+  - ps: .\poc.ps1 --dryrun quartus PoC.arith.prng --board=DE4
+  - ps: .\poc.ps1 --dryrun lse PoC.arith.prng --board=ECP5Versa
+  - ps: .\poc.ps1 --dryrun xst PoC.arith.prng --board=KC705
+  - ps: .\poc.ps1 --dryrun vivado PoC.arith.prng --board=KC705
+  - ps: Write-Host "Testing core generators..."
+  - ps: .\poc.ps1 --dryrun coregen PoC.xil.mig.Atlys_1x128 --board=Atlys
