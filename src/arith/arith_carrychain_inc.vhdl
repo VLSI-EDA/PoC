@@ -8,9 +8,9 @@
 --
 -- Description:
 -- -------------------------------------
---	This is a generic carry-chain abstraction for increment by one operations.
+-- This is a generic carry-chain abstraction for increment by one operations.
 --
---	Y <= X + (0...0) & Cin
+-- Y <= X + (0...0) & Cin
 --
 -- License:
 -- =============================================================================

@@ -19,9 +19,9 @@ PoC.arith.carrychain_inc
       * |gh-src| :pocsrc:`Sourcecode <arith/arith_carrychain_inc.vhdl>`
       * |gh-tb| :poctb:`Testbench <arith/arith_carrychain_inc_tb.vhdl>`
 
-	This is a generic carry-chain abstraction for increment by one operations.
+This is a generic carry-chain abstraction for increment by one operations.
 
-	Y <= X + (0...0) & Cin
+Y <= X + (0...0) & Cin
 
 
 
