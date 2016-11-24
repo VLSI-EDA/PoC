@@ -17,7 +17,9 @@ install:
   - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
   - ps: .\poc.ps1
 
-build:
+build: off
+
+build_script:
   - ps: Write-Host "Testing query interface..."
   - ps: .\poc.ps1 query INSTALL.PoC:InstallationDirectory
   - ps: Write-Host "Testing information interface..."
