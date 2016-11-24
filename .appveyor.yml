@@ -23,8 +23,8 @@ build_script:
   - ps: Write-Host "Testing query interface..."
   - ps: .\poc.ps1 query INSTALL.PoC:InstallationDirectory
   - ps: Write-Host "Testing information interface..."
-  - ps: .\poc.ps1 list-testbench
-  - ps: .\poc.ps1 list-netlist
+  - ps: .\poc.ps1 list-testbench PoC.*
+  - ps: .\poc.ps1 list-netlist PoC.*
   - ps: Write-Host "Testing simulators..."
   - ps: .\poc.ps1 --dryrun ghdl PoC.arith.prng --analyze --elaborate
   - ps: Write-Host "Testing synthesizers..."
