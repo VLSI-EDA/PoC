@@ -19,8 +19,8 @@ PoC.misc.PulseTrain
       * |gh-src| :pocsrc:`Sourcecode <misc/misc_PulseTrain.vhdl>`
       * |gh-tb| :poctb:`Testbench <misc/misc_PulseTrain_tb.vhdl>`
 
-		This module generates pulse trains. This module was written as a answer for
-		a StackOverflow question: http://stackoverflow.com/questions/25783320
+This module generates pulse trains. This module was written as a answer for
+a StackOverflow question: http://stackoverflow.com/questions/25783320
 
 
 

@@ -47,8 +47,8 @@ Records are useful to group several signals of an IP core
 interface. But the corresponding port of this record type should not
 be of mode ``inout`` to pass data in both direction. This restriction
 holds even if a record member will be driven only by one source in the
-real hardware and even if all possible drivers of this port are visible
-to the current synthesis run (AND-OR based multiplexer). The following
+real hardware and even if all the drivers (one for each record member)
+are visible to the current synthesis run. The following
 observations have been made:
 
 * An IP core (entity or procedure) must drive all record members with
