@@ -39,8 +39,9 @@ use			PoC.physical.all;
 
 
 package io is
-	-- not yet supported by Xilinx ISE Simulator - the subsignal I (with reverse direction) is always 'U'
-	-- so use this record only in pure synthesis environments
+	-- Do not use this type for ``inout`` ports of synthesizable IP cores to drive
+	-- values in both directions, see also
+	-- :ref:`ISSUES:General:inout_records`.
 	type T_IO_TRISTATE is record
 		I			: std_logic;					-- input / from device to FPGA
 		O			: std_logic;					-- output / from FPGA to device
@@ -52,13 +53,18 @@ package io is
 		N			: std_logic;
 	end record;
 
+	-- Do not use this type for ``inout`` ports of synthesizable IP cores to drive
+	-- values in both directions, see also
+	-- :ref:`ISSUES:General:inout_records`.
 	type T_IO_TRISTATE_VECTOR	is array(natural range <>) of T_IO_TRISTATE;
+
 	type T_IO_LVDS_VECTOR			is array(natural range <>) of T_IO_LVDS;
 
 	type T_IO_DATARATE is (IO_DATARATE_SDR, IO_DATARATE_DDR, IO_DATARATE_QDR);
 
 	-- Drive a std_logic_vector from a Tri-State bus and in reverse.
-	-- Use this procedure only in simulation
+	-- Use this procedure only in simulation, see also
+	-- :ref:`ISSUES:General:inout_records`.
 	procedure io_tristate_driver (
 		signal pad      : inout std_logic_vector;
 		signal tristate : inout T_IO_TRISTATE_VECTOR
@@ -174,8 +180,13 @@ package body io is
 		for k in pad'range loop
 			pad(k)        <= ite((tristate(k).t = '1'), 'Z', tristate(k).o);
 			tristate(k).i <= pad(k);
-			tristate(k).t <= 'Z';     -- drive all record members
-			tristate(k).o <= 'Z';     -- drive all record members
+			-- As defined in IEEE Std. 1076-2008 para. 2.1.1.2: "a subprogram
+			-- contains a driver for each formal signal parameter of mode out or
+			-- inout". This driver will drive 'U' if the following 'Z' drivers are
+			-- missed. Driving 'U' would lead to an effective value of 'U' which is
+			-- not intended, see also :ref:`ISSUES:General:inout_records`.
+			tristate(k).t <= 'Z';
+			tristate(k).o <= 'Z';
 		end loop;
 	end procedure;
 

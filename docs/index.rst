@@ -36,9 +36,6 @@ Germany |br|
    .. image:: https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/release?svg=true
       :target: https://ci.appveyor.com/project/Paebbels/poc/branch/release
       :alt: Build status by AppVeyor
-   .. image:: https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch=release
-      :target: https://requires.io/github/VLSI-EDA/PoC/requirements/?branch=release
-      :alt: Requirements Status
    .. image:: https://badges.gitter.im/VLSI-EDA/PoC.svg
       :target: https://gitter.im/VLSI-EDA/PoC
       :alt: Join
@@ -51,9 +48,7 @@ Germany |br|
       :target: References/Licenses/License.html
       :alt: Apache License 2.0
 
-   .. raw:: html
-
-      <hr />
+   -----------------------------------------------------------------------------
 
 
 The PoC-Library Documentation
