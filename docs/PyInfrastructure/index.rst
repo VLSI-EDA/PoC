@@ -2,16 +2,10 @@
 Python Infrastructure
 #####################
 
-Frontend Scripts
-****************
-
 .. toctree::
 
    PoC
 
-
-Packages and Modules
-********************
 
 .. toctree::
 
@@ -23,7 +17,7 @@ Packages and Modules
    ToolChains
    lib
 
-.. foobar
+.. #
    automodule:: PoC
    :members:
    :undoc-members:

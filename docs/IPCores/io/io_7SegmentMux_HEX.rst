@@ -1,3 +1,10 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
+
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
 .. _IP:io_7SegmentMux_HEX:
 
 PoC.io.7SegmentMux_HEX

@@ -1,3 +1,10 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
+
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
 .. _IP:sortnet_Stream_Adapter2:
 
 PoC.sort.sortnet.Stream_Adapter2
