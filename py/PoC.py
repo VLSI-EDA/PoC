@@ -36,9 +36,11 @@
 # load dependencies
 from argparse                           import RawDescriptionHelpFormatter
 from configparser                       import Error as ConfigParser_Error, DuplicateOptionError
+from datetime import datetime
 from os                                 import environ
 from pathlib                            import Path
 from platform                           import system as platform_system
+from shutil                             import copy as shutil_copy
 from sys                                import argv as sys_argv
 from textwrap                           import dedent
 
@@ -155,25 +157,35 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 	# records
 	class __Directories__:
-		Working =     None
-		Root =        None
-		ConfigFiles = None
-		Solution =    None
-		Project =     None
-		Source =      None
-		Testbench =   None
-		Netlist =     None
-		Temp =        None
-		PreCompiled = None
+		"""Data structure for all main directories.
+
+		WORKAROUND: All members are initialized with empty :py:class:`pathlib.Path`
+		instances, until Python 3.6 with type hints gets the default Python version.
+		"""
+		Working =     Path()
+		Root =        Path()
+		ConfigFiles = Path()
+		Solution =    Path()
+		Project =     Path()
+		Source =      Path()
+		Testbench =   Path()
+		Netlist =     Path()
+		Temp =        Path()
+		PreCompiled = Path()
 
 	class __ConfigFiles__:
-		Private =     None
-		Defaults =    None
-		Boards =      None
-		Structure =   None
-		IPCores =     None
-		Solution =    None
-		Project =     None
+		"""Data structure for all configuration files.
+
+		WORKAROUND: All members are initialized with empty :py:class:`pathlib.Path`
+		instances, until Python 3.6 with type hints gets the default Python version.
+		"""
+		Private =     Path()
+		Defaults =    Path()
+		Boards =      Path()
+		Structure =   Path()
+		IPCores =     Path()
+		Solution =    Path()
+		Project =     Path()
 
 
 	def __init__(self, debug, verbose, quiet, dryRun, sphinx=False):
@@ -303,6 +315,16 @@ class PileOfCores(ILogable, ArgParseMixin):
 		self.__root = NamespaceRoot(self)
 		self.__repo = Repository(self)
 
+	def __BackupPoCConfiguration(self):
+		now = datetime.now()
+		backupFile = self._configFiles.Private.with_suffix(".{datetime}.ini".format(datetime=now.strftime("%Y.%m.%d-%H.%M.%S")))
+		self.LogVerbose("Copying old configuration file to '{0!s}'.".format(backupFile, **Init.Foreground))
+		self.LogDebug("cp {0!s} {1!s}".format(self._configFiles.Private, backupFile))
+		try:
+			shutil_copy(str(self._configFiles.Private), str(backupFile), follow_symlinks=True)
+		except OSError as ex:
+			raise ConfigurationException("Error while copying '{0!s}'.".format(self._configFiles.Private)) from ex
+
 	def __WritePoCConfiguration(self):
 		for sectionName in [sectionName for sectionName in self.__pocConfig if not (sectionName.startswith("INSTALL") or sectionName.startswith("SOLUTION"))]:
 			self.__pocConfig.remove_section(sectionName)
@@ -405,6 +427,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		# load existing configuration or create a new one
 		try:
 			self.__ReadPoCConfiguration()
+			self.__BackupPoCConfiguration()
 			configurator = Configurator(self)
 			configurator.UpdateConfiguration()
 		except NotConfiguredException:

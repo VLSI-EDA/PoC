@@ -151,7 +151,6 @@ class Simulator(BaseSimulator):
 		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =     VHDL_TESTBENCH_LIBRARY_NAME
 		ghdl.Parameters[ghdl.ArgTopLevel] =           testbench.ModuleName
 		ghdl.Parameters[ghdl.FlagExplicit] =          True
-		# ghdl.Parameters[ghdl.SwitchLinkerOption] =    ["-no-pie"]
 
 		self._SetVHDLVersionAndIEEEFlavor(ghdl)
 		self._SetExternalLibraryReferences(ghdl)

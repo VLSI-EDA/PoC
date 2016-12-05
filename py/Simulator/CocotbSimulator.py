@@ -27,7 +27,7 @@
 # ==============================================================================
 #
 # load dependencies
-import shutil
+from shutil                  import copy as shutil_copy
 from textwrap                import dedent
 
 from Base.Project            import FileTypes, ToolChain, Tool
@@ -147,7 +147,7 @@ class Simulator(BaseSimulator):
 					from FileNotFoundError(str(file.Path))
 			self.LogDebug("copy {0!s} {1}".format(file.Path, cocotbTempDir))
 			try:
-				shutil.copy(str(file.Path), cocotbTempDir)
+				shutil_copy(str(file.Path), cocotbTempDir)
 			except OSError as ex:
 				raise SimulatorException("Error while copying '{0!s}'.".format(file.Path)) from ex
 

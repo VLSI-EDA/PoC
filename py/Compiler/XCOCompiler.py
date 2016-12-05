@@ -27,10 +27,10 @@
 # ==============================================================================
 #
 # load dependencies
-import shutil
 from datetime               import datetime
 from os                     import chdir
 from pathlib                import Path
+from shutil                 import copy as shutil_copy
 from textwrap               import dedent
 
 from Base.Project           import ToolChain, Tool
@@ -190,7 +190,7 @@ class Compiler(BaseCompiler):
 		self.LogVerbose("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
 		self.LogDebug("cp {0!s} {1!s}".format(xcoInputFilePath, self.Directories.Working))
 		try:
-			shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
+			shutil_copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
 		except OSError as ex:
 			raise CompilerException("Error while copying '{0!s}'.".format(xcoInputFilePath)) from ex
 

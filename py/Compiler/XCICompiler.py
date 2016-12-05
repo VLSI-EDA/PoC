@@ -26,10 +26,10 @@
 # ==============================================================================
 #
 # load dependencies
-import shutil
 from datetime                 import datetime
 from os                       import chdir
 from pathlib                  import Path
+from shutil                   import copy as shutil_copy
 from textwrap                 import dedent
 
 from Base.Project             import ToolChain, Tool
@@ -189,7 +189,7 @@ class Compiler(BaseCompiler):
 		self.LogVerbose("Copy CoreGen xci file to '{0}'.".format(xciFilePath))
 		self.LogDebug("cp {0!s} {1!s}".format(xciInputFilePath, self.Directories.Working))
 		try:
-			shutil.copy(str(xciInputFilePath), str(xciFilePath), follow_symlinks=True)
+			shutil_copy(str(xciInputFilePath), str(xciFilePath), follow_symlinks=True)
 		except OSError as ex:
 			raise CompilerException("Error while copying '{0!s}'.".format(xciInputFilePath)) from ex
 
