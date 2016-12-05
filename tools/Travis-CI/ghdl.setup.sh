@@ -69,6 +69,10 @@ fi
 # remove downloaded files
 rm $GHDL_TARBALL
 
+# gcc debugging
+echo -e "${CYAN}Testing GCC version and configuration...${NOCOLOR}"
+gcc -v
+
 # test ghdl version
 echo -e "${CYAN}Testing GHDL version...${NOCOLOR}"
 ./bin/ghdl -v
