@@ -28,15 +28,14 @@
 #
 # load dependencies
 from subprocess                 import check_output
-from textwrap                   import dedent
 
 from lib.Functions              import CallByRefParam, Init
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Logging               import LogEntry, Severity
 from Base.Executable            import Executable
 from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
-from ToolChains                 import ToolMixIn, ConfigurationException, ToolConfiguration
-from ToolChains.Mentor          import MentorException
+from ToolChains                 import ToolMixIn, ConfigurationException
+from ToolChains.Mentor.ModelSim import ModelSimException, Configuration as ModelSim_Configuration
 from Simulator                  import PoCSimulationResultNotFoundException, SimulationResult, PoCSimulationResultFilter
 
 
@@ -54,11 +53,11 @@ __api__ = [
 __all__ = __api__
 
 
-class QuestaSimException(MentorException):
+class QuestaSimException(ModelSimException):
 	pass
 
 
-class Configuration(ToolConfiguration):
+class Configuration(ModelSim_Configuration):
 	_vendor =               "Mentor"                    #: The name of the tools vendor.
 	_toolName =             "Mentor QuestaSim"          #: The name of the tool.
 	_section  =             "INSTALL.Mentor.QuestaSim"  #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
@@ -82,10 +81,6 @@ class Configuration(ToolConfiguration):
 		}
 	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
-	def CheckDependency(self):
-		"""Check if general Mentor support is configured in PoC."""
-		return (len(self._host.PoCConfig['INSTALL.Mentor']) != 0)
-
 	def ConfigureForAll(self):
 		try:
 			if (not self._AskInstalled("Is Mentor QuestaSim installed on your system?")):
@@ -100,47 +95,14 @@ class Configuration(ToolConfiguration):
 
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
-				self.__CheckQuestaSimVersion(binPath, version)
+				self._CheckQuestaSimVersion(binPath, version)
 				self._host.LogNormal("{DARK_GREEN}Mentor Graphics QuestaSim is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
 
-	def __CheckQuestaSimVersion(self, binPath, version):
-		if (self._host.Platform == "Windows"):
-			vsimPath = binPath / "vsim.exe"
-		else:
-			vsimPath = binPath / "vsim"
-
-		if not vsimPath.exists():
-			raise ConfigurationException("Executable '{0!s}' not found.".format(vsimPath)) from FileNotFoundError(
-				str(vsimPath))
-
-		output = check_output([str(vsimPath), "-version"], universal_newlines=True)
-		if str(version) not in output:
-			raise ConfigurationException("QuestaSim version mismatch. Expected version {0}.".format(version))
-
-	def RunPostConfigurationTasks(self):
-		if (len(self._host.PoCConfig[self._section]) == 0): return # exit if not configured
-
-		precompiledDirectory = self._host.PoCConfig['CONFIG.DirectoryNames']['PrecompiledFiles']
-		vSimSimulatorFiles = self._host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
-		vsimPath = self._host.Directories.Root / precompiledDirectory / vSimSimulatorFiles
-		modelsimIniPath = vsimPath / "modelsim.ini"
-		if not modelsimIniPath.exists():
-			if not vsimPath.exists():
-				try:
-					vsimPath.mkdir(parents=True)
-				except OSError as ex:
-					raise ConfigurationException("Error while creating '{0!s}'.".format(vsimPath)) from ex
-
-			with modelsimIniPath.open('w') as fileHandle:
-				fileContent = dedent("""\
-								[Library]
-								others = $MODEL_TECH/../modelsim.ini
-								""")
-				fileHandle.write(fileContent)
-
+	def _CheckQuestaSimVersion(self, binPath, version):
+		self._CheckModelSimVersion(binPath, version)
 
 class QuestaSim(ToolMixIn):
 	def GetVHDLCompiler(self):

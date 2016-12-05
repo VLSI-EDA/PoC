@@ -714,8 +714,8 @@ class Configurator(ILogable, AskMixIn):
 		from .Lattice.ActiveHDL   import Configuration as LatticeActiveHDL_Configuration
 		# from .Lattice.Symplify    import Configuration as LatticeSymplify_Configuration
 		from .Mentor              import Configuration as Mentor_Configuration
+		from .Mentor.ModelSim     import ModelSimPEConfiguration, ModelSimSE32Configuration, ModelSimSE64Configuration
 		from .Mentor.QuestaSim    import Configuration as Questa_Configuration
-		from .Mentor.ModelSim     import Configuration as ModelSim_Configuration
 		# from .Mentor.PrecisionRTL import Configuration as PrecisionRTL_Configuration
 		# from .Synopsys            import Configuration as Synopsys_Configuration
 		# from .Synopsys.Symplify   import Configuration as Symplify_Configuration
@@ -743,7 +743,9 @@ class Configurator(ILogable, AskMixIn):
 			LatticeActiveHDL_Configuration,
 			# Mentor products
 			Mentor_Configuration,
-			ModelSim_Configuration,
+			ModelSimPEConfiguration,
+			ModelSimSE32Configuration,
+			ModelSimSE64Configuration,
 			Questa_Configuration,
 			# Xilinx products
 			Xilinx_Configuration,
