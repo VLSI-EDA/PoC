@@ -27,8 +27,6 @@
 # ==============================================================================
 #
 # load dependencies
-from subprocess                 import check_output
-
 from lib.Functions              import CallByRefParam, Init
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Logging               import LogEntry, Severity

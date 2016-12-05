@@ -41,7 +41,7 @@ from ToolChains.Mentor            import MentorException
 
 __api__ = [
 	'ModelSimException',
-	'MentorModelSimEditions',
+	'MentorModelSimPEEditions',
 	'ModelSimEditions',
 	'Configuration',
 	'ModelSimPEConfiguration',
