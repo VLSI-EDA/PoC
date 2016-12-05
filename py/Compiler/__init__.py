@@ -27,7 +27,7 @@
 #
 from enum                         import unique, Enum
 from pathlib                      import Path
-from re                           import compile as re_compile, IGNORECASE, MULTILINE, DOTALL, subn
+from re                           import compile as re_compile, subn as re_subn, IGNORECASE as RE_IGNORECASE, MULTILINE as RE_MULTILINE, DOTALL as RE_DOTALL
 from shutil                       import copy as shutil_copy
 
 from flags                        import Flags
@@ -109,6 +109,7 @@ class CompileSteps(Flags):
 	Route =          1 << 9
 	WriteBitfile =   1 << 10
 	ShowReport =     1 << 15
+	ShowGUI =        1 << 20
 	# Recompile =      1 << 25
 	# Resimulate =     1 << 26
 	# Review =         1 << 27

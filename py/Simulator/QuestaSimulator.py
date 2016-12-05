@@ -30,7 +30,6 @@
 from pathlib                      import Path
 from textwrap                     import dedent
 
-from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
 from DataBase.Config              import Vendors
 from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaSimException

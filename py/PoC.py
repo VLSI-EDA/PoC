@@ -46,7 +46,6 @@ from Compiler                           import CompilerException, CompileSteps
 from Base.Exceptions                    import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
 from Base.Logging                       import ILogable, Logger, Severity
 from Base.Project                       import VHDLVersion
-from Simulator                          import SimulatorException, SimulationSteps, Simulator
 from Compiler.LSECompiler               import Compiler as LSECompiler
 from Compiler.QuartusCompiler           import Compiler as MapCompiler
 from Compiler.ISECompiler               import Compiler as ISECompiler
@@ -58,7 +57,7 @@ from DataBase                           import Query
 from DataBase.Config                    import Board
 from DataBase.Entity                    import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
 from DataBase.Solution                  import Repository
-from Simulator                          import Simulator as BaseSimulator
+from Simulator                          import Simulator as BaseSimulator, SimulatorException, SimulationSteps
 from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
 from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
 from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
@@ -736,6 +735,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 			compileSteps |=  CompileSteps.Prepare &     True   #prepare
 			compileSteps |=  CompileSteps.Synthesize &  synthesize
 			compileSteps |=  CompileSteps.ShowReport &  showReport
+			compileSteps |=  CompileSteps.ShowGUI &     guiMode
 		return compileSteps
 
 	# ----------------------------------------------------------------------------

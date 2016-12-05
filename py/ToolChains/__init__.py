@@ -41,18 +41,17 @@ __api__ = [
 	'ToolChainException',
 	'ConfigurationException',
 	'SkipConfigurationException',
-	'ToolMixIn',
-	'Configurations',
-	'Configurator',
 	'ConfigurationState',
 	'ChangeState',
+	'ToolMixIn',
 	'AskMixIn',
 	'Configuration',
 	'VendorConfiguration',
 	'ToolConfiguration',
 	'EditionDescription',
 	'Edition',
-	'ToolSelector'
+	'ToolSelector',
+	'Configurator'
 ]
 __all__ = __api__
 
@@ -142,7 +141,6 @@ class AskMixIn:
 	def _PrintAvailableEditions(self, editions, selectedEdition):
 		"""Print all available editions and return the selected index."""
 		if (not isinstance(editions, (list, tuple))):
-		# if issubclass(editions, Edition):
 			editions = list(editions)
 
 		selectedIndex = 0
@@ -186,6 +184,11 @@ class Configuration(ILogable, AskMixIn):    #(ISubClassRegistration):
 	def State(self):
 		"""Return the configuration state."""
 		return self._state
+
+	@property
+	def SectionName(self):
+		"""Return the configuration's section name."""
+		return self._section
 
 	def IsSupportedPlatform(self):
 		"""Return true if the given platform is supported by this configuration routine."""
@@ -607,7 +610,7 @@ EditionDescription = namedtuple('EditionDescription', ['Name', 'Section'])
 
 
 class Edition(Enum):
-	def __new__(cls, *args, **kwargs):
+	def __new__(cls, *_, **__):
 		value = len(cls.__members__) + 1
 		obj = object.__new__(cls)
 		obj._value_ = value
@@ -623,21 +626,25 @@ class Edition(Enum):
 		for item in cls.__members__.values():
 			if (item.Name == value):
 				return item
-		else:
-			raise ValueError("Unknown enum value '{0}'.".format(value))
+		raise ValueError("Unknown enum value '{0}'.".format(value))
 
 	def __repr__(self):
 		return self.Name
 
 
 class ToolSelector(ILogable, AskMixIn):
-	"""Base class for all Configuration classes."""
+	"""Base class for all Selector classes."""
+	_toolName =     ""
 
 	def __init__(self, host: IHost):
 		"""Class initializer."""
 		self._host = host
 
 		ILogable.__init__(self, host.Logger if isinstance(host, ILogable) else None)
+
+	@property
+	def ToolName(self):
+		return self._toolName
 
 	def _GetConfiguredEditions(self, editions):
 		"""Return all configured editions."""
@@ -666,12 +673,6 @@ class ToolSelector(ILogable, AskMixIn):
 						edition = item
 						break
 				else:
-
-				# try:
-				# 	selectedIndex = int(selectedIndex)
-				# 	edition = editions.Parse(selectedIndex)
-				# 	break
-				# except:
 					self._host.LogError("Invalid choice.")
 					continue  # the outer while loop
 
@@ -699,7 +700,7 @@ class Configurator(ILogable, AskMixIn):
 		from .PoC                 import Configuration as PoC_Configuration
 		from .Git                 import Configuration as Git_Configuration
 		from .Aldec               import Configuration as Aldec_Configuration
-		from .Aldec.ActiveHDL     import Configuration as ActiveHDL_Configuration, ActiveHDLEditions
+		from .Aldec.ActiveHDL     import Configuration as ActiveHDL_Configuration
 		from .Altera              import Configuration as Altera_Configuration
 		from .Altera.Quartus      import Configuration as AlteraQuartus_Configuration
 		from .Altera.ModelSim     import Configuration as AlteraModelSim_Configuration
@@ -778,7 +779,7 @@ class Configurator(ILogable, AskMixIn):
 	def ConfigureTool(self, toolChain):
 		"""Select tool chains for configuration."""
 		sectionName = ("INSTALL.{0}".format(toolChain)).lower()
-		configurators = [config for config in self._configurators if (config._section.lower().startswith(sectionName))]
+		configurators = [config for config in self._configurators if (config.SectionName.lower().startswith(sectionName))]
 
 		if (len(configurators) == 0):
 			self.LogError("{RED}No configuration named '{0}' found.{NOCOLOR}".format(toolChain, **Init.Foreground))
@@ -913,7 +914,7 @@ class Configurator(ILogable, AskMixIn):
 	def _ConfigureDefaultTools(self):
 		self.LogNormal("{CYAN}Choosing default tools\n----------------------{NOCOLOR}".format(**Init.Foreground))
 		for selector in self._selectors:
-			self._host.LogNormal("{DARK_CYAN}Selecting {0} installation{NOCOLOR}".format(selector._toolName, **Init.Foreground))
+			self._host.LogNormal("{DARK_CYAN}Selecting {0} installation{NOCOLOR}".format(selector.ToolName, **Init.Foreground))
 			try:
 				selector.Select()
 			except KeyboardInterrupt:

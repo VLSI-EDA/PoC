@@ -29,7 +29,6 @@
 # load dependencies
 from pathlib                      import Path
 
-from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
 from ToolChains.Aldec.ActiveHDL   import ActiveHDL, ActiveHDLException
 from Simulator                    import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
