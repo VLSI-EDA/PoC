@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Mentor QuestaSim specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Mentor QuestaSim specific classes
 #
 # License:
 # ==============================================================================
@@ -39,12 +33,11 @@ from textwrap                   import dedent
 from lib.Functions              import CallByRefParam, Init
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Logging               import LogEntry, Severity
-from Base.Configuration         import Configuration as BaseConfiguration, ConfigurationException
-from Base.Simulator             import SimulationResult, PoCSimulationResultFilter, PoCSimulationResultNotFoundException
 from Base.Executable            import Executable
 from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, PathArgument, StringArgument, CommandLineArgumentList
-from ToolChains                 import ToolMixIn
-from ToolChains.Mentor.Mentor   import MentorException
+from ToolChains                 import ToolMixIn, ConfigurationException, ToolConfiguration
+from ToolChains.Mentor          import MentorException
+from Simulator                  import PoCSimulationResultNotFoundException, SimulationResult, PoCSimulationResultFilter
 
 
 __api__ = [
@@ -65,29 +58,32 @@ class QuestaSimException(MentorException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      "Mentor"
-	_toolName =    "Mentor QuestaSim"
-	_section =     "INSTALL.Mentor.QuestaSim"
+class Configuration(ToolConfiguration):
+	_vendor =               "Mentor"                    #: The name of the tools vendor.
+	_toolName =             "Mentor QuestaSim"          #: The name of the tool.
+	_section  =             "INSTALL.Mentor.QuestaSim"  #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Mentor QuestaSim supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "10.4d",
-				"InstallationDirectory":  "${INSTALL.Mentor:InstallationDirectory}/QuestaSim/${Version}",
-				"BinaryDirectory":        "${InstallationDirectory}/win64"
+				"Version":                "10.5c",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Mentor:InstallationDirectory}/QuestaSim/${Version}"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/win64")
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "10.4d",
-				"InstallationDirectory":  "${INSTALL.Mentor:InstallationDirectory}/${Version}/questasim",
-				"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"Version":                "10.5c",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Mentor:InstallationDirectory}/${Version}/questasim"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Xilinx is configured
+		"""Check if general Mentor support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Mentor']) != 0)
 
 	def ConfigureForAll(self):
@@ -95,10 +91,17 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Mentor QuestaSim installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure QuestaSim version
 				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__CheckQuestaSimVersion(binPath, version)
+				self._host.LogNormal("{DARK_GREEN}Mentor Graphics QuestaSim is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise

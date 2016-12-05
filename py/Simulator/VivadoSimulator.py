@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx Vivado simulator.
 #
 # License:
 # ==============================================================================
@@ -35,11 +29,11 @@
 # load dependencies
 from pathlib                    import Path
 
-from Base.Project               import ToolChain, Tool
-from Base.Simulator             import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException, SimulationSteps
 from Base.Logging               import Severity
-from ToolChains.Xilinx.Xilinx   import XilinxProjectExportMixIn
+from Base.Project               import ToolChain, Tool
+from ToolChains.Xilinx          import XilinxProjectExportMixIn
 from ToolChains.Xilinx.Vivado   import Vivado, VivadoException
+from Simulator                  import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [

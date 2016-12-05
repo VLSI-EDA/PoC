@@ -6,11 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
+# Python Module:    Mentor QuestaSim simulator.
 #
 # License:
 # ==============================================================================
@@ -32,13 +28,13 @@
 #
 # load dependencies
 from pathlib                      import Path
-from textwrap import dedent
+from textwrap                     import dedent
 
 from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
-from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException, SimulationSteps
 from DataBase.Config              import Vendors
 from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaSimException
+from Simulator                    import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [
@@ -70,16 +66,20 @@ class Simulator(BaseSimulator):
 	def _PrepareSimulator(self):
 		# create the QuestaSim executable factory
 		self.LogVerbose("Preparing Mentor simulator.")
-		for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Mentor.ModelSimPE', 'INSTALL.Altera.ModelSim']:
-			if (len(self.Host.PoCConfig.options(sectionName)) != 0):
-				break
-		else:
-			raise NotConfiguredException(
-				"Neither Mentor Graphics QuestaSim, ModelSim PE nor ModelSim Altera-Edition are configured on this system.")
+		# for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Mentor.ModelSim', 'INSTALL.Altera.ModelSim']:
+		# 	if (len(self.Host.PoCConfig.options(sectionName)) != 0):
+		# 		break
+		# else:
+		# XXX: check SectionName if ModelSim is configured
+		# 	raise NotConfiguredException(
+		# 		"Neither Mentor Graphics QuestaSim, ModelSim PE nor ModelSim Altera-Edition are configured on this system.")
 
-		questaSection = self.Host.PoCConfig[sectionName]
-		binaryPath = Path(questaSection['BinaryDirectory'])
-		version = questaSection['Version']
+		# questaSection = self.Host.PoCConfig[sectionName]
+		# binaryPath = Path(questaSection['BinaryDirectory'])
+		# version = questaSection['Version']
+
+		binaryPath =  Path(self.Host.PoCConfig['INSTALL.ModelSim']['BinaryDirectory'])
+		version =     self.Host.PoCConfig['INSTALL.ModelSim']['Version']
 		self._toolChain = QuestaSim(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None):

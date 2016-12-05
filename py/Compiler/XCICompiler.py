@@ -5,13 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:     This XCICompiler compiles xci IPCores to netlists
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx Vivado IP Catalog synthesizer (compiler) compiles xci IPCores to netlists.
 #
 # License:
 # ==============================================================================
@@ -39,9 +33,9 @@ from pathlib                  import Path
 from textwrap                 import dedent
 
 from Base.Project             import ToolChain, Tool
-from Base.Compiler            import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
-from DataBase.Entity               import WildCard
+from DataBase.Entity          import WildCard
 from ToolChains.Xilinx.Vivado import Vivado, VivadoException
+from Compiler                 import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
 __api__ = [

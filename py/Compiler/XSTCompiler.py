@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      This XSTCompiler compiles VHDL source files to netlists
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx ISE synthesizer (compiler).
 #
 # License:
 # ==============================================================================
@@ -37,10 +31,10 @@ from datetime                 import datetime
 from pathlib                  import Path
 
 from Base.Project             import ToolChain, Tool
-from Base.Compiler            import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
-from DataBase.Entity               import WildCard
-from ToolChains.Xilinx.Xilinx import XilinxProjectExportMixIn
+from DataBase.Entity          import WildCard
+from ToolChains.Xilinx        import XilinxProjectExportMixIn
 from ToolChains.Xilinx.ISE    import ISE, ISEException
+from Compiler                 import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
 __api__ = [

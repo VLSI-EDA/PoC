@@ -6,11 +6,7 @@
 # Authors:            Patrick Lehmann
 #											Thomas B. Preusser
 #
-# Python functions:    Auxillary functions to exit a program and report an error message.
-#
-# Description:
-# ------------------------------------
-#		TODO:
+# Python functions:   Auxillary functions to exit a program and report an error message.
 #
 # License:
 # ==============================================================================
@@ -31,9 +27,9 @@
 # ==============================================================================
 #
 # load dependencies
-from functools  import reduce
-from operator    import or_
-from sys        import version_info
+from functools    import reduce
+from operator     import or_
+from sys          import version_info
 
 
 __api__ = [
@@ -53,7 +49,17 @@ def merge_with(f, *dicts):
 	"""Merge 2 or more dictionaries. Apply function f to each element during merge."""
 	return {k : reduce(lambda x: f(*x) if (len(x) > 1) else x[0])([ d[k] for d in dicts if k in d ]) for k in reduce(or_, map(lambda x: x.keys(), dicts), set()) }
 
+
 class CallByRefParam:
+	"""Implements a "call by reference" parameter.
+
+	.. seealso::
+
+	   :py:class:`CallByRefBoolParam`
+	     A special "call by reference" implementation for boolean reference types.
+	   :py:class:`CallByRefIntParam`
+	     A special "call by reference" implementation for integer reference types.
+	"""
 	def __init__(self, value=None):
 		self.value = value
 
@@ -63,19 +69,63 @@ class CallByRefParam:
 
 	def __eq__(self, other):  return self.value == other
 	def __ne__(self, other):  return self.value != other
-	def __lt__(self, other):  return self.value < other
+	def __repr__(self):       return repr(self.value)
+	def __str__(self):        return str(self.value)
+
+
+class CallByRefBoolParam(CallByRefParam):
+	"""A special "call by reference" implementation for boolean reference types."""
+	# unary operators
+	def __neg__(self):         return not self.value
+
+	# binary operators - logical
+	def __and__(self, other):  return self.value and other
+	def __or__(self, other):   return self.value or  other
+
+	# binary inplace operators
+	def __iand__(self, other):
+		self.value = self.value and other
+		return self
+	def __ior__(self, other):
+		self.value = self.value or other
+		return self
+
+	# type conversion operators
+	def __bool__(self): return self.value
+	def __int__(self):  return int(self.value)
+
+class CallByRefIntParam(CallByRefParam):
+	"""A special "call by reference" implementation for integer reference types."""
+
+	# unary operators
+	def __neg__(self):            return not self.value
+
+	# binary operators - arithmetic
+	def __add__(self, other):     return self.value +  other
+	def __sub__(self, other):     return self.value -  other
+	def __truediv__(self, other): return self.value /  other
+	def __mul__(self, other):     return self.value *  other
+	def __mod__(self, other):     return self.value %  other
+	def __pow__(self, other):     return self.value ** other
+
+	# binary operators - comparison
+	def __eq__(self, other):  return self.value == other
+	def __ne__(self, other):  return self.value != other
+	def __lt__(self, other):  return self.value <  other
 	def __le__(self, other):  return self.value <= other
-	def __gt__(self, other):  return self.value > other
+	def __gt__(self, other):  return self.value >  other
 	def __ge__(self, other):  return self.value >= other
-	def __neg__(self):        return not self.value
+
+	# type conversion operators
+	def __bool__(self):       return bool(self.value)
+	def __int__(self):        return self.value
 
 
 class Init:
 	@classmethod
 	def init(cls):
-		from colorama import init
-		init()
-		from colorama import Back as Background
+		from colorama import init, Back as Background
+		init()#strip=False)
 		print(Background.BLACK, end="")
 
 	from colorama import Fore as Foreground
@@ -115,26 +165,6 @@ class Exit:
 			cls.exit(1)
 
 	@classmethod
-	def printThisIsNoExecutableFile(cls, message):
-		Init.init()
-		print("=" * 80)
-		print("{: ^80s}".format(message))
-		print("=" * 80)
-		print()
-		print("{RED}ERROR:{NOCOLOR} This is not a executable file!".format(**Init.Foreground))
-		cls.exit(1)
-
-	@classmethod
-	def printThisIsNoLibraryFile(cls, message):
-		Init.init()
-		print("=" * 80)
-		print("{: ^80s}".format(message))
-		print("=" * 80)
-		print()
-		print("{RED}ERROR:{NOCOLOR} This is not a library file!".format(**Init.Foreground))
-		cls.exit(1)
-
-	@classmethod
 	def printException(cls, ex):
 		from traceback  import print_tb, walk_tb
 		Init.init()
@@ -145,9 +175,9 @@ class Exit:
 		filename = frame.f_code.co_filename
 		funcName = frame.f_code.co_name
 		print("{YELLOW}  Caused by:{NOCOLOR}         {function} in file '{filename}' at line {line}".format(function=funcName, filename=filename, line=sourceLine, **Init.Foreground))
-		print("-" * 80)
+		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
 		print_tb(ex.__traceback__)
-		print("-" * 80)
+		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
 		Exit.exit(1)
 
 	@classmethod
@@ -161,7 +191,7 @@ class Exit:
 		Exit.exit(1)
 
 	@classmethod
-	def printExceptionbase(cls, ex):
+	def printExceptionBase(cls, ex):
 		Init.init()
 		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
 		Exit.exit(1)

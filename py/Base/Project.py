@@ -8,10 +8,6 @@
 #
 # Python Module:    TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
@@ -38,7 +34,7 @@ from flags              import Flags
 from lib.Functions      import merge
 from Base.Exceptions    import CommonException
 from Parser.FilesParser import VHDLSourceFileMixIn, VerilogSourceFileMixIn, CocotbSourceFileMixIn
-from DataBase.Config         import Board, Device
+from DataBase.Config    import Board, Device
 
 
 __api__ = [

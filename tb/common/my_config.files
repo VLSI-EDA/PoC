@@ -57,6 +57,10 @@ elseif (BoardName = "ECP5Versa") then
 elseif (BoardName = "S3SK1000") then
 	vhdl	poc	"tb/common/my_config_S3SK1000.vhdl"
 
+# Spartan-3E boards
+elseif (BoardName = "S3ESK500") then
+	vhdl	poc	"tb/common/my_config_S3ESK500.vhdl"
+
 # Spartan-6 boards
 elseif (BoardName = "Atlys") then
 	vhdl	poc	"tb/common/my_config_Atlys.vhdl"

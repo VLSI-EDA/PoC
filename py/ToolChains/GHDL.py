@@ -9,12 +9,6 @@
 #
 # Python Class:     GHDL specific classes
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
@@ -38,16 +32,14 @@ from pathlib                import Path
 from re                     import compile as re_compile
 from subprocess             import check_output, CalledProcessError
 
-from lib.Functions          import CallByRefParam
-from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
+from lib.Functions          import CallByRefParam, Init
 from Base.Exceptions        import PlatformNotSupportedException
+from Base.Logging           import LogEntry, Severity
 from Base.Executable        import Executable, LongValuedFlagArgument
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
 from Base.Executable        import ShortFlagArgument, LongFlagArgument, CommandLineArgumentList
-from Base.Logging           import LogEntry, Severity
-from Base.Simulator         import PoCSimulationResultFilter, SimulationResult
-from Base.ToolChain         import ToolChainException
-from ToolChains             import ToolMixIn
+from ToolChains             import ToolMixIn, ToolChainException, ConfigurationException, ToolConfiguration
+from Simulator              import SimulationResult, PoCSimulationResultFilter
 
 
 __api__ = [
@@ -73,48 +65,59 @@ class GHDLReanalyzeException(GHDLException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      None
-	_toolName =    "GHDL"
-	_section =     "INSTALL.GHDL"
+class Configuration(ToolConfiguration):
+	_vendor =               "tgingold"                  #: The name of the tools vendor.
+	_toolName =             "GHDL"                      #: The name of the tool.
+	_section  =             "INSTALL.GHDL"              #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Git supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "0.34dev",
-				"InstallationDirectory":  "C:/Tools/GHDL/0.34dev",
-				"BinaryDirectory":        "${InstallationDirectory}/bin",
-				"ScriptDirectory":        "${InstallationDirectory}/lib/vendors",
-				"Backend":                "mcode"
+				"Version":                "0.34-dev",
+				"Backend":                "mcode",
+				"Runtime":                "gnatgpl32",
+				"SectionName":            ("%{PathWithRoot}#${Version}-${Runtime}-${Backend}",  None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}",           "C:/Tools/GHDL/${Version}-${Runtime}-${Backend}"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",                 "${InstallationDirectory}/bin"),
+				"ScriptDirectory":        ("${${SectionName}:ScriptDirectory}",                 "${InstallationDirectory}/lib/vendors")
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "0.34dev",
-				"InstallationDirectory":  "/usr/local",
-				"BinaryDirectory":        "${InstallationDirectory}/bin",
-				"ScriptDirectory":        "${InstallationDirectory}/lib/ghdl/vendors",
-				"Backend":                "llvm"
+				"Version":                "0.34-dev",
+				"Backend":                "llvm",
+				"SectionName":            ("%{PathWithRoot}#${Version}-${Backend}",   None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "/usr/local"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin"),
+				"ScriptDirectory":        ("${${SectionName}:ScriptDirectory}",       "${InstallationDirectory}/lib/ghdl/vendors")
 			}
 		},
 		"Darwin": {
 			_section: {
-				"Version":                "0.34dev",
-				"InstallationDirectory":  "/usr/local",
-				"BinaryDirectory":        "${InstallationDirectory}/bin",
-				"ScriptDirectory":        "${InstallationDirectory}/lib/ghdl/vendors",
-				"Backend":                "llvm"
+				"Version":                "0.34-dev",
+				"Backend":                "llvm",
+				"SectionName":            ("%{PathWithRoot}#${Version}-${Backend}",   None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "/usr/local"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin"),
+				"ScriptDirectory":        ("${${SectionName}:ScriptDirectory}",       "${InstallationDirectory}/lib/ghdl/vendors")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def ConfigureForAll(self):
 		try:
 			if (not self._AskInstalled("Is GHDL installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure GHDL version
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
+
 				self.__WriteGHDLSection(binPath)
+				self._host.LogNormal("{DARK_GREEN}GHDL is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
@@ -136,8 +139,8 @@ class Configuration(BaseConfiguration):
 
 	def _ConfigureScriptDirectory(self):
 		"""Updates section with value from _template and returns directory as Path object."""
-		unresolved = self._template[self._host.Platform][self._section]['ScriptDirectory']
-		self._host.PoCConfig[self._section]['ScriptDirectory'] = unresolved  # create entry
+		# unresolved = self._template[self._host.Platform][self._section]['ScriptDirectory']
+		# self._host.PoCConfig[self._section]['ScriptDirectory'] = unresolved  # create entry
 		scriptPath = Path(self._host.PoCConfig[self._section]['ScriptDirectory'])  # resolve entry
 
 		if (not scriptPath.exists()):
@@ -264,6 +267,18 @@ class GHDL(Executable, ToolMixIn):
 	class FlagPSL(metaclass=ShortFlagArgument):
 		_name =    "fpsl"
 
+	class SwitchCompilerOption(metaclass=ValuedFlagListArgument):
+		_pattern =  "-{0},{1}"
+		_name =     "Wc"
+
+	class SwitchAssemblerOption(metaclass=ValuedFlagListArgument):
+		_pattern =  "-{0},{1}"
+		_name =     "Wa"
+
+	class SwitchLinkerOption(metaclass=ValuedFlagListArgument):
+		_pattern =  "-{0},{1}"
+		_name =     "Wl"
+
 	class SwitchIEEEFlavor(metaclass=LongValuedFlagArgument):
 		_name =     "ieee"
 
@@ -296,6 +311,9 @@ class GHDL(Executable, ToolMixIn):
 		FlagMultiByteComments,
 		FlagSynBinding,
 		FlagPSL,
+		SwitchCompilerOption,
+		SwitchAssemblerOption,
+		SwitchLinkerOption,
 		SwitchIEEEFlavor,
 		SwitchVHDLVersion,
 		SwitchVHDLLibrary,

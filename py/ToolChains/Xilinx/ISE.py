@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Xilinx ISE specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Xilinx ISE specific classes
 #
 # License:
 # ==============================================================================
@@ -33,18 +27,17 @@
 # ==============================================================================
 #
 # load dependencies
-from subprocess            import check_output
+from subprocess               import check_output
 
-from Base.Configuration          import Configuration as BaseConfiguration, ConfigurationException
-from Base.Exceptions            import PlatformNotSupportedException
-from Base.Executable            import Executable
-from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
-from Base.Logging                import LogEntry, Severity
-from Base.Project                import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
-from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
-from ToolChains import ToolMixIn
-from ToolChains.Xilinx.Xilinx    import XilinxException
-from lib.Functions              import CallByRefParam
+from lib.Functions            import CallByRefParam, Init
+from Base.Exceptions          import PlatformNotSupportedException
+from Base.Executable          import Executable
+from Base.Executable          import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from Base.Logging             import LogEntry, Severity
+from Base.Project             import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from ToolChains               import ToolMixIn, ConfigurationException, ToolConfiguration
+from ToolChains.Xilinx        import XilinxException
+from Simulator                import SimulationResult, PoCSimulationResultFilter
 
 
 __api__ = [
@@ -71,29 +64,32 @@ class ISEException(XilinxException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =   "Xilinx"
-	_toolName = "Xilinx ISE"
-	_section =  "INSTALL.Xilinx.ISE"
+class Configuration(ToolConfiguration):
+	_vendor =               "Xilinx"                    #: The name of the tools vendor.
+	_toolName =             "Xilinx ISE"                #: The name of the tool.
+	_section  =             "INSTALL.Xilinx.ISE"        #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Xilinx ISE supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
 				"Version":                "14.7",
-				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
-				"BinaryDirectory":        "${InstallationDirectory}/ISE/bin/nt64"
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/ISE/bin/nt64")
 			}
 		},
 		"Linux": {
 			_section: {
 				"Version":                "14.7",
-				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
-				"BinaryDirectory":        "${InstallationDirectory}/ISE/bin/lin64"
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/ISE/bin/lin64")
 			}
 		}
-	}
+	}                                                 #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Xilinx is configured
+		"""Check if general Xilinx support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Xilinx']) != 0)
 
 	def ConfigureForAll(self):
@@ -101,10 +97,17 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Xilinx ISE installed on your system?")):
 				self.ClearSection()
 			else:
-				self._host.PoCConfig[self._section]['Version'] = self._template[self._host.Platform][self._section]['Version']
+				# Configure ISE version
+				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__CheckISEVersion(binPath)
+				self._host.LogNormal("{DARK_GREEN}Xilinx ISE is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise

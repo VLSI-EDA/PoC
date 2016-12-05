@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:     This XCOCompiler compiles xco IPCores to netlists
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx Core Generator (compiler) compiles xco IPCores to netlists.
 #
 # License:
 # ==============================================================================
@@ -40,9 +34,9 @@ from pathlib                import Path
 from textwrap               import dedent
 
 from Base.Project           import ToolChain, Tool
-from Base.Compiler          import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
-from DataBase.Entity             import WildCard
+from DataBase.Entity        import WildCard
 from ToolChains.Xilinx.ISE  import ISE, ISEException
+from Compiler               import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
 __api__ = [

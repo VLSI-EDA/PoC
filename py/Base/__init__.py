@@ -3,18 +3,13 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:               Patrick Lehmann
+# Authors:          Patrick Lehmann
 #
-# Python Sub Module:    Saves The PoC-Library configuration as python source code.
-#
-# Description:
-# ------------------------------------
-#    TODO:
-#
+# Python Package:   Saves The PoC-Library configuration as python source code.
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,3 +25,30 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
+from lib.ExtendedConfigParser import ExtendedConfigParser
+from Base.Logging             import ILogable
+
+
+__api__ = [
+	'IHost'
+]
+__all__ = __api__
+
+
+class IHost(ILogable):
+	"""This is a type hint class (interface description) for a host instance.
+
+	It's needed until PoC requires Python 3.6.
+	"""
+
+	# instance fields
+	Platform =    "string"
+	PoCConfig =   ExtendedConfigParser()
+
+	# methods
+	def SaveAndReloadPoCConfiguration(self): pass
+
+	# Syntax not supported by Python 3.5 -> requires 3.6
+	# Platform :  str =                  None
+	# PoCConfig : ExtendedConfigParser = None

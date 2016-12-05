@@ -7,12 +7,6 @@
 #
 # Python Class:     TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
@@ -37,12 +31,12 @@ from textwrap           import dedent
 
 from lib.Decorators     import ILazyLoadable, LazyLoadTrigger
 from Base.Exceptions    import CommonException
-from Base.Configuration import ConfigurationException
 from Base.Project       import Project as BaseProject, File, FileTypes, VHDLSourceFile, VerilogSourceFile, CocotbSourceFile  #, ProjectFile
 from Parser.FilesParser import FilesParserMixIn
 from Parser.RulesParser import RulesParserMixIn
 from DataBase           import __POC_SOLUTION_KEYWORD__
 from DataBase.Entity    import Visibility
+from ToolChains         import ConfigurationException
 
 
 __api__ = [

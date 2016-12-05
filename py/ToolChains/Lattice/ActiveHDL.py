@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Lattice Active-HDL specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Lattice Active-HDL specific classes
 #
 # License:
 # ==============================================================================
@@ -33,39 +27,34 @@
 # ==============================================================================
 #
 # load dependencies
-from subprocess                  import check_output
+from subprocess                   import check_output
 
-from Base.Configuration          import Configuration as BaseConfiguration, ConfigurationException
-from ToolChains.Lattice.Lattice  import LatticeException
+from lib.Functions                import Init
+from ToolChains                   import ConfigurationException
+from ToolChains.Lattice           import LatticeException
+from ToolChains.Aldec.ActiveHDL   import Configuration as ActiveHDL_Configuration, ActiveHDLException as Aldec_ActiveHDL_ActiveHDLException
 
 
-class ActiveHDLException(LatticeException):
+class ActiveHDLException(LatticeException, Aldec_ActiveHDL_ActiveHDLException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =    "Lattice"
-	_toolName =  "Active-HDL Lattice Edition"
-	_section =  "INSTALL.Lattice.ActiveHDL"
+class Configuration(ActiveHDL_Configuration):
+	_vendor =               "Lattice"                     #: The name of the tools vendor.
+	_toolName =             "Active-HDL Lattice Edition"  #: The name of the tool.
+	_section  =             "INSTALL.Lattice.ActiveHDL"   #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "10.2",
+				"Version":                "10.3",
 				"InstallationDirectory":  "${INSTALL.Lattice.Diamond:InstallationDirectory}/active-hdl",
 				"BinaryDirectory":        "${InstallationDirectory}/BIN"
 			}
-		},
-		"Linux": {
-			_section: {
-			# 	"Version":                "15.0",
-			# 	"InstallationDirectory":  "${INSTALL.Lattice:InstallationDirectory}/${Version}/activeHDL",
-			# 	"BinaryDirectory":        "${InstallationDirectory}/fix_me"
-			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Lattice is configured
+		"""Check if Lattice Diamond support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Lattice.Diamond']) != 0)
 
 	def ConfigureForAll(self):
@@ -73,10 +62,14 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Aldec Active-HDL installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure Active-HDL version
 				version = self._ConfigureVersion()
+
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__CheckActiveHDLVersion(binPath, version)
+				self._host.LogNormal("{DARK_GREEN}Lattice Active-HDL is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise

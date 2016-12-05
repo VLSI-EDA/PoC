@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx ISE simulator.
 #
 # License:
 # ==============================================================================
@@ -36,9 +30,9 @@
 from pathlib                    import Path
 
 from Base.Project               import ToolChain, Tool
-from Base.Simulator             import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException, SimulationSteps
-from ToolChains.Xilinx.Xilinx   import XilinxProjectExportMixIn
+from ToolChains.Xilinx          import XilinxProjectExportMixIn
 from ToolChains.Xilinx.ISE      import ISE, ISESimulator, ISEException
+from Simulator                  import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [

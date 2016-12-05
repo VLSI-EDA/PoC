@@ -15,10 +15,6 @@
 #
 # Python module:	    pyAttributes for ArgParse
 #
-# Description:
-# ------------------------------------
-#		TODO
-#
 # License:
 # ============================================================================
 # Copyright 2007-2016 Patrick Lehmann - Dresden, Germany

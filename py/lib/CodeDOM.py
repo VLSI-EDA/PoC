@@ -8,10 +8,6 @@
 #
 # Python Module:    TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Patrick Lehmann - Dresden, Germany
@@ -152,7 +148,7 @@ class CodeDOMObject(metaclass=CodeDOMMeta):
 				if printChar: print("{BLUE}{token!s}{NOCOLOR}".format(token=token, **Init.Foreground))
 				parser.send(token)
 
-			# XXX: print("send empty token")
+			# FIXME: print("send empty token")
 			parser.send(None)
 		except MatchingParserResult as ex:
 			return ex.value

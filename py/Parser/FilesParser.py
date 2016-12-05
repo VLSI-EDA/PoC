@@ -8,10 +8,6 @@
 #
 # Python Module:    TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
@@ -170,7 +166,7 @@ class FilesParserMixIn:
 			print("{DARK_GRAY}{doc!s}{NOCOLOR}".format(doc=self._document, **Init.Foreground))
 			print("{DARK_GRAY}{line}{NOCOLOR}".format(line="*"*80, **Init.Foreground))
 
-	# FIXME: is there a better way to passthrough/access host?
+	# QUESTION: Is there a better way to passthrough/access host?
 	def _Resolve(self, host, statements=None): # mccabe:disable=MC0001
 		if (statements is None):
 			statements = self._document.Statements

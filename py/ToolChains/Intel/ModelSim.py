@@ -7,7 +7,7 @@
 #                   Martin Zabel
 #                   Thomas B. Preusser
 #
-# Python Class:     Altera ModelSim specific classes
+# Python Class:     Intel ModelSim specific classes
 #
 # License:
 # ==============================================================================
@@ -34,84 +34,83 @@ from subprocess                   import check_output
 
 from lib.Functions                import Init
 from ToolChains                   import ConfigurationException, EditionDescription, Edition
-from ToolChains.Altera            import AlteraException
-from ToolChains.Mentor.ModelSim   import Configuration as Mentor_ModelSim_Configuration, ModelSimException as Mentor_ModelSimException
+from ToolChains.Mentor.ModelSim   import ModelSimException as Mentor_ModelSimException, Configuration as Mentor_ModelSim_Configuration
+from ToolChains.Intel             import IntelException
 
 
 __api__ = [
 	'ModelSimException',
-	'AlteraModelSimEditions',
+	'IntelModelSimEditions',
 	'Configuration'
 ]
 __all__ = __api__
 
 
-class ModelSimException(AlteraException, Mentor_ModelSimException):
+class ModelSimException(IntelException, Mentor_ModelSimException):
 	pass
 
 
 @unique
-class AlteraModelSimEditions(Edition):
-	"""Enumeration of all ModelSim editions provided by Altera."""
-	ModelSimAlteraEdition =         EditionDescription(Name="ModelSim Altera Edition",          Section=None)
-	ModelSimAlteraStarterEdition =  EditionDescription(Name="ModelSim Altera Starter Edition",  Section=None)
+class IntelModelSimEditions(Edition):
+	ModelSimIntelEdition =        EditionDescription(Name="ModelSim Intel Edition",         Section=None)
+	ModelSimIntelStarterEdition = EditionDescription(Name="ModelSim Intel Starter Edition", Section=None)
 
 
 class Configuration(Mentor_ModelSim_Configuration):
-	_vendor =               "Altera"                    #: The name of the tools vendor.
-	_toolName =             "Altera ModelSim"           #: The name of the tool.
-	_section  =             "INSTALL.Altera.ModelSim"   #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_vendor =               "Intel"                     #: The name of the tools vendor.
+	_toolName =             "Intel ModelSim"            #: The name of the tool.
+	_section  =             "INSTALL.Intel.ModelSim"    #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "10.4b",
-				"Edition":                "ModelSim Altera Edition",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ae",
+				"Version":                "10.5b",
+				"Edition":                "ModelSim Intel Edition",
+				"InstallationDirectory":  "${INSTALL.Intel:InstallationDirectory}/${INSTALL.Intel.Quartus:Version}/modelsim_ae",  # _ase
 				"BinaryDirectory":        "${InstallationDirectory}/win32aloem"
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "10.4b",
-				"Edition":                "ModelSim Altera Edition",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ae",
+				"Version":                "10.5b",
+				"Edition":                "ModelSim Intel Edition",
+				"InstallationDirectory":  "${INSTALL.Intel:InstallationDirectory}/${INSTALL.Intel.Quartus:Version}/modelsim_ae",
 				"BinaryDirectory":        "${InstallationDirectory}/linuxaloem"
 			}
 		}
 	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		"""Check if general Altera support is configured in PoC."""
-		return (len(self._host.PoCConfig['INSTALL.Altera']) != 0)
+		"""Check if general Intel support is configured in PoC."""
+		return (len(self._host.PoCConfig['INSTALL.Intel']) != 0)
 
 	def ConfigureForAll(self):
 		try:
-			if (not self._AskInstalled("Is ModelSim Altera Edition installed on your system?")):
+			if (not self._AskInstalled("Is ModelSim Intel Edition installed on your system?")):
 				self.ClearSection()
 			else:
 				# Configure ModelSim version
+				edition = self._ConfigureEdition()
 
-				changed,edition = self._ConfigureEdition()
-				if changed:
-					configSection = self._host.PoCConfig[self._section]
-					if (edition is AlteraModelSimEditions.ModelSimAlteraEdition):
-						configSection['InstallationDirectory'] = self._host.PoCConfig.get(self._section, 'InstallationDirectory', raw=True).replace("_ase", "_ae")
-					elif (edition is AlteraModelSimEditions.ModelSimAlteraStarterEdition):
-						configSection['InstallationDirectory'] = self._host.PoCConfig.get(self._section, 'InstallationDirectory', raw=True).replace("_ae", "_ase")
+
+				configSection = self._host.PoCConfig[self._section]
+				if (edition is IntelModelSimEditions.ModelSimIntelEdition):
+					configSection['InstallationDirectory'] = self._host.PoCConfig.get(self._section, 'InstallationDirectory', raw=True).replace("_ase", "_ae")
+				elif (edition is IntelModelSimEditions.ModelSimIntelStarterEdition):
+					configSection['InstallationDirectory'] = self._host.PoCConfig.get(self._section, 'InstallationDirectory', raw=True).replace("_ase", "_ase")
 
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__GetModelSimVersion(binPath)
-				self._host.LogNormal("{DARK_GREEN}Altera ModelSim is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
+				self._host.LogNormal("{DARK_GREEN}Intel ModelSim is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
 
 	def _ConfigureEdition(self):
-		"""Configure ModelSim for Altera."""
+		"""Configure ModelSim for Intel."""
 		configSection =   self._host.PoCConfig[self._section]
-		defaultEdition =  AlteraModelSimEditions.Parse(configSection['Edition'])
-		edition =         super()._ConfigureEdition(AlteraModelSimEditions, defaultEdition)
+		defaultEdition =  IntelModelSimEditions.Parse(configSection['Edition'])
+		edition =         super()._ConfigureEdition(IntelModelSimEditions, defaultEdition)
 
 		if (edition is not defaultEdition):
 			configSection['Edition'] = edition.Name

@@ -34,40 +34,38 @@
 # ==============================================================================
 #
 # load dependencies
-from argparse                       import RawDescriptionHelpFormatter
-from collections                    import OrderedDict
-from configparser                   import Error as ConfigParser_Error, DuplicateOptionError
-from os                             import environ
-from pathlib                        import Path
-from platform                       import system as platform_system
-from sys                            import argv as sys_argv
-from textwrap                       import dedent
+from argparse                           import RawDescriptionHelpFormatter
+from configparser                       import Error as ConfigParser_Error, DuplicateOptionError
+from os                                 import environ
+from pathlib                            import Path
+from platform                           import system as platform_system
+from sys                                import argv as sys_argv
+from textwrap                           import dedent
 
-from Base.Compiler                  import CompilerException
-from Base.Configuration             import ConfigurationException, SkipConfigurationException
-from Base.Exceptions                import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
-from Base.Logging                   import ILogable, Logger, Severity
-from Base.Project                   import VHDLVersion
-from Base.Simulator                 import SimulatorException, Simulator as BaseSimulator, SimulationSteps
-from Base.ToolChain                 import ToolChainException
-from Compiler.LSECompiler           import Compiler as LSECompiler
-from Compiler.QuartusCompiler       import Compiler as MapCompiler
-from Compiler.ISECompiler           import Compiler as ISECompiler
-from Compiler.XCICompiler           import Compiler as XCICompiler
-from Compiler.XCOCompiler           import Compiler as XCOCompiler
-from Compiler.XSTCompiler           import Compiler as XSTCompiler
-from Compiler.VivadoCompiler        import Compiler as VivadoCompiler
+from Compiler                           import CompilerException, CompileSteps
+from Base.Exceptions                    import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
+from Base.Logging                       import ILogable, Logger, Severity
+from Base.Project                       import VHDLVersion
+from Simulator                          import SimulatorException, SimulationSteps, Simulator
+from Compiler.LSECompiler               import Compiler as LSECompiler
+from Compiler.QuartusCompiler           import Compiler as MapCompiler
+from Compiler.ISECompiler               import Compiler as ISECompiler
+from Compiler.XCICompiler               import Compiler as XCICompiler
+from Compiler.XCOCompiler               import Compiler as XCOCompiler
+from Compiler.XSTCompiler               import Compiler as XSTCompiler
+from Compiler.VivadoCompiler            import Compiler as VivadoCompiler
+from DataBase                           import Query
 from DataBase.Config                    import Board
 from DataBase.Entity                    import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
 from DataBase.Solution                  import Repository
-from DataBase.Query                     import Query
+from Simulator                          import Simulator as BaseSimulator
 from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
 from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
 from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
 from Simulator.ISESimulator             import Simulator as ISESimulator
 from Simulator.QuestaSimulator          import Simulator as QuestaSimulator
 from Simulator.VivadoSimulator          import Simulator as VivadoSimulator
-from ToolChains                         import Configurations
+from ToolChains                         import ToolChainException, Configurator, ConfigurationException
 from ToolChains.GHDL                    import Configuration as GHDLConfiguration
 from lib.pyAttribute.ArgParseAttributes import ArgParseMixin
 from lib.pyAttribute.ArgParseAttributes import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
@@ -132,7 +130,7 @@ class SimulationStepsAttribute(Attribute):
 
 class CompileStepsAttribute(Attribute):
 	def __call__(self, func):
-		# synthesize
+		self._AppendAttribute(func, SwitchArgumentAttribute("-s", "--synthesize", dest="Synthesize", help="Run only the prepare and synthesize step."))
 		# merge
 		# place
 		# route
@@ -187,7 +185,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		elif verbose:  severity = Severity.Verbose
 		else:          severity = Severity.Normal
 
-		logger = Logger(self, severity, printToStdOut=True)
+		logger = Logger(severity, printToStdOut=True)
 		ILogable.__init__(self, logger=logger)
 
 		# Call the constructor of the ArgParseMixin
@@ -231,6 +229,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 		self._configFiles.Structure =   self.Directories.ConfigFiles / self.__CONFIGFILE_STRUCTURE
 		self._configFiles.IPCores =     self.Directories.ConfigFiles / self.__CONFIGFILE_IPCORES
 
+		self.__pocConfig =              ExtendedConfigParser()
+		self.__pocConfig.optionxform =  str
+
 	# class properties
 	# ============================================================================
 	@property
@@ -269,8 +270,6 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 		# create parser instance
 		self.LogDebug("Reading PoC configuration from:")
-		self.__pocConfig = ExtendedConfigParser()
-		self.__pocConfig.optionxform = str
 
 		try:
 			# process first file (private)
@@ -288,10 +287,10 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 		# check PoC installation directory
 		if (self.Directories.Root != Path(self.PoCConfig['INSTALL.PoC']['InstallationDirectory'])):
-			raise NotConfiguredException("There is a mismatch between PoCRoot and PoC installation directory.")
+			raise NotConfiguredException("There is a mismatch between PoCRoot and PoC's installation directory.")
 
 		# parsing values into class fields
-		configSection =                 self.PoCConfig['CONFIG.DirectoryNames']
+		configSection =                 self.__pocConfig['CONFIG.DirectoryNames']
 		self.Directories.Source =       self.Directories.Root / configSection['HDLSourceFiles']
 		self.Directories.Testbench =    self.Directories.Root / configSection['TestbenchFiles']
 		self.Directories.NetList =      self.Directories.Root / configSection['NetlistFiles']
@@ -312,9 +311,14 @@ class PileOfCores(ILogable, ArgParseMixin):
 		self.__pocConfig.remove_section("SOLUTION.DEFAULTS")
 
 		# Writing configuration to disc
-		self.LogNormal("Writing configuration file to '{0!s}'".format(self._configFiles.Private))
+		self.LogNormal("{GREEN}Writing configuration file to '{0!s}'.{NOCOLOR}".format(self._configFiles.Private, **Init.Foreground))
 		with self._configFiles.Private.open('w') as configFileHandle:
 			self.PoCConfig.write(configFileHandle)
+
+	def SaveAndReloadPoCConfiguration(self):
+		self.__WritePoCConfiguration()
+		self.__pocConfig.clear()
+		self.__ReadPoCConfiguration()
 
 	def __PrepareForConfiguration(self):
 		self.__ReadPoCConfiguration()
@@ -391,97 +395,48 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Configuration commands") # mccabe:disable=MC0001
 	@CommandAttribute("configure", help="Configure vendor tools for PoC.")
-	@ArgumentAttribute(metavar="ToolChain", dest="ToolChain", type=str, nargs="?", help="Specify a tool chain to be configured.")
+	@ArgumentAttribute(metavar="ToolChain",         dest="ToolChain", type=str, nargs="?", help="Specify a tool chain to be configured.")
+	@SwitchArgumentAttribute("--set-default-tools", dest="SetDefaultTools",                help="Set default tool for a tool chain.")
 	def HandleConfiguration(self, args):
+		"""Handle 'configure' command."""
 		self.PrintHeadline()
 
 		if (self.Platform not in ["Darwin", "Linux", "Windows"]):    raise PlatformNotSupportedException(self.Platform)
 
+		# load existing configuration or create a new one
 		try:
 			self.__ReadPoCConfiguration()
-			self.__UpdateConfiguration()
+			configurator = Configurator(self)
+			configurator.UpdateConfiguration()
 		except NotConfiguredException:
-			self._InitializeConfiguration()
+			self.LogWarning("No private configuration found. Generating an empty PoC configuration...")
+			configurator = Configurator(self)
+			configurator.InitializeConfiguration()
 
-		self.LogVerbose("starting manual configuration...")
-		print("Explanation of abbreviations:")
-		print("  {YELLOW}Y{NOCOLOR} - yes      {YELLOW}P{NOCOLOR}        - pass (jump to next question)".format(**Init.Foreground))
-		print("  {YELLOW}N{NOCOLOR} - no       {YELLOW}Ctrl + C{NOCOLOR} - abort (no changes are saved)".format(**Init.Foreground))
-		print("Upper case or value in '[...]' means default value")
-		print("-"*80)
+		if (args.SetDefaultTools is True):
+			configurator.ConfigureDefaultTools()
+		else:
+			toolChain = args.ToolChain
+			if (toolChain is None):
+				configurator.ConfigureAll()
+			else:
+				configurator.ConfigureTool(toolChain)
 
-		# select tool chains for configuration
-		toolChain = args.ToolChain
-		if (toolChain is None):
-			configurators = [config(self) for config in Configurations]
-		elif (toolChain != ""):
-			sectionName = "INSTALL.{0}".format(toolChain)
-			configurators = [config(self) for config in Configurations if (config._section.lower().startswith(sectionName.lower()))]
-
-		if (len(configurators) == 0):
-			self.LogError("{RED}No configuration named '{0}' found.{NOCOLOR}".format(toolChain, **Init.Foreground))
-			return
-
-		# configure each vendor or tool of a tool chain
-		print()
-		for configurator in configurators:
-
-			# skip configuration with unsupported platforms
-			if (not configurator.IsSupportedPlatform()):  continue
-			# skip configuration if dependency is not fulfilled
-			if (not configurator.CheckDependency()):
-				configurator.ClearSection()
-				continue
-
-			self.LogNormal("{CYAN}Configuring {0!s}{NOCOLOR}".format(configurator, **Init.Foreground))
-			nxt = False
-			while (nxt is False):
-				try:
-					if   (self.Platform == "Darwin"):   configurator.ConfigureForDarwin()
-					elif (self.Platform == "Linux"):    configurator.ConfigureForLinux()
-					elif (self.Platform == "Windows"):  configurator.ConfigureForWindows()
-
-					nxt = True
-				except SkipConfigurationException:
-					break
-				except ExceptionBase as ex:
-					print("  {RED}FAULT:{NOCOLOR} {0}".format(ex.message, **Init.Foreground))
-				except KeyboardInterrupt:
-					print("\n\n{RED}Abort configuration.\nNo files have been created or changed.{NOCOLOR}".format(**Init.Foreground))
-					return
-
-		# write and re-read configuration
-		self.__WritePoCConfiguration()
-		self.__ReadPoCConfiguration()
-
-		# run post-configuration tasks
-		self.LogNormal("{CYAN}Running post configuration tasks{NOCOLOR}".format(**Init.Foreground))
-		for configurator in configurators:
-			configurator.RunPostConfigurationTasks()
-
-	def _InitializeConfiguration(self):
-		self.LogWarning("No private configuration found. Generating an empty PoC configuration...")
-
-		for config in Configurations:
-			for sectionName in config.GetSections(self.Platform):
-				self.__pocConfig[sectionName] = OrderedDict()
-
-	def __UpdateConfiguration(self):
-		pocSections =     set([sectionName for sectionName in self.__pocConfig])
-		configSections =  set([sectionName for config in Configurations for sectionName in config.GetSections(self.Platform)])
-
-		addSections = configSections.difference(pocSections)
-		delSections = pocSections.difference(configSections)
-
-		if addSections:
-			self.LogWarning("Adding new sections to configuration...")
-			for sectionName in addSections:
-				self.LogWarning("  Adding [{0}]".format(sectionName))
-				self.__pocConfig[sectionName] = OrderedDict()
-
-		if delSections:
-			for sectionName in delSections:
-				self.__pocConfig.remove_section(sectionName)
+		if (self.Logger.LogLevel is Severity.Debug):
+			self.LogDebug("Dumping PoCConfig...")
+			self.LogDebug("-" * 40)
+			for sectionName in self.__pocConfig.sections():
+				if (not sectionName.startswith("INSTALL")):
+					continue
+				self.LogDebug("[{0}]".format(sectionName))
+				configSection = self.__pocConfig[sectionName]
+				for optionName in configSection:
+					try:
+						optionValue = configSection[optionName]
+					except Exception:
+						optionValue = "-- ERROR --"
+					self.LogDebug("{0} = {1}".format(optionName, optionValue), indent=3)
+			self.LogDebug("-" * 40)
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "add-solution" command
@@ -495,19 +450,23 @@ class PileOfCores(ILogable, ArgParseMixin):
 		self.__PrepareForConfiguration()
 
 		self.LogNormal("Register a new solutions in PoC")
-		solutionName = input("  Solution name: ")
+		self.LogNormal("Solution name: ", indent=1)
+		solutionName = input()
 		if (solutionName == ""):        raise ConfigurationException("Empty input. Aborting!")
 
-		solutionID = input("  Solution id:   ")
+		self.LogNormal("Solution id:   ", indent=1)
+		solutionID = input()
 		if (solutionID == ""):          raise ConfigurationException("Empty input. Aborting!")
 		if (solutionID in self.__repo): raise ConfigurationException("Solution ID is already used.")
 
-		solutionRootPath = input("  Solution path: ")
+		self.LogNormal("Solution path: ", indent=1)
+		solutionRootPath = input()
 		if (solutionRootPath == ""):    raise ConfigurationException("Empty input. Aborting!")
 		solutionRootPath = Path(solutionRootPath)
 
 		if (not solutionRootPath.exists()):
-			createPath = input("Path does not exists. Should it be created? [Y/n]: ")
+			self.LogNormal("Path does not exists. Should it be created? [{CYAN}Y{NOCOLOR}/n]: ".format(**Init.Foreground), appendLinebreak=False)
+			createPath = input()
 			createPath = createPath if createPath != "" else "Y"
 			if (createPath in ['n', 'N']):
 				raise ConfigurationException("Cannot continue to register the new project, because '{0!s}' does not exist.".format(solutionRootPath))
@@ -764,6 +723,21 @@ class PileOfCores(ILogable, ArgParseMixin):
 			simulationSteps |=  SimulationSteps.ShowReport &     showReport
 		return simulationSteps
 
+	@staticmethod
+	def _ExtractCompileSteps(guiMode, synthesize, showReport, cleanUp):
+		compileSteps = CompileSteps.no_flags
+		if (not (synthesize)):
+			compileSteps |= CompileSteps.Prepare | SimulationSteps.CleanUpBefore
+			compileSteps |= CompileSteps.Synthesize
+			compileSteps |= CompileSteps.ShowReport   & showReport
+			compileSteps |= CompileSteps.CleanUpAfter & cleanUp
+		else:
+			# simulationSteps |=  SimulationSteps.CleanUpBefore &  True   #cleanup
+			compileSteps |=  CompileSteps.Prepare &     True   #prepare
+			compileSteps |=  CompileSteps.Synthesize &  synthesize
+			compileSteps |=  CompileSteps.ShowReport &  showReport
+		return compileSteps
+
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "list-testbench" command
 	# ----------------------------------------------------------------------------
@@ -893,7 +867,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 		config = GHDLConfiguration(self)
 		if (not config.IsSupportedPlatform()):    raise PlatformNotSupportedException()
-		if (not config.IsConfigured()):            raise NotConfiguredException("GHDL is not configured on this system.")
+		if (not config.IsConfigured()):           raise NotConfiguredException("GHDL is not configured on this system.")
 
 		fqnList =         self._ExtractFQNs(args.FQN)
 		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -951,8 +925,6 @@ class PileOfCores(ILogable, ArgParseMixin):
 		vhdlVersion =     self._ExtractVHDLVersion(args.VHDLVersion)
 		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
 
-		print(simulationSteps)
-
 		simulator = QuestaSimulator(self, self.DryRun, simulationSteps)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)
 
@@ -1005,7 +977,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		# check if QuestaSim is configured
 		if (len(self.PoCConfig.options("INSTALL.Mentor.QuestaSim")) == 0):
 			if (len(self.PoCConfig.options("INSTALL.Altera.ModelSim")) == 0):
-				raise NotConfiguredException("Neither Mentor QuestaSim, Mentor ModelSimPE nor ModelSim Altera Edition are configured on this system.")
+				raise NotConfiguredException("Neither Mentor QuestaSim, Mentor ModelSim nor ModelSim Altera Edition are configured on this system.")
 
 		fqnList =         self._ExtractFQNs(args.FQN)
 		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -1229,8 +1201,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 # main program
 def main(): # mccabe:disable=MC0001
-	"""
-	This is the entry point for PoC.py written as a function.
+	"""This is the entry point for PoC.py written as a function.
 
 	1. It extracts common flags from the script's arguments list, before :py:class:`~argparse.ArgumentParser` is fully loaded.
 	2. It initializes colorama for colored outputs
@@ -1288,7 +1259,7 @@ def main(): # mccabe:disable=MC0001
 	except EnvironmentException as ex:          Exit.printEnvironmentException(ex)
 	except NotConfiguredException as ex:        Exit.printNotConfiguredException(ex)
 	except PlatformNotSupportedException as ex: Exit.printPlatformNotSupportedException(ex)
-	except ExceptionBase as ex:                 Exit.printExceptionbase(ex)
+	except ExceptionBase as ex:                 Exit.printExceptionBase(ex)
 	except NotImplementedError as ex:           Exit.printNotImplementedError(ex)
 	except Exception as ex:                     Exit.printException(ex)
 

@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Xilinx Vivado specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Xilinx Vivado specific classes
 #
 # License:
 # ==============================================================================
@@ -33,18 +27,17 @@
 # ==============================================================================
 #
 # load dependencies
-from subprocess import check_output
+from subprocess                 import check_output
 
-from ToolChains import ToolMixIn
-from lib.Functions              import CallByRefParam
+from lib.Functions              import CallByRefParam, Init
 from Base.Exceptions            import PlatformNotSupportedException
-from Base.Logging                import LogEntry, Severity
-from Base.Configuration         import Configuration as BaseConfiguration, ConfigurationException
-from Base.Project                import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
-from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
+from Base.Logging               import LogEntry, Severity
+from Base.Project               import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
 from Base.Executable            import Executable
 from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
-from ToolChains.Xilinx.Xilinx    import XilinxException
+from ToolChains                 import ToolMixIn, ConfigurationException, ToolConfiguration
+from ToolChains.Xilinx          import XilinxException
+from Simulator                  import SimulationResult, PoCSimulationResultFilter
 
 
 __api__ = [
@@ -69,29 +62,32 @@ class VivadoException(XilinxException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      "Xilinx"
-	_toolName =    "Xilinx Vivado"
-	_section =    "INSTALL.Xilinx.Vivado"
+class Configuration(ToolConfiguration):
+	_vendor =               "Xilinx"                    #: The name of the tools vendor.
+	_toolName =             "Xilinx Vivado"             #: The name of the tool.
+	_section  =             "INSTALL.Xilinx.Vivado"     #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Xilinx Vivado supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "2016.2",
-				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
-				"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"Version":                "2016.3",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "2016.2",
-				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
-				"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"Version":                "2016.3",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Xilinx is configured
+		"""Check if general Xilinx support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Xilinx']) != 0)
 
 	def ConfigureForAll(self):
@@ -99,10 +95,17 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Xilinx Vivado installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure Vivado version
 				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__CheckVivadoVersion(binPath, version)
+				self._host.LogNormal("{DARK_GREEN}Xilinx Vivado is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise

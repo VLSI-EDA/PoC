@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    TODO
 #
 # License:
 # ==============================================================================
@@ -37,10 +31,10 @@ import shutil
 from textwrap                import dedent
 
 from Base.Project            import FileTypes, ToolChain, Tool
-from Base.Simulator          import SimulatorException, Simulator as BaseSimulator, SimulationSteps
-from DataBase.Config              import Vendors
-from DataBase.Entity              import WildCard
+from DataBase.Config         import Vendors
+from DataBase.Entity         import WildCard
 from ToolChains.GNU          import Make
+from Simulator               import SimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [

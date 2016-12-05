@@ -7,12 +7,6 @@
 #
 # Python Class:     Base class for ***
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
@@ -36,6 +30,7 @@ import shutil
 from datetime           import datetime
 from os                 import chdir
 
+from Base import IHost
 from lib.Functions      import Init
 from lib.Parser         import ParserException
 from Base.Exceptions    import CommonException, SkipableCommonException
@@ -88,11 +83,8 @@ class Shared(ILogable):
 		Working = None
 		PoCRoot = None
 
-	def __init__(self, host, dryRun):
-		if isinstance(host, ILogable):
-			ILogable.__init__(self, host.Logger)
-		else:
-			ILogable.__init__(self, None)
+	def __init__(self, host : IHost, dryRun):
+		ILogable.__init__(self, host.Logger if isinstance(host, ILogable) else None)
 
 		self._host =            host
 		self._dryRun =          dryRun

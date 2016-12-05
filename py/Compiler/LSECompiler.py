@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:     This PoCXCOCompiler compiles xco IPCores to netlists
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Lattice Diamond synthesizer (compiler).
 #
 # License:
 # ==============================================================================
@@ -37,11 +31,11 @@ from datetime                   import datetime
 from pathlib                    import Path
 
 from Base.Exceptions            import PlatformNotSupportedException
-from Base.Compiler              import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
 from Base.Project               import ToolChain, Tool, VHDLVersion
-from DataBase.Entity                 import WildCard
-from ToolChains.Lattice.Lattice import LatticeException
+from DataBase.Entity            import WildCard
+from ToolChains.Lattice         import LatticeException
 from ToolChains.Lattice.Diamond import Diamond, SynthesisArgumentFile
+from Compiler                   import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
 __api__ = [

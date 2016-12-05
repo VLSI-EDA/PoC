@@ -6,11 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
+# Python Module:    Aldec Active-HDL simulator.
 #
 # License:
 # ==============================================================================
@@ -31,12 +27,12 @@
 # ==============================================================================
 #
 # load dependencies
-from pathlib import Path
+from pathlib                      import Path
 
 from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
-from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException, SimulationSteps
 from ToolChains.Aldec.ActiveHDL   import ActiveHDL, ActiveHDLException
+from Simulator                    import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [
@@ -60,19 +56,19 @@ class Simulator(BaseSimulator):
 		self._PrepareSimulator()
 
 	def _PrepareSimulator(self):
-		# create the Active-HDL executable factory
+		"""Create the Active-HDL executable factory."""
 		self.LogVerbose("Preparing Active-HDL simulator.")
-		for sectionName in ['INSTALL.Aldec.ActiveHDL', 'INSTALL.Lattice.ActiveHDL']:
-			if (len(self.Host.PoCConfig.options(sectionName)) != 0):
-				break
-		else:
-			raise NotConfiguredException(
-				"Neither Aldec's Active-HDL nor Active-HDL Lattice Edition are configured on this system.")
+		# for sectionName in ['INSTALL.Aldec.ActiveHDL', 'INSTALL.Lattice.ActiveHDL']:
+		# 	if (len(self.Host.PoCConfig.options(sectionName)) != 0):
+		# 		break
+		# else:
+		# XXX: check SectionName if ActiveHDL is configured
+		# 	raise NotConfiguredException(
+		# 		"Neither Aldec's Active-HDL nor Active-HDL Lattice Edition are configured on this system.")
 
-		asimSection = self.Host.PoCConfig[sectionName]
-		binaryPath = Path(asimSection['BinaryDirectory'])
-		version = asimSection['Version']
-		self._toolChain =    ActiveHDL(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		binaryPath =      Path(self.Host.PoCConfig['INSTALL.ActiveHDL']['BinaryDirectory'])
+		version =         self.Host.PoCConfig['INSTALL.ActiveHDL']['Version']
+		self._toolChain = ActiveHDL(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
 	def _RunAnalysis(self, _):
 		# create a ActiveHDLVHDLCompiler instance

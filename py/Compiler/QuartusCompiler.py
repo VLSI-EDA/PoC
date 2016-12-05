@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      This PoCXCOCompiler compiles xco IPCores to netlists
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Altera Quartus synthesizer (compiler).
 #
 # License:
 # ==============================================================================
@@ -37,9 +31,9 @@ from datetime                   import datetime
 from pathlib                    import Path
 
 from Base.Project               import ToolChain, Tool
-from Base.Compiler              import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
-from DataBase.Entity                 import WildCard
+from DataBase.Entity            import WildCard
 from ToolChains.Altera.Quartus  import QuartusException, Quartus, QuartusSettings, QuartusProjectFile
+from Compiler                   import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
 __api__ = [
@@ -64,9 +58,13 @@ class Compiler(BaseCompiler):
 	def _PrepareCompiler(self):
 		super()._PrepareCompiler()
 
-		quartusSection = self.Host.PoCConfig['INSTALL.Altera.Quartus']
-		binaryPath = Path(quartusSection['BinaryDirectory'])
-		version =  quartusSection['Version']
+		# XXX: check SectionName if Quartus is configured
+		# quartusSection = self.Host.PoCConfig['INSTALL.Altera.Quartus']
+		# binaryPath = Path(quartusSection['BinaryDirectory'])
+		# version =  quartusSection['Version']
+
+		binaryPath =  Path(self.Host.PoCConfig['INSTALL.Quartus']['BinaryDirectory'])
+		version =     self.Host.PoCConfig['INSTALL.Quartus']['Version']
 		self._toolChain =    Quartus(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
 	def RunAll(self, fqnList, *args, **kwargs):

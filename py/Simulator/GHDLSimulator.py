@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    GHDL simulator.
 #
 # License:
 # ==============================================================================
@@ -38,7 +32,7 @@ from pathlib                import Path
 from Base.Exceptions        import NotConfiguredException
 from Base.Logging           import Severity
 from Base.Project           import FileTypes, VHDLVersion, ToolChain, Tool
-from Base.Simulator         import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException, SimulationSteps
+from Simulator              import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 from ToolChains.GHDL        import GHDL, GHDLException, GHDLReanalyzeException
 from ToolChains.GTKWave     import GTKWave
 
@@ -157,6 +151,7 @@ class Simulator(BaseSimulator):
 		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =     VHDL_TESTBENCH_LIBRARY_NAME
 		ghdl.Parameters[ghdl.ArgTopLevel] =           testbench.ModuleName
 		ghdl.Parameters[ghdl.FlagExplicit] =          True
+		ghdl.Parameters[ghdl.SwitchLinkerOption] =    ["-no-pie"]
 
 		self._SetVHDLVersionAndIEEEFlavor(ghdl)
 		self._SetExternalLibraryReferences(ghdl)

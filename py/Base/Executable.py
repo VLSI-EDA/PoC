@@ -5,13 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Basic abstraction layer for executables.
 #
 # License:
 # ==============================================================================
@@ -61,12 +55,14 @@ __all__ = __api__
 
 
 class ExecutableException(ExceptionBase):
+	"""This exception is raised by all executable abstraction classes."""
 	def __init__(self, message=""):
 		super().__init__(message)
 		self.message = message
 
 
 class CommandLineArgument(type):
+	"""Base class (and meta class) for all Arguments classes."""
 	_value = None
 
 	# def __new__(mcls, name, bases, nmspc):
@@ -75,6 +71,8 @@ class CommandLineArgument(type):
 
 
 class ExecutableArgument(CommandLineArgument):
+	"""Represents the executable."""
+
 	@property
 	def Value(self):
 		return self._value

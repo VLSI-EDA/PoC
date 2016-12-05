@@ -5,13 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:     This SynthCompiler compiles VHDL source files to design checkpoints
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx Vivado synthesizer (compiler).
 #
 # License:
 # ==============================================================================
@@ -36,9 +30,9 @@ from datetime                 import datetime
 from pathlib                  import Path
 
 from Base.Project             import ToolChain, Tool, FileTypes
-from Base.Compiler            import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
-from DataBase.Entity               import WildCard
+from DataBase.Entity          import WildCard
 from ToolChains.Xilinx.Vivado import Vivado, VivadoException
+from Compiler                 import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
 __api__ = [

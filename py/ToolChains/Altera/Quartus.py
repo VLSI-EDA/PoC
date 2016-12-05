@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Altera Quartus specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Altera Quartus specific classes
 #
 # License:
 # ==============================================================================
@@ -34,22 +28,23 @@
 #
 # load dependencies
 from collections                import OrderedDict
+from enum                       import unique
 from subprocess                 import check_output, STDOUT
 
-from Base.Configuration          import Configuration as BaseConfiguration, ConfigurationException
+from lib.Functions              import Init
 from Base.Exceptions            import PlatformNotSupportedException
-from Base.Logging                import Severity, LogEntry
+from Base.Logging               import Severity, LogEntry
 from Base.Executable            import Executable, CommandLineArgumentList
 from Base.Executable            import ExecutableArgument, ShortValuedFlagArgument, LongValuedFlagArgument, StringArgument, ShortFlagArgument
-from Base.Project                import Project as BaseProject, ProjectFile, FileTypes, SettingsFile
-from ToolChains import ToolMixIn
-from ToolChains.Altera.Altera    import AlteraException
+from Base.Project               import Project as BaseProject, ProjectFile, FileTypes, SettingsFile
+from ToolChains                 import ToolMixIn, ConfigurationException, ToolConfiguration, EditionDescription, Edition, ToolSelector
+from ToolChains.Altera          import AlteraException
 
 
 __api__ = [
 	'QuartusException',
+	'QuartusEditions',
 	'Configuration',
-	'ToolMixIn',
 	'Quartus',
 	'Map',
 	'TclShell',
@@ -66,29 +61,39 @@ class QuartusException(AlteraException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =    "Altera"
-	_toolName =  "Altera Quartus"
-	_section =  "INSTALL.Altera.Quartus"
+@unique
+class QuartusEditions(Edition):
+	"""Enumeration of all Quartus editions provided by Altera itself."""
+	AlteraQuartus =   EditionDescription(Name="Altera Quartus", Section="INSTALL.Altera.Quartus")
+	IntelQuartus =    EditionDescription(Name="Intel Quartus",  Section="INSTALL.Intel.Quartus")
+
+
+class Configuration(ToolConfiguration):
+	_vendor =               "Altera"                    #: The name of the tools vendor.
+	_toolName =             "Altera Quartus"            #: The name of the tool.
+	_section =              "INSTALL.Altera.Quartus"    #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Altera Quartus supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "15.1",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${Version}/quartus",
-				"BinaryDirectory":        "${InstallationDirectory}/bin64"
+				"Version":                "16.0",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Altera:InstallationDirectory}/${Version}/quartus"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin64")
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "15.1",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${Version}/quartus",
-				"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"Version":                "16.0",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Altera:InstallationDirectory}/${Version}/quartus"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Altera is configured
+		"""Check if general Altera support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Altera']) != 0)
 
 	def ConfigureForAll(self):
@@ -96,10 +101,20 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Altera Quartus-II or Quartus Prime installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure Quartus version
 				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
+
+				self.LogNormal("Checking Altera Quartus version... (this may take a few seconds)", indent=1)
 				self.__CheckQuartusVersion(binPath, version)
+
+				self.LogNormal("{DARK_GREEN}Altera Quartus is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
@@ -111,12 +126,36 @@ class Configuration(BaseConfiguration):
 			quartusPath = binPath / "quartus_sh"
 
 		if not quartusPath.exists():
-			raise ConfigurationException("Executable '{0!s}' not found.".format(quartusPath)) from FileNotFoundError(
-				str(quartusPath))
+			raise ConfigurationException("Executable '{0!s}' not found.".format(quartusPath)) \
+				from FileNotFoundError(str(quartusPath))
 
 		output = check_output([str(quartusPath), "-v"], universal_newlines=True, stderr=STDOUT)
 		if "Version {0}".format(version) not in output:
 			raise ConfigurationException("Quartus version mismatch. Expected version {0}.".format(version))
+
+
+class Selector(ToolSelector):
+	_toolName = "Quartus"
+
+	def Select(self):
+		editions = self._GetConfiguredEditions(QuartusEditions)
+
+		if (len(editions) == 0):
+			self._host.LogWarning("No Quartus installation found.", indent=1)
+			self._host.PoCConfig['INSTALL.Quartus'] = OrderedDict()
+		elif (len(editions) == 1):
+			self._host.LogNormal("Default Quartus installation:", indent=1)
+			self._host.LogNormal("Set to {0}".format(editions[0].Name), indent=2)
+			self._host.PoCConfig['INSTALL.Quartus']['SectionName'] = editions[0].Section
+		else:
+			self._host.LogNormal("Select Quartus installation:", indent=1)
+
+			defaultEdition = QuartusEditions.IntelQuartus
+			if defaultEdition not in editions:
+				defaultEdition = editions[0]
+
+			selectedEdition = self._AskSelection(editions, defaultEdition)
+			self._host.PoCConfig['INSTALL.Quartus']['SectionName'] = selectedEdition.Section
 
 
 class Quartus(ToolMixIn):
@@ -399,4 +438,3 @@ class QuartusSettings(SettingsFile):
 class QuartusProjectFile(ProjectFile):
 	def __init__(self, file):
 		super().__init__(file)
-

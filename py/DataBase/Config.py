@@ -6,11 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
+# Python Class:     TODO
 #
 # License:
 # ==============================================================================
@@ -34,15 +30,15 @@
 from enum                 import Enum, unique
 from re                   import compile as re_compile
 
-from Base.Configuration   import ConfigurationException
+from ToolChains import ConfigurationException
 
 
 __api__ = [
 	'BaseEnum',
 	'Vendors',
-	'Families', 'GenericFamilies', 'XilinxFamilies', 'AlteraFamilies', 'LatticeFamilies',
-	'Devices',
-	'SubTypes',
+	'Families', 'GenericFamilies', 'AlteraFamilies', 'LatticeFamilies', 'XilinxFamilies',
+	'Devices',  'GenericDevices',  'AlteraDevices',  'LatticeDevices',  'XilinxDevices',
+	'SubTypes', 'GenericSubTypes', 'AlteraSubTypes', 'LatticeSubTypes', 'XilinxSubTypes',
 	'Packages',
 	'Device',
 	'Board'
@@ -75,19 +71,32 @@ class Vendors(BaseEnum):
 
 
 class Families(BaseEnum):
+	"""Base enum for all Family enums."""
+
 	# @CachedReadOnlyProperty
 	@property
 	def Token(self):
 		return self.value
 
-
 class GenericFamilies(Families):
+	"""Enumeration of all generic families."""
 	Unknown = None
 	Generic = "g"
 
+class AlteraFamilies(Families):
+	"""Enumeration of all Altera families."""
+	Max =       "m"
+	Cyclone =   "c"
+	Arria =     "a"
+	Stratix =   "s"
+
+class LatticeFamilies(Families):
+	"""Enumeration of all Lattice families."""
+	ECP =       "lfe"
+	# TODO: MachXO, iCE, ...
 
 class XilinxFamilies(Families):
-	# Xilinx families
+	"""Enumeration of all Xilinx families."""
 	Spartan = "s"
 	Artix =   "a"
 	Kintex =  "k"
@@ -95,29 +104,21 @@ class XilinxFamilies(Families):
 	Zynq =    "z"
 
 
-class AlteraFamilies(Families):
-	# Altera families
-	Max =        "m"
-	Cyclone =   "c"
-	Arria =      "a"
-	Stratix =    "s"
-
-class LatticeFamilies(Families):
-	# lattice families
-	ECP =        "lfe"
-	# FIXME: MachXO, iCE, ...
-
-
-@unique
 class Devices(BaseEnum):
-	Unknown =                  0
-	Generic =                  1
+	"""Base enum for all Device enums."""
 
+class GenericDevices(Devices):
+	"""Enumeration of all generic devices."""
+	Unknown =                   0
+	Generic =                   1
+
+class AlteraDevices(Devices):
+	"""Enumeration of all Altera devices."""
 	# Altera.Max devices
 	Max2 =                    100
 	Max4 =                    101
 	Max5 =                    102
-	Max10 =                    103
+	Max10 =                   103
 	# Altera.Cyclone devices
 	Cyclone3 =                110
 	Cyclone4 =                111
@@ -129,19 +130,23 @@ class Devices(BaseEnum):
 	Stratix2 =                130
 	Stratix4 =                131
 	Stratix5 =                132
-	Stratix10 =                133
+	Stratix10 =               133
 
+class LatticeDevices(Devices):
+	"""Enumeration of all Lattice devices."""
 	# Lattice.iCE device
-	iCE40 =                    200
+	iCE40 =                   200
 	# Lattice.MachXO
 	MachXO =                  210
-	MachXO2 =                  211
-	MachXO3 =                  212
+	MachXO2 =                 211
+	MachXO3 =                 212
 	# Lattice.ECP
 	ECP2 =                    220
 	ECP3 =                    221
 	ECP5 =                    222
 
+class XilinxDevices(Devices):
+	"""Enumeration of all Xilinx devices."""
 	# Xilinx.Spartan devices
 	Spartan3 =                310
 	Spartan6 =                311
@@ -149,15 +154,15 @@ class Devices(BaseEnum):
 	# Xilinx.Artix devices
 	Artix7 =                  320
 	# Xilinx.Kintex devices
-	Kintex7 =                  330
+	Kintex7 =                 330
 	KintexUltraScale =        331
 	KintexUltraScalePlus =    332
 	# Xilinx.Virtex devices
-	Virtex2 =                  340
-	Virtex4 =                  341
-	Virtex5 =                  342
-	Virtex6 =                  343
-	Virtex7 =                  344
+	Virtex2 =                 340
+	Virtex4 =                 341
+	Virtex5 =                 342
+	Virtex6 =                 343
+	Virtex7 =                 344
 	VirtexUltraScale =        345
 	VirtexUltraScalePlus =    346
 	# Xilinx.Zynq devices
@@ -165,45 +170,61 @@ class Devices(BaseEnum):
 
 
 class SubTypes(BaseEnum):
-	Unknown =    None
-	Generic =    1
-	NoSubType = ("",	"")
-	# Altera device subtypes
-	LS =        ("ls",	"")
-	E =          ("e",		"")
-	GS =        ("gs",	"")
-	GX =        ("gx",	"")
-	GT =        ("gt",	"")
-	GZ =        ("gz",	"")
-	SX =        ("sx",	"")
-	ST =        ("st",	"")
-	# lAttice device subtypes
-	U =          ("u",		"")
-	UM =        ("um",	"")
-	# Xilinx device subtypes
-	X =          ("x",		"")
-	T =          ("",		"t")
-	XT =        ("x",		"t")
-	HT =        ("h",		"t")
-	LX =        ("lx",	"")
-	SXT =        ("sx",	"t")
-	LXT =        ("lx",	"t")
-	TXT =        ("tx",	"t")
-	FXT =        ("fx",	"t")
-	CXT =        ("cx",	"t")
-	HXT =        ("hx",	"t")
-
+	"""Base enum for all SubType enums."""
 
 	# @CachedReadOnlyProperty
 	@property
 	def Groups(self):
 		return self.value
 
+class GenericSubTypes(SubTypes):
+	"""Enumeration of all generic device subtype."""
+	Unknown =   None
+	Generic =   1
+	NoSubType = ("",	"")
+
+class AlteraSubTypes(SubTypes):
+	"""Enumeration of all Altera device subtype."""
+	NoSubType = ("",	"")
+
+	LS =        ("ls",	"")
+	E =         ("e",		"")
+	GS =        ("gs",	"")
+	GX =        ("gx",	"")
+	GT =        ("gt",	"")
+	GZ =        ("gz",	"")
+	SX =        ("sx",	"")
+	ST =        ("st",	"")
+
+class LatticeSubTypes(SubTypes):
+	"""Enumeration of all Lattice device subtype."""
+	NoSubType = ("",	"")
+
+	U =         ("u",		"")
+	UM =        ("um",	"")
+
+class XilinxSubTypes(SubTypes):
+	"""Enumeration of all Xilinx device subtype."""
+	DA =        ("d",		"a")
+	E =         ("",		"e")
+	AN =        ("",		"an")
+	X =         ("x",		"")
+	T =         ("",		"t")
+	XT =        ("x",		"t")
+	HT =        ("h",		"t")
+	LX =        ("lx",	"")
+	SXT =       ("sx",	"t")
+	LXT =       ("lx",	"t")
+	TXT =       ("tx",	"t")
+	FXT =       ("fx",	"t")
+	CXT =       ("cx",	"t")
+	HXT =       ("hx",	"t")
+
 
 @unique
 class Packages(BaseEnum):
-	Unknown = 0
-	Generic = 1
+	Unknown =  0
+	Generic =  1
 
 	TQG =     10
 
@@ -216,10 +237,11 @@ class Packages(BaseEnum):
 	FBG =     30
 	FF =      31
 	FFG =     32
-	FGG =     33
-	FLG =     34
-	FT =      35
-	FTG =     36
+	FG =      33
+	FGG =     34
+	FLG =     35
+	FT =      36
+	FTG =     37
 
 	RB =      40
 	RBG =     41
@@ -238,9 +260,9 @@ class Device:
 		# Device members
 		self.__vendor =       Vendors.Unknown
 		self.__family =       GenericFamilies.Unknown
-		self.__device =       Devices.Unknown
+		self.__device =       GenericDevices.Unknown
 		self.__generation =   0
-		self.__subtype =      SubTypes.Unknown
+		self.__subtype =      GenericSubTypes.Unknown
 		self.__number =       0
 		self.__speedGrade =   0
 		self.__package =      Packages.Unknown
@@ -265,7 +287,8 @@ class Device:
 	def _DecodeGeneric(self):
 		self.__vendor =   Vendors.Generic
 		self.__family =   GenericFamilies.Generic
-		self.__subtype =  SubTypes.Generic
+		self.__device =   GenericDevices.Generic
+		self.__subtype =  GenericSubTypes.Generic
 		self.__package =  Packages.Generic
 
 	def _DecodeAltera(self, deviceString):
@@ -292,10 +315,10 @@ class Device:
 			if (subtype != ""):
 				d = {"g": "gx", "x": "sx", "t": "gt"} # re-name for Stratix 10 and Arria 10
 				if subtype in d: subtype = d[subtype]
-				try:                    self.__subtype = SubTypes[subtype.upper()]
+				try:                    self.__subtype = AlteraSubTypes[subtype.upper()]
 				except KeyError as ex:  raise ConfigurationException("Unknown subtype '{0}'.".format(subtype)) from ex
 			else:
-				self.__subtype = SubTypes.NoSubType
+				self.__subtype = AlteraSubTypes.NoSubType
 
 		else:
 			raise ConfigurationException("RegExp mismatch.")
@@ -316,29 +339,30 @@ class Device:
 		else:                           raise ConfigurationException("Unknown Lattice ECP generation.")
 
 	def _DecodeLatticeECP3(self, deviceString):
-		self.__subtype =      SubTypes.NoSubType
+		self.__device =       LatticeDevices.ECP3
+		self.__subtype =      LatticeSubTypes.NoSubType
 		self.__number =       int(deviceString[5:8])
 
 	def _DecodeLatticeECP5(self, deviceString):
-		self.__device =       Devices.ECP5
+		self.__device =       LatticeDevices.ECP5
 		familyToken = deviceString[4:6].lower()
 		if (familyToken == "u-"):
-			self.__subtype =    SubTypes.U
+			self.__subtype =    LatticeSubTypes.U
 			self.__number =     int(deviceString[6:8])
 			self.__speedGrade = int(deviceString[10:11])
 			self.__package =    Packages.CABGA
-			self.__pinCount =   381                            # XXX: implement other packages and pin counts
+			self.__pinCount =   381                            # TODO: implement other packages and pin counts
 		elif (familyToken == "um"):
-			self.__subtype =    SubTypes.UM
+			self.__subtype =    LatticeSubTypes.UM
 			self.__number =     int(deviceString[7:9])
 			self.__speedGrade = int(deviceString[11:12])
 			self.__package =    Packages.CABGA
-			self.__pinCount =   381                            # XXX: implement other packages and pin counts
+			self.__pinCount =   381                            # TODO: implement other packages and pin counts
 		else:
 			raise ConfigurationException("Unknown Lattice ECP5 subtype.")
 
 	def _DecodeXilinx(self, deviceString):
-		self.__vendor = Vendors.Xilinx
+		self.__vendor =     Vendors.Xilinx
 		self.__generation = int(deviceString[2:3])
 
 		familyToken = deviceString[3:4].lower()
@@ -351,7 +375,7 @@ class Device:
 
 		deviceRegExpStr  = r"(?P<st1>[a-z]{0,2})"   # device subtype - part 1
 		deviceRegExpStr += r"(?P<no>\d{1,4})"       # device number
-		deviceRegExpStr += r"(?P<st2>[t]{0,1})"     # device subtype - part 2
+		deviceRegExpStr += r"(?P<st2>[aent]{0,2})"  # device subtype - part 2
 		deviceRegExpStr += r"(?P<sg>[-1-5]{2})"     # speed grade
 		deviceRegExpStr += r"(?P<pack>[a-z]{1,3})"  # package
 		deviceRegExpStr += r"(?P<pins>\d{1,4})"     # pin count
@@ -363,9 +387,9 @@ class Device:
 			package = deviceRegExpMatch.group('pack')
 
 			if (subtype != ""):
-				try:                    self.__subtype = SubTypes[subtype.upper()]
+				try:                    self.__subtype = XilinxSubTypes[subtype.upper()]
 				except KeyError as ex:  raise ConfigurationException("Unknown subtype '{0}'.".format(subtype)) from ex
-			else:	                    self.__subtype = SubTypes.NoSubType
+			else:	                    self.__subtype = XilinxSubTypes.NoSubType
 			self.__number =           int(deviceRegExpMatch.group('no'))
 			self.__speedGrade =       int(deviceRegExpMatch.group('sg'))
 			try:                      self.__package = Packages[package.upper()]

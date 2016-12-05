@@ -57,6 +57,9 @@ class ExtendedSectionProxy(SectionProxy):
 			raise KeyError(self._name + ":" + key)
 		return self._parser.get(self._name, key)
 
+	def __setitem__(self, key, value):
+		super().__setitem__(key, value)
+		self.parser.Interpolation.clear_cache()
 
 # WORKAROUND: Required for ReadTheDocs, which doesn't support Python 3.5 yet.
 if (version_info < (3,5,0)):
@@ -330,6 +333,11 @@ class ExtendedConfigParser(ConfigParser):
 		if (interpolation is None):     self._interpolation = Interpolation()
 		elif (interpolation is _UNSET): self._interpolation = ExtendedInterpolation()
 		else:                           self._interpolation = interpolation
+
+	def clear(self):
+		super().clear()
+		if isinstance(self._interpolation, ExtendedInterpolation):
+			self._interpolation.clear_cache()
 
 	@property
 	def Interpolation(self):

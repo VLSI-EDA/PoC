@@ -4,15 +4,8 @@
 #
 # ==============================================================================
 # Authors:          Patrick Lehmann
-#                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     TODO
 #
 # License:
 # ==============================================================================
@@ -33,39 +26,46 @@
 # ==============================================================================
 #
 # load dependencies
-from Base.Configuration    import Configuration as BaseConfiguration
-from Base.ToolChain        import ToolChainException
+from ToolChains               import ToolChainException, VendorConfiguration
 
 
 __api__ = [
-	'AldecException',
+	'IntelException',
 	'Configuration'
 ]
 __all__ = __api__
 
 
-class AldecException(ToolChainException):
+class IntelException(ToolChainException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      "Aldec"
-	_toolName =    None  # automatically configure only vendor path
-	_section  =    "INSTALL.Aldec"
+class Configuration(VendorConfiguration):
+	"""Configuration routines for Intel as a vendor.
+
+	This configuration provides a common installation directory setup for all
+	Intel tools installed on a system.
+	"""
+	_vendor =               "Intel"                     #: The name of the tools vendor.
+	_section  =             "INSTALL.Intel"             #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
 	_template = {
 		"Windows": {
 			_section: {
-				"InstallationDirectory":  "C:/Aldec"
+				"InstallationDirectory": "C:/IntelFPGA"
 			}
 		},
 		"Linux": {
 			_section: {
-				"InstallationDirectory":  "/opt/Aldec"
+				"InstallationDirectory": "/opt/Intel"
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def _GetDefaultInstallationDirectory(self):
-		path = self._TestDefaultInstallPath({"Windows": "Aldec", "Linux": "Aldec"})
+		# Intel = environ.get("QUARTUS_ROOTDIR")				# on Windows: D:\IntelFPGA\16.1\quartus
+		# if (Intel is not None):
+		# 	return str(Path(Intel).parent.parent)
+
+		path = self._TestDefaultInstallPath({"Windows": "IntelFPGA", "Linux": "Intel"})
 		if path is None: return super()._GetDefaultInstallationDirectory()
 		return path.as_posix()
