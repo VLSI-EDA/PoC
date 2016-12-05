@@ -8,16 +8,16 @@
 --
 -- Description:
 -- -------------------------------------
---	This module provides a downscaling gearbox with a common clock (cc)
---	interface. It perfoems a 'word' to 'byte' splitting. The default order is
---	LITTLE_ENDIAN (starting at byte(0)). Input "In_Data" and output "Out_Data"
---	are of the same clock domain "Clock". Optional input and output registers
---	can be added by enabling (ADD_***PUT_REGISTERS = TRUE).
+-- This module provides a downscaling gearbox with a common clock (cc)
+-- interface. It perfoems a 'word' to 'byte' splitting. The default order is
+-- LITTLE_ENDIAN (starting at byte(0)). Input "In_Data" and output "Out_Data"
+-- are of the same clock domain "Clock". Optional input and output registers
+-- can be added by enabling (ADD_***PUT_REGISTERS = TRUE).
 --
 -- License:
 -- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
---										 Chair for VLSI-Design, Diagnostics and Architecture
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

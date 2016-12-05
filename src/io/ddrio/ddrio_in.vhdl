@@ -17,15 +17,25 @@
 -- the falling edge directly before this rising edge. Thus sampling starts with
 -- the falling edge of the clock as depicted in the following waveform.
 --
--- .. code-block:: none
+-- .. wavedrom::
 --
---                 __      ____      ____      __
---    Clock          |____|    |____|    |____|
---    Pad          < 0 >< 1 >< 2 >< 3 >< 4 >< 5 >
---    DataIn_low      ... >< 0      >< 2      ><
---    DataIn_high     ... >< 1      >< 3      ><
---
---    < i > is the value of the i-th data bit on the line.
+--    { signal: [
+--      ['DataIn',
+--        {name: 'ClockIn',         wave: 'L.H.L.H.L.H.L.H.L.'},
+--        {name: 'ClockInEnable',   wave: '01............0...'},
+--        {name: 'DataIn_low',      wave: 'x.....2...4...x...', data: ['0',      '2'],      node: '......u...w.'},
+--        {name: 'DataIn_high',     wave: 'x.....3...5...x...', data: ['1',      '3'],      node: '......v...x.'}
+--      ],
+--      {name: 'Pad',             wave: 'x2.3.4.5.x........', data: ['0', '1', '2', '3'], node: '.a.b.c.d.....'},
+--      ],
+--      edge: ['a~>u', 'b~>v', 'c~>w', 'd~>x'],
+--      foot: {
+--        text: ['tspan',
+--          ['tspan', {'font-weight': 'bold'}, 'PoC.io.ddrio.inout'],
+--          ' -- DDR Data Input/Output sampled from pad.'
+--        ]
+--      }
+--    }
 --
 -- After power-up, the output ports ``DataIn_high`` and ``DataIn_low`` both equal
 -- INIT_VALUE.
@@ -35,8 +45,8 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
---										 Chair for VLSI-Design, Diagnostics and Architecture
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

@@ -9,19 +9,32 @@
 -- Description:
 -- -------------------------------------
 -- Controller for Micron DDR-SDRAM on Spartan-3E Starter Kit Board.
+--
 -- SDRAM Device: MT46V32M16-6T
 --
--- CLK_PERIOD = clock period in nano seconds. All SDRAM timings are
--- calculated for the device stated above.
+-- Configuration
+-- *************
 --
--- CL = cas latency, choose according to clock frequency.
--- BL = burst length.
+-- +------------+----------------------------------------------------+
+-- | Parameter  | Description                                        |
+-- +============+====================================================+
+-- | CLK_PERIOD | Clock period in nano seconds. All SDRAM timings are|
+-- |            | calculated for the device stated above.            |
+-- +------------+----------------------------------------------------+
+-- | CL         | CAS latency, choose according to clock frequency.  |
+-- +------------+----------------------------------------------------+
+-- | BL         | Burst length. Choose BL=2 for single cycle memory  |
+-- |            | transactions as required for the PoC.Mem interface.|
+-- +------------+----------------------------------------------------+
 --
 -- Tested with: CLK_PERIOD = 10.0, CL=2, BL=2.
 --
--- Command, address and write data is sampled with clk.
+-- Operation
+-- *********
 --
--- Read data is aligned with clk_fb90_n. Either process data in this clock
+-- Command, address and write data are sampled with the rising edge of ``clk``.
+--
+-- Read data is aligned with ``clk_fb90_n``. Either process data in this clock
 -- domain, or connect a FIFO to transfer data into another clock domain of your
 -- choice.  This FIFO should capable of storing at least one burst (size BL/2)
 -- + start of next burst (size 1).
@@ -30,8 +43,8 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
---										 Chair for VLSI-Design, Diagnostics and Architecture
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -45,27 +58,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -- =============================================================================
-
--------------------------------------------------------------------------------
--- Naming Conventions:
--- (Based on: Keating and Bricaud: "Reuse Methodology Manual")
 --
--- active low signals: "*_n"
--- clock signals: "clk", "clk_div#", "clk_#x"
--- reset signals: "rst", "rst_n"
--- generics: all UPPERCASE
--- user defined types: "*_TYPE"
--- state machine next state: "*_ns"
--- state machine current state: "*_cs"
--- output of a register: "*_r"
--- asynchronous signal: "*_a"
--- pipelined or register delay signals: "*_p#"
--- data before being registered into register with the same name: "*_nxt"
--- clock enable signals: "*_ce"
--- internal version of output port: "*_i"
--- tristate internal signal "*_z"
--------------------------------------------------------------------------------
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

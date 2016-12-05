@@ -1,0 +1,46 @@
+.. :CHANGE:v0.2.0:
+
+New in v0.2.0 (09.03.2015)
+================================================================================================================================================================
+
+* New packages:
+
+  * xil
+  * stream
+
+* New modules:
+
+  * PoC.bus - Modules for busses
+
+    * bus_Arbiter
+
+  * PoC.bus.stream - Modules for the PoC.Stream protocol
+
+    * stream_Buffer
+    * stream_DeMux
+    * stream_FrameGenerator
+    * stream_Mirror
+    * stream_Mux
+    * stream_Source
+
+  * PoC.misc.sync - Cross-Clock Synchronizers
+
+    * sync_Reset
+    * sync_Flag
+    * sync_Strobe
+    * sync_Vector
+    * sync_Command
+
+  * PoC.xil - Xilinx specific modules
+
+    * xil_SyncBits
+    * xil_SyncReset
+    * xil_BSCAN
+    * xil_Reconfigurator
+    * xil_SystemMonitor_Virtex6
+    * xil_SystemMonitor_Series7
+
+* Updated packages:
+
+  * utils
+  * arith

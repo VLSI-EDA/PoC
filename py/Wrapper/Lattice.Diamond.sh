@@ -3,19 +3,14 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-#	Authors:						Patrick Lehmann
+#	Authors:          Patrick Lehmann
 #
-#	BashModule:
-#
-# Description:
-# ------------------------------------
-#	TODO:
-#		-
+#	BashModule:       Create an environment for Lattice Diamond
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,7 +48,7 @@ OpenEnvironment() {
 			echo 1>&2 -e "${RED}Run 'PoC.py configure' to configure your Lattice Diamond installation.${NOCOLOR}"
 			return 1
 		fi
-		# QUESTION: move into PoC.py query like ISESettingsFile ?
+		# QUESTION: Move into PoC.py query like ISESettingsFile ?
 		Diamond_SettingsFile=$Diamond_BinDir/diamond_env
 		if [ ! -f "$Diamond_SettingsFile" ]; then
 			echo 1>&2 -e "${RED}Lattice Diamond settings file not found.${NOCOLOR}"

@@ -6,18 +6,12 @@
 # Authors:          Patrick Lehmann
 #                   Thomas B. Preusser
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Contains PoC's logging (console output) mechanism.
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,22 +26,24 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Base.PoCBase")
-
-
+# load dependencies
 from enum             import Enum, unique
 
 from lib.Functions    import Init
 
 
+__api__ = [
+	'Severity',
+	'LogEntry',
+	'Logger',
+	'ILogable'
+]
+__all__ = __api__
+
+
 @unique
 class Severity(Enum):
+	"""Logging message severity levels."""
 	Fatal =     30
 	Error =     25
 	Quiet =     20
@@ -60,7 +56,7 @@ class Severity(Enum):
 	All =        0
 
 	def __init__(self, *_):
-		"""Patch the embedded MAP dictionary"""
+		"""Patch the embedded MAP dictionary."""
 		for k,v in self.__class__.__VHDL_SEVERITY_LEVEL_MAP__.items():
 			if ((not isinstance(v, self.__class__)) and (v == self.value)):
 				self.__class__.__VHDL_SEVERITY_LEVEL_MAP__[k] = self
@@ -84,14 +80,17 @@ class Severity(Enum):
 
 	@classmethod
 	def ParseVHDLSeverityLevel(cls, severity, fallback=None):
+		"""Translate a VHDL severity level into logging severity level."""
 		return cls.__VHDL_SEVERITY_LEVEL_MAP__.get(severity, fallback)
 
 
 class LogEntry:
-	def __init__(self, message, severity=Severity.Normal, indent=0):
-		self._severity =  severity
-		self._message =    message
-		self._indent =    indent
+	"""Represents a single line log message with a severity and indentation level."""
+	def __init__(self, message, severity=Severity.Normal, indent=0, appendLinebreak=True):
+		self._severity =        severity
+		self._message =         message
+		self._indent =          indent
+		self.AppendLinebreak =  appendLinebreak
 
 	_Log_MESSAGE_FORMAT__ = {
 		Severity.Fatal:     "FATAL: {message}",
@@ -106,30 +105,44 @@ class LogEntry:
 	}
 
 	@property
-	def Severity(self):   return self._severity
+	def Severity(self):
+		"""Return the log message's severity level."""
+		return self._severity
+
 	@property
-	def Indent(self):     return self._indent
+	def Indent(self):
+		"""Return the log message's indentation level."""
+		return self._indent
+
 	@property
-	def Message(self):    return ("  " * self._indent) + self._message
+	def Message(self):
+		"""Return the indented log message."""
+		return ("  " * self._indent) + self._message
 
 	def IndentBy(self, indent):
+		"""Increase a log message's indentation level."""
 		self._indent += indent
 
 	def __str__(self):
 		return self._Log_MESSAGE_FORMAT__[self._severity].format(message=self._message)
 
+
 class Logger:
-	def __init__(self, host, logLevel, printToStdOut=True):
-		self._host =            host
+	def __init__(self, logLevel, printToStdOut=True):
+		"""Class nitializer."""
 		self._LogLevel =        logLevel
 		self._printToStdOut =   printToStdOut
 		self._entries =         []
 		self._baseIndent =      0
 
 	@property
-	def LogLevel(self):             return self._LogLevel
+	def LogLevel(self):
+		"""Return the currently logged minimal severity level."""
+		return self._LogLevel
 	@LogLevel.setter
-	def LogLevel(self, value):      self._LogLevel = value
+	def LogLevel(self, value):
+		"""Set the logged minimal severity level."""
+		self._LogLevel = value
 
 	@property
 	def BaseIndent(self):           return self._baseIndent
@@ -137,7 +150,7 @@ class Logger:
 	def BaseIndent(self, value):    self._baseIndent = value
 
 	_Log_MESSAGE_FORMAT__ = {
-		Severity.Fatal:   "{DARKRED}{message}{NOCOLOR}",
+		Severity.Fatal:   "{DARK_RED}{message}{NOCOLOR}",
 		Severity.Error:   "{RED}{message}{NOCOLOR}",
 		Severity.Quiet:   "{WHITE}{message}{NOCOLOR}",
 		Severity.Warning: "{YELLOW}{message}{NOCOLOR}",
@@ -152,7 +165,7 @@ class Logger:
 		if (entry.Severity >= self._LogLevel):
 			self._entries.append(entry)
 			if self._printToStdOut:
-				print(self._Log_MESSAGE_FORMAT__[entry.Severity].format(message=entry.Message, **Init.Foreground))
+				print(self._Log_MESSAGE_FORMAT__[entry.Severity].format(message=entry.Message, **Init.Foreground), end="\n" if entry.AppendLinebreak else "")
 			return True
 		else:
 			return False
@@ -160,93 +173,99 @@ class Logger:
 	def TryWrite(self, entry):
 		return (entry.Severity >= self._LogLevel)
 
-	def WriteFatal(self, message):
-		return self.Write(LogEntry(message, Severity.Fatal))
+	def WriteFatal(self, message, indent=0, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.Fatal, self._baseIndent + indent, appendLinebreak))
 
-	def WriteError(self, message):
-		return self.Write(LogEntry(message, Severity.Error))
+	def WriteError(self, message, indent=0, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.Error, self._baseIndent + indent, appendLinebreak))
 
-	def WriteWarning(self, message):
-		return self.Write(LogEntry(message, Severity.Warning))
+	def WriteWarning(self, message, indent=0, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.Warning, self._baseIndent + indent, appendLinebreak))
 
-	def WriteInfo(self, message):
-		return self.Write(LogEntry(message, Severity.Info))
+	def WriteInfo(self, message, indent=0, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.Info, self._baseIndent + indent, appendLinebreak))
 
-	def WriteQuiet(self, message):
-		return self.Write(LogEntry(message, Severity.Quiet))
+	def WriteQuiet(self, message, indent=0, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.Quiet, self._baseIndent + indent, appendLinebreak))
 
-	def WriteNormal(self, message, indent=0):
-		return self.Write(LogEntry(message, Severity.Normal, self._baseIndent + indent))
+	def WriteNormal(self, message, indent=0, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.Normal, self._baseIndent + indent, appendLinebreak))
 
-	def WriteVerbose(self, message, indent=1):
-		return self.Write(LogEntry(message, Severity.Verbose, self._baseIndent + indent))
+	def WriteVerbose(self, message, indent=1, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.Verbose, self._baseIndent + indent, appendLinebreak))
 
-	def WriteDebug(self, message, indent=2):
-		return self.Write(LogEntry(message, Severity.Debug, self._baseIndent + indent))
+	def WriteDebug(self, message, indent=2, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.Debug, self._baseIndent + indent, appendLinebreak))
 
-	def WriteDryRun(self, message, indent=2):
-		return self.Write(LogEntry(message, Severity.DryRun, self._baseIndent + indent))
+	def WriteDryRun(self, message, indent=2, appendLinebreak=True):
+		return self.Write(LogEntry(message, Severity.DryRun, self._baseIndent + indent, appendLinebreak))
 
 
 class ILogable:
+	"""A mixin class to provide local logging methods."""
 	def __init__(self, logger=None):
-		self._Logger = logger
+		"""MixIn initializer."""
+		self._logger = logger
+
+		# FIXME: Alter methods if a logger is present or set dummy methods
 
 	@property
 	def Logger(self):
-		return self._Logger
+		"""Return the local logger instance."""
+		return self._logger
 
-	def Log(self, entry):
-		if self._Logger is not None:
-			return self._Logger.Write(entry)
+	def Log(self, entry, condition=True):
+		"""Write an entry to the local logger."""
+		if ((self._logger is not None) and condition):
+			return self._logger.Write(entry)
 		return False
 
-	def _TryLog(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.TryWrite(*args, **kwargs)
+	def _TryLog(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.TryWrite(*args, **kwargs)
 		return False
 
-	def LogFatal(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteFatal(*args, **kwargs)
+	def LogFatal(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteFatal(*args, **kwargs)
 		return False
 
-	def LogError(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteError(*args, **kwargs)
+	def LogError(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteError(*args, **kwargs)
 		return False
 
-	def LogWarning(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteWarning(*args, **kwargs)
+	def LogWarning(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteWarning(*args, **kwargs)
 		return False
 
-	def LogInfo(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteInfo(*args, **kwargs)
+	def LogInfo(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteInfo(*args, **kwargs)
 		return False
 
-	def LogQuiet(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteQuiet(*args, **kwargs)
+	def LogQuiet(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteQuiet(*args, **kwargs)
 		return False
 
-	def LogNormal(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteNormal(*args, **kwargs)
+	def LogNormal(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteNormal(*args, **kwargs)
 		return False
 
-	def LogVerbose(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteVerbose(*args, **kwargs)
+	def LogVerbose(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteVerbose(*args, **kwargs)
 		return False
 
-	def LogDebug(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteDebug(*args, **kwargs)
+	def LogDebug(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteDebug(*args, **kwargs)
 		return False
 
-	def LogDryRun(self, *args, **kwargs):
-		if self._Logger is not None:
-			return self._Logger.WriteDryRun(*args, **kwargs)
+	def LogDryRun(self, *args, condition=True, **kwargs):
+		if ((self._logger is not None) and condition):
+			return self._logger.WriteDryRun(*args, **kwargs)
 		return False

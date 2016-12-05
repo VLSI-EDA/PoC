@@ -63,7 +63,7 @@
 -- Authors:      Thomas B. Preußer <thomas.preusser@utexas.edu>
 -------------------------------------------------------------------------------
 -- Copyright 2007-2014 Technische Universität Dresden - Germany
---                     Chair for VLSI-Design, Diagnostics and Architecture
+--                     Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

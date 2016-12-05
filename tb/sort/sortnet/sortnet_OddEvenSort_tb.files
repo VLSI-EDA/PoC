@@ -11,4 +11,5 @@ include				"lib/OSVVM.files"																# Open Source VHDL Verification Meth
 include				"src/sort/sortnet/sortnet_OddEvenSort.files"		# UUT (Unit Under Test)
 
 # Testbench file(s)
+vhdl		test	"tb/sort/sortnet/sortnet_tb.pkg.vhdl"						# Testbench package
 vhdl		test	"tb/sort/sortnet/sortnet_OddEvenSort_tb.vhdl"		# Testbench

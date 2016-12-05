@@ -1,3 +1,4 @@
+.. _USING:Sim:
 
 Simulation
 ##########
@@ -5,6 +6,8 @@ Simulation
 .. contents:: Contents of this Page
    :local:
 
+
+.. _USING:Sim:Over:
 
 Overview
 ********
@@ -33,6 +36,8 @@ frontend script:
    :doc:`Supported Simulators </WhatIsPoC/SupportedToolChains>`
      See the Intruction page for a list of supported simulators.
 
+
+.. _USING:Sim:Quick:
 
 Quick Example
 *************
@@ -86,6 +91,8 @@ The opened waveform viewer and displayed waveform should look like this:
 	 :alt: GTKWave waveform view of PoC.arith.prng.
 
 
+.. _USING:Sim:Vendor:
+
 Vendor Specific Testbenches
 ***************************
 
@@ -127,6 +134,9 @@ A vendor specific testbench can be launched by passing either ``--board=xxx`` or
    PoC is shipped with a set of pre-compile scripts to offer a unified interface
    and common storage for all supported vendor's pre-compile procedures. See
    :doc:`Pre-Compiling Vendor Libraries </UsingPoC/PrecompilingVendorLibraries>`.
+
+
+.. _USING:Sim:Single:
 
 Running a Single Testbench
 **************************
@@ -180,6 +190,8 @@ PoC runs multiple testbenches at once, all finished testbenches are reported wit
 there testbench result. The aborted testbench will be listed as errored.
 
 
+.. _USING:Sim:Aldec-ActiveHDL:
+
 Aldec Active-HDL
 ================
 
@@ -206,6 +218,8 @@ PoC entities. The following options are supported for Active-HDL:
    cd PoCRoot
    .\poc.ps1 asim PoC.arith.prng --std=93
 
+
+.. _USING:Sim:Cocotb:
 
 Cocotb with QuestaSim backend
 =============================
@@ -235,6 +249,8 @@ by a list of PoC entities. The following options are supported for Cocotb:
    .\poc.ps1 cocotb PoC.cache.par
 
 
+.. _USING:Sim:GHDL:
+
 GHDL (plus GTKwave)
 ===================
 
@@ -260,6 +276,8 @@ PoC entities. The following options are supported for GHDL:
    cd PoCRoot
    .\poc.ps1 ghdl PoC.arith.prng --board=Atlys -g
 
+
+.. _USING:Sim:Mentor-QuestaSim:
 
 Mentor Graphics QuestaSim
 =========================
@@ -287,6 +305,23 @@ QuestaSim:
    cd PoCRoot
    .\poc.ps1 vsim PoC.arith.prng --board=DE4 --gui
 
+If QuestaSim is started in GUI mode (:option:`--gui`), PoC will provide several
+Tcl files (:file:`*.do`) in the simulator's working directory to recompile,
+restart or rerun the current simulation. The rerun command is based on the saved
+IP core's run script, which may default to ``run -all``.
+
++--------------------------+---------------------------------------------------------+
+| Tcl Script               | Performed Tasks                                         |
++==========================+=========================================================+
+| :file:`recompile.do`     | recompile and restart                                   |
++--------------------------+---------------------------------------------------------+
+| :file:`relaunch.do`      | recompile, restart and rerun                            |
++--------------------------+---------------------------------------------------------+
+| :file:`saveWaveform.do`  | save the current waveform viewer settings               |
++--------------------------+---------------------------------------------------------+
+
+
+.. _USING:Sim:Xilinx-iSim:
 
 Xilinx ISE Simulator
 ====================
@@ -312,6 +347,8 @@ ISE Simulator:
    cd PoCRoot
    .\poc.ps1 isim PoC.arith.prng --board=Atlys -g
 
+
+.. _USING:Sim:Xilinx-xSim:
 
 Xilinx Vivado Simulator
 =======================
@@ -339,6 +376,8 @@ Vivado Simulator:
    cd PoCRoot
    .\poc.ps1 xsim PoC.arith.prng --board=Atlys -g
 
+
+.. _USING:Sim:Group:
 
 Running a Group of Testbenches
 ******************************
@@ -378,6 +417,8 @@ current namespace and all sub-namespaces.
 	 :alt: Report after running multiple testbenches in Active-HDL.
 
 
+.. _USING:Sim:CI:
+
 Continuous Integration (CI)
 ***************************
 
@@ -416,5 +457,4 @@ Terrasic DE4 board:
      simulator tool chains. This is required to invoke the simulators.
    `Latest Travis-CI Report <https://travis-ci.org/VLSI-EDA/PoC/branches>`_
      Browse the list of branches at Travis-CI.org.
-
 

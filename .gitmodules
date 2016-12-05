@@ -10,3 +10,6 @@
 [submodule "docs/_themes/sphinx_rtd_theme"]
 	path = docs/_themes/sphinx_rtd_theme
 	url = https://github.com/VLSI-EDA/sphinx_rtd_theme.git
+[submodule "lib/uvvm"]
+	path = lib/uvvm
+	url = https://github.com/VLSI-EDA/UVVM_All.git

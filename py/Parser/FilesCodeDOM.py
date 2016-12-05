@@ -8,14 +8,10 @@
 #
 # Python Module:    TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +26,7 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
 from lib.Parser     import MismatchingParserResult, MatchingParserResult, GreedyMatchingParserResult, StartOfDocumentToken
 from lib.Parser     import SpaceToken, CharacterToken, StringToken, NumberToken
 from lib.CodeDOM    import AndExpression, OrExpression, XorExpression, NotExpression, InExpression, NotInExpression, Literal, BinaryExpression
@@ -37,6 +34,28 @@ from lib.CodeDOM    import EmptyLine, CommentLine, BlockedStatement as BlockedSt
 from lib.CodeDOM    import EqualExpression, UnequalExpression, LessThanExpression, LessThanEqualExpression, GreaterThanExpression, GreaterThanEqualExpression
 from lib.CodeDOM    import Statement, BlockStatement, ConditionalBlockStatement, Function, Expression, ListElement
 from lib.CodeDOM    import StringLiteral, IntegerLiteral, Identifier
+
+
+__api__ = [
+	'BlockedStatement',
+	'IfThenElseExpressions', 'ListElementExpressions', 'PathExpressions',
+	'ListConstructorExpression',
+	'SubDirectoryExpression',
+	'ConcatenateExpression',
+	'ExistsFunction',
+	'VHDLStatement', 'VerilogStatement', 'CocotbStatement',
+	'ConstraintStatement',
+	'LDCStatement', 'SDCStatement', 'UCFStatement', 'XDCStatement',
+	'InterpolateLiteral',
+	'PathStatement',
+	'ReportStatement',
+	'LibraryStatement',
+	'IncludeStatement',
+	'IfStatement', 'ElseIfStatement', 'ElseStatement', 'IfElseIfElseStatement',
+	'Document'
+]
+__all__ = __api__
+
 
 DEBUG =   False#True
 
@@ -573,7 +592,7 @@ class InterpolateLiteral(Literal):
 			token = yield
 			if isinstance(token, CharacterToken):
 				if (token.Value == ":"):
-					if (foundDelimiter == False):
+					if (foundDelimiter is False):
 						foundDelimiter = True
 					else:
 						raise MismatchingParserResult("InterpolateLiteralParser: ")
@@ -588,7 +607,7 @@ class InterpolateLiteral(Literal):
 			else:
 				raise MismatchingParserResult("InterpolateLiteralParser: ")
 
-		if (foundDelimiter == True):
+		if (foundDelimiter is True):
 			sectionName = value[False]
 			optionName =  value[True]
 		else:

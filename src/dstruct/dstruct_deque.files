@@ -8,7 +8,7 @@
 include				"src/common/common.files"										# load common packages
 
 # PoC.mem.ocram
-include				"src/mem/ocram/ocram_tdp.files"				      # True dual-port RAM
+include				"src/mem/ocram/ocram_tdp_wf.files"					# True dual-port RAM
 
 # PoC.dstruct
 vhdl		PoC		"src/dstruct/dstruct.pkg.vhdl"							# PoC.bus package

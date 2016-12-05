@@ -30,6 +30,7 @@ ignore-paths:
 - sim
 - src
 # - tb
+- tcl
 - temp
 # - tools
 - ucf

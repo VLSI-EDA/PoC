@@ -15,7 +15,7 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,24 +42,24 @@
 #
 [CmdletBinding()]
 param(
-	# Pre-compile all libraries and packages for all simulators
+	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
-	# Pre-compile the Altera Quartus libraries for GHDL
+	# Pre-compile the Altera Quartus libraries for GHDL.
 	[switch]$GHDL =				$false,
 
-	# Pre-compile the Altera Quartus libraries for QuestaSim
+	# Pre-compile the Altera Quartus libraries for QuestaSim.
 	[switch]$Questa =			$false,
 
-	# Set VHDL Standard to '93
+	# Set VHDL Standard to '93.
 	[switch]$VHDL93 =			$false,
-	# # Set VHDL Standard to '08
+	# Set VHDL Standard to '08.
 	[switch]$VHDL2008 =		$false,
 
 	# Clean up directory before analyzing.
 	[switch]$Clean =			$false,
 
-	# Show the embedded help page(s)
+	# Show the embedded help page(s).
 	[switch]$Help =				$false
 )
 
@@ -69,6 +69,13 @@ $PoCRootDir =		"\..\.."
 $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
+
+# set default values
+$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
 
 Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -Scope Local -ArgumentList "$WorkingDir"
 
@@ -103,7 +110,7 @@ if ($GHDL)
 
 	$GHDLAlteraScript = "$GHDLScriptDir\compile-altera.ps1"
 	if (-not (Test-Path $GHDLAlteraScript -PathType Leaf))
-	{ Write-Host "[ERROR]: Altera compile script from GHDL is not executable." -ForegroundColor Red
+	{ Write-Host "[ERROR]: Altera compile script '$GHDLAlteraScript' from GHDL not found." -ForegroundColor Red
 		Exit-PrecompileScript -1
 	}
 
@@ -115,7 +122,7 @@ if ($GHDL)
 	{	$env:GHDL = $GHDLBinDir		}
 
 	if ($VHDL93)
-	{	$Command = "$GHDLAlteraScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$AlteraDirName"
+	{	$Command = "$GHDLAlteraScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$AlteraDirName -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -123,7 +130,7 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLAlteraScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$AlteraDirName"
+	{	$Command = "$GHDLAlteraScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$AlteraDirName -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red

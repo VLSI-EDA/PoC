@@ -7,16 +7,10 @@
 #
 # Python Class:     Base class for ***
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,56 +25,74 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Class PoCCompiler")
-
-
 # load dependencies
 import shutil
 from datetime           import datetime
 from os                 import chdir
 
+from Base import IHost
+from lib.Functions      import Init
 from lib.Parser         import ParserException
 from Base.Exceptions    import CommonException, SkipableCommonException
 from Base.Logging       import ILogable
 from Base.Project       import ToolChain, Tool, VHDLVersion, Environment
-from PoC.Solution       import VirtualProject, FileListFile
+from DataBase.Solution  import VirtualProject, FileListFile
+
+
+__api__ = [
+	'to_time',
+	'Shared'
+]
+__all__ = __api__
 
 
 # local helper function
 def to_time(seconds):
-	"""Convert n seconds to a str with pattern {min}:{sec:02}."""
+	"""
+	Convert *n* seconds to a :py:class:`str` with this pattern: "{min}:{sec:02}".
+
+	:type seconds:  int
+	:param seconds: Number of seconds to be converted.
+	:rtype:         str
+	:return:        Returns a string formatted as #:##. E.g. "1:05"
+	"""
+
 	minutes = int(seconds / 60)
 	seconds = seconds - (minutes * 60)
 	return "{min}:{sec:02}".format(min=minutes, sec=seconds)
 
 
 class Shared(ILogable):
-	_ENVIRONMENT =    Environment.Any
-	_TOOL_CHAIN =     ToolChain.Any
-	_TOOL =           Tool.Any
-	_vhdlVersion =    VHDLVersion.VHDL2008
+	"""
+	Base class for Simulator and Compiler.
+
+	:type  host:      object
+	:param host:      The hosting instance for this instance.
+	:type  dryRun:    bool
+	:param dryRun:    Enable dry-run mode
+	:type  noCleanUp: bool
+	:param noCleanUp: Don't clean up after a run.
+	"""
+
+	ENVIRONMENT =     Environment.Any
+	TOOL_CHAIN =      ToolChain.Any
+	TOOL =            Tool.Any
+	VHDL_VERSION =    VHDLVersion.VHDL2008
 
 	class __Directories__:
 		Working = None
 		PoCRoot = None
 
-	def __init__(self, host, dryRun):
-		if isinstance(host, ILogable):
-			ILogable.__init__(self, host.Logger)
-		else:
-			ILogable.__init__(self, None)
+	def __init__(self, host : IHost, dryRun):
+		ILogable.__init__(self, host.Logger if isinstance(host, ILogable) else None)
 
 		self._host =            host
 		self._dryRun =          dryRun
-
 		self._pocProject =      None
 		self._directories =     self.__Directories__()
+		self._toolChain =       None
+		self._vhdlVersion =     self.VHDL_VERSION
+		self._vhdlGenerics =    None
 
 		self._testSuite =       None
 		self._startAt =         datetime.now()
@@ -107,36 +119,66 @@ class Shared(ILogable):
 		self._lastEvent = now
 		return result
 
-	def _Prepare(self):
-		self.LogNormal("Preparing {0}.".format(self._TOOL.LongName))
-
 	def _PrepareEnvironment(self):
 		# create fresh temporary directory
 		self.LogVerbose("Creating fresh temporary directory.")
 		if (self.Directories.Working.exists()):
-			self.LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
-			for item in self.Directories.Working.iterdir():
-				try:
-					if item.is_dir():
-						shutil.rmtree(str(item))
-					elif item.is_file():
-						item.unlink()
-				except OSError as ex:
-					raise CommonException("Error while deleting '{0!s}'.".format(item)) from ex
+			self._PrepareEnvironment_PurgeDirectory()
+			# self.LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
+			# for item in self.Directories.Working.iterdir():
+			# 	try:
+			# 		if item.is_dir():
+			# 			shutil.rmtree(str(item))
+			# 		elif item.is_file():
+			# 			item.unlink()
+			# 	except OSError as ex:
+			# 		raise CommonException("Error while deleting '{0!s}'.".format(item)) from ex
 		else:
-			self.LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
-			try:
-				self.Directories.Working.mkdir(parents=True)
-			except OSError as ex:
-				raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
+			self._PrepareEnvironment_CreatingDirectory()
+			# self.LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
+			# try:
+			# 	self.Directories.Working.mkdir(parents=True)
+			# except OSError as ex:
+			# 	raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
 
+		self._PrepareEnvironment_ChangeDirectory()
 		# change working directory to temporary path
+		# self.LogVerbose("Changing working directory to temporary directory.")
+		# self.LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
+		# try:
+		# 	chdir(str(self.Directories.Working))
+		# except OSError as ex:
+		# 	raise CommonException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
+
+	def _PrepareEnvironment_PurgeDirectory(self):
+		self.LogDebug("Purging temporary directory: {0!s}".format(self.Directories.Working))
+		for item in self.Directories.Working.iterdir():
+			try:
+				if item.is_dir():
+					shutil.rmtree(str(item))
+				elif item.is_file():
+					item.unlink()
+			except OSError as ex:
+				raise CommonException("Error while deleting '{0!s}'.".format(item)) from ex
+
+	def _PrepareEnvironment_CreatingDirectory(self):
+		self.LogDebug("Creating temporary directory: {0!s}".format(self.Directories.Working))
+		try:
+			self.Directories.Working.mkdir(parents=True)
+		except OSError as ex:
+			raise CommonException("Error while creating '{0!s}'.".format(self.Directories.Working)) from ex
+
+	def _PrepareEnvironment_ChangeDirectory(self):
+		"""Change working directory to temporary path 'temp/<tool>'."""
 		self.LogVerbose("Changing working directory to temporary directory.")
 		self.LogDebug("cd \"{0!s}\"".format(self.Directories.Working))
 		try:
 			chdir(str(self.Directories.Working))
 		except OSError as ex:
 			raise CommonException("Error while changing to '{0!s}'.".format(self.Directories.Working)) from ex
+
+	def _Prepare(self):
+		self.LogNormal("Preparing {0}.".format(self.TOOL.LongName))
 
 	def _CreatePoCProject(self, projectName, board):
 		# create a PoCProject and read all needed files
@@ -145,9 +187,9 @@ class Shared(ILogable):
 
 		# configure the project
 		pocProject.RootDirectory =  self.Host.Directories.Root
-		pocProject.Environment =    self._ENVIRONMENT
-		pocProject.ToolChain =      self._TOOL_CHAIN
-		pocProject.Tool =           self._TOOL
+		pocProject.Environment =    self.ENVIRONMENT
+		pocProject.ToolChain =      self.TOOL_CHAIN
+		pocProject.Tool =           self.TOOL
 		pocProject.VHDLVersion =    self._vhdlVersion
 		pocProject.Board =          board
 
@@ -169,7 +211,8 @@ class Shared(ILogable):
 
 		self.LogDebug("=" * 78)
 		self.LogDebug("Pretty printing the PoCProject...")
-		self.LogDebug(self._pocProject.pprint(2))
+		self.LogDebug("{DARK_RED}Disabled{NOCOLOR}".format(**Init.Foreground))
+		# self.LogDebug(self._pocProject.pprint(2))
 		self.LogDebug("=" * 78)
 		if (len(fileListFile.Warnings) > 0):
 			for warn in fileListFile.Warnings:
@@ -184,7 +227,7 @@ class Shared(ILogable):
 			for keyValuePair in hdlParameters.split(";"):
 				try:
 					key,value = keyValuePair.split("=")
-				except ValueError as ex:
+				except ValueError:
 					raise CommonException("Syntax error in option 'HDLParameters' within section {section}.".format(section=configSectionName))
 				result[key.strip()] = value.strip()
 		return result

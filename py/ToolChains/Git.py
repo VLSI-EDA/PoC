@@ -7,18 +7,12 @@
 #                   Martin Zabel
 #										Thomas B. Preusser
 #
-# Python Class:      Git specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Git specific classes
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,35 +27,41 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.PoC")
-
-
+# load dependencies
 from pathlib              import Path
 from re                   import compile as re_compile
 from subprocess           import check_output, CalledProcessError
 from os                   import environ
 from shutil               import copy as shutil_copy
 
+from lib.Functions        import Init
 from Base.Exceptions      import PlatformNotSupportedException, CommonException
-from Base.Configuration   import Configuration as BaseConfiguration, ConfigurationException, SkipConfigurationException
-from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList, CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument
-from Base.ToolChain       import ToolChainException
+from Base.Executable      import Executable, ExecutableArgument, CommandLineArgumentList
+from Base.Executable      import CommandArgument, LongFlagArgument, ValuedFlagArgument, StringArgument, LongValuedFlagArgument, LongTupleArgument
+from ToolChains           import ToolMixIn, ToolChainException, ConfigurationException, SkipConfigurationException, ChangeState, ToolConfiguration
+
+
+__api__ = [
+	'GitException',
+	'Configuration',
+	'Git',
+	'GitSCM',
+	'GitRevParse',
+	'GitRevList',
+	'GitDescribe',
+	'GitConfig'
+]
+__all__ = __api__
 
 
 class GitException(ToolChainException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      "Git SCM"
-	_toolName =    "Git"
-	_section =     "INSTALL.Git"
+class Configuration(ToolConfiguration):
+	_vendor =               "Git SCM"                   #: The name of the tools vendor.
+	_toolName =             "Git"                       #: The name of the tool.
+	_section  =             "INSTALL.Git"               #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
 	_template = {
 		"Windows": {
 			_section: {
@@ -77,7 +77,7 @@ class Configuration(BaseConfiguration):
 				"BinaryDirectory":        "${InstallationDirectory}"
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def __init__(self, host):
 		super().__init__(host)
@@ -86,36 +86,56 @@ class Configuration(BaseConfiguration):
 
 	def ConfigureForAll(self):
 		try:
-			self._ConfigureInstallationDirectory()
-			binPath = self._ConfigureBinaryDirectory()
-			self.__WriteGitSection(binPath)
+			if (not self._AskInstalled("Is Git installed on your system?")):
+				self.ClearSection()
+			else:
+				# Configure Git version
+				self._host.PoCConfig[self._section]['Version'] = self._template[self._host.Platform][self._section]['Version']
+
+
+				self._ConfigureInstallationDirectory()
+				binPath = self._ConfigureBinaryDirectory()
+				self.__WriteGitSection(binPath)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
 
 		if (len(self._host.PoCConfig['INSTALL.Git']) == 0):
-			self._host.LogNormal("  Skipping Git setup. Not Git installation found.")
+			self._host.LogNormal("Skipping further Git setup. No Git installation found.", indent=1)
+			self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 			return
 
 		try:
 			binaryDirectoryPath = binPath
-			self._git = Git(self._host.Platform, self._host.DryRun, binaryDirectoryPath, logger=self._host.Logger)
+			self._git = Git(self._host.Platform, self._host.DryRun, binaryDirectoryPath, "", logger=self._host.Logger)
 		except Exception as ex:
 			self._host.LogWarning(str(ex))
 
 		if (not self.__IsUnderGitControl()):
-			self._host.LogNormal("Skipping Git setup. This directory is not under Git control.")
+			self._host.LogNormal("Skipping Git setup. This directory is not under Git control.", indent=1)
+			self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 			return
 
-		if (not self._AskDoInstall("Install Git mechanisms for PoC developers?")):
-			self.__UninstallGitFilters()
-			self.__UninstallGitHooks()
-			return
+		try:
+			if (not self._AskYes_NoPass("Install Git mechanisms for PoC developers?")):
+				self._changed = ChangeState.Changed
+				self._host.PoCConfig[self._section]['HasInstalledGitFilters'] = "True"
+				self._host.PoCConfig[self._section]['HasInstalledGitHooks'] =   "True"
+				self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
+				return
+		except SkipConfigurationException:
+			self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
+			raise
 
 		if (self._AskInstalled("Install Git filters?")):
-			self.__InstallGitFilters()
+			self._changed = ChangeState.Changed
+			self._host.PoCConfig[self._section]['HasInstalledGitFilters'] = "True"
+
 		if (self._AskInstalled("Install Git hooks?")):
-			self.__InstallGitHooks()
+			self._changed = ChangeState.Changed
+			self._host.PoCConfig[self._section]['HasInstalledGitHooks'] =   "True"
+
+		self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 
 	def _GetDefaultInstallationDirectory(self):
 		if (self._host.Platform == "Windows"):
@@ -126,7 +146,6 @@ class Configuration(BaseConfiguration):
 				gitPath =             binaryDirectoryPath / "git.exe"
 				if gitPath.exists():
 					return binaryDirectoryPath.parent.as_posix()
-			raise GitException("No Git installation found.")
 		elif (self._host.Platform in ["Linux", "Darwin"]):
 			try:
 				name = check_output(["which", "git"], universal_newlines=True).strip()
@@ -137,17 +156,18 @@ class Configuration(BaseConfiguration):
 
 		return super()._GetDefaultInstallationDirectory()
 
-	def _AskDoInstall(self, question):
-		isInstalled = input("  " + question + " [y/N/p]: ")
-		isInstalled = isInstalled if isInstalled != "" else "N"
-		if (isInstalled in ['p', 'P']):
-			raise SkipConfigurationException()
-		elif (isInstalled in ['n', 'N']):
-			return False
-		elif (isInstalled in ['y', 'Y']):
-			return True
-		else:
-			raise ConfigurationException("Unsupported choice '{0}'".format(isInstalled))
+	def RunPostConfigurationTasks(self):
+		if self._changed is ChangeState.Changed:
+			pocSection = self._host.PoCConfig[self._section]
+			if pocSection['HasInstalledGitFilters']:
+				self.__InstallGitFilters()
+			else:
+				self.__UninstallGitFilters()
+
+			if pocSection['HasInstalledGitHooks']:
+				self.__InstallGitHooks()
+			else:
+				self.__UninstallGitHooks()
 
 	def __WriteGitSection(self, binPath):
 		if (self._host.Platform == "Windows"):
@@ -161,7 +181,7 @@ class Configuration(BaseConfiguration):
 		# get version and backend
 		output = check_output([str(gitPath), "--version"], universal_newlines=True)
 		version = None
-		versionRegExpStr = r"^git version (\d\.\d\.\d+).*"
+		versionRegExpStr = r"^git version (\d+\.\d+\.\d+).*"
 		versionRegExp = re_compile(versionRegExpStr)
 		for line in output.split('\n'):
 			if version is None:
@@ -308,40 +328,47 @@ class Configuration(BaseConfiguration):
 		return gitDirectoryPath
 
 
-class GitMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		# self._version =             version
-		self._Logger =              logger
-
-
-class Git(GitMixIn):
+class Git(ToolMixIn):
 	def GetGitRevParse(self):
-		git = GitRevParse(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
+		git = GitRevParse(self)
 		git.Clear()
 		git.RevParseParameters[GitRevParse.Command] = True
 
 		return git
 
+	def GetGitRevList(self):
+		git = GitRevList(self)
+		git.Clear()
+		git.RevListParameters[GitRevList.Command] = True
+
+		return git
+
+	def GetGitDescribe(self):
+		git = GitDescribe(self)
+		git.Clear()
+		git.DescribeParameters[GitDescribe.Command] = True
+
+		return git
+
 	def GetGitConfig(self):
-		git = GitConfig(self._platform, self._dryrun, self._binaryDirectoryPath, logger=self._Logger)
+		git = GitConfig(self)
 		git.Clear()
 		git.ConfigParameters[GitConfig.Command] = True
 
 		return git
 
 
-class GitSCM(Executable, GitMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, logger=None):
-		GitMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, logger=logger)
+class GitSCM(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
 
-		if (platform == "Windows"):     executablePath = binaryDirectoryPath / "git.exe"
-		elif (platform == "Linux"):     executablePath = binaryDirectoryPath / "git"
-		elif (platform == "Darwin"):    executablePath = binaryDirectoryPath / "git"
-		else:                           raise PlatformNotSupportedException(platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		if (self._platform == "Windows"):     executablePath = self._binaryDirectoryPath / "git.exe"
+		elif (self._platform == "Linux"):     executablePath = self._binaryDirectoryPath / "git"
+		elif (self._platform == "Darwin"):    executablePath = self._binaryDirectoryPath / "git"
+		else:                           raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -396,6 +423,102 @@ class GitRevParse(GitSCM):
 	def Execute(self):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList += self.RevParseParameters.ToArgumentList()
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise GitException("Failed to launch Git.") from ex
+
+		# FIXME: Replace GetReader with a shorter call to e.g. GetLine and/or GetLines
+		output = ""
+		for line in self.GetReader():
+			output += line
+
+		return output
+
+class GitRevList(GitSCM):
+	def Clear(self):
+		super().Clear()
+		for param in self.RevListParameters:
+			# if isinstance(param, ExecutableArgument):
+			# 	print("{0}".format(param.Value))
+			# elif isinstance(param, NamedCommandLineArgument):
+			# 	print("{0}".format(param.Name))
+			if (param is not self.Command):
+				# print("  clearing: {0} = {1} to None".format(param.Name, param.Value))
+				self.RevListParameters[param] = None
+
+	class Command(metaclass=CommandArgument):
+		_name = "rev-list"
+
+	class SwitchTags(metaclass=LongFlagArgument):
+		_name = "tags"
+
+	class SwitchMaxCount(metaclass=LongValuedFlagArgument):
+		_name = "max-count"
+
+	RevListParameters = CommandLineArgumentList(
+		Command,
+		SwitchTags,
+		SwitchMaxCount
+	)
+
+	def Execute(self):
+		parameterList = self.Parameters.ToArgumentList()
+		parameterList += self.RevListParameters.ToArgumentList()
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise GitException("Failed to launch Git.") from ex
+
+		# FIXME: Replace GetReader with a shorter call to e.g. GetLine and/or GetLines
+		output = ""
+		for line in self.GetReader():
+			output += line
+
+		return output
+
+class GitDescribe(GitSCM):
+	def Clear(self):
+		super().Clear()
+		for param in self.DescribeParameters:
+			# if isinstance(param, ExecutableArgument):
+			# 	print("{0}".format(param.Value))
+			# elif isinstance(param, NamedCommandLineArgument):
+			# 	print("{0}".format(param.Name))
+			if (param is not self.Command):
+				# print("  clearing: {0} = {1} to None".format(param.Name, param.Value))
+				self.DescribeParameters[param] = None
+
+	class Command(metaclass=CommandArgument):
+		_name = "describe"
+
+	class SwitchAbbrev(metaclass=LongValuedFlagArgument):
+		_name = "abbrev"
+
+	class SwitchTags(metaclass=LongTupleArgument):
+		_name = "tags"
+
+	DescribeParameters = CommandLineArgumentList(
+		Command,
+		SwitchAbbrev,
+		SwitchTags
+	)
+
+	def Execute(self):
+		parameterList = self.Parameters.ToArgumentList()
+		parameterList += self.DescribeParameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
 		if (self._dryrun):

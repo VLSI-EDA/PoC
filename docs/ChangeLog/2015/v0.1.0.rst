@@ -1,0 +1,44 @@
+.. :CHANGE:v0.1.0:
+
+New in v0.1.0 (19.02.2015)
+================================================================================================================================================================
+
+* New packages:
+
+  * board - common development board configurations
+  * config - extract configuration parameters from device names
+  * utils - common utility functions
+  * strings - a helper package for string handling
+  * vectors - a helper package for std_logic_vector and std_logic_matrix
+  * arith
+  * fifo
+
+* New modules
+
+  * PoC.arith - arithmetic modules
+
+    * arith_counter_gray
+    * arith_counter_ring
+    * arith_div
+    * arith_prefix_and
+    * arith_prefix_or
+    * arith_prng
+    * arith_scaler
+    * arith_sqrt
+
+  * PoC.fifo - FIFOs
+
+    * fifo_cc_got
+    * fifo_cc_got_tempgot
+    * fifo_cc_got_tempput
+    * fifo_ic_got
+    * fifo_glue
+    * fifo_shift
+
+  * PoC.mem.ocram - On-Chip RAMs
+
+    * ocram_sp
+    * ocram_sdp
+    * ocram_esdp
+    * ocram_tdp
+    * ocram_wb

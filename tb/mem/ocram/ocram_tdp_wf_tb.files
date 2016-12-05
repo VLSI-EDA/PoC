@@ -1,0 +1,11 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# PoC.mem.ocram
+include				"src/mem/ocram/ocram_tdp_wf.files"						#	Unit Under Test
+
+# Testbench files
+vhdl		test	"tb/mem/ocram/ocram_tdp_wf_tb.vhdl"						# Testbench

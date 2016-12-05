@@ -40,19 +40,24 @@
 -- ``fstate_rd`` and ``estate_wr`` are combinatorial outputs and include an address
 -- comparator (subtractor) in their path.
 --
--- Examples:
--- - FSTATE_RD_BITS = 1: fstate_rd == 0 => 0/2 full
---                       fstate_rd == 1 => 1/2 full (half full)
+-- **Examples:**
 --
--- - FSTATE_RD_BITS = 2: fstate_rd == 0 => 0/4 full
---                       fstate_rd == 1 => 1/4 full
---                       fstate_rd == 2 => 2/4 full
---                       fstate_rd == 3 => 3/4 full
+-- * FSTATE_RD_BITS = 1:
+--
+--   * fstate_rd == 0 => 0/2 full
+--   * fstate_rd == 1 => 1/2 full (half full)
+--
+-- * FSTATE_RD_BITS = 2:
+--
+--   * fstate_rd == 0 => 0/4 full
+--   * fstate_rd == 1 => 1/4 full
+--   * fstate_rd == 2 => 2/4 full
+--   * fstate_rd == 3 => 3/4 full
 --
 -- License:
 -- =============================================================================
 -- Copyright 2007-2014 Technische Universitaet Dresden - Germany,
---										 Chair for VLSI-Design, Diagnostics and Architecture
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

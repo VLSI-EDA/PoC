@@ -1,8 +1,9 @@
+.. _USING:
 
 Using PoC
 #########
 
-PoC can be used in several ways, if all :doc:`Requirements </UsingPoC/Requirements>`
+PoC can be used in several ways, if all :ref:`Requirements <USING:Require>`
 are fulfilled. Chose one of the following integration kinds:
 
 * Stand-Alone IP Core Library:
@@ -25,8 +26,8 @@ are fulfilled. Chose one of the following integration kinds:
     * No possibility to contribute bugfixes and extensions via Git pull requests.
 
     **Next steps:** |br|
-    1. See :doc:`Downloads </UsingPoC/Download>` for how to download a stand-alone version (*.zip-file) of the PoC-Library. |br|
-    2. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for how to configure PoC on a local system.
+    1. See :ref:`Downloads <USING:Download>` for how to download a stand-alone version (*.zip-file) of the PoC-Library. |br|
+    2. See :ref:`Configuration <USING:PoCConfig>` for how to configure PoC on a local system.
 
 * Stand-Alone IP Core Library cloned from Git:
     Download PoC via ``git clone`` from GitHub as latest branch copy. IP cores
@@ -48,8 +49,8 @@ are fulfilled. Chose one of the following integration kinds:
     * Using different PoC versions in different projects is not possible
 
     **Next steps:** |br|
-    1. See :doc:`Downloads </UsingPoC/Download>` for how to clone a stand-alone version of the PoC-Library. |br|
-    2. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for how to configure PoC on a local system.
+    1. See :ref:`Downloads <USING:Download>` for how to clone a stand-alone version of the PoC-Library. |br|
+    2. See :ref:`Configuration <USING:PoCConfig>` for how to configure PoC on a local system.
 
 * Embedded IP Core Library as Git Submodule:
     Integrate PoC as a Git submodule into the destination projects Git repository.
@@ -67,8 +68,8 @@ are fulfilled. Chose one of the following integration kinds:
     * Version linking between hosting Git and PoC.
 
     **Next steps:** |br|
-    1. See :doc:`Integration </UsingPoC/Integration>` for how to integrate PoC as a Git submodule into an existing Git. |br|
-    2. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for how to configure PoC on a local system.
+    1. See :ref:`Integration <USING:Integration>` for how to integrate PoC as a Git submodule into an existing Git. |br|
+    2. See :ref:`Configuration <USING:PoCConfig>` for how to configure PoC on a local system.
 
 
 .. toctree::

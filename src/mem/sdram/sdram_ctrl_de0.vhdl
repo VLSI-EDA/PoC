@@ -9,30 +9,41 @@
 -- Description:
 -- -------------------------------------
 -- Complete controller for ISSI SDR-SDRAM for Altera DE0 Board.
+--
 -- SDRAM Device: IS42S16400F
 --
--- CLK_PERIOD = clock period in nano seconds. All SDRAM timings are
--- calculated for the device stated above.
+-- Configuration
+-- *************
 --
--- CL = cas latency, choose according to clock frequency.
--- BL = burst length.
---
--- Command, address and write data is sampled with clk.
+-- +------------+----------------------------------------------------+
+-- | Parameter  | Description                                        |
+-- +============+====================================================+
+-- | CLK_PERIOD | Clock period in nano seconds. All SDRAM timings are|
+-- |            | calculated for the device stated above.            |
+-- +------------+----------------------------------------------------+
+-- | CL         | CAS latency, choose according to clock frequency.  |
+-- +------------+----------------------------------------------------+
+-- | BL         | Burst length. Choose BL=1 for single cycle memory  |
+-- |            | transactions as required for the PoC.Mem interface.|
+-- +------------+----------------------------------------------------+
 --
 -- Tested with: CLK_PERIOD = 7.5 (133 MHz), CL=2, BL=1.
 --
--- Read data is aligned with clk. Either process data in this clock
--- domain, or connect a FIFO to transfer data into another clock domain of your
--- choice.
+-- Operation
+-- *********
 --
--- For description on 'clkout' see sdram_ctrl_phy_de0.vhdl.
+-- Command, address and write data is sampled with ``clk``.
+-- Read data is also aligned with ``clk``.
+--
+-- For description on ``clkout`` see
+-- :ref:`sdram_ctrl_phy_de0 <IP:sdram_ctrl_phy_de0>`.
 --
 -- Synchronous resets are used.
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
---										 Chair for VLSI-Design, Diagnostics and Architecture
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -46,27 +57,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -- =============================================================================
-
--------------------------------------------------------------------------------
--- Naming Conventions:
--- (Based on: Keating and Bricaud: "Reuse Methodology Manual")
 --
--- active low signals: "*_n"
--- clock signals: "clk", "clk_div#", "clk_#x"
--- reset signals: "rst", "rst_n"
--- generics: all UPPERCASE
--- user defined types: "*_TYPE"
--- state machine next state: "*_ns"
--- state machine current state: "*_cs"
--- output of a register: "*_r"
--- asynchronous signal: "*_a"
--- pipelined or register delay signals: "*_p#"
--- data before being registered into register with the same name: "*_nxt"
--- clock enable signals: "*_ce"
--- internal version of output port: "*_i"
--- tristate internal signal "*_z"
--------------------------------------------------------------------------------
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

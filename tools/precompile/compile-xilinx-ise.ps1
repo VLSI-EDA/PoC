@@ -15,7 +15,7 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,27 +43,27 @@
 #
 [CmdletBinding()]
 param(
-	# Pre-compile all libraries and packages for all simulators
+	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
-	# Pre-compile the Xilinx ISE libraries for GHDL
+	# Pre-compile the Xilinx ISE libraries for GHDL.
 	[switch]$GHDL =				$false,
 
-	# Pre-compile the Xilinx ISE libraries for QuestaSim
+	# Pre-compile the Xilinx ISE libraries for QuestaSim.
 	[switch]$Questa =			$false,
 
-	# Change the 'xilinx' symlink to 'xilinx-ise'
+	# Change the 'xilinx' symlink to 'xilinx-ise'.
 	[switch]$ReLink =			$false,
 
-	# Set VHDL Standard to '93
+	# Set VHDL Standard to '93.
 	[switch]$VHDL93 =			$false,
-	# Set VHDL Standard to '08
+	# Set VHDL Standard to '08.
 	[switch]$VHDL2008 =		$false,
 
 	# Clean up directory before analyzing.
 	[switch]$Clean =			$false,
 
-	# Show the embedded help page(s)
+	# Show the embedded help page(s).
 	[switch]$Help =				$false
 )
 
@@ -73,6 +73,13 @@ $PoCRootDir =		"\..\.."
 $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
+
+# set default values
+$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
 
 Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -ArgumentList "$WorkingDir"
 
@@ -102,13 +109,13 @@ if ($GHDL)
 	$GHDLDirName =		Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir="$PoCRootDir\$PrecompiledDir\$GHDLDirName"
+	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir
 
 	$GHDLXilinxScript = "$GHDLScriptDir\compile-xilinx-ise.ps1"
 	if (-not (Test-Path $GHDLXilinxScript -PathType Leaf))
-	{ Write-Host "[ERROR]: Xilinx compile script from GHDL is not executable." -ForegroundColor Red
+	{ Write-Host "[ERROR]: Xilinx compile script '$GHDLXilinxScript' from GHDL not found." -ForegroundColor Red
 		Exit-PrecompileScript -1
 	}
 
@@ -120,7 +127,7 @@ if ($GHDL)
 
 	{	$env:GHDL = $GHDLBinDir		}
 	if ($VHDL93)
-	{	$Command = "$GHDLXilinxScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$XilinxDirName2"
+	{	$Command = "$GHDLXilinxScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$XilinxDirName2 -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red
@@ -128,7 +135,7 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLXilinxScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$XilinxDirName2"
+	{	$Command = "$GHDLXilinxScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$XilinxDirName2 -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red

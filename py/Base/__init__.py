@@ -3,19 +3,14 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:               Patrick Lehmann
+# Authors:          Patrick Lehmann
 #
-# Python Sub Module:    Saves The PoC-Library configuration as python source code.
-#
-# Description:
-# ------------------------------------
-#    TODO:
-#
+# Python Package:   Saves The PoC-Library configuration as python source code.
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,13 +24,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
-
+#
 # load dependencies
+from lib.ExtendedConfigParser import ExtendedConfigParser
+from Base.Logging             import ILogable
+
+
+__api__ = [
+	'IHost'
+]
+__all__ = __api__
+
+
+class IHost(ILogable):
+	"""This is a type hint class (interface description) for a host instance.
+
+	It's needed until PoC requires Python 3.6.
+	"""
+
+	# instance fields
+	Platform =    "string"
+	PoCConfig =   ExtendedConfigParser()
+
+	# methods
+	def SaveAndReloadPoCConfiguration(self): pass
+
+	# Syntax not supported by Python 3.5 -> requires 3.6
+	# Platform :  str =                  None
+	# PoCConfig : ExtendedConfigParser = None

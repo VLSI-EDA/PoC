@@ -7,15 +7,10 @@
 #
 # Python Sub Module:    Saves The PoC-Library configuration as python source code.
 #
-# Description:
-# ------------------------------------
-#    TODO:
-#
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2015 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,12 +25,4 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
-
 # load dependencies

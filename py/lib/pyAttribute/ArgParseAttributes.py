@@ -15,10 +15,6 @@
 #
 # Python module:	    pyAttributes for ArgParse
 #
-# Description:
-# ------------------------------------
-#		TODO
-#
 # License:
 # ============================================================================
 # Copyright 2007-2016 Patrick Lehmann - Dresden, Germany
@@ -36,7 +32,21 @@
 # limitations under the License.
 # ============================================================================
 #
+# load dependencies
 from . import Attribute, AttributeHelperMixin
+
+
+__api__ = [
+	'CommandGroupAttribute',
+	'DefaultAttribute',
+	'CommandAttribute',
+	'ArgumentAttribute',
+	'SwitchArgumentAttribute',
+	'CommonArgumentAttribute',
+	'CommonSwitchArgumentAttribute',
+	'ArgParseMixin'
+]
+__all__ = __api__
 
 
 class CommandGroupAttribute(Attribute):
@@ -70,11 +80,11 @@ class CommandAttribute(Attribute):
 
 	def __init__(self, command, **kwargs):
 		super().__init__()
-		self.__command = command
-		self.__kwargs = kwargs
+		self.__command =  command
+		self.__kwargs =   kwargs
 
 	def __call__(self, func):
-		self.__handler = func
+		self.__handler =  func
 		return super().__call__(func)
 
 	@property

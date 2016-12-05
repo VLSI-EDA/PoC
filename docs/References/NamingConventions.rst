@@ -11,7 +11,7 @@ Root Directory Overview (PoCRoot)
 The PoC-Library is structured into several sub-directories, naming the purpose
 of the directory like ``src`` for sources files or ``tb`` for testbench files.
 The structure within these directories is most likely the same and based on
-PoC's :doc:`sub-namespace tree </PoC/index>`. PoC's installation directory is
+PoC's :doc:`sub-namespace tree </IPCores/index>`. PoC's installation directory is
 also referred to as ``PoCRoot``.
 
 * ``lib``
@@ -40,7 +40,7 @@ also referred to as ``PoCRoot``.
 * ``src``
     The source files of PoC's IP cores are stored in this directory. The IP
     cores are grouped by their sub-namespace into sub-directories according to
-    the :doc:`sub-namespace tree </PoC/index>`. See the paragraph below, for
+    the :doc:`sub-namespace tree </IPCores/index>`. See the paragraph below, for
     how IP cores are named and how PoC core names map to the sub-namespace
     hierachy and the resulting sub-namespace directory structure.
 * ``tb``

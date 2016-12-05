@@ -1,0 +1,15 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# PoC.cache
+include       "src/cache/cache_mem.files"           # UUT (Unit Under Test)
+
+# PoC.arith
+include       "src/arith/arith_prng.files"
+
+# Testbench files
+vhdl    test  "tb/mem/mem_model.vhdl"               # Memory Model
+vhdl    test  "tb/cache/cache_mem_tb.vhdl"          # Testbench

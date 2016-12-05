@@ -1,0 +1,50 @@
+.. :CHANGE:v0.4.0:
+
+New in v0.4 (29.04.2015)
+================================================================================================================================================================
+
+* New Python infrastructure
+
+  * Added simulators for:
+
+    * GHDL + GTKWave
+    * Mentor Graphic QuestaSim
+    * Xilinx ISE Simulator
+    * Xilinx Vivado Simulator
+
+* New packages:
+
+  * simulation
+
+* New modules:
+
+  * PoC.comm - communication modules
+
+    * comm_crc
+
+  * PoC.comm.remote - remote communication modules
+
+    * remote_terminal_control
+
+* New testbenches:
+
+  * arith_addw_tb
+  * arith_counter_bcd_tb
+  * arith_prefix_and_tb
+  * arith_prefix_or_tb
+  * arith_prng_tb
+
+* Updated packages:
+
+  * board
+  * config
+  * physical
+  * strings
+  * utils
+
+* Updated modules:
+
+  * io_Debounce
+  * misc_FrequencyMeasurement
+  * sync_Bits
+  * sync_Reset

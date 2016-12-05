@@ -47,7 +47,7 @@ if (Tool = "GHDL") then
 		report "No precompiled Xilinx primitives for GHDL found."
 	end if
 elseif (Tool in ["Mentor_vSim", "Cocotb_QuestaSim"]) then
-	path Xilinx_Directory = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / ${CONFIG.DirectoryNames:XilinxSpecificFiles}))
+	path Xilinx_Directory = (PreCompiled / (${CONFIG.DirectoryNames:QuestaSimFiles} / ${CONFIG.DirectoryNames:XilinxSpecificFiles}))
 	if ?{Xilinx_Directory} then
 		library unisim		Xilinx_Directory
 		library unimacro	Xilinx_Directory

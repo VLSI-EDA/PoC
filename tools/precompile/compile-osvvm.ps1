@@ -15,7 +15,7 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,19 +42,19 @@
 #
 [CmdletBinding()]
 param(
-	# Pre-compile all libraries and packages for all simulators
+	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
-	# Pre-compile the OSVVM libraries for GHDL
+	# Pre-compile the OSVVM libraries for GHDL.
 	[switch]$GHDL =				$false,
 
-	# Pre-compile the OSVVM libraries for QuestaSim
+	# Pre-compile the OSVVM libraries for QuestaSim.
 	[switch]$Questa =			$false,
 
 	# Clean up directory before analyzing.
 	[switch]$Clean =			$false,
 
-	# Show the embedded help page(s)
+	# Show the embedded help page(s).
 	[switch]$Help =				$false
 )
 
@@ -65,6 +65,13 @@ $OSVVMSourceDirectory =	"lib\osvvm"
 $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
+
+# set default values
+$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
 
 Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -ArgumentList "$WorkingDir"
 
@@ -99,7 +106,7 @@ if ($GHDL)
 
 	$GHDLOSVVMScript = "$GHDLScriptDir\compile-osvvm.ps1"
 	if (-not (Test-Path $GHDLOSVVMScript -PathType Leaf))
-	{ Write-Host "[ERROR]: OSVVM compile script from GHDL is not executable." -ForegroundColor Red
+	{ Write-Host "[ERROR]: OSVVM compile script '$GHDLOSVVMScript' from GHDL not found." -ForegroundColor Red
 		Exit-PrecompileScript -1
 	}
 
@@ -107,7 +114,7 @@ if ($GHDL)
 	if (-not (Test-Path env:GHDL))
 	{	$env:GHDL = $GHDLBinDir		}
 
-	$Command = "$GHDLOSVVMScript -All -Source $SourceDirectory -Output $DestDir"
+	$Command = "$GHDLOSVVMScript -All -Source $SourceDirectory -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 	Invoke-Expression $Command
 	if ($LastExitCode -ne 0)
 	{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -144,26 +151,33 @@ if ($Questa)
 		"AlertLogPkg.vhd",
 		"MemoryPkg.vhd",
 		"MessagePkg.vhd",
+		"SortListGenericPkg.vhd",
+		"SortListPkg.vhd",
 		"SortListPkg_int.vhd",
 		"RandomBasePkg.vhd",
 		"RandomPkg.vhd",
 		"CoveragePkg.vhd",
+		"ScoreboardGenericPkg.vhd",
+		"ScoreboardPkg.vhd",
 		"OsvvmContext.vhd"
 	)
 	$SourceFiles = $Files | % { "$SourceDirectory\$_" }
 
 	# Compile libraries with vcom, executed in destination directory
 	Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow
-	& "$VSimBinDir\vlib.exe" $Library
-	& "$VSimBinDir\vmap.exe" -del $Library
-	& "$VSimBinDir\vmap.exe" $Library "$DestDir"
+	$InvokeExpr = "$VSimBinDir\vlib.exe " + $Library + " 2>&1"
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVLibLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	$InvokeExpr = "$VSimBinDir\vmap.exe -del " + $Library + " 2>&1"
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	$InvokeExpr = "$VSimBinDir\vmap.exe " + $Library + " $DestDir\$Library 2>&1"
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	Write-Host "Compiling library '$Library' with vcom..." -ForegroundColor Yellow
 	$ErrorCount += 0
 	foreach ($File in $SourceFiles)
-	{	Write-Host "Compiling '$File'..." -ForegroundColor Cyan
-		$InvokeExpr = "$VSimBinDir\vcom.exe -2008 -work $Library " + $File + " 2>&1"
-		Invoke-Expression $InvokeExpr
+	{	Write-Host "Compiling '$File'..." -ForegroundColor DarkCyan
+		$InvokeExpr = "$VSimBinDir\vcom.exe -suppress 1246 -2008 -work $Library " + $File + " 2>&1"
+		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVComLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 		if ($LastExitCode -ne 0)
 		{	$ErrorCount += 1
 			if ($HaltOnError)

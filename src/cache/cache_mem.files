@@ -1,0 +1,16 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Common PoC packages for configuration, synthesis and simulation
+include       "src/common/common.files"                   # load common packages
+
+# PoC.fifo
+include       "src/fifo/fifo_glue.files"
+include       "src/fifo/fifo_cc_got.files"
+
+# PoC.cache
+include       "src/cache/cache_cpu.files"                 # Embedded CPU Cache
+vhdl    poc   "src/cache/cache_mem.vhdl"                  # Top Level
