@@ -504,11 +504,15 @@ class GitDescribe(GitSCM):
 	class Command(metaclass=CommandArgument):
 		_name = "describe"
 
+	class SwitchAbbrev(metaclass=LongValuedFlagArgument):
+		_name = "abbrev"
+
 	class SwitchTags(metaclass=LongTupleArgument):
 		_name = "tags"
 
 	DescribeParameters = CommandLineArgumentList(
 		Command,
+		SwitchAbbrev,
 		SwitchTags
 	)
 

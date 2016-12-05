@@ -50,7 +50,7 @@ class Configuration(ToolConfiguration):
 	_template =    {
 		"ALL": {
 			_section: {
-				"Version":                "1.1.0",
+				"Version":                "1.1.1",
 				"InstallationDirectory":  "",
 				"RepositoryKind":         "Public",
 				"IsGitRepository":        "True",
@@ -66,9 +66,9 @@ class Configuration(ToolConfiguration):
 	def ConfigureForAll(self):
 		pocInstallationDirectory = Path(environ.get('PoCRootDirectory'))
 		if (not pocInstallationDirectory.exists()):
-			raise EnvironmentException("Path '{0!s}' in environment variable 'PoCRootDirectory' does not exist.")
+			raise EnvironmentException("Path '{0!s}' in environment variable 'PoCRootDirectory' does not exist.".format(pocInstallationDirectory))
 		elif (not pocInstallationDirectory.is_dir()):
-			raise EnvironmentException("Path '{0!s}' in environment variable 'PoCRootDirectory' is not a directory.") \
+			raise EnvironmentException("Path '{0!s}' in environment variable 'PoCRootDirectory' is not a directory.".format(pocInstallationDirectory)) \
 				from NotADirectoryError(str(pocInstallationDirectory))
 
 		self._host.LogNormal("  Installation directory: {0!s} (found in environment variable)".format(pocInstallationDirectory))
@@ -81,13 +81,9 @@ class Configuration(ToolConfiguration):
 				binaryDirectoryPath = Path(self._host.PoCConfig['INSTALL.Git']['BinaryDirectory'])
 				git = Git(self._host.Platform, self._host.DryRun, binaryDirectoryPath, "", logger=self._host.Logger)
 
-				gitRevList =    git.GetGitRevList()
-				gitRevList.RevListParameters[gitRevList.SwitchTags] = True
-				gitRevList.RevListParameters[gitRevList.SwitchMaxCount] = 1
-				latestTagHash = gitRevList.Execute().strip()
-
 				gitDescribe =   git.GetGitDescribe()
-				gitDescribe.DescribeParameters[gitDescribe.SwitchTags] = latestTagHash
+				gitDescribe.DescribeParameters[gitDescribe.SwitchAbbrev] =  0
+				gitDescribe.DescribeParameters[gitDescribe.SwitchTags] =    "" # specify no hash
 				latestTagName = gitDescribe.Execute().strip()
 
 				self._host.LogNormal("  PoC version: {0} (found in git)".format(latestTagName))
