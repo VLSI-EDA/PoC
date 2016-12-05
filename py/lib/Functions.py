@@ -168,15 +168,20 @@ class Exit:
 	def printException(cls, ex):
 		from traceback  import print_tb, walk_tb
 		Init.init()
-		print("{RED}FATAL: An unknown or unhandled exception reached the topmost exception handler!{NOCOLOR}".format(message=ex.__str__(), **Init.Foreground))
-		print("{YELLOW}  Exception type:{NOCOLOR}    {type}".format(type=ex.__class__.__name__, **Init.Foreground))
-		print("{YELLOW}  Exception message:{NOCOLOR} {message}".format(message=ex.__str__(), **Init.Foreground))
+		print("{RED}FATAL: An unknown or unhandled exception reached the topmost exception handler!{NOCOLOR}".format(**Init.Foreground))
+		print("{YELLOW}  Exception type:{NOCOLOR}      {type}".format(type=ex.__class__.__name__, **Init.Foreground))
+		print("{YELLOW}  Exception message:{NOCOLOR}   {message!s}".format(message=ex, **Init.Foreground))
+		if (ex.__cause__ is not None):
+			print("{YELLOW}    Caused by type:{NOCOLOR}    {type}".format(message=ex.__cause__.__class__.__name__, **Init.Foreground))
+			print("{YELLOW}    Caused by message:{NOCOLOR} {message!s}".format(message=ex.__cause__, **Init.Foreground))
 		frame,sourceLine = [x for x in walk_tb(ex.__traceback__)][-1]
 		filename = frame.f_code.co_filename
 		funcName = frame.f_code.co_name
 		print("{YELLOW}  Caused by:{NOCOLOR}         {function} in file '{filename}' at line {line}".format(function=funcName, filename=filename, line=sourceLine, **Init.Foreground))
 		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
 		print_tb(ex.__traceback__)
+		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
+		print(("{RED}Please report this bug at GitHub: https://github.com/VLSI-EDA/PoC/issues{NOCOLOR}").format(**Init.Foreground))
 		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
 		Exit.exit(1)
 
@@ -187,13 +192,20 @@ class Exit:
 		frame, _ = [x for x in walk_tb(ex.__traceback__)][-1]
 		filename = frame.f_code.co_filename
 		funcName = frame.f_code.co_name
-		print("{RED}Not implemented:{NOCOLOR} {function} in file '{filename}': {message}".format(function=funcName, filename=filename, message=str(ex), **Init.Foreground))
+		print("{RED}NOT IMPLEMENTED:{NOCOLOR} {function} in file '{filename}': {message!s}".format(function=funcName, filename=filename, message=ex, **Init.Foreground))
+		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
+		print(("{RED}Please report this bug at GitHub: https://github.com/VLSI-EDA/PoC/issues{NOCOLOR}").format(**Init.Foreground))
+		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
 		Exit.exit(1)
 
 	@classmethod
 	def printExceptionBase(cls, ex):
 		Init.init()
+		print("{RED}FATAL: A known but unhandled exception reached the topmost exception handler!{NOCOLOR}".format(**Init.Foreground))
 		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
+		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
+		print(("{RED}Please report this bug at GitHub: https://github.com/VLSI-EDA/PoC/issues{NOCOLOR}").format(**Init.Foreground))
+		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
 		Exit.exit(1)
 
 	@classmethod
@@ -206,12 +218,12 @@ class Exit:
 	def printEnvironmentException(cls, ex):
 		Init.init()
 		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
-		print("  Please run this script with it's provided wrapper or manually load the required environment before executing this script.")
+		print("  Please run this script with it's provided wrapper ('poc.[sh/ps1]') or manually load the required environment before executing this script.")
 		Exit.exit(1)
 
 	@classmethod
 	def printNotConfiguredException(cls, ex):
 		Init.init()
 		print("{RED}ERROR:{NOCOLOR} {message}".format(message=ex.message, **Init.Foreground))
-		print("  Please run {YELLOW}'poc.[sh/ps1] configure'{NOCOLOR} in PoC root directory.".format(**Init.Foreground))
+		print("  Please run {YELLOW}'poc.[sh/ps1] configure'{NOCOLOR} in PoC's root directory.".format(**Init.Foreground))
 		Exit.exit(1)
