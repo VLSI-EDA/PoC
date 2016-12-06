@@ -106,7 +106,7 @@ if ($GHDL)
 	# Assemble output directory
 	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$GHDLLatticeScript = "$GHDLScriptDir\compile-lattice.ps1"
 	if (-not (Test-Path $GHDLLatticeScript -PathType Leaf))
@@ -155,7 +155,7 @@ if ($Questa)
 	# Assemble output directory
 	$DestDir="$PoCRootDir\$PrecompiledDir\$VSimDirName\$LatticeDirName"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$DiamondBinDir = 		Get-DiamondBinaryDirectory $PoCPS1
 	$Diamond_tcl =			"$DiamondBinDir\pnmainc.exe"

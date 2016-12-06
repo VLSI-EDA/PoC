@@ -180,7 +180,9 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	GetVSimDirectories $PoC_sh
 
 	# Assemble output directory
-	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName
+	VSimDestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName
+	DestDir=$VSimDestDir
+	ModelSimINI=$VSimDestDir/modelsim.ini
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir

@@ -111,7 +111,7 @@ if ($GHDL)
 	# Assemble output directory
 	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$GHDLXilinxScript = "$GHDLScriptDir\compile-xilinx-vivado.ps1"
 	if (-not (Test-Path $GHDLXilinxScript -PathType Leaf))
@@ -168,7 +168,7 @@ if ($Questa)
 	# Assemble output directory
 	$DestDir="$PoCRootDir\$PrecompiledDir\$VSimDirName\$XilinxDirName2"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$VivadoBinDir = Get-VivadoBinaryDirectory $PoCPS1
 	$Vivado_tcl =		"$VivadoBinDir\vivado.bat"
