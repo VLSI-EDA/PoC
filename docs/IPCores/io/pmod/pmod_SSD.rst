@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-pmod_SSD
-########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:pmod_SSD:
+
+PoC.io.pmod.SSD
+###############
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_SSD.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/pmod/pmod_SSD_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/pmod/pmod_SSD.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/pmod/pmod_SSD_tb.vhdl>`
 
 This module drives a dual-digit 7-segment display (Pmod_SSD). The module
 expects two binary encoded 4-bit ``Digit<i>`` signals and drives a 2x6 bit
@@ -27,7 +51,8 @@ Pmod connector (7 anode bits, 1 cathode bit).
    :linenos:
    :lines: 56-69
 
-Source file: `io/pmod/pmod_SSD.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_SSD.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/pmod/pmod_SSD.vhdl <io/pmod/pmod_SSD.vhdl>`

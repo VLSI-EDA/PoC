@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-vga_phy
-#######
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:vga_phy:
+
+PoC.io.vga.phy
+##############
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/vga/vga_phy_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_phy.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/vga/vga_phy_tb.vhdl>`
 
 	The clock frequency must be the same as used for the timing module.
 
@@ -18,7 +42,8 @@ vga_phy
    :linenos:
    :lines: 43-55
 
-Source file: `io/vga/vga_phy.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/vga/vga_phy.vhdl <io/vga/vga_phy.vhdl>`

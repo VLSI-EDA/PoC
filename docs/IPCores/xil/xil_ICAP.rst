@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-xil_ICAP
-########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:xil_ICAP:
+
+PoC.xil.ICAP
+############
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ICAP.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_ICAP_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <xil/xil_ICAP.vhdl>`
+      * |gh-tb| :poctb:`Testbench <xil/xil_ICAP_tb.vhdl>`
 
 This module wraps Xilinx "Internal Configuration Access Port" (ICAP) primitives in a generic
 module. |br|
@@ -19,7 +43,8 @@ Supported devices are:
    :linenos:
    :lines: 47-66
 
-Source file: `xil/xil_ICAP.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ICAP.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`xil/xil_ICAP.vhdl <xil/xil_ICAP.vhdl>`

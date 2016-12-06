@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-ocram_wb
-########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:ocram_wb:
+
+PoC.bus.wb.ocram
+################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/wb/wb_ocram.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/wb/wb_ocram_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <bus/wb/wb_ocram.vhdl>`
+      * |gh-tb| :poctb:`Testbench <bus/wb/wb_ocram_tb.vhdl>`
 
 This slave supports Wishbone Registered Feedback bus cycles (aka. burst
 transfers / advanced synchronous cycle termination). The mode "Incrementing
@@ -33,7 +57,8 @@ PIPE_STAGES = 2
    :linenos:
    :lines: 54-80
 
-Source file: `bus/wb/wb_ocram.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/wb/wb_ocram.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`bus/wb/wb_ocram.vhdl <bus/wb/wb_ocram.vhdl>`

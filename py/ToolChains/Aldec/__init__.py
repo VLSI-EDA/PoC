@@ -1,16 +1,12 @@
-# EMACS settings: -*-  tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t; python-indent-offset: 2 -*-
 # vim: tabstop=2:shiftwidth=2:noexpandtab
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-# Authors:               Patrick Lehmann
+# Authors:          Patrick Lehmann
+#                   Martin Zabel
 #
-# Python Sub Module:    TODO:
-#
-# Description:
-# ------------------------------------
-#    TODO:
-#
+# Python Class:     TODO
 #
 # License:
 # ==============================================================================
@@ -21,7 +17,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#    http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,13 +26,57 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Repository Service Tool")
+# load dependencies
+from lib.Functions            import Init
+from ToolChains               import ToolChainException, VendorConfiguration
 
 
+__api__ = [
+	'AldecException',
+	'Configuration'
+]
+__all__ = __api__
 
+
+class AldecException(ToolChainException):
+	"""Base class for all Aldec tool's exceptions."""
+
+
+class Configuration(VendorConfiguration):
+	"""Configuration routines for Aldec as a vendor.
+
+	This configuration provides a common installation directory setup for all
+	Aldec tools installed on a system.
+	"""
+	_vendor =               "Aldec"                     #: The name of the tools vendor.
+	_section  =             "INSTALL.Aldec"             #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_template = {
+		"ALL": {
+			"INSTALL.ActiveHDL": {
+				"SectionName":           "",
+				"Version":               "${${SectionName}:Version}",
+				"Edition":               "${${SectionName}:Edition}",
+				"InstallationDirectory": "${${SectionName}:InstallationDirectory}",
+				"BinaryDirectory":       "${${SectionName}:BinaryDirectory}"
+			}
+		},
+		"Windows": {
+			_section: {
+				"InstallationDirectory": "C:/Aldec"
+			}
+		},
+		"Linux": {
+			_section: {
+				"InstallationDirectory": "/opt/Aldec"
+			}
+		}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
+
+	def ConfigureForAll(self):
+		super().ConfigureForAll()
+		self._host.LogNormal("{DARK_GREEN}Aldec is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
+
+	def _GetDefaultInstallationDirectory(self):
+		path = self._TestDefaultInstallPath({"Windows": "Aldec", "Linux": "Aldec"})
+		if path is None: return super()._GetDefaultInstallationDirectory()
+		return path.as_posix()

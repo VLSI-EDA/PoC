@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    TODO
 #
 # License:
 # ==============================================================================
@@ -33,14 +27,14 @@
 # ==============================================================================
 #
 # load dependencies
-import shutil
+from shutil                  import copy as shutil_copy
 from textwrap                import dedent
 
 from Base.Project            import FileTypes, ToolChain, Tool
-from Base.Simulator          import SimulatorException, Simulator as BaseSimulator
-from DataBase.Config              import Vendors
-from DataBase.Entity              import WildCard
+from DataBase.Config         import Vendors
+from DataBase.Entity         import WildCard
 from ToolChains.GNU          import Make
+from Simulator               import SimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [
@@ -50,12 +44,12 @@ __all__ = __api__
 
 
 class Simulator(BaseSimulator):
-	_TOOL_CHAIN =            ToolChain.Cocotb
-	_TOOL =                  Tool.Cocotb_QuestaSim
-	_COCOTB_SIMBUILD_DIRECTORY = "sim_build"
+	TOOL_CHAIN =      ToolChain.Cocotb
+	TOOL =            Tool.Cocotb_QuestaSim
+	COCOTB_SIMBUILD_DIRECTORY = "sim_build"
 
-	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun, guiMode)
+	def __init__(self, host, dryRun, simulationSteps):
+		super().__init__(host, dryRun, simulationSteps)
 
 		configSection =                 host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working =      host.Directories.Temp / configSection['CocotbFiles']
@@ -104,7 +98,7 @@ class Simulator(BaseSimulator):
 			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(precompiledModelsimIniPath)) \
 				from FileNotFoundError(str(precompiledModelsimIniPath))
 
-		simBuildPath = self.Directories.Working / self._COCOTB_SIMBUILD_DIRECTORY
+		simBuildPath = self.Directories.Working / self.COCOTB_SIMBUILD_DIRECTORY
 		# create temporary directory for Cocotb if not existent
 		if (not (simBuildPath).exists()):
 			self.LogVerbose("Creating build directory for simulator files.")
@@ -153,7 +147,7 @@ class Simulator(BaseSimulator):
 					from FileNotFoundError(str(file.Path))
 			self.LogDebug("copy {0!s} {1}".format(file.Path, cocotbTempDir))
 			try:
-				shutil.copy(str(file.Path), cocotbTempDir)
+				shutil_copy(str(file.Path), cocotbTempDir)
 			except OSError as ex:
 				raise SimulatorException("Error while copying '{0!s}'.".format(file.Path)) from ex
 
@@ -174,5 +168,5 @@ class Simulator(BaseSimulator):
 
 		# execute make
 		make = Make(self.Host.Platform, self.DryRun, logger=self.Logger)
-		if self._guiMode: make.Parameters[Make.SwitchGui] = 1
+		if (SimulationSteps.ShowWaveform in self._simulationSteps): make.Parameters[Make.SwitchGui] = 1
 		testbench.Result = make.RunCocotb()

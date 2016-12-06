@@ -1,8 +1,32 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sdram_ctrl_phy_s3esk
-####################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
 
-Physical layer used by module :doc:`sdram_ctrl_s3esk <sdram_ctrl_s3esk>`.
+.. _IP:sdram_ctrl_phy_s3esk:
+
+PoC.mem.sdram.ctrl_phy_s3esk
+############################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_phy_s3esk.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/sdram/sdram_ctrl_phy_s3esk_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_phy_s3esk.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_phy_s3esk_tb.vhdl>`
+
+Physical layer used by module :ref:`sdram_ctrl_s3esk <IP:sdram_ctrl_s3esk>`.
 
 Instantiates input and output buffer components and adjusts the timing for
 the Spartan-3E Starter Kit Board.
@@ -82,9 +106,10 @@ Synchronous resets are used. Reset must be hold for at least two cycles.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 127-171
-
-Source file: `mem/sdram/sdram_ctrl_phy_s3esk.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_phy_s3esk.vhdl>`_
+   :lines: 107-151
 
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/sdram/sdram_ctrl_phy_s3esk.vhdl <mem/sdram/sdram_ctrl_phy_s3esk.vhdl>`

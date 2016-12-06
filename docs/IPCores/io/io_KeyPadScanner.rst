@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-io_KeyPadScanner
-################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:io_KeyPadScanner:
+
+PoC.io.KeyPadScanner
+####################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_KeyPadScanner.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_KeyPadScanner_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/io_KeyPadScanner.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/io_KeyPadScanner_tb.vhdl>`
 
 This module drives a one-hot encoded column vector to read back a rows
 vector. By scanning column-by-column it's possible to extract the current
@@ -18,7 +42,8 @@ matrix is not debounced.
    :linenos:
    :lines: 46-63
 
-Source file: `io/io_KeyPadScanner.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_KeyPadScanner.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/io_KeyPadScanner.vhdl <io/io_KeyPadScanner.vhdl>`

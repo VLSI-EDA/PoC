@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx ISE simulator.
 #
 # License:
 # ==============================================================================
@@ -36,9 +30,9 @@
 from pathlib                    import Path
 
 from Base.Project               import ToolChain, Tool
-from Base.Simulator             import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
-from ToolChains.Xilinx.Xilinx   import XilinxProjectExportMixIn
+from ToolChains.Xilinx          import XilinxProjectExportMixIn
 from ToolChains.Xilinx.ISE      import ISE, ISESimulator, ISEException
+from Simulator                  import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [
@@ -48,15 +42,12 @@ __all__ = __api__
 
 
 class Simulator(BaseSimulator, XilinxProjectExportMixIn):
-	_TOOL_CHAIN =            ToolChain.Xilinx_ISE
-	_TOOL =                  Tool.Xilinx_iSim
+	TOOL_CHAIN =      ToolChain.Xilinx_ISE
+	TOOL =            Tool.Xilinx_iSim
 
-	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun, guiMode)
+	def __init__(self, host, dryRun, simulationSteps):
+		super().__init__(host, dryRun, simulationSteps)
 		XilinxProjectExportMixIn.__init__(self)
-
-		self._vhdlGenerics =  None
-		self._toolChain =     None
 
 		iseFilesDirectoryName =         host.PoCConfig['CONFIG.DirectoryNames']['ISESimulatorFiles']
 		self.Directories.Working =      host.Directories.Temp / iseFilesDirectoryName
@@ -106,7 +97,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		iSim = ISESimulator(self._host.Platform, self._host.DryRun, exeFilePath, logger=self.Logger)
 		iSim.Parameters[iSim.SwitchLogFile] =         str(iSimLogFilePath)
 
-		if (not self._guiMode):
+		if (SimulationSteps.ShowWaveform not in self._simulationSteps):
 			iSim.Parameters[iSim.SwitchTclBatchFile] =  str(tclBatchFilePath)
 		else:
 			iSim.Parameters[iSim.SwitchTclBatchFile] =  str(tclGUIFilePath)

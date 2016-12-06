@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-lcd_LCDController_KS0066U
-#########################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:lcd_LCDController_KS0066U:
+
+PoC.io.lcd.LCDController_KS0066U
+################################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/lcd_LCDController_KS0066U.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/lcd/lcd_LCDController_KS0066U_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/lcd/lcd_LCDController_KS0066U.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/lcd/lcd_LCDController_KS0066U_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ lcd_LCDController_KS0066U
    :linenos:
    :lines: 42-64
 
-Source file: `io/lcd/lcd_LCDController_KS0066U.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/lcd/lcd_LCDController_KS0066U.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/lcd/lcd_LCDController_KS0066U.vhdl <io/lcd/lcd_LCDController_KS0066U.vhdl>`

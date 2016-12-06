@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-io_TimingCounter
-################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:io_TimingCounter:
+
+PoC.io.TimingCounter
+####################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_TimingCounter.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_TimingCounter_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/io_TimingCounter.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/io_TimingCounter_tb.vhdl>`
 
 This down-counter can be configured with a ``TIMING_TABLE`` (a ROM), from which
 the initial counter value is loaded. The table index can be selected by
@@ -17,7 +41,8 @@ consisting of ``log2ceilnz(imax(TIMING_TABLE)) + 1`` 6-input LUTs.
    :linenos:
    :lines: 43-54
 
-Source file: `io/io_TimingCounter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_TimingCounter.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/io_TimingCounter.vhdl <io/io_TimingCounter.vhdl>`

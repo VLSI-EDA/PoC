@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-comm_crc
-########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:comm_crc:
+
+PoC.comm.crc
+############
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_crc.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/comm/comm_crc_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <comm/comm_crc.vhdl>`
+      * |gh-tb| :poctb:`Testbench <comm/comm_crc_tb.vhdl>`
 
 Computes the Cyclic Redundancy Check (CRC) for a data packet as remainder
 of the polynomial division of the message by the given generator
@@ -20,7 +44,8 @@ processing width.
    :linenos:
    :lines: 45-64
 
-Source file: `comm/comm_crc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/comm/comm_crc.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`comm/comm_crc.vhdl <comm/comm_crc.vhdl>`

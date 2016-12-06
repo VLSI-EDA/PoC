@@ -13,4 +13,4 @@ implementations.
  - [`PoC.mem.ocrom`](ocrom) - On-Chip ROM abstraction layer
  - [`PoC.mem.sdram`](sdram) - SDRAM controllers
 
-Read detailed documentation on [ReadTheDocs](http://poc-library.readthedocs.io/en/latest/PoC/mem/index.html).
+Read detailed documentation on [ReadTheDocs](http://poc-library.readthedocs.io/en/latest/IPCores/mem/index.html).

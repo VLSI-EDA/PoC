@@ -37,7 +37,7 @@ elseif (VHDLVersion >= 2002) then
 			report "No precompiled UVVM libraries for GHDL found."
 		end if
 	elseif (Tool = "Mentor_vSim") then
-		path UVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / UVVM_Directory))
+		path UVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:QuestaSimFiles} / UVVM_Directory))
 		if ?{UVVM_LibraryPath} then
 			library uvvm_util             UVVM_LibraryPath
 			library uvvm_vvc_framework	  UVVM_LibraryPath

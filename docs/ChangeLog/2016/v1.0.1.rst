@@ -1,0 +1,63 @@
+.. _CHANGE:v1.0.1:
+
+
+
+New in 1.x (upcomming)
+=======================
+
+Already documented changes are available on the ``release`` branch at GitHub.
+
+* Python Infrastructure
+
+  * Common changes
+
+    * The classes ``Simulator`` and ``Compiler`` now share common methods in base class called ``Shared``.
+
+  * ``*.files`` Parser
+
+    * Implemented path expressions: sub-directory expression, concatenate expression
+    * Implemented InterpolateLiteral: access database keys in ``*.files`` files
+    * New Path statement, which defines a path constant calculated from a path expression
+    * Replaced string arguments in statements with path expressions if the desired string was a path
+    * Replaced simple StringToken matches with Identifier expressions
+
+  * All Simulators
+
+    *
+
+  * All Compilers
+
+    *
+
+  * GHDL
+
+    * Reduced ``-P<path>`` parameters: Removed doublings
+
+* Documentation
+
+  *
+
+* VHDL common packages
+
+  *
+
+* VHDL Simulation helpers
+
+  * Mark a testbench as failed if (registered) processes are active while finilize is called
+
+* New Entities
+
+  *
+
+* New Testbenches
+
+  *
+
+* New Constraints
+
+  *
+
+* Shipped Tool and Helper Scripts
+
+  * Updated and new Notepad++ syntax files
+

@@ -1,3 +1,43 @@
+proc _poc_reanalyze {} {
+	set returnCode [exec -ignorestderr py -3 ../../py/PoC.py -d vsim PoC.sort.sortnet.BitonicSort --analyze --elaborate]
+	puts "ReturnCode: $returnCode"
+}
+
+proc poc_recompile {} {
+	_poc_reanalyze
+	restart -force
+	puts "DONE"
+}
+
+proc poc_rerun {} {
+	restart -force
+	# if xxx exists
+	# do ../../sim/sort/sortnet/sortnet_BitonicSort_tb.do
+	# else
+	do ../../sim/vSim.gui.tcl
+	puts "DONE"
+}
+
+proc poc_relaunch {} {
+	_poc_reanalyze
+	poc_rerun
+}
+
+proc poc_reload_waveform {} {
+	puts "Not implemented!"
+	# if xxx exists
+	# do ../../sim/sort/sortnet/sortnet_BitonicSort_tb.wdo
+	# else
+	# do ../../sim/vSim.default.wdo
+	puts "DONE"
+}
+
+proc poc_save_waveform {} {
+	puts "Saving waveform settings to 'D:/git/PoC/sim/sort/sortnet/sortnet_BitonicSort_tb.wdo'..."
+	write format wave -window .main_pane.wave.interior.cs.body.pw.wf D:/git/PoC/sim/sort/sortnet/sortnet_BitonicSort_tb.wdo
+	puts "DONE"
+}
+
 onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /sortnet_bitonicsort_tb/Clock

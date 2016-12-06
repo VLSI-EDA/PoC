@@ -8,10 +8,6 @@
 #
 # Python functions:    Auxillary functions to exit a program and report an error message.
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
@@ -33,13 +29,30 @@
 # load dependencies
 import functools
 
+from lib.SphinxExtensions import DocumentMemberAttribute
+
 
 __api__ = [
+	'MethodAlias',
 	'ILazyLoadable',
 	'LazyLoadTrigger',
 	'CachedReadOnlyProperty'
 ]
 __all__ = __api__
+
+
+class MethodAlias:
+	"""``MethodAlias`` creates a local method, which is an alias to another method
+	local or inherited method.
+	"""
+
+	@DocumentMemberAttribute()
+	def __init__(self, method):
+		self.method = method
+
+	@DocumentMemberAttribute()
+	def __call__(self, func):
+		return self.method
 
 
 class ILazyLoadable:

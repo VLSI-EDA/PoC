@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-icmpv6_RX
-#########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:icmpv6_RX:
+
+PoC.net.icmpv6.RX
+#################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/icmpv6/icmpv6_RX.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/icmpv6/icmpv6_RX_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/icmpv6/icmpv6_RX.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/icmpv6/icmpv6_RX_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ icmpv6_RX
    :linenos:
    :lines: 42-57
 
-Source file: `net/icmpv6/icmpv6_RX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/icmpv6/icmpv6_RX.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`net/icmpv6/icmpv6_RX.vhdl <net/icmpv6/icmpv6_RX.vhdl>`

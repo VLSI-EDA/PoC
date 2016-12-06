@@ -1,3 +1,4 @@
+.. _PKG_Sim:
 
 Simulation Packages
 ###################

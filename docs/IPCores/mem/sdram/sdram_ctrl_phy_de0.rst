@@ -1,8 +1,32 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sdram_ctrl_phy_de0
-##################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
 
-Physical layer used by module :doc:`sdram_ctrl_de0 <sdram_ctrl_de0>`.
+.. _IP:sdram_ctrl_phy_de0:
+
+PoC.mem.sdram.ctrl_phy_de0
+##########################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_phy_de0.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/sdram/sdram_ctrl_phy_de0_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_phy_de0.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_phy_de0_tb.vhdl>`
+
+Physical layer used by module :ref:`sdram_ctrl_de0 <IP:sdram_ctrl_de0>`.
 
 Instantiates input and output buffer components and adjusts the timing for
 the Altera DE0 board.
@@ -46,7 +70,8 @@ Synchronous resets are used. Reset must be hold for at least two cycles.
    :linenos:
    :lines: 89-122
 
-Source file: `mem/sdram/sdram_ctrl_phy_de0.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_phy_de0.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`mem/sdram/sdram_ctrl_phy_de0.vhdl <mem/sdram/sdram_ctrl_phy_de0.vhdl>`

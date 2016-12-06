@@ -10,7 +10,7 @@
 -- -------------------------------------
 -- This sorting network uses the *bitonic sort* algorithm.
 --
--- .. image:: ../../../_static/sort/sortnet/sortnet_BitonicSort.svg
+-- .. image:: /_static/sort/sortnet/sortnet_BitonicSort.*
 --    :target: ../../../_static/sort/sortnet/sortnet_BitonicSort.svg
 --
 -- License:

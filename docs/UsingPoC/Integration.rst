@@ -1,3 +1,4 @@
+.. _USING:Integration:
 
 Integrating PoC into Projects
 #############################
@@ -6,6 +7,8 @@ Integrating PoC into Projects
    :local:
    :depth: 2
 
+
+.. _USING:Integration:GitSubmodule:
 
 As a Git submodule
 ******************
@@ -175,5 +178,4 @@ On Windows
      .\poc.ps1 coregen PoC.xil.ChipScopeICON_$i --board=KC705
    }
    ```
-
 

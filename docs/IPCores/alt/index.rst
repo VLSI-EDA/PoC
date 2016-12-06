@@ -1,5 +1,6 @@
+.. _NS:alt:
 
-alt
-===
+PoC.alt
+========
 
 .. TODO:: This namespace is reserved for Altera specific entities.

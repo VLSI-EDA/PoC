@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-fifo_cc_got_tempgot
-###################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:fifo_cc_got_tempgot:
+
+PoC.fifo.cc_got_tempgot
+#######################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got_tempgot.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_cc_got_tempgot_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_cc_got_tempgot.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_cc_got_tempgot_tb.vhdl>`
 
 The specified depth (``MIN_DEPTH``) is rounded up to the next suitable value.
 
@@ -55,7 +79,8 @@ comparator (subtractor) in their path.
    :linenos:
    :lines: 85-114
 
-Source file: `fifo/fifo_cc_got_tempgot.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got_tempgot.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`fifo/fifo_cc_got_tempgot.vhdl <fifo/fifo_cc_got_tempgot.vhdl>`

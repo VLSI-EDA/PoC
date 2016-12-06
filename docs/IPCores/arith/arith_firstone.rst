@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-arith_firstone
-##############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:arith_firstone:
+
+PoC.arith.firstone
+##################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_firstone.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_firstone_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <arith/arith_firstone.vhdl>`
+      * |gh-tb| :poctb:`Testbench <arith/arith_firstone_tb.vhdl>`
 
 Computes from an input word, a word of the same size that has, at most,
 one bit set. The output contains a set bit at the position of the rightmost
@@ -27,7 +51,8 @@ This implementation uses carry chains for wider implementations.
    :linenos:
    :lines: 50-61
 
-Source file: `arith/arith_firstone.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_firstone.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`arith/arith_firstone.vhdl <arith/arith_firstone.vhdl>`

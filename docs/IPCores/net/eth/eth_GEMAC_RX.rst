@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-Eth_GEMAC_RX
-############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:Eth_GEMAC_RX:
+
+PoC.net.eth.GEMAC_RX
+####################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_RX.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/eth/eth_GEMAC_RX_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/eth/eth_GEMAC_RX.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/eth/eth_GEMAC_RX_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ Eth_GEMAC_RX
    :linenos:
    :lines: 42-62
 
-Source file: `net/eth/eth_GEMAC_RX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/eth/eth_GEMAC_RX.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`net/eth/eth_GEMAC_RX.vhdl <net/eth/eth_GEMAC_RX.vhdl>`

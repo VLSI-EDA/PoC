@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sync_Vector
-###########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:sync_Vector:
+
+PoC.misc.sync.Vector
+####################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Vector.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Vector_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Vector.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/sync/sync_Vector_tb.vhdl>`
 
 This module synchronizes a vector of bits from clock-domain ``Clock1`` to
 clock-domain ``Clock2``. The clock-domain boundary crossing is done by a
@@ -23,7 +47,8 @@ Constraints:
    :linenos:
    :lines: 49-63
 
-Source file: `misc/sync/sync_Vector.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Vector.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`misc/sync/sync_Vector.vhdl <misc/sync/sync_Vector.vhdl>`

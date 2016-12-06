@@ -1,6 +1,7 @@
+.. _NS:sdram:
 
-sdram
-=====
+PoC.mem.sdram
+=============
 
 The namespace ``PoC.mem.sdram`` offers components for the access of external SDRAMs.
 A common finite state-machine is used to address the memory via banks, rows and
@@ -10,24 +11,24 @@ module required by the FPGA board.
 
 .. rubric:: SDRAM Controller for the Altera DE0 Board
 
-The module :doc:`sdram_ctrl_de0 <sdram_ctrl_de0>` combines the finite state machine
-:doc:`sdram_ctrl_fsm <sdram_ctrl_fsm>` and the DE0 specific physical layer
-:doc:`sdram_ctrl_phy_de0 <sdram_ctrl_phy_de0>`. It has been tested with the
+The module :ref:`sdram_ctrl_de0 <IP:sdram_ctrl_de0>` combines the finite state machine
+:ref:`sdram_ctrl_fsm <IP:sdram_ctrl_fsm>` and the DE0 specific physical layer
+:ref:`sdram_ctrl_phy_de0 <IP:sdram_ctrl_phy_de0>`. It has been tested with the
 IS42S16400F SDR memory at a frequency of 133 MHz. A usage example
 is given in PoC-Examples_.
 
 
 .. rubric:: SDRAM Controller for the Xilinx Spartan-3E Starter Kit (S3ESK)
 
-The module :doc:`sdram_ctrl_s3esk <sdram_ctrl_s3esk>` combines the finite state
-machine :doc:`sdram_ctrl_fsm <sdram_ctrl_fsm>` and the S3ESK specific physical layer
-:doc:`sdram_ctrl_phy_s3esk <sdram_ctrl_phy_s3esk>`. It has been tested with the
+The module :ref:`sdram_ctrl_s3esk <IP:sdram_ctrl_s3esk>` combines the finite state
+machine :ref:`sdram_ctrl_fsm <IP:sdram_ctrl_fsm>` and the S3ESK specific physical layer
+:ref:`sdram_ctrl_phy_s3esk <IP:sdram_ctrl_phy_s3esk>`. It has been tested with the
 MT46V32M16-6T DDR memory at a frequency of 100 MHz (DDR-200). A usage
 example is given in PoC-Examples_.
 
 .. Note::
-   See also :doc:`PoC.xil.mig </PoC/xil/mig/index>` for board specific memory controller
-   implementations created by Xilinx's Memory Interface Generator (MIG).
+   See also :ref:`NS:mig` for board specific memory controller implementations
+   created by Xilinx's Memory Interface Generator (MIG).
 
 
 
@@ -36,8 +37,8 @@ example is given in PoC-Examples_.
 .. toctree::
    :hidden:
 
-   sdram_ctrl_fsm
-   sdram_ctrl_de0
-   sdram_ctrl_phy_de0
-   sdram_ctrl_s3esk
-   sdram_ctrl_phy_s3esk
+   sdram_ctrl_fsm <sdram_ctrl_fsm>
+   sdram_ctrl_de0 <sdram_ctrl_de0>
+   sdram_ctrl_phy_de0 <sdram_ctrl_phy_de0>
+   sdram_ctrl_s3esk <sdram_ctrl_s3esk>
+   sdram_ctrl_phy_s3esk <sdram_ctrl_phy_s3esk>

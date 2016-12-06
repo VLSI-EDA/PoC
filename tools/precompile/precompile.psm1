@@ -40,7 +40,7 @@ param(
 $Module_WorkingDir = $WorkingDir
 
 function Exit-PrecompileScript
-{		<#
+{	<#
 		.SYNOPSIS
 		Undocumented
 

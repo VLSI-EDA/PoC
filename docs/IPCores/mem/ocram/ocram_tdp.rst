@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-ocram_tdp
-#########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:ocram_tdp:
+
+PoC.mem.ocram.tdp
+#################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_tdp.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ocram/ocram_tdp_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_tdp.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_tdp_tb.vhdl>`
 
 Inferring / instantiating true dual-port memory, with:
 
@@ -17,16 +41,17 @@ ce1 we1 Command
 1   1   Write to memory
 === === ================
 
+Both reading and writing are synchronous to the rising-edge of the clock.
+Thus, when reading, the memory data will be outputted after the
+clock edge, i.e, in the following clock cycle.
+
 The generalized behavior across Altera and Xilinx FPGAs since
 Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 
 Same-Port Read-During-Write
   When writing data through port 1, the read output of the same port
   (``q1``) will output the new data (``d1``, in the following clock cycle)
-  which is aka. "write-first behavior". This behavior also applies to Altera
-  M20K memory blocks as described in the Altera: "Stratix 5 Device Handbook"
-  (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
-  (UG-01068) is wrong.
+  which is aka. "write-first behavior".
 
   Same applies to port 2.
 
@@ -37,11 +62,8 @@ Mixed-Port Read-During-Write
   rising-edge of the write clock and (in the worst case) extends
   until the next rising-edge of that write clock.
 
-.. WARNING::
-   The simulated behavior on RT-level is too optimistic. When reading
-   at the write address always the new data will be returned.
-
-.. TODO:: Implement correct behavior for RT-level simulation.
+For simulation, always our dedicated simulation model :ref:`IP:ocram_tdp_sim`
+is used.
 
 
 
@@ -51,9 +73,10 @@ Mixed-Port Read-During-Write
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 84-104
-
-Source file: `mem/ocram/ocram_tdp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_tdp.vhdl>`_
+   :lines: 82-102
 
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/ocram/ocram_tdp.vhdl <mem/ocram/ocram_tdp.vhdl>`

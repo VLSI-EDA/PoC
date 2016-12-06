@@ -6,11 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
+# Python Module:    Mentor QuestaSim simulator.
 #
 # License:
 # ==============================================================================
@@ -32,13 +28,12 @@
 #
 # load dependencies
 from pathlib                      import Path
-from textwrap import dedent
+from textwrap                     import dedent
 
-from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
-from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
-from DataBase.Config                   import Vendors
+from DataBase.Config              import Vendors
 from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaSimException
+from Simulator                    import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [
@@ -48,39 +43,45 @@ __all__ = __api__
 
 
 class Simulator(BaseSimulator):
-	_TOOL_CHAIN =            ToolChain.Mentor_QuestaSim
-	_TOOL =                  Tool.Mentor_vSim
+	TOOL_CHAIN =      ToolChain.Mentor_QuestaSim
+	TOOL =            Tool.Mentor_vSim
 
-	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun, guiMode)
-
-		self._vhdlVersion =   None
-		self._vhdlGenerics =  None
-		self._toolChain =     None
+	def __init__(self, host, dryRun, simulationSteps):
+		# A separate elaboration step is not implemented in QuestaSim
+		simulationSteps &= ~SimulationSteps.Elaborate
+		super().__init__(host, dryRun, simulationSteps)
 
 		vSimSimulatorFiles =            host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
 		self.Directories.Working =      host.Directories.Temp / vSimSimulatorFiles
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / vSimSimulatorFiles
 
-		self._PrepareSimulationEnvironment()
-		self._PrepareSimulator()
+		if (SimulationSteps.CleanUpBefore in self._simulationSteps):
+			pass
+
+		if (SimulationSteps.Prepare in self._simulationSteps):
+			self._PrepareSimulationEnvironment()
+			self._PrepareSimulator()
 
 	def _PrepareSimulator(self):
 		# create the QuestaSim executable factory
 		self.LogVerbose("Preparing Mentor simulator.")
-		for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Altera.ModelSim']:
-			if (len(self.Host.PoCConfig.options(sectionName)) != 0):
-				break
-		else:
-			raise NotConfiguredException(
-				"Neither Mentor Graphics QuestaSim nor ModelSim Altera-Edition are configured on this system.")
+		# for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Mentor.ModelSim', 'INSTALL.Altera.ModelSim']:
+		# 	if (len(self.Host.PoCConfig.options(sectionName)) != 0):
+		# 		break
+		# else:
+		# XXX: check SectionName if ModelSim is configured
+		# 	raise NotConfiguredException(
+		# 		"Neither Mentor Graphics QuestaSim, ModelSim PE nor ModelSim Altera-Edition are configured on this system.")
 
-		questaSection = self.Host.PoCConfig[sectionName]
-		binaryPath = Path(questaSection['BinaryDirectory'])
-		version = questaSection['Version']
+		# questaSection = self.Host.PoCConfig[sectionName]
+		# binaryPath = Path(questaSection['BinaryDirectory'])
+		# version = questaSection['Version']
+
+		binaryPath =  Path(self.Host.PoCConfig['INSTALL.ModelSim']['BinaryDirectory'])
+		version =     self.Host.PoCConfig['INSTALL.ModelSim']['Version']
 		self._toolChain = QuestaSim(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
-	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, guiMode=False):
+	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None):
 		# TODO: refactor into a ModelSim module, shared by QuestaSim and Cocotb (-> MixIn class)?
 		# select modelsim.ini
 		self._modelsimIniPath = self.Directories.PreCompiled
@@ -96,7 +97,7 @@ class Simulator(BaseSimulator):
 			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(self._modelsimIniPath)) \
 				from FileNotFoundError(str(self._modelsimIniPath))
 
-		super().Run(testbench, board, vhdlVersion, vhdlGenerics, guiMode)
+		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
 
 	def _RunAnalysis(self, _):
 		# create a QuestaVHDLCompiler instance
@@ -163,7 +164,7 @@ class Simulator(BaseSimulator):
 			fileHandle.write(recompileScriptContent)
 
 	def _RunSimulation(self, testbench):
-		if self._guiMode:
+		if (SimulationSteps.ShowWaveform in self._simulationSteps):
 			return self._RunSimulationWithGUI(testbench)
 
 		tclBatchFilePath =        self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
@@ -267,7 +268,7 @@ class Simulator(BaseSimulator):
 			puts "Loading run script '{runScript}'..."
 			do {runScript}
 			""").format(
-			recompileScript=recompileScriptPath.as_posix(),
+				recompileScript=recompileScriptPath.as_posix(),
 				runScript=vsimRunScript
 			)
 

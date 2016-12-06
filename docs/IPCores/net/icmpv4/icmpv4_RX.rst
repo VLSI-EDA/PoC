@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-icmpv4_RX
-#########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:icmpv4_RX:
+
+PoC.net.icmpv4.RX
+#################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/icmpv4/icmpv4_RX.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/icmpv4/icmpv4_RX_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/icmpv4/icmpv4_RX.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/icmpv4/icmpv4_RX_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ icmpv4_RX
    :linenos:
    :lines: 42-88
 
-Source file: `net/icmpv4/icmpv4_RX.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/icmpv4/icmpv4_RX.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`net/icmpv4/icmpv4_RX.vhdl <net/icmpv4/icmpv4_RX.vhdl>`

@@ -8,10 +8,6 @@
 #
 # Python Module:    TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
@@ -38,7 +34,7 @@ from flags              import Flags
 from lib.Functions      import merge
 from Base.Exceptions    import CommonException
 from Parser.FilesParser import VHDLSourceFileMixIn, VerilogSourceFileMixIn, CocotbSourceFileMixIn
-from DataBase.Config         import Board, Device
+from DataBase.Config    import Board, Device
 
 
 __api__ = [
@@ -127,11 +123,13 @@ class Tool(Enum):      # ID     Short Name       Long Name
 	Any =                 0
 	Aldec_aSim =         ("ASIM",   "Aldec Active-HDL",         "Aldec Active-HDL")
 	Altera_Quartus_Map = ("QMAP",   "Quartus Map",              "Altera Quartus Map (quartus_map)")
+	# ModelSim Altera Edition?
 	Cocotb_QuestaSim =   ("COCO",   "Cocotb",                   "Coroutine Cosimulation Testbench (Cocotb)")
 	GHDL =               ("GHDL",   "GHDL",                     "GHDL")
 	GTKwave =            ("GTKW",   "GTKWave",                  "GTKWave")
 	Lattice_LSE =        ("LSE",    "Lattice LSE",              "Lattice Synthesis Engine (LSE)")
 	Mentor_vSim =        ("VSIM",   "Mentor QuestaSim",         "Mentor Graphics QuestaSim (vSim)")
+	# Mentor ModelSim?
 	Xilinx_iSim =        ("XSIM",   "Xilinx iSim",              "Xilinx ISE Simulator (iSim)")
 	Xilinx_XST =         ("XST",    "Xilinx XST",               "Xilinx Synthesis Tool (XST)")
 	Xilinx_CoreGen =     ("CG",     "Xilinx CoreGen",           "Xilinx Core Generator Tool (CoreGen)")

@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-pmod_USBUART
-############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:pmod_USBUART:
+
+PoC.io.pmod.USBUART
+###################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_USBUART.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/pmod/pmod_USBUART_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/pmod/pmod_USBUART.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/pmod/pmod_USBUART_tb.vhdl>`
 
 This module abstracts a FTDI FT232R USB-UART bridge by instantiating a
 :doc:`PoC.io.uart.fifo <../uart/uart_fifo>`. The FT232R supports up to
@@ -17,7 +41,8 @@ Hardware flow control (RTS_CTS) is enabled.
    :linenos:
    :lines: 43-65
 
-Source file: `io/pmod/pmod_USBUART.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_USBUART.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/pmod/pmod_USBUART.vhdl <io/pmod/pmod_USBUART.vhdl>`

@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Lattice Diamond specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Lattice Diamond specific classes
 #
 # License:
 # ==============================================================================
@@ -35,21 +29,21 @@
 # load dependencies
 import time
 
-from pathlib import Path
-from subprocess                    import check_output, CalledProcessError, STDOUT
+from pathlib                  import Path
+from subprocess               import check_output, CalledProcessError, STDOUT
 
-from Base.Configuration            import Configuration as BaseConfiguration, ConfigurationException
-from Base.Exceptions              import PlatformNotSupportedException
-from Base.Executable              import Executable, CommandLineArgumentList, ExecutableArgument, ShortTupleArgument
-from Base.Logging                  import Severity, LogEntry
-from Base.Project                  import File, FileTypes, VHDLVersion
-from ToolChains.Lattice.Lattice    import LatticeException
+from lib.Functions            import Init
+from Base.Exceptions          import PlatformNotSupportedException
+from Base.Logging             import Severity, LogEntry
+from Base.Executable          import Executable, CommandLineArgumentList, ExecutableArgument, ShortTupleArgument
+from Base.Project             import File, FileTypes, VHDLVersion
+from ToolChains               import ToolMixIn, ConfigurationException, ToolConfiguration
+from ToolChains.Lattice       import LatticeException
 
 
 __api__ = [
 	'DiamondException',
 	'Configuration',
-	'DiamondMixIn',
 	'Diamond',
 	'Synth',
 	'SynthesisArgumentFile',
@@ -63,31 +57,34 @@ class DiamondException(LatticeException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =   "Lattice"
-	_toolName = "Lattice Diamond"
-	_section =  "INSTALL.Lattice.Diamond"
+class Configuration(ToolConfiguration):
+	_vendor =               "Lattice"                   #: The name of the tools vendor.
+	_toolName =             "Lattice Diamond"           #: The name of the tool.
+	_section  =             "INSTALL.Lattice.Diamond"   #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Lattice Diamond supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "3.7",
-				"InstallationDirectory":  "${INSTALL.Lattice:InstallationDirectory}/Diamond/${Version}_x64",
-				"BinaryDirectory":        "${InstallationDirectory}/bin/nt64",
-				"BinaryDirectory2":       "${InstallationDirectory}/ispfpga/bin/nt64"
+				"Version":                "3.8",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Lattice:InstallationDirectory}/Diamond/${Version}_x64"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin/nt64"),
+				"BinaryDirectory2":       ("${${SectionName}:BinaryDirectory2}",      "${InstallationDirectory}/ispfpga/bin/nt64")
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "3.7",
-				"InstallationDirectory":  "${INSTALL.Lattice:InstallationDirectory}/diamond/${Version}_x64",
-				"BinaryDirectory":        "${InstallationDirectory}/bin/lin64",
-				"BinaryDirectory2":       "${InstallationDirectory}/ispfpga/bin/lin64"
+				"Version":                "3.8",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Lattice:InstallationDirectory}/diamond/${Version}_x64"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin/lin64"),
+				"BinaryDirectory2":       ("${${SectionName}:BinaryDirectory2}",      "${InstallationDirectory}/ispfpga/bin/lin64")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Lattice is configured
+		"""Check if general Lattice support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Lattice']) != 0)
 
 	def ConfigureForAll(self):
@@ -95,10 +92,17 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Lattice Diamond installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure Diamond version
 				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__CheckDiamondVersion(binPath, version)
+				self._host.LogNormal("{DARK_GREEN}Lattice Diamond is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
@@ -127,8 +131,8 @@ class Configuration(BaseConfiguration):
 	def _ConfigureBinaryDirectory(self):
 		"""Updates section with value from _template and returns directory as Path object."""
 		binPath = super()._ConfigureBinaryDirectory()
-		unresolved = self._template[self._host.Platform][self._section]['BinaryDirectory2']
-		self._host.PoCConfig[self._section]['BinaryDirectory2'] = unresolved  # create entry
+		# unresolved = self._template[self._host.Platform][self._section]['BinaryDirectory2']
+		# self._host.PoCConfig[self._section]['BinaryDirectory2'] = unresolved  # create entry
 		defaultPath = Path(self._host.PoCConfig[self._section]['BinaryDirectory2'])  # resolve entry
 
 		binPath2 = defaultPath  # may be more complex in the future
@@ -140,31 +144,21 @@ class Configuration(BaseConfiguration):
 		return binPath
 
 
-class DiamondMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		self._version =             version
-		self._Logger =              logger
-
-
-class Diamond(DiamondMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		DiamondMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-
+class Diamond(ToolMixIn):
 	def GetSynthesizer(self):
-		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return Synth(self)
 
 
-class Synth(Executable, DiamondMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		DiamondMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
+class Synth(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
 
-		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "synthesis.exe"
-		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "synthesis"
-		else:                          raise PlatformNotSupportedException(platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "synthesis.exe"
+		elif (self._platform == "Linux"):    executablePath = self._binaryDirectoryPath / "synthesis"
+		else:                          raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -192,7 +186,7 @@ class Synth(Executable, DiamondMixIn):
 	def GetLogFileReader(self, logFile):
 		while True:
 			if logFile.exists(): break
-			time.sleep(5)							# XXX: implement a 'tail -f' functionality
+			time.sleep(5)							# FIXME: implement a 'tail -f' functionality
 
 		with logFile.open('r') as logFileHandle:
 			for line in logFileHandle:

@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-vga_phy_ch7301c
-###############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:vga_phy_ch7301c:
+
+PoC.io.vga.phy_ch7301c
+######################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy_ch7301c.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/vga/vga_phy_ch7301c_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/vga/vga_phy_ch7301c.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/vga/vga_phy_ch7301c_tb.vhdl>`
 
 The clock frequency must be the same as used for the timing module,
 e.g., 25 MHZ for VGA 640x480. A phase-shifted clock must be provided:
@@ -45,7 +69,8 @@ tests/ml505/vga_test_ml505.vhdl for an example.
    :linenos:
    :lines: 70-83
 
-Source file: `io/vga/vga_phy_ch7301c.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/vga/vga_phy_ch7301c.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/vga/vga_phy_ch7301c.vhdl <io/vga/vga_phy_ch7301c.vhdl>`

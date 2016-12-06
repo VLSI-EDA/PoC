@@ -6,11 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
+# Python Module:    Aldec Active-HDL simulator.
 #
 # License:
 # ==============================================================================
@@ -31,12 +27,11 @@
 # ==============================================================================
 #
 # load dependencies
-from pathlib import Path
+from pathlib                      import Path
 
-from Base.Exceptions              import NotConfiguredException
 from Base.Project                 import FileTypes, ToolChain, Tool
-from Base.Simulator               import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
 from ToolChains.Aldec.ActiveHDL   import ActiveHDL, ActiveHDLException
+from Simulator                    import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
 __api__ = [
@@ -46,15 +41,11 @@ __all__ = __api__
 
 
 class Simulator(BaseSimulator):
-	_TOOL_CHAIN =            ToolChain.Aldec_ActiveHDL
-	_TOOL =                  Tool.Aldec_aSim
+	TOOL_CHAIN =      ToolChain.Aldec_ActiveHDL
+	TOOL =            Tool.Aldec_aSim
 
-	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun, guiMode)
-
-		self._vhdlVersion =   None
-		self._vhdlGenerics =  None
-		self._toolChain =     None
+	def __init__(self, host, dryRun, simulationSteps):
+		super().__init__(host, dryRun, simulationSteps)
 
 		activeHDLFilesDirectoryName =   host.PoCConfig['CONFIG.DirectoryNames']['ActiveHDLFiles']
 		self.Directories.Working =      host.Directories.Temp / activeHDLFilesDirectoryName
@@ -64,19 +55,19 @@ class Simulator(BaseSimulator):
 		self._PrepareSimulator()
 
 	def _PrepareSimulator(self):
-		# create the Active-HDL executable factory
+		"""Create the Active-HDL executable factory."""
 		self.LogVerbose("Preparing Active-HDL simulator.")
-		for sectionName in ['INSTALL.Aldec.ActiveHDL', 'INSTALL.Lattice.ActiveHDL']:
-			if (len(self.Host.PoCConfig.options(sectionName)) != 0):
-				break
-		else:
-			raise NotConfiguredException(
-				"Neither Aldec's Active-HDL nor Active-HDL Lattice Edition are configured on this system.")
+		# for sectionName in ['INSTALL.Aldec.ActiveHDL', 'INSTALL.Lattice.ActiveHDL']:
+		# 	if (len(self.Host.PoCConfig.options(sectionName)) != 0):
+		# 		break
+		# else:
+		# XXX: check SectionName if ActiveHDL is configured
+		# 	raise NotConfiguredException(
+		# 		"Neither Aldec's Active-HDL nor Active-HDL Lattice Edition are configured on this system.")
 
-		asimSection = self.Host.PoCConfig[sectionName]
-		binaryPath = Path(asimSection['BinaryDirectory'])
-		version = asimSection['Version']
-		self._toolChain =    ActiveHDL(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		binaryPath =      Path(self.Host.PoCConfig['INSTALL.ActiveHDL']['BinaryDirectory'])
+		version =         self.Host.PoCConfig['INSTALL.ActiveHDL']['Version']
+		self._toolChain = ActiveHDL(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
 	def _RunAnalysis(self, _):
 		# create a ActiveHDLVHDLCompiler instance
@@ -109,7 +100,7 @@ class Simulator(BaseSimulator):
 				raise SkipableSimulatorException("Error while compiling '{0!s}'.".format(file.Path))
 
 	def _RunSimulation(self, testbench):
-		if self._guiMode:
+		if (SimulationSteps.ShowWaveform in self._simulationSteps):
 			return self._RunSimulationWithGUI(testbench)
 
 		# tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimBatchScript']

@@ -16,5 +16,8 @@ if (DeviceVendor = "Altera") then
 	include			"lib/Altera.files"
 	vhdl	poc		"src/mem/ocram/altera/ocram_tdp_altera.vhdl"	# Altera specific extended simple dual-port RAM
 end if
+if (Environment = "Simulation") then
+	vhdl		poc		"src/mem/ocram/ocram_tdp_sim.vhdl"					# Simulation model
+end if
 vhdl    poc   "src/mem/ocram/ocram_tdp.vhdl"								# True dual-port RAM
 vhdl    poc   "src/mem/ocram/ocram_esdp.vhdl"								# Extended simple dual-port RAM

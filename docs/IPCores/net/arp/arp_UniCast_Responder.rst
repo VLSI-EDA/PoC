@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-arp_UniCast_Responder
-#####################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:arp_UniCast_Responder:
+
+PoC.net.arp.UniCast_Responder
+#############################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/arp/arp_UniCast_Responder.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/arp/arp_UniCast_Responder_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_UniCast_Responder.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/arp/arp_UniCast_Responder_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ arp_UniCast_Responder
    :linenos:
    :lines: 42-73
 
-Source file: `net/arp/arp_UniCast_Responder.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/arp/arp_UniCast_Responder.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`net/arp/arp_UniCast_Responder.vhdl <net/arp/arp_UniCast_Responder.vhdl>`

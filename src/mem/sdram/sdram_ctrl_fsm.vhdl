@@ -93,27 +93,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -- =============================================================================
-
--------------------------------------------------------------------------------
--- Naming Conventions:
--- (Based on: Keating and Bricaud: "Reuse Methodology Manual")
 --
--- active low signals: "*_n"
--- clock signals: "clk", "clk_div#", "clk_#x"
--- reset signals: "rst", "rst_n"
--- generics: all UPPERCASE
--- user defined types: "*_TYPE"
--- state machine next state: "*_ns"
--- state machine current state: "*_cs"
--- output of a register: "*_r"
--- asynchronous signal: "*_a"
--- pipelined or register delay signals: "*_p#"
--- data before being registered into register with the same name: "*_nxt"
--- clock enable signals: "*_ce"
--- internal version of output port: "*_i"
--- tristate internal signal "*_z"
--------------------------------------------------------------------------------
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

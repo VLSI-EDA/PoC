@@ -1,22 +1,26 @@
+.. _NS:bus:
 
-bus
-===
+PoC.bus
+========
 
 These are bus entities....
 
 **Sub-namespaces**
 
- * :doc:`PoC.bus.stream <stream/index>`
- * :doc:`PoC.bus.wb <wb/index>`
+ * :ref:`NS:stream`
+ * :ref:`NS:wb`
 
 **Entities**
 
- * :doc:`PoC.bus.Arbiter <bus_Arbiter>`
+ * :ref:`IP:bus_Arbiter`
 
 .. toctree::
    :hidden:
 
-   stream/index
-   wb/index
+   stream <stream/index>
+   wb <wb/index>
 
-   bus_Arbiter
+.. toctree::
+   :hidden:
+
+   bus_Arbiter <bus_Arbiter>

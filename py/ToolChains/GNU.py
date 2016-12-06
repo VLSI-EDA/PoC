@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      GNU tools specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     GNU tools specific classes
 #
 # License:
 # ==============================================================================
@@ -35,12 +29,12 @@
 # load dependencies
 import re
 
+from lib.Functions           import Init, CallByRefParam
 from Base.Exceptions         import PlatformNotSupportedException
 from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument
 from Base.Logging            import LogEntry, Severity
-from Base.Simulator          import SimulationResult
-from Base.ToolChain          import ToolChainException
-from lib.Functions           import Init, CallByRefParam
+from Simulator               import SimulationResult
+from ToolChains              import ToolChainException
 
 
 __api__ = [

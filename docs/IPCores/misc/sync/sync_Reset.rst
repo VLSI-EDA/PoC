@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sync_Reset
-##########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:sync_Reset:
+
+PoC.misc.sync.Reset
+###################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Reset.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Reset_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Reset.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/sync/sync_Reset_tb.vhdl>`
 
 This module synchronizes an asynchronous reset signal to the clock
 ``Clock``. The ``Input`` can be asserted and de-asserted at any time.
@@ -34,7 +58,8 @@ Constraints:
    :linenos:
    :lines: 60-69
 
-Source file: `misc/sync/sync_Reset.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Reset.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`misc/sync/sync_Reset.vhdl <misc/sync/sync_Reset.vhdl>`

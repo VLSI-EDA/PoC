@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sortnet_MergeSort_Streamed
-##########################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:sortnet_MergeSort_Streamed:
+
+PoC.sort.sortnet.MergeSort_Streamed
+###################################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_MergeSort_Streamed.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sortnet/sortnet_MergeSort_Streamed_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <sort/sortnet/sortnet_MergeSort_Streamed.vhdl>`
+      * |gh-tb| :poctb:`Testbench <sort/sortnet/sortnet_MergeSort_Streamed_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ sortnet_MergeSort_Streamed
    :linenos:
    :lines: 41-68
 
-Source file: `sort/sortnet/sortnet_MergeSort_Streamed.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sortnet/sortnet_MergeSort_Streamed.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`sort/sortnet/sortnet_MergeSort_Streamed.vhdl <sort/sortnet/sortnet_MergeSort_Streamed.vhdl>`

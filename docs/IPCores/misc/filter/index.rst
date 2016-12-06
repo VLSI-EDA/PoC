@@ -1,18 +1,19 @@
+.. _NS:filter:
 
-filter
-======
+PoC.misc.filter
+===============
 
 These are filter entities....
 
 **Entities**
 
- * :doc:`PoC.misc.filter.and <filter_and>`
- * :doc:`PoC.misc.filter.mean <filter_mean>`
- * :doc:`PoC.misc.filter.or <filter_or>`
+ * :ref:`IP:filter_and`
+ * :ref:`IP:filter_mean`
+ * :ref:`IP:filter_or`
 
 .. toctree::
    :hidden:
 
-   filter_and
-   filter_mean
-   filter_or
+   filter_and <filter_and>
+   filter_mean <filter_mean>
+   filter_or <filter_or>

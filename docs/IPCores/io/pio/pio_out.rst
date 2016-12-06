@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-pio_out
-#######
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:pio_out:
+
+PoC.io.pio.out
+##############
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/pio/pio_out.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/pio/pio_out_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/pio/pio_out.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/pio/pio_out_tb.vhdl>`
 
 
 
@@ -13,7 +37,8 @@ pio_out
    :linenos:
    :lines: 40-55
 
-Source file: `io/pio/pio_out.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pio/pio_out.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/pio/pio_out.vhdl <io/pio/pio_out.vhdl>`

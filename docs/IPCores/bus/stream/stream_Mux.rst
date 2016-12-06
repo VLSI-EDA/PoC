@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-stream_Mux
-##########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:stream_Mux:
+
+PoC.bus.stream.Mux
+##################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Mux.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/bus/stream/stream_Mux_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <bus/stream/stream_Mux.vhdl>`
+      * |gh-tb| :poctb:`Testbench <bus/stream/stream_Mux_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ stream_Mux
    :linenos:
    :lines: 41-69
 
-Source file: `bus/stream/stream_Mux.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/bus/stream/stream_Mux.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`bus/stream/stream_Mux.vhdl <bus/stream/stream_Mux.vhdl>`

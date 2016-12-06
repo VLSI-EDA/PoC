@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sort_lru_list
-#############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:sort_lru_list:
+
+PoC.sort.lru_list
+#################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_lru_list.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sort_lru_list_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <sort/sort_lru_list.vhdl>`
+      * |gh-tb| :poctb:`Testbench <sort/sort_lru_list_tb.vhdl>`
 
 List storing ``(key, value)`` pairs. The least-recently inserted pair is
 outputed on ``DataOut`` if ``Valid = '1'``. If ``Valid = '0'``, then the list
@@ -26,7 +50,8 @@ Supported operations:
    :linenos:
    :lines: 55-74
 
-Source file: `sort/sort_lru_list.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_lru_list.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`sort/sort_lru_list.vhdl <sort/sort_lru_list.vhdl>`

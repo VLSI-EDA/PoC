@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-arith_scaler
-############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:arith_scaler:
+
+PoC.arith.scaler
+################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_scaler.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_scaler_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <arith/arith_scaler.vhdl>`
+      * |gh-tb| :poctb:`Testbench <arith/arith_scaler_tb.vhdl>`
 
 A flexible scaler for fixed-point values. The scaler is implemented for a set
 of multiplier and divider values. Each individual scaling operation can
@@ -28,7 +52,8 @@ highest scaling ratio to be used in order to avoid a truncation overflow.
    :linenos:
    :lines: 52-69
 
-Source file: `arith/arith_scaler.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_scaler.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`arith/arith_scaler.vhdl <arith/arith_scaler.vhdl>`

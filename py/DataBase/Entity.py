@@ -5,13 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     TODO
 #
 # License:
 # ==============================================================================
@@ -39,7 +33,7 @@ from flags                import Flags
 
 from lib.Functions        import Init
 from lib.Decorators       import LazyLoadTrigger, ILazyLoadable
-from Base.Configuration   import ConfigurationException
+from ToolChains           import ConfigurationException
 
 
 __api__ = [

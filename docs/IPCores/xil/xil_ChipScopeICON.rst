@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-xil_ChipScopeICON
-#################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:xil_ChipScopeICON:
+
+PoC.xil.ChipScopeICON
+#####################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ChipScopeICON.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_ChipScopeICON_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <xil/xil_ChipScopeICON.vhdl>`
+      * |gh-tb| :poctb:`Testbench <xil/xil_ChipScopeICON_tb.vhdl>`
 
 This module wraps 15 ChipScope ICON IP core netlists generated from ChipScope
 ICON xco files. The generic parameter ``PORTS`` selects the apropriate ICON
@@ -27,8 +51,6 @@ the needed source and netlist files on your local machine.
    :linenos:
    :lines: 56-63
 
-Source file: `xil/xil_ChipScopeICON.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_ChipScopeICON.vhdl>`_
-
 .. seealso::
 
    :doc:`Using PoC -> Synthesis </UsingPoC/Synthesis>`
@@ -36,3 +58,6 @@ Source file: `xil/xil_ChipScopeICON.vhdl <https://github.com/VLSI-EDA/PoC/blob/m
 
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`xil/xil_ChipScopeICON.vhdl <xil/xil_ChipScopeICON.vhdl>`

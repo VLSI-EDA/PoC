@@ -6,4 +6,4 @@ columns. Different physical layers are provide for the single-data-rate (SDR) or
 double-data-rate (DDR, DDR2, ...) data bus. One has to instantiate the specific
 module required by the FPGA board.
  
-Read detailed documentation on [ReadTheDocs](http://poc-library.readthedocs.io/en/latest/PoC/mem/sdram/index.html).
+Read detailed documentation on [ReadTheDocs](http://poc-library.readthedocs.io/en/latest/IPCores/mem/sdram/index.html).

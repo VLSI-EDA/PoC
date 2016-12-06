@@ -154,6 +154,12 @@ $PoC_Environments =	@{
 				"PSModule" =			"Mentor.PrecisionRTL.psm1";
 				"PreHookFile" =		"Mentor.PrecisionRTL.pre.ps1";
 				"PostHookFile" =	"Mentor.PrecisionRTL.post.ps1"};
+			"ModelSim" =		@{
+				"Load" =				$false;
+				"Commands" =		@("vsim", "msim");
+				"PSModule" =			"Mentor.ModelSim.psm1";
+				"PreHookFile" =		"Mentor.ModelSim.pre.ps1";
+				"PostHookFile" =	"Mentor.ModelSim.post.ps1"};
 			"QuestaSim" =			@{
 				"Load" =				$false;
 				"Commands" =		@("vsim", "qsim");
@@ -205,7 +211,22 @@ $PoC_Environments =	@{
 		} # Tools
 	}	# Xilinx
 }
+# ==============================================================================
+function Invoke-BatchFile
+{	param(
+		[string]$Path,
+		[string]$Parameters
+	)
+	$environmentVariables = cmd.exe /c " `"$Path`" $Parameters && set "
+	foreach ($line in $environmentVariables)
+	{	if ($_ -match "^(.*?)=(.*)$")
+		{	Set-Content "env:\$($matches[1])" $matches[2]		}
+		else
+		{	$_																							}
+	}
+}
 
+# ==============================================================================
 function Get-PoCEnvironmentArray
 {	<#
 		.SYNOPSIS

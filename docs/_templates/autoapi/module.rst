@@ -1,15 +1,21 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
+
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
 
 {{ node.name }}
 =={{ '=' * node.name|length }}==
 
 .. automodule:: {{ node.name }}
 
-
 {##}
 {%- block modules -%}
 {%- if subnodes %}
 
------------------------------------
+.. #-----------------------------------
 {##}
 **Submodules**
 
@@ -24,7 +30,7 @@
 .. currentmodule:: {{ node.name }}
 {##}
 
------------------------------------
+.. #-----------------------------------
 {##}
 {%- if node.variables %}
 **Variables**
@@ -89,11 +95,13 @@
 {%- block exceptions -%}
 {%- if node.exceptions %}
 
------------------------------------
+.. #-----------------------------------
 
 {% for item in node.exceptions %}
 .. autoexception:: {{ item }}
    :members:
+   :private-members:
+   :inherited-members:
    :undoc-members:
 {##}
    .. rubric:: Inheritance
@@ -109,7 +117,7 @@
 {%- block classes -%}
 {%- if node.classes %}
 
------------------------------------
+.. #-----------------------------------
 
 {% for item in node.classes %}
 .. autoclass:: {{ item }}
@@ -131,7 +139,7 @@
 {%- block functions -%}
 {%- if node.functions %}
 
------------------------------------
+.. #-----------------------------------
 
 **Functions**
 

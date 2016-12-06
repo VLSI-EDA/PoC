@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sync_Pulse
-##########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:sync_Pulse:
+
+PoC.misc.sync.Pulse
+###################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Pulse.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/sync/sync_Pulse_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/sync/sync_Pulse.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/sync/sync_Pulse_tb.vhdl>`
 
 This module synchronizes multiple pulsed bits into the clock-domain ``Clock``.
 The clock-domain boundary crossing is done by two synchronizer D-FFs. All bits
@@ -32,18 +56,19 @@ Constraints:
    :linenos:
    :lines: 68-78
 
-Source file: `misc/sync/sync_Pulse.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/sync/sync_Pulse.vhdl>`_
-
 .. seealso::
 
-   :doc:`PoC.misc.sync.Bits </PoC/misc/sync/sync_Bits>`
+   :doc:`PoC.misc.sync.Bits </IPCores/misc/sync/sync_Bits>`
      For a common 2 D-FF synchronizer for *flag*-signals.
-   :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`
+   :doc:`PoC.misc.sync.Reset </IPCores/misc/sync/sync_Reset>`
      For a special 2 D-FF synchronizer for *reset*-signals.
-   :doc:`PoC.misc.sync.Strobe </PoC/misc/sync/sync_Strobe>`
+   :doc:`PoC.misc.sync.Strobe </IPCores/misc/sync/sync_Strobe>`
      For a synchronizer for *strobe*-signals.
-   :doc:`PoC.misc.sync.Vector </PoC/misc/sync/sync_Vector>`
+   :doc:`PoC.misc.sync.Vector </IPCores/misc/sync/sync_Vector>`
      For a multiple bits capable synchronizer.
 
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`misc/sync/sync_Pulse.vhdl <misc/sync/sync_Pulse.vhdl>`

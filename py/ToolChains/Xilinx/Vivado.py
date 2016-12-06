@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Xilinx Vivado specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Xilinx Vivado specific classes
 #
 # License:
 # ==============================================================================
@@ -33,23 +27,23 @@
 # ==============================================================================
 #
 # load dependencies
-from subprocess import check_output
+from subprocess                 import check_output
 
-from lib.Functions              import CallByRefParam
+from lib.Functions              import CallByRefParam, Init
 from Base.Exceptions            import PlatformNotSupportedException
-from Base.Logging                import LogEntry, Severity
-from Base.Configuration         import Configuration as BaseConfiguration, ConfigurationException
-from Base.Project                import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
-from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
+from Base.Logging               import LogEntry, Severity
+from Base.Project               import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
 from Base.Executable            import Executable
 from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
-from ToolChains.Xilinx.Xilinx    import XilinxException
+from ToolChains                 import ToolMixIn, ConfigurationException, ToolConfiguration
+from ToolChains.Xilinx          import XilinxException
+from Simulator                  import SimulationResult, PoCSimulationResultFilter
 
 
 __api__ = [
 	'VivadoException',
 	'Configuration',
-	'VivadoMixIn',
+	'ToolMixIn',
 	'Vivado',
 	'XElab',
 	'XSim',
@@ -68,29 +62,32 @@ class VivadoException(XilinxException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      "Xilinx"
-	_toolName =    "Xilinx Vivado"
-	_section =    "INSTALL.Xilinx.Vivado"
+class Configuration(ToolConfiguration):
+	_vendor =               "Xilinx"                    #: The name of the tools vendor.
+	_toolName =             "Xilinx Vivado"             #: The name of the tool.
+	_section  =             "INSTALL.Xilinx.Vivado"     #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Xilinx Vivado supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "2016.2",
-				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
-				"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"Version":                "2016.3",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "2016.2",
-				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}",
-				"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"Version":                "2016.3",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Xilinx:InstallationDirectory}/Vivado/${Version}"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Xilinx is configured
+		"""Check if general Xilinx support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Xilinx']) != 0)
 
 	def ConfigureForAll(self):
@@ -98,10 +95,17 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Xilinx Vivado installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure Vivado version
 				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__CheckVivadoVersion(binPath, version)
+				self._host.LogNormal("{DARK_GREEN}Xilinx Vivado is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
@@ -120,36 +124,27 @@ class Configuration(BaseConfiguration):
 			raise ConfigurationException("Vivado version mismatch. Expected version {0}.".format(version))
 
 
-class VivadoMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		self._version =             version
-		self._Logger =              logger
-
-
-class Vivado(VivadoMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		VivadoMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-
+class Vivado(ToolMixIn):
 	def GetElaborator(self):
-		return XElab(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return XElab(self)
 
 	def GetSimulator(self):
-		return XSim(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return XSim(self)
 
 	def GetSynthesizer(self):
-		return Synth(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return Synth(self)
 
 
-class XElab(Executable, VivadoMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		VivadoMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "xelab.bat"
-		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "xelab"
+class XElab(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "xelab.bat"
+		elif (self._platform == "Linux"):    executablePath = self._binaryDirectoryPath / "xelab"
 		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -270,13 +265,16 @@ class XElab(Executable, VivadoMixIn):
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
-class XSim(Executable, VivadoMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		VivadoMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "xsim.bat"
-		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "xsim"
+class XSim(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "xsim.bat"
+		elif (self._platform == "Linux"):    executablePath = self._binaryDirectoryPath / "xsim"
 		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -365,13 +363,16 @@ class XSim(Executable, VivadoMixIn):
 		return simulationResult.value
 
 
-class Synth(Executable, VivadoMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		VivadoMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vivado.bat"
-		elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vivado"
+class Synth(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "vivado.bat"
+		elif (self._platform == "Linux"):    executablePath = self._binaryDirectoryPath / "vivado"
 		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 

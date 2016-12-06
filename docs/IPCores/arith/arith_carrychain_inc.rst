@@ -1,10 +1,34 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-arith_carrychain_inc
-####################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
 
-	This is a generic carry-chain abstraction for increment by one operations.
+.. _IP:arith_carrychain_inc:
 
-	Y <= X + (0...0) & Cin
+PoC.arith.carrychain_inc
+########################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_carrychain_inc.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_carrychain_inc_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <arith/arith_carrychain_inc.vhdl>`
+      * |gh-tb| :poctb:`Testbench <arith/arith_carrychain_inc_tb.vhdl>`
+
+This is a generic carry-chain abstraction for increment by one operations.
+
+Y <= X + (0...0) & Cin
 
 
 
@@ -16,7 +40,8 @@ arith_carrychain_inc
    :linenos:
    :lines: 43-52
 
-Source file: `arith/arith_carrychain_inc.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_carrychain_inc.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`arith/arith_carrychain_inc.vhdl <arith/arith_carrychain_inc.vhdl>`

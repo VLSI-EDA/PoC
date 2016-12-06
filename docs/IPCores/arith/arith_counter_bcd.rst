@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-arith_counter_bcd
-#################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:arith_counter_bcd:
+
+PoC.arith.counter_bcd
+#####################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_bcd.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_counter_bcd_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <arith/arith_counter_bcd.vhdl>`
+      * |gh-tb| :poctb:`Testbench <arith/arith_counter_bcd_tb.vhdl>`
 
 Counter with output in binary coded decimal (BCD). The number of BCD digits
 is configurable by ``DIGITS``.
@@ -25,7 +49,8 @@ is specified by ``val(3 downto 0)``.
    :linenos:
    :lines: 51-61
 
-Source file: `arith/arith_counter_bcd.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_bcd.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`arith/arith_counter_bcd.vhdl <arith/arith_counter_bcd.vhdl>`

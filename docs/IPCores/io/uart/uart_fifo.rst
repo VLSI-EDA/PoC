@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-uart_fifo
-#########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:uart_fifo:
+
+PoC.io.uart.fifo
+################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_fifo.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/uart/uart_fifo_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/uart/uart_fifo.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/uart/uart_fifo_tb.vhdl>`
 
 Small :abbr:`FIFO (first-in, first-out)` s are included in this module, if
 larger or asynchronous transmit / receive FIFOs are required, then they must
@@ -22,7 +46,8 @@ old comments:
    :linenos:
    :lines: 52-94
 
-Source file: `io/uart/uart_fifo.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/uart/uart_fifo.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/uart/uart_fifo.vhdl <io/uart/uart_fifo.vhdl>`

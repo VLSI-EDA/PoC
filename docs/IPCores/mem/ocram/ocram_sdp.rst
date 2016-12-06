@@ -1,11 +1,39 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-ocram_sdp
-#########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:ocram_sdp:
+
+PoC.mem.ocram.sdp
+#################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sdp.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ocram/ocram_sdp_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/ocram/ocram_sdp.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/ocram/ocram_sdp_tb.vhdl>`
 
 Inferring / instantiating simple dual-port memory, with:
 
 * dual clock, clock enable,
 * 1 read port plus 1 write port.
+
+Both reading and writing are synchronous to the rising-edge of the clock.
+Thus, when reading, the memory data will be outputted after the
+clock edge, i.e, in the following clock cycle.
 
 The generalized behavior across Altera and Xilinx FPGAs since
 Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
@@ -17,12 +45,8 @@ Mixed-Port Read-During-Write
   rising-edge of the write clock and (in the worst case) extends until the
   next rising-edge of the write clock.
 
-.. WARNING::
-   The simulated behavior on RT-level is too optimistic. The
-   mixed-port read-during-write behavior is only valid if the read and write
-   clock are in phase. Otherwise, simulation will always show known data.
-
-.. TODO:: Implement correct behavior for RT-level simulation.
+For simulation, always our dedicated simulation model :ref:`IP:ocram_tdp_sim`
+is used.
 
 
 
@@ -34,7 +58,8 @@ Mixed-Port Read-During-Write
    :linenos:
    :lines: 65-82
 
-Source file: `mem/ocram/ocram_sdp.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ocram/ocram_sdp.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`mem/ocram/ocram_sdp.vhdl <mem/ocram/ocram_sdp.vhdl>`

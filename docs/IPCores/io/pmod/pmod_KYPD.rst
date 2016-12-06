@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-pmod_KYPD
-#########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:pmod_KYPD:
+
+PoC.io.pmod.KYPD
+################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_KYPD.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/pmod/pmod_KYPD_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/pmod/pmod_KYPD.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/pmod/pmod_KYPD_tb.vhdl>`
 
 This module drives a 4-bit one-cold encoded column vector to read back a
 4-bit rows vector. By scanning column-by-column it's possible to extract
@@ -19,7 +43,8 @@ the button signals. The scan frequency and bounce time can be configured.
    :linenos:
    :lines: 46-61
 
-Source file: `io/pmod/pmod_KYPD.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/pmod/pmod_KYPD.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/pmod/pmod_KYPD.vhdl <io/pmod/pmod_KYPD.vhdl>`

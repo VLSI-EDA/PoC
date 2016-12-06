@@ -6,13 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:     This XCOCompiler compiles xco IPCores to netlists
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx Core Generator (compiler) compiles xco IPCores to netlists.
 #
 # License:
 # ==============================================================================
@@ -33,16 +27,16 @@
 # ==============================================================================
 #
 # load dependencies
-import shutil
 from datetime               import datetime
 from os                     import chdir
 from pathlib                import Path
+from shutil                 import copy as shutil_copy
 from textwrap               import dedent
 
 from Base.Project           import ToolChain, Tool
-from Base.Compiler          import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
-from DataBase.Entity             import WildCard
+from DataBase.Entity        import WildCard
 from ToolChains.Xilinx.ISE  import ISE, ISEException
+from Compiler               import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
 __api__ = [
@@ -52,13 +46,11 @@ __all__ = __api__
 
 
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =     ToolChain.Xilinx_ISE
-	_TOOL =           Tool.Xilinx_CoreGen
+	TOOL_CHAIN =      ToolChain.Xilinx_ISE
+	TOOL =            Tool.Xilinx_CoreGen
 
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)
-
-		self._toolChain =    None
 
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working = host.Directories.Temp / configSection['ISECoreGeneratorFiles']
@@ -198,7 +190,7 @@ class Compiler(BaseCompiler):
 		self.LogVerbose("Copy CoreGen xco file to '{0}'.".format(xcoFilePath))
 		self.LogDebug("cp {0!s} {1!s}".format(xcoInputFilePath, self.Directories.Working))
 		try:
-			shutil.copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
+			shutil_copy(str(xcoInputFilePath), str(xcoFilePath), follow_symlinks=True)
 		except OSError as ex:
 			raise CompilerException("Error while copying '{0!s}'.".format(xcoInputFilePath)) from ex
 

@@ -23,33 +23,50 @@ from subprocess import check_output
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../py'))
+sys.path.insert(0, os.path.abspath('_extensions'))
 
 
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-#needs_sphinx = '1.0'
+needs_sphinx = '1.4.9'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.inheritance_diagram',
-    'sphinx.ext.todo',
-    # 'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
-    # 'sphinx.ext.githubpages',
-    'sphinxcontrib.autoprogram',
-    'autoapi.sphinx',
-    'poc'
+# Standard Sphinx extensions
+	'sphinx.ext.autodoc',
+	'sphinx.ext.extlinks',
+	'sphinx.ext.intersphinx',
+	'sphinx.ext.inheritance_diagram',
+	'sphinx.ext.todo',
+	# 'sphinx.ext.coverage',
+	'sphinx.ext.graphviz',
+	'sphinx.ext.mathjax',
+	'sphinx.ext.ifconfig',
+	'sphinx.ext.viewcode',
+	# 'sphinx.ext.githubpages',
+# SphinxContrib extensions
+	# 'sphinxcontrib.actdiag',
+	# 'sphinxcontrib.seqdiag',
+	'sphinxcontrib.wavedrom',
+	# 'sphinxcontrib.textstyle',
+	# 'sphinxcontrib.spelling',
+	'autoapi.sphinx',
+	# 'changelog',
+# local extensions (patched)
+	'autoprogram',	             #'sphinxcontrib.autoprogram',
+# local extensions
+	'DocumentMember',
+	'poc'
 ]
 
-if (not (tags.has('PoCExternal') or tags.has('PoCInternal'))):
-	tags.add('PoCExternal')
+for tag in tags:
+	print(tag)
+
+# if (not (tags.has('PoCExternal') or tags.has('PoCInternal'))):
+	# tags.add('PoCExternal')
 
 autodoc_member_order = "bysource"
 
@@ -229,7 +246,7 @@ html_last_updated_fmt = "%b %d, %Y"
 #html_use_index = True
 
 # If true, the index is split into individual pages for each letter.
-#html_split_index = False
+# html_split_index = True
 
 # If true, links to the reST sources are added to the pages.
 #html_show_sourcelink = True
@@ -296,7 +313,7 @@ latex_documents = [
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
-#latex_use_parts = False
+# latex_use_parts = True
 
 # If true, show page references after internal links.
 #latex_show_pagerefs = False
@@ -347,9 +364,107 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
 
-
-# Example configuration for intersphinx: refer to the Python standard library.
+# ==============================================================================
+# Sphinx.Ext.InterSphinx
+# ==============================================================================
 intersphinx_mapping = {
 	'python': ('https://docs.python.org/3.5/', None),
 	'ghdl':   ('http://ghdl.readthedocs.io/en/latest', None)
 }
+
+# ==============================================================================
+# Sphinx.Ext.ExtLinks
+# ==============================================================================
+extlinks = {
+	'pocissue': ('https://github.com/VLSI-EDA/PoC/issues/%s', 'issue #'),
+	'pocpull':  ('https://github.com/VLSI-EDA/PoC/pull/%s', 'pull request #'),
+	'pocsrc':   ('https://github.com/VLSI-EDA/PoC/blob/master/src/%s?ts=2', None),
+	'poctb':    ('https://github.com/VLSI-EDA/PoC/blob/master/tb/%s?ts=2', None)
+}
+
+
+# ==============================================================================
+# Sphinx.Ext.Graphviz
+# ==============================================================================
+graphviz_output_format = "svg"
+
+
+# ==============================================================================
+# Changelog
+# ==============================================================================
+# section names - optional
+changelog_sections = ["general", "rendering", "tests"]
+
+# tags to sort on inside of sections - also optional
+changelog_inner_tag_sort = ["feature", "bug"]
+
+# how to render changelog links - these are plain
+# python string templates, ticket/pullreq/changeset number goes
+# in "%s"
+changelog_render_ticket = "http://bitbucket.org/myusername/myproject/issue/%s"
+changelog_render_pullreq = "http://bitbucket.org/myusername/myproject/pullrequest/%s"
+changelog_render_changeset = "http://bitbucket.org/myusername/myproject/changeset/%s"
+
+
+# ==============================================================================
+# SphinxContrib.Spelling
+# ==============================================================================
+# # String specifying the language, as understood by PyEnchant and enchant.
+# # Defaults to en_US for US English.
+# spelling_lang='en_US'
+#
+# # String specifying a file containing a list of words known to be spelled
+# # correctly but that do not appear in the language dictionary selected by
+# # spelling_lang. The file should contain one word per line.
+# # Refer to the PyEnchant tutorial for details.
+# #spelling_word_list_filename='spelling_wordlist.txt'
+#
+# # Boolean controlling whether suggestions for misspelled words are printed.
+# # Defaults to False.
+# spelling_show_suggestions=True
+#
+# # Boolean controlling whether words that look like package names from PyPI are
+# # treated as spelled properly. When True, the current list of package names is
+# # downloaded at the start of the build and used to extend the list of known
+# # words in the dictionary.
+# # Defaults to False.
+# spelling_ignore_pypi_package_names=False
+#
+# # Boolean controlling whether words that follow the CamelCase conventions used
+# # for page names in wikis should be treated as spelled properly.
+# # Defaults to True.
+# spelling_ignore_wiki_words=True
+#
+# # Boolean controlling treatment of words that appear in all capital letters, or
+# # all capital letters followed by a lower case s. When True, acronyms are
+# # assumed to be spelled properly.
+# # Defaults to True.
+# spelling_ignore_acronyms=True
+#
+# # Boolean controlling whether names built in to Python should be treated as
+# # spelled properly.
+# # Defaults to True.
+# spelling_ignore_python_builtins=True
+#
+# # Boolean controlling whether words that are names of modules found on
+# # sys.path are treated as spelled properly.
+# # Defaults to True.
+# spelling_ignore_importable_modules=True
+#
+# # List of filter classes to be added to the tokenizer that produces words to be
+# # checked. The classes should be derived from enchant.tokenize.Filter. Refer to
+# # the PyEnchant tutorial for examples.
+# spelling_filters=[]
+
+
+# ==============================================================================
+# Custom changes
+# ==============================================================================
+def setup(app):
+	app.add_stylesheet('css/custom.css')
+	if tags.has('PoCInternal'):
+		app.add_config_value('visibility', 'PoCInternal', True)
+		print("="* 40)
+	else:
+		app.add_config_value('visibility', 'PoCExternal', True)
+		print("-"* 40)

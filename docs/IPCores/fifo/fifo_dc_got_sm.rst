@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-fifo_dc_got_sm
-##############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:fifo_dc_got_sm:
+
+PoC.fifo.dc_got_sm
+##################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_dc_got_sm.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_dc_got_sm_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_dc_got_sm.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_dc_got_sm_tb.vhdl>`
 
 Dependent clocks meens, that one clock must be a multiple of the other one.
 And your synthesis tool must check for setup- and hold-time violations.
@@ -37,7 +61,8 @@ Synchronous reset is used. Both resets must overlap.
    :linenos:
    :lines: 62-85
 
-Source file: `fifo/fifo_dc_got_sm.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_dc_got_sm.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`fifo/fifo_dc_got_sm.vhdl <fifo/fifo_dc_got_sm.vhdl>`

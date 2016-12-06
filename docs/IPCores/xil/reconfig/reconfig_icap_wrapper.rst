@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-reconfig_icap_wrapper
-#####################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:reconfig_icap_wrapper:
+
+PoC.xil.reconfig.icap_wrapper
+#############################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/reconfig/reconfig_icap_wrapper.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/reconfig/reconfig_icap_wrapper_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <xil/reconfig/reconfig_icap_wrapper.vhdl>`
+      * |gh-tb| :poctb:`Testbench <xil/reconfig/reconfig_icap_wrapper_tb.vhdl>`
 
 This module was designed to connect the Xilinx "Internal Configuration Access Port" (ICAP)
 to a PCIe endpoint on a Dini board. Tested on:
@@ -17,7 +41,8 @@ tbd
    :linenos:
    :lines: 43-68
 
-Source file: `xil/reconfig/reconfig_icap_wrapper.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/reconfig/reconfig_icap_wrapper.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`xil/reconfig/reconfig_icap_wrapper.vhdl <xil/reconfig/reconfig_icap_wrapper.vhdl>`

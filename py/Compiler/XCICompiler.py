@@ -5,13 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:     This XCICompiler compiles xci IPCores to netlists
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx Vivado IP Catalog synthesizer (compiler) compiles xci IPCores to netlists.
 #
 # License:
 # ==============================================================================
@@ -32,16 +26,16 @@
 # ==============================================================================
 #
 # load dependencies
-import shutil
 from datetime                 import datetime
 from os                       import chdir
 from pathlib                  import Path
+from shutil                   import copy as shutil_copy
 from textwrap                 import dedent
 
 from Base.Project             import ToolChain, Tool
-from Base.Compiler            import Compiler as BaseCompiler, CompilerException, SkipableCompilerException, CompileState
-from DataBase.Entity               import WildCard
+from DataBase.Entity          import WildCard
 from ToolChains.Xilinx.Vivado import Vivado, VivadoException
+from Compiler                 import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
 __api__ = [
@@ -51,13 +45,11 @@ __all__ = __api__
 
 
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =     ToolChain.Xilinx_Vivado
-	_TOOL =           Tool.Xilinx_IPCatalog
+	TOOL_CHAIN =      ToolChain.Xilinx_Vivado
+	TOOL =            Tool.Xilinx_IPCatalog
 
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)
-
-		self._toolChain =    None
 
 		configSection = host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working = host.Directories.Temp / configSection['VivadoIPCatalogFiles']
@@ -197,7 +189,7 @@ class Compiler(BaseCompiler):
 		self.LogVerbose("Copy CoreGen xci file to '{0}'.".format(xciFilePath))
 		self.LogDebug("cp {0!s} {1!s}".format(xciInputFilePath, self.Directories.Working))
 		try:
-			shutil.copy(str(xciInputFilePath), str(xciFilePath), follow_symlinks=True)
+			shutil_copy(str(xciInputFilePath), str(xciFilePath), follow_symlinks=True)
 		except OSError as ex:
 			raise CompilerException("Error while copying '{0!s}'.".format(xciInputFilePath)) from ex
 

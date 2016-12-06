@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-xil_DRP_BusSync
-###############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:xil_DRP_BusSync:
+
+PoC.xil.DRP_BusSync
+###################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_DRP_BusSync.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_DRP_BusSync_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <xil/xil_DRP_BusSync.vhdl>`
+      * |gh-tb| :poctb:`Testbench <xil/xil_DRP_BusSync_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ xil_DRP_BusSync
    :linenos:
    :lines: 40-58
 
-Source file: `xil/xil_DRP_BusSync.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_DRP_BusSync.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`xil/xil_DRP_BusSync.vhdl <xil/xil_DRP_BusSync.vhdl>`

@@ -1,0 +1,69 @@
+.. _CHANGE:v1.x:
+
+New in 1.x (upcoming)
+=======================
+
+Already documented changes are available on the ``release`` branch at GitHub.
+
+* VHDL common packages
+* VHDL Simulation helpers
+
+* New Entities
+
+  * :ref:`IP:ocram_sdp_wf`
+  * :ref:`IP:ocram_tdp_wf`
+  * :ref:`IP:cache_par2`
+  * :ref:`IP:cache_cpu`
+  * :ref:`IP:cache_mem`
+  * Simulation helper :ref:`IP:ocram_tdp_sim`
+
+* Updated Entities
+
+  * Interface of :ref:`IP:cache_tagunit_par` changed slightly.
+  * New port "write-mask" in :ref:`IP:ddr3_mem2mig_adapter_Series7`.
+  * New port "write-mask" in :ref:`IP:ddr2_mem2mig_adapter_Spartan6`.
+  * Fixed :ref:`IP:dstruct_deque`
+
+* New Testbenches
+
+  * Testbench for :ref:`IP:ocram_sdp_wf`
+  * Testbench for :ref:`IP:ocram_tdp_wf`
+  * Testbench for :ref:`IP:cache_par2`
+  * Testbench for :ref:`IP:cache_cpu`
+  * Testbench for :ref:`IP:cache_mem`
+
+* Updated Testbenches
+
+  * Testbench for :ref:`IP:ocram_sdp`
+  * Testbench for :ref:`IP:ocram_esdp`
+  * Testbench for :ref:`IP:ocram_tdp`
+  * Testbench for :ref:`IP:sortnet_BitonicSort`
+  * Testbench for :ref:`IP:sortnet_OddEvenSort`
+  * Testbench for :ref:`IP:sortnet_OddEvenMergeSort`
+
+* New Constraints
+* Updated Constraints
+* Shipped Tool and Helper Scripts
+* Python Infrastructure
+
+  * Common changes
+  * All Simulators
+  * Aldec Active-HDL
+  * GHDL
+  * Mentor QuestaSim
+  * Xilinx ISE Simulator
+  * Xilinx Vivado Simulator
+  * All Compilers
+  * Altera Quartus Synthesis
+  * Lattice Diamond (LSE)
+  * Xilinx ISE (XST)
+  * Xilinx ISE Core Generator
+  * Xilinx Vivado Synthesis
+
+* Continuous Integration
+
+  * Implemented a simple Python infrastructe test on AppVeyor
+
+* Documentation
+
+  * Improved PDF rendering

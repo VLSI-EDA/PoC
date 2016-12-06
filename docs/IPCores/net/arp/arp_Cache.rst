@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-arp_Cache
-#########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:arp_Cache:
+
+PoC.net.arp.Cache
+#################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/arp/arp_Cache.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/arp/arp_Cache_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/arp/arp_Cache.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/arp/arp_Cache_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ arp_Cache
    :linenos:
    :lines: 44-75
 
-Source file: `net/arp/arp_Cache.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/arp/arp_Cache.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`net/arp/arp_Cache.vhdl <net/arp/arp_Cache.vhdl>`

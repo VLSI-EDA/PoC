@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-io_GlitchFilter
-###############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:io_GlitchFilter:
+
+PoC.io.GlitchFilter
+###################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_GlitchFilter.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_GlitchFilter_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/io_GlitchFilter.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/io_GlitchFilter_tb.vhdl>`
 
 This module filters glitches on a wire. The high and low spike suppression
 cycle counts can be configured.
@@ -15,7 +39,8 @@ cycle counts can be configured.
    :linenos:
    :lines: 41-51
 
-Source file: `io/io_GlitchFilter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_GlitchFilter.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/io_GlitchFilter.vhdl <io/io_GlitchFilter.vhdl>`

@@ -1,6 +1,27 @@
 compile-uvvm.ps1
 ----------------
 
+.. program:: compile-uvvm.ps1
+
+This script pre-compiles the UVVM framework. This script will generate all
+outputs into a :file:`uvvm` directory.
+
+
+.. rubric:: Supported Simulators
+
++----------+--------------------------------------------+
+| Target   | Description                                |
++==========+============================================+
+| All      | pre-compile for all simulators             |
++----------+--------------------------------------------+
+| GHDL     | pre-compile for the GHDL simulator         |
++----------+--------------------------------------------+
+| Questa   | pre-compile for Metor Graphics QuestaSim   |
++----------+--------------------------------------------+
+
+
+.. rubric:: Command Line Options
+
 .. option:: -Help
 
    Show the embedded help page(s).
@@ -21,10 +42,13 @@ compile-uvvm.ps1
 
    Pre-compile the Altera Quartus libraries for QuestaSim.
 
+
+.. rubric:: Additional Options for GHDL
+
 .. option:: -VHDL93
 
-   Set VHDL Standard to '93.
+   For GHDL only: Set VHDL Standard to '93.
 
 .. option:: -VHDL2008
 
-   Set VHDL Standard to '08.
+   For GHDL only: Set VHDL Standard to '08.

@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-ddrio_out
-#########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:ddrio_out:
+
+PoC.io.ddrio.out
+################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_out.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/ddrio/ddrio_out_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/ddrio/ddrio_out.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/ddrio/ddrio_out_tb.vhdl>`
 
 Instantiates chip-specific :abbr:`DDR (Double Data Rate)` output registers.
 
@@ -16,6 +40,28 @@ setting ``NO_OUTPUT_ENABLE = true``.
 If ``NO_OUTPUT_ENABLE = false`` then output is disabled after power-up.
 If ``NO_OUTPUT_ENABLE = true`` then output after power-up equals ``INIT_VALUE``.
 
+.. wavedrom::
+
+   { signal: [
+     ['DataOut',
+       {name: 'ClockOut',        wave: 'L.H.L.H.L.H.L.H.'},
+       {name: 'ClockOutEnable',  wave: '01...........0..'},
+       {name: 'OutputEnable',    wave: '01.......0......'},
+       {name: 'DataOut_low',     wave: 'x2...4...x......', data: ['0',      '2'],      node: '.k...m'},
+       {name: 'DataOut_high',    wave: 'x3...5...x......', data: ['1',      '3'],      node: '.l...n'}
+       ],
+       {},
+       {name: 'Pad',             wave: 'x.....2.3.4.5.z.', data: ['0', '1', '2', '3'], node: '......a.b.c.d.'},
+     ],
+     edge: ['k~>a', 'l~>b', 'm~>c', 'n~>d'],
+     foot: {
+       text: ['tspan',
+         ['tspan', {'font-weight': 'bold'}, 'PoC.io.ddrio.out'],
+         ' -- DDR Data Output sampled from pad.'
+       ]
+     }
+   }
+
 ``Pad`` must be connected to a PAD because FPGAs only have these registers in
 IOBs.
 
@@ -27,9 +73,10 @@ IOBs.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 57-71
-
-Source file: `io/ddrio/ddrio_out.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/ddrio/ddrio_out.vhdl>`_
+   :lines: 79-93
 
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`io/ddrio/ddrio_out.vhdl <io/ddrio/ddrio_out.vhdl>`

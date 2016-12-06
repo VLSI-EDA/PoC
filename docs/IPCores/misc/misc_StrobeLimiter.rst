@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-misc_StrobeLimiter
-##################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:misc_StrobeLimiter:
+
+PoC.misc.StrobeLimiter
+######################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_StrobeLimiter.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/misc_StrobeLimiter_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/misc_StrobeLimiter.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/misc_StrobeLimiter_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ misc_StrobeLimiter
    :linenos:
    :lines: 39-51
 
-Source file: `misc/misc_StrobeLimiter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/misc_StrobeLimiter.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`misc/misc_StrobeLimiter.vhdl <misc/misc_StrobeLimiter.vhdl>`

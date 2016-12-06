@@ -5,13 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:      Lattice Synopsys specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Lattice Synopsys specific classes
 #
 # License:
 # ==============================================================================
@@ -32,8 +26,7 @@
 # ==============================================================================
 #
 # load dependencies
-from Base.Configuration import Configuration as BaseConfiguration
-from Base.ToolChain import ToolChainException
+from ToolChains                   import ToolChainException, ToolConfiguration
 
 
 __api__ = [
@@ -47,6 +40,6 @@ class SynplifyException(ToolChainException):
 	pass
 
 
-class Configuration(BaseConfiguration):
+class Configuration(ToolConfiguration):
 	def __init__(self, host):
 		super().__init__(host)

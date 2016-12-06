@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sdram_ctrl_fsm
-##############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:sdram_ctrl_fsm:
+
+PoC.mem.sdram.ctrl_fsm
+######################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_fsm.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/sdram/sdram_ctrl_fsm_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/sdram/sdram_ctrl_fsm.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/sdram/sdram_ctrl_fsm_tb.vhdl>`
 
 This file contains the FSM as well as parts of the datapath.
 The board specific physical layer is defined in another file.
@@ -78,9 +102,10 @@ The write data must directly connected to the physical layer.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 124-168
-
-Source file: `mem/sdram/sdram_ctrl_fsm.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/sdram/sdram_ctrl_fsm.vhdl>`_
+   :lines: 104-148
 
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/sdram/sdram_ctrl_fsm.vhdl <mem/sdram/sdram_ctrl_fsm.vhdl>`

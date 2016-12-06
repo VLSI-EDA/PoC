@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-fifo_cc_got
-###########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:fifo_cc_got:
+
+PoC.fifo.cc_got
+###############
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_cc_got_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_cc_got.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_cc_got_tb.vhdl>`
 
 This module implements a regular FIFO with common clock (cc), pipelined
 interface. Common clock means read and write port use the same clock. The
@@ -60,16 +84,17 @@ comparator (subtractor) in their path.
    :linenos:
    :lines: 98-124
 
-Source file: `fifo/fifo_cc_got.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_cc_got.vhdl>`_
-
 .. seealso::
 
-   :doc:`PoC.fifo.dc_got </PoC/fifo/fifo_dc_got>`
+   :ref:`IP:fifo_dc_got`
      For a FIFO with dependent clocks.
-   :doc:`PoC.fifo.ic_got </PoC/fifo/fifo_ic_got>`
+   :ref:`IP:fifo_ic_got`
      For a FIFO with independent clocks (cross-clock FIFO).
-   :doc:`PoC.fifo.glue </PoC/fifo/fifo_glue>`
+   :ref:`IP:fifo_glue`
      For a minimal FIFO / pipeline decoupling.
 
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`fifo/fifo_cc_got.vhdl <fifo/fifo_cc_got.vhdl>`

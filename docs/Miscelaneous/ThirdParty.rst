@@ -1,3 +1,8 @@
+.. index::
+   single: Third-Party Libraries
+
+.. _THIRD:
+
 Third Party Libraries
 #####################
 
@@ -5,6 +10,13 @@ The PoC-Library is shiped with different third party libraries, which are
 located in the ``<PoCRoot>/lib/`` folder. This document lists all these
 libraries, their websites and licenses.
 
+
+.. # ===========================================================================================================================================================
+
+.. index::
+   pair: Third-Party Libraries; Cocotb
+
+.. _THIRD:Cocotb:
 
 Cocotb
 ******
@@ -17,13 +29,20 @@ library for writing VHDL and Verilog testbenches in Python.
 +--------------------+-----------------------------------------------------------------------------------------------------------+
 | **Copyright:**     | Copyright © 2013, `Potential Ventures Ltd. <http://potential.ventures/>`_, SolarFlare Communications Inc. |
 +--------------------+-----------------------------------------------------------------------------------------------------------+
-| **License:**       | :doc:`Revised BSD License (local copy) </References/Licenses/BSDLicense_Cocotb>`                          |
+| **License:**       | :doc:`Revised BSD License (local copy) </References/Licenses/Cocotb_BSDLicense>`                          |
 +--------------------+-----------------------------------------------------------------------------------------------------------+
 | **Documentation:** | `http://cocotb.readthedocs.org/ <http://cocotb.readthedocs.org/>`_                                        |
 +--------------------+-----------------------------------------------------------------------------------------------------------+
 | **Source:**        | `https://github.com/potentialventures/cocotb <https://github.com/potentialventures/cocotb>`_              |
 +--------------------+-----------------------------------------------------------------------------------------------------------+
 
+
+.. # ===========================================================================================================================================================
+
+.. index::
+   pair: Third-Party Libraries; OSVVM
+
+.. _THIRD:OSVVM:
 
 OSVVM
 *****
@@ -49,6 +68,12 @@ existing testbench or testbench models.
 +----------------+---------------------------------------------------------------------------------------+
 
 
+.. # ===========================================================================================================================================================
+
+.. index::
+   pair: Third-Party Libraries; UVVM
+
+.. _THIRD:UVVM:
 
 UVVM
 ****
@@ -74,13 +99,20 @@ the ``uart_receive()`` or ``axilite_write()`` BFM respectively.
 +----------------+---------------------------------------------------------------------------------------+
 | **Copyright:** | Copyright © 2016 by `Bitvis AS <http://bitvis.no/>`_                                  |
 +----------------+---------------------------------------------------------------------------------------+
-| **License:**   | :doc:`The MIT License (local copy) </References/Licenses/MIT_UVVM>`                   |
+| **License:**   | :doc:`The MIT License (local copy) </References/Licenses/UVVM_MIT>`                   |
 +----------------+---------------------------------------------------------------------------------------+
 | **Website:**   | `http://bitvis.no/ <http://bitvis.no/>`_                                              |
 +----------------+---------------------------------------------------------------------------------------+
 | **Source:**    | `https://github.com/UVVM/UVVM_All <https://github.com/UVVM/UVVM_All>`_                |
 +----------------+---------------------------------------------------------------------------------------+
 
+
+.. # ===========================================================================================================================================================
+
+.. index::
+   pair: Third-Party Libraries; VUnit
+
+.. _THIRD:VUnit:
 
 VUnit
 *****

@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-arith_counter_free
-##################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:arith_counter_free:
+
+PoC.arith.counter_free
+######################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_free.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/arith/arith_counter_free_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <arith/arith_counter_free.vhdl>`
+      * |gh-tb| :poctb:`Testbench <arith/arith_counter_free_tb.vhdl>`
 
 Implements a free-running counter that generates a strobe signal every
 DIVIDER-th cycle the increment input was asserted. There is deliberately no
@@ -21,7 +45,8 @@ input have been observed.
    :linenos:
    :lines: 41-53
 
-Source file: `arith/arith_counter_free.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/arith/arith_counter_free.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`arith/arith_counter_free.vhdl <arith/arith_counter_free.vhdl>`

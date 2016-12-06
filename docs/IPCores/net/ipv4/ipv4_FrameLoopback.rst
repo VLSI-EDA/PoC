@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-ipv4_FrameLoopback
-##################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:ipv4_FrameLoopback:
+
+PoC.net.ipv4.FrameLoopback
+##########################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv4/ipv4_FrameLoopback.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/net/ipv4/ipv4_FrameLoopback_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <net/ipv4/ipv4_FrameLoopback.vhdl>`
+      * |gh-tb| :poctb:`Testbench <net/ipv4/ipv4_FrameLoopback_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ ipv4_FrameLoopback
    :linenos:
    :lines: 42-74
 
-Source file: `net/ipv4/ipv4_FrameLoopback.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/net/ipv4/ipv4_FrameLoopback.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`net/ipv4/ipv4_FrameLoopback.vhdl <net/ipv4/ipv4_FrameLoopback.vhdl>`

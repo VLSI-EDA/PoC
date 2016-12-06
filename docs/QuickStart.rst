@@ -1,14 +1,54 @@
+.. _QUICK:
+
+.. raw:: html
+
+   <style>kbd
+   { -moz-border-radius:3px;
+     -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+     -webkit-border-radius:3px;
+     -webkit-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+     background-color:#f7f7f7;
+     border:1px solid #ccc;
+     border-radius:3px;
+     box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+     color:#333;
+     display:inline-block;
+     font-family:Arial,Helvetica,sans-serif;
+     font-size:11px;
+     line-height:1.4;
+     margin:0 .1em;
+     padding:.1em .6em;
+     text-shadow:0 1px 0 #fff;
+   }</style>
+
+.. |kbd-Y| raw:: html
+
+           <kbd>Y</kbd>
+
+.. |kbd-N| raw:: html
+
+           <kbd>N</kbd>
+
+.. |kbd-P| raw:: html
+
+           <kbd>P</kbd>
+
+.. |kbd-Return| raw:: html
+
+                <kbd>Return</kbd>
 
 Quick Start Guide
 #################
 
-This **quick start guide** gives a fast and simple introduction into PoC. All
-topics can be found in the :doc:`Using PoC </UsingPoC/index>` section with much
-more details and examples.
+This **Quick Start Guide** gives a fast and simple introduction into PoC. All
+topics can be found in the :ref:`Using PoC <USING>` section with much more
+details and examples.
 
 .. contents:: Contents of this Page
    :local:
 
+
+.. _QUICK:Requirements:
 
 Requirements and Dependencies
 *****************************
@@ -17,13 +57,13 @@ The PoC-Library comes with some scripts to ease most of the common tasks, like
 running testbenches or generating IP cores. PoC uses Python 3 as a platform
 independent scripting environment. All Python scripts are wrapped in Bash or
 PowerShell scripts, to hide some platform specifics of Darwin, Linux or Windows.
-See :doc:`/UsingPoC/Requirements` for further details.
+See :ref:`USING:Require` for further details.
 
 
 .. rubric:: PoC requires:
 
-* A :doc:`supported synthesis tool chain </WhatIsPoC/SupportedToolChains>`, if you want to synthezise IP cores.
-* A :doc:`supported simulator too chain </WhatIsPoC/SupportedToolChains>`, if you want to simulate IP cores.
+* A :ref:`supported synthesis tool chain <INTRO:ToolChains>`, if you want to synthezise IP cores.
+* A :ref:`supported simulator too chain <INTRO:ToolChains>`, if you want to simulate IP cores.
 * The **Python 3** programming language and runtime, if you want to use PoC's infrastructure.
 * A shell to execute shell scripts:
 
@@ -33,25 +73,45 @@ See :doc:`/UsingPoC/Requirements` for further details.
 
 .. rubric:: PoC optionally requires:
 
-* **Git command line** tools or
+* **Git** command line tools or
 * **Git User Interface**, if you want to check out the latest 'master' or 'release' branch.
 
 
 .. rubric:: PoC depends on third part libraries:
 
-* `Cocotb <https://github.com/potentialventures/cocotb>`_ |br|
+.. |gh-cocotb| image:: _static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/potentialventures/cocotb
+               :alt: Source Code on GitHub
+.. |gh-osvvm| image:: _static/logos/GitHub-Mark-32px.png
+              :scale: 40
+              :target: https://github.com/JimLewis/OSVVM
+              :alt: Source Code on GitHub
+.. |gh-uvvm| image:: _static/logos/GitHub-Mark-32px.png
+             :scale: 40
+             :target: https://github.com/UVVM/UVVM_All
+             :alt: Source Code on GitHub
+.. |gh-vunit| image:: _static/logos/GitHub-Mark-32px.png
+              :scale: 40
+              :target: https://github.com/VUnit/vunit
+              :alt: Source Code on GitHub
+
+* :ref:`THIRD:Cocotb` |gh-cocotb| |br|
   A coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python.
-* `OS-VVM <https://github.com/JimLewis/OSVVM>`_ |br|
+* :ref:`THIRD:OSVVM` |gh-osvvm| |br|
   Open Source VHDL Verification Methodology.
-* `UVVM <https://github.com/UVVM/UVVM_All>`_ |br|
+* :ref:`THIRD:UVVM` |gh-uvvm| |br|
   Universal VHDL Verification Methodology.
-* `VUnit <https://github.com/VUnit/vunit>`_ |br|
+* :ref:`THIRD:VUnit` |gh-vunit| |br|
   An unit testing framework for VHDL.
 
 All dependencies are available as GitHub repositories and are linked to
 PoC as Git submodules into the `PoCRoot\\lib <https://github.com/VLSI-EDA/PoC/tree/master/lib>`_
-directory. See :doc:`Third Party Libraries </Miscelaneous/ThirdParty>` for more details on these libraries.
+directory. See :ref:`Third Party Libraries <THIRD>` for more details on these
+libraries.
 
+
+.. _QUICK:Download:
 
 Download
 ********
@@ -59,7 +119,7 @@ Download
 The PoC-Library can be downloaded as a `zip-file <https://github.com/VLSI-EDA/PoC/archive/master.zip>`_
 (latest 'master' branch), cloned with ``git clone`` or embedded with
 ``git submodule add`` from GitHub. GitHub offers HTTPS and SSH as transfer
-protocols. See the :doc:`Download </UsingPoC/Download>` page for further
+protocols. See the :ref:`Download <USING:Download>` page for further
 details. The installation directory is referred to as ``PoCRoot``.
 
 +----------+---------------------------------------------------------------------+
@@ -71,6 +131,8 @@ details. The installation directory is referred to as ``PoCRoot``.
 +----------+---------------------------------------------------------------------+
 
 
+.. _QUICK:Configuration:
+
 Configuring PoC on a Local System
 *********************************
 
@@ -78,7 +140,7 @@ To explore PoC's full potential, it's required to configure some paths and
 synthesis or simulation tool chains. The following commands start a guided
 configuration process. Please follow the instructions on screen. It's possible
 to relaunch the process at any time, for example to register new tools or to
-update tool versions. See :doc:`Configuration </UsingPoC/PoCConfiguration>` for
+update tool versions. See :ref:`Configuration <USING:PoCConfig>` for
 more details. Run the following command line instructions to configure PoC on
 your local system:
 
@@ -87,9 +149,13 @@ your local system:
    cd PoCRoot
    .\poc.ps1 configure
 
-Use the keyboard buttons: :kbd:`Y` to accept, :kbd:`N` to decline, :kbd:`P` to
-skip/pass a step and :kbd:`Return` to accept a default value displayed in brackets.
 
+Use the keyboard buttons: |kbd-Y| to accept, |kbd-N| to decline, |kbd-P| to
+skip/pass a step and |kbd-Return| to accept a default value displayed in
+brackets.
+
+
+.. _QUICK:Integration:
 
 Integration
 ***********
@@ -188,6 +254,8 @@ and if needed patch these IP cores. See :doc:`Synthesis </UsingPoC/Synthesis>`
 for more details.
 
 
+.. _QUICK:RunSimulation:
+
 Run a Simulation
 ****************
 
@@ -224,6 +292,8 @@ status (``... ERROR``, ``FAILED``, ``NO ASSERTS`` or ``PASSED``). See
 :doc:`Simulation </UsingPoC/Simulation>` for more details.
 
 
+.. _QUICK:RunSynthesis:
+
 Run a Synthesis
 ***************
 
@@ -250,6 +320,8 @@ synthesized to a netlist.
    :target: /_static/images/xst/arith_prng.posh.png
 	 :alt: PowerShell console output after running PoC.arith.prng with XST.
 
+
+.. _QUICK:Updating:
 
 Updating
 ********

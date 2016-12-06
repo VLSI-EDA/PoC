@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-xil_Reconfigurator
-##################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:xil_Reconfigurator:
+
+PoC.xil.Reconfigurator
+######################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_Reconfigurator.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/xil/xil_Reconfigurator_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <xil/xil_Reconfigurator.vhdl>`
+      * |gh-tb| :poctb:`Testbench <xil/xil_Reconfigurator_tb.vhdl>`
 
 Many complex primitives in a Xilinx device offer a Dynamic Reconfiguration
 Port (DRP) to reconfigure a primitive at runtime without reconfiguring the
@@ -22,7 +46,8 @@ completes with another strobe on ``ReconfigDone``.
    :linenos:
    :lines: 51-72
 
-Source file: `xil/xil_Reconfigurator.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/xil/xil_Reconfigurator.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`xil/xil_Reconfigurator.vhdl <xil/xil_Reconfigurator.vhdl>`

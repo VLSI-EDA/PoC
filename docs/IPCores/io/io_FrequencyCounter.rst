@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-io_FrequencyCounter
-###################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:io_FrequencyCounter:
+
+PoC.io.FrequencyCounter
+#######################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_FrequencyCounter.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/io/io_FrequencyCounter_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <io/io_FrequencyCounter.vhdl>`
+      * |gh-tb| :poctb:`Testbench <io/io_FrequencyCounter_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ io_FrequencyCounter
    :linenos:
    :lines: 40-52
 
-Source file: `io/io_FrequencyCounter.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/io/io_FrequencyCounter.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`io/io_FrequencyCounter.vhdl <io/io_FrequencyCounter.vhdl>`

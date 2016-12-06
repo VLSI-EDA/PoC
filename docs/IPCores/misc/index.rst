@@ -1,43 +1,50 @@
+.. _NS:misc:
 
-misc
-====
+PoC.misc
+========
 
 The namespace ``PoC.misc`` offers different yet uncathegorized entities.
 
 **Sub-Namespaces**
 
- * :doc:`PoC.misc.filter <filter/index>` contains 1-bit filter algorithms.
- * :doc:`PoC.misc.stat <stat/index>` contains statistic modules.
- * :doc:`PoC.misc.sync <sync/index>` offers clock-domain-crossing (CDC) modules.
+ * :ref:`NS:filter` contains 1-bit filter algorithms.
+ * :ref:`NS:stat` contains statistic modules.
+ * :ref:`NS:sync` offers clock-domain-crossing (CDC) modules.
 
 **Package**
 
-The package :doc:`PoC.misc <misc.pkg>` holds all component declarations for this namespace.
+The package :ref:`PoC.misc <PKG:misc>` holds all component declarations for this namespace.
 
 **Entities**
 
- * :doc:`PoC.misc.Delay <misc_Delay>`
- * :doc:`PoC.misc.FrequencyMeasurement <misc_FrequencyMeasurement>`
- * :doc:`PoC.misc.PulseTrain <misc_PulseTrain>`
- * :doc:`PoC.misc.Sequencer <misc_Sequencer>`
- * :doc:`PoC.misc.StrobeGenerator <misc_StrobeGenerator>`
- * :doc:`PoC.misc.StrobeLimiter <misc_StrobeLimiter>`
- * :doc:`PoC.misc.WordAligner <misc_WordAligner>`
+ * :ref:`IP:misc_Delay`
+ * :ref:`IP:misc_FrequencyMeasurement`
+ * :ref:`IP:misc_PulseTrain`
+ * :ref:`IP:misc_Sequencer`
+ * :ref:`IP:misc_StrobeGenerator`
+ * :ref:`IP:misc_StrobeLimiter`
+ * :ref:`IP:misc_WordAligner`
 
 .. toctree::
    :hidden:
 
-   filter/index
-   gearbox/index
-   stat/index
-   sync/index
+   filter <filter/index>
+   gearbox <gearbox/index>
+   stat <stat/index>
+   sync <sync/index>
 
-   misc.pkg
+.. toctree::
+   :hidden:
 
-   misc_Delay
-   misc_FrequencyMeasurement
-   misc_PulseTrain
-   misc_Sequencer
-   misc_StrobeGenerator
-   misc_StrobeLimiter
-   misc_WordAligner
+   Package <misc.pkg>
+
+.. toctree::
+   :hidden:
+
+   misc_Delay <misc_Delay>
+   misc_FrequencyMeasurement <misc_FrequencyMeasurement>
+   misc_PulseTrain <misc_PulseTrain>
+   misc_Sequencer <misc_Sequencer>
+   misc_StrobeGenerator <misc_StrobeGenerator>
+   misc_StrobeLimiter <misc_StrobeLimiter>
+   misc_WordAligner <misc_WordAligner>

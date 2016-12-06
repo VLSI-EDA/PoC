@@ -5,13 +5,7 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:     This ISECompiler compiles any IPCores for the ISE tool chain
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx ISE synthesizer (compiler).
 #
 # License:
 # ==============================================================================
@@ -33,8 +27,8 @@
 #
 # load dependencies
 from Base.Project           import ToolChain, Tool
-from Base.Compiler          import Compiler as BaseCompiler
-from DataBase.Entity             import WildCard, FQN, EntityTypes
+from DataBase.Entity        import WildCard, FQN, EntityTypes
+from Compiler               import Compiler as BaseCompiler
 from Compiler.XCOCompiler   import Compiler as XCOCompiler
 from Compiler.XSTCompiler   import Compiler as XSTCompiler
 
@@ -45,8 +39,8 @@ __api__ = [
 __all__ = __api__
 
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =  ToolChain.Xilinx_ISE
-	_TOOL =        Tool.Any
+	TOOL_CHAIN =      ToolChain.Xilinx_ISE
+	TOOL =            Tool.Any
 
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)

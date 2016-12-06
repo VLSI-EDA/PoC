@@ -9,7 +9,7 @@
 --
 -- Description:
 -- ------------------------------------
--- Adapter between the :doc:`PoC.Mem </References/Interfaces/Memory>`
+-- Adapter between the :ref:`PoC.Mem <INT:PoC.Mem>`
 -- interface and the User Interface of the Xilinx MIG IP core for the
 -- Spartan-6 FPGA Memory Controller Block (MCB). The MCB can be configured to
 -- have multiple ports. One instance of this adapter is required for every
@@ -20,7 +20,7 @@
 -- The PoC.Mem interface provides single-cycle fully pipelined read/write access
 -- to the memory. All accesses are word-aligned. Always all bytes of a word are
 -- written to the memory. More details can be found
--- :doc:`here </References/Interfaces/Memory>`.
+-- :ref:`here <INT:PoC.Mem>`.
 --
 -- Generic parameters:
 --
@@ -72,6 +72,7 @@ entity ddr2_mem2mig_adapter_Spartan6 is
 		mem_write : in  std_logic;
 		mem_addr  : in  unsigned(MEM_A_BITS-1 downto 0);
 		mem_wdata : in  std_logic_vector(D_BITS-1 downto 0);
+		mem_wmask : in  std_logic_vector(D_BITS/8-1 downto 0) := (others => '0');
 		mem_rdy   : out std_logic;
 		mem_rstb  : out std_logic;
 		mem_rdata : out std_logic_vector(D_BITS-1 downto 0);
@@ -120,7 +121,7 @@ begin  -- architecture rtl
 
 	-- write data & mask
 	mig_wr_data <= mem_wdata;
-	mig_wr_mask <= (others => '0'); -- all bytes
+	mig_wr_mask <= mem_wmask;
 
 	-- read reply
 	mig_rd_en <= not mig_rd_empty;

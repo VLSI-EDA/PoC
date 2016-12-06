@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-filter_mean
-###########
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:filter_mean:
+
+PoC.misc.filter.mean
+####################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/misc/filter/filter_mean.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/misc/filter/filter_mean_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <misc/filter/filter_mean.vhdl>`
+      * |gh-tb| :poctb:`Testbench <misc/filter/filter_mean_tb.vhdl>`
 
 .. TODO:: No documentation available.
 
@@ -14,7 +38,8 @@ filter_mean
    :linenos:
    :lines: 37-48
 
-Source file: `misc/filter/filter_mean.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/misc/filter/filter_mean.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`misc/filter/filter_mean.vhdl <misc/filter/filter_mean.vhdl>`

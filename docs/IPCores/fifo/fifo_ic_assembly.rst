@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-fifo_ic_assembly
-################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:fifo_ic_assembly:
+
+PoC.fifo.ic_assembly
+####################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_ic_assembly.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/fifo/fifo_ic_assembly_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <fifo/fifo_ic_assembly.vhdl>`
+      * |gh-tb| :poctb:`Testbench <fifo/fifo_ic_assembly_tb.vhdl>`
 
 This module assembles a FIFO stream from data blocks that may arrive
 slightly out of order. The arriving data is ordered according to their
@@ -25,7 +49,8 @@ the transmission of data blocks. This applies to many DMA implementations.
    :linenos:
    :lines: 45-78
 
-Source file: `fifo/fifo_ic_assembly.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/fifo/fifo_ic_assembly.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`fifo/fifo_ic_assembly.vhdl <fifo/fifo_ic_assembly.vhdl>`

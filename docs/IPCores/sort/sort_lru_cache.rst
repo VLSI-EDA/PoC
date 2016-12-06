@@ -1,6 +1,30 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-sort_lru_cache
-##############
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
+
+.. _IP:sort_lru_cache:
+
+PoC.sort.lru_cache
+##################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_lru_cache.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/sort/sort_lru_cache_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <sort/sort_lru_cache.vhdl>`
+      * |gh-tb| :poctb:`Testbench <sort/sort_lru_cache_tb.vhdl>`
 
 This is an optimized implementation of ``sort_lru_list`` to be used for caches.
 Only keys are stored within this list, and these keys are the index of the
@@ -28,7 +52,8 @@ Supported operations:
    :linenos:
    :lines: 56-70
 
-Source file: `sort/sort_lru_cache.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/sort/sort_lru_cache.vhdl>`_
 
 
+.. only:: latex
 
+   Source file: :pocsrc:`sort/sort_lru_cache.vhdl <sort/sort_lru_cache.vhdl>`

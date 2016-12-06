@@ -57,6 +57,9 @@ class ExtendedSectionProxy(SectionProxy):
 			raise KeyError(self._name + ":" + key)
 		return self._parser.get(self._name, key)
 
+	def __setitem__(self, key, value):
+		super().__setitem__(key, value)
+		self.parser.Interpolation.clear_cache()
 
 # WORKAROUND: Required for ReadTheDocs, which doesn't support Python 3.5 yet.
 if (version_info < (3,5,0)):
@@ -331,6 +334,11 @@ class ExtendedConfigParser(ConfigParser):
 		elif (interpolation is _UNSET): self._interpolation = ExtendedInterpolation()
 		else:                           self._interpolation = interpolation
 
+	def clear(self):
+		super().clear()
+		if isinstance(self._interpolation, ExtendedInterpolation):
+			self._interpolation.clear_cache()
+
 	@property
 	def Interpolation(self):
 		return self._interpolation
@@ -365,8 +373,8 @@ class ExtendedConfigParser(ConfigParser):
 
 	def has_option(self, section, option):
 		"""Check for the existence of a given option in a given section.
-		If the specified `section' is None or an empty string, DEFAULT is
-		assumed. If the specified `section' does not exist, returns False."""
+		If the specified `section` is None or an empty string, DEFAULT is
+		assumed. If the specified `section` does not exist, returns False."""
 		option = self.optionxform(option)
 		if ((not section) or (section == self.default_section)):
 			sect = self._defaults

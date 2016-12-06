@@ -1,16 +1,39 @@
+.. # Load pre-defined aliases from docutils
+   # <file> is used to denote the special path
+   # <Python>\Lib\site-packages\docutils\parsers\rst\include
 
-ddr3_mem2mig_adapter_Series7
-############################
+.. include:: <mmlalias.txt>
+.. include:: <isonum.txt>
 
-Adapter between the :doc:`PoC.Mem </References/Interfaces/Memory>`
-interface and the application interface ("app")
-of the Xilinx MIG IP core for 7-Series	FPGAs.
+.. _IP:ddr3_mem2mig_adapter_Series7:
+
+PoC.mem.ddr3.mem2mig_adapter_Series7
+####################################
+
+.. only:: html
+
+   .. |gh-src| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl
+               :alt: Source Code on GitHub
+   .. |gh-tb| image:: /_static/logos/GitHub-Mark-32px.png
+               :scale: 40
+               :target: https://github.com/VLSI-EDA/PoC/blob/master/tb/mem/ddr3/ddr3_mem2mig_adapter_Series7_tb.vhdl
+               :alt: Source Code on GitHub
+
+   .. sidebar:: GitHub Links
+
+      * |gh-src| :pocsrc:`Sourcecode <mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl>`
+      * |gh-tb| :poctb:`Testbench <mem/ddr3/ddr3_mem2mig_adapter_Series7_tb.vhdl>`
+
+Adapter between the :ref:`PoC.Mem <INT:PoC.Mem>` interface and the
+application interface ("app") of the Xilinx MIG IP core for 7-Series	FPGAs.
 
 Simplifies the application interface ("app") of the Xilinx MIG IP core.
 The PoC.Mem interface provides single-cycle fully pipelined read/write access
 to the memory. All accesses are word-aligned. Always all bytes of a word are
 written to the memory. More details can be found
-:doc:`here </References/Interfaces/Memory>`.
+:ref:`here <INT:PoC.Mem>`.
 
 Generic parameters:
 
@@ -34,9 +57,10 @@ Containts only combinational logic.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 61-96
-
-Source file: `mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl <https://github.com/VLSI-EDA/PoC/blob/master/src/mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl>`_
+   :lines: 60-96
 
 
 
+.. only:: latex
+
+   Source file: :pocsrc:`mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl <mem/ddr3/ddr3_mem2mig_adapter_Series7.vhdl>`

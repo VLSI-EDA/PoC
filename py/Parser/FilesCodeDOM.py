@@ -8,10 +8,6 @@
 #
 # Python Module:    TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
@@ -596,7 +592,7 @@ class InterpolateLiteral(Literal):
 			token = yield
 			if isinstance(token, CharacterToken):
 				if (token.Value == ":"):
-					if (foundDelimiter == False):
+					if (foundDelimiter is False):
 						foundDelimiter = True
 					else:
 						raise MismatchingParserResult("InterpolateLiteralParser: ")
@@ -611,7 +607,7 @@ class InterpolateLiteral(Literal):
 			else:
 				raise MismatchingParserResult("InterpolateLiteralParser: ")
 
-		if (foundDelimiter == True):
+		if (foundDelimiter is True):
 			sectionName = value[False]
 			optionName =  value[True]
 		else:
