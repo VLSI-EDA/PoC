@@ -593,14 +593,22 @@ function Initialize-DestinationDirectory
 	param(
 		[string]$DestinationDirectory
 	)
+	# set default values
+	$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+	$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+	if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+	if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
 
 	if (-not (Test-Path $DestinationDirectory -PathType Container))
-	{	mkdir $DestinationDirectory -ErrorAction SilentlyContinue | Out-Null
+	{	$EnableDebug -and		(Write-Host "  mkdir $DestinationDirectory -ErrorAction SilentlyContinue | Out-Null" -ForegroundColor DarkGray	) | Out-Null
+		mkdir $DestinationDirectory -ErrorAction SilentlyContinue | Out-Null
 		if (-not $?)
 		{	Write-Host "[ERROR]: Cannot create output directory '$DestinationDirectory'." -ForegroundColor Red
 			Exit-PrecompileScript -1
 		}
 	}
+	$EnableDebug -and		(Write-Host "  cd $DestinationDirectory" -ForegroundColor DarkGray	) | Out-Null
 	cd $DestinationDirectory
 	if (-not $?)
 	{	Write-Host "[ERROR]: Cannot change to output directory '$DestinationDirectory'." -ForegroundColor Red
@@ -616,14 +624,26 @@ function New-ModelSim_ini
 		.DESCRIPTION
 		Undocumented
 	#>
-	$ModelSim_ini = "modelsim.ini"
+	[CmdletBinding()]
+	param(
+		[string]$ModelSim_ini = "modelsim.ini"
+	)
+	# set default values
+	$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
+	$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
+	if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
+	if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+
+	# $ModelSim_ini = "modelsim.ini"
+	$EnableVerbose -and		(Write-Host "Writing new '$ModelSim_ini'..." -ForegroundColor Gray	) | Out-Null
 	"[Library]" | Out-File $ModelSim_ini -Encoding ascii
 	if (-not $?)
-	{	Write-Host "[ERROR]: Cannot create initial modelsim.ini." -ForegroundColor Red
+	{	Write-Host "[ERROR]: Cannot create initial $ModelSim_ini." -ForegroundColor Red
 		Exit-PrecompileScript -1
 	}
-	if (Test-Path "..\modelsim.ini")
-	{	"others = ../modelsim.ini" | Out-File $ModelSim_ini -Append -Encoding ascii		}
+	if (Test-Path "..\$ModelSim_ini")
+	{	"others = ../$ModelSim_ini" | Out-File $ModelSim_ini -Append -Encoding ascii		}
 }
 
 function Open-ISEEnvironment

@@ -106,7 +106,7 @@ if ($GHDL)
 	# Assemble output directory
 	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$GHDLAlteraScript = "$GHDLScriptDir\compile-altera.ps1"
 	if (-not (Test-Path $GHDLAlteraScript -PathType Leaf))
@@ -155,7 +155,7 @@ if ($Questa)
 	# Assemble output directory
 	$DestDir="$PoCRootDir\$PrecompiledDir\$VSimDirName\$AlteraDirName"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$QuartusBinDir = 	Get-QuartusBinaryDirectory $PoCPS1
 	$Quartus_sh =			"$QuartusBinDir\quartus_sh.exe"

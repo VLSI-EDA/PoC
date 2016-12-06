@@ -234,8 +234,6 @@ class QuestaVHDLCompiler(Executable, ToolMixIn):
 		return "vcom " + " ".join(parameterList[1:])
 
 
-
-
 class QuestaSimulator(Executable, ToolMixIn):
 	def __init__(self, toolchain : ToolMixIn):
 		ToolMixIn.__init__(

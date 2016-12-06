@@ -86,7 +86,7 @@ if ($Help)
 $GHDL,$Questa =			Resolve-Simulator $All $GHDL $Questa
 
 $PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
-$OSVVMDirName =			"osvvm"
+# $OSVVMDirName =			"osvvm"
 $SourceDirectory =	"$PoCRootDir\$OSVVMSourceDirectory"
 
 # GHDL
@@ -102,7 +102,7 @@ if ($GHDL)
 	# Assemble output directory
 	$DestDir = Convert-Path (Resolve-Path "$PoCRootDir\$PrecompiledDir\$GHDLDirName")
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$GHDLOSVVMScript = "$GHDLScriptDir\compile-osvvm.ps1"
 	if (-not (Test-Path $GHDLOSVVMScript -PathType Leaf))
@@ -133,14 +133,15 @@ if ($Questa)
 {	Write-Host "Pre-compiling OSVVM's simulation libraries for QuestaSim" -ForegroundColor Cyan
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$VSimBinDir =			Get-ModelSimBinaryDirectory $PoCPS1
-	$VSimDirName =		Get-QuestaSimDirectoryName $PoCPS1
+	$VSimBinDir =		Get-ModelSimBinaryDirectory $PoCPS1 -Verbose:$EnableVerbose -Debug:$EnableDebug
+	$VSimDirName =	Get-QuestaSimDirectoryName $PoCPS1 -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	# Assemble output directory
-	$DestDir = Convert-Path (Resolve-Path "$PoCRootDir\$PrecompiledDir\$VSimDirName\$OSVVMDirName")
+	$VSimDestDir =	Convert-Path (Resolve-Path "$PoCRootDir\$PrecompiledDir\$VSimDirName")
+	$DestDir =			"$VSimDestDir"
+	$ModelSimINI =	"$VSimDestDir\modelsim.ini"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
-	cd ..
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$Library = "osvvm"
 	$Files = @(
@@ -167,16 +168,16 @@ if ($Questa)
 	Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow
 	$InvokeExpr = "$VSimBinDir\vlib.exe " + $Library + " 2>&1"
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVLibLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-	$InvokeExpr = "$VSimBinDir\vmap.exe -del " + $Library + " 2>&1"
+	$InvokeExpr = "$VSimBinDir\vmap.exe -modelsimini $ModelSimINI -del " + $Library + " 2>&1"
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-	$InvokeExpr = "$VSimBinDir\vmap.exe " + $Library + " $DestDir\$Library 2>&1"
+	$InvokeExpr = "$VSimBinDir\vmap.exe -modelsimini $ModelSimINI " + $Library + " $DestDir\$Library 2>&1"
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	Write-Host "Compiling library '$Library' with vcom..." -ForegroundColor Yellow
 	$ErrorCount += 0
 	foreach ($File in $SourceFiles)
 	{	Write-Host "Compiling '$File'..." -ForegroundColor DarkCyan
-		$InvokeExpr = "$VSimBinDir\vcom.exe -suppress 1246 -2008 -work $Library " + $File + " 2>&1"
+		$InvokeExpr = "$VSimBinDir\vcom.exe -suppress 1246 -2008 -modelsimini $ModelSimINI -work $Library " + $File + " 2>&1"
 		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVComLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 		if ($LastExitCode -ne 0)
 		{	$ErrorCount += 1
