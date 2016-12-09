@@ -1,0 +1,5 @@
+#formats:
+#  - pdf
+requirements_file: tools/ReadTheDocs/requirements.txt
+python:
+  version: 3

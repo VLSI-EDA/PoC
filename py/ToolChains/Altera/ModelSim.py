@@ -9,16 +9,10 @@
 #
 # Python Class:     Altera ModelSim specific classes
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,49 +27,61 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
+# load dependencies
+from enum                         import unique
+from re                           import compile as re_compile
+from subprocess                   import check_output
+
+from lib.Functions                import Init
+from ToolChains                   import ConfigurationException, EditionDescription, Edition
+from ToolChains.Altera            import AlteraException
+from ToolChains.Mentor.ModelSim   import Configuration as Mentor_ModelSim_Configuration, ModelSimException as Mentor_ModelSimException
+
+
+__api__ = [
+	'ModelSimException',
+	'AlteraModelSimEditions',
+	'Configuration'
+]
+__all__ = __api__
+
+
+class ModelSimException(AlteraException, Mentor_ModelSimException):
 	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.ModelSim")
 
 
-from re                      import compile as RegExpCompile
-from subprocess             import check_output
-
-from Base.Configuration import Configuration as BaseConfiguration, ConfigurationException
-from ToolChains.Altera.Altera import AlteraException
-
-
-class ModelSimException(AlteraException):
-	pass
+@unique
+class AlteraModelSimEditions(Edition):
+	"""Enumeration of all ModelSim editions provided by Altera."""
+	ModelSimAlteraEdition =         EditionDescription(Name="ModelSim Altera Edition",          Section=None)
+	ModelSimAlteraStarterEdition =  EditionDescription(Name="ModelSim Altera Starter Edition",  Section=None)
 
 
-class Configuration(BaseConfiguration):
-	_vendor =    "Altera"
-	_toolName =  "ModelSim Altera Edition"
-	_section =  "INSTALL.Altera.ModelSim"
+class Configuration(Mentor_ModelSim_Configuration):
+	_vendor =               "Altera"                    #: The name of the tools vendor.
+	_toolName =             "ModelSim Altera Edition"   #: The name of the tool.
+	_section  =             "INSTALL.Altera.ModelSim"   #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
 	_template = {
 		"Windows": {
 			_section: {
 				"Version":                "10.4b",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ase",
+				"Edition":                "ModelSim Altera Edition",
+				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ae",
 				"BinaryDirectory":        "${InstallationDirectory}/win32aloem"
 			}
 		},
 		"Linux": {
 			_section: {
 				"Version":                "10.4b",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ase",
+				"Edition":                "ModelSim Altera Edition",
+				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ae",
 				"BinaryDirectory":        "${InstallationDirectory}/linuxaloem"
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Altera is configured
+		"""Check if general Altera support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Altera']) != 0)
 
 	def ConfigureForAll(self):
@@ -83,12 +89,36 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is ModelSim Altera Edition installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure ModelSim version
+
+				changed,edition = self._ConfigureEdition()
+				if changed:
+					configSection = self._host.PoCConfig[self._section]
+					if (edition is AlteraModelSimEditions.ModelSimAlteraEdition):
+						configSection['InstallationDirectory'] = self._host.PoCConfig.get(self._section, 'InstallationDirectory', raw=True).replace("_ase", "_ae")
+					elif (edition is AlteraModelSimEditions.ModelSimAlteraStarterEdition):
+						configSection['InstallationDirectory'] = self._host.PoCConfig.get(self._section, 'InstallationDirectory', raw=True).replace("_ae", "_ase")
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__GetModelSimVersion(binPath)
+				self._host.LogNormal("{DARK_GREEN}Altera ModelSim is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
+
+	def _ConfigureEdition(self):
+		"""Configure ModelSim for Altera."""
+		configSection =   self._host.PoCConfig[self._section]
+		defaultEdition =  AlteraModelSimEditions.Parse(configSection['Edition'])
+		edition =         super()._ConfigureEdition(AlteraModelSimEditions, defaultEdition)
+
+		if (edition is not defaultEdition):
+			configSection['Edition'] = edition.Name
+			self._host.PoCConfig.Interpolation.clear_cache()
+			return (True, edition)
+		else:
+			return (False, edition)
 
 	def __GetModelSimVersion(self, binPath):
 		if (self._host.Platform == "Windows"):
@@ -97,8 +127,8 @@ class Configuration(BaseConfiguration):
 			vsimPath = binPath / "vsim"
 
 		if not vsimPath.exists():
-			raise ConfigurationException("Executable '{0!s}' not found.".format(vsimPath)) from FileNotFoundError(
-				str(vsimPath))
+			raise ConfigurationException("Executable '{0!s}' not found.".format(vsimPath)) \
+				from FileNotFoundError(str(vsimPath))
 
 		# get version and backend
 		try:
@@ -108,7 +138,7 @@ class Configuration(BaseConfiguration):
 
 		version = None
 		versionRegExpStr = r"^.* vsim (.+?) "
-		versionRegExp = RegExpCompile(versionRegExpStr)
+		versionRegExp = re_compile(versionRegExpStr)
 		for line in output.split('\n'):
 			if version is None:
 				match = versionRegExp.match(line)

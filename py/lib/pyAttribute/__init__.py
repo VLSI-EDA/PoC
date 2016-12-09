@@ -15,10 +15,6 @@
 #
 # Python package:	    pyAttribute Implementation
 #
-# Description:
-# ------------------------------------
-#		TODO
-#
 # License:
 # ============================================================================
 # Copyright 2007-2016 Patrick Lehmann - Dresden, Germany
@@ -36,6 +32,17 @@
 # limitations under the License.
 # ============================================================================
 #
+__api__ = [
+	'Attribute',
+	'AttributeHelperMixin'
+]
+__all__ = __api__
+
+# TODO: implement class, method, function attributes
+# TODO: implement unique attributes
+# TODO: add an attacheHelper methods option
+# TODO: implement a static HasAttribute method
+
 class Attribute:
 	__AttributesMemberName__ = "__pyattr__"
 	_debug = False
@@ -85,14 +92,16 @@ class AttributeHelperMixin:
 				if hasattr(func, '__dict__')
 			}.items()
 
-	def HasAttribute(self, method):
+	@staticmethod
+	def HasAttribute(method): # TODO: add a tuple based type filer
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
 			attributeList = method.__dict__[Attribute.__AttributesMemberName__]
 			return (isinstance(attributeList, list) and (len(attributeList) != 0))
 		else:
 			return False
 
-	def GetAttributes(self, method):
+	@staticmethod
+	def GetAttributes(method): # TODO: add a tuple based type filer
 		if (Attribute.__AttributesMemberName__ in method.__dict__):
 			attributeList = method.__dict__[Attribute.__AttributesMemberName__]
 			if isinstance(attributeList, list):

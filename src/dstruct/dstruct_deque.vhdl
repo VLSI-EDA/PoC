@@ -15,7 +15,7 @@
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
---                     Chair for VLSI-Design, Diagnostics and Architecture
+--                     Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -115,17 +115,15 @@ architecture rtl of dstruct_deque is
 
 begin
 
-    ram : entity poc.ocram_tdp
+  ram : entity poc.ocram_tdp_wf
   generic map(
     A_BITS => A_BITS,
     D_BITS => D_BITS,
     FILENAME =>  ""
   )
   port map(
-    clk1 => clk,
-    clk2 => clk,
-    ce1	=> '1',
-    ce2	=> '1',
+    clk => clk,
+    ce 	=> '1',
     we1	=> weA,
     we2	=> weB,
     a1	=> adrA,

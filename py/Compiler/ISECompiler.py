@@ -5,18 +5,12 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:     This ISECompiler compiles any IPCores for the ISE tool chain
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Xilinx ISE synthesizer (compiler).
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,26 +25,22 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Compiler.XCOCompiler")
-
-
 # load dependencies
 from Base.Project           import ToolChain, Tool
-from Base.Compiler          import Compiler as BaseCompiler
-from PoC.Entity             import WildCard, FQN, EntityTypes
+from DataBase.Entity        import WildCard, FQN, EntityTypes
+from Compiler               import Compiler as BaseCompiler
 from Compiler.XCOCompiler   import Compiler as XCOCompiler
 from Compiler.XSTCompiler   import Compiler as XSTCompiler
 
 
+__api__ = [
+	'Compiler'
+]
+__all__ = __api__
+
 class Compiler(BaseCompiler):
-	_TOOL_CHAIN =  ToolChain.Xilinx_ISE
-	_TOOL =        Tool.Any
+	TOOL_CHAIN =      ToolChain.Xilinx_ISE
+	TOOL =            Tool.Any
 
 	def __init__(self, host, dryRun, noCleanUp):
 		super().__init__(host, dryRun, noCleanUp)

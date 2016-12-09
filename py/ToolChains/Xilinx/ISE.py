@@ -6,18 +6,12 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Xilinx ISE specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Xilinx ISE specific classes
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,55 +26,70 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Xilinx.ISE")
+# load dependencies
+from subprocess               import check_output
+
+from lib.Functions            import CallByRefParam, Init
+from Base.Exceptions          import PlatformNotSupportedException
+from Base.Executable          import Executable
+from Base.Executable          import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from Base.Logging             import LogEntry, Severity
+from Base.Project             import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from ToolChains               import ToolMixIn, ConfigurationException, ToolConfiguration
+from ToolChains.Xilinx        import XilinxException
+from Simulator                import SimulationResult, PoCSimulationResultFilter
 
 
-from subprocess            import check_output
-
-from Base.Configuration          import Configuration as BaseConfiguration, ConfigurationException
-from Base.Exceptions            import PlatformNotSupportedException
-from Base.Executable            import Executable
-from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
-from Base.Logging                import LogEntry, Severity
-from Base.Project                import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
-from Base.Simulator              import SimulationResult, PoCSimulationResultFilter
-from ToolChains.Xilinx.Xilinx    import XilinxException
-from lib.Functions              import CallByRefParam
+__api__ = [
+	'ISEException',
+	'Configuration',
+	'ISE',
+	'Fuse',
+	'ISESimulator',
+	'Xst',
+	'CoreGenerator',
+	'VhCompFilter',
+	'FuseFilter',
+	'SimulatorFilter',
+	'XstFilter',
+	'CoreGeneratorFilter',
+	'ISEProject',
+	'ISEProjectFile',
+	'UserConstraintFile'
+]
+__all__ = __api__
 
 
 class ISEException(XilinxException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =   "Xilinx"
-	_toolName = "Xilinx ISE"
-	_section =  "INSTALL.Xilinx.ISE"
+class Configuration(ToolConfiguration):
+	_vendor =               "Xilinx"                    #: The name of the tools vendor.
+	_toolName =             "Xilinx ISE"                #: The name of the tool.
+	_section  =             "INSTALL.Xilinx.ISE"        #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Xilinx ISE supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
 				"Version":                "14.7",
-				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
-				"BinaryDirectory":        "${InstallationDirectory}/ISE/bin/nt64"
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/ISE/bin/nt64")
 			}
 		},
 		"Linux": {
 			_section: {
 				"Version":                "14.7",
-				"InstallationDirectory":  "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS",
-				"BinaryDirectory":        "${InstallationDirectory}/ISE/bin/lin64"
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Xilinx:InstallationDirectory}/${Version}/ISE_DS"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/ISE/bin/lin64")
 			}
 		}
-	}
+	}                                                 #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Xilinx is configured
+		"""Check if general Xilinx support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Xilinx']) != 0)
 
 	def ConfigureForAll(self):
@@ -88,10 +97,17 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Xilinx ISE installed on your system?")):
 				self.ClearSection()
 			else:
-				self._host.PoCConfig[self._section]['Version'] = self._template[self._host.Platform][self._section]['Version']
+				# Configure ISE version
+				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__CheckISEVersion(binPath)
+				self._host.LogNormal("{DARK_GREEN}Xilinx ISE is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
@@ -111,40 +127,31 @@ class Configuration(BaseConfiguration):
 			raise ConfigurationException("ISE version mismatch. Expected version 14.7 (P.20131013).")
 
 
-class ISEMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		self._version =             version
-		self._Logger =              logger
-
-
-class ISE(ISEMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-
+class ISE(ToolMixIn):
 	def GetVHDLCompiler(self):
 		raise NotImplementedError("ISE.GetVHDLCompiler")
-		# return ISEVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		# return ISEVHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._logger)
 
 	def GetFuse(self):
-		return Fuse(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return Fuse(self)
 
 	def GetXst(self):
-		return Xst(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return Xst(self)
 
 	def GetCoreGenerator(self):
-		return CoreGenerator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return CoreGenerator(self)
 
 
-class Fuse(Executable, ISEMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):    executablePath = binaryDirectoryPath / "fuse.exe"
-		elif (platform == "Linux"):    executablePath = binaryDirectoryPath / "fuse"
+class Fuse(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "fuse.exe"
+		elif (self._platform == "Linux"):    executablePath = self._binaryDirectoryPath / "fuse"
 		else:                          raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -316,13 +323,16 @@ class ISESimulator(Executable):
 		return simulationResult.value
 
 
-class Xst(Executable, ISEMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):      executablePath = binaryDirectoryPath / "xst.exe"
-		elif (platform == "Linux"):      executablePath = binaryDirectoryPath / "xst"
-		else:                            raise PlatformNotSupportedException(platform)
-		Executable.__init__(self, platform, dryrun, executablePath, logger=logger)
+class Xst(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):      executablePath = self._binaryDirectoryPath / "xst.exe"
+		elif (self._platform == "Linux"):      executablePath = self._binaryDirectoryPath / "xst"
+		else:                            raise PlatformNotSupportedException(self._platform)
+		Executable.__init__(self, self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -396,13 +406,16 @@ class Xst(Executable, ISEMixIn):
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
-class CoreGenerator(Executable, ISEMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ISEMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (platform == "Windows"):      executablePath = binaryDirectoryPath / "coregen.exe"
-		elif (platform == "Linux"):      executablePath = binaryDirectoryPath / "coregen"
-		else:                            raise PlatformNotSupportedException(platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+class CoreGenerator(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):      executablePath = self._binaryDirectoryPath / "coregen.exe"
+		elif (self._platform == "Linux"):      executablePath = self._binaryDirectoryPath / "coregen"
+		else:                            raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 

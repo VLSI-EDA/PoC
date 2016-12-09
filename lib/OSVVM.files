@@ -18,11 +18,11 @@ elseif (VHDLVersion = 2008) then
 			report "No precompiled OSVVM library for GHDL found."
 		end if
 	elseif (Tool = "Mentor_vSim") then
-		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:ModelSimFiles} / OSVVM_Directory))
+		path OSVVM_LibraryPath = (PreCompiled / (${CONFIG.DirectoryNames:QuestaSimFiles} / OSVVM_Directory))
 		if ?{OSVVM_LibraryPath} then
 			library osvvm	OSVVM_LibraryPath
 		else
-			report "No precompiled QuestaSim/ModelSim library for GHDL found."
+			report "No precompiled OSVVM library for QuestaSim/ModelSim found."
 		end if
 	else
 		# TODO self-compile section?

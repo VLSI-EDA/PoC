@@ -28,6 +28,15 @@ if grcat $TRAVIS_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
   exec 1>&${COPROC[1]}-
 fi
 
+
+echo -e "Testing PoC infrastructure (1/1)..."
+$POCROOT/poc.sh list-testbenches "PoC.*"
+
+
+echo -e "Running one testbenche in debug mode..."
+$POCROOT/poc.sh -d ghdl "PoC.arith.prng"
+
+
 echo -e "Running all testbenches..."
 mode=-q
 if [ "x$1" = 'x-d' -o "x$1" = 'x-v' ]; then

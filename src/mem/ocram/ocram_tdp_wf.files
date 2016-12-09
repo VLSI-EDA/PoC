@@ -1,0 +1,12 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+# Common PoC packages for configuration, synthesis and simulation
+include				"src/common/common.files"
+
+# PoC.mem.ocram
+include       "src/mem/ocram/ocram_tdp.files"
+vhdl    poc   "src/mem/ocram/ocram_tdp_wf.vhdl"

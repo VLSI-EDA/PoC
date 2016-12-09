@@ -6,18 +6,12 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    GHDL simulator.
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,45 +26,48 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Simulator.GHDLSimulator")
-
-
 # load dependencies
 from pathlib                import Path
 
 from Base.Exceptions        import NotConfiguredException
 from Base.Logging           import Severity
 from Base.Project           import FileTypes, VHDLVersion, ToolChain, Tool
-from Base.Simulator         import SimulatorException, Simulator as BaseSimulator, VHDL_TESTBENCH_LIBRARY_NAME, SkipableSimulatorException
+from Simulator              import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 from ToolChains.GHDL        import GHDL, GHDLException, GHDLReanalyzeException
 from ToolChains.GTKWave     import GTKWave
 
 
+__api__ = [
+	'Simulator'
+]
+__all__ = __api__
+
+
 class Simulator(BaseSimulator):
-	_TOOL_CHAIN =            ToolChain.GHDL_GTKWave
-	_TOOL =                  Tool.GHDL
+	"""This class encapsulates the GHDL simulator."""
+
+	TOOL_CHAIN =      ToolChain.GHDL_GTKWave
+	TOOL =            Tool.GHDL
 
 	class __Directories__(BaseSimulator.__Directories__):
 		GTKWBinary = None
 
-	def __init__(self, host, dryRun, guiMode):
-		super().__init__(host, dryRun)
-
-		self._guiMode =       guiMode
-		self._vhdlGenerics =  None
-		self._toolChain =     None
+	def __init__(self, host, dryRun, simulationSteps):
+		"""Constructor"""
+		super().__init__(host, dryRun, simulationSteps)
 
 		ghdlFilesDirectoryName =        host.PoCConfig['CONFIG.DirectoryNames']['GHDLFiles']
 		self.Directories.Working =      host.Directories.Temp / ghdlFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / ghdlFilesDirectoryName
 
-		if (guiMode is True):
+		self._PrepareSimulationEnvironment()
+		self._PrepareSimulator()
+
+		if (self._toolChain.Backend == "mcode"):
+			# A separate elaboration step is not implemented in GHDL (mcode)
+			self._simulationSteps &= ~SimulationSteps.Elaborate
+
+		if (SimulationSteps.ShowWaveform in self._simulationSteps):
 			# prepare paths for GTKWave, if configured
 			sectionName = 'INSTALL.GTKWave'
 			if (len(host.PoCConfig.options(sectionName)) != 0):
@@ -78,11 +75,8 @@ class Simulator(BaseSimulator):
 			else:
 				raise NotConfiguredException("No GHDL compatible waveform viewer is configured on this system.")
 
-		self._PrepareSimulationEnvironment()
-		self._PrepareSimulator()
-
 	def _PrepareSimulator(self):
-		# create the GHDL executable factory
+		"""Create the GHDL executable factory instance."""
 		self.LogVerbose("Preparing GHDL simulator.")
 		ghdlSection =     self.Host.PoCConfig['INSTALL.GHDL']
 		binaryPath =      Path(ghdlSection['BinaryDirectory'])
@@ -91,6 +85,8 @@ class Simulator(BaseSimulator):
 		self._toolChain = GHDL(self.Host.Platform, self.DryRun, binaryPath, version, backend, logger=self.Logger)
 
 	def _RunAnalysis(self, testbench):
+		""""""
+
 		# create a GHDLAnalyzer instance
 		ghdl = self._toolChain.GetGHDLAnalyze()
 		ghdl.Parameters[ghdl.FlagVerbose] =           (self.Logger.LogLevel is Severity.Debug)
@@ -121,6 +117,8 @@ class Simulator(BaseSimulator):
 				raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(file.Path))
 
 	def _SetVHDLVersionAndIEEEFlavor(self, ghdl):
+		""""""
+
 		ghdl.Parameters[ghdl.SwitchIEEEFlavor] =  "synopsys"
 
 		if (self._vhdlVersion is VHDLVersion.VHDL93):
@@ -129,6 +127,8 @@ class Simulator(BaseSimulator):
 			ghdl.Parameters[ghdl.SwitchVHDLVersion] = repr(self._vhdlVersion)[-2:]
 
 	def _SetExternalLibraryReferences(self, ghdl):
+		""""""
+
 		# add external library references
 		externalLibraryReferences = []
 		for extLibrary in self._pocProject.ExternalVHDLLibraries:
@@ -140,6 +140,8 @@ class Simulator(BaseSimulator):
 	# running elaboration
 	# ==========================================================================
 	def _RunElaboration(self, testbench):
+		""""""
+
 		if (self._toolChain.Backend == "mcode"):
 			return
 
@@ -161,6 +163,8 @@ class Simulator(BaseSimulator):
 			raise SkipableSimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
 
 	def _RunSimulation(self, testbench):
+		""""""
+
 		# create a GHDLRun instance
 		ghdl = self._toolChain.GetGHDLRun()
 		ghdl.Parameters[ghdl.FlagVerbose] =             (self.Logger.LogLevel is Severity.Debug)
@@ -180,7 +184,7 @@ class Simulator(BaseSimulator):
 		# configure RUNOPTS
 		ghdl.RunOptions[ghdl.SwitchIEEEAsserts] = "disable-at-0"		# enable, disable, disable-at-0
 		# set dump format to save simulation results to *.vcd file
-		if (self._guiMode):
+		if (SimulationSteps.ShowWaveform in self._simulationSteps):
 			configSection = self.Host.PoCConfig[testbench.ConfigSectionName]
 			testbench.WaveformOptionFile = Path(configSection['ghdlWaveformOptionFile'])
 			testbench.WaveformFileFormat = configSection['ghdlWaveformFileFormat']
@@ -201,11 +205,13 @@ class Simulator(BaseSimulator):
 
 			testbench.WaveformFile = waveformFilePath
 			if testbench.WaveformOptionFile.exists():
-				ghdl.RunOptions[ghdl.SwitchWaveformSelect] =  testbench.WaveformOptionFile
+				ghdl.RunOptions[ghdl.SwitchWaveformOptionFile] =  testbench.WaveformOptionFile
 
 		testbench.Result = ghdl.Run()
 
 	def _RunView(self, testbench):
+		"""foo"""
+
 		if (not testbench.WaveformFile.exists()):
 			raise SkipableSimulatorException("Waveform file '{0!s}' not found.".format(testbench.WaveformFile)) \
 				from FileNotFoundError(str(testbench.WaveformFile))

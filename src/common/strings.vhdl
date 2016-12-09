@@ -15,7 +15,7 @@
 -- License:
 -- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
---										 Chair for VLSI-Design, Diagnostics and Architecture
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -178,6 +178,7 @@ package body strings is
 		end loop;
 
 		report "Unknown IPStyle: '" & str & "'" severity FAILURE;
+		return IPSTYLE_UNKNOWN;
 	end function;
 
 	-- to_char
@@ -552,7 +553,8 @@ package body strings is
 			when 'd' =>			return to_digit_dec(chr);
 			when 'h' =>			return to_digit_hex(chr);
 			when others =>	report "Unknown base character: " & base & "." severity FAILURE;
-		end case;					-- return statement is explicitly missing otherwise XST won't stop
+											return -1;
+		end case;
 	end function;
 
 	-- to_natural*
@@ -636,7 +638,8 @@ package body strings is
 			when 'd' =>			return to_natural_dec(str);
 			when 'h' =>			return to_natural_hex(str);
 			when others =>	report "Unknown base character: " & base & "." severity FAILURE;
-		end case;					-- return statement is explicitly missing otherwise XST won't stop
+											return -1;
+		end case;
 	end function;
 
 	-- to_raw*

@@ -15,7 +15,7 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,14 +59,7 @@ function Open-Environment
 		}
 
 		Write-Host "Loading Xilinx ISE environment '$ISE_SettingsFile'" -ForegroundColor Yellow
-		if (-not (Get-Module -ListAvailable PSCX))
-		{	Write-Host "[ERROR]: PowerShell Community Extensions (PSCX) is not installed." -ForegroundColor Red
-			return 1
-		}
-		Import-Module PSCX
-
 		Push-EnvironmentBlock -Description "Before loading Xilinx ISE."
-
 		Invoke-BatchFile -path $ISE_SettingsFile
 		return 0
 	}

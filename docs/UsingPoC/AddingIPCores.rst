@@ -1,3 +1,4 @@
+.. _USING:AddIP:
 
 Adding IP Cores to a Project
 ############################

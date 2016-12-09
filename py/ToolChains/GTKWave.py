@@ -7,18 +7,12 @@
 #                   Martin Zabel
 #                   Thomas B. Preusser
 #
-# Python Class:      GTKWave specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     GTKWave specific classes
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,57 +27,63 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GTKWave")
+# load dependencies
+from pathlib                  import Path
+from re                       import compile as re_compile
+from subprocess               import check_output, CalledProcessError
+
+from lib.Functions            import Init
+from Base.Exceptions          import PlatformNotSupportedException
+from Base.Logging             import LogEntry, Severity
+from Base.Executable          import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
+from ToolChains               import ToolChainException, ConfigurationException, ToolConfiguration
 
 
-from pathlib                import Path
-from re                     import compile as RegExpCompile
-from subprocess             import check_output, CalledProcessError
+__api__ = [
+	'GTKWaveException',
+	'Configuration',
+	'GTKWave',
+	'GTKWaveFilter'
+]
+__all__ = __api__
 
-from Base.Configuration      import Configuration as BaseConfiguration, ConfigurationException
-from Base.Exceptions        import PlatformNotSupportedException
-from Base.Executable        import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
-from Base.Logging            import LogEntry, Severity
-from Base.ToolChain          import ToolChainException
 
 
 class GTKWaveException(ToolChainException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      None
-	_toolName =    "GTKWave"
-	_section =     "INSTALL.GTKWave"
+class Configuration(ToolConfiguration):
+	_vendor =               "TonyBybell"                #: The name of the tools vendor.
+	_toolName =             "GTKWave"                   #: The name of the tool.
+	_section  =             "INSTALL.GTKWave"           #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: GTKWave supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "3.3.71",
-				"InstallationDirectory":  "C:/Program Files (x86)/GTKWave",
-				"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"Version":                "3.3.78",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "C:/Program Files (x86)/GTKWave"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "3.3.71",
-				"InstallationDirectory":  "/usr/bin",
-				"BinaryDirectory":        "${InstallationDirectory}"
+				"Version":                "3.3.78",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "/usr/bin"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}")
 			}
 		},
 		"Darwin": {
 			_section: {
-				"Version":                "3.3.71",
-				"InstallationDirectory":  "/usr/bin",
-				"BinaryDirectory":        "${InstallationDirectory}"
+				"Version":                "3.3.78",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "/usr/bin"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
 		# return True if Xilinx is configured
@@ -94,9 +94,17 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is GTKWave installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure GTKWave version
+				version = "3.3.78"
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
 				self.__WriteGtkWaveSection(binPath)
+				self._host.LogNormal("{DARK_GREEN}GTKWave is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
@@ -125,7 +133,7 @@ class Configuration(BaseConfiguration):
 		output = check_output([str(gtkwPath), "--version"], universal_newlines=True)
 		version = None
 		versionRegExpStr = r"^GTKWave Analyzer v(.+?) "
-		versionRegExp = RegExpCompile(versionRegExpStr)
+		versionRegExp = re_compile(versionRegExpStr)
 		for line in output.split('\n'):
 			if version is None:
 				match = versionRegExp.match(line)
@@ -133,7 +141,6 @@ class Configuration(BaseConfiguration):
 					version = match.group(1)
 
 		self._host.PoCConfig[self._section]['Version'] = version
-
 
 
 class GTKWave(Executable):
@@ -215,6 +222,7 @@ class GTKWave(Executable):
 		finally:
 			if self._hasOutput:
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+
 
 def GTKWaveFilter(gen):
 	for line in gen:

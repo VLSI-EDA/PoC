@@ -6,18 +6,12 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Aldec Active-HDL specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Aldec Active-HDL specific classes
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,116 +26,210 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-from subprocess import check_output
+# load dependencies
+from collections            import OrderedDict
+from enum                   import unique
+from subprocess             import check_output
 
-
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Aldec.ActiveHDL")
-
-
-from lib.Functions          import CallByRefParam
+from lib.Functions          import CallByRefParam, Init
 from Base.Exceptions        import PlatformNotSupportedException
 from Base.Logging           import LogEntry, Severity
-from Base.Simulator         import SimulationResult, PoCSimulationResultFilter
 from Base.Executable        import Executable
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument
 from Base.Executable        import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
-from Base.Configuration     import Configuration as BaseConfiguration, ConfigurationException
-from ToolChains.Aldec.Aldec import AldecException
+from ToolChains             import ToolMixIn, ConfigurationException, ToolConfiguration, EditionDescription, Edition, ToolSelector
+from ToolChains.Aldec       import AldecException
+from Simulator              import SimulationResult, PoCSimulationResultFilter
+
+
+__api__ = [
+	'ActiveHDLException',
+	'AldecActiveHDLEditions',
+	'ActiveHDLEditions',
+	'Configuration',
+	'ActiveHDL',
+	'VHDLCompiler',
+	'StandaloneSimulator',
+	'Simulator',
+	'ActiveHDLVHDLLibraryTool',
+	'VHDLCompilerFilter',
+	'SimulatorFilter',
+	'VHDLLibraryToolFilter'
+]
+__all__ = __api__
 
 
 class ActiveHDLException(AldecException):
-	pass
+	"""An ActiveHDLException is raised if Active-HDL catches a system exception."""
 
 
-class Configuration(BaseConfiguration):
-	_vendor =      "Aldec"
-	_toolName =    "Aldec Active-HDL"
-	_section  =    "INSTALL.Aldec.ActiveHDL"
+@unique
+class AldecActiveHDLEditions(Edition):
+	"""Enumeration of all Active-HDL editions provided by Aldec itself."""
+	StandardEdition = EditionDescription(Name="Active-HDL",                   Section="foo")
+	StudentEdition =  EditionDescription(Name="Active-HDL (Student Edition)", Section="bar")
+
+
+@unique
+class ActiveHDLEditions(Edition):
+	"""Enumeration of all Active-HDL editions provided by Aldec inclusive editions
+	shipped by other vendors.
+	"""
+	StandardEdition = EditionDescription(Name="Aldec Active-HDL",             Section="INSTALL.Aldec.ActiveHDL")
+	LatticeEdition =  EditionDescription(Name="Active-HDL Lattice Edition",   Section="INSTALL.Lattice.ActiveHDL")
+	# StudentEdition =  "Active-HDL (Student Edition)"
+
+
+class Configuration(ToolConfiguration):
+	_vendor =               "Aldec"                     #: The name of the tools vendor.
+	_toolName =             "Aldec Active-HDL"          #: The name of the tool.
+	_section  =             "INSTALL.Aldec.ActiveHDL"   #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Aldec Active-HDL supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
 				"Version":                "10.3",
-				"InstallationDirectory":  "${INSTALL.Aldec:InstallationDirectory}/Active-HDL",
-				"BinaryDirectory":        "${InstallationDirectory}/BIN"
-			}
-		},
-		"Linux": {
-			_section: {
-			#		"Version":                "10.4c",
-			#		"InstallationDirectory":  "${INSTALL.Aldec:InstallationDirectory}/${Version}",
-			#		"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"Edition":                ("${${SectionName}:Edition}",               "Active-HDL"),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Aldec:InstallationDirectory}/Active-HDL"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/BIN")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Aldec is configured
+		"""Check if general Aldec support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Aldec']) != 0)
 
 	def ConfigureForAll(self):
+		"""Configuration routine for Aldec Active-HDL on all supported platforms.
+
+		#. Ask if Active-HDL is installed.
+
+		  * Pass |rarr| skip this configuration. Don't change existing settings.
+		  * Yes |rarr| collect installation information for Active-HDL.
+		  * No |rarr| clear the Active-HDL configuration section.
+
+		#. Ask for Active-HDL's version.
+		#. Ask for Active-HDL's edition (normal, student).
+		#. Ask for Active-HDL's installation directory.
+		"""
 		try:
 			if (not self._AskInstalled("Is Aldec Active-HDL installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure Active-HDL version
 				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
+				# Configure Active-HDL edition
+				changed,edition = self._ConfigureEdition()
+				if changed:
+					if (edition is AldecActiveHDLEditions.StudentEdition):
+						if self._multiVersionSupport:
+							sectionName = self._host.PoCConfig[self._section]['SectionName']
+						else:
+							sectionName = self._section
+						self._host.PoCConfig[sectionName]['InstallationDirectory'] = self._host.PoCConfig.get(sectionName, 'InstallationDirectory', raw=True) + "-Student-Edition"
+						self._host.PoCConfig.Interpolation.clear_cache()
+				# Configure installation directory
 				self._ConfigureInstallationDirectory()
+				# Configure binary directory
 				binPath = self._ConfigureBinaryDirectory()
+				# Check version for correctness
 				self.__CheckActiveHDLVersion(binPath, version)
+				self._host.LogNormal("{DARK_GREEN}Aldec Active-HDL is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
+			# FIXME: also remove all versioned sections; implement it in ClearSection?
 			raise
 
+	def _ConfigureEdition(self):
+		"""Configure Active-HDL for Aldec."""
+		sectionName =     self._section
+		if self._multiVersionSupport:
+			sectionName =   self._host.PoCConfig[sectionName]['SectionName']
+
+		configSection =   self._host.PoCConfig[sectionName]
+		defaultEdition =  AldecActiveHDLEditions.Parse(configSection['Edition'])
+		edition =         super()._ConfigureEdition(AldecActiveHDLEditions, defaultEdition)
+
+		if (edition is not defaultEdition):
+			configSection['Edition'] = edition.Name
+			self._host.PoCConfig.Interpolation.clear_cache()
+			return (True, edition)
+		else:
+			return (False, edition)
+
 	def __CheckActiveHDLVersion(self, binPath, version):
+		"""Compare the given Active-HDL version with the tool's version string."""
+		# TODO: use vsim abstraction?
 		if (self._host.Platform == "Windows"):
 			vsimPath = binPath / "vsim.exe"
 		else:
 			vsimPath = binPath / "vsim"
 
 		if not vsimPath.exists():
-			raise ConfigurationException("Executable '{0!s}' not found.".format(vsimPath)) from FileNotFoundError(
-				str(vsimPath))
+			raise ConfigurationException("Executable '{0!s}' not found.".format(vsimPath)) \
+				from FileNotFoundError(str(vsimPath))
 
 		output = check_output([str(vsimPath), "-version"], universal_newlines=True)
 		if str(version) not in output:
 			raise ConfigurationException("Active-HDL version mismatch. Expected version {0}.".format(version))
 
 
-class ActiveHDLMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		self._version =             version
-		self._Logger =              logger
+class Selector(ToolSelector):
+	_toolName = "Active-HDL"
+
+	def Select(self):
+		editions = self._GetConfiguredEditions(ActiveHDLEditions)
+
+		if (len(editions) == 0):
+			self._host.LogWarning("No Active-HDL installation found.", indent=1)
+			self._host.PoCConfig['INSTALL.ActiveHDL'] = OrderedDict()
+		elif (len(editions) == 1):
+			self._host.LogNormal("Default Active-HDL installation:", indent=1)
+			self._host.LogNormal("Set to {0}".format(editions[0].Name), indent=2)
+			self._host.PoCConfig['INSTALL.ActiveHDL']['SectionName'] = editions[0].Section
+		else:
+			self._host.LogNormal("Select Active-HDL installation:", indent=1)
+
+			defaultEdition = ActiveHDLEditions.LatticeEdition
+			if defaultEdition not in editions:
+				defaultEdition = editions[0]
+
+			selectedEdition = self._AskSelection(editions, defaultEdition)
+			self._host.PoCConfig['INSTALL.ActiveHDL']['SectionName'] = selectedEdition.Section
 
 
-class ActiveHDL(ActiveHDLMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ActiveHDLMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-
+class ActiveHDL(ToolMixIn):
+	"""Factory for executable abstractions in Active-HDL."""
 	def GetVHDLLibraryTool(self):
-		return ActiveHDLVHDLLibraryTool(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		"""Return an instance of Active-HDL's VHDL library management tool 'vlib'."""
+		return ActiveHDLVHDLLibraryTool(self)
 
 	def GetVHDLCompiler(self):
-		return VHDLCompiler(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		"""Return an instance of Active-HDL's VHDL compiler 'vcom'."""
+		return VHDLCompiler(self)
 
 	def GetSimulator(self):
-		return StandaloneSimulator(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		"""Return an instance of Active-HDL's VHDL simulator 'vsim'."""
+		return StandaloneSimulator(self)
 
 
-class VHDLCompiler(Executable, ActiveHDLMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ActiveHDLMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vcom.exe"
-		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vcom"
-		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+class VHDLCompiler(Executable, ToolMixIn):
+	"""Abstraction layer of Active-HDL's VHDL compiler 'vcom'."""
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "vcom.exe"
+		else:                                raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self._hasOutput =    False
 		self._hasWarnings =  False
@@ -232,13 +320,16 @@ class VHDLCompiler(Executable, ActiveHDLMixIn):
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
-class StandaloneSimulator(Executable, ActiveHDLMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ActiveHDLMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vsimsa.exe"
-		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vsimsa"
-		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+class StandaloneSimulator(Executable, ToolMixIn):
+	"""Abstraction layer of Active-HDL's VHDL standalone simulator 'vsimsa'."""
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "vsimsa.exe"
+		else:                                raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self._hasOutput =    False
 		self._hasWarnings =  False
@@ -305,9 +396,10 @@ class StandaloneSimulator(Executable, ActiveHDLMixIn):
 		return simulationResult.value
 
 
-class Simulator(Executable, ActiveHDLMixIn):
+class Simulator(Executable, ToolMixIn):
+	"""Abstraction layer of Active-HDL's VHDL simulator 'vsim'."""
 	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ActiveHDLMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
+		ToolMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
 		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vsimsa.exe"
 		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vsimsa"
 		else:                                            raise PlatformNotSupportedException(self._platform)
@@ -371,13 +463,16 @@ class Simulator(Executable, ActiveHDLMixIn):
 		print(_indent + "-" * 80)
 
 
-class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ActiveHDLMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vlib.exe"
-		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vlib"
-		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+class ActiveHDLVHDLLibraryTool(Executable, ToolMixIn):
+	"""Abstraction layer of Active-HDL's VHDL library management tool 'vlib'."""
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "vlib.exe"
+		else:                                raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self._hasOutput =    False
 		self._hasWarnings =  False
@@ -462,6 +557,7 @@ class ActiveHDLVHDLLibraryTool(Executable, ActiveHDLMixIn):
 
 
 def VHDLCompilerFilter(gen): # mccabe:disable=MC0001
+	"""A line based output stream filter for Active-HDL's VHDL compiler."""
 	for line in gen:
 		if line.startswith("Aldec, Inc. VHDL Compiler"):
 			yield LogEntry(line, Severity.Debug)
@@ -496,6 +592,7 @@ def VHDLCompilerFilter(gen): # mccabe:disable=MC0001
 
 
 def SimulatorFilter(gen):
+	"""A line based output stream filter for Active-HDL's VHDL simulator."""
 	PoCOutputFound = False
 	for line in gen:
 		if line.startswith("asim"):
@@ -524,6 +621,9 @@ def SimulatorFilter(gen):
 			yield LogEntry(line, Severity.Normal)
 
 def VHDLLibraryToolFilter(gen):
+	"""A line based output stream filter for Active-HDL's VHDL library management
+	tool.
+	"""
 	for line in gen:
 		if line.startswith("ALIB: Library "):
 			yield LogEntry(line, Severity.Verbose)

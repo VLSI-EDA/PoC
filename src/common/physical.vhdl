@@ -412,6 +412,7 @@ package body physical is
 		else
 			report "to_baud: Unknown format" severity FAILURE;
 		end if;
+		return 0 Bd;
 	end function;
 
 	-- inter-type arithmetic
@@ -827,6 +828,7 @@ package body physical is
 		elsif	(scale = 1	ms) then	return div(t, 1	 ms);
 		elsif	(scale = 1 sec) then	return div(t, 1 sec);
 		else	report "to_real: scale must have a value of '1 <unit>'" severity failure;
+		return 0.0;
 		end if;
 	end;
 
@@ -849,6 +851,7 @@ package body physical is
 		elsif	(scale = 1000 MHz) then	return div(f, 1000 MHz);
 		else	report "to_real: scale must have a value of '1 <unit>'" severity failure;
 		end if;
+		return 0.0;
 	end;
 
 	function to_real(br : BAUD; scale : BAUD) return REAL is
@@ -859,6 +862,7 @@ package body physical is
 		elsif	(scale = 1000 MBd) then	return div(br, 1000 MBd);
 		else	report "to_real: scale must have a value of '1 <unit>'" severity failure;
 		end if;
+		return 0.0;
 	end;
 
 	function to_real(mem : MEMORY; scale : MEMORY) return REAL is
@@ -869,6 +873,7 @@ package body physical is
 		elsif	(scale = 1024 MiB) then	return div(mem, 1024 MiB);
 		else	report "to_real: scale must have a value of '1 <unit>'" severity failure;
 		end if;
+		return 0.0;
 	end;
 
 	-- convert physical types to standard type (INTEGER)
@@ -882,6 +887,7 @@ package body physical is
 			when others =>						null;
 		end case;
 		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
+		return 0;
 	end;
 
 	function to_int(f : FREQ; scale : FREQ; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return integer is
@@ -893,6 +899,7 @@ package body physical is
 			when others =>						null;
 		end case;
 		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
+		return 0;
 	end;
 
 	function to_int(br : BAUD; scale : BAUD; RoundingStyle : T_ROUNDING_STYLE := ROUND_TO_NEAREST) return integer is
@@ -904,6 +911,7 @@ package body physical is
 			when others =>						null;
 		end case;
 		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
+		return 0;
 	end;
 
 	function to_int(mem : MEMORY; scale : MEMORY; RoundingStyle : T_ROUNDING_STYLE := ROUND_UP) return integer is
@@ -915,6 +923,7 @@ package body physical is
 			when others =>						null;
 		end case;
 		report "to_int: unsupported RoundingStyle: " & T_ROUNDING_STYLE'image(RoundingStyle) severity failure;
+		return 0;
 	end;
 
 	-- calculate needed counter cycles to achieve a given 1. timing/delay and 2. frequency/period

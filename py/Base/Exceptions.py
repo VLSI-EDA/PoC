@@ -5,18 +5,12 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    This module contains exception base classes and common exceptions for PoC.
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2015 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,38 +24,71 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
+#
+from lib.SphinxExtensions import DocumentMemberAttribute
 
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("The PoC-Library - Python Module Base.Exceptions")
+
+__api__ = [
+	'ExceptionBase',
+	'EnvironmentException',
+	'PlatformNotSupportedException',
+	'NotConfiguredException',
+	'SkipableException',
+	'CommonException',
+	'SkipableCommonException'
+]
+__all__ = __api__
 
 
 class ExceptionBase(Exception):
+	"""Base exception derived from :py:exc:`Exception` for all
+	custom exceptions in PoC.
+	"""
+	@DocumentMemberAttribute()
 	def __init__(self, message=""):
+		"""Exception initializer
+
+		:type  message:   str
+		:param message:   The exception message.
+		"""
 		super().__init__()
 		self.message = message
 
+	@DocumentMemberAttribute()
 	def __str__(self):
+		"""Returns the exception's message text."""
 		return self.message
 
+	@DocumentMemberAttribute(False)
+	def with_traceback(self, tb):
+		super().with_traceback(tb)
+
+	# @DocumentMemberAttribute(False)
+	# @MethodAlias(Exception.with_traceback)
+	# def with_traceback(self): pass
+
 class EnvironmentException(ExceptionBase):
-	pass
+	"""``EnvironmentException`` is raised when an expected environment variable is
+	missing for PoC.
+	"""
 
 class PlatformNotSupportedException(ExceptionBase):
-	pass
+	"""``PlatformNotSupportedException`` is raise if the platform is not supported
+	by PoC, or the selected tool flow is not supported on the host system by PoC.
+	"""
 
 class NotConfiguredException(ExceptionBase):
-	pass
+	"""``NotConfiguredException`` is raise if PoC or the requested tool chain
+	setting is not configured in PoC.
+	"""
 
 class SkipableException(ExceptionBase):
-	pass
+	"""Base class for all skipable exceptions."""
 
 class CommonException(ExceptionBase):
 	pass
 
 class SkipableCommonException(CommonException, SkipableException):
-	pass
+	"""``SkipableCommonException`` is a :py:exc:`CommonException`, which can be
+	skipped.
+	"""

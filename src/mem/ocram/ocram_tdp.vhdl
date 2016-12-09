@@ -24,16 +24,17 @@
 -- 1   1   Write to memory
 -- === === ================
 --
+-- Both reading and writing are synchronous to the rising-edge of the clock.
+-- Thus, when reading, the memory data will be outputted after the
+-- clock edge, i.e, in the following clock cycle.
+--
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
 -- Same-Port Read-During-Write
 --   When writing data through port 1, the read output of the same port
 --   (``q1``) will output the new data (``d1``, in the following clock cycle)
---   which is aka. "write-first behavior". This behavior also applies to Altera
---   M20K memory blocks as described in the Altera: "Stratix 5 Device Handbook"
---   (S5-5V1). The documentation in the Altera: "Embedded Memory User Guide"
---   (UG-01068) is wrong.
+--   which is aka. "write-first behavior".
 --
 --   Same applies to port 2.
 --
@@ -44,16 +45,13 @@
 --   rising-edge of the write clock and (in the worst case) extends
 --   until the next rising-edge of that write clock.
 --
--- .. WARNING::
---    The simulated behavior on RT-level is too optimistic. When reading
---    at the write address always the new data will be returned.
---
--- .. TODO:: Implement correct behavior for RT-level simulation.
+-- For simulation, always our dedicated simulation model :ref:`IP:ocram_tdp_sim`
+-- is used.
 --
 -- License:
 -- =============================================================================
--- Copyright 2008-2015 Technische Universitaet Dresden - Germany
---										 Chair for VLSI-Design, Diagnostics and Architecture
+-- Copyright 2008-2016 Technische Universitaet Dresden - Germany
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -108,7 +106,7 @@ architecture rtl of ocram_tdp is
 	constant DEPTH : positive := 2**A_BITS;
 
 begin
-	gInfer : if (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX) generate
+	gInfer : if not SIMULATION and ((VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly only if '-use_new_parser yes' is enabled in XST options
 		subtype word_t	is std_logic_vector(D_BITS - 1 downto 0);
 		type		ram_t		is array(0 to DEPTH - 1) of word_t;
@@ -170,7 +168,7 @@ begin
 					ram(to_integer(a2_reg));		-- returns new data
 	end generate gInfer;
 
-	gAltera: if VENDOR = VENDOR_ALTERA generate
+	gAltera: if not SIMULATION and (VENDOR = VENDOR_ALTERA) generate
 		component ocram_tdp_altera
 			generic (
 				A_BITS		: positive;
@@ -197,7 +195,7 @@ begin
 		-- declaration above) is not sufficient for ModelSim.
 		-- That requires also usage of altera_mf library.
 
-		ram_tdp: ocram_tdp_altera
+		ram_altera: ocram_tdp_altera
 			generic map (
 				A_BITS		=> A_BITS,
 				D_BITS		=> D_BITS,
@@ -219,7 +217,50 @@ begin
 			);
 	end generate gAltera;
 
-	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
+	gSim: if SIMULATION generate
+		-- Use component instantiation so that simulation model can be excluded
+		-- from synthesis.
+		component ocram_tdp_sim is
+			generic (
+				A_BITS	 : positive;
+				D_BITS	 : positive;
+				FILENAME : string);
+			port (
+				clk1 : in	 std_logic;
+				clk2 : in	 std_logic;
+				ce1	 : in	 std_logic;
+				ce2	 : in	 std_logic;
+				we1	 : in	 std_logic;
+				we2	 : in	 std_logic;
+				a1	 : in	 unsigned(A_BITS-1 downto 0);
+				a2	 : in	 unsigned(A_BITS-1 downto 0);
+				d1	 : in	 std_logic_vector(D_BITS-1 downto 0);
+				d2	 : in	 std_logic_vector(D_BITS-1 downto 0);
+				q1	 : out std_logic_vector(D_BITS-1 downto 0);
+				q2	 : out std_logic_vector(D_BITS-1 downto 0));
+		end component ocram_tdp_sim;
+	begin
+		sim_tdp: ocram_tdp_sim
+			generic map (
+				A_BITS	 => A_BITS,
+				D_BITS	 => D_BITS,
+				FILENAME => FILENAME)
+			port map (
+				clk1 => clk1,
+				clk2 => clk2,
+				ce1	 => ce1,
+				ce2	 => ce2,
+				we1	 => we1,
+				we2	 => we2,
+				a1	 => a1,
+				a2	 => a2,
+				d1	 => d1,
+				d2	 => d2,
+				q1	 => q1,
+				q2	 => q2);
+	end generate gSim;
+
+	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC and SIMULATION) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
 		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;
 end architecture;

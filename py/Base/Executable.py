@@ -5,18 +5,12 @@
 # ==============================================================================
 # Authors:          Patrick Lehmann
 #
-# Python Class:      TODO
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Module:    Basic abstraction layer for executables.
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,37 +25,54 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module Base.Executable")
-
 # load dependencies
 from pathlib                import Path
-from subprocess              import Popen				as Subprocess_Popen
-from subprocess              import PIPE					as Subprocess_Pipe
-from subprocess              import STDOUT				as Subprocess_StdOut
+from subprocess             import Popen				as Subprocess_Popen
+from subprocess             import PIPE					as Subprocess_Pipe
+from subprocess             import STDOUT				as Subprocess_StdOut
 
-from Base.Exceptions        import CommonException
-from Base.Logging            import ILogable
+from Base.Exceptions        import CommonException, ExceptionBase
+from Base.Logging           import ILogable
 
 
-class ExecutableException(BaseException):
+__api__ = [
+	'ExecutableException',
+	'CommandLineArgument',
+	'ExecutableArgument',
+	'NamedCommandLineArgument',
+	'CommandArgument',        'ShortCommandArgument',         'LongCommandArgument',        'WindowsCommandArgument',
+	'StringArgument',
+	'StringListArgument',
+	'PathArgument',
+	'FlagArgument',           'ShortFlagArgument',            'LongFlagArgument',           'WindowsFlagArgument',
+	'ValuedFlagArgument',     'ShortValuedFlagArgument',      'LongValuedFlagArgument',
+	'ValuedFlagListArgument', 'ShortValuedFlagListArgument',  'LongValuedFlagListArgument',
+	'TupleArgument',          'ShortTupleArgument',           'LongTupleArgument',
+	'CommandLineArgumentList',
+	'Executable'
+]
+__all__ = __api__
+
+
+class ExecutableException(ExceptionBase):
+	"""This exception is raised by all executable abstraction classes."""
 	def __init__(self, message=""):
 		super().__init__(message)
 		self.message = message
 
+
 class CommandLineArgument(type):
+	"""Base class (and meta class) for all Arguments classes."""
 	_value = None
 
 	# def __new__(mcls, name, bases, nmspc):
 	# 	print("CommandLineArgument.new: %s - %s" % (name, nmspc))
 	# 	return super(CommandLineArgument, mcls).__new__(mcls, name, bases, nmspc)
 
+
 class ExecutableArgument(CommandLineArgument):
+	"""Represents the executable."""
+
 	@property
 	def Value(self):
 		return self._value
@@ -82,6 +93,7 @@ class ExecutableArgument(CommandLineArgument):
 
 
 class NamedCommandLineArgument(CommandLineArgument):
+	"""Base class for all command line arguments with a name."""
 	_name = None  # set in sub-classes
 
 	@property
@@ -90,6 +102,12 @@ class NamedCommandLineArgument(CommandLineArgument):
 
 
 class CommandArgument(NamedCommandLineArgument):
+	"""Represents a command name.
+
+	It is usually used to select a sub parser in a CLI argument parser or to hand
+	over all following parameters to a separate tool. An example for a command is
+	'checkout' in ``git.exe checkout``, which calls ``git-checkout.exe``.
+	"""
 	_pattern =    "{0}"
 
 	@property
@@ -112,12 +130,21 @@ class CommandArgument(NamedCommandLineArgument):
 		elif self._value:              return self._pattern.format(self._name)
 		else:                          return None
 
-class ShortCommandArgument(CommandArgument):    _pattern = "-{0}"
-class LongCommandArgument(CommandArgument):     _pattern = "--{0}"
-class WindowsCommandArgument(CommandArgument):  _pattern = "/{0}"
+class ShortCommandArgument(CommandArgument):
+	"""Represents a command name with a single dash."""
+	_pattern = "-{0}"
+
+class LongCommandArgument(CommandArgument):
+	"""Represents a command name with a double dash."""
+	_pattern = "--{0}"
+
+class WindowsCommandArgument(CommandArgument):
+	"""Represents a command name with a single slash."""
+	_pattern = "/{0}"
 
 
 class StringArgument(CommandLineArgument):
+	"""Represents a simple string argument."""
 	_pattern =  "{0}"
 
 	@property
@@ -143,6 +170,7 @@ class StringArgument(CommandLineArgument):
 		else:                          return None
 
 class StringListArgument(CommandLineArgument):
+	"""Represents a list of string arguments."""
 	_pattern =  "{0}"
 
 	@property
@@ -170,6 +198,10 @@ class StringListArgument(CommandLineArgument):
 		else:                          return None
 
 class PathArgument(CommandLineArgument):
+	"""Represents a path argument.
+
+	The output format can be forced to the POSIX format with :py:data:`_PosixFormat`.
+	"""
 	_PosixFormat = False
 
 	@property
@@ -194,6 +226,10 @@ class PathArgument(CommandLineArgument):
 
 
 class FlagArgument(NamedCommandLineArgument):
+	"""Base class for all FlagArgument classes, which represents a simple flag argument.
+
+	A simple flag is a single boolean value (absent/present or off/on) with no data.
+	"""
 	_pattern =    "{0}"
 
 	@property
@@ -216,11 +252,36 @@ class FlagArgument(NamedCommandLineArgument):
 		elif self._value:             return self._pattern.format(self._name)
 		else:                         return None
 
-class ShortFlagArgument(FlagArgument):    _pattern = "-{0}"
-class LongFlagArgument(FlagArgument):     _pattern = "--{0}"
-class WindowsFlagArgument(FlagArgument):  _pattern = "/{0}"
+class ShortFlagArgument(FlagArgument):
+	"""Represents a flag argument with a single dash.
+
+	Example: ``-optimize``
+	"""
+	_pattern = "-{0}"
+
+class LongFlagArgument(FlagArgument):
+	"""Represents a flag argument with a double dash.
+
+	Example: ``--optimize``
+	"""
+	_pattern = "--{0}"
+
+class WindowsFlagArgument(FlagArgument):
+	"""Represents a flag argument with a single slash.
+
+	Example: ``/optimize``
+	"""
+	_pattern = "/{0}"
+
 
 class ValuedFlagArgument(NamedCommandLineArgument):
+	"""Class and base class for all ValuedFlagArgument classes, which represents a flag argument with data.
+
+	A valued flag is a flag name followed by a value. The default delimiter sign is equal (``=``). Name and
+	value are passed as one arguments to the executable even if the delimiter sign is a whitespace character.
+
+	Example: ``width=100``
+	"""
 	_pattern = "{0}={1}"
 
 	@property
@@ -245,10 +306,30 @@ class ValuedFlagArgument(NamedCommandLineArgument):
 		elif self._value:             return self._pattern.format(self._name, self._value)
 		else:                         return None
 
-class ShortValuedFlagArgument(ValuedFlagArgument):  _pattern = "-{0}={1}"
-class LongValuedFlagArgument(ValuedFlagArgument):   _pattern = "--{0}={1}"
+class ShortValuedFlagArgument(ValuedFlagArgument):
+	"""Represents a :py:class:`ValuedFlagArgument` with a single dash.
+
+	Example: ``-optimizer=on``
+	"""
+	_pattern = "-{0}={1}"
+
+class LongValuedFlagArgument(ValuedFlagArgument):
+	"""Represents a :py:class:`ValuedFlagArgument` with a double dash.
+
+	Example: ``--optimizer=on``
+	"""
+	_pattern = "--{0}={1}"
+
 
 class ValuedFlagListArgument(NamedCommandLineArgument):
+	"""Class and base class for all ValuedFlagListArgument classes, which represents a list of :py:class:`ValuedFlagArgument` instances.
+
+	Each list item gets translated into a :py:class:`ValuedFlagArgument`, with the same flag name, but differing values. Each
+	:py:class:`ValuedFlagArgument` is passed as a single argument to the executable, even if the delimiter sign is a whitespace
+	character.
+
+	Example: ``file=file1.txt file=file2.txt``
+	"""
 	_pattern = "{0}={1}"
 
 	@property
@@ -271,10 +352,29 @@ class ValuedFlagListArgument(NamedCommandLineArgument):
 		elif (len(self._value) > 0):  return [self._pattern.format(self._name, item) for item in self._value]
 		else:                         return None
 
-class ShortValuedFlagListArgument(ValuedFlagListArgument):  _pattern = "-{0}={1}"
-class LongValuedFlagListArgument(ValuedFlagListArgument):   _pattern = "--{0}={1}"
+class ShortValuedFlagListArgument(ValuedFlagListArgument):
+	"""Represents a :py:class:`ValuedFlagListArgument` with a single dash.
+
+	Example: ``-file=file1.txt -file=file2.txt``
+	"""
+	_pattern = "-{0}={1}"
+
+class LongValuedFlagListArgument(ValuedFlagListArgument):
+	"""Represents a :py:class:`ValuedFlagListArgument` with a double dash.
+
+	Example: ``--file=file1.txt --file=file2.txt``
+	"""
+	_pattern = "--{0}={1}"
+
 
 class TupleArgument(NamedCommandLineArgument):
+	"""Class and base class for all TupleArgument classes, which represents a switch with separate data.
+
+	A tuple switch is a command line argument followed by a separate value. Name and value are passed as
+	two arguments to the executable.
+
+	Example: ``width 100``
+	"""
 	_switchPattern =  "{0}"
 	_valuePattern =   "{0}"
 
@@ -300,10 +400,23 @@ class TupleArgument(NamedCommandLineArgument):
 		elif self._value:             return [self._switchPattern.format(self._name), self._valuePattern.format(self._value)]
 		else:                         return None
 
-class ShortTupleArgument(TupleArgument):    _switchPattern = "-{0}"
-class LongTupleArgument(TupleArgument):     _switchPattern = "--{0}"
+class ShortTupleArgument(TupleArgument):
+	"""Represents a :py:class:`TupleArgument` with a single dash in front of the switch name.
+
+	Example: ``-file file1.txt``
+	"""
+	_switchPattern = "-{0}"
+
+class LongTupleArgument(TupleArgument):
+	"""Represents a :py:class:`TupleArgument` with a double dash in front of the switch name.
+
+	Example: ``--file file1.txt``
+	"""
+	_switchPattern = "--{0}"
+
 
 class CommandLineArgumentList(list):
+	"""Represent a list of all available commands, flags and switch of an executable."""
 	def __init__(self, *args):
 		super().__init__()
 		for arg in args:
@@ -333,6 +446,7 @@ class CommandLineArgumentList(list):
 
 
 class Executable(ILogable):
+	"""Represent an executable."""
 	_POC_BOUNDARY = "====== POC BOUNDARY ======"
 
 	def __init__(self, platform, dryrun, executablePath, logger=None):

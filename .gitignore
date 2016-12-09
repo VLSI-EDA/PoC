@@ -9,7 +9,13 @@
 __pycache__
 
 # ignore build directories
-docs/_build/
+/docs/_build/
+/docs/PyInfrastructure/*
+!/docs/PyInfrastructure/.gitempty
+!/docs/PyInfrastructure/.publish
+!/docs/PyInfrastructure/README.md
+!/docs/PyInfrastructure/index.rst
+
 
 # ignore files in netlist/
 /netlist/
@@ -94,3 +100,4 @@ other/diamond/.spreadsheet_view.ini
 !.git*
 !.publish
 !README.md
+other/PrecisionRTL/

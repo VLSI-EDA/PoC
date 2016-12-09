@@ -18,7 +18,7 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#											Chair for VLSI-Design, Diagnostics and Architecture
+#											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,7 +97,7 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  on Linux."
 	echo ""
 	echo "Usage:"
-	echo "  compile-osvvm.sh [-c] [--help|--all|--ghdl|--vsim]"
+	echo "  compile-osvvm.sh [-c] [--help|--all|--ghdl|--questa]"
 	echo ""
 	echo "Common commands:"
 	echo "  -h --help             Print this help page"
@@ -206,10 +206,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		AlertLogPkg.vhd
 		MemoryPkg.vhd
 		MessagePkg.vhd
+		SortListGenericPkg.vhd
+		SortListPkg.vhd
 		SortListPkg_int.vhd
 		RandomBasePkg.vhd
 		RandomPkg.vhd
 		CoveragePkg.vhd
+		ScoreboardGenericPkg.vhd
+		ScoreboardPkg.vhd
 		OsvvmContext.vhd
 	)
 
@@ -239,4 +243,3 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 
 	cd $WorkingDir
 fi
-

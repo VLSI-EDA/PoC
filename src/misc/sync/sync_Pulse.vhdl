@@ -29,19 +29,19 @@
 --     TODO
 --
 -- SeeAlso:
--- :doc:`PoC.misc.sync.Bits </PoC/misc/sync/sync_Bits>`
+-- :doc:`PoC.misc.sync.Bits </IPCores/misc/sync/sync_Bits>`
 --   For a common 2 D-FF synchronizer for *flag*-signals.
--- :doc:`PoC.misc.sync.Reset </PoC/misc/sync/sync_Reset>`
+-- :doc:`PoC.misc.sync.Reset </IPCores/misc/sync/sync_Reset>`
 --   For a special 2 D-FF synchronizer for *reset*-signals.
--- :doc:`PoC.misc.sync.Strobe </PoC/misc/sync/sync_Strobe>`
+-- :doc:`PoC.misc.sync.Strobe </IPCores/misc/sync/sync_Strobe>`
 --   For a synchronizer for *strobe*-signals.
--- :doc:`PoC.misc.sync.Vector </PoC/misc/sync/sync_Vector>`
+-- :doc:`PoC.misc.sync.Vector </IPCores/misc/sync/sync_Vector>`
 --   For a multiple bits capable synchronizer.
 --
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
---										 Chair for VLSI-Design, Diagnostics and Architecture
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

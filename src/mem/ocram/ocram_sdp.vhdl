@@ -15,6 +15,10 @@
 -- * dual clock, clock enable,
 -- * 1 read port plus 1 write port.
 --
+-- Both reading and writing are synchronous to the rising-edge of the clock.
+-- Thus, when reading, the memory data will be outputted after the
+-- clock edge, i.e, in the following clock cycle.
+--
 -- The generalized behavior across Altera and Xilinx FPGAs since
 -- Stratix/Cyclone and Spartan-3/Virtex-5, respectively, is as follows:
 --
@@ -25,17 +29,13 @@
 --   rising-edge of the write clock and (in the worst case) extends until the
 --   next rising-edge of the write clock.
 --
--- .. WARNING::
---    The simulated behavior on RT-level is too optimistic. The
---    mixed-port read-during-write behavior is only valid if the read and write
---    clock are in phase. Otherwise, simulation will always show known data.
---
--- .. TODO:: Implement correct behavior for RT-level simulation.
+-- For simulation, always our dedicated simulation model :ref:`IP:ocram_tdp_sim`
+-- is used.
 --
 -- License:
 -- =============================================================================
--- Copyright 2008-2015 Technische Universitaet Dresden - Germany
---										 Chair for VLSI-Design, Diagnostics and Architecture
+-- Copyright 2008-2016 Technische Universitaet Dresden - Germany
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ architecture rtl of ocram_sdp is
 
 begin
 
-	gInfer : if (VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX) generate
+	gInfer : if not SIMULATION and ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX)) generate
 		-- RAM can be inferred correctly
 		-- Xilinx notes:
 		--	 WRITE_MODE is set to WRITE_FIRST, but this also means that read data
@@ -134,18 +134,7 @@ begin
 		begin
 			if rising_edge(wclk) then
 				if (wce and we) = '1' then
-					-- Note: Hide plausibility tests from synthesis to ensure
-					--       proper RAM inference.
-					--synthesis translate_off
-					if Is_X(std_logic_vector(wa)) then
-						report "ocram_sdp: Writing to ill-defined address."
-							severity error;
-					else
-					--synthesis translate_on
 						ram(to_integer(wa)) <= d;
-					--synthesis translate_off
-					end if;
-					--synthesis translate_on
 				end if;
 			end if;
 		end process;
@@ -154,29 +143,56 @@ begin
 		begin
 			if rising_edge(rclk) then
 				if rce = '1' then
-					-- Note: Hide plausibility tests from synthesis to ensure
-					--       proper RAM inference.
-					--synthesis translate_off
-					if Is_X(std_logic_vector(ra)) then
-						q <= (others => 'X');
-					elsif wce = '1' and we = '1' and ra = wa and rising_edge(wclk) then
-						-- read data unknown when reading at write address,
-						-- and both clock-edges are at almost the same time
-						q <= (others => 'X');
-						report "ocram_sdp: Reading from address just writing: Unknown result."
-							severity warning;
-					else
-					--synthesis translate_on
 						q <= ram(to_integer(ra));
-					--synthesis translate_off
-					end if;
-					--synthesis translate_on
 				end if;
 			end if;
 		end process;
 	end generate gInfer;
 
-	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
+	gSim: if SIMULATION generate
+		-- Use component instantiation so that simulation model can be excluded
+		-- from synthesis.
+		component ocram_tdp_sim is
+			generic (
+				A_BITS	 : positive;
+				D_BITS	 : positive;
+				FILENAME : string);
+			port (
+				clk1 : in	 std_logic;
+				clk2 : in	 std_logic;
+				ce1	 : in	 std_logic;
+				ce2	 : in	 std_logic;
+				we1	 : in	 std_logic;
+				we2	 : in	 std_logic;
+				a1	 : in	 unsigned(A_BITS-1 downto 0);
+				a2	 : in	 unsigned(A_BITS-1 downto 0);
+				d1	 : in	 std_logic_vector(D_BITS-1 downto 0);
+				d2	 : in	 std_logic_vector(D_BITS-1 downto 0);
+				q1	 : out std_logic_vector(D_BITS-1 downto 0);
+				q2	 : out std_logic_vector(D_BITS-1 downto 0));
+		end component ocram_tdp_sim;
+	begin
+		sim_tdp: ocram_tdp_sim
+			generic map (
+				A_BITS	 => A_BITS,
+				D_BITS	 => D_BITS,
+				FILENAME => FILENAME)
+			port map (
+				clk1 => wclk,
+				clk2 => rclk,
+				ce1	 => wce,
+				ce2	 => rce,
+				we1	 => we,
+				we2	 => '0',
+				a1	 => wa,
+				a2	 => ra,
+				d1	 => d,
+				d2	 => (others => '0'),
+				q1	 => open,
+				q2	 => q);
+	end generate gSim;
+
+	assert ((VENDOR = VENDOR_ALTERA) or (VENDOR = VENDOR_GENERIC and SIMULATION) or (VENDOR = VENDOR_LATTICE) or (VENDOR = VENDOR_XILINX))
 		report "Vendor '" & T_VENDOR'image(VENDOR) & "' not yet supported."
 		severity failure;
 end architecture;

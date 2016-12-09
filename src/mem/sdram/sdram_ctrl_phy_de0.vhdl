@@ -8,22 +8,32 @@
 --
 -- Description:
 -- -------------------------------------
--- Physical layer used by module 'sdram_ctrl_de0'
+-- Physical layer used by module :ref:`sdram_ctrl_de0 <IP:sdram_ctrl_de0>`.
 --
--- Instantiates input and output buffer components and adjusts timing for
+-- Instantiates input and output buffer components and adjusts the timing for
 -- the Altera DE0 board.
 --
--- Command signals and write data are sampled with clk.
--- Read data is also aligned with clk.
+-- Clock and Reset Signals
+-- ***********************
 --
--- clk     : Base clock for command and write data path.
--- rst     : Reset for clk.
+-- +-----------+-----------------------------------------------------------+
+-- | Port      | Description                                               |
+-- +===========+===========================================================+
+-- |clk        | Base clock for command and write data path.               |
+-- +-----------+-----------------------------------------------------------+
+-- |rst        | Reset for ``clk``.                                        |
+-- +-----------+-----------------------------------------------------------+
 --
--- Write and read enable (wren_nxt, rden_nxt) must be hold for
---   1 clock cycle  if BL = 1,
---   2 clock cycles if BL = 2, or
---   4 clock cycles if BL = 4, or
---   8 clock cycles if BL = 8.
+-- Command signals and write data are sampled with ``clk``.
+-- Read data is also aligned with ``clk``.
+--
+-- Write and read enable (wren_nxt, rden_nxt) must be hold for:
+--
+-- * 1 clock cycle  if BL = 1,
+-- * 2 clock cycles if BL = 2, or
+-- * 4 clock cycles if BL = 4, or
+-- * 8 clock cycles if BL = 8.
+--
 -- They must be first asserted with the read and write command. Proper delay is
 -- included in this unit.
 --
@@ -34,8 +44,8 @@
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany,
---										 Chair for VLSI-Design, Diagnostics and Architecture
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany,
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

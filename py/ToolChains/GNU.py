@@ -6,18 +6,12 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      GNU tools specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     GNU tools specific classes
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,23 +26,25 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.GNU")
-
 # load dependencies
 import re
 
+from lib.Functions           import Init, CallByRefParam
 from Base.Exceptions         import PlatformNotSupportedException
 from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument
 from Base.Logging            import LogEntry, Severity
-from Base.Simulator          import SimulationResult
-from Base.ToolChain          import ToolChainException
-from lib.Functions           import Init, CallByRefParam
+from Simulator               import SimulationResult
+from ToolChains              import ToolChainException
+
+
+__api__ = [
+	'GNUException',
+	# 'Configuration',
+	'Make',
+	'GNUMakeQuestaSimFilter',
+	'CocotbSimulationResultFilter'
+]
+__all__ = __api__
 
 
 class GNUException(ToolChainException):

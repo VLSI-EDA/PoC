@@ -9,14 +9,14 @@
 -- Description:
 -- -------------------------------------
 -- This module implements a generic buffer (FIFO) for the
--- :doc:`PoC.Stream </References/Interfaces/Stream>` protocol. It is generic in
+-- :doc:`PoC.Stream </Interfaces/Stream>` protocol. It is generic in
 -- ``DATA_BITS`` and in ``META_BITS`` as well as in FIFO depths for data and
 -- meta information.
 --
 -- License:
 -- =============================================================================
 -- Copyright 2007-2015 Technische Universitaet Dresden - Germany
---										 Chair for VLSI-Design, Diagnostics and Architecture
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

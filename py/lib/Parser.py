@@ -7,10 +7,6 @@
 #
 # Python Module:    TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Patrick Lehmann - Dresden, Germany
@@ -28,7 +24,29 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
 from enum       import Enum
+
+
+__api__ = [
+	'ParserException',
+	'MismatchingParserResult',
+	'EmptyChoiseParserResult',
+	'MatchingParserResult',
+	'GreedyMatchingParserResult',
+	'SourceCodePosition',
+	'Token',
+	'SuperToken',
+	'ValuedToken',
+	'StartOfDocumentToken',
+	'CharacterToken',
+	'SpaceToken',
+	'DelimiterToken',
+	'NumberToken',
+	'StringToken',
+	'Tokenizer'
+]
+__all__ = __api__
 
 
 class ParserException(Exception):
@@ -148,6 +166,7 @@ class SpaceToken(ValuedToken):
 		return "<SpaceToken '{value}' at {line}:{col}>".format(
 						value=self.Value, pos=self.Start.Absolute, line=self.Start.Row, col=self.Start.Column)
 
+
 class DelimiterToken(ValuedToken):
 	def __str__(self):
 		return "<DelimiterToken '{value}' at {line}:{col}>".format(
@@ -171,8 +190,8 @@ class Tokenizer:
 		DelimiterChars =  3
 		OtherChars =      4
 
-	@classmethod
-	def GetCharacterTokenizer(cls, iterable):
+	@staticmethod
+	def GetCharacterTokenizer(iterable):
 		previousToken =  None
 		absolute =    0
 		column =      0

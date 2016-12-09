@@ -8,10 +8,6 @@
 #
 # Python Module:    TODO
 #
-# Description:
-# ------------------------------------
-#		TODO:
-#
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Patrick Lehmann - Dresden, Germany
@@ -29,9 +25,48 @@
 # limitations under the License.
 # ==============================================================================
 #
+# load dependencies
 from lib.Functions import Init
 from lib.Parser    import MismatchingParserResult, MatchingParserResult, EmptyChoiseParserResult, GreedyMatchingParserResult
 from lib.Parser    import SpaceToken, CharacterToken, StringToken, NumberToken, Tokenizer
+
+
+__api__ = [
+	'CodeDOMMeta',
+	'CodeDOMObject',
+	'Expression',
+	'UnaryExpression',
+	'NotExpression',
+	'BinaryExpression',
+	'LogicalExpression',
+	'CompareExpression',
+	'EqualExpression',
+	'UnequalExpression',
+	'LessThanExpression',
+	'LessThanEqualExpression',
+	'GreaterThanExpression',
+	'GreaterThanEqualExpression',
+	'AndExpression',
+	'OrExpression',
+	'XorExpression',
+	'InExpression',
+	'NotInExpression',
+	'Function',
+	'ListElement',
+	'Literal',
+	'StringLiteral',
+	'IntegerLiteral',
+	'Identifier',
+	'Statement',
+	'BlockStatement',
+	'ConditionalBlockStatement',
+	'EmptyLine',
+	'CommentLine',
+	'BlockedStatement',
+	'ExpressionChoice'
+]
+__all__ = __api__
+
 
 DEBUG =   False#True
 
@@ -113,7 +148,7 @@ class CodeDOMObject(metaclass=CodeDOMMeta):
 				if printChar: print("{BLUE}{token!s}{NOCOLOR}".format(token=token, **Init.Foreground))
 				parser.send(token)
 
-			# XXX: print("send empty token")
+			# FIXME: print("send empty token")
 			parser.send(None)
 		except MatchingParserResult as ex:
 			return ex.value
@@ -195,7 +230,7 @@ class BinaryExpression(Expression):
 	__PARSER_NAME__ =             None
 	__PARSER_LHS_EXPRESSIONS__ =  None
 	__PARSER_RHS_EXPRESSIONS__ =  None
-	__PARSER_OPERATOR__ =     None
+	__PARSER_OPERATOR__ =         None
 
 	@classmethod
 	def GetParser(cls):

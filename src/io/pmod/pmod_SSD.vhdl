@@ -12,21 +12,21 @@
 -- expects two binary encoded 4-bit ``Digit<i>`` signals and drives a 2x6 bit
 -- Pmod connector (7 anode bits, 1 cathode bit).
 --
--- -- code-block:. none
+-- .. code-block:: none
 --
---		Segment Pos./ Index
---			 AAA      |   000
---			F   B     |  5   1
---			F   B     |  5   1
---			 GGG      |   666
---			E   C     |  4   2
---			E   C     |  4   2
---			 DDD  DOT |   333  7
+--    Segment Pos./ Index
+--       AAA      |   000
+--      F   B     |  5   1
+--      F   B     |  5   1
+--       GGG      |   666
+--      E   C     |  4   2
+--      E   C     |  4   2
+--       DDD  DOT |   333  7
 --
 -- License:
 -- =============================================================================
--- Copyright 2007-2015 Technische Universitaet Dresden - Germany
---										 Chair for VLSI-Design, Diagnostics and Architecture
+-- Copyright 2007-2016 Technische Universitaet Dresden - Germany
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

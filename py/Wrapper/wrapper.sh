@@ -3,9 +3,9 @@
 # kate: tab-width 2; replace-tabs off; indent-width 2;
 #
 # ==============================================================================
-#	Authors:				Patrick Lehmann
-#							Thomas B. Preusser
-#							Martin Zabel
+#	Authors:          Patrick Lehmann
+#	                  Thomas B. Preusser
+#                   Martin Zabel
 #
 #	Bash Script:			Wrapper Script to execute a given Python script
 #
@@ -18,7 +18,7 @@
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,9 +42,9 @@ PoC_WrapperDirectory="$PoC_PythonScriptDir/Wrapper"
 PoC_HookDirectory="$PoC_WrapperDirectory/Hooks"
 
 # define color escape codes
-RED='\e[0;31m'			# Red
-YELLOW='\e[1;33m'		# Yellow
-NOCOLOR='\e[0m'			# No Color
+ANSI_RED='\e[0;31m'       # Red
+ANSI_YELLOW='\e[1;33m'    # Yellow
+ANSI_NOCOLOR='\e[0m'      # No Color
 
 # set default values
 PyWrapper_Debug=0
@@ -134,6 +134,13 @@ declare -A Env_Mentor_PrecisionRTL=(
 	["BashModule"]="Mentor.PrecisionRTL.sh"
 	["PreHookFile"]="Mentor.PrecisionRTL.pre.sh"
 	["PostHookFile"]="Mentor.PrecisionRTL.post.sh"
+)
+declare -A Env_Mentor_ModelSim=(
+	["Load"]=0
+	["Commands"]="vsim"
+	["BashModule"]="Mentor.ModelSim.sh"
+	["PreHookFile"]="Mentor.ModelSim.pre.sh"
+	["PostHookFile"]="Mentor.ModelSim.post.sh"
 )
 declare -A Env_Mentor_QuestaSim=(
 	["Load"]=0
@@ -226,19 +233,19 @@ export PoCRootDirectory=$PoC_RootDir
 export PoCWorkingDirectory=$PoC_WorkingDir
 
 if [ $PyWrapper_Debug -eq 1 ]; then
-	echo -e "${YELLOW}This is the PoC Library script wrapper operating in debug mode.${NOCOLOR}"
+	echo -e "${ANSI_YELLOW}This is the PoC Library script wrapper operating in debug mode.${ANSI_NOCOLOR}"
 	echo
-	echo -e "${YELLOW}Directories:${NOCOLOR}"
-	echo -e "${YELLOW}  PoC root:        $PoC_RootDir${NOCOLOR}"
-	echo -e "${YELLOW}  working:         $PoC_WorkingDir${NOCOLOR}"
-	echo -e "${YELLOW}Script:${NOCOLOR}"
-	echo -e "${YELLOW}  Filename:        $PyWrapper_Script${NOCOLOR}"
-	echo -e "${YELLOW}  Solution:        $PyWrapper_Solution${NOCOLOR}"
-	echo -e "${YELLOW}  Parameters:      $PyWrapper_Parameters${NOCOLOR}"
-	echo -e "${YELLOW}Load Environment:  ${NOCOLOR}"
-	echo -e "${YELLOW}  Lattice Diamond: ${Env_Lattice_Diamond["Load"]}${NOCOLOR}"
-	echo -e "${YELLOW}  Xilinx ISE:      ${Env_Xilinx_ISE["Load"]}${NOCOLOR}"
-	echo -e "${YELLOW}  Xilinx VIVADO:   ${Env_Xilinx_Vivado["Load"]}${NOCOLOR}"
+	echo -e "${ANSI_YELLOW}Directories:${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}  PoC root:        $PoC_RootDir${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}  working:         $PoC_WorkingDir${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}Script:${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}  Filename:        $PyWrapper_Script${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}  Solution:        $PyWrapper_Solution${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}  Parameters:      $PyWrapper_Parameters${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}Load Environment:  ${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}  Lattice Diamond: ${Env_Lattice_Diamond["Load"]}${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}  Xilinx ISE:      ${Env_Xilinx_ISE["Load"]}${ANSI_NOCOLOR}"
+	echo -e "${ANSI_YELLOW}  Xilinx VIVADO:   ${Env_Xilinx_Vivado["Load"]}${ANSI_NOCOLOR}"
 	echo
 fi
 
@@ -247,7 +254,7 @@ Python_VersionTest='import sys; sys.exit(not (0x03050000 < sys.hexversion < 0x04
 python -c "$Python_VersionTest" 2>/dev/null
 if [ $? -eq 0 ]; then
 	Python_Interpreter=$(which python 2>/dev/null)
-	test $PyWrapper_Debug -eq 1 && echo -e "${YELLOW}PythonInterpreter: use standard interpreter: '$Python_Interpreter'${NOCOLOR}"
+	test $PyWrapper_Debug -eq 1 && echo -e "${ANSI_YELLOW}PythonInterpreter: use standard interpreter: '$Python_Interpreter'${ANSI_NOCOLOR}"
 else
 	# standard python interpreter is not suitable, try to find a suitable version manually
 	for pyVersion in 3.9 3.8 3.7 3.6 3.5; do
@@ -259,12 +266,12 @@ else
 			if [ $? -eq 0 ]; then break; fi
 		fi
 	done
-	test $PyWrapper_Debug -eq 1 && echo -e "${YELLOW}PythonInterpreter: use this interpreter: '$Python_Interpreter'${NOCOLOR}"
+	test $PyWrapper_Debug -eq 1 && echo -e "${ANSI_YELLOW}PythonInterpreter: use this interpreter: '$Python_Interpreter'${ANSI_NOCOLOR}"
 fi
 # if no interpreter was found => exit
 if [ -z "$Python_Interpreter" ]; then
-	echo 1>&2 -e "${RED}No suitable Python interpreter found.${NOCOLOR}"
-	echo 1>&2 -e "${RED}The script requires Python >= $PyWrapper_MinVersion${NOCOLOR}"
+	echo 1>&2 -e "${ANSI_RED}No suitable Python interpreter found.${ANSI_NOCOLOR}"
+	echo 1>&2 -e "${ANSI_RED}The script requires Python >= $PyWrapper_MinVersion${ANSI_NOCOLOR}"
 	PoC_ExitCode=1
 fi
 
@@ -308,8 +315,8 @@ if [ $PoC_ExitCode -eq 0 ]; then
 	fi
 
 	if [ $PyWrapper_Debug -eq 1 ]; then
-		echo -e "${YELLOW}Launching: '$Python_Interpreter $Python_Script $Python_ScriptParameters'${NOCOLOR}"
-		echo -e "${YELLOW}------------------------------------------------------------${NOCOLOR}"
+		echo -e "${ANSI_YELLOW}Launching: '$Python_Interpreter $Python_Script $Python_ScriptParameters'${ANSI_NOCOLOR}"
+		echo -e "${ANSI_YELLOW}------------------------------------------------------------${ANSI_NOCOLOR}"
 	fi
 
 	# launching python script

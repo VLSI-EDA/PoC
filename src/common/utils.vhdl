@@ -16,7 +16,7 @@
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
---										 Chair for VLSI-Design, Diagnostics and Architecture
+--										 Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ package utils is
 
 	--+ Enums ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	-- Intellectual Property (IP) type
-	type T_IPSTYLE				is (IPSTYLE_HARD, IPSTYLE_SOFT);
+	type T_IPSTYLE				is (IPSTYLE_UNKNOWN, IPSTYLE_HARD, IPSTYLE_SOFT);
 
 	-- Bit Order
 	type T_BIT_ORDER			is (LSB_FIRST, MSB_FIRST);
@@ -1044,6 +1044,7 @@ package body utils is
 				when ROUND_DOWN =>				return integer(floor(Result));
 				when others =>						report "scale: unsupported RoundingStyle." severity FAILURE;
 			end case;
+			return integer(Result);
 		end if;
 	end function;
 

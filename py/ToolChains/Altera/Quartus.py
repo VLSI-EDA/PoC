@@ -6,18 +6,12 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Class:      Altera Quartus specific classes
-#
-# Description:
-# ------------------------------------
-#		TODO:
-#		-
-#		-
+# Python Class:     Altera Quartus specific classes
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
-#                     Chair for VLSI-Design, Diagnostics and Architecture
+#                     Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,54 +26,74 @@
 # limitations under the License.
 # ==============================================================================
 #
-# entry point
-if __name__ != "__main__":
-	# place library initialization code here
-	pass
-else:
-	from lib.Functions import Exit
-	Exit.printThisIsNoExecutableFile("PoC Library - Python Module ToolChains.Altera.Quartus")
-
-
+# load dependencies
 from collections                import OrderedDict
+from enum                       import unique
 from subprocess                 import check_output, STDOUT
 
-from Base.Configuration          import Configuration as BaseConfiguration, ConfigurationException
+from lib.Functions              import Init
 from Base.Exceptions            import PlatformNotSupportedException
-from Base.Logging                import Severity, LogEntry
+from Base.Logging               import Severity, LogEntry
 from Base.Executable            import Executable, CommandLineArgumentList
 from Base.Executable            import ExecutableArgument, ShortValuedFlagArgument, LongValuedFlagArgument, StringArgument, ShortFlagArgument
-from Base.Project                import Project as BaseProject, ProjectFile, FileTypes, SettingsFile
-from ToolChains.Altera.Altera    import AlteraException
+from Base.Project               import Project as BaseProject, ProjectFile, FileTypes, SettingsFile
+from ToolChains                 import ToolMixIn, ConfigurationException, ToolConfiguration, EditionDescription, Edition, ToolSelector
+from ToolChains.Altera          import AlteraException
+
+
+__api__ = [
+	'QuartusException',
+	'QuartusEditions',
+	'Configuration',
+	'Quartus',
+	'Map',
+	'TclShell',
+	'MapFilter',
+	'QuartusSession',
+	'QuartusProject',
+	'QuartusSettings',
+	'QuartusProjectFile'
+]
+__all__ = __api__
 
 
 class QuartusException(AlteraException):
 	pass
 
 
-class Configuration(BaseConfiguration):
-	_vendor =    "Altera"
-	_toolName =  "Altera Quartus"
-	_section =  "INSTALL.Altera.Quartus"
+@unique
+class QuartusEditions(Edition):
+	"""Enumeration of all Quartus editions provided by Altera itself."""
+	AlteraQuartus =   EditionDescription(Name="Altera Quartus", Section="INSTALL.Altera.Quartus")
+	IntelQuartus =    EditionDescription(Name="Intel Quartus",  Section="INSTALL.Intel.Quartus")
+
+
+class Configuration(ToolConfiguration):
+	_vendor =               "Altera"                    #: The name of the tools vendor.
+	_toolName =             "Altera Quartus"            #: The name of the tool.
+	_section =              "INSTALL.Altera.Quartus"    #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  True                        #: Altera Quartus supports multiple versions installed on the same system.
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "15.1",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${Version}/quartus",
-				"BinaryDirectory":        "${InstallationDirectory}/bin64"
+				"Version":                "16.0",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Altera:InstallationDirectory}/${Version}/quartus"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin64")
 			}
 		},
 		"Linux": {
 			_section: {
-				"Version":                "15.1",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${Version}/quartus",
-				"BinaryDirectory":        "${InstallationDirectory}/bin"
+				"Version":                "16.0",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Altera:InstallationDirectory}/${Version}/quartus"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		}
-	}
+	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
-		# return True if Altera is configured
+		"""Check if general Altera support is configured in PoC."""
 		return (len(self._host.PoCConfig['INSTALL.Altera']) != 0)
 
 	def ConfigureForAll(self):
@@ -87,10 +101,20 @@ class Configuration(BaseConfiguration):
 			if (not self._AskInstalled("Is Altera Quartus-II or Quartus Prime installed on your system?")):
 				self.ClearSection()
 			else:
+				# Configure Quartus version
 				version = self._ConfigureVersion()
+				if self._multiVersionSupport:
+					self.PrepareVersionedSections()
+					sectionName = self._host.PoCConfig[self._section]['SectionName']
+					self._host.PoCConfig[sectionName]['Version'] = version
+
 				self._ConfigureInstallationDirectory()
 				binPath = self._ConfigureBinaryDirectory()
+
+				self.LogNormal("Checking Altera Quartus version... (this may take a few seconds)", indent=1)
 				self.__CheckQuartusVersion(binPath, version)
+
+				self.LogNormal("{DARK_GREEN}Altera Quartus is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 		except ConfigurationException:
 			self.ClearSection()
 			raise
@@ -102,42 +126,56 @@ class Configuration(BaseConfiguration):
 			quartusPath = binPath / "quartus_sh"
 
 		if not quartusPath.exists():
-			raise ConfigurationException("Executable '{0!s}' not found.".format(quartusPath)) from FileNotFoundError(
-				str(quartusPath))
+			raise ConfigurationException("Executable '{0!s}' not found.".format(quartusPath)) \
+				from FileNotFoundError(str(quartusPath))
 
 		output = check_output([str(quartusPath), "-v"], universal_newlines=True, stderr=STDOUT)
 		if "Version {0}".format(version) not in output:
 			raise ConfigurationException("Quartus version mismatch. Expected version {0}.".format(version))
 
 
-class QuartusMixIn:
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		self._platform =            platform
-		self._dryrun =              dryrun
-		self._binaryDirectoryPath = binaryDirectoryPath
-		self._version =             version
-		self._Logger =              logger
+class Selector(ToolSelector):
+	_toolName = "Quartus"
+
+	def Select(self):
+		editions = self._GetConfiguredEditions(QuartusEditions)
+
+		if (len(editions) == 0):
+			self._host.LogWarning("No Quartus installation found.", indent=1)
+			self._host.PoCConfig['INSTALL.Quartus'] = OrderedDict()
+		elif (len(editions) == 1):
+			self._host.LogNormal("Default Quartus installation:", indent=1)
+			self._host.LogNormal("Set to {0}".format(editions[0].Name), indent=2)
+			self._host.PoCConfig['INSTALL.Quartus']['SectionName'] = editions[0].Section
+		else:
+			self._host.LogNormal("Select Quartus installation:", indent=1)
+
+			defaultEdition = QuartusEditions.IntelQuartus
+			if defaultEdition not in editions:
+				defaultEdition = editions[0]
+
+			selectedEdition = self._AskSelection(editions, defaultEdition)
+			self._host.PoCConfig['INSTALL.Quartus']['SectionName'] = selectedEdition.Section
 
 
-class Quartus(QuartusMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
-
+class Quartus(ToolMixIn):
 	def GetMap(self):
-		return Map(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return Map(self)
 
 	def GetTclShell(self):
-		return TclShell(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, logger=self._Logger)
+		return TclShell(self)
 
 
-class Map(Executable, QuartusMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
+class Map(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
 
-		if (platform == "Windows") :      executablePath = binaryDirectoryPath / "quartus_map.exe"
-		elif (platform == "Linux") :      executablePath = binaryDirectoryPath / "quartus_map"
-		else :                            raise PlatformNotSupportedException(platform)
-		Executable.__init__(self, platform, dryrun, executablePath, logger=logger)
+		if (self._platform == "Windows") :      executablePath = self._binaryDirectoryPath / "quartus_map.exe"
+		elif (self._platform == "Linux") :      executablePath = self._binaryDirectoryPath / "quartus_map"
+		else :                            raise PlatformNotSupportedException(self._platform)
+		Executable.__init__(self, self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -211,14 +249,17 @@ class Map(Executable, QuartusMixIn):
 			if self._hasOutput:
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
-class TclShell(Executable, QuartusMixIn):
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		QuartusMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger)
 
-		if (platform == "Windows") :      executablePath = binaryDirectoryPath / "quartus_sh.exe"
-		elif (platform == "Linux") :      executablePath = binaryDirectoryPath / "quartus_sh"
-		else :                            raise PlatformNotSupportedException(platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+class TclShell(Executable, ToolMixIn):
+	def __init__(self, toolchain : ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows") :      executablePath = self._binaryDirectoryPath / "quartus_sh.exe"
+		elif (self._platform == "Linux") :      executablePath = self._binaryDirectoryPath / "quartus_sh"
+		else :                            raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
 
@@ -232,6 +273,7 @@ class TclShell(Executable, QuartusMixIn):
 			Executable,
 			SwitchShell
 	)
+
 
 def MapFilter(gen):
 	iterator = iter(gen)
@@ -250,6 +292,8 @@ def MapFilter(gen):
 		elif line.startswith("Warning ("):
 			yield LogEntry(line, Severity.Warning)
 		elif line.startswith("    Info ("):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("        Info ("):
 			yield LogEntry(line, Severity.Verbose)
 		elif line.startswith("Info:"):
 			yield LogEntry(line, Severity.Info)
@@ -394,4 +438,3 @@ class QuartusSettings(SettingsFile):
 class QuartusProjectFile(ProjectFile):
 	def __init__(self, file):
 		super().__init__(file)
-
