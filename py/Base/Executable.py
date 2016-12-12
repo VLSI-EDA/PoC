@@ -32,7 +32,7 @@ from subprocess             import PIPE					as Subprocess_Pipe
 from subprocess             import STDOUT				as Subprocess_StdOut
 
 from Base.Exceptions        import CommonException, ExceptionBase
-from Base.Logging           import ILogable
+from Base.Logging           import ILogable, Logger
 
 
 __api__ = [
@@ -45,10 +45,11 @@ __api__ = [
 	'StringListArgument',
 	'PathArgument',
 	'FlagArgument',           'ShortFlagArgument',            'LongFlagArgument',           'WindowsFlagArgument',
-	'ValuedFlagArgument',     'ShortValuedFlagArgument',      'LongValuedFlagArgument',
-	'ValuedFlagListArgument', 'ShortValuedFlagListArgument',  'LongValuedFlagListArgument',
-	'TupleArgument',          'ShortTupleArgument',           'LongTupleArgument',
+	'ValuedFlagArgument',     'ShortValuedFlagArgument',      'LongValuedFlagArgument',     'WindowsValuedFlagArgument',
+	'ValuedFlagListArgument', 'ShortValuedFlagListArgument',  'LongValuedFlagListArgument', 'WindowsValuedFlagListArgument',
+	'TupleArgument',          'ShortTupleArgument',           'LongTupleArgument',          'WindowsTupleArgument',
 	'CommandLineArgumentList',
+	'Environment',
 	'Executable'
 ]
 __all__ = __api__
@@ -320,6 +321,13 @@ class LongValuedFlagArgument(ValuedFlagArgument):
 	"""
 	_pattern = "--{0}={1}"
 
+class WindowsValuedFlagArgument(ValuedFlagArgument):
+	"""Represents a :py:class:`ValuedFlagArgument` with a single slash.
+
+	Example: ``/optimizer:on``
+	"""
+	_pattern = "/{0}:{1}"
+
 
 class ValuedFlagListArgument(NamedCommandLineArgument):
 	"""Class and base class for all ValuedFlagListArgument classes, which represents a list of :py:class:`ValuedFlagArgument` instances.
@@ -365,6 +373,13 @@ class LongValuedFlagListArgument(ValuedFlagListArgument):
 	Example: ``--file=file1.txt --file=file2.txt``
 	"""
 	_pattern = "--{0}={1}"
+
+class WindowsValuedFlagListArgument(ValuedFlagListArgument):
+	"""Represents a :py:class:`ValuedFlagListArgument` with a single slash.
+
+	Example: ``/file:file1.txt /file:file2.txt``
+	"""
+	_pattern = "/{0}:{1}"
 
 
 class TupleArgument(NamedCommandLineArgument):
@@ -414,6 +429,13 @@ class LongTupleArgument(TupleArgument):
 	"""
 	_switchPattern = "--{0}"
 
+class WindowsTupleArgument(TupleArgument):
+	"""Represents a :py:class:`TupleArgument` with a single slash in front of the switch name.
+
+	Example: ``/file file1.txt``
+	"""
+	_switchPattern = "/{0}"
+
 
 class CommandLineArgumentList(list):
 	"""Represent a list of all available commands, flags and switch of an executable."""
@@ -445,16 +467,22 @@ class CommandLineArgumentList(list):
 		return result
 
 
+class Environment:
+	def __init__(self):
+		self.Variables = {}
+
+
 class Executable(ILogable):
 	"""Represent an executable."""
 	_POC_BOUNDARY = "====== POC BOUNDARY ======"
 
-	def __init__(self, platform, dryrun, executablePath, logger=None):
+	def __init__(self, platform : str, dryrun : bool, executablePath : Path, environment : Environment = None, logger : Logger =None):
 		super().__init__(logger)
 
-		self._platform =  platform
-		self._dryrun =    dryrun
-		self._process =   None
+		self._platform =    platform
+		self._dryrun =      dryrun
+		self._environment = environment #if (environment is not None) else Environment()
+		self._process =     None
 
 		if isinstance(executablePath, str):             executablePath = Path(executablePath)
 		elif (not isinstance(executablePath, Path)):    raise ValueError("Parameter 'executablePath' is not of type str or Path.")
@@ -474,8 +502,21 @@ class Executable(ILogable):
 		# start child process
 		# parameterList.insert(0, str(self._executablePath))
 		if (not self._dryrun):
+			if (self._environment is not None):
+				envVariables = self._environment.Variables
+			else:
+				envVariables = None
+
 			try:
-				self._process = Subprocess_Popen(parameterList, stdin=Subprocess_Pipe, stdout=Subprocess_Pipe, stderr=Subprocess_StdOut, universal_newlines=True, bufsize=256)
+				self._process = Subprocess_Popen(
+					parameterList,
+					stdin=Subprocess_Pipe,
+					stdout=Subprocess_Pipe,
+					stderr=Subprocess_StdOut,
+					env=envVariables,
+					universal_newlines=True,
+					bufsize=256
+				)
 			except OSError as ex:
 				raise CommonException("Error while accessing '{0!s}'.".format(self._executablePath)) from ex
 		else:

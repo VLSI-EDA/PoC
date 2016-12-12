@@ -27,21 +27,34 @@ Germany |br|
       :scale: 60
       :target: https://www.github.com/VLSI-EDA/PoC
       :alt: Source Code on GitHub
-   .. image:: https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat
-      :target: https://landscape.io/github/VLSI-EDA/PoC/release
-      :alt: Code Health
    .. image:: https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release
       :target: https://travis-ci.org/VLSI-EDA/PoC
       :alt: Build status by Travis-CI
    .. image:: https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/release?svg=true
       :target: https://ci.appveyor.com/project/Paebbels/poc/branch/release
       :alt: Build status by AppVeyor
+   .. image:: https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat
+      :target: https://landscape.io/github/VLSI-EDA/PoC/release
+      :alt: Code Health
    .. image:: https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch=release
       :target: https://requires.io/github/VLSI-EDA/PoC/requirements/?branch=release
       :alt: Requirements Status
+
+   .. raw:: html
+
+      <br />
+
    .. image:: https://badges.gitter.im/VLSI-EDA/PoC.svg
       :target: https://gitter.im/VLSI-EDA/PoC
       :alt: Join
+   .. image:: https://img.shields.io/badge/news-Subscribe%20to%20VLSI--EDA%2FNews-orange.svg
+      :target: https://gitter.im/VLSI-EDA/News
+      :alt: Subscribe to VLSI-EDA/News
+
+   .. raw:: html
+
+      <br />
+
    .. image:: https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat
       :alt: Latest tag
    .. image:: https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat

@@ -29,7 +29,7 @@
 from pathlib              import Path
 
 from Base.Exceptions      import NotConfiguredException, PlatformNotSupportedException
-from ToolChains           import ConfigurationException
+from ToolChain            import ConfigurationException
 
 
 __api__ = [

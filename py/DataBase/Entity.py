@@ -33,7 +33,7 @@ from flags                import Flags
 
 from lib.Functions        import Init
 from lib.Decorators       import LazyLoadTrigger, ILazyLoadable
-from ToolChains           import ConfigurationException
+from ToolChain            import ConfigurationException
 
 
 __api__ = [

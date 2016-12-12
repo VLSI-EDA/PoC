@@ -30,8 +30,8 @@
 from pathlib                    import Path
 
 from Base.Project               import ToolChain, Tool
-from ToolChains.Xilinx          import XilinxProjectExportMixIn
-from ToolChains.Xilinx.ISE      import ISE, ISESimulator, ISEException
+from ToolChain.Xilinx           import XilinxProjectExportMixIn
+from ToolChain.Xilinx.ISE       import ISE, ISESimulator, ISEException
 from Simulator                  import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
@@ -59,10 +59,12 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	def _PrepareSimulator(self):
 		# create the Xilinx ISE executable factory
 		self.LogVerbose("Preparing ISE simulator.")
-		iseSection =  self.Host.PoCConfig['INSTALL.Xilinx.ISE']
-		version =     iseSection['Version']
-		binaryPath =  Path(iseSection['BinaryDirectory'])
-		self._toolChain = ISE(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		iseSection =            self.Host.PoCConfig['INSTALL.Xilinx.ISE']
+		version =               iseSection['Version']
+		installationDirectory = Path(iseSection['InstallationDirectory'])
+		binaryPath =            Path(iseSection['BinaryDirectory'])
+		self._toolChain =       ISE(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		self._toolChain.PreparseEnvironment(installationDirectory)
 
 	def _RunElaboration(self, testbench):
 		exeFilePath = self.Directories.Working / (testbench.ModuleName + ".exe")
@@ -94,7 +96,7 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 		wcfgFilePath =      self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['iSimWaveformConfigFile']
 
 		# create a ISESimulator instance
-		iSim = ISESimulator(self._host.Platform, self._host.DryRun, exeFilePath, logger=self.Logger)
+		iSim = ISESimulator(self._host.Platform, self._host.DryRun, exeFilePath, self._toolChain._environment, logger=self.Logger)
 		iSim.Parameters[iSim.SwitchLogFile] =         str(iSimLogFilePath)
 
 		if (SimulationSteps.ShowWaveform not in self._simulationSteps):

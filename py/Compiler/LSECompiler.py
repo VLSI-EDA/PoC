@@ -33,8 +33,8 @@ from pathlib                    import Path
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Project               import ToolChain, Tool, VHDLVersion
 from DataBase.Entity            import WildCard
-from ToolChains.Lattice         import LatticeException
-from ToolChains.Lattice.Diamond import Diamond, SynthesisArgumentFile
+from ToolChain.Lattice          import LatticeException
+from ToolChain.Lattice.Diamond  import Diamond, SynthesisArgumentFile
 from Compiler                   import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
@@ -67,8 +67,11 @@ class Compiler(BaseCompiler):
 		elif (self.Host.Platform == "Windows"): binaryPath = Path(diamondSection['BinaryDirectory2'])		# ispFPGA directory
 		else:                                   raise PlatformNotSupportedException(self.Host.Platform)
 
-		version = diamondSection['Version']
-		self._toolChain =    Diamond(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		version =               diamondSection['Version']
+		installationDirectory = Path(diamondSection['InstallationDirectory'])
+		# binaryDirectory =       Path(diamondSection['BinaryDirectory'])
+		self._toolChain =       Diamond(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		self._toolChain.PreparseEnvironment(installationDirectory)
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		"""Run a list of netlist compilations. Expand wildcards to all selected netlists."""

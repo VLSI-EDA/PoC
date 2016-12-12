@@ -37,7 +37,10 @@
 # This CmdLet:
 #   (1) Creates a sub-directory 'lattice' in the current working directory
 #   (2) Compiles all Lattice Diamond simulation libraries and packages for
+#       o Active-HDL
+#       o Riviera-PRO
 #       o GHDL
+#       o ModelSim
 #       o QuestaSim
 #
 [CmdletBinding()]
@@ -45,11 +48,16 @@ param(
 	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
-	# Pre-compile the Lattice Diamond libraries for GHDL.
+	# Pre-compile the Lattice libraries for Active-HDL.
+	[switch]$ActiveHDL =	$false,
+	# Pre-compile the Lattice libraries for Riviera-PRO.
+	[switch]$RivieraPRO =	$false,
+	# Pre-compile the Lattice libraries for GHDL.
 	[switch]$GHDL =				$false,
-
-	# Pre-compile the Lattice Diamond libraries for QuestaSim.
-	[switch]$Questa =			$false,
+	# Pre-compile the Lattice libraries for ModelSim.
+	[switch]$ModelSim =		$false,
+	# Pre-compile the Lattice libraries for QuestaSim.
+	[switch]$QuestaSim =	$false,
 
 	# Set VHDL Standard to '93.
 	[switch]$VHDL93 =			$false,
@@ -70,25 +78,25 @@ $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
 
-# set default values
-$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
-
 Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -ArgumentList "$WorkingDir"
 
 # Display help if no command was selected
-$Help = $Help -or (-not ($All -or $GHDL -or $Questa))
-
-if ($Help)
+if ($Help -or (-not ($All -or $ActiveHDL -or $RivieraPRO -or $GHDL -or $ModelSim -or $QuestaSim)))
 {	Get-Help $MYINVOCATION.InvocationName -Detailed
 	Exit-PrecompileScript
 }
 
-$GHDL,$Questa =			Resolve-Simulator $All $GHDL $Questa
-$VHDL93,$VHDL2008 = Resolve-VHDLVersion $VHDL93 $VHDL2008
+# set default values
+$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
+
+if ($All)
+{	$ActiveHDL =	$true
+	$RivieraPRO =	$true
+	$GHDL =				$true
+	$ModelSim =		$true
+	$QuestaSim =	$true
+}
 
 $PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
 $LatticeDirName =		Get-LatticeDirectoryName $PoCPS1
@@ -99,9 +107,10 @@ if ($GHDL)
 {	Write-Host "Pre-compiling Lattice's simulation libraries for GHDL" -ForegroundColor Cyan
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$GHDLBinDir =			Get-GHDLBinaryDirectory $PoCPS1
-	$GHDLScriptDir =	Get-GHDLScriptDirectory $PoCPS1
-	$GHDLDirName =		Get-GHDLDirectoryName $PoCPS1
+	$VHDL93,$VHDL2008 = Resolve-VHDLVersion $VHDL93 $VHDL2008
+	$GHDLBinDir =				Get-GHDLBinaryDirectory $PoCPS1
+	$GHDLScriptDir =		Get-GHDLScriptDirectory $PoCPS1
+	$GHDLDirName =			Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
 	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
@@ -143,42 +152,85 @@ if ($GHDL)
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 }
 
-# QuestaSim/ModelSim
+# Supported pre-compilations by Lattice (Active-HDL, Riviera-PRO, ModelSim, QuestaSim)
 # ==============================================================================
-if ($Questa)
-{	Write-Host "Pre-compiling Lattice's simulation libraries for QuestaSim" -ForegroundColor Cyan
-	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+:forTools foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
+{	if (Get-Variable $tool -ValueOnly)
+	{	switch ($tool)
+		{	"ActiveHDL"
+			{	Write-Host "Pre-compiling Lattice's simulation libraries for Active-HDL..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-ActiveHDLBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-ActiveHDLDirectoryName $PoCPS1
+				$Simulator =			"activehdl"
 
-	$VSimBinDir =			Get-ModelSimBinaryDirectory $PoCPS1
-	$VSimDirName =		Get-QuestaSimDirectoryName $PoCPS1
+				Write-Host "Pre-compilaltion via 'cmpl_libs' for Active-HDL not supported." -ForegroundColor Red
+				continue forTools;
 
-	# Assemble output directory
-	$DestDir="$PoCRootDir\$PrecompiledDir\$VSimDirName\$LatticeDirName"
-	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
+				break;
+			}
+			"RivieraPRO"
+			{	Write-Host "Pre-compiling Lattice's simulation libraries for Riviera-PRO..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-RivieraPROBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-RivieraPRODirectoryName $PoCPS1
+				$Simulator =			"riviera"
 
-	$DiamondBinDir = 		Get-DiamondBinaryDirectory $PoCPS1
-	$Diamond_tcl =			"$DiamondBinDir\pnmainc.exe"
-	# Open-DiamondEnvironment $PoCPS1
+				Write-Host "Pre-compilaltion via 'cmpl_libs' for Active-HDL not supported." -ForegroundColor Red
+				continue forTools;
 
-	New-ModelSim_ini
+				break;
+			}
+			"ModelSim"
+			{	Write-Host "Pre-compiling Lattice's simulation libraries for ModelSim..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-ModelSimBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-ModelSimDirectoryName $PoCPS1
+				$Simulator =			"mentor"
+				break;
+			}
+			"QuestaSim"
+			{	Write-Host "Pre-compiling Lattice's simulation libraries for QuestaSim..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-QuestaSimBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-QuestaSimDirectoryName $PoCPS1
+				$Simulator =			"mentor"
+				break;
+			}
+		}
+		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$Simulator =					"mentor"
-	$Language =						"vhdl"
-	$Device =							"all"			# all, machxo, ecp, ...
+		# Assemble output directory
+		$DestDir="$PoCRootDir\$PrecompiledDir\$ToolDirName\$LatticeDirName"
+		# Create and change to destination directory
+		Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
-	$VSimBinDir_TclPath = $VSimBinDir.Replace("\", "/")
-	"cmpl_libs -lang $Language -sim_vendor $Simulator -sim_path $VSimBinDir_TclPath -device $Device`nexit" | & $Diamond_tcl
-	if ($LastExitCode -ne 0)
-	{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
-		Exit-PrecompileScript -1
+		$DiamondBinDir = 		Get-DiamondBinaryDirectory $PoCPS1
+		$Diamond_tcl =			"$DiamondBinDir\pnmainc.exe"
+		# Open-DiamondEnvironment $PoCPS1
+
+		switch ($tool)
+		{	"ModelSim"
+			{	New-ModelSim_ini	}
+			"QuestaSim"
+			{	New-ModelSim_ini	}
+		}
+
+		$Language =						"vhdl"
+		$TargetArchitectures =	@(		# all, machxo, ecp, ...
+			"all"
+		)
+
+		$ToolBinDir_TclPath =	$ToolBinDir.Replace("\", "/")
+		foreach ($Device in $TargetArchitectures)
+		{	"cmpl_libs -lang $Language -sim_vendor $Simulator -sim_path $ToolBinDir_TclPath -device $Device`nexit" | & $Diamond_tcl
+			if ($LastExitCode -ne 0)
+			{	Write-Host "[ERROR]: While compiling family '$Device' libraries." -ForegroundColor Red
+				Exit-PrecompileScript -1
+			}
+		}
+		# Close-DiamondEnvironment
+
+		# restore working directory
+		cd $WorkingDir
+		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 	}
-
-	# Close-DiamondEnvironment
-
-	# restore working directory
-	cd $WorkingDir
-	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 }
 
 Write-Host "[COMPLETE]" -ForegroundColor Green

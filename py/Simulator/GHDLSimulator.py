@@ -33,8 +33,8 @@ from Base.Exceptions        import NotConfiguredException
 from Base.Logging           import Severity
 from Base.Project           import FileTypes, VHDLVersion, ToolChain, Tool
 from Simulator              import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
-from ToolChains.GHDL        import GHDL, GHDLException, GHDLReanalyzeException
-from ToolChains.GTKWave     import GTKWave
+from ToolChain.GHDL         import GHDL, GHDLException, GHDLReanalyzeException
+from ToolChain.GTKWave      import GTKWave
 
 
 __api__ = [

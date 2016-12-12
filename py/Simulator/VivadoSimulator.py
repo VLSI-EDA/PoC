@@ -31,8 +31,8 @@ from pathlib                    import Path
 
 from Base.Logging               import Severity
 from Base.Project               import ToolChain, Tool
-from ToolChains.Xilinx          import XilinxProjectExportMixIn
-from ToolChains.Xilinx.Vivado   import Vivado, VivadoException
+from ToolChain.Xilinx           import XilinxProjectExportMixIn
+from ToolChain.Xilinx.Vivado    import Vivado, VivadoException
 from Simulator                  import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
@@ -60,14 +60,16 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 	def _PrepareSimulator(self):
 		# create the Vivado executable factory
 		self.LogVerbose("Preparing Vivado simulator.")
-		vivadoSection = self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
-		version =  vivadoSection['Version']
-		binaryPath = Path(vivadoSection['BinaryDirectory'])
-		self._toolChain = Vivado(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		vivadoSection =         self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
+		version =               vivadoSection['Version']
+		installationDirectory = Path(vivadoSection['InstallationDirectory'])
+		binaryPath =            Path(vivadoSection['BinaryDirectory'])
+		self._toolChain =       Vivado(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		self._toolChain.PreparseEnvironment(installationDirectory)
 
 	def _RunElaboration(self, testbench):
 		xelabLogFilePath =  self.Directories.Working / (testbench.ModuleName + ".xelab.log")
-		prjFilePath =        self.Directories.Working / (testbench.ModuleName + ".prj")
+		prjFilePath =       self.Directories.Working / (testbench.ModuleName + ".prj")
 		self._WriteXilinxProjectFile(prjFilePath, "xSim", self._vhdlVersion)
 
 		# create a VivadoLinker instance

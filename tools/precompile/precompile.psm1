@@ -41,12 +41,6 @@ $Module_WorkingDir = $WorkingDir
 
 function Exit-PrecompileScript
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER ExitCode
 		ExitCode of this script run
 	#>
@@ -71,41 +65,8 @@ function Exit-PrecompileScript
 	}
 }
 
-function Resolve-Simulator
-{	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
-		.PARAMETER All
-		Undocumented
-		.PARAMETER GHDL
-		Undocumented
-		.PARAMETER QuestaSim
-		Undocumented
-	#>
-	[CmdletBinding()]
-	param(
-		[Parameter(Mandatory=$true)][bool]$All,
-		[Parameter(Mandatory=$true)][bool]$GHDL,
-		[Parameter(Mandatory=$true)][bool]$QuestaSim
-	)
-	if ($All)
-	{	return $true, $true				}
-	else
-	{	return $GHDL, $QuestaSim	}
-}
-
 function Resolve-VHDLVersion
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER VHDL93
 		Undocumented
 		.PARAMETER VHDL2008
@@ -126,12 +87,6 @@ function Resolve-VHDLVersion
 
 function Get-PrecompiledDirectoryName
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -152,12 +107,6 @@ function Get-PrecompiledDirectoryName
 
 function Get-AlteraDirectoryName
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -178,12 +127,6 @@ function Get-AlteraDirectoryName
 
 function Get-LatticeDirectoryName
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -204,12 +147,6 @@ function Get-LatticeDirectoryName
 
 function Get-XilinxDirectoryName
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -228,14 +165,48 @@ function Get-XilinxDirectoryName
 	return $Result
 }
 
+function Get-ActiveHDLDirectoryName
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query CONFIG.DirectoryNames:ActiveHDLFiles"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get Aldec Active-HDL directory name." -ForegroundColor Red
+		Write-Host "$Result" -ForegroundColor Red
+		Exit-PrecompileScript -1
+	}
+	return $Result
+}
+
+function Get-RivieraPRODirectoryName
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query CONFIG.DirectoryNames:RivieraPROFiles"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get Aldec Riviera-PRO directory name." -ForegroundColor Red
+		Write-Host "$Result" -ForegroundColor Red
+		Exit-PrecompileScript -1
+	}
+	return $Result
+}
+
 function Get-GHDLDirectoryName
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -254,14 +225,132 @@ function Get-GHDLDirectoryName
 	return $Result
 }
 
+function Get-ModelSimDirectoryName
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query CONFIG.DirectoryNames:ModelSimFiles"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get Mentor ModelSim directory name." -ForegroundColor Red
+		Write-Host "$Result" -ForegroundColor Red
+		Exit-PrecompileScript -1
+	}
+	return $Result
+}
+
+function Get-QuestaSimDirectoryName
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query CONFIG.DirectoryNames:QuestaSimFiles"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get Mentor QuestaSim directory name." -ForegroundColor Red
+		Write-Host "$Result" -ForegroundColor Red
+		Exit-PrecompileScript -1
+	}
+	return $Result
+}
+
+function Get-ActiveHDLInstallationDirectory
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query INSTALL.ActiveHDL:InstallationDirectory"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get Active-HDL installation directory." -ForegroundColor Red
+		Write-Host "         $Result" -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Active-HDL installation." -ForegroundColor Yellow
+		Exit-PrecompileScript -1
+	}
+	return $Result.Replace("/", "\")
+}
+
+function Get-ActiveHDLBinaryDirectory
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query INSTALL.ActiveHDL:BinaryDirectory"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get Active-HDL binary directory." -ForegroundColor Red
+		Write-Host "         $Result" -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Active-HDL installation." -ForegroundColor Yellow
+		Exit-PrecompileScript -1
+	}
+	return $Result.Replace("/", "\")
+}
+
+function Get-RivieraPROInstallationDirectory
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query INSTALL.Aldec.RivieraPRO:InstallationDirectory"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get Aldec Riviera-PRO installation directory." -ForegroundColor Red
+		Write-Host "         $Result" -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Aldec Riviera-PRO installation." -ForegroundColor Yellow
+		Exit-PrecompileScript -1
+	}
+	return $Result.Replace("/", "\")
+}
+
+function Get-RivieraPROBinaryDirectory
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query INSTALL.Aldec.RivieraPRO:BinaryDirectory"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get Aldec Riviera-PRO binary directory." -ForegroundColor Red
+		Write-Host "         $Result" -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Aldec Riviera-PRO installation." -ForegroundColor Yellow
+		Exit-PrecompileScript -1
+	}
+	return $Result.Replace("/", "\")
+}
+
 function Get-GHDLBinaryDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -283,12 +372,6 @@ function Get-GHDLBinaryDirectory
 
 function Get-GHDLScriptDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -308,14 +391,8 @@ function Get-GHDLScriptDirectory
 	return $Result.Replace("/", "\")
 }
 
-function Get-QuestaSimDirectoryName
+function Get-ModelSimInstallationDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -324,24 +401,19 @@ function Get-QuestaSimDirectoryName
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:QuestaSimFiles"
+	$Command = "$PoCPS1 query INSTALL.ModelSim:InstallationDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
-	{	Write-Host "[ERROR]: Cannot get Mentor QuestaSim directory name." -ForegroundColor Red
-		Write-Host "$Result" -ForegroundColor Red
+	{	Write-Host "[ERROR]: Cannot get ModelSim installation directory." -ForegroundColor Red
+		Write-Host "         $Result" -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Mentor ModelSim installation." -ForegroundColor Yellow
 		Exit-PrecompileScript -1
 	}
-	return $Result
+	return $Result.Replace("/", "\")
 }
 
 function Get-ModelSimBinaryDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -350,12 +422,54 @@ function Get-ModelSimBinaryDirectory
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
 
-	$Command = "$PoCPS1 query ModelSim:BinaryDirectory"
+	$Command = "$PoCPS1 query INSTALL.ModelSim:BinaryDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
-	{	Write-Host "[ERROR]: Cannot get QuestaSim/ModelSim binary directory." -ForegroundColor Red
+	{	Write-Host "[ERROR]: Cannot get ModelSim binary directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
-		Write-Host "Run 'poc.ps1 configure' to configure your Mentor QuestaSim/ModelSim installation." -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Mentor ModelSim installation." -ForegroundColor Yellow
+		Exit-PrecompileScript -1
+	}
+	return $Result.Replace("/", "\")
+}
+
+function Get-QuestaSimInstallationDirectory
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query INSTALL.Mentor.QuestaSim:InstallationDirectory"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get QuestaSim installation directory." -ForegroundColor Red
+		Write-Host "         $Result" -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Mentor QuestaSim installation." -ForegroundColor Yellow
+		Exit-PrecompileScript -1
+	}
+	return $Result.Replace("/", "\")
+}
+
+function Get-QuestaSimBinaryDirectory
+{	<#
+		.PARAMETER PoCPS1
+		PoC's front-end script
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory=$true)][string]$PoCPS1
+	)
+
+	$Command = "$PoCPS1 query INSTALL.Mentor.QuestaSim:BinaryDirectory"
+	$Result = Invoke-Expression $Command
+	if (($LastExitCode -ne 0) -or ($Result -eq ""))
+	{	Write-Host "[ERROR]: Cannot get QuestaSim binary directory." -ForegroundColor Red
+		Write-Host "         $Result" -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Mentor QuestaSim installation." -ForegroundColor Yellow
 		Exit-PrecompileScript -1
 	}
 	return $Result.Replace("/", "\")
@@ -363,12 +477,6 @@ function Get-ModelSimBinaryDirectory
 
 function Get-QuartusInstallationDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -377,12 +485,12 @@ function Get-QuartusInstallationDirectory
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
 
-	$Command = "$PoCPS1 query INSTALL.Altera.Quartus:InstallationDirectory"
+	$Command = "$PoCPS1 query INSTALL.Quartus:InstallationDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
-	{	Write-Host "[ERROR]: Cannot get Altera Quartus installation directory." -ForegroundColor Red
+	{	Write-Host "[ERROR]: Cannot get Quartus installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
-		Write-Host "Run 'poc.ps1 configure' to configure your Altera Quartus installation." -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Quartus installation." -ForegroundColor Yellow
 		Exit-PrecompileScript -1
 	}
 	return $Result.Replace("/", "\")
@@ -390,12 +498,6 @@ function Get-QuartusInstallationDirectory
 
 function Get-QuartusBinaryDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -404,12 +506,12 @@ function Get-QuartusBinaryDirectory
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
 
-	$Command = "$PoCPS1 query INSTALL.Altera.Quartus:BinaryDirectory"
+	$Command = "$PoCPS1 query INSTALL.Quartus:BinaryDirectory"
 	$Result = Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
-	{	Write-Host "[ERROR]: Cannot get Altera Quartus installation directory." -ForegroundColor Red
+	{	Write-Host "[ERROR]: Cannot get Quartus installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
-		Write-Host "Run 'poc.ps1 configure' to configure your Altera Quartus installation." -ForegroundColor Yellow
+		Write-Host "Run 'poc.ps1 configure' to configure your Quartus installation." -ForegroundColor Yellow
 		Exit-PrecompileScript -1
 	}
 	return $Result.Replace("/", "\")
@@ -417,12 +519,6 @@ function Get-QuartusBinaryDirectory
 
 function Get-DiamondInstallationDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -444,12 +540,6 @@ function Get-DiamondInstallationDirectory
 
 function Get-DiamondBinaryDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -471,12 +561,6 @@ function Get-DiamondBinaryDirectory
 
 function Get-ISEInstallationDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -498,12 +582,6 @@ function Get-ISEInstallationDirectory
 
 function Get-ISEBinaryDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -525,12 +603,6 @@ function Get-ISEBinaryDirectory
 
 function Get-VivadoInstallationDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -552,12 +624,6 @@ function Get-VivadoInstallationDirectory
 
 function Get-VivadoBinaryDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -580,12 +646,6 @@ function Get-VivadoBinaryDirectory
 
 function Initialize-DestinationDirectory
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -594,11 +654,8 @@ function Initialize-DestinationDirectory
 		[string]$DestinationDirectory
 	)
 	# set default values
-	$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-	$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-	if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-	if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-	if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
 	if (-not (Test-Path $DestinationDirectory -PathType Container))
 	{	$EnableDebug -and		(Write-Host "  mkdir $DestinationDirectory -ErrorAction SilentlyContinue | Out-Null" -ForegroundColor DarkGray	) | Out-Null
@@ -617,23 +674,13 @@ function Initialize-DestinationDirectory
 }
 
 function New-ModelSim_ini
-{	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-	#>
-	[CmdletBinding()]
+{	[CmdletBinding()]
 	param(
 		[string]$ModelSim_ini = "modelsim.ini"
 	)
 	# set default values
-	$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-	$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-	if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-	if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-	if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
 	# $ModelSim_ini = "modelsim.ini"
 	$EnableVerbose -and		(Write-Host "Writing new '$ModelSim_ini'..." -ForegroundColor Gray	) | Out-Null
@@ -646,14 +693,9 @@ function New-ModelSim_ini
 	{	"others = ../$ModelSim_ini" | Out-File $ModelSim_ini -Append -Encoding ascii		}
 }
 
+
 function Open-ISEEnvironment
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -701,15 +743,7 @@ function Open-ISEEnvironment
 }
 
 function Close-ISEEnvironment
-{	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-	#>
-
-	Write-Host "Unloading Xilinx ISE environment..." -ForegroundColor Yellow
+{	Write-Host "Unloading Xilinx ISE environment..." -ForegroundColor Yellow
 	$env:XILINX =						$null
 	$env:XILINX_EDK =				$null
 	$env:XILINX_PLANAHEAD =	$null
@@ -718,12 +752,6 @@ function Close-ISEEnvironment
 
 function Open-VivadoEnvironment
 {	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-
 		.PARAMETER PoCPS1
 		PoC's front-end script
 	#>
@@ -771,17 +799,10 @@ function Open-VivadoEnvironment
 }
 
 function Close-VivadoEnvironment
-{	<#
-		.SYNOPSIS
-		Undocumented
-
-		.DESCRIPTION
-		Undocumented
-	#>
-
-	Write-Host "Unloading Xilinx Vivado environment..." -ForegroundColor Yellow
+{	Write-Host "Unloading Xilinx Vivado environment..." -ForegroundColor Yellow
 	$env:XILINX_VIVADO =		$null
 }
+
 
 function Restore-NativeCommandStream
 {	<#
@@ -891,13 +912,13 @@ function Write-ColoredGHDLLine
 	{	$ErrorRecordFound		}
 }
 
-function Write-ColoredActiveHDLLine
+function Write-ColoredActiveHDLVLibLine
 {	<#
 		.SYNOPSIS
-		This CmdLet colors ActiveHDL output lines.
+		This CmdLet colors Active-HDL output lines.
 
 		.DESCRIPTION
-		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
+		This CmdLet colors Active-HDL output lines. Warnings are prefixed with 'WARNING: '
 		in yellow and errors are prefixed with 'ERROR: ' in red.
 
 		.PARAMETER InputObject
@@ -919,12 +940,138 @@ function Write-ColoredActiveHDLLine
 
 	begin
 	{	# set default values
-		$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-		$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-		if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-		if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-		if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
+		$EnableDebug =			[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
+		$ErrorRecordFound =	$false
+	}
 
+	process
+	{	if (-not $InputObject)
+		{	Write-Host "Empty pipeline!"	}
+		elseif ($InputObject -is [string])
+		{	if ($InputObject.StartsWith("vlib "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("** Warning:") -and -not $SuppressWarnings)
+			{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
+				Write-Host $InputObject.Substring(12)
+			}
+			elseif ($InputObject.StartsWith("** Fatal:") -or $InputObject.StartsWith("# ** Fatal:"))
+			{	Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("** Error:") -or $InputObject.StartsWith("# ** Error:"))
+			{	Write-Host "${Indent}FATAL: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("QuestaSim-64 vlib"))
+			{	if ($EnableDebug)			{	Write-Host "${Indent}$InputObject" -ForegroundColor DarkGray		}		}
+			else
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}$InputObject"
+			}
+		}
+		else
+		{	Write-Host "Unsupported object in pipeline stream"		}
+	}
+
+	end
+	{	$ErrorRecordFound		}
+}
+function Write-ColoredActiveHDLVMapLine
+{	<#
+		.SYNOPSIS
+		This CmdLet colors Active-HDL output lines.
+
+		.DESCRIPTION
+		This CmdLet colors Active-HDL output lines. Warnings are prefixed with 'WARNING: '
+		in yellow and errors are prefixed with 'ERROR: ' in red.
+
+		.PARAMETER InputObject
+		A object stream is required as an input.
+
+		.PARAMETER SuppressWarnings
+		Skip warning messages. (Show errors only.)
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline=$true)]
+		$InputObject,
+
+		[Parameter(Position=1)]
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
+	)
+
+	begin
+	{	# set default values
+		$EnableDebug =			[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
+		$ErrorRecordFound =	$false
+	}
+
+	process
+	{	if (-not $InputObject)
+		{	Write-Host "Empty pipeline!"	}
+		elseif ($InputObject -is [string])
+		{	if ($InputObject.StartsWith("vmap "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("** Warning:") -and -not $SuppressWarnings)
+			{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
+				Write-Host $InputObject.Substring(12)
+			}
+			elseif ($InputObject.StartsWith("** Fatal:") -or $InputObject.StartsWith("# ** Fatal:"))
+			{	Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("** Error:") -or $InputObject.StartsWith("# ** Error:"))
+			{	Write-Host "${Indent}FATAL: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("QuestaSim-64 vmap"))
+			{	if ($EnableDebug)			{	Write-Host "${Indent}$InputObject" -ForegroundColor DarkGray		}		}
+			else
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}$InputObject"
+			}
+		}
+		else
+		{	Write-Host "Unsupported object in pipeline stream"		}
+	}
+
+	end
+	{	$ErrorRecordFound		}
+}
+function Write-ColoredActiveHDLVComLine
+{	<#
+		.SYNOPSIS
+		This CmdLet colors ActiveHDL output lines.
+
+		.DESCRIPTION
+		This CmdLet colors Active-HDL output lines. Warnings are prefixed with 'WARNING: '
+		in yellow and errors are prefixed with 'ERROR: ' in red.
+
+		.PARAMETER InputObject
+		A object stream is required as an input.
+
+		.PARAMETER SuppressWarnings
+		Skip warning messages. (Show errors only.)
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline=$true)]
+		$InputObject,
+
+		[Parameter(Position=1)]
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
+	)
+
+	begin
+	{	# set default values
+		$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 		$ErrorRecordFound = $false
 	}
 
@@ -932,7 +1079,13 @@ function Write-ColoredActiveHDLLine
 	{	if (-not $InputObject)
 		{	Write-Host "Empty pipeline!"	}
 		elseif ($InputObject -is [string])
-		{	if ($InputObject.Contains("WARNING"))
+		{	if ($InputObject.StartsWith("Aldec, Inc."))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("VLM Initialized"))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("COMP96 File:"))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.Contains("WARNING"))
 			{	if (-not $SuppressWarnings)
 				{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
 					Write-Host $InputObject
@@ -942,6 +1095,23 @@ function Write-ColoredActiveHDLLine
 			{	$ErrorRecordFound	= $true
 				Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
 				Write-Host $InputObject
+			}
+			elseif ($InputObject -match "COMP96\sCompile\s(?:success|failure)\s(\d+)\sErrors\s(\d+)\sWarnings\s+Analysis\stime\s:\s+(\d+\.\d+)\s\[(\w+)\]")
+			{	if ($EnableVerbose)
+				{	if ($Matches[1] -eq 0)
+					{	Write-Host "${Indent}Errors: 0" -NoNewline -ForegroundColor Gray 							}
+					else
+					{ Write-Host "${Indent}Errors: $($Matches[1])" -NoNewline -ForegroundColor Red		}
+					Write-Host ", " -NoNewline
+					if ($Matches[2] -eq 0)
+					{	Write-Host "Warnings: 0" -ForegroundColor Gray 																}
+					else
+					{ Write-Host "Warnings: $($Matches[2])" -ForegroundColor Yellow									}
+				}
+				else
+				{	if ($Matches[1] -gt 0)	{ Write-Host "${Indent}Errors:   $($Matches[1])" -ForegroundColor Red				}
+					if ($Matches[2] -gt 0)	{	Write-Host "${Indent}Warnings: $($Matches[2])" -ForegroundColor Yellow	}
+				}
 			}
 			else
 			{	Write-Host "${Indent}$InputObject"									}
@@ -954,13 +1124,13 @@ function Write-ColoredActiveHDLLine
 	{	$ErrorRecordFound		}
 }
 
-function Write-ColoredQuestaVLibLine
+function Write-ColoredModelSimVLibLine
 {	<#
 		.SYNOPSIS
-		This CmdLet colors QuestaSim/ModelSim output lines.
+		This CmdLet colors ModelSim output lines.
 
 		.DESCRIPTION
-		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
+		This CmdLet colors ModelSim output lines. Warnings are prefixed with 'WARNING: '
 		in yellow and errors are prefixed with 'ERROR: ' in red.
 
 		.PARAMETER InputObject
@@ -982,12 +1152,8 @@ function Write-ColoredQuestaVLibLine
 
 	begin
 	{	# set default values
-		$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-		$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-		if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-		if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-		if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
-
+		$EnableDebug =			[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 		$ErrorRecordFound = $false
 	}
 
@@ -1023,13 +1189,13 @@ function Write-ColoredQuestaVLibLine
 	end
 	{	$ErrorRecordFound		}
 }
-function Write-ColoredQuestaVMapLine
+function Write-ColoredModelSimVMapLine
 {	<#
 		.SYNOPSIS
-		This CmdLet colors QuestaSim/ModelSim output lines.
+		This CmdLet colors ModelSim output lines.
 
 		.DESCRIPTION
-		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
+		This CmdLet colors ModelSim output lines. Warnings are prefixed with 'WARNING: '
 		in yellow and errors are prefixed with 'ERROR: ' in red.
 
 		.PARAMETER InputObject
@@ -1051,12 +1217,8 @@ function Write-ColoredQuestaVMapLine
 
 	begin
 	{	# set default values
-		$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-		$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-		if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-		if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-		if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
-
+		$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 		$ErrorRecordFound = $false
 	}
 
@@ -1092,13 +1254,13 @@ function Write-ColoredQuestaVMapLine
 	end
 	{	$ErrorRecordFound		}
 }
-function Write-ColoredQuestaVComLine
+function Write-ColoredModelSimVComLine
 {	<#
 		.SYNOPSIS
-		This CmdLet colors QuestaSim/ModelSim output lines.
+		This CmdLet colors ModelSim output lines.
 
 		.DESCRIPTION
-		This CmdLet colors GHDL output lines. Warnings are prefixed with 'WARNING: '
+		This CmdLet colors ModelSim output lines. Warnings are prefixed with 'WARNING: '
 		in yellow and errors are prefixed with 'ERROR: ' in red.
 
 		.PARAMETER InputObject
@@ -1120,12 +1282,8 @@ function Write-ColoredQuestaVComLine
 
 	begin
 	{	# set default values
-		$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-		$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-		if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-		if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-		if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
-
+		$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 		$ErrorRecordFound = $false
 	}
 
@@ -1162,16 +1320,237 @@ function Write-ColoredQuestaVComLine
 				{	if ($Matches[1] -eq 0)
 					{	Write-Host "${Indent}Errors: 0" -NoNewline -ForegroundColor Gray 							}
 					else
-					{ Write-Host "${Indent}Errors: ${Matches[1]}" -NoNewline -ForegroundColor Red		}
+					{ Write-Host "${Indent}Errors: $($Matches[1])" -NoNewline -ForegroundColor Red		}
 					Write-Host ", " -NoNewline
 					if ($Matches[2] -eq 0)
 					{	Write-Host "Warnings: 0" -ForegroundColor Gray 																}
 					else
-					{ Write-Host "Warnings: ${Matches[2]}" -ForegroundColor Yellow									}
+					{ Write-Host "Warnings: $($Matches[2])" -ForegroundColor Yellow									}
 				}
 				else
-				{	if ($Matches[1] -gt 0)	{ Write-Host "${Indent}Errors:   ${Matches[1]}" -ForegroundColor Red				}
-					if ($Matches[2] -gt 0)	{	Write-Host "${Indent}Warnings: ${Matches[2]}" -ForegroundColor Yellow	}
+				{	if ($Matches[1] -gt 0)	{ Write-Host "${Indent}Errors:   $($Matches[1])" -ForegroundColor Red				}
+					if ($Matches[2] -gt 0)	{	Write-Host "${Indent}Warnings: $($Matches[2])" -ForegroundColor Yellow	}
+				}
+			}
+			else
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}$InputObject"
+			}
+		}
+		else
+		{	Write-Host "Unsupported object in pipeline stream"		}
+	}
+
+	end
+	{	$ErrorRecordFound		}
+}
+
+function Write-ColoredQuestaSimVLibLine
+{	<#
+		.SYNOPSIS
+		This CmdLet colors QuestaSim output lines.
+
+		.DESCRIPTION
+		This CmdLet colors QuestaSim output lines. Warnings are prefixed with 'WARNING: '
+		in yellow and errors are prefixed with 'ERROR: ' in red.
+
+		.PARAMETER InputObject
+		A object stream is required as an input.
+
+		.PARAMETER SuppressWarnings
+		Skip warning messages. (Show errors only.)
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline=$true)]
+		$InputObject,
+
+		[Parameter(Position=1)]
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
+	)
+
+	begin
+	{	# set default values
+		$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
+		$ErrorRecordFound = $false
+	}
+
+	process
+	{	if (-not $InputObject)
+		{	Write-Host "Empty pipeline!"	}
+		elseif ($InputObject -is [string])
+		{	if ($InputObject.StartsWith("vlib "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("** Warning:") -and -not $SuppressWarnings)
+			{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
+				Write-Host $InputObject.Substring(12)
+			}
+			elseif ($InputObject.StartsWith("** Fatal:") -or $InputObject.StartsWith("# ** Fatal:"))
+			{	Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("** Error:") -or $InputObject.StartsWith("# ** Error:"))
+			{	Write-Host "${Indent}FATAL: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("QuestaSim-64 vlib"))
+			{	if ($EnableDebug)			{	Write-Host "${Indent}$InputObject" -ForegroundColor DarkGray		}		}
+			else
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}$InputObject"
+			}
+		}
+		else
+		{	Write-Host "Unsupported object in pipeline stream"		}
+	}
+
+	end
+	{	$ErrorRecordFound		}
+}
+function Write-ColoredQuestaSimVMapLine
+{	<#
+		.SYNOPSIS
+		This CmdLet colors QuestaSim output lines.
+
+		.DESCRIPTION
+		This CmdLet colors QuestaSim output lines. Warnings are prefixed with 'WARNING: '
+		in yellow and errors are prefixed with 'ERROR: ' in red.
+
+		.PARAMETER InputObject
+		A object stream is required as an input.
+
+		.PARAMETER SuppressWarnings
+		Skip warning messages. (Show errors only.)
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline=$true)]
+		$InputObject,
+
+		[Parameter(Position=1)]
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
+	)
+
+	begin
+	{	# set default values
+		$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
+		$ErrorRecordFound = $false
+	}
+
+	process
+	{	if (-not $InputObject)
+		{	Write-Host "Empty pipeline!"	}
+		elseif ($InputObject -is [string])
+		{	if ($InputObject.StartsWith("vmap "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("** Warning:") -and -not $SuppressWarnings)
+			{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
+				Write-Host $InputObject.Substring(12)
+			}
+			elseif ($InputObject.StartsWith("** Fatal:") -or $InputObject.StartsWith("# ** Fatal:"))
+			{	Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("** Error:") -or $InputObject.StartsWith("# ** Error:"))
+			{	Write-Host "${Indent}FATAL: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("QuestaSim-64 vmap"))
+			{	if ($EnableDebug)			{	Write-Host "${Indent}$InputObject" -ForegroundColor DarkGray		}		}
+			else
+			{	$ErrorRecordFound	= $true
+				Write-Host "${Indent}$InputObject"
+			}
+		}
+		else
+		{	Write-Host "Unsupported object in pipeline stream"		}
+	}
+
+	end
+	{	$ErrorRecordFound		}
+}
+function Write-ColoredQuestaSimVComLine
+{	<#
+		.SYNOPSIS
+		This CmdLet colors QuestaSim output lines.
+
+		.DESCRIPTION
+		This CmdLet colors QuestaSim output lines. Warnings are prefixed with 'WARNING: '
+		in yellow and errors are prefixed with 'ERROR: ' in red.
+
+		.PARAMETER InputObject
+		A object stream is required as an input.
+
+		.PARAMETER SuppressWarnings
+		Skip warning messages. (Show errors only.)
+	#>
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline=$true)]
+		$InputObject,
+
+		[Parameter(Position=1)]
+		[switch]$SuppressWarnings = $false,
+		[Parameter(Position=2)]
+		[string]$Indent = ""
+	)
+
+	begin
+	{	# set default values
+		$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+		$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
+		$ErrorRecordFound = $false
+	}
+
+	process
+	{	if (-not $InputObject)
+		{	Write-Host "Empty pipeline!"	}
+		elseif ($InputObject -is [string])
+		{	if ($InputObject.StartsWith("vcom "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("-- Loading "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("-- Compiling "))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("** Warning:") -and -not $SuppressWarnings)
+			{	Write-Host "${Indent}WARNING: "	-NoNewline -ForegroundColor Yellow
+				Write-Host $InputObject.Substring(12)
+			}
+			elseif ($InputObject.StartsWith("** Fatal:") -or $InputObject.StartsWith("# ** Fatal:"))
+			{	Write-Host "${Indent}ERROR: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("** Error:") -or $InputObject.StartsWith("# ** Error:"))
+			{	Write-Host "${Indent}FATAL: "	-NoNewline -ForegroundColor Red
+				Write-Host $InputObject.Substring(10)
+			}
+			elseif ($InputObject.StartsWith("Start time:"))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("End time:"))
+			{	if ($EnableVerbose)		{	Write-Host "${Indent}$InputObject" -ForegroundColor Gray				}		}
+			elseif ($InputObject.StartsWith("QuestaSim-64 vcom"))
+			{	if ($EnableDebug)			{	Write-Host "${Indent}$InputObject" -ForegroundColor DarkGray		}		}
+			elseif ($InputObject -match "Errors: (\d+), Warnings: (\d+)")
+			{	if ($EnableVerbose)
+				{	if ($Matches[1] -eq 0)
+					{	Write-Host "${Indent}Errors: 0" -NoNewline -ForegroundColor Gray 							}
+					else
+					{ Write-Host "${Indent}Errors: $($Matches[1])" -NoNewline -ForegroundColor Red		}
+					Write-Host ", " -NoNewline
+					if ($Matches[2] -eq 0)
+					{	Write-Host "Warnings: 0" -ForegroundColor Gray 																}
+					else
+					{ Write-Host "Warnings: $($Matches[2])" -ForegroundColor Yellow									}
+				}
+				else
+				{	if ($Matches[1] -gt 0)	{ Write-Host "${Indent}Errors:   $($Matches[1])" -ForegroundColor Red				}
+					if ($Matches[2] -gt 0)	{	Write-Host "${Indent}Warnings: $($Matches[2])" -ForegroundColor Yellow	}
 				}
 			}
 			else
@@ -1189,25 +1568,35 @@ function Write-ColoredQuestaVComLine
 
 Export-ModuleMember -Function 'Exit-PrecompileScript'
 
-Export-ModuleMember -Function 'Resolve-Simulator'
 Export-ModuleMember -Function 'Resolve-VHDLVersion'
 
 # Directory names
 Export-ModuleMember -Function 'Get-PrecompiledDirectoryName'
 Export-ModuleMember -Function 'Get-AlteraDirectoryName'
-Export-ModuleMember -Function 'Get-GHDLDirectoryName'
+Export-ModuleMember -Function 'Get-IntelDirectoryName'
 Export-ModuleMember -Function 'Get-LatticeDirectoryName'
-Export-ModuleMember -Function 'Get-QuestaSimDirectoryName'
 Export-ModuleMember -Function 'Get-XilinxDirectoryName'
+Export-ModuleMember -Function 'Get-ActiveHDLDirectoryName'
+Export-ModuleMember -Function 'Get-RivieraPRODirectoryName'
+Export-ModuleMember -Function 'Get-GHDLDirectoryName'
+Export-ModuleMember -Function 'Get-ModelSimDirectoryName'
+Export-ModuleMember -Function 'Get-QuestaSimDirectoryName'
 
 # Tool directories
+Export-ModuleMember -Function 'Get-ActiveHDLInstallationDirectory'
+Export-ModuleMember -Function 'Get-ActiveHDLBinaryDirectory'
+Export-ModuleMember -Function 'Get-RivieraPROInstallationDirectory'
+Export-ModuleMember -Function 'Get-RivieraPROBinaryDirectory'
 Export-ModuleMember -Function 'Get-QuartusInstallationDirectory'
 Export-ModuleMember -Function 'Get-QuartusBinaryDirectory'
 Export-ModuleMember -Function 'Get-DiamondInstallationDirectory'
 Export-ModuleMember -Function 'Get-DiamondBinaryDirectory'
 Export-ModuleMember -Function 'Get-GHDLBinaryDirectory'
 Export-ModuleMember -Function 'Get-GHDLScriptDirectory'
+Export-ModuleMember -Function 'Get-ModelSimInstallationDirectory'
 Export-ModuleMember -Function 'Get-ModelSimBinaryDirectory'
+Export-ModuleMember -Function 'Get-QuestaSimInstallationDirectory'
+Export-ModuleMember -Function 'Get-QuestaSimBinaryDirectory'
 Export-ModuleMember -Function 'Get-ISEInstallationDirectory'
 Export-ModuleMember -Function 'Get-ISEBinaryDirectory'
 Export-ModuleMember -Function 'Get-VivadoInstallationDirectory'
@@ -1223,8 +1612,13 @@ Export-ModuleMember -Function 'Open-VivadoEnvironment'
 Export-ModuleMember -Function 'Close-VivadoEnvironment'
 
 Export-ModuleMember -Function 'Restore-NativeCommandStream'
+Export-ModuleMember -Function 'Write-ColoredActiveHDLVLibLine'
+Export-ModuleMember -Function 'Write-ColoredActiveHDLVMapLine'
+Export-ModuleMember -Function 'Write-ColoredActiveHDLVComLine'
 Export-ModuleMember -Function 'Write-ColoredGHDLLine'
-Export-ModuleMember -Function 'Write-ColoredActiveHDLLine'
-Export-ModuleMember -Function 'Write-ColoredQuestaVLibLine'
-Export-ModuleMember -Function 'Write-ColoredQuestaVMapLine'
-Export-ModuleMember -Function 'Write-ColoredQuestaVComLine'
+Export-ModuleMember -Function 'Write-ColoredModelSimVLibLine'
+Export-ModuleMember -Function 'Write-ColoredModelSimVMapLine'
+Export-ModuleMember -Function 'Write-ColoredModelSimVComLine'
+Export-ModuleMember -Function 'Write-ColoredQuestaSimVLibLine'
+Export-ModuleMember -Function 'Write-ColoredQuestaSimVMapLine'
+Export-ModuleMember -Function 'Write-ColoredQuestaSimVComLine'

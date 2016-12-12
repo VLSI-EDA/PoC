@@ -36,7 +36,7 @@ from Parser.FilesParser import FilesParserMixIn
 from Parser.RulesParser import RulesParserMixIn
 from DataBase           import __POC_SOLUTION_KEYWORD__
 from DataBase.Entity    import Visibility
-from ToolChains         import ConfigurationException
+from ToolChain          import ConfigurationException
 
 
 __api__ = [

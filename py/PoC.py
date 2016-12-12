@@ -4,7 +4,7 @@
 #
 # ==============================================================================
 # Authors:              Patrick Lehmann
-#												Martin Zabel
+#                       Martin Zabel
 #
 # Python Main Module:   Entry point to the testbench tools in PoC repository.
 #
@@ -36,7 +36,7 @@
 # load dependencies
 from argparse                           import RawDescriptionHelpFormatter
 from configparser                       import Error as ConfigParser_Error, DuplicateOptionError
-from datetime import datetime
+from datetime                           import datetime
 from os                                 import environ
 from pathlib                            import Path
 from platform                           import system as platform_system
@@ -64,10 +64,10 @@ from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
 from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
 from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
 from Simulator.ISESimulator             import Simulator as ISESimulator
-from Simulator.QuestaSimulator          import Simulator as QuestaSimulator
+from Simulator.ModelSimSimulator        import Simulator as QuestaSimulator
 from Simulator.VivadoSimulator          import Simulator as VivadoSimulator
-from ToolChains                         import ToolChainException, Configurator, ConfigurationException
-from ToolChains.GHDL                    import Configuration as GHDLConfiguration
+from ToolChain                          import ToolChainException, Configurator, ConfigurationException
+from ToolChain.GHDL                     import Configuration as GHDLConfiguration
 from lib.pyAttribute.ArgParseAttributes import ArgParseMixin
 from lib.pyAttribute.ArgParseAttributes import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
 from lib.pyAttribute.ArgParseAttributes import CommonArgumentAttribute, CommonSwitchArgumentAttribute
@@ -396,7 +396,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "help" command
 	# ----------------------------------------------------------------------------
-	@CommandAttribute("help", help="help help")
+	@CommandAttribute("help", help="Display help page(s) for the given command name.")
 	@ArgumentAttribute(metavar="Command", dest="Command", type=str, nargs="?", help="Print help page(s) for a command.")
 	def HandleHelp(self, args):
 		self.PrintHeadline()
@@ -408,6 +408,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		else:
 			self.SubParsers[args.Command].print_help()
 		Exit.exit()
+
 
 	# ============================================================================
 	# Configuration commands
@@ -700,17 +701,15 @@ class PileOfCores(ILogable, ArgParseMixin):
 		if (vhdlVersion is None):       return defaultVersion
 		else:                           return VHDLVersion.Parse(vhdlVersion)
 
-	# TODO: move to Configuration class in ToolChains.Xilinx.Vivado
+	# TODO: move to Configuration class in ToolChain.Xilinx.Vivado
 	def _CheckVivadoEnvironment(self):
 		# check if Vivado is configure
 		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0): raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
-		if (environ.get('XILINX_VIVADO') is None):                      raise EnvironmentException("Xilinx Vivado environment is not loaded in this shell environment.")
 
-	# TODO: move to Configuration class in ToolChains.Xilinx.ISE
+	# TODO: move to Configuration class in ToolChain.Xilinx.ISE
 	def _CheckISEEnvironment(self):
 		# check if ISE is configure
 		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) == 0):    raise NotConfiguredException("Xilinx ISE is not configured on this system.")
-		if (environ.get('XILINX') is None):                             raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
 
 	@staticmethod
 	def _ExtractSimulationSteps(guiMode, analyze, elaborate, optimize, recompile, simulate, showWaveform, resimulate, showReport, cleanUp):
