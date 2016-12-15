@@ -35,7 +35,7 @@ from subprocess               import check_output, CalledProcessError
 from lib.Functions            import Init
 from Base.Exceptions          import PlatformNotSupportedException
 from Base.Logging             import LogEntry, Severity
-from Base.Executable          import Executable, ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList
+from Base.Executable          import ExecutableArgument, LongValuedFlagArgument, CommandLineArgumentList, DryRunException
 from ToolChain                import ToolChainException, ConfigurationException, ToolConfiguration, OutputFilteredExecutable
 
 
@@ -213,6 +213,8 @@ class GTKWave(OutputFilteredExecutable):
 				line.IndentBy(self.Logger.BaseIndent + 1)
 				self.Log(line)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:

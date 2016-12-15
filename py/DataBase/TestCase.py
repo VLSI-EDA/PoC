@@ -45,11 +45,12 @@ __all__ = __api__
 @unique
 class SimulationStatus(Enum):
 	Unknown =              0
-	SystemError =          1
-	InternalError =        2
-	AnalyzeError =         3
-	ElaborationError =     4
-	SimulationError =      5
+	DryRun =               1
+	SystemError =          5
+	InternalError =        6
+	AnalyzeError =         7
+	ElaborationError =     8
+	SimulationError =      9
 	SimulationFailed =    10
 	SimulationNoAsserts = 15
 	SimulationSuccess =   20
@@ -58,9 +59,10 @@ class SimulationStatus(Enum):
 @unique
 class CompileStatus(Enum):
 	Unknown =              0
-	SystemError =          1
-	InternalError =        2
-	CompileError =         6
+	DryRun =               1
+	SystemError =          5
+	InternalError =        6
+	CompileError =         7
 	CompileFailed =       10
 	CompileSuccess =      20
 
@@ -284,6 +286,7 @@ class TestCase(TestBase):
 
 	def UpdateStatus(self, testResult):
 		if (testResult is testResult.NotRun):       self._status = SimulationStatus.Unknown
+		elif (testResult is testResult.DryRun):     self._status = SimulationStatus.DryRun
 		elif (testResult is testResult.Error):      self._status = SimulationStatus.SimulationError
 		elif (testResult is testResult.Failed):     self._status = SimulationStatus.SimulationFailed
 		elif (testResult is testResult.NoAsserts):  self._status = SimulationStatus.SimulationNoAsserts
@@ -303,6 +306,7 @@ class Synthesis(TestBase):
 
 	def UpdateStatus(self, synthResult):
 		if (synthResult is synthResult.NotRun):     self._status = CompileStatus.Unknown
+		if (synthResult is synthResult.DryRun):     self._status = CompileStatus.DryRun
 		elif (synthResult is synthResult.Error):    self._status = CompileStatus.CompileError
 		elif (synthResult is synthResult.Success):  self._status = CompileStatus.CompileSuccess
 		else:                                       raise IndentationError("Wuhu2")

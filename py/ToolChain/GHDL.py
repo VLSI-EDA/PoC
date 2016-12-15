@@ -35,11 +35,12 @@ from subprocess             import check_output, CalledProcessError
 from lib.Functions          import CallByRefParam, Init
 from Base.Exceptions        import PlatformNotSupportedException
 from Base.Logging           import LogEntry, Severity
-from Base.Executable        import Executable, LongValuedFlagArgument
+from Base.Executable        import LongValuedFlagArgument, DryRunException
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument, ValuedFlagListArgument
 from Base.Executable        import ShortFlagArgument, LongFlagArgument, CommandLineArgumentList
+from DataBase.Entity        import SimulationResult
 from ToolChain              import ToolMixIn, ToolChainException, ConfigurationException, ToolConfiguration, OutputFilteredExecutable
-from Simulator              import SimulationResult, PoCSimulationResultFilter
+from Simulator              import PoCSimulationResultFilter
 
 
 __api__ = [
@@ -345,7 +346,7 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 		ghdl = GHDLAnalyze(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self._logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
-				ghdl.Parameters[param] = None
+				ghdl.Parameters[param] =       None
 		ghdl.Parameters[ghdl.CmdAnalyze] = True
 		return ghdl
 
@@ -353,7 +354,7 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 		ghdl = GHDLElaborate(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self._logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
-				ghdl.Parameters[param] = None
+				ghdl.Parameters[param] =         None
 		ghdl.Parameters[ghdl.CmdElaborate] = True
 		return ghdl
 
@@ -361,7 +362,7 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 		ghdl = GHDLRun(self._platform, self._dryrun, self._binaryDirectoryPath, self._version, self._backend, logger=self._logger)
 		for param in ghdl.Parameters:
 			if (param is not ghdl.Executable):
-				ghdl.Parameters[param] = None
+				ghdl.Parameters[param] =        None
 		ghdl.Parameters[ghdl.CmdRun] =      True
 		return ghdl
 
@@ -374,10 +375,6 @@ class GHDLAnalyze(GHDL):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList.insert(0, self.Executable)
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
-
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -392,8 +389,8 @@ class GHDLAnalyze(GHDL):
 
 			line = next(iterator)
 			self._hasOutput =    True
-			self.LogNormal("  ghdl analyze messages for '{0}'".format(self.Parameters[self.ArgSourceFile]))
-			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("ghdl analyze messages for '{0}'".format(self.Parameters[self.ArgSourceFile]), indent=1)
+			self.LogNormal(("-" * (78 - self.Logger.BaseIndent*2)), indent=1)
 
 			while True:
 				self._hasWarnings |=  (line.Severity is Severity.Warning)
@@ -403,11 +400,13 @@ class GHDLAnalyze(GHDL):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal(("-" * (78 - self.Logger.BaseIndent*2)), indent=1)
 
 
 class GHDLElaborate(GHDL):
@@ -418,10 +417,6 @@ class GHDLElaborate(GHDL):
 		parameterList = self.Parameters.ToArgumentList()
 		parameterList.insert(0, self.Executable)
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
-
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -439,8 +434,8 @@ class GHDLElaborate(GHDL):
 			self._hasOutput = True
 			vhdlLibraryName = self.Parameters[self.SwitchVHDLLibrary]
 			topLevel = self.Parameters[self.ArgTopLevel]
-			self.LogNormal("  ghdl elaborate messages for '{0}.{1}'".format(vhdlLibraryName, topLevel))
-			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+			self.LogNormal("ghdl elaborate messages for '{0}.{1}'".format(vhdlLibraryName, topLevel), indent=1)
+			self.LogNormal(("-" * (78 - self.Logger.BaseIndent*2)), indent=1)
 			self.Log(line)
 
 			while True:
@@ -451,11 +446,13 @@ class GHDLElaborate(GHDL):
 				line.IndentBy(self.Logger.BaseIndent + 1)
 				self.Log(line)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
+				self.LogNormal(("-" * (78 - self.Logger.BaseIndent*2)), indent=1)
 
 
 class GHDLRun(GHDL):
@@ -467,10 +464,6 @@ class GHDLRun(GHDL):
 		parameterList += self.RunOptions.ToArgumentList()
 		parameterList.insert(0, self.Executable)
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
-
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
 
 		try:
 			self.StartProcess(parameterList)
@@ -489,8 +482,8 @@ class GHDLRun(GHDL):
 			self._hasOutput = True
 			vhdlLibraryName =  self.Parameters[self.SwitchVHDLLibrary]
 			topLevel =        self.Parameters[self.ArgTopLevel]
-			self.LogNormal("  ghdl run messages for '{0}.{1}'".format(vhdlLibraryName, topLevel))
-			self.LogNormal("  " + ("-" * 76))
+			self.LogNormal("ghdl run messages for '{0}.{1}'".format(vhdlLibraryName, topLevel), indent=1)
+			self.LogNormal("-" * 78, indent=1)
 			self.Log(line)
 
 			while True:
@@ -501,11 +494,13 @@ class GHDLRun(GHDL):
 				line.IndentBy(self.Logger.BaseIndent + 1)
 				self.Log(line)
 
+		except DryRunException:
+			simulationResult <<= SimulationResult.DryRun
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
-				self.LogNormal("  " + ("-" * 76))
+				self.LogNormal("-" * 78, indent=1)
 
 		return simulationResult.value
 

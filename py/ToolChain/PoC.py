@@ -114,4 +114,3 @@ class Configuration(ToolConfiguration):
 	# elif (local == base):   return "Need to pull"
 	# elif (remote == base):  return "Need to push"
 	# else:                   return "divergent"
-

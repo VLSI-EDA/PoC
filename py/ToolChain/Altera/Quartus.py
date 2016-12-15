@@ -34,7 +34,7 @@ from subprocess                 import check_output, STDOUT
 from lib.Functions              import Init
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Logging               import Severity, LogEntry
-from Base.Executable            import Executable, CommandLineArgumentList
+from Base.Executable            import Executable, CommandLineArgumentList, DryRunException
 from Base.Executable            import ExecutableArgument, ShortValuedFlagArgument, LongValuedFlagArgument, StringArgument, ShortFlagArgument
 from Base.Project               import Project as BaseProject, ProjectFile, FileTypes, SettingsFile
 from ToolChain                  import ToolMixIn, ConfigurationException, ToolConfiguration, EditionDescription, Edition, ToolSelector, OutputFilteredExecutable
@@ -234,6 +234,8 @@ class Map(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:

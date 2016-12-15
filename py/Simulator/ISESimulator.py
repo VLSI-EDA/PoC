@@ -29,6 +29,7 @@
 # load dependencies
 from pathlib                    import Path
 
+from Base.Executable            import DryRunException
 from Base.Project               import ToolChain, Tool
 from ToolChain.Xilinx           import XilinxProjectExportMixIn
 from ToolChain.Xilinx.ISE       import ISE, ISESimulator, ISEException
@@ -83,6 +84,8 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 		try:
 			fuse.Link()
+		except DryRunException:
+			pass
 		except ISEException as ex:
 			raise SimulatorException("Error while analysing '{0!s}'.".format(prjFilePath)) from ex
 		if fuse.HasErrors:
@@ -112,4 +115,11 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 			else:
 				self.LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
-		testbench.Result = iSim.Simulate()
+		try:
+			testbench.Result = iSim.Simulate()
+		except DryRunException:
+			pass
+		except ISEException as ex:
+			raise SimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
+		if iSim.HasErrors:
+			raise SkipableSimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))

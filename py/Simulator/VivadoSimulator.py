@@ -29,6 +29,7 @@
 # load dependencies
 from pathlib                    import Path
 
+from Base.Executable            import DryRunException
 from Base.Logging               import Severity
 from Base.Project               import ToolChain, Tool
 from ToolChain.Xilinx           import XilinxProjectExportMixIn
@@ -89,6 +90,8 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 
 		try:
 			xelab.Link()
+		except DryRunException:
+			pass
 		except VivadoException as ex:
 			raise SimulatorException("Error while analysing '{0!s}'.".format(prjFilePath)) from ex
 		if xelab.HasErrors:
@@ -118,4 +121,12 @@ class Simulator(BaseSimulator, XilinxProjectExportMixIn):
 				self.LogDebug("Didn't find waveform config file: '{0!s}'".format(wcfgFilePath))
 
 		xSim.Parameters[xSim.SwitchSnapshot] = testbench.ModuleName
-		testbench.Result = xSim.Simulate()
+
+		try:
+			testbench.Result = xSim.Simulate()
+		except DryRunException:
+			pass
+		except VivadoException as ex:
+			raise SimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
+		if xSim.HasErrors:
+			raise SkipableSimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))

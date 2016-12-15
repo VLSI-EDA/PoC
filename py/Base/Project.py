@@ -107,7 +107,7 @@ class Environment(Enum):
 class ToolChain(Enum):
 	Any =                0
 	Aldec_ActiveHDL =   10
-	Aldec_RivieraPro =  15
+	Aldec_RivieraPRO =  15
 	Altera_Quartus =    20
 	Altera_ModelSim =   21
 	Cocotb =            30
@@ -127,6 +127,7 @@ class ToolChain(Enum):
 class Tool(Enum):      # ID     Short Name       Long Name
 	Any =                 0
 	Aldec_aSim =         ("ASIM",   "Aldec Active-HDL",         "Aldec Active-HDL")
+	Aldec_rPro =         ("RPRO",   "Aldec Riviera-PRO",        "Aldec Riviera-PRO")
 	Altera_Quartus_Map = ("QMAP",   "Quartus Map",              "Altera Quartus Map (quartus_map)")
 	# ModelSim Altera Edition?
 	Cocotb_QuestaSim =   ("COCO",   "Cocotb",                   "Coroutine Cosimulation Testbench (Cocotb)")

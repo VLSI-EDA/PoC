@@ -35,7 +35,7 @@ from subprocess               import check_output, CalledProcessError, STDOUT
 from lib.Functions            import Init
 from Base.Exceptions          import PlatformNotSupportedException
 from Base.Logging             import Severity, LogEntry
-from Base.Executable          import Executable, CommandLineArgumentList, ExecutableArgument, ShortTupleArgument
+from Base.Executable          import CommandLineArgumentList, ExecutableArgument, ShortTupleArgument, DryRunException
 from Base.Project             import File, FileTypes, VHDLVersion
 from ToolChain                import ToolMixIn, ConfigurationException, ToolConfiguration, OutputFilteredExecutable
 from ToolChain.GNU            import Bash
@@ -230,6 +230,8 @@ class Synth(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:

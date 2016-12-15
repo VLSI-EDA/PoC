@@ -29,6 +29,7 @@
 # load dependencies
 from pathlib                      import Path
 
+from Base.Executable              import DryRunException
 from Base.Project                 import FileTypes, ToolChain, Tool
 from ToolChain.Aldec.ActiveHDL    import ActiveHDL, ActiveHDLException
 from Simulator                    import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
@@ -77,6 +78,8 @@ class Simulator(BaseSimulator):
 			alib.Parameters[alib.SwitchLibraryName] = lib.Name
 			try:
 				alib.CreateLibrary()
+			except DryRunException:
+				pass
 			except ActiveHDLException as ex:
 				raise SimulatorException("Error creating VHDL library '{0}'.".format(lib.Name)) from ex
 			if alib.HasErrors:
@@ -94,6 +97,8 @@ class Simulator(BaseSimulator):
 			# set a per file log-file with '-l', 'vcom.log',
 			try:
 				acom.Compile()
+			except DryRunException:
+				pass
 			except ActiveHDLException as ex:
 				raise SimulatorException("Error while compiling '{0!s}'.".format(file.Path)) from ex
 			if acom.HasErrors:
@@ -106,19 +111,21 @@ class Simulator(BaseSimulator):
 		# tclBatchFilePath =    self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['aSimBatchScript']
 
 		# create a ActiveHDLSimulator instance
-		aSim = self._toolChain.GetSimulator()
-		aSim.Parameters[aSim.SwitchBatchCommand] = "asim -lib {0} {1}; run -all; bye".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+		asim = self._toolChain.GetSimulator()
+		asim.Parameters[asim.SwitchBatchCommand] = "asim -lib {0} {1}; run -all; bye".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
 
-		# aSim.Optimization =      True
-		# aSim.TimeResolution =    "1fs"
-		# aSim.ComanndLineMode =  True
-		# aSim.BatchCommand =      "do {0}".format(str(tclBatchFilePath))
-		# aSim.TopLevel =          "{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
+		# asim.Optimization =      True
+		# asim.TimeResolution =    "1fs"
+		# asim.ComanndLineMode =  True
+		# asim.BatchCommand =      "do {0}".format(str(tclBatchFilePath))
+		# asim.TopLevel =          "{0}.{1}".format(VHDLTestbenchLibraryName, testbenchName)
 		try:
-			testbench.Result = aSim.Simulate()
+			testbench.Result = asim.Simulate()
+		except DryRunException:
+			pass
 		except ActiveHDLException as ex:
 			raise SimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
-		if aSim.HasErrors:
+		if asim.HasErrors:
 			raise SkipableSimulatorException("Error while simulating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName))
 
 	def _RunSimulationWithGUI(self, testbench):

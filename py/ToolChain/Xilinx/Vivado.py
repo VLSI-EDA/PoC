@@ -33,12 +33,13 @@ from lib.Functions              import CallByRefParam, Init
 from Base.Exceptions            import PlatformNotSupportedException
 from Base.Logging               import LogEntry, Severity
 from Base.Project               import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
-from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from Base.Executable            import ExecutableArgument, ShortFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList, DryRunException
+from DataBase.Entity            import SimulationResult
 from ToolChain                  import ToolMixIn, ConfigurationException, ToolConfiguration, OutputFilteredExecutable
 from ToolChain.GNU              import Bash
 from ToolChain.Windows          import Cmd
 from ToolChain.Xilinx           import XilinxException
-from Simulator                  import SimulationResult, PoCSimulationResultFilter
+from Simulator                  import PoCSimulationResultFilter
 
 
 __api__ = [
@@ -224,10 +225,6 @@ class XElab(OutputFilteredExecutable, ToolMixIn):
 		parameterList = self.Parameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
-
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -252,6 +249,8 @@ class XElab(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		except VivadoException:
@@ -311,10 +310,6 @@ class XSim(OutputFilteredExecutable, ToolMixIn):
 		parameterList = self.Parameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
-
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -340,6 +335,8 @@ class XSim(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			simulationResult <<= SimulationResult.DryRun
 		except StopIteration:
 			pass
 		finally:
@@ -389,10 +386,6 @@ class Synth(OutputFilteredExecutable, ToolMixIn):
 		parameterList = self.Parameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
-
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -417,12 +410,13 @@ class Synth(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:
 			if self._hasOutput:
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
-
 
 
 def ElaborationFilter(gen): # mccabe:disable=MC0001

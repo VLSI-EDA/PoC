@@ -61,6 +61,9 @@ class ExecutableException(ExceptionBase):
 		super().__init__(message)
 		self.message = message
 
+class DryRunException(ExecutableException):
+	"""This exception is raised if a simulator runs in dry-run mode."""
+
 
 class CommandLineArgument(type):
 	"""Base class (and meta class) for all Arguments classes."""
@@ -533,13 +536,16 @@ class Executable(ILogable):
 		self._process.terminate()
 
 	def GetReader(self):
-		try:
-			for line in iter(self._process.stdout.readline, ""):
-				yield line[:-1]
-		except Exception as ex:
-			raise ex
-		# finally:
-			# self._process.terminate()
+		if (not self._dryrun):
+			try:
+				for line in iter(self._process.stdout.readline, ""):
+					yield line[:-1]
+			except Exception as ex:
+				raise ex
+			# finally:
+				# self._process.terminate()
+		else:
+			raise DryRunException()
 
 	def ReadUntilBoundary(self, indent=0):
 		__indent = "  " * indent

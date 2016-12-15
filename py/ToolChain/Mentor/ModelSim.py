@@ -36,11 +36,12 @@ from textwrap                     import dedent
 
 from lib.Functions                import Init, CallByRefParam
 from Base.Exceptions              import PlatformNotSupportedException
-from Base.Executable              import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, PathArgument, CommandLineArgumentList
+from Base.Executable              import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, PathArgument, CommandLineArgumentList, DryRunException
 from Base.Logging                 import Severity, LogEntry
+from DataBase.Entity              import SimulationResult
 from ToolChain                    import ConfigurationException, EditionDescription, Edition, ToolConfiguration, ToolSelector, ToolMixIn, OutputFilteredExecutable
 from ToolChain.Mentor             import MentorException
-from Simulator                    import SimulationResult, PoCSimulationResultFilter, PoCSimulationResultNotFoundException
+from Simulator                    import PoCSimulationResultFilter, PoCSimulationResultNotFoundException
 
 
 __api__ = [
@@ -420,6 +421,8 @@ class ModelSimVHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
 				line.IndentBy(self.Logger.BaseIndent + 1)
 				self.Log(line)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:
@@ -525,6 +528,8 @@ class ModelSimVHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 				line.IndentBy(self.Logger.BaseIndent + 1)
 				self.Log(line)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:
@@ -672,6 +677,8 @@ class ModelSimSimulator(OutputFilteredExecutable, ToolMixIn):
 				line.IndentBy(self.Logger.BaseIndent + 1)
 				self.Log(line)
 
+		except DryRunException:
+			simulationResult <<= SimulationResult.DryRun
 		except PoCSimulationResultNotFoundException:
 			if self.Parameters[self.FlagGuiMode]:
 				simulationResult <<= SimulationResult.GUIRun

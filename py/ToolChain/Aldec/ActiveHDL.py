@@ -34,12 +34,13 @@ from subprocess             import check_output
 from lib.Functions          import CallByRefParam, Init
 from Base.Exceptions        import PlatformNotSupportedException
 from Base.Logging           import LogEntry, Severity
-from Base.Executable        import Executable
+from Base.Executable        import Executable, DryRunException
 from Base.Executable        import ExecutableArgument, PathArgument, StringArgument
 from Base.Executable        import LongFlagArgument, ShortValuedFlagArgument, ShortTupleArgument, CommandLineArgumentList
+from DataBase.Entity        import SimulationResult
 from ToolChain              import ToolMixIn, ConfigurationException, ToolConfiguration, EditionDescription, Edition, ToolSelector, OutputFilteredExecutable
 from ToolChain.Aldec        import AldecException
-from Simulator              import SimulationResult, PoCSimulationResultFilter
+from Simulator              import PoCSimulationResultFilter
 
 
 __api__ = [
@@ -301,6 +302,8 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:
@@ -363,6 +366,8 @@ class StandaloneSimulator(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			simulationResult <<= SimulationResult.DryRun
 		except StopIteration:
 			pass
 		finally:
@@ -496,6 +501,8 @@ class ActiveHDLVHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:

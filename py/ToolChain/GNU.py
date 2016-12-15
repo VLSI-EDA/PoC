@@ -32,9 +32,9 @@ from re                      import compile as re_compile
 
 from lib.Functions           import Init, CallByRefParam
 from Base.Exceptions         import PlatformNotSupportedException
-from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument, ShortTupleArgument, Environment
+from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument, ShortTupleArgument, Environment, DryRunException
 from Base.Logging            import LogEntry, Severity
-from Simulator               import SimulationResult
+from DataBase.Entity         import SimulationResult
 from ToolChain               import ToolChainException, OutputFilteredExecutable
 
 
@@ -105,6 +105,8 @@ class Make(OutputFilteredExecutable):
 				line.IndentBy(self.Logger.BaseIndent + 1)
 				self.Log(line)
 
+		except DryRunException:
+			simulationResult <<= SimulationResult.DryRun
 		except StopIteration:
 			pass
 		finally:

@@ -44,37 +44,48 @@ from shutil                             import copy as shutil_copy
 from sys                                import argv as sys_argv
 from textwrap                           import dedent
 
-from Compiler                           import CompilerException, CompileSteps
-from Base.Exceptions                    import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
-from Base.Logging                       import ILogable, Logger, Severity
-from Base.Project                       import VHDLVersion
-from Compiler.LSECompiler               import Compiler as LSECompiler
-from Compiler.QuartusCompiler           import Compiler as MapCompiler
-from Compiler.ISECompiler               import Compiler as ISECompiler
-from Compiler.XCICompiler               import Compiler as XCICompiler
-from Compiler.XCOCompiler               import Compiler as XCOCompiler
-from Compiler.XSTCompiler               import Compiler as XSTCompiler
-from Compiler.VivadoCompiler            import Compiler as VivadoCompiler
-from DataBase                           import Query
-from DataBase.Config                    import Board
-from DataBase.Entity                    import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
-from DataBase.Solution                  import Repository
-from Simulator                          import Simulator as BaseSimulator, SimulatorException, SimulationSteps
-from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
-from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
-from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
-from Simulator.ISESimulator             import Simulator as ISESimulator
-from Simulator.ModelSimSimulator        import Simulator as QuestaSimulator
-from Simulator.VivadoSimulator          import Simulator as VivadoSimulator
-from ToolChain                          import ToolChainException, Configurator, ConfigurationException
-from ToolChain.GHDL                     import Configuration as GHDLConfiguration
-from lib.pyAttribute.ArgParseAttributes import ArgParseMixin
-from lib.pyAttribute.ArgParseAttributes import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
-from lib.pyAttribute.ArgParseAttributes import CommonArgumentAttribute, CommonSwitchArgumentAttribute
-from lib.ExtendedConfigParser           import ExtendedConfigParser
-from lib.Functions                      import Init, Exit
-from lib.Parser                         import ParserException
-from lib.pyAttribute                    import Attribute
+def printImportError():
+	platform = platform_system()
+	print("IMPORT ERROR: One or more Python packages are not available in your environment.\n")
+	if (platform == "Windows"): print("Run: 'py.exe -3 -m pip install -r requirements.txt'\n")
+	elif (platform == "Linux"): print("Run: 'python3 -m pip install -r requirements.txt'\n")
+	exit(1)
+
+try:
+	from Compiler                           import CompilerException, CompileSteps
+	from Base.Exceptions                    import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
+	from Base.Logging                       import ILogable, Logger, Severity
+	from Base.Project                       import VHDLVersion
+	from Compiler.LSECompiler               import Compiler as LSECompiler
+	from Compiler.QuartusCompiler           import Compiler as MapCompiler
+	from Compiler.ISECompiler               import Compiler as ISECompiler
+	from Compiler.XCICompiler               import Compiler as XCICompiler
+	from Compiler.XCOCompiler               import Compiler as XCOCompiler
+	from Compiler.XSTCompiler               import Compiler as XSTCompiler
+	from Compiler.VivadoCompiler            import Compiler as VivadoCompiler
+	from DataBase                           import Query
+	from DataBase.Config                    import Board
+	from DataBase.Entity                    import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
+	from DataBase.Solution                  import Repository
+	from Simulator                          import Simulator as BaseSimulator, SimulatorException, SimulationSteps
+	from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
+	from Simulator.RivieraPROSimulator      import Simulator as RivieraPROSimulator
+	from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
+	from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
+	from Simulator.ISESimulator             import Simulator as ISESimulator
+	from Simulator.ModelSimSimulator        import Simulator as QuestaSimulator
+	from Simulator.VivadoSimulator          import Simulator as VivadoSimulator
+	from ToolChain                          import ToolChainException, Configurator, ConfigurationException
+	from ToolChain.GHDL                     import Configuration as GHDLConfiguration
+	from lib.pyAttribute.ArgParseAttributes import ArgParseMixin
+	from lib.pyAttribute.ArgParseAttributes import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
+	from lib.pyAttribute.ArgParseAttributes import CommonArgumentAttribute, CommonSwitchArgumentAttribute
+	from lib.ExtendedConfigParser           import ExtendedConfigParser
+	from lib.Functions                      import Init, Exit
+	from lib.Parser                         import ParserException
+	from lib.pyAttribute                    import Attribute
+except:
+	printImportError()
 
 
 __author__ =      "Patrick Lehmann, Martin Zabel"
@@ -928,6 +939,30 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 
 	# ----------------------------------------------------------------------------
+	# create the sub-parser for the "rsim" command
+	# ----------------------------------------------------------------------------
+	@CommandGroupAttribute("Simulation commands")
+	@CommandAttribute("rpro", help="Simulate a PoC Entity with Aldec Riviera-PRO (rpro)")
+	@PoCEntityAttribute()
+	@BoardDeviceAttributeGroup()
+	@VHDLVersionAttribute()
+	@SimulationStepsAttribute()
+	def HandleRivieraPROSimulation(self, args):
+		self.PrintHeadline()
+		self.__PrepareForSimulation()
+
+		fqnList =         self._ExtractFQNs(args.FQN)
+		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
+		vhdlVersion =     self._ExtractVHDLVersion(args.VHDLVersion)
+
+		simulator = RivieraPROSimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)
+
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
+
+
+	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "vsim" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
@@ -1283,6 +1318,7 @@ def main(): # mccabe:disable=MC0001
 	except PlatformNotSupportedException as ex: Exit.printPlatformNotSupportedException(ex)
 	except ExceptionBase as ex:                 Exit.printExceptionBase(ex)
 	except NotImplementedError as ex:           Exit.printNotImplementedError(ex)
+	except ImportError:                         printImportError()
 	except Exception as ex:                     Exit.printException(ex)
 
 # entry point

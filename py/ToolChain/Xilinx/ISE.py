@@ -31,15 +31,15 @@ from subprocess               import check_output
 
 from lib.Functions            import CallByRefParam, Init
 from Base.Exceptions          import PlatformNotSupportedException
-from Base.Executable          import Executable
-from Base.Executable          import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList
+from Base.Executable          import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, CommandLineArgumentList, DryRunException
 from Base.Logging             import LogEntry, Severity
 from Base.Project             import Project as BaseProject, ProjectFile, ConstraintFile, FileTypes
+from DataBase.Entity          import SimulationResult
 from ToolChain                import ToolMixIn, ConfigurationException, ToolConfiguration, OutputFilteredExecutable
 from ToolChain.GNU            import Bash
 from ToolChain.Windows        import Cmd
 from ToolChain.Xilinx         import XilinxException
-from Simulator                import SimulationResult, PoCSimulationResultFilter
+from Simulator                import PoCSimulationResultFilter
 
 
 __api__ = [
@@ -205,10 +205,6 @@ class Fuse(OutputFilteredExecutable, ToolMixIn):
 		parameterList = self.Parameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
-
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -233,6 +229,8 @@ class Fuse(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:
@@ -272,10 +270,6 @@ class ISESimulator(OutputFilteredExecutable):
 		parameterList = self.Parameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
-
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -301,6 +295,8 @@ class ISESimulator(OutputFilteredExecutable):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			simulationResult <<= SimulationResult.DryRun
 		except StopIteration:
 			pass
 		finally:
@@ -346,10 +342,6 @@ class Xst(OutputFilteredExecutable, ToolMixIn):
 		parameterList = self.Parameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
-
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -374,6 +366,8 @@ class Xst(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:
@@ -416,10 +410,6 @@ class CoreGenerator(OutputFilteredExecutable, ToolMixIn):
 		parameterList = self.Parameters.ToArgumentList()
 		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
 
-		if (self._dryrun):
-			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
-			return
-
 		try:
 			self.StartProcess(parameterList)
 		except Exception as ex:
@@ -444,6 +434,8 @@ class CoreGenerator(OutputFilteredExecutable, ToolMixIn):
 				self.Log(line)
 				line = next(iterator)
 
+		except DryRunException:
+			pass
 		except StopIteration:
 			pass
 		finally:

@@ -26,10 +26,10 @@
 # ==============================================================================
 #
 # load dependencies
-from pathlib import Path
+from pathlib                 import Path
 
 from Base.Exceptions         import PlatformNotSupportedException
-from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, WindowsTupleArgument, Environment
+from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, WindowsTupleArgument
 from ToolChain               import Environment, ToolChainException #, OutputFilteredExecutable
 
 

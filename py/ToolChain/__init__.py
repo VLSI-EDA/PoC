@@ -703,6 +703,7 @@ class Configurator(ILogable, AskMixIn):
 		from .Git                 import Configuration as Git_Configuration
 		from .Aldec               import Configuration as Aldec_Configuration
 		from .Aldec.ActiveHDL     import Configuration as ActiveHDL_Configuration
+		from .Aldec.RivieraPRO    import Configuration as RivieraPRO_Configuration
 		from .Altera              import Configuration as Altera_Configuration
 		from .Altera.Quartus      import Configuration as AlteraQuartus_Configuration
 		from .Altera.ModelSim     import Configuration as AlteraModelSim_Configuration
@@ -732,6 +733,7 @@ class Configurator(ILogable, AskMixIn):
 			# Aldec products
 			Aldec_Configuration,
 			ActiveHDL_Configuration,
+			RivieraPRO_Configuration,
 			# Altera products
 			Altera_Configuration,
 			AlteraQuartus_Configuration,
