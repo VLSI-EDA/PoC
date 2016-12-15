@@ -15,6 +15,7 @@ install:
   - ps: Write-Host "Configuring PoC..."
   - ps: cp .\tools\AppVeyor\config.private.ini .\py\
   - ps: cp .\tools\AppVeyor\my_project.vhdl .\tb\common\
+  - ps: cp .\tools\AppVeyor\modelsim.ini .\temp\precompiled\vsim\
   - ps: .\poc.ps1
 
 build: off

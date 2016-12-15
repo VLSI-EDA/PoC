@@ -18,6 +18,20 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+echo -e "${CYAN}Copy my_project.vhdl into ./tb/common directory${NOCOLOR}"
+cp ./tools/Travis-CI/my_project.vhdl ./tb/common
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}Copy of ./tools/Travis-CI/my_project.vhdl [FAILED]${NOCOLOR}"
+	exit 1
+fi
+
+echo -e "${CYAN}Copy modelsim.ini into ./temp/precompiled/vsim directory${NOCOLOR}"
+cp ./tools/Travis-CI/modelsim.ini ./temp/precompiled/vsim
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}Copy of ./tools/Travis-CI/modelsim.ini [FAILED]${NOCOLOR}"
+	exit 1
+fi
+
 echo -e "${CYAN}Test PoC front-end script.${NOCOLOR}"
 ./poc.sh
 if [ $? -ne 0 ]; then
@@ -25,12 +39,6 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-echo -e "${CYAN}Copy my_project.vhdl into ./tb/common directory${NOCOLOR}"
-cp ./tools/Travis-CI/my_project.vhdl ./tb/common
-if [ $? -ne 0 ]; then
-	echo 1>&2 -e "${RED}Copy of ./tools/Travis-CI/my_project.vhdl [FAILED]${NOCOLOR}"
-	exit 1
-fi
 
 echo -e "${CYAN}Pre-compiling OSVVM with GHDL into ./temp/precompiled/ghdl/osvvm directory${NOCOLOR}"
 cd tools/precompile
