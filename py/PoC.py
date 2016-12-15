@@ -93,7 +93,7 @@ __author__ =      "Patrick Lehmann, Martin Zabel"
 __copyright__ =   "Copyright 2007-2016 Technische Universitaet Dresden - Germany, Chair of VLSI-Design, Diagnostics and Architecture"
 __maintainer__ =  "Patrick Lehmann"
 __email__ =       "Patrick.Lehmann@tu-dresden.de"
-__version__ =     "1.1.0"
+__version__ =     "1.1.1"
 __status__ =      "Production"
 __license__ =     "Apache License 2.0"
 
@@ -419,6 +419,23 @@ class PileOfCores(ILogable, ArgParseMixin):
 			print("This is a recursion ...")
 		else:
 			self.SubParsers[args.Command].print_help()
+		Exit.exit()
+
+	# ----------------------------------------------------------------------------
+	# create the sub-parser for the "info" command
+	# ----------------------------------------------------------------------------
+	@CommandAttribute("info", help="Display tool and version information.")
+	def HandleInfo(self, args):
+		self.PrintHeadline()
+		copyrights = __copyright__.split(", ", 1)
+		self.LogNormal("Copyright:  {0}".format(copyrights[0]))
+		self.LogNormal("            {0}".format(copyrights[1]))
+		self.LogNormal("License:    {0}".format(__license__))
+		authors = __author__.split(", ")
+		self.LogNormal("Authors:    {0}".format(authors[0]))
+		for author in authors[1:]:
+			self.LogNormal("            {0}".format(author))
+		self.LogNormal("Version:    {0}".format(__version__))
 		Exit.exit()
 
 

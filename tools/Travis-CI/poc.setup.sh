@@ -36,7 +36,7 @@ cp ./tools/Travis-CI/modelsim.ini ./temp/precompiled/vsim
 ExitIfError $? "${RED}Copying of ./tools/Travis-CI/modelsim.ini [FAILED]${NOCOLOR}"
 
 echo -e "${CYAN}Test PoC front-end script.${NOCOLOR}"
-./poc.sh
+./poc.sh info
 ExitIfError $? "${RED}Testing PoC front-end script [FAILED]${NOCOLOR}"
 
 echo -e "${CYAN}Pre-compiling OSVVM for GHDL into ./temp/precompiled/ghdl/osvvm directory${NOCOLOR}"
