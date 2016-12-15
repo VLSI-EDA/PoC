@@ -730,15 +730,53 @@ class PileOfCores(ILogable, ArgParseMixin):
 		if (vhdlVersion is None):       return defaultVersion
 		else:                           return VHDLVersion.Parse(vhdlVersion)
 
-	# TODO: move to Configuration class in ToolChain.Xilinx.Vivado
-	def _CheckVivadoEnvironment(self):
-		# check if Vivado is configure
-		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0): raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
+	def __CheckSection(self, sectionName, toolName):
+		if (len(self.PoCConfig.options(sectionName)) == 0):    raise NotConfiguredException("{0} is not configured on this system.".format(toolName))
+		sectionName = self.PoCConfig[sectionName]["SectionName"]
+		if (len(self.PoCConfig.options(sectionName)) == 0):    raise NotConfiguredException("{0} is not configured on this system.".format(toolName))
+		if self.PoCConfig.has_option(sectionName, "SectionName"):
+			sectionName = self.PoCConfig[sectionName]["SectionName"]
+			if (len(self.PoCConfig.options(sectionName)) == 0):  raise NotConfiguredException("{0} is not configured on this system.".format(toolName))
+
+	# TODO: move to Configuration class in ToolChain.Aldec.ActiveHDL
+	def _CheckActiveHDL(self):
+		# check if Active-HDL is configure
+		self.__CheckSection("INSTALL.ActiveHDL", "Active-HDL")
+
+	# TODO: move to Configuration class in ToolChain.Aldec.RivieraPRO
+	def _CheckRivieraPRO(self):
+		# check if RivieraPRO is configure
+		self.__CheckSection("INSTALL.Aldec.RivieraPRO", "Aldec Riviera-PRO")
+
+	# TODO: move to Configuration class in ToolChain.Altera.Quartus
+	def _CheckQuartus(self):
+		# check if RivieraPRO is configure
+		self.__CheckSection("INSTALL.Quartus", "Quartus")
+
+	# TODO: move to Configuration class in ToolChain.Lattice.Diamond
+	def _CheckDiamond(self):
+		# check if RivieraPRO is configure
+		self.__CheckSection("INSTALL.Lattice.Diamond", "Lattice Diamond")
+
+	# TODO: move to Configuration class in ToolChain.ModelSim
+	def _CheckModelSim(self):
+		# check if ModelSim is configure
+		self.__CheckSection("INSTALL.ModelSim", "ModelSim")
 
 	# TODO: move to Configuration class in ToolChain.Xilinx.ISE
-	def _CheckISEEnvironment(self):
-		# check if ISE is configure
-		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) == 0):    raise NotConfiguredException("Xilinx ISE is not configured on this system.")
+	def _CheckISE(self):
+		# check if RivieraPRO is configure
+		self.__CheckSection("INSTALL.Xilinx.ISE", "Xilinx ISE")
+
+	# TODO: move to Configuration class in ToolChain.Xilinx.Vivado
+	def _CheckVivado(self):
+		# check if RivieraPRO is configure
+		self.__CheckSection("INSTALL.Xilinx.Vivado", "Xilinx Vivado")
+
+	# TODO: move to Configuration class in ToolChain.GHDL
+	def _CheckGHDL(self):
+		# check if GHDL is configure
+		self.__CheckSection("INSTALL.GHDL", "GHDL")
 
 	@staticmethod
 	def _ExtractSimulationSteps(guiMode, analyze, elaborate, optimize, recompile, simulate, showWaveform, resimulate, showReport, cleanUp):
@@ -887,6 +925,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleActiveHDLSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
+		self._CheckActiveHDL()
 
 		fqnList =         self._ExtractFQNs(args.FQN)
 		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -915,6 +954,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleGHDLSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
+		self._CheckGHDL()
 
 		config = GHDLConfiguration(self)
 		if (not config.IsSupportedPlatform()):    raise PlatformNotSupportedException()
@@ -944,7 +984,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleISESimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
-		self._CheckISEEnvironment()
+		self._CheckISE()
 
 		fqnList =         self._ExtractFQNs(args.FQN)
 		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -968,6 +1008,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleRivieraPROSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
+		self._CheckRivieraPRO()
 
 		fqnList =         self._ExtractFQNs(args.FQN)
 		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -994,6 +1035,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleQuestaSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
+		self._CheckModelSim()
 
 		fqnList =         self._ExtractFQNs(args.FQN)
 		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -1020,8 +1062,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleVivadoSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
-
-		self._CheckVivadoEnvironment()
+		self._CheckVivado()
 
 		fqnList =         self._ExtractFQNs(args.FQN)
 		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
@@ -1048,6 +1089,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleCocotbSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
+		self._CheckModelSim()
 
 		# check if QuestaSim is configured
 		if (len(self.PoCConfig.options("INSTALL.Mentor.QuestaSim")) == 0):
@@ -1117,7 +1159,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleISECompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
-		self._CheckISEEnvironment()
+		self._CheckISE()
 
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
@@ -1140,7 +1182,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleCoreGeneratorCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
-		self._CheckISEEnvironment()
+		self._CheckISE()
 
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
@@ -1165,7 +1207,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleXstCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
-		self._CheckISEEnvironment()
+		self._CheckISE()
 
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
@@ -1188,7 +1230,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleIpCatalogCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
-		self._CheckISEEnvironment()
+		self._CheckVivado()
 
 		fqnList = self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board = self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
@@ -1211,7 +1253,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleVivadoCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
-		self._CheckVivadoEnvironment()
+		self._CheckVivado()
 
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
@@ -1235,9 +1277,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleQuartusCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
-
-		# TODO: check env variables
-		# self._CheckQuartusEnvironment()
+		self._CheckQuartus()
 
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
@@ -1261,9 +1301,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	def HandleLSECompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
-
-		# TODO: check env variables
-		# self._CheckLatticeEnvironment()
+		self._CheckDiamond()
 
 		fqnList =  self._ExtractFQNs(args.FQN, defaultType=EntityTypes.NetList)
 		board =    self._ExtractBoard(args.BoardName, args.DeviceName, force=True)
