@@ -1319,7 +1319,7 @@ def main(): # mccabe:disable=MC0001
 	except PlatformNotSupportedException as ex: Exit.printPlatformNotSupportedException(ex)
 	except ExceptionBase as ex:                 Exit.printExceptionBase(ex)
 	except NotImplementedError as ex:           Exit.printNotImplementedError(ex)
-	except ImportErro as ex:                    printImportError(ex)
+	except ImportError as ex:                   printImportError(ex)
 	except Exception as ex:                     Exit.printException(ex)
 
 # entry point
