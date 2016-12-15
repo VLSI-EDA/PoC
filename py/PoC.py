@@ -44,9 +44,10 @@ from shutil                             import copy as shutil_copy
 from sys                                import argv as sys_argv
 from textwrap                           import dedent
 
-def printImportError():
+def printImportError(ex):
 	platform = platform_system()
-	print("IMPORT ERROR: One or more Python packages are not available in your environment.\n")
+	print("IMPORT ERROR: One or more Python packages are not available in your environment.")
+	print("Missing package: '{0}'\n".format(ex.name))
 	if (platform == "Windows"): print("Run: 'py.exe -3 -m pip install -r requirements.txt'\n")
 	elif (platform == "Linux"): print("Run: 'python3 -m pip install -r requirements.txt'\n")
 	exit(1)
@@ -84,8 +85,8 @@ try:
 	from lib.Functions                      import Init, Exit
 	from lib.Parser                         import ParserException
 	from lib.pyAttribute                    import Attribute
-except:
-	printImportError()
+except ImportError as ex:
+	printImportError(ex)
 
 
 __author__ =      "Patrick Lehmann, Martin Zabel"
@@ -1318,7 +1319,7 @@ def main(): # mccabe:disable=MC0001
 	except PlatformNotSupportedException as ex: Exit.printPlatformNotSupportedException(ex)
 	except ExceptionBase as ex:                 Exit.printExceptionBase(ex)
 	except NotImplementedError as ex:           Exit.printNotImplementedError(ex)
-	except ImportError:                         printImportError()
+	except ImportErro as ex:                    printImportError(ex)
 	except Exception as ex:                     Exit.printException(ex)
 
 # entry point
