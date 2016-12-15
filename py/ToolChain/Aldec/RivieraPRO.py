@@ -47,9 +47,9 @@ __api__ = [
 	'VHDLLibraryTool',
 	'VHDLCompiler',
 	'VHDLSimulator',
-	'RivieraPROVLibFilter',
-	'RivieraPROVComFilter',
-	'RivieraPROVSimFilter'
+	'VLibFilter',
+	'VComFilter',
+	'VSimFilter'
 ]
 __all__ = __api__
 
