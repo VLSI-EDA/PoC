@@ -121,6 +121,11 @@ class TestGroup(GroupBase):
 						+ sum([1 for tc in self._tests.values() if tc.Status is SimulationStatus.SimulationNoAsserts])
 
 	@property
+	def DryRunCount(self):
+		return sum([tg.DryRunCount for tg in self._groups.values()]) \
+						+ sum([1 for tc in self._tests.values() if tc.Status is SimulationStatus.DryRun])
+
+	@property
 	def FailedCount(self):
 		return sum([tg.FailedCount for tg in self._groups.values()]) \
 						+ sum([1 for tc in self._tests.values() if tc.Status is SimulationStatus.SimulationFailed])
@@ -145,6 +150,11 @@ class SynthesisGroup(GroupBase):
 	def SuccessCount(self):
 		return sum([tg.SuccessCount for tg in self._groups.values()]) \
 						+ sum([1 for tc in self._tests.values() if tc.Status is CompileStatus.CompileSuccess])
+
+	@property
+	def DryRunCount(self):
+		return sum([tg.DryRunCount for tg in self._groups.values()]) \
+						+ sum([1 for tc in self._tests.values() if tc.Status is CompileStatus.DryRun])
 
 	@property
 	def FailedCount(self):
@@ -194,7 +204,7 @@ class TestSuite(TestGroup, SuiteMixIn):
 
 	@property
 	def IsAllPassed(self):
-		return (self.Count == self.PassedCount + self.NoAssertsCount)
+		return (self.Count == self.PassedCount + self.NoAssertsCount + self.DryRunCount)
 
 	def AddTestCase(self, testCase):
 		cur = self
