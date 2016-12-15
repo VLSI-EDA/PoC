@@ -1,7 +1,5 @@
 #! /usr/bin/env bash
 
-POC_GHDL_DIR="temp/ghdl"
-
 # define color escape codes
 RED='\e[0;31m'			# Red
 GREEN='\e[1;32m'		# Green
@@ -24,11 +22,8 @@ ExitIfError() {
 }
 
 echo -e "${MAGENTA}========================================${NOCOLOR}"
-echo -e "${MAGENTA}    Running PoC testbenches with GHDL   ${NOCOLOR}"
+echo -e "${MAGENTA}    Running PoC in dryrun mode          ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
-
-echo -e "${CYAN}mkdir -p $POC_GHDL_DIR && cd $POC_GHDL_DIR${NOCOLOR}"
-mkdir -p $POC_GHDL_DIR && cd $POC_GHDL_DIR
 
 # Check if output filter grcat is available and install it
 if grcat $TRAVIS_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
@@ -37,26 +32,27 @@ if grcat $TRAVIS_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
   exec 1>&${COPROC[1]}-
 fi
 
-echo -e "Testing PoC infrastructure (1/2)..."
-$POCROOT/poc.sh list-testbench "PoC.*"
-ExitIfError $? "${RED}Testing command 'list-testbench' [FAILED]${NOCOLOR}"
+echo -e "Testing Active-HDL (1/5)..."
+$POCROOT/poc.sh asim "PoC.arith.prng"
+ExitIfError $? "${RED}Testing Active-HDL [FAILED]${NOCOLOR}"
 
-echo -e "Testing PoC infrastructure (2/2)..."
-$POCROOT/poc.sh list-netlist "PoC.*"
-ExitIfError $? "${RED}Testing command 'list-netlist' [FAILED]${NOCOLOR}"
+echo -e "Testing Riviera-PRO (2/5)..."
+$POCROOT/poc.sh rpro "PoC.arith.prng"
+ExitIfError $? "${RED}Testing Riviera-PRO [FAILED]${NOCOLOR}"
 
-echo -e "Running one testbenche in debug mode..."
-$POCROOT/poc.sh -d ghdl "PoC.arith.prng"
+echo -e "Testing ModelSim (3/5)..."
+$POCROOT/poc.sh vsim "PoC.arith.prng"
+ExitIfError $? "${RED}Testing ModelSim [FAILED]${NOCOLOR}"
 
+echo -e "Testing ISE Simulator (4/5)..."
+$POCROOT/poc.sh isim "PoC.arith.prng"
+ExitIfError $? "${RED}Testing ISE Simulator [FAILED]${NOCOLOR}"
 
-echo -e "Running all testbenches..."
-mode=-q
-if [ "x$1" = 'x-d' -o "x$1" = 'x-v' ]; then
-  mode=$1
-  shift
-fi
-$POCROOT/poc.sh $mode ghdl "$@"
-ret=$?
+echo -e "Testing Vivado Simulator (5/5)..."
+$POCROOT/poc.sh xsim "PoC.arith.prng"
+ExitIfError $? "${RED}Testing Vivado Simulator [FAILED]${NOCOLOR}"
+
+$ret=0
 
 # Cleanup and exit
 exec 1>&-
