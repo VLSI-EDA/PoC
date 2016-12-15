@@ -65,9 +65,18 @@ class Configuration(ToolConfiguration):
 	_section  =             "INSTALL.Aldec.RivieraPRO"  #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
 	_multiVersionSupport =  True                        #: Aldec Riviera-PRO supports multiple versions installed on the same system.
 	_template = {
+		"Linux": {
+			_section: {
+				"Version":                "2016.10",
+				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
+				"Edition":                ("${${SectionName}:Edition}",               "Riviera-PRO"),
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Aldec:InstallationDirectory}/Riviera-PRO"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/BIN")
+			}
+		},
 		"Windows": {
 			_section: {
-				"Version":                "10.3",
+				"Version":                "2016.10",
 				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
 				"Edition":                ("${${SectionName}:Edition}",               "Riviera-PRO"),
 				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Aldec:InstallationDirectory}/Riviera-PRO"),
