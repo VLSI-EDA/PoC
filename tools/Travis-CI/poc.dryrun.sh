@@ -17,9 +17,25 @@ TRAVIS_DIR=$POCROOT/tools/Travis-CI
 ExitIfError() {
 	if [ $1 -ne 0 ]; then
 		echo 1>&2 -e $2
+		# Cleanup and exit
+		exec 1>&-
+		wait # for output filter
 		exit 1
 	fi
 }
+# -> LastExitCode
+# -> Error message
+ExitIfNoError() {
+	if [ $1 -eq 0 ]; then
+		echo 1>&2 -e $2
+		# Cleanup and exit
+		exec 1>&-
+		wait # for output filter
+		exit 1
+	fi
+}
+
+
 
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}    Running PoC in dryrun mode          ${NOCOLOR}"
@@ -34,7 +50,7 @@ fi
 
 echo -e "Testing Active-HDL (1/5)..."
 $POCROOT/poc.sh asim "PoC.arith.prng"
-ExitIfError $? "${RED}Testing Active-HDL [FAILED]${NOCOLOR}"
+ExitIfNoError $? "${RED}Testing Active-HDL [FAILED]${NOCOLOR}"
 
 echo -e "Testing Riviera-PRO (2/5)..."
 $POCROOT/poc.sh rpro "PoC.arith.prng"

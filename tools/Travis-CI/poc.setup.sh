@@ -12,7 +12,6 @@ NOCOLOR='\e[0m'			# No Color
 # -> Error message
 ExitIfError() {
 	if [ $1 -ne 0 ]; then
-		echo "PID:" $$
 		echo 1>&2 -e $2
 		exit 1
 	fi
@@ -21,7 +20,6 @@ ExitIfError() {
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}             Configuring PoC            ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
-echo "PID=" $$
 
 echo -e "${CYAN}Copy config.private.ini into ./py directory${NOCOLOR}"
 cp ./tools/Travis-CI/config.private.ini ./py
@@ -46,7 +44,7 @@ echo -e "${CYAN}Pre-compiling OSVVM for GHDL into ./temp/precompiled/ghdl/osvvm 
 ExitIfError $? "${RED}Pre-compiling OSVVM for GHDL [FAILED]${NOCOLOR}"
 
 echo -e "${CYAN}Pre-compiling UVVM for GHDL into ./temp/precompiled/ghdl/uvvm directory${NOCOLOR}"
-echo -e "${RED}UVVM pre-compile scripts are not yet shipped with GHDL${NOCOLOR}"
+echo -e "UVVM pre-compile scripts are not yet shipped with GHDL. ${RED}[SKIPPING]${NOCOLOR}"
 #./tools/precompile/compile-uvvm.sh --ghdl
 #ExitIfError $? "${RED}Pre-compiling UVVM for GHDL [FAILED]${NOCOLOR}"
 
