@@ -43,5 +43,6 @@ echo -e "${CYAN}Pre-compiling OSVVM for GHDL into ./temp/precompiled/ghdl/osvvm 
 ExitIfError $? "${RED}Pre-compiling OSVVM for GHDL [FAILED]${NOCOLOR}"
 
 echo -e "${CYAN}Pre-compiling UVVM for GHDL into ./temp/precompiled/ghdl/uvvm directory${NOCOLOR}"
-./tools/precompile/compile-uvvm.sh --ghdl
-ExitIfError $? "${RED}Pre-compiling UVVM for GHDL [FAILED]${NOCOLOR}"
+echo -e "${RED}UVVM pre-compile scripts are not yet shipped with GHDL${NOCOLOR}"
+#./tools/precompile/compile-uvvm.sh --ghdl
+#ExitIfError $? "${RED}Pre-compiling UVVM for GHDL [FAILED]${NOCOLOR}"
