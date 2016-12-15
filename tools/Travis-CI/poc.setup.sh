@@ -26,6 +26,11 @@ if [ $? -ne 0 ]; then
 fi
 
 echo -e "${CYAN}Copy modelsim.ini into ./temp/precompiled/vsim directory${NOCOLOR}"
+mkdir -p ./temp/precompiled/vsim
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}Creating directory ./temp/precompiled/vsim [FAILED]${NOCOLOR}"
+	exit 1
+fi
 cp ./tools/Travis-CI/modelsim.ini ./temp/precompiled/vsim
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${RED}Copy of ./tools/Travis-CI/modelsim.ini [FAILED]${NOCOLOR}"
