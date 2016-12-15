@@ -44,13 +44,12 @@ __api__ = [
 	'RivieraPROException',
 	'Configuration',
 	'RivieraPRO',
+	'VHDLLibraryTool',
 	'VHDLCompiler',
-	'StandaloneSimulator',
-	'Simulator',
-	'RivieraPROVHDLLibraryTool',
-	'VHDLCompilerFilter',
-	'SimulatorFilter',
-	'VHDLLibraryToolFilter'
+	'VHDLSimulator',
+	'RivieraPROVLibFilter',
+	'RivieraPROVComFilter',
+	'RivieraPROVSimFilter'
 ]
 __all__ = __api__
 
@@ -145,7 +144,7 @@ class RivieraPRO(ToolMixIn):
 	"""Factory for executable abstractions in Riviera-PRO."""
 	def GetVHDLLibraryTool(self):
 		"""Return an instance of Riviera-PRO's VHDL library management tool 'vlib'."""
-		return RivieraPROVHDLLibraryTool(self)
+		return VHDLLibraryTool(self)
 
 	def GetVHDLCompiler(self):
 		"""Return an instance of Riviera-PRO's VHDL compiler 'vcom'."""
@@ -156,15 +155,16 @@ class RivieraPRO(ToolMixIn):
 		return VHDLSimulator(self)
 
 
-class RivieraPROVHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
+class VHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
 	"""Abstraction layer of Riviera-PRO's VHDL library management tool 'vlib'."""
 	def __init__(self, toolchain : ToolMixIn):
 		ToolMixIn.__init__(
 			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
 			toolchain._logger)
 
-		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "vlib.exe"
-		else:                                raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"): executablePath = self._binaryDirectoryPath / "vlib.exe"
+		elif (self._platform == "Linux"): executablePath = self._binaryDirectoryPath / "vlib"
+		else:                             raise PlatformNotSupportedException(self._platform)
 		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -189,11 +189,11 @@ class RivieraPROVHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
 		except Exception as ex:
 			raise RivieraPROException("Failed to launch alib run.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		try:
-			iterator = iter(RivieraPROVLibFilter(self.GetReader()))
+			iterator = iter(VLibFilter(self.GetReader()))
 			line = next(iterator)
 
 			self._hasOutput = True
@@ -225,6 +225,7 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 			toolchain._logger)
 
 		if (self._platform == "Windows"): executablePath = self._binaryDirectoryPath / "vcom.exe"
+		elif (self._platform == "Linux"): executablePath = self._binaryDirectoryPath / "vcom"
 		else:                             raise PlatformNotSupportedException(self._platform)
 		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
@@ -234,7 +235,7 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 		_value =  None
 
 	# class FlagNoRangeCheck(metaclass=LongFlagArgument):
-	# 	_name =    "norangecheck"
+	# 	_name =   "norangecheck"
 	# 	_value =  None
 
 	class SwitchVHDLVersion(metaclass=ShortValuedFlagArgument):
@@ -243,11 +244,11 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 		_value =    None
 
 	class SwitchVHDLLibrary(metaclass=ShortTupleArgument):
-		_name =    "work"
-		_value =  None
+		_name =     "work"
+		_value =    None
 
 	class ArgSourceFile(metaclass=PathArgument):
-		_value =  None
+		_value =    None
 
 	Parameters = CommandLineArgumentList(
 		Executable,
@@ -270,11 +271,11 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 		except Exception as ex:
 			raise RivieraPROException("Failed to launch acom run.") from ex
 
-		self._hasOutput = False
+		self._hasOutput =   False
 		self._hasWarnings = False
-		self._hasErrors = False
+		self._hasErrors =   False
 		try:
-			iterator = iter(RivieraPROVComFilter(self.GetReader()))
+			iterator = iter(VComFilter(self.GetReader()))
 			line = next(iterator)
 
 
@@ -305,12 +306,9 @@ class VHDLSimulator(OutputFilteredExecutable, ToolMixIn):
 			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
 			toolchain._logger)
 
-		if (self._platform == "Windows"):
-			executablePath = self._binaryDirectoryPath / "vsim.exe"
-		elif (self._platform == "Linux"):
-			executablePath = self._binaryDirectoryPath / "vsim"
-		else:
-			raise PlatformNotSupportedException(self._platform)
+		if (self._platform == "Windows"): executablePath = self._binaryDirectoryPath / "vsim.exe"
+		elif (self._platform == "Linux"): executablePath = self._binaryDirectoryPath / "vsim"
+		else:                             raise PlatformNotSupportedException(self._platform)
 		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
 
 		self.Parameters[self.Executable] = executablePath
@@ -362,7 +360,7 @@ class VHDLSimulator(OutputFilteredExecutable, ToolMixIn):
 		self._hasErrors =   False
 		simulationResult =  CallByRefParam(SimulationResult.Error)
 		try:
-			iterator = iter(PoCSimulationResultFilter(RivieraPROVSimFilter(self.GetReader()), simulationResult))
+			iterator = iter(PoCSimulationResultFilter(VSimFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
 			line.IndentBy(self.Logger.BaseIndent + 1)
@@ -390,17 +388,17 @@ class VHDLSimulator(OutputFilteredExecutable, ToolMixIn):
 		return simulationResult.value
 
 
-def RivieraPROVLibFilter(gen):
+def VLibFilter(gen):
 	"""A line based output stream filter for Riviera-PRO's VHDL library management tool."""
 	for line in gen:
 		yield LogEntry(line, Severity.Normal)
 
-def RivieraPROVComFilter(gen): # mccabe:disable=MC0001
+def VComFilter(gen): # mccabe:disable=MC0001
 	"""A line based output stream filter for Riviera-PRO's VHDL compiler."""
 	for line in gen:
 		yield LogEntry(line, Severity.Normal)
 
-def RivieraPROVSimFilter(gen):
+def VSimFilter(gen):
 	"""A line based output stream filter for Riviera-PRO's VHDL simulator."""
 	for line in gen:
 		yield LogEntry(line, Severity.Normal)

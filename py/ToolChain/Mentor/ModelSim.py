@@ -54,9 +54,9 @@ __api__ = [
 	'ModelSimSE64Configuration',
 	'Selector',
 	'ModelSim',
-	'ModelSimVHDLLibraryTool',
-	'ModelSimVHDLCompiler',
-	'ModelSimSimulator',
+	'VHDLLibraryTool',
+	'VHDLCompiler',
+	'VHDLSimulator',
 	'ModelSimVLibFilter',
 	'ModelSimVComFilter',
 	'ModelSimVSimFilter'
@@ -355,16 +355,16 @@ class Selector(ToolSelector):
 
 class ModelSim(ToolMixIn):
 	def GetVHDLLibraryTool(self):
-		return ModelSimVHDLLibraryTool(self)
+		return VHDLLibraryTool(self)
 
 	def GetVHDLCompiler(self):
-		return ModelSimVHDLCompiler(self)
+		return VHDLCompiler(self)
 
 	def GetSimulator(self):
-		return ModelSimSimulator(self)
+		return VHDLSimulator(self)
 
 
-class ModelSimVHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
+class VHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
 	def __init__(self, toolchain: ToolMixIn):
 		ToolMixIn.__init__(
 			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
@@ -404,7 +404,7 @@ class ModelSimVHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
 		self._hasWarnings = False
 		self._hasErrors =   False
 		try:
-			iterator = iter(ModelSimVLibFilter(self.GetReader()))
+			iterator = iter(VLibFilter(self.GetReader()))
 
 			line = next(iterator)
 			line.IndentBy(self.Logger.BaseIndent + 1)
@@ -430,7 +430,7 @@ class ModelSimVHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
 				self.LogNormal("-" * (78 - self.Logger.BaseIndent * 2), indent=1)
 
 
-class ModelSimVHDLCompiler(OutputFilteredExecutable, ToolMixIn):
+class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 	def __init__(self, toolchain : ToolMixIn):
 		ToolMixIn.__init__(
 			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
@@ -511,7 +511,7 @@ class ModelSimVHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 		self._hasWarnings = False
 		self._hasErrors =   False
 		try:
-			iterator = iter(ModelSimVComFilter(self.GetReader()))
+			iterator = iter(VComFilter(self.GetReader()))
 
 			line = next(iterator)
 			line.IndentBy(self.Logger.BaseIndent + 1)
@@ -541,7 +541,7 @@ class ModelSimVHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 		return "vcom " + " ".join(parameterList[1:])
 
 
-class ModelSimSimulator(OutputFilteredExecutable, ToolMixIn):
+class VHDLSimulator(OutputFilteredExecutable, ToolMixIn):
 	def __init__(self, toolchain : ToolMixIn):
 		ToolMixIn.__init__(
 			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
@@ -660,7 +660,7 @@ class ModelSimSimulator(OutputFilteredExecutable, ToolMixIn):
 		self._hasErrors =   False
 		simulationResult =  CallByRefParam(SimulationResult.Error)
 		try:
-			iterator = iter(PoCSimulationResultFilter(ModelSimVSimFilter(self.GetReader()), simulationResult))
+			iterator = iter(PoCSimulationResultFilter(VSimFilter(self.GetReader()), simulationResult))
 
 			line = next(iterator)
 			line.IndentBy(self.Logger.BaseIndent + 1)
@@ -691,7 +691,7 @@ class ModelSimSimulator(OutputFilteredExecutable, ToolMixIn):
 		return simulationResult.value
 
 
-def ModelSimVLibFilter(gen):
+def VLibFilter(gen):
 	for line in gen:
 		if line.startswith("** Warning: "):
 			yield LogEntry(line, Severity.Warning)
@@ -703,7 +703,7 @@ def ModelSimVLibFilter(gen):
 			yield LogEntry(line, Severity.Normal)
 
 
-def ModelSimVComFilter(gen):
+def VComFilter(gen):
 	for line in gen:
 		if line.startswith("** Warning: "):
 			yield LogEntry(line, Severity.Warning)
@@ -715,7 +715,7 @@ def ModelSimVComFilter(gen):
 			yield LogEntry(line, Severity.Normal)
 
 
-def ModelSimVSimFilter(gen):
+def VSimFilter(gen):
 	PoCOutputFound = False
 	for line in gen:
 		if line.startswith("# Loading "):

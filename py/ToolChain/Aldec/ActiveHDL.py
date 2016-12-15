@@ -49,13 +49,12 @@ __api__ = [
 	'ActiveHDLEditions',
 	'Configuration',
 	'ActiveHDL',
+	'VHDLLibraryTool',
 	'VHDLCompiler',
-	'StandaloneSimulator',
-	'Simulator',
-	'ActiveHDLVHDLLibraryTool',
-	'VHDLCompilerFilter',
-	'SimulatorFilter',
-	'VHDLLibraryToolFilter'
+	'VHDLStandaloneSimulator',
+	'ActiveHDLVLibFilter',
+	'ActiveHDLVComFilter',
+	'ActiveHDLVSimFilter'
 ]
 __all__ = __api__
 
@@ -210,7 +209,7 @@ class ActiveHDL(ToolMixIn):
 	"""Factory for executable abstractions in Active-HDL."""
 	def GetVHDLLibraryTool(self):
 		"""Return an instance of Active-HDL's VHDL library management tool 'vlib'."""
-		return ActiveHDLVHDLLibraryTool(self)
+		return VHDLLibraryTool(self)
 
 	def GetVHDLCompiler(self):
 		"""Return an instance of Active-HDL's VHDL compiler 'vcom'."""
@@ -218,7 +217,76 @@ class ActiveHDL(ToolMixIn):
 
 	def GetSimulator(self):
 		"""Return an instance of Active-HDL's VHDL simulator 'vsim'."""
-		return StandaloneSimulator(self)
+		return VHDLStandaloneSimulator(self)
+
+
+class VHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
+	"""Abstraction layer of Active-HDL's VHDL library management tool 'vlib'."""
+
+	def __init__(self, toolchain: ToolMixIn):
+		ToolMixIn.__init__(
+			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
+			toolchain._logger)
+
+		if (self._platform == "Windows"):
+			executablePath = self._binaryDirectoryPath / "vlib.exe"
+		else:
+			raise PlatformNotSupportedException(self._platform)
+		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
+
+		self.Parameters[self.Executable] = executablePath
+
+	class Executable(metaclass=ExecutableArgument):
+		_value = None
+
+	# class FlagVerbose(metaclass=FlagArgument):
+	# 	_name =    "-v"
+	# 	_value =  None
+
+	class SwitchLibraryName(metaclass=StringArgument):
+		_value = None
+
+	Parameters = CommandLineArgumentList(
+		Executable,
+		# FlagVerbose,
+		SwitchLibraryName
+	)
+
+	def CreateLibrary(self):
+		parameterList = self.Parameters.ToArgumentList()
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise ActiveHDLException("Failed to launch alib run.") from ex
+
+		self._hasOutput = False
+		self._hasWarnings = False
+		self._hasErrors = False
+		try:
+			iterator = iter(VLibFilter(self.GetReader()))
+			line = next(iterator)
+
+			self._hasOutput = True
+			self.LogNormal("  alib messages for '{0}'".format(self.Parameters[self.SwitchLibraryName]))
+			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent * 2)))
+
+			while True:
+				self._hasWarnings |= (line.Severity is Severity.Warning)
+				self._hasErrors |= (line.Severity is Severity.Error)
+
+				line.IndentBy(self.Logger.BaseIndent + 1)
+				self.Log(line)
+				line = next(iterator)
+
+		except DryRunException:
+			pass
+		except StopIteration:
+			pass
+		finally:
+			if self._hasOutput:
+				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent * 2)))
 
 
 class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
@@ -286,7 +354,7 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 		self._hasWarnings = False
 		self._hasErrors = False
 		try:
-			iterator = iter(VHDLCompilerFilter(self.GetReader()))
+			iterator = iter(VComFilter(self.GetReader()))
 			line = next(iterator)
 
 
@@ -311,7 +379,7 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
 
 
-class StandaloneSimulator(OutputFilteredExecutable, ToolMixIn):
+class VHDLStandaloneSimulator(OutputFilteredExecutable, ToolMixIn):
 	"""Abstraction layer of Active-HDL's VHDL standalone simulator 'vsimsa'."""
 	def __init__(self, toolchain : ToolMixIn):
 		ToolMixIn.__init__(
@@ -351,7 +419,7 @@ class StandaloneSimulator(OutputFilteredExecutable, ToolMixIn):
 		self._hasErrors = False
 		simulationResult = CallByRefParam(SimulationResult.Error)
 		try:
-			iterator = iter(PoCSimulationResultFilter(SimulatorFilter(self.GetReader()), simulationResult))
+			iterator = iter(PoCSimulationResultFilter(VSimFilter(self.GetReader()), simulationResult))
 			line = next(iterator)
 
 			self._hasOutput = True
@@ -377,157 +445,17 @@ class StandaloneSimulator(OutputFilteredExecutable, ToolMixIn):
 		return simulationResult.value
 
 
-class Simulator(Executable, ToolMixIn):
-	"""Abstraction layer of Active-HDL's VHDL simulator 'vsim'."""
-	def __init__(self, platform, dryrun, binaryDirectoryPath, version, logger=None):
-		ToolMixIn.__init__(self, platform, dryrun, binaryDirectoryPath, version, logger=logger)
-		if (self._platform == "Windows"):    executablePath = binaryDirectoryPath / "vsimsa.exe"
-		# elif (self._platform == "Linux"):    executablePath = binaryDirectoryPath / "vsimsa"
-		else:                                            raise PlatformNotSupportedException(self._platform)
-		super().__init__(platform, dryrun, executablePath, logger=logger)
+def VLibFilter(gen):
+	"""A line based output stream filter for Active-HDL's VHDL library management
+	tool.
+	"""
+	for line in gen:
+		if line.startswith("ALIB: Library "):
+			yield LogEntry(line, Severity.Verbose)
+		else:
+			yield LogEntry(line, Severity.Normal)
 
-		self.Parameters[self.Executable] = executablePath
-
-	class Executable(metaclass=ExecutableArgument):
-		_value =  None
-
-	# class FlagVerbose(metaclass=ShortFlagArgument):
-	# 	_name =    "v"
-	# 	_value =  None
-	#
-	# class FlagOptimization(metaclass=ShortFlagArgument):
-	# 	_name =    "vopt"
-	# 	_value =  None
-	#
-	# class FlagCommandLineMode(metaclass=ShortFlagArgument):
-	# 	_name =    "c"
-	# 	_value =  None
-	#
-	# class SwitchTimeResolution(metaclass=ShortTupleArgument):
-	# 	_name =    "t"
-	# 	_value =  None
-
-	class SwitchBatchCommand(metaclass=ShortTupleArgument):
-		_name =    "do"
-
-	# class SwitchTopLevel(metaclass=ShortValuedFlagArgument):
-	# 	_name =    ""
-	# 	_value =  None
-
-	Parameters = CommandLineArgumentList(
-		Executable,
-		# FlagVerbose,
-		# FlagOptimization,
-		# FlagCommandLineMode,
-		# SwitchTimeResolution,
-		SwitchBatchCommand
-		# SwitchTopLevel
-	)
-
-	# units = ("fs", "ps", "us", "ms", "sec", "min", "hr")
-
-	def Simulate(self):
-		parameterList = self.Parameters.ToArgumentList()
-
-		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
-		self.LogDebug("tcl commands: {0}".format(self.Parameters[self.SwitchBatchCommand]))
-
-		_indent = "    "
-		print(_indent + "vsimsa messages for '{0}.{1}'".format("??????", "??????"))  # self.VHDLLibrary, topLevel))
-		print(_indent + "-" * 80)
-		try:
-			self.StartProcess(parameterList)
-			for line in self.GetReader():
-				print(_indent + line)
-		except Exception as ex:
-			raise ex  # SimulatorException() from ex
-		print(_indent + "-" * 80)
-
-
-class ActiveHDLVHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
-	"""Abstraction layer of Active-HDL's VHDL library management tool 'vlib'."""
-	def __init__(self, toolchain : ToolMixIn):
-		ToolMixIn.__init__(
-			self, toolchain._platform, toolchain._dryrun, toolchain._binaryDirectoryPath, toolchain._version,
-			toolchain._logger)
-
-		if (self._platform == "Windows"):    executablePath = self._binaryDirectoryPath / "vlib.exe"
-		else:                                raise PlatformNotSupportedException(self._platform)
-		super().__init__(self._platform, self._dryrun, executablePath, logger=self._logger)
-
-		self.Parameters[self.Executable] = executablePath
-
-	class Executable(metaclass=ExecutableArgument):
-		_value =  None
-
-	# class FlagVerbose(metaclass=FlagArgument):
-	# 	_name =    "-v"
-	# 	_value =  None
-
-	class SwitchLibraryName(metaclass=StringArgument):
-		_value =  None
-
-	Parameters = CommandLineArgumentList(
-		Executable,
-		# FlagVerbose,
-		SwitchLibraryName
-	)
-
-	def CreateLibrary(self):
-		parameterList = self.Parameters.ToArgumentList()
-		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
-
-		try:
-			self.StartProcess(parameterList)
-		except Exception as ex:
-			raise ActiveHDLException("Failed to launch alib run.") from ex
-
-		self._hasOutput = False
-		self._hasWarnings = False
-		self._hasErrors = False
-		try:
-			iterator = iter(VHDLLibraryToolFilter(self.GetReader()))
-			line = next(iterator)
-
-			self._hasOutput = True
-			self.LogNormal("  alib messages for '{0}'".format(self.Parameters[self.SwitchLibraryName]))
-			self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
-
-			while True:
-				self._hasWarnings |=  (line.Severity is Severity.Warning)
-				self._hasErrors |=    (line.Severity is Severity.Error)
-
-				line.IndentBy(self.Logger.BaseIndent + 1)
-				self.Log(line)
-				line = next(iterator)
-
-		except DryRunException:
-			pass
-		except StopIteration:
-			pass
-		finally:
-			if self._hasOutput:
-				self.LogNormal("  " + ("-" * (78 - self.Logger.BaseIndent*2)))
-
-
-		# 			# assemble acom command as list of parameters
-		# 			parameterList = [
-		# 				str(aComExecutablePath),
-		# 				'-O3',
-		# 				'-relax',
-		# 				'-l', 'acom.log',
-		# 				vhdlStandard,
-		# 				'-work', vhdlLibraryName,
-		# 				str(vhdlFilePath)
-		# 			]
-		# parameterList = [
-		# 	str(aSimExecutablePath)#,
-		# 	# '-vopt',
-		# 	# '-t', '1fs',
-		# ]
-
-
-def VHDLCompilerFilter(gen): # mccabe:disable=MC0001
+def VComFilter(gen): # mccabe:disable=MC0001
 	"""A line based output stream filter for Active-HDL's VHDL compiler."""
 	for line in gen:
 		if line.startswith("Aldec, Inc. VHDL Compiler"):
@@ -561,8 +489,7 @@ def VHDLCompilerFilter(gen): # mccabe:disable=MC0001
 		else:
 			yield LogEntry(line, Severity.Normal)
 
-
-def SimulatorFilter(gen):
+def VSimFilter(gen):
 	"""A line based output stream filter for Active-HDL's VHDL simulator."""
 	PoCOutputFound = False
 	for line in gen:
@@ -588,15 +515,5 @@ def SimulatorFilter(gen):
 				yield LogEntry(line, Severity.Verbose)
 			else:
 				yield LogEntry(line[8:], Severity.Normal)
-		else:
-			yield LogEntry(line, Severity.Normal)
-
-def VHDLLibraryToolFilter(gen):
-	"""A line based output stream filter for Active-HDL's VHDL library management
-	tool.
-	"""
-	for line in gen:
-		if line.startswith("ALIB: Library "):
-			yield LogEntry(line, Severity.Verbose)
 		else:
 			yield LogEntry(line, Severity.Normal)

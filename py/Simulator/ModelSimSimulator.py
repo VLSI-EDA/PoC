@@ -101,7 +101,7 @@ class Simulator(BaseSimulator):
 		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
 
 	def _RunAnalysis(self, _):
-		# create a ModelSimVHDLCompiler instance
+		# create a VHDLCompiler instance
 		vlib = self._toolChain.GetVHDLLibraryTool()
 		for lib in self._pocProject.VHDLLibraries:
 			vlib.Parameters[vlib.SwitchLibraryName] = lib.Name
@@ -110,7 +110,7 @@ class Simulator(BaseSimulator):
 			except DryRunException:
 				pass
 
-		# create a ModelSimVHDLCompiler instance
+		# create a VHDLCompiler instance
 		vcom = self._toolChain.GetVHDLCompiler()
 		vcom.Parameters[vcom.FlagQuietMode] =         True
 		vcom.Parameters[vcom.FlagExplicit] =          True
@@ -174,7 +174,7 @@ class Simulator(BaseSimulator):
 		tclBatchFilePath =        self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		tclDefaultBatchFilePath = self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultBatchScript']
 
-		# create a ModelSimSimulator instance
+		# create a VHDLSimulator instance
 		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
@@ -212,7 +212,7 @@ class Simulator(BaseSimulator):
 		tclDefaultGUIFilePath =   self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultGUIScript']
 		tclDefaultWaveFilePath =  self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultWaveScript']
 
-		# create a ModelSimSimulator instance
+		# create a VHDLSimulator instance
 		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
