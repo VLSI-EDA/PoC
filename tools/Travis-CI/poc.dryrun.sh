@@ -49,23 +49,27 @@ if grcat $TRAVIS_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
 fi
 
 echo -e "Testing Active-HDL (1/5)..."
-$POCROOT/poc.sh asim "PoC.arith.prng"
+$POCROOT/poc.sh --dryrun asim "PoC.arith.prng"
 ExitIfNoError $? "${RED}Testing Active-HDL [FAILED]${NOCOLOR}"
 
 echo -e "Testing Riviera-PRO (2/5)..."
-$POCROOT/poc.sh rpro "PoC.arith.prng"
+$POCROOT/poc.sh --dryrun rpro "PoC.arith.prng"
 ExitIfError $? "${RED}Testing Riviera-PRO [FAILED]${NOCOLOR}"
 
-echo -e "Testing ModelSim (3/5)..."
-$POCROOT/poc.sh vsim "PoC.arith.prng"
+echo -e "Testing GHDL (3/6)..."
+$POCROOT/poc.sh --dryrun ghdl "PoC.arith.prng"
 ExitIfError $? "${RED}Testing ModelSim [FAILED]${NOCOLOR}"
 
-echo -e "Testing ISE Simulator (4/5)..."
-$POCROOT/poc.sh isim "PoC.arith.prng"
+echo -e "Testing ModelSim (4/6)..."
+$POCROOT/poc.sh --dryrun vsim "PoC.arith.prng"
+ExitIfError $? "${RED}Testing ModelSim [FAILED]${NOCOLOR}"
+
+echo -e "Testing ISE Simulator (5/6)..."
+$POCROOT/poc.sh --dryrun isim "PoC.arith.prng"
 ExitIfError $? "${RED}Testing ISE Simulator [FAILED]${NOCOLOR}"
 
-echo -e "Testing Vivado Simulator (5/5)..."
-$POCROOT/poc.sh xsim "PoC.arith.prng"
+echo -e "Testing Vivado Simulator (6/6)..."
+$POCROOT/poc.sh --dryrun xsim "PoC.arith.prng"
 ExitIfError $? "${RED}Testing Vivado Simulator [FAILED]${NOCOLOR}"
 
 $ret=0
