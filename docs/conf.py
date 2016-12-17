@@ -78,7 +78,7 @@ autoapi_modules = {
   'DataBase':   {'output': "PyInfrastructure"},
   'Parser':     {'output': "PyInfrastructure"},
   'Simulator':  {'output': "PyInfrastructure"},
-  'ToolChains': {'output': "PyInfrastructure"},
+  'ToolChain':  {'output': "PyInfrastructure"},
   'lib':        {'output': "PyInfrastructure"}
 }
 
