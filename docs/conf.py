@@ -24,7 +24,9 @@ from subprocess import check_output
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../py'))
 sys.path.insert(0, os.path.abspath('_extensions'))
+sys.path.insert(0, os.path.abspath('_themes/sphinx_rtd_theme'))
 
+import sphinx_rtd_theme
 
 # -- General configuration ------------------------------------------------
 
@@ -192,8 +194,7 @@ html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom themes here, relative to this directory.
 html_theme_path = [
-	"_themes",
-	"_themes/sphinx_rtd_theme"
+	sphinx_rtd_theme.get_html_theme_path()
 ]
 
 # The name for this set of Sphinx documents.
