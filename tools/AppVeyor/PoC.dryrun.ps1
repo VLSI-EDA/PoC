@@ -20,6 +20,6 @@ foreach ($Tool in $Tools)
 	$start = Get-Date
 	.\PoC.ps1 --dryrun asim PoC.arith.prng
 	$end = Get-Date
-	Update-AppveyorTest -Name $TestName -Framework $TestFramework -FileName $PoCEntity -Outcome $(if ($LastExitCode -eq 0) {"Passed"} else {"Failed"}) -Duration ($end - $start).TotalSeconds
+	Update-AppveyorTest -Name $TestName -Framework $TestFramework -FileName $PoCEntity -Outcome $(if ($LastExitCode -eq 0) {"Passed"} else {"Failed"}) -Duration ($end - $start).TotalMilliseconds
 }
 # ==============================================================================

@@ -7,8 +7,8 @@ New in 1.x (upcomming)
 
 Already documented changes are available on the ``release`` branch at GitHub.
 
-* VHDL common packages
-* VHDL Simulation helpers
+* VHDL Common Packages
+* VHDL Simulation Packages
 * New Entities
 * Updated Entities
 * New Testbenches

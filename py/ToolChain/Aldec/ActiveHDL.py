@@ -52,9 +52,9 @@ __api__ = [
 	'VHDLLibraryTool',
 	'VHDLCompiler',
 	'VHDLStandaloneSimulator',
-	'ActiveHDLVLibFilter',
-	'ActiveHDLVComFilter',
-	'ActiveHDLVSimFilter'
+	'VLibFilter',
+	'VComFilter',
+	'VSimFilter'
 ]
 __all__ = __api__
 

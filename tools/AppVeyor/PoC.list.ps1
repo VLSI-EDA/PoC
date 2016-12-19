@@ -16,6 +16,6 @@ foreach ($Command in $Commands)
 	$start = Get-Date
 	.\PoC.ps1 $Command $PoCEntity
 	$end = Get-Date
-	Update-AppveyorTest -Name $TestName -Framework $TestFramework -FileName $PoCEntity -Outcome $(if ($LastExitCode -eq 0) {"Passed"} else {"Failed"}) -Duration ($end - $start).TotalSeconds
+	Update-AppveyorTest -Name $TestName -Framework $TestFramework -FileName $PoCEntity -Outcome $(if ($LastExitCode -eq 0) {"Passed"} else {"Failed"}) -Duration ($end - $start).TotalMilliseconds
 }
 # ==============================================================================
