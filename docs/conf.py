@@ -72,7 +72,7 @@ for tag in tags:
 
 from pathlib import Path
 print("current path: {0!s}".format(Path.cwd()))
-pyInfrastructureDirectory = Path("docs/PyInfrastructure")
+pyInfrastructureDirectory = Path("PyInfrastructure")
 for path in pyInfrastructureDirectory.iterdir():
 	print("  {0!s}".format(path))
 
