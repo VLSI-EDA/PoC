@@ -70,6 +70,7 @@ for tag in tags:
 # if (not (tags.has('PoCExternal') or tags.has('PoCInternal'))):
 	# tags.add('PoCExternal')
 
+from pathlib import Path
 pyInfrastructureDirectory = Path("docs/PyInfrastructure")
 for path in pyInfrastructureDirectory.iterdir():
 	print("  {0!s}".format(path))
