@@ -73,9 +73,7 @@ for tag in tags:
 from pathlib import Path
 pyInfrastructureDirectory = Path("PyInfrastructure")
 for path in pyInfrastructureDirectory.iterdir():
-	if (path.Name == "index.rst"):
-		print("  {0!s}".format(path))
-	else:
+	if (path.name != "index.rst"):
 		path.unlink()
 
 autodoc_member_order = "bysource"
