@@ -78,13 +78,13 @@ class Simulator(BaseSimulator):
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None):
 		# TODO: refactor into a RivieraPRO module, shared by RivieraPRO and Cocotb (-> MixIn class)?
 		# select RivieraPRO.ini
-		self._RivieraPROIniPath = self.Directories.PreCompiled
-		if board.Device.Vendor is Vendors.Altera:
-			self._RivieraPROIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
-		elif board.Device.Vendor is Vendors.Lattice:
-			self._RivieraPROIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
-		elif board.Device.Vendor is Vendors.Xilinx:
-			self._RivieraPROIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
+		# self._RivieraPROIniPath = self.Directories.PreCompiled
+		# if board.Device.Vendor is Vendors.Altera:
+		# 	self._RivieraPROIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
+		# elif board.Device.Vendor is Vendors.Lattice:
+		# 	self._RivieraPROIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
+		# elif board.Device.Vendor is Vendors.Xilinx:
+		# 	self._RivieraPROIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
 		# self._RivieraPROIniPath /= "RivieraPRO.ini"
 		# if not self._RivieraPROIniPath.exists():
