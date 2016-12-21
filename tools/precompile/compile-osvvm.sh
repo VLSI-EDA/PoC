@@ -209,6 +209,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		SortListPkg_int.vhd
 		RandomBasePkg.vhd
 		RandomPkg.vhd
+		VendorCovApiPkg.vhd
 		CoveragePkg.vhd
 		MemoryPkg.vhd
 		ScoreboardGenericPkg.vhd

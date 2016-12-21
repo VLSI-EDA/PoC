@@ -98,7 +98,13 @@ begin
 					S		=> '0'
 				);
 
-			Pad(i) <= o when t = '0' else 'Z';  -- 't' is low-active!
+			-- Explicit instantiation of tri-statable I/O buffers. Required if entity
+			-- is part of a netlist, which is used in another design.
+			obuf : OBUFT
+				port map (
+					I => o,
+					T => t,
+					O => Pad(i));
 		end generate genOE;
 
 		genNoOE : if NO_OUTPUT_ENABLE generate

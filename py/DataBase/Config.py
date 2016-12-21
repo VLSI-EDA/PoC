@@ -205,6 +205,8 @@ class LatticeSubTypes(SubTypes):
 
 class XilinxSubTypes(SubTypes):
 	"""Enumeration of all Xilinx device subtype."""
+	NoSubType = ("",	"")
+
 	DA =        ("d",		"a")
 	E =         ("",		"e")
 	AN =        ("",		"an")
