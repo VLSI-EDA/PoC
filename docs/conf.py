@@ -58,7 +58,7 @@ extensions = [
 	'autoapi.sphinx',
 	# 'changelog',
 # local extensions (patched)
-	'autoprogram',	             #'sphinxcontrib.autoprogram',
+	'autoprogram',               #'sphinxcontrib.autoprogram',
 # local extensions
 	'DocumentMember',
 	'poc'
@@ -70,11 +70,21 @@ for tag in tags:
 # if (not (tags.has('PoCExternal') or tags.has('PoCInternal'))):
 	# tags.add('PoCExternal')
 
-from pathlib import Path
+from pathlib  import Path
+from shutil   import rmtree as shutil_rmtree
+
+buildDirectory = Path("_build")
+print("Removing old build directory '{0!s}'...".format(buildDirectory))
+shutil_rmtree(str(buildDirectory))
+
 pyInfrastructureDirectory = Path("PyInfrastructure")
+print("Removing created files from '{0!s}'...".format(pyInfrastructureDirectory))
 for path in pyInfrastructureDirectory.iterdir():
 	if (path.name != "index.rst"):
+		print("  {0!s}".format(path))
 		path.unlink()
+print()
+
 
 autodoc_member_order = "bysource"
 
