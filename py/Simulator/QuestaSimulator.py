@@ -52,7 +52,7 @@ class Simulator(ModelSimSimulator_Simulator):
 		simulationSteps &= ~SimulationSteps.Elaborate
 		super().__init__(host, dryRun, simulationSteps)
 
-		vSimSimulatorFiles =            host.PoCConfig['CONFIG.DirectoryNames']['QuestaSimFiles']
+		vSimSimulatorFiles =            host.PoCConfig['CONFIG.DirectoryNames']['ModelSimFiles']
 		self.Directories.Working =      host.Directories.Temp / vSimSimulatorFiles
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / vSimSimulatorFiles
 

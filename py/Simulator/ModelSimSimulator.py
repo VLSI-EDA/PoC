@@ -66,7 +66,7 @@ class Simulator(BaseSimulator):
 	def _PrepareSimulator(self):
 		# create the ModelSim executable factory
 		self.LogVerbose("Preparing Mentor simulator.")
-		# for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Mentor.ModelSim', 'INSTALL.Altera.ModelSim']:
+		# for sectionName in ['INSTALL.Mentor.ModelSim', 'INSTALL.Mentor.ModelSim', 'INSTALL.Altera.ModelSim']:
 		# 	if (len(self.Host.PoCConfig.options(sectionName)) != 0):
 		# 		break
 		# else:

@@ -53,7 +53,7 @@ class Simulator(BaseSimulator):
 
 		configSection =                 host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working =      host.Directories.Temp / configSection['CocotbFiles']
-		self.Directories.PreCompiled =  host.Directories.PreCompiled / configSection['QuestaSimFiles']
+		self.Directories.PreCompiled =  host.Directories.PreCompiled / configSection['ModelSimFiles']
 
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()
