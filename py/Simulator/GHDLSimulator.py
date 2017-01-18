@@ -30,11 +30,12 @@
 from pathlib                import Path
 
 from Base.Exceptions        import NotConfiguredException
+from Base.Executable        import DryRunException
 from Base.Logging           import Severity
 from Base.Project           import FileTypes, VHDLVersion, ToolChain, Tool
 from Simulator              import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
-from ToolChains.GHDL        import GHDL, GHDLException, GHDLReanalyzeException
-from ToolChains.GTKWave     import GTKWave
+from ToolChain.GHDL         import GHDL, GHDLException, GHDLReanalyzeException
+from ToolChain.GTKWave      import GTKWave
 
 
 __api__ = [
@@ -109,6 +110,8 @@ class Simulator(BaseSimulator):
 			ghdl.Parameters[ghdl.ArgSourceFile] =         file.Path
 			try:
 				ghdl.Analyze()
+			except DryRunException:
+				pass
 			except GHDLReanalyzeException as ex:
 				raise SkipableSimulatorException("Error while analysing '{0!s}'.".format(file.Path)) from ex
 			except GHDLException as ex:
@@ -157,6 +160,8 @@ class Simulator(BaseSimulator):
 
 		try:
 			ghdl.Elaborate()
+		except DryRunException:
+			pass
 		except GHDLException as ex:
 			raise SimulatorException("Error while elaborating '{0}.{1}'.".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)) from ex
 		if ghdl.HasErrors:
@@ -207,7 +212,10 @@ class Simulator(BaseSimulator):
 			if testbench.WaveformOptionFile.exists():
 				ghdl.RunOptions[ghdl.SwitchWaveformOptionFile] =  testbench.WaveformOptionFile
 
-		testbench.Result = ghdl.Run()
+		try:
+			testbench.Result = ghdl.Run()
+		except DryRunException:
+			pass
 
 	def _RunView(self, testbench):
 		"""foo"""
@@ -231,7 +239,10 @@ class Simulator(BaseSimulator):
 			self.LogDebug("Didn't find waveform save file: '{0!s}'".format(gtkwSaveFilePath))
 
 		# run GTKWave GUI
-		gtkw.View()
+		try:
+			gtkw.View()
+		except DryRunException:
+			pass
 
 		# clean-up *.gtkw files
 		if gtkwSaveFilePath.exists():

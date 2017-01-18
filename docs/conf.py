@@ -24,7 +24,9 @@ from subprocess import check_output
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../py'))
 sys.path.insert(0, os.path.abspath('_extensions'))
+sys.path.insert(0, os.path.abspath('_themes/sphinx_rtd_theme'))
 
+import sphinx_rtd_theme
 
 # -- General configuration ------------------------------------------------
 
@@ -56,7 +58,7 @@ extensions = [
 	'autoapi.sphinx',
 	# 'changelog',
 # local extensions (patched)
-	'autoprogram',	             #'sphinxcontrib.autoprogram',
+	'autoprogram',               #'sphinxcontrib.autoprogram',
 # local extensions
 	'DocumentMember',
 	'poc'
@@ -68,6 +70,22 @@ for tag in tags:
 # if (not (tags.has('PoCExternal') or tags.has('PoCInternal'))):
 	# tags.add('PoCExternal')
 
+from pathlib  import Path
+from shutil   import rmtree as shutil_rmtree
+
+buildDirectory = Path("_build")
+print("Removing old build directory '{0!s}'...".format(buildDirectory))
+shutil_rmtree(str(buildDirectory))
+
+pyInfrastructureDirectory = Path("PyInfrastructure")
+print("Removing created files from '{0!s}'...".format(pyInfrastructureDirectory))
+for path in pyInfrastructureDirectory.iterdir():
+	if (path.name != "index.rst"):
+		print("  {0!s}".format(path))
+		path.unlink()
+print()
+
+
 autodoc_member_order = "bysource"
 
 # Extract Python documentation and generate ReST files.
@@ -78,7 +96,7 @@ autoapi_modules = {
   'DataBase':   {'output': "PyInfrastructure"},
   'Parser':     {'output': "PyInfrastructure"},
   'Simulator':  {'output': "PyInfrastructure"},
-  'ToolChains': {'output': "PyInfrastructure"},
+  'ToolChain':  {'output': "PyInfrastructure"},
   'lib':        {'output': "PyInfrastructure"}
 }
 
@@ -108,17 +126,14 @@ author = 'Patrick Lehmann, Thomas B. Preusser, Martin Zabel'
 def _IsUnderGitControl():
 	return (check_output(["git", "rev-parse", "--is-inside-work-tree"], universal_newlines=True).strip() == "true")
 
-def _LatestTagHash():
-	return check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True).strip()
-
-def _LatestTagName(latestTagHash):
-	return check_output(["git", "describe", "--tags", latestTagHash], universal_newlines=True).strip()
+def _LatestTagName():
+	return check_output(["git", "describe", "--abbrev=0", "--tags"], universal_newlines=True).strip()
 
 version = "1.1"     # The short X.Y version.
-release = "1.1.0"   # The full version, including alpha/beta/rc tags.
+release = "1.1.1"   # The full version, including alpha/beta/rc tags.
 try:
 	if _IsUnderGitControl:
-		latestTagName = _LatestTagName(_LatestTagHash())[1:]		# remove prefix "v"
+		latestTagName = _LatestTagName()[1:]		# remove prefix "v"
 		versionParts =  latestTagName.split("-")[0].split(".")
 
 		version = ".".join(versionParts[:2])
@@ -194,8 +209,11 @@ html_theme = "sphinx_rtd_theme"
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
-html_theme_path = ["_themes", ]
+html_theme_path = [
+	sphinx_rtd_theme.get_html_theme_path()
+]
+
+print(sphinx_rtd_theme.get_html_theme_path())
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.

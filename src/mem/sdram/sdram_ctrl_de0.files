@@ -10,9 +10,9 @@ include				"src/common/common.files"											# load common packages
 # PoC.mem.sdram
 if (DeviceVendor = "Altera") then
 	include			"lib/Altera.files"														# Altera primitives
-	vhdl	poc		"src/mem/ocram/sdram_ctrl_phy_de0.vhdl"				# Physical layer abstraction for the Terrasic DE0 board
-	vhdl	poc		"src/mem/ocram/sdram_ctrl_fsm.vhdl"						# SDR/DDR SDRAM controller FSM
-	vhdl	poc		"src/mem/ocram/sdram_ctrl_de0.vhdl"						# Top-Level
+	vhdl	poc		"src/mem/sdram/sdram_ctrl_phy_de0.vhdl"				# Physical layer abstraction for the Terrasic DE0 board
+	vhdl	poc		"src/mem/sdram/sdram_ctrl_fsm.vhdl"						# SDR/DDR SDRAM controller FSM
+	vhdl	poc		"src/mem/sdram/sdram_ctrl_de0.vhdl"						# Top-Level
 else
 	report "This SDRAM controller supports only the 'DE0' board."
 end if

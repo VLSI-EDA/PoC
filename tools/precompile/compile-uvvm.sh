@@ -179,9 +179,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	GetVSimDirectories $PoC_sh
 
 	# Assemble output directory
-	VSimDestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName
-	DestDir=$VSimDestDir/$UVVMDirName
-	ModelSimINI=$VSimDestDir/modelsim.ini
+	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName/$UVVMDirName
 	# Create and change to destination directory
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
@@ -215,14 +213,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Compile libraries with vcom, executed in destination directory
 	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
 	$VSimBinDir/vlib $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI -del $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI $Library $DestDir/$Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
 
 	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
 	ERRORCOUNT=0
 	for File in ${Files[@]}; do
 		echo "  Compiling '$File'..."
-		$VSimBinDir/vcom -suppress 1346,1236 -2008 -modelsimini $ModelSimINI -work $Library $SourceDir/$File
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi
@@ -241,14 +239,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Compile libraries with vcom, executed in destination directory
 	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
 	$VSimBinDir/vlib $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI -del $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI $Library $DestDir/$Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
 
 	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
 	ERRORCOUNT=0
 	for File in ${Files[@]}; do
 		echo "  Compiling '$File'..."
-		$VSimBinDir/vcom -suppress 1346,1236 -2008 -modelsimini $ModelSimINI -work $Library $SourceDir/$File
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi
@@ -270,14 +268,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Compile libraries with vcom, executed in destination directory
 	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
 	$VSimBinDir/vlib $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI -del $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI $Library $DestDir/$Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
 
 	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
 	ERRORCOUNT=0
 	for File in ${Files[@]}; do
 		echo "  Compiling '$File'..."
-		$VSimBinDir/vcom -suppress 1346,1236 -2008 -modelsimini $ModelSimINI -work $Library $SourceDir/$File
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi
@@ -299,14 +297,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Compile libraries with vcom, executed in destination directory
 	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
 	$VSimBinDir/vlib $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI -del $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI $Library $DestDir/$Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
 
 	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
 	ERRORCOUNT=0
 	for File in ${Files[@]}; do
 		echo "  Compiling '$File'..."
-		$VSimBinDir/vcom -suppress 1346,1236 -2008 -modelsimini $ModelSimINI -work $Library $SourceDir/$File
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi
@@ -328,14 +326,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Compile libraries with vcom, executed in destination directory
 	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
 	$VSimBinDir/vlib $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI -del $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI $Library $DestDir/$Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
 
 	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
 	ERRORCOUNT=0
 	for File in ${Files[@]}; do
 		echo "  Compiling '$File'..."
-		$VSimBinDir/vcom -suppress 1346,1236 -2008 -modelsimini $ModelSimINI -work $Library $SourceDir/$File
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi
@@ -357,14 +355,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Compile libraries with vcom, executed in destination directory
 	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
 	$VSimBinDir/vlib $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI -del $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI $Library $DestDir/$Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
 
 	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
 	ERRORCOUNT=0
 	for File in ${Files[@]}; do
 		echo "  Compiling '$File'..."
-		$VSimBinDir/vcom -suppress 1346,1236 -2008 -modelsimini $ModelSimINI -work $Library $SourceDir/$File
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi
@@ -388,14 +386,14 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Compile libraries with vcom, executed in destination directory
 	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
 	$VSimBinDir/vlib $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI -del $Library
-	$VSimBinDir/vmap -modelsimini $ModelSimINI $Library $DestDir/$Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
 
 	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
 	ERRORCOUNT=0
 	for File in ${Files[@]}; do
 		echo "  Compiling '$File'..."
-		$VSimBinDir/vcom -suppress 1346,1236 -2008 -modelsimini $ModelSimINI -work $Library $SourceDir/$File
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
 		if [ $? -ne 0 ]; then
 			let ERRORCOUNT++
 		fi

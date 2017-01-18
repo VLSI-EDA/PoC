@@ -33,7 +33,7 @@ from textwrap                import dedent
 from Base.Project            import FileTypes, ToolChain, Tool
 from DataBase.Config         import Vendors
 from DataBase.Entity         import WildCard
-from ToolChains.GNU          import Make
+from ToolChain.GNU           import Make
 from Simulator               import SimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
@@ -53,7 +53,7 @@ class Simulator(BaseSimulator):
 
 		configSection =                 host.PoCConfig['CONFIG.DirectoryNames']
 		self.Directories.Working =      host.Directories.Temp / configSection['CocotbFiles']
-		self.Directories.PreCompiled =  host.Directories.PreCompiled / configSection['QuestaSimFiles']
+		self.Directories.PreCompiled =  host.Directories.PreCompiled / configSection['ModelSimFiles']
 
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()

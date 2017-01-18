@@ -171,6 +171,7 @@ architecture rtl of sdram_ctrl_phy_s3esk is
   signal dq_en0_n   : std_logic;
   signal dq_en1_r_n : std_logic_vector(15 downto 0);  -- inited below
   signal dq_o_r     : std_logic_vector(15 downto 0);
+  signal dq_i       : std_logic_vector(15 downto 0);
 
   signal wdata_r        : std_logic_vector(31 downto 0);
   signal wdata_fal_r    : std_logic_vector(15 downto 0);
@@ -286,7 +287,7 @@ begin  -- rtl
   -- is only 90 degrees after source clock.
   --
 
-  dqs_obuf : for i in 0 to 1 generate
+  dqs_out : for i in 0 to 1 generate
     -- Both "tff" and "off" must be placed in the IOB. Thus, due to placement
     -- constraints, the "off" must be reset with rst90.
 
@@ -314,10 +315,21 @@ begin  -- rtl
         R      => rst90,                -- only due to placement constraints
         S      => '0');
 
-  end generate dqs_obuf;
+  end generate;
 
-  sd_ldqs <= dqs_o_r(0) when dqs_en1_r_n(0) = '0' else 'Z';
-  sd_udqs <= dqs_o_r(1) when dqs_en1_r_n(1) = '0' else 'Z';
+	-- Explicit instantiation of I/O buffers. Required if entity is part of a
+	-- netlist, which is used in another design.
+	ldqs_obuf : OBUFT
+		port map (
+			I => dqs_o_r(0),
+			T => dqs_en1_r_n(0),
+			O => sd_ldqs);
+
+	udqs_obuf : OBUFT
+		port map (
+			I => dqs_o_r(1),
+			T => dqs_en1_r_n(1),
+			O => sd_udqs);
 
   --
   -- Write Data
@@ -339,7 +351,7 @@ begin  -- rtl
     end if;
   end process;
 
-  dq_obuf: for i in 0 to 15 generate
+  dq_out: for i in 0 to 15 generate
     -- A reset can't be applied to the "tff" because then it must also be
     -- applied to the "iff" which is driven be another clock domain.
     -- (Applying reset to "off" is not a problem.)
@@ -369,8 +381,22 @@ begin  -- rtl
         R      => '0',
         S      => '0');
 
-    sd_dq(i) <= dq_o_r(i) when dq_en1_r_n(i) = '0' else 'Z';
-  end generate dq_obuf;
+  end generate;
+
+  -----------------------------------------------------------------------------
+  -- DQ I/O Buffers
+  -----------------------------------------------------------------------------
+
+	-- Explicit instantiation of I/O buffers. Required if entity is part of a
+	-- netlist, which is used in another design.
+	dq_iobuf : for i in 0 to 15 generate
+		b : IOBUF
+			port map (
+				I => dq_o_r(i),
+				T => dq_en1_r_n(i),
+				IO => sd_dq(i),
+				O  => dq_i(i));
+	end generate;
 
   -----------------------------------------------------------------------------
   -- Read data capture
@@ -420,12 +446,12 @@ begin  -- rtl
     end if;
   end process;
 
-  dq_ibuf : for i in 0 to 15 generate
+  dq_in : for i in 0 to 15 generate
     iff   : IDDR2
       generic map (
         SRTYPE => "SYNC")
       port map (
-        D      => sd_dq(i),
+        D      => dq_i(i),
         C0     => clk_fb90,
         C1     => clk_fb90_n,
         CE     => rden3_r,
@@ -433,7 +459,7 @@ begin  -- rtl
         Q1     => rdata_r(16+i),
         R      => '0',
         S      => '0');
-  end generate dq_ibuf;
+  end generate;
 
   process (clk_fb90_n)
   begin  -- process

@@ -33,7 +33,8 @@
 # ============================================================================
 #
 # load dependencies
-from . import Attribute, AttributeHelperMixin
+from argparse   import ArgumentParser
+from .          import Attribute, AttributeHelperMixin
 
 
 __api__ = [
@@ -143,8 +144,7 @@ class ArgParseMixin(AttributeHelperMixin):
 		super().__init__()
 
 		# create a commandline argument parser
-		import argparse
-		self.__mainParser = argparse.ArgumentParser(**kwargs)
+		self.__mainParser = ArgumentParser(**kwargs)
 		self.__subParser = self.__mainParser.add_subparsers(help='sub-command help')
 
 		for _, func in CommonArgumentAttribute.GetMethods(self):
@@ -175,7 +175,13 @@ class ArgParseMixin(AttributeHelperMixin):
 				continue
 
 	def Run(self):
-		# parse command line options and process splitted arguments in callback functions
+		try:
+			from argcomplete  import autocomplete
+			autocomplete(self.__mainParser)
+		except ImportError:
+			pass
+
+		# parse command line options and process split arguments in callback functions
 		args = self.__mainParser.parse_args()
 		# because func is a function (unbound to an object), it MUST be called with self as a first parameter
 		args.func(self, args)

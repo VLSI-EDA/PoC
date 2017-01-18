@@ -295,9 +295,9 @@ class ReplaceStatement(Statement):
 				# match for whitespace
 				token = yield
 				if (not isinstance(token, SpaceToken)): raise MismatchingParserResult("ReplaceParser: Expected whitespace before MULTILINE, DOTALL or CASEINSENSITIVE keyword.")
+				token = yield # first keyword
 				for _ in range(3):
 					# match for 				MULTILINE, DOTALL or CASEINSENSITIVE keyword
-					token = yield
 					if (not isinstance(token, StringToken)):  raise MismatchingParserResult("ReplaceParser: Expected MULTILINE, DOTALL or CASEINSENSITIVE keyword.")
 					if (token.Value.lower() == "multiline"):
 						multiLine =        True
@@ -315,7 +315,7 @@ class ReplaceStatement(Statement):
 						# match for optional whitespace, before going into the next iteration
 						token = yield
 						if isinstance(token, SpaceToken):            token = yield
-						continue
+						continue # with 'token' set to next keyword
 					else:
 						break
 

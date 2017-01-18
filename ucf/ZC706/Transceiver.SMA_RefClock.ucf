@@ -1,0 +1,7 @@
+## Transceiver - SMA interface
+## =============================================================================
+##	Bank:						111
+##	ReferenceClock	MGT_REFCLK1
+##		Location:			J36, J31
+NET "ZC706_SMA_RefClock_p"											LOC = "W8";													## J25
+NET "ZC706_SMA_RefClock_n"											LOC = "W7";													## J26

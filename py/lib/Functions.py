@@ -130,23 +130,24 @@ class Init:
 
 	from colorama import Fore as Foreground
 	Foreground = {
-		"RED":        Foreground.LIGHTRED_EX,
-		"DARK_RED":		Foreground.RED,
-		"GREEN":      Foreground.LIGHTGREEN_EX,
-		"DARK_GREEN": Foreground.GREEN,
-		"YELLOW":     Foreground.LIGHTYELLOW_EX,
-		"MAGENTA":    Foreground.LIGHTMAGENTA_EX,
-		"BLUE":       Foreground.LIGHTBLUE_EX,
-		"CYAN":       Foreground.LIGHTCYAN_EX,
-		"DARK_CYAN":  Foreground.CYAN,
-		"GRAY":       Foreground.WHITE,
-		"DARK_GRAY":  Foreground.LIGHTBLACK_EX,
-		"WHITE":      Foreground.LIGHTWHITE_EX,
-		"NOCOLOR":    Foreground.RESET,
+		"RED":          Foreground.LIGHTRED_EX,
+		"DARK_RED":		  Foreground.RED,
+		"GREEN":        Foreground.LIGHTGREEN_EX,
+		"DARK_GREEN":   Foreground.GREEN,
+		"YELLOW":       Foreground.LIGHTYELLOW_EX,
+		"DARK_YELLOW":  Foreground.YELLOW,
+		"MAGENTA":      Foreground.LIGHTMAGENTA_EX,
+		"BLUE":         Foreground.LIGHTBLUE_EX,
+		"CYAN":         Foreground.LIGHTCYAN_EX,
+		"DARK_CYAN":    Foreground.CYAN,
+		"GRAY":         Foreground.WHITE,
+		"DARK_GRAY":    Foreground.LIGHTBLACK_EX,
+		"WHITE":        Foreground.LIGHTWHITE_EX,
+		"NOCOLOR":      Foreground.RESET,
 
-		"HEADLINE":   Foreground.LIGHTMAGENTA_EX,
-		"ERROR":      Foreground.LIGHTRED_EX,
-		"WARNING":    Foreground.LIGHTYELLOW_EX
+		"HEADLINE":     Foreground.LIGHTMAGENTA_EX,
+		"ERROR":        Foreground.LIGHTRED_EX,
+		"WARNING":      Foreground.LIGHTYELLOW_EX
 	}
 
 class Exit:
@@ -169,15 +170,15 @@ class Exit:
 		from traceback  import print_tb, walk_tb
 		Init.init()
 		print("{RED}FATAL: An unknown or unhandled exception reached the topmost exception handler!{NOCOLOR}".format(**Init.Foreground))
-		print("{YELLOW}  Exception type:{NOCOLOR}      {type}".format(type=ex.__class__.__name__, **Init.Foreground))
+		print("{YELLOW}  Exception type:{NOCOLOR}      {typename}".format(typename=ex.__class__.__name__, **Init.Foreground))
 		print("{YELLOW}  Exception message:{NOCOLOR}   {message!s}".format(message=ex, **Init.Foreground))
-		if (ex.__cause__ is not None):
-			print("{YELLOW}    Caused by type:{NOCOLOR}    {type}".format(message=ex.__cause__.__class__.__name__, **Init.Foreground))
-			print("{YELLOW}    Caused by message:{NOCOLOR} {message!s}".format(message=ex.__cause__, **Init.Foreground))
 		frame,sourceLine = [x for x in walk_tb(ex.__traceback__)][-1]
 		filename = frame.f_code.co_filename
 		funcName = frame.f_code.co_name
-		print("{YELLOW}  Caused by:{NOCOLOR}         {function} in file '{filename}' at line {line}".format(function=funcName, filename=filename, line=sourceLine, **Init.Foreground))
+		print("{YELLOW}  Caused in:{NOCOLOR}         {function} in file '{filename}' at line {line}".format(function=funcName, filename=filename, line=sourceLine, **Init.Foreground))
+		if (ex.__cause__ is not None):
+			print("{DARK_YELLOW}    Caused by type:{NOCOLOR}    {typename}".format(typename=ex.__cause__.__class__.__name__, **Init.Foreground))
+			print("{DARK_YELLOW}    Caused by message:{NOCOLOR} {message!s}".format(message=ex.__cause__, **Init.Foreground))
 		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
 		print_tb(ex.__traceback__)
 		print(("{RED}" + ("-" * 80) + "{NOCOLOR}").format(**Init.Foreground))
