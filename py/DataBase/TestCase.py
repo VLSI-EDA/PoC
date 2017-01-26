@@ -180,8 +180,8 @@ class SuiteMixIn:
 
 	def StartTimer(self):
 		now = datetime.now()
-		self.__initRuntime =    now - self._startedAt
-		self._startedAt =       now
+		self._initRuntime =   now - self._startedAt
+		self._startedAt =     now
 
 	def StopTimer(self):
 		self._endedAt = datetime.now()
@@ -250,6 +250,7 @@ class TestBase(ElementBase):
 		super().__init__(test.Parent.Name, None)
 
 		self._test =              test
+		self._group =             None
 
 		self._status =            None
 		self._warnings =          []

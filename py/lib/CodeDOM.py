@@ -78,7 +78,8 @@ class CodeDOMMeta(type):
 		result = mcls()
 		return result
 
-	def GetChoiceParser(self, choices):
+	@staticmethod
+	def GetChoiceParser(choices):
 		if DEBUG: print("init ChoiceParser")
 		parsers = []
 		for choice in choices:
@@ -110,7 +111,8 @@ class CodeDOMMeta(type):
 		if DEBUG: print("ChoiceParser: list of choices is empty -> no match found")
 		raise EmptyChoiseParserResult("ChoiceParser: ")
 
-	def GetRepeatParser(self, callback, generator):
+	@staticmethod
+	def GetRepeatParser(callback, generator):
 		if DEBUG: print("init RepeatParser")
 		parser = generator()
 		parser.send(None)

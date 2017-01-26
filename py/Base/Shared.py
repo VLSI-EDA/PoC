@@ -58,7 +58,7 @@ def to_time(seconds):
 	"""
 
 	minutes = int(seconds / 60)
-	seconds = seconds - (minutes * 60)
+	seconds -= minutes * 60
 	return "{min}:{sec:02}".format(min=minutes, sec=seconds)
 
 

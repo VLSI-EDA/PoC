@@ -55,6 +55,7 @@ class Simulator(ModelSimSimulator_Simulator):
 		vSimSimulatorFiles =            host.PoCConfig['CONFIG.DirectoryNames']['ModelSimFiles']
 		self.Directories.Working =      host.Directories.Temp / vSimSimulatorFiles
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / vSimSimulatorFiles
+		self.ModelSimIniPath =          host.Directories.PreCompiled
 
 		if (SimulationSteps.CleanUpBefore in self._simulationSteps):
 			pass
@@ -85,18 +86,14 @@ class Simulator(ModelSimSimulator_Simulator):
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None):
 		# TODO: refactor into a ModelSim module, shared by ModelSim and Cocotb (-> MixIn class)?
 		# select modelsim.ini
-		self._modelsimIniPath = self.Directories.PreCompiled
-		if board.Device.Vendor is Vendors.Altera:
-			self._modelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
-		elif board.Device.Vendor is Vendors.Lattice:
-			self._modelsimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
-		elif board.Device.Vendor is Vendors.Xilinx:
-			self._modelsimIniPath  /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
+		if board.Device.Vendor is Vendors.Altera:     self.ModelSimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
+		elif board.Device.Vendor is Vendors.Lattice:  self.ModelSimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
+		elif board.Device.Vendor is Vendors.Xilinx:   self.ModelSimIniPath  /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
-		self._modelsimIniPath /= "modelsim.ini"
-		if not self._modelsimIniPath.exists():
-			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(self._modelsimIniPath)) \
-				from FileNotFoundError(str(self._modelsimIniPath))
+		self.ModelSimIniPath /= "modelsim.ini"
+		if not self.ModelSimIniPath.exists():
+			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(self.ModelSimIniPath)) \
+				from FileNotFoundError(str(self.ModelSimIniPath))
 
 		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
 
@@ -112,7 +109,7 @@ class Simulator(ModelSimSimulator_Simulator):
 		vcom.Parameters[vcom.FlagQuietMode] =         True
 		vcom.Parameters[vcom.FlagExplicit] =          True
 		vcom.Parameters[vcom.FlagRangeCheck] =        True
-		vcom.Parameters[vcom.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
+		vcom.Parameters[vcom.SwitchModelSimIniFile] = self.ModelSimIniPath.as_posix()
 		vcom.Parameters[vcom.SwitchVHDLVersion] =     repr(self._vhdlVersion)
 
 		recompileScriptContent = dedent("""\
@@ -173,7 +170,7 @@ class Simulator(ModelSimSimulator_Simulator):
 
 		# create a VHDLSimulator instance
 		vsim = self._toolChain.GetSimulator()
-		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
+		vsim.Parameters[vsim.SwitchModelSimIniFile] = self.ModelSimIniPath.as_posix()
 		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
 		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
@@ -204,7 +201,7 @@ class Simulator(ModelSimSimulator_Simulator):
 
 		# create a VHDLSimulator instance
 		vsim = self._toolChain.GetSimulator()
-		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
+		vsim.Parameters[vsim.SwitchModelSimIniFile] = self.ModelSimIniPath.as_posix()
 		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
 		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"

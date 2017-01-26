@@ -333,7 +333,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		self.LogVerbose("Copying old configuration file to '{0!s}'.".format(backupFile, **Init.Foreground))
 		self.LogDebug("cp {0!s} {1!s}".format(self._configFiles.Private, backupFile))
 		try:
-			shutil_copy(str(self._configFiles.Private), str(backupFile), follow_symlinks=True)
+			shutil_copy(str(self._configFiles.Private), str(backupFile))
 		except OSError as ex:
 			raise ConfigurationException("Error while copying '{0!s}'.".format(self._configFiles.Private)) from ex
 

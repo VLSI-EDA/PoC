@@ -224,7 +224,8 @@ class ExtendedInterpolation(Interpolation):
 		# print("interpol: RESULT => '{0}'".format(result))
 		return result
 
-	def GetSpecial(self, section, option, path):
+	@staticmethod
+	def GetSpecial(section, option, path):
 		parts = section.split(".")
 		if (path == "Root"):
 			return parts[0]

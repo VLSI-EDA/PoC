@@ -189,7 +189,8 @@ class Synth(OutputFilteredExecutable, ToolMixIn):
 		SwitchProjectFile
 	)
 
-	def GetLogFileReader(self, logFile):
+	@staticmethod
+	def GetLogFileReader(logFile):
 		while True:
 			if logFile.exists(): break
 			time.sleep(5)							# FIXME: implement a 'tail -f' functionality

@@ -34,7 +34,7 @@ from subprocess                   import check_output
 
 from lib.Functions                import Init
 from ToolChain                    import ConfigurationException, EditionDescription, Edition
-from ToolChain.Mentor.ModelSim    import ModelSimException as Mentor_ModelSimException, ModelSimPEConfiguration as Mentor_ModelSim_Configuration
+from ToolChain.Mentor.ModelSim    import ModelSimException as Mentor_ModelSimException, Configuration as Mentor_ModelSim_Configuration
 from ToolChain.Intel              import IntelException
 
 
