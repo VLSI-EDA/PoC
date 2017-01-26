@@ -190,7 +190,7 @@ class Compiler(BaseCompiler):
 		self.LogVerbose("Copy CoreGen xci file to '{0}'.".format(xciFilePath))
 		self.LogDebug("cp {0!s} {1!s}".format(xciInputFilePath, self.Directories.Working))
 		try:
-			shutil_copy(str(xciInputFilePath), str(xciFilePath), follow_symlinks=True)
+			shutil_copy(str(xciInputFilePath), str(xciFilePath))
 		except OSError as ex:
 			raise CompilerException("Error while copying '{0!s}'.".format(xciInputFilePath)) from ex
 
@@ -205,8 +205,8 @@ class Compiler(BaseCompiler):
 		# ==========================================================================
 		self.LogVerbose("Executing CoreGen...")
 		coreGen = self._toolChain.GetCoreGenerator()
-		coreGen.Parameters[coreGen.SwitchProjectFile] =  "."		# use current directory and the default project name
-		coreGen.Parameters[coreGen.SwitchBatchFile] =    str(xciFilePath)
+		coreGen.Parameters[coreGen.SwitchProjectFile] = "."		# use current directory and the default project name
+		coreGen.Parameters[coreGen.SwitchBatchFile] =   str(xciFilePath)
 		coreGen.Parameters[coreGen.FlagRegenerate] =    True
 
 		try:
