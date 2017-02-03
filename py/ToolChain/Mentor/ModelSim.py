@@ -180,23 +180,35 @@ class Configuration(ToolConfiguration):
 	def RunPostConfigurationTasks(self):
 		if (len(self._host.PoCConfig[self._section]) == 0): return  # exit if not configured
 
-		precompiledDirectory = self._host.PoCConfig['CONFIG.DirectoryNames']['PrecompiledFiles']
-		vSimSimulatorFiles = self._host.PoCConfig['CONFIG.DirectoryNames']['ModelSimFiles']
-		vsimPath = self._host.Directories.Root / precompiledDirectory / vSimSimulatorFiles
-		modelsimIniPath = vsimPath / "modelsim.ini"
-		if not modelsimIniPath.exists():
-			if not vsimPath.exists():
-				try:
-					vsimPath.mkdir(parents=True)
-				except OSError as ex:
-					raise ConfigurationException("Error while creating '{0!s}'.".format(vsimPath)) from ex
+		precompiledDirectory =  self._host.PoCConfig['CONFIG.DirectoryNames']['PrecompiledFiles']
+		vSimSimulatorFiles =    self._host.PoCConfig['CONFIG.DirectoryNames']['ModelSimFiles']
+		vsimPath =              self._host.Directories.Root / precompiledDirectory / vSimSimulatorFiles
+		modelsimIniPath =       vsimPath / "modelsim.ini"
 
-			with modelsimIniPath.open('w') as fileHandle:
-				fileContent = dedent("""\
-					[Library]
-					others = $MODEL_TECH/../modelsim.ini
-					""")
-				fileHandle.write(fileContent)
+		if not vsimPath.exists():
+			self.LogVerbose("Creating directory for ModelSim files.")
+			try:
+				self.LogDebug("Creating directory '{0!s}'.".format(vsimPath))
+				vsimPath.mkdir(parents=True)
+			except OSError as ex:
+				raise ConfigurationException("Error while creating '{0!s}'.".format(vsimPath)) from ex
+		else:
+			self.LogDebug("Directory for ModelSim files already exists.")
+
+		if not modelsimIniPath.exists():
+			self.LogVerbose("Creating initial 'modelsim.ini' file.")
+			self.LogDebug("Writing initial 'modelsim.ini' file to '{0!s}'.".format(modelsimIniPath))
+			try:
+				with modelsimIniPath.open('w') as fileHandle:
+					fileContent = dedent("""\
+						[Library]
+						others = $MODEL_TECH/../modelsim.ini
+						""")
+					fileHandle.write(fileContent)
+			except OSError as ex:
+				raise ConfigurationException("Error while creating '{0!s}'.".format(modelsimIniPath)) from ex
+		else:
+			self.LogVerbose("ModelSim configuration file '{0!s}' already exists.".format(modelsimIniPath))
 
 
 class ModelSimPEConfiguration(Configuration):

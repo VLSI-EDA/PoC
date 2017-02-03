@@ -95,7 +95,7 @@ class Simulator(BaseSimulator):
 
 		precompiledModelsimIniPath /= "modelsim.ini"
 		if not precompiledModelsimIniPath.exists():
-			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(precompiledModelsimIniPath)) \
+			raise SimulatorException("ModelSim ini file '{0!s}' not found.".format(precompiledModelsimIniPath)) \
 				from FileNotFoundError(str(precompiledModelsimIniPath))
 
 		simBuildPath = self.Directories.Working / self.COCOTB_SIMBUILD_DIRECTORY

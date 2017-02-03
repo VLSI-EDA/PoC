@@ -55,7 +55,8 @@ class Simulator(ModelSimSimulator_Simulator):
 		vSimSimulatorFiles =            host.PoCConfig['CONFIG.DirectoryNames']['ModelSimFiles']
 		self.Directories.Working =      host.Directories.Temp / vSimSimulatorFiles
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / vSimSimulatorFiles
-		self.ModelSimIniPath =          host.Directories.PreCompiled
+		self.ModelSimIniDirectoryPath = self.Directories.PreCompiled
+		self.ModelSimIniPath =          "modelsim.ini"
 
 		if (SimulationSteps.CleanUpBefore in self._simulationSteps):
 			pass
@@ -86,13 +87,13 @@ class Simulator(ModelSimSimulator_Simulator):
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None):
 		# TODO: refactor into a ModelSim module, shared by ModelSim and Cocotb (-> MixIn class)?
 		# select modelsim.ini
-		if board.Device.Vendor is Vendors.Altera:     self.ModelSimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
-		elif board.Device.Vendor is Vendors.Lattice:  self.ModelSimIniPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
-		elif board.Device.Vendor is Vendors.Xilinx:   self.ModelSimIniPath  /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
+		if board.Device.Vendor is Vendors.Altera:     self.ModelSimIniDirectoryPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
+		elif board.Device.Vendor is Vendors.Lattice:  self.ModelSimIniDirectoryPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
+		elif board.Device.Vendor is Vendors.Xilinx:   self.ModelSimIniDirectoryPath  /= self.Host.PoCConfig['CONFIG.DirectoryNames']['XilinxSpecificFiles']
 
-		self.ModelSimIniPath /= "modelsim.ini"
+		self.ModelSimIniPath = self.ModelSimIniDirectoryPath / self.ModelSimIniPath
 		if not self.ModelSimIniPath.exists():
-			raise SimulatorException("Modelsim ini file '{0!s}' not found.".format(self.ModelSimIniPath)) \
+			raise SimulatorException("ModelSim ini file '{0!s}' not found.".format(self.ModelSimIniPath)) \
 				from FileNotFoundError(str(self.ModelSimIniPath))
 
 		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
