@@ -60,6 +60,7 @@ class Configuration(Mentor_ModelSim_Configuration):
 	_vendor =               "Intel"                     #: The name of the tools vendor.
 	_toolName =             "Intel ModelSim"            #: The name of the tool.
 	_section  =             "INSTALL.Intel.ModelSim"    #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  False                       #: Intel ModelSim Edition doesn't support multiple versions.
 	_template = {
 		"Windows": {
 			_section: {

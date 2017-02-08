@@ -600,19 +600,60 @@ class VHDLSimulator(OutputFilteredExecutable, ToolMixIn):
 		_name =   "modelsimini"
 		_value =  None
 
-	class FlagOptimization(metaclass=ShortFlagArgument):
+	class FlagEnableOptimization(metaclass=ShortFlagArgument):
 		"""Enabled optimization while elaborating the design."""
 		_name =   "vopt"
-		_value =  None
 
-	class FlagNoOptimization(metaclass=ShortFlagArgument):
+	class FlagDisableOptimization(metaclass=ShortFlagArgument):
 		"""Disabled optimization while elaborating the design."""
 		_name =   "novopt"
+
+	class FlagEnableOptimizationVerbosity(metaclass=ShortFlagArgument):
+		"""Enabled optimization while elaborating the design."""
+		_name =   "vopt_verbose"
+
+	class FlagEnableKeepAssertionCountsForCoverage(metaclass=ShortFlagArgument):
+		_name =   "assertcover"
+
+	class FlagDisableKeepAssertionCountsForCoverage(metaclass=ShortFlagArgument):
+		_name =   "noassertcover"
+
+	class FlagEnableCoverage(metaclass=ShortFlagArgument):
+		_name =   "coverage"
+
+	class FlagDisableCoverage(metaclass=ShortFlagArgument):
+		_name =   "nocoverage"
+
+	class FlagEnablePSL(metaclass=ShortFlagArgument):
+		_name =   "psl"
+
+	class FlagDisablePSL(metaclass=ShortFlagArgument):
+		_name =   "nopsl"
+
+	class FlagEnableFSMDebugging(metaclass=ShortFlagArgument):
+		_name =   "fsmdebug"
+
+	class FlagReportAsNote(metaclass=ShortTupleArgument):
+		_name =   "note"
 		_value =  None
 
 	class FlagReportAsError(metaclass=ShortTupleArgument):
 		_name =   "error"
 		_value =  None
+
+	class FlagReportAsWarning(metaclass=ShortTupleArgument):
+		_name =   "warning"
+		_value =  None
+
+	class FlagReportAsFatal(metaclass=ShortTupleArgument):
+		_name =   "fatal"
+		_value =  None
+
+	class FlagRelaxLanguageChecks(metaclass=ShortFlagArgument):
+		_name =   "permissive"
+
+	class FlagForceLanguageChecks(metaclass=ShortFlagArgument):
+		_name =   "pedanticerrors"
 
 	class SwitchTimeResolution(metaclass=ShortTupleArgument):
 		"""Set simulation time resolution."""
@@ -647,7 +688,8 @@ class VHDLSimulator(OutputFilteredExecutable, ToolMixIn):
 		SwitchBatchCommand,
 		FlagCommandLineMode,
 		SwitchModelSimIniFile,
-		FlagOptimization,
+		FlagEnableOptimization,
+		FlagDisableOptimization,
 		FlagReportAsError,
 		ArgLogFile,
 		ArgKeepStdOut,

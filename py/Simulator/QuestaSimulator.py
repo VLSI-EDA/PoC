@@ -172,7 +172,7 @@ class Simulator(ModelSimSimulator_Simulator):
 		# create a VHDLSimulator instance
 		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self.ModelSimIniPath.as_posix()
-		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
+		# vsim.Parameters[vsim.FlagEnableOptimization] =      True			# FIXME:
 		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
 		vsim.Parameters[vsim.FlagCommandLineMode] =   True
@@ -203,7 +203,7 @@ class Simulator(ModelSimSimulator_Simulator):
 		# create a VHDLSimulator instance
 		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self.ModelSimIniPath.as_posix()
-		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
+		# vsim.Parameters[vsim.FlagEnableOptimization] =      True			# FIXME:
 		vsim.Parameters[vsim.FlagReportAsError] =     "3473"
 		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
 		vsim.Parameters[vsim.FlagGuiMode] =           True
