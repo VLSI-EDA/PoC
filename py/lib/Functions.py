@@ -175,7 +175,7 @@ class Exit:
 		frame,sourceLine = [x for x in walk_tb(ex.__traceback__)][-1]
 		filename = frame.f_code.co_filename
 		funcName = frame.f_code.co_name
-		print("{YELLOW}  Caused in:{NOCOLOR}         {function} in file '{filename}' at line {line}".format(function=funcName, filename=filename, line=sourceLine, **Init.Foreground))
+		print("{YELLOW}  Caused in:{NOCOLOR}           {function} in file '{filename}' at line {line}".format(function=funcName, filename=filename, line=sourceLine, **Init.Foreground))
 		if (ex.__cause__ is not None):
 			print("{DARK_YELLOW}    Caused by type:{NOCOLOR}    {typename}".format(typename=ex.__cause__.__class__.__name__, **Init.Foreground))
 			print("{DARK_YELLOW}    Caused by message:{NOCOLOR} {message!s}".format(message=ex.__cause__, **Init.Foreground))

@@ -75,14 +75,14 @@ from shutil   import rmtree as shutil_rmtree
 
 buildDirectory = Path("_build")
 print("Removing old build directory '{0!s}'...".format(buildDirectory))
-shutil_rmtree(str(buildDirectory))
+# shutil_rmtree(str(buildDirectory))
 
 pyInfrastructureDirectory = Path("PyInfrastructure")
 print("Removing created files from '{0!s}'...".format(pyInfrastructureDirectory))
 for path in pyInfrastructureDirectory.iterdir():
 	if (path.name != "index.rst"):
 		print("  {0!s}".format(path))
-		path.unlink()
+#		path.unlink()
 print()
 
 

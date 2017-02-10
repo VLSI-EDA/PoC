@@ -61,6 +61,7 @@ class Configuration(Mentor_ModelSim_Configuration):
 	_vendor =               "Altera"                    #: The name of the tools vendor.
 	_toolName =             "ModelSim Altera Edition"   #: The name of the tool.
 	_section  =             "INSTALL.Altera.ModelSim"   #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_multiVersionSupport =  False                       #: Altera ModelSim Edition doesn't support multiple versions.
 	_template = {
 		"Windows": {
 			_section: {

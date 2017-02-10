@@ -47,13 +47,13 @@ use			PoC.sync.all;
 entity sync_Bits_Altera is
 	generic (
 		BITS					: positive						:= 1;									-- number of bit to be synchronized
-		INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
+		INIT					: std_logic_vector		:= x"00000000";				-- initialization bits
 		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
 		Clock					: in	std_logic;														-- Clock to be synchronized to
 		Input					: in	std_logic_vector(BITS - 1 downto 0);	-- Data to be synchronized
-		Output				: out	std_logic_vector(BITS - 1 downto 0)		-- synchronised data
+		Output				: out	std_logic_vector(BITS - 1 downto 0)		-- synchronized data
 	);
 end entity;
 
@@ -73,7 +73,7 @@ begin
 		-- preserve both registers (no optimization, shift register extraction, ...)
 		attribute PRESERVE of Data_meta						: signal is TRUE;
 		attribute PRESERVE of Data_sync						: signal is TRUE;
-		-- Notity the synthesizer / timing analysator to identity a synchronizer circuit
+		-- Notify the synthesizer / timing analysator to identity a synchronizer circuit
 		attribute ALTERA_ATTRIBUTE of Data_meta		: signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
 	begin
 		Data_async	<= Input(i);

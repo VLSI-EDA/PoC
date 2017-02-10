@@ -101,8 +101,8 @@ __api__ = [
 	'PoCEntityAttribute',
 	'BoardDeviceAttributeGroup',
 	'VHDLVersionAttribute',
-	'SimulationStepsAttribute',
-	'CompileStepsAttribute',
+	'SimulationStepsAttributeGroup',
+	'CompileStepsAttributeGroup',
 	'PileOfCores',
 	'main'
 ]
@@ -125,7 +125,7 @@ class VHDLVersionAttribute(Attribute):
 		self._AppendAttribute(func, ArgumentAttribute("--std", metavar="VHDLVersion", dest="VHDLVersion", help="Simulate with VHDL-??"))
 		return func
 
-class SimulationStepsAttribute(Attribute):
+class SimulationStepsAttributeGroup(Attribute):
 	def __call__(self, func):
 		self._AppendAttribute(func, SwitchArgumentAttribute("-g", "--gui",        dest="GUIMode",     help="Run all steps (prepare, analysis, elaboration, optimization, simulation) and finally display the waveform in a GUI window."))
 		self._AppendAttribute(func, SwitchArgumentAttribute("-a", "--analyze",    dest="Analyze",     help="Run only the prepare and analysis step."))
@@ -141,7 +141,7 @@ class SimulationStepsAttribute(Attribute):
 		# self._AppendAttribute(func, SwitchArgumentAttribute(      "--cleanup-after",  dest="CleanUpAfter",  help="Don't delete intermediate files. Skip post-delete rules."))
 		return func
 
-class CompileStepsAttribute(Attribute):
+class CompileStepsAttributeGroup(Attribute):
 	def __call__(self, func):
 		self._AppendAttribute(func, SwitchArgumentAttribute("-s", "--synthesize", dest="Synthesize", help="Run only the prepare and synthesize step."))
 		# merge
@@ -921,7 +921,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@SimulationStepsAttribute()
+	@SimulationStepsAttributeGroup()
 	def HandleActiveHDLSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -949,7 +949,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@SimulationStepsAttribute()
+	@SimulationStepsAttributeGroup()
 	@ArgumentAttribute("--reproducer", metavar="Name", dest="CreateReproducer", help="Create a bug reproducer")
 	def HandleGHDLSimulation(self, args):
 		self.PrintHeadline()
@@ -980,7 +980,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@SimulationStepsAttribute()
+	@SimulationStepsAttributeGroup()
 	def HandleISESimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -1004,7 +1004,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@SimulationStepsAttribute()
+	@SimulationStepsAttributeGroup()
 	def HandleRivieraPROSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -1031,7 +1031,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@SimulationStepsAttribute()
+	@SimulationStepsAttributeGroup()
 	def HandleQuestaSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -1058,7 +1058,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
-	@SimulationStepsAttribute()
+	@SimulationStepsAttributeGroup()
 	def HandleVivadoSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -1085,7 +1085,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@SimulationStepsAttribute()
+	@SimulationStepsAttributeGroup()
 	def HandleCocotbSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
@@ -1155,7 +1155,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@CompileStepsAttribute()
+	@CompileStepsAttributeGroup()
 	def HandleISECompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1178,7 +1178,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@CompileStepsAttribute()
+	@CompileStepsAttributeGroup()
 	def HandleCoreGeneratorCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1203,7 +1203,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@CompileStepsAttribute()
+	@CompileStepsAttributeGroup()
 	def HandleXstCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1226,7 +1226,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@CompileStepsAttribute()
+	@CompileStepsAttributeGroup()
 	def HandleIpCatalogCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1249,7 +1249,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@CompileStepsAttribute()
+	@CompileStepsAttributeGroup()
 	def HandleVivadoCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1273,7 +1273,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@CompileStepsAttribute()
+	@CompileStepsAttributeGroup()
 	def HandleQuartusCompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()
@@ -1297,7 +1297,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
-	@CompileStepsAttribute()
+	@CompileStepsAttributeGroup()
 	def HandleLSECompilation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSynthesis()

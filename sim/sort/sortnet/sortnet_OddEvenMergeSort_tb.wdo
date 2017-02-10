@@ -1,0 +1,31 @@
+onerror {resume}
+quietly WaveActivateNextPane {} 0
+add wave -noupdate -expand -group Common -label Clock /sortnet_oddevenmergesort_tb/Clock
+add wave -noupdate -expand -group Input -label Generator_Valid /sortnet_oddevenmergesort_tb/Generator_Valid
+add wave -noupdate -expand -group Input -label Generator_IsKey /sortnet_oddevenmergesort_tb/Generator_IsKey
+add wave -noupdate -expand -group Input -label Generator_Data /sortnet_oddevenmergesort_tb/Generator_Data
+add wave -noupdate -expand -group Input -label DataInputMatrix /sortnet_oddevenmergesort_tb/DataInputMatrix
+add wave -noupdate -expand -group Input -label Generator_Meta /sortnet_oddevenmergesort_tb/Generator_Meta
+add wave -noupdate -expand -group Output -label Sort_Valid /sortnet_oddevenmergesort_tb/Sort_Valid
+add wave -noupdate -expand -group Output -label Sort_IsKey /sortnet_oddevenmergesort_tb/Sort_IsKey
+add wave -noupdate -expand -group Output -label Sort_Data /sortnet_oddevenmergesort_tb/Sort_Data
+add wave -noupdate -expand -group Output -label DataOutputMatrix /sortnet_oddevenmergesort_tb/DataOutputMatrix
+add wave -noupdate -expand -group Output -label Sort_Meta /sortnet_oddevenmergesort_tb/Sort_Meta
+TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 1} {0 fs} 0}
+quietly wave cursor active 0
+configure wave -namecolwidth 324
+configure wave -valuecolwidth 100
+configure wave -justifyvalue left
+configure wave -signalnamewidth 0
+configure wave -snapdistance 10
+configure wave -datasetprefix 0
+configure wave -rowmargin 4
+configure wave -childrowmargin 2
+configure wave -gridoffset 0
+configure wave -gridperiod 1
+configure wave -griddelta 40
+configure wave -timeline 0
+configure wave -timelineunits ns
+update
+WaveRestoreZoom {0 fs} {10707958493 fs}
