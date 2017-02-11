@@ -953,6 +953,15 @@ class Configurator(ILogable, AskMixIn):
 			else:
 				self.LogNormal("Unsupported choice '{0}'".format(configureDefaultTools))
 
+	def Relocated(self):
+		self.LogNormal("Relocating PoC to '{0!s}'.".format(self._host.Directories.Root))
+		self.LogVerbose("Old location: {0!s}".format(Path(self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'])))
+
+		self._host.PoCConfig['INSTALL.PoC']['InstallationDirectory'] = self._host.Directories.Root.as_posix()
+
+		# Write and re-read configuration
+		self._host.SaveAndReloadPoCConfiguration()
+
 
 class OutputFilteredExecutable(Executable):
 	def __init__(self, platform, dryrun, executablePath, environment=None, logger=None):

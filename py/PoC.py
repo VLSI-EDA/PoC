@@ -447,6 +447,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	@CommandGroupAttribute("Configuration commands") # mccabe:disable=MC0001
 	@CommandAttribute("configure", help="Configure vendor tools for PoC.")
 	@ArgumentAttribute(metavar="ToolChain",         dest="ToolChain", type=str, nargs="?", help="Specify a tool chain to be configured.")
+	@SwitchArgumentAttribute("--relocated",         dest="Relocated",                      help="Consistency check after PoC was relocated.")
 	@SwitchArgumentAttribute("--set-default-tools", dest="SetDefaultTools",                help="Set default tool for a tool chain.")
 	def HandleConfiguration(self, args):
 		"""Handle 'configure' command."""
@@ -465,7 +466,9 @@ class PileOfCores(ILogable, ArgParseMixin):
 			configurator = Configurator(self)
 			configurator.InitializeConfiguration()
 
-		if (args.SetDefaultTools is True):
+		if (args.Relocated is True):
+			configurator.Relocated()
+		elif (args.SetDefaultTools is True):
 			configurator.ConfigureDefaultTools()
 		else:
 			toolChain = args.ToolChain
