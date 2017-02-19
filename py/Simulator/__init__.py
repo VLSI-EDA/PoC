@@ -87,6 +87,7 @@ class SimulationSteps(Flags):
 	# Optimize =       1 << 8
 	Simulate =       1 << 9
 	ShowWaveform =   1 << 10
+	ShowCoverage =   1 << 11
 	ShowReport =     1 << 15
 	Recompile =      1 << 25
 	Resimulate =     1 << 26
@@ -107,6 +108,7 @@ class SimulationState(Enum):
 	Optimize =    3
 	Simulate =    4
 	View =        5
+	Coverage =    6
 
 
 class Simulator(Shared):
@@ -264,6 +266,11 @@ class Simulator(Shared):
 			self._state = SimulationState.View
 			self._RunView(testbench)
 
+		if self._simulationSteps.ShowCoverage:
+			self.LogNormal("Executing coverage analysis...")
+			self._state = SimulationState.View
+			self._RunCoverage(testbench)
+
 		self._endAt = datetime.now()
 
 	def _RunAnalysis(self, testbench):
@@ -276,6 +283,9 @@ class Simulator(Shared):
 		pass
 
 	def _RunView(self, testbench):
+		pass
+
+	def _RunCoverage(self, testbench):
 		pass
 
 	def PrintOverallSimulationReport(self):

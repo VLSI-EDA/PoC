@@ -116,24 +116,34 @@ class Configuration(ToolConfiguration):
 			self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 			return
 
+		pocSection = self._host.PoCConfig[self._section]
+
 		try:
 			if (not self._AskYes_NoPass("Install Git mechanisms for PoC developers?")):
 				self._changed = ChangeState.Changed
-				self._host.PoCConfig[self._section]['HasInstalledGitFilters'] = "True"
-				self._host.PoCConfig[self._section]['HasInstalledGitHooks'] =   "True"
+				pocSection['HasInstalledGitFilters'] = "False"
+				pocSection['HasInstalledGitHooks'] =   "False"
 				self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 				return
 		except SkipConfigurationException:
 			self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 			raise
 
-		if (self._AskInstalled("Install Git filters?")):
+		if ((self._AskInstalled("Install Git filters?")) and
+				(pocSection['HasInstalledGitFilters'] == "False")):
 			self._changed = ChangeState.Changed
-			self._host.PoCConfig[self._section]['HasInstalledGitFilters'] = "True"
+			pocSection['HasInstalledGitFilters'] = "True"
+		elif (pocSection['HasInstalledGitFilters'] == "True"):
+			self._changed = ChangeState.Changed
+			pocSection['HasInstalledGitFilters'] = "False"
 
-		if (self._AskInstalled("Install Git hooks?")):
+		if ((self._AskInstalled("Install Git hooks?")) and
+				(pocSection['HasInstalledGitHooks'] == "False")):
 			self._changed = ChangeState.Changed
-			self._host.PoCConfig[self._section]['HasInstalledGitHooks'] =   "True"
+			pocSection['HasInstalledGitHooks'] = "True"
+		elif (pocSection['HasInstalledGitHooks'] == "True"):
+			self._changed = ChangeState.Changed
+			pocSection['HasInstalledGitHooks'] = "False"
 
 		self._host.LogNormal("{DARK_GREEN}Git is now configured.{NOCOLOR}".format(**Init.Foreground), indent=1)
 
@@ -159,12 +169,12 @@ class Configuration(ToolConfiguration):
 	def RunPostConfigurationTasks(self):
 		if self._changed is ChangeState.Changed:
 			pocSection = self._host.PoCConfig[self._section]
-			if pocSection['HasInstalledGitFilters']:
+			if (pocSection['HasInstalledGitFilters'] == "True"):
 				self.__InstallGitFilters()
 			else:
 				self.__UninstallGitFilters()
 
-			if pocSection['HasInstalledGitHooks']:
+			if (pocSection['HasInstalledGitHooks'] == "True"):
 				self.__InstallGitHooks()
 			else:
 				self.__UninstallGitHooks()

@@ -32,7 +32,8 @@ from re                      import compile as re_compile
 
 from lib.Functions           import Init, CallByRefParam
 from Base.Exceptions         import PlatformNotSupportedException
-from Base.Executable         import Executable, ExecutableArgument, CommandLineArgumentList, ValuedFlagArgument, ShortTupleArgument, Environment, DryRunException
+from Base.Executable         import Environment, DryRunException, Executable, CommandLineArgumentList
+from Base.Executable         import ExecutableArgument, ValuedFlagArgument, ShortTupleArgument, LongTupleArgument, LongFlagArgument, StringListArgument
 from Base.Logging            import LogEntry, Severity
 from DataBase.Entity         import SimulationResult
 from ToolChain               import ToolChainException, OutputFilteredExecutable
@@ -164,6 +165,93 @@ class Bash(Executable):
 
 		return env
 
+
+class LCov(Executable):
+	def __init__(self, platform, dryrun, logger=None):
+		if (platform == "Linux"):     executablePath = Path("/usr/bin/lcov")
+		else:	                        raise PlatformNotSupportedException(platform)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
+
+		self.Parameters[self.Executable] = executablePath
+
+	class Executable(metaclass=ExecutableArgument):
+		pass
+
+	class FlagCapture(metaclass=LongFlagArgument):
+		_name = "capture"
+
+	class SwitchDirectory(metaclass=LongTupleArgument):
+		_name = "directory"
+
+	class SwitchOutputFile(metaclass=LongTupleArgument):
+		_name = "output-file"
+
+	Parameters = CommandLineArgumentList(
+		Executable,
+		FlagCapture,
+		SwitchDirectory,
+		SwitchOutputFile
+	)
+
+	def Execute(self):
+		parameterList = self.Parameters.ToArgumentList()
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise GNUException("Failed to launch /usr/bin/lcov.") from ex
+
+		iterator = iter(self.GetReader())
+		for line in iterator:
+			print(line)
+
+
+class GenHtml(Executable):
+	def __init__(self, platform, dryrun, logger=None):
+		if (platform == "Linux"):     executablePath = Path("/usr/bin/genhtml")
+		else:	                        raise PlatformNotSupportedException(platform)
+		super().__init__(platform, dryrun, executablePath, logger=logger)
+
+		self.Parameters[self.Executable] = executablePath
+
+	class Executable(metaclass=ExecutableArgument):
+		pass
+
+	class SwitchOutputDirectory(metaclass=LongTupleArgument):
+		_name = "output-directory"
+
+	class SwitchInputFiles(metaclass=StringListArgument):
+		pass
+
+	Parameters = CommandLineArgumentList(
+		Executable,
+		SwitchOutputDirectory,
+		SwitchInputFiles
+	)
+
+	def Execute(self):
+		parameterList = self.Parameters.ToArgumentList()
+		self.LogVerbose("command: {0}".format(" ".join(parameterList)))
+
+		if (self._dryrun):
+			self.LogDryRun("Start process: {0}".format(" ".join(parameterList)))
+			return
+
+		try:
+			self.StartProcess(parameterList)
+		except Exception as ex:
+			raise GNUException("Failed to launch /usr/bin/genhtml.") from ex
+
+		iterator = iter(self.GetReader())
+		for line in iterator:
+			print(line)
+
+
 def GNUMakeQuestaSimFilter(gen):
 	for line in gen:
 		if   line.startswith("# --"):       yield LogEntry(line, Severity.Verbose)
@@ -173,7 +261,7 @@ def GNUMakeQuestaSimFilter(gen):
 		elif line.startswith("# ** Erro"):  yield LogEntry(line, Severity.Error)
 		elif line.startswith("# ** Fata"):  yield LogEntry(line, Severity.Error)
 		elif line.startswith("# //"):       continue
-		else:                                yield LogEntry(line, Severity.Normal)
+		else:                               yield LogEntry(line, Severity.Normal)
 
 # Could not be moved to CocotbSimulator. Function could not be imported. (Why?)
 def CocotbSimulationResultFilter(gen, simulationResult):

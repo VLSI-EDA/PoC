@@ -239,6 +239,9 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 	class FlagVerbose(metaclass=ShortFlagArgument):
 		_name =    "v"
 
+	class FlagDebug(metaclass=ShortFlagArgument):
+		_name =    "g"
+
 	class FlagExplicit(metaclass=ShortFlagArgument):
 		_name =    "fexplicit"
 
@@ -259,6 +262,12 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 
 	class FlagPSL(metaclass=ShortFlagArgument):
 		_name =    "fpsl"
+
+	class FlagProfileArcs(metaclass=ShortFlagArgument):
+		_name =    "fprofile-arcs"
+
+	class FlagTestCoverage(metaclass=ShortFlagArgument):
+		_name =    "ftest-coverage"
 
 	class SwitchCompilerOption(metaclass=ValuedFlagListArgument):
 		_pattern =  "-{0},{1}"
@@ -297,6 +306,7 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 		CmdElaborate,
 		CmdRun,
 		FlagVerbose,
+		FlagDebug,
 		FlagExplicit,
 		FlagRelaxedRules,
 		FlagWarnBinding,
@@ -304,6 +314,8 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 		FlagMultiByteComments,
 		FlagSynBinding,
 		FlagPSL,
+		FlagProfileArcs,
+		FlagTestCoverage,
 		SwitchCompilerOption,
 		SwitchAssemblerOption,
 		SwitchLinkerOption,

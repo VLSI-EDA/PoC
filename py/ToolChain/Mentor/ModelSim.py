@@ -29,14 +29,17 @@
 #
 # load dependencies
 from collections                  import OrderedDict
-from enum                         import unique
+from enum                         import unique, Enum
 from re                           import compile as re_compile
 from subprocess                   import check_output
 from textwrap                     import dedent
 
+from flags import Flags
+
 from lib.Functions                import Init, CallByRefParam
 from Base.Exceptions              import PlatformNotSupportedException
-from Base.Executable              import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, PathArgument, CommandLineArgumentList, DryRunException
+from Base.Executable              import ExecutableArgument, ShortFlagArgument, ShortTupleArgument, StringArgument, PathArgument, CommandLineArgumentList, DryRunException, \
+	ShortOptionalValuedFlagArgument, OptionalValuedFlagArgument
 from Base.Logging                 import Severity, LogEntry
 from DataBase.Entity              import SimulationResult
 from ToolChain                    import ConfigurationException, EditionDescription, Edition, ToolConfiguration, ToolSelector, ToolMixIn, OutputFilteredExecutable
@@ -442,6 +445,38 @@ class VHDLLibraryTool(OutputFilteredExecutable, ToolMixIn):
 				self.LogNormal("-" * (78 - self.Logger.BaseIndent * 2), indent=1)
 
 
+class VHDLCompilerCoverageOptions(Flags):
+	__no_flags_name__ =   "Default"
+	__all_flags_name__ =  "All"
+	Statement =           "s"
+	Branch =              "b"
+	Condition =           "c"
+	Expression =          "e"
+	StateMachine =        "f"
+	Toggle =              "t"
+
+	def __str__(self):
+		return "".join([i.value for i in self])
+
+class VHDLCompilerFSMVerbosityLevel(Enum):
+	Default =         ""
+	Basic =           "b"
+	TransitionTable = "t"
+	AnyWarning =      "w"
+
+	def __str__(self):
+		return self.value
+
+
+class OptionalModelSimMinusArgument(OptionalValuedFlagArgument):
+	_pattern =          "-{0}"
+	_patternWithValue = "-{0} {1}"
+
+class OptionalModelSimPlusArgument(OptionalValuedFlagArgument):
+	_pattern =          "+{0}"
+	_patternWithValue = "+{0}={1}"
+
+
 class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 	def __init__(self, toolchain : ToolMixIn):
 		ToolMixIn.__init__(
@@ -478,6 +513,104 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 		_name =     "rangecheck"
 		_value =    None
 
+	class SwitchCoverage(metaclass=OptionalModelSimPlusArgument):
+		_name =     "cover"
+
+		# @property
+		# def Value(self):
+		# 	return self._value
+		#
+		# @Value.setter
+		# def Value(self, value):
+		# 	if (value is None):                                         self._value = None
+		# 	elif isinstance(value, VHDLCompilerCoverageOptions):        self._value = value
+		# 	else:	                                                      raise ValueError("Parameter 'value' is not of type VHDLCompilerCoverageOptions.")
+		#
+		# def __str__(self):
+		# 	if (self._value is None):                                   return ""
+		# 	elif (self._value is VHDLCompilerCoverageOptions.Default):  return self._pattern.format(self._name)
+		# 	else:                                                       return self._patternWithValue.format(self._name, str(self._value))
+		#
+		# def AsArgument(self):
+		# 	if (self._value is None):                                   return None
+		# 	elif (self._value is VHDLCompilerCoverageOptions.Default):  return self._pattern.format(self._name)
+		# 	else:                                                       return self._patternWithValue.format(self._name, str(self._value))
+
+	class FlagEnableFocusedExpressionCoverage(metaclass=ShortFlagArgument):
+		_name =     "coverfec"
+
+	class FlagDisableFocusedExpressionCoverage(metaclass=ShortFlagArgument):
+		_name =     "nocoverfec"
+
+	class FlagEnableRapidExpressionCoverage(metaclass=ShortFlagArgument):
+		_name =     "coverrec"
+
+	class FlagDisableRapidExpressionCoverage(metaclass=ShortFlagArgument):
+		_name =     "nocoverrec"
+
+	class FlagEnableRecognitionOfImplicitFSMResetTransitions(metaclass=ShortFlagArgument):
+		_name =     "fsmresettrans"
+
+	class FlagDisableRecognitionOfImplicitFSMResetTransitions(metaclass=ShortFlagArgument):
+		_name =     "nofsmresettrans"
+
+	class FlagEnableRecognitionOfSingleBitFSMState(metaclass=ShortFlagArgument):
+		_name =     "fsmsingle"
+
+	class FlagDisableRecognitionOfSingleBitFSMState(metaclass=ShortFlagArgument):
+		_name =     "nofsmsingle"
+
+	class FlagEnableRecognitionOfImplicitFSMTransitions(metaclass=ShortFlagArgument):
+		_name =     "fsmimplicittrans"
+
+	class FlagDisableRecognitionOfImplicitFSMTransitions(metaclass=ShortFlagArgument):
+		_name =     "nofsmimplicittrans"
+
+	class SwitchFSMVerbosityLevel(metaclass=OptionalModelSimMinusArgument):
+		_name =     "fsmverbose"
+
+		# @property
+		# def Value(self):
+		# 	return self._value
+		#
+		# @Value.setter
+		# def Value(self, value):
+		# 	if (value is None):                                           self._value = None
+		# 	elif isinstance(value, VHDLCompilerFSMVerbosityLevel):        self._value = value
+		# 	else:	                                                        raise ValueError("Parameter 'value' is not of type VHDLCompilerFSMVerbosityLevel.")
+		#
+		# def __str__(self):
+		# 	if (self._value is None):                                     return ""
+		# 	elif (self._value is VHDLCompilerFSMVerbosityLevel.Default):  return self._pattern.format(self._name)
+		# 	else:                                                         return self._patternWithValue.format(self._name, str(self._value))
+		#
+		# def AsArgument(self):
+		# 	if (self._value is None):                                     return None
+		# 	elif (self._value is VHDLCompilerFSMVerbosityLevel.Default):  return self._pattern.format(self._name)
+		# 	else:                                                         return self._patternWithValue.format(self._name, str(self._value))
+
+	class FlagReportAsNote(metaclass=ShortTupleArgument):
+		_name =   "note"
+		_value =  None
+
+	class FlagReportAsError(metaclass=ShortTupleArgument):
+		_name =   "error"
+		_value =  None
+
+	class FlagReportAsWarning(metaclass=ShortTupleArgument):
+		_name =   "warning"
+		_value =  None
+
+	class FlagReportAsFatal(metaclass=ShortTupleArgument):
+		_name =   "fatal"
+		_value =  None
+
+	class FlagRelaxLanguageChecks(metaclass=ShortFlagArgument):
+		_name =   "permissive"
+
+	class FlagForceLanguageChecks(metaclass=ShortFlagArgument):
+		_name =   "pedanticerrors"
+
 	class SwitchVHDLVersion(metaclass=StringArgument):
 		_pattern =  "-{0}"
 		_value =    None
@@ -500,6 +633,24 @@ class VHDLCompiler(OutputFilteredExecutable, ToolMixIn):
 		FlagQuietMode,
 		SwitchModelSimIniFile,
 		FlagRangeCheck,
+		SwitchCoverage,
+		FlagEnableFocusedExpressionCoverage,
+		FlagDisableFocusedExpressionCoverage,
+		FlagEnableRapidExpressionCoverage,
+		FlagDisableRapidExpressionCoverage,
+		FlagEnableRecognitionOfImplicitFSMResetTransitions,
+		FlagDisableRecognitionOfImplicitFSMResetTransitions,
+		FlagEnableRecognitionOfSingleBitFSMState,
+		FlagDisableRecognitionOfSingleBitFSMState,
+		FlagEnableRecognitionOfImplicitFSMTransitions,
+		FlagDisableRecognitionOfImplicitFSMTransitions,
+		SwitchFSMVerbosityLevel,
+		FlagReportAsNote,
+		FlagReportAsError,
+		FlagReportAsWarning,
+		FlagReportAsFatal,
+		FlagRelaxLanguageChecks,
+		FlagForceLanguageChecks,
 		SwitchVHDLVersion,
 		ArgLogFile,
 		SwitchVHDLLibrary,
@@ -690,7 +841,20 @@ class VHDLSimulator(OutputFilteredExecutable, ToolMixIn):
 		SwitchModelSimIniFile,
 		FlagEnableOptimization,
 		FlagDisableOptimization,
+		FlagEnableOptimizationVerbosity,
+		FlagEnableKeepAssertionCountsForCoverage,
+		FlagDisableKeepAssertionCountsForCoverage,
+		FlagEnableCoverage,
+		FlagDisableCoverage,
+		FlagEnablePSL,
+		FlagDisablePSL,
+		FlagEnableFSMDebugging,
+		FlagReportAsNote,
 		FlagReportAsError,
+		FlagReportAsWarning,
+		FlagReportAsFatal,
+		FlagRelaxLanguageChecks,
+		FlagForceLanguageChecks,
 		ArgLogFile,
 		ArgKeepStdOut,
 		ArgVHDLLibraryName,
