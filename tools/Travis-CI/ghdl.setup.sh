@@ -1,9 +1,10 @@
 #! /usr/bin/env bash
 
 # configure variables in the section below
-GHDL_BACKEND="llvm"
-GHDL_VERSION="0.34dev"
-RELEASE_DATE="2016-09-14"
+GHDL_BACKEND="llvm-3.5"
+GHDL_VERSION="0.34-dev"
+RELEASE_DATE="2017-03-01"
+PLATFORM="ubu1404"
 
 GITHUB_SERVER="https://github.com"
 GITHUB_SLUG="tgingold/ghdl"
@@ -16,8 +17,8 @@ TRAVIS_DIR="temp/Travis-CI"
 # example: 2016-05-03
 GITHUB_TAGNAME="$RELEASE_DATE"
 
-# example: ghdl-llvm-0.34dev-2016-05-03.tgz
-GITHUB_RELEASE_FILE="ghdl-$GHDL_VERSION-$GHDL_BACKEND-$RELEASE_DATE.tgz"
+# example: ghdl-0.34-dev-llvm-3.5-2017-03-01-ubu1404.tgz
+GITHUB_RELEASE_FILE="ghdl-$GHDL_VERSION-$GHDL_BACKEND-$RELEASE_DATE-$PLATFORM.tgz"
 
 # example: https://github.com/tgingold/ghdl/releases/download/2016.05.03/ghdl-0.34dev-llvm-2016-05-03.tar.gz
 GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHUB_RELEASE_FILE"
