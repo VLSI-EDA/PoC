@@ -17,6 +17,7 @@ import sys
 import os
 
 from subprocess import check_output
+from textwrap   import dedent
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -31,7 +32,7 @@ import sphinx_rtd_theme
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = '1.4.9'
+needs_sphinx = '1.5'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -73,17 +74,18 @@ for tag in tags:
 from pathlib  import Path
 from shutil   import rmtree as shutil_rmtree
 
-buildDirectory = Path("_build")
-print("Removing old build directory '{0!s}'...".format(buildDirectory))
-# shutil_rmtree(str(buildDirectory))
+if tags.has('PoCCleanUp'):
+	buildDirectory = Path("_build")
+	print("Removing old build directory '{0!s}'...".format(buildDirectory))
+	shutil_rmtree(str(buildDirectory))
 
-pyInfrastructureDirectory = Path("PyInfrastructure")
-print("Removing created files from '{0!s}'...".format(pyInfrastructureDirectory))
-for path in pyInfrastructureDirectory.iterdir():
-	if (path.name != "index.rst"):
-		print("  {0!s}".format(path))
-#		path.unlink()
-print()
+	pyInfrastructureDirectory = Path("PyInfrastructure")
+	print("Removing created files from '{0!s}'...".format(pyInfrastructureDirectory))
+	for path in pyInfrastructureDirectory.iterdir():
+		if (path.name != "index.rst"):
+			print("  {0!s}".format(path))
+			path.unlink()
+	print()
 
 
 autodoc_member_order = "bysource"
@@ -188,13 +190,14 @@ todo_include_todos = True
 todo_link_only = True
 
 # reST settings
-
-rst_prolog = """\
-.. |br| raw:: html
-
-   <br />
-
-"""
+prologPath = "prolog.inc"
+try:
+	with open(prologPath, "r") as prologFile:
+		rst_prolog = prologFile.read()
+except Exception as ex:
+	print("[ERROR:] While reading '{0!s}'.".format(prologPath))
+	print(ex)
+	rst_prolog = ""
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -310,8 +313,23 @@ latex_elements = {
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+	# Additional stuff for the LaTeX preamble.
+	'preamble': dedent(r"""
+		% ================================================================================
+		% User defined additional preamble code
+		% ================================================================================
+		% Add more Unicode characters for pdfLaTeX.
+		% - Alternatively, compile with XeLaTeX or LuaLaTeX.
+		% - https://github.com/sphinx-doc/sphinx/issues/3511
+		%
+		\ifdefined\DeclareUnicodeCharacter
+			%\DeclareUnicodeCharacter{2265}{$\geq$}
+			%\DeclareUnicodeCharacter{21D2}{$\Rightarrow$}
+		\fi
+
+
+		% ================================================================================
+		"""),
 
 # Latex figure (float) alignment
 #'figure_align': 'htbp',
@@ -386,7 +404,7 @@ texinfo_documents = [
 # Sphinx.Ext.InterSphinx
 # ==============================================================================
 intersphinx_mapping = {
-	'python': ('https://docs.python.org/3.5/', None),
+	'python': ('https://docs.python.org/3.6/', None),
 	'ghdl':   ('http://ghdl.readthedocs.io/en/latest', None)
 }
 

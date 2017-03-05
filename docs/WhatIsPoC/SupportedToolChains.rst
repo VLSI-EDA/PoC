@@ -1,5 +1,3 @@
-.. include:: <mmlalias.txt>
-
 .. _INTRO:ToolChains:
 
 Which Tool Chains are supported?

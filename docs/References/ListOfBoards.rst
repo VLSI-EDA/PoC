@@ -1,6 +1,3 @@
-
-.. include:: <mmlalias.txt>
-
 List of Supported Boards
 ########################
 

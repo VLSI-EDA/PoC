@@ -1,10 +1,3 @@
-.. # Load pre-defined aliases from docutils
-   # <file> is used to denote the special path
-   # <Python>\Lib\site-packages\docutils\parsers\rst\include
-
-.. include:: <mmlalias.txt>
-.. include:: <isonum.txt>
-
 .. _IP:ddr3_mem2mig_adapter_Series7:
 
 PoC.mem.ddr3.mem2mig_adapter_Series7
