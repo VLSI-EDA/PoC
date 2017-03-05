@@ -332,6 +332,68 @@ class WindowsValuedFlagArgument(ValuedFlagArgument):
 	_pattern = "/{0}:{1}"
 
 
+class OptionalValuedFlagArgument(NamedCommandLineArgument):
+	"""Class and base class for all OptionalValuedFlagArgument classes, which represents a flag argument with data.
+
+	An optional valued flag is a flag name followed by a value. The default delimiter sign is equal (``=``).
+	Name and value are passed as one arguments to the executable even if the delimiter sign is a whitespace
+	character. If the value is None, no delimiter sign and value is passed.
+
+	Example: ``width=100``
+	"""
+	_pattern =          "{0}"
+	_patternWithValue = "{0}={1}"
+
+	@property
+	def Value(self):
+		return self._value
+
+	@Value.setter
+	def Value(self, value):
+		if (value is None):           self._value = None
+		elif isinstance(value, str):  self._value = value
+		else:
+			try:                        self._value = str(value)
+			except Exception as ex:     raise ValueError("Parameter 'value' cannot be converted to type str.") from ex
+
+	def __str__(self):
+		if (self._value is None):     return ""
+		elif self._value:             return self._pattern.format(self._name, self._value)
+		else:                         return ""
+
+	def AsArgument(self):
+		if (self._value is None):     return None
+		elif self._value:             return self._pattern.format(self._name, self._value)
+		else:                         return None
+
+
+class ShortOptionalValuedFlagArgument(OptionalValuedFlagArgument):
+	"""Represents a :py:class:`OptionalValuedFlagArgument` with a single dash.
+
+	Example: ``-optimizer=on``
+	"""
+	_pattern =          "-{0}"
+	_patternWithValue = "-{0}={1}"
+
+
+class LongOptionalValuedFlagArgument(OptionalValuedFlagArgument):
+	"""Represents a :py:class:`OptionalValuedFlagArgument` with a double dash.
+
+	Example: ``--optimizer=on``
+	"""
+	_pattern =          "--{0}"
+	_patternWithValue = "--{0}={1}"
+
+
+class WindowsOptionalValuedFlagArgument(OptionalValuedFlagArgument):
+	"""Represents a :py:class:`OptionalValuedFlagArgument` with a single slash.
+
+	Example: ``/optimizer:on``
+	"""
+	_pattern =          "/{0}"
+	_patternWithValue = "/{0}={1}"
+
+
 class ValuedFlagListArgument(NamedCommandLineArgument):
 	"""Class and base class for all ValuedFlagListArgument classes, which represents a list of :py:class:`ValuedFlagArgument` instances.
 

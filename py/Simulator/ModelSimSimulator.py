@@ -33,7 +33,7 @@ from textwrap                     import dedent
 from Base.Executable              import DryRunException
 from Base.Project                 import FileTypes, ToolChain, Tool
 from DataBase.Config              import Vendors
-from ToolChain.Mentor.ModelSim    import ModelSim, ModelSimException
+from ToolChain.Mentor.ModelSim    import ModelSim, ModelSimException, VHDLCompilerCoverageOptions, VHDLCompilerFSMVerbosityLevel
 from Simulator                    import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 
@@ -57,6 +57,8 @@ class Simulator(BaseSimulator):
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / vSimSimulatorFiles
 		self.ModelSimIniDirectoryPath = self.Directories.PreCompiled
 		self.ModelSimIniPath =          "modelsim.ini"
+
+		self._withCoverage =            False
 
 		if (SimulationSteps.CleanUpBefore in self._simulationSteps):
 			pass
@@ -84,8 +86,9 @@ class Simulator(BaseSimulator):
 		version =     self.Host.PoCConfig['INSTALL.ModelSim']['Version']
 		self._toolChain = ModelSim(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
-	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None):
-		# TODO: refactor into a ModelSim module, shared by ModelSim and Cocotb (-> MixIn class)?
+	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, withCoverage=False):
+		self._withCoverage = withCoverage
+
 		# select modelsim.ini
 		if board.Device.Vendor is Vendors.Altera:     self.ModelSimIniDirectoryPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['AlteraSpecificFiles']
 		elif board.Device.Vendor is Vendors.Lattice:  self.ModelSimIniDirectoryPath /= self.Host.PoCConfig['CONFIG.DirectoryNames']['LatticeSpecificFiles']
@@ -115,6 +118,10 @@ class Simulator(BaseSimulator):
 		vcom.Parameters[vcom.FlagRangeCheck] =        True
 		vcom.Parameters[vcom.SwitchModelSimIniFile] = self.ModelSimIniPath.as_posix()
 		vcom.Parameters[vcom.SwitchVHDLVersion] =     repr(self._vhdlVersion)
+
+		if (self._withCoverage is True):
+			vcom.Parameters[vcom.SwitchCoverage] =          VHDLCompilerCoverageOptions.All and not VHDLCompilerCoverageOptions.Toggle
+			vcom.Parameters[vcom.SwitchFSMVerbosityLevel] = VHDLCompilerFSMVerbosityLevel.Default
 
 		recompileScriptContent = dedent("""\
 			puts "Recompiling..."
@@ -180,6 +187,11 @@ class Simulator(BaseSimulator):
 		vsim.Parameters[vsim.SwitchTimeResolution] =  "1fs"
 		vsim.Parameters[vsim.FlagCommandLineMode] =   True
 		vsim.Parameters[vsim.SwitchTopLevel] =        "{0}.{1}".format(VHDL_TESTBENCH_LIBRARY_NAME, testbench.ModuleName)
+
+		if (self._withCoverage is True):
+			vsim.Parameters[vsim.FlagEnableCoverage] =                        True
+			vsim.Parameters[vsim.FlagEnableFSMDebugging] =                    True
+			vsim.Parameters[vsim.FlagEnableKeepAssertionCountsForCoverage] =  True
 
 		# find a Tcl batch script for the BATCH mode
 		vsimBatchCommand = ""

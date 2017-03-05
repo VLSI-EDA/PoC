@@ -36,6 +36,7 @@ from Base.Project           import FileTypes, VHDLVersion, ToolChain, Tool
 from Simulator              import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
 from ToolChain.GHDL         import GHDL, GHDLException, GHDLReanalyzeException
 from ToolChain.GTKWave      import GTKWave
+from ToolChain.GNU          import LCov, GenHtml
 
 
 __api__ = [
@@ -61,6 +62,8 @@ class Simulator(BaseSimulator):
 		self.Directories.Working =      host.Directories.Temp / ghdlFilesDirectoryName
 		self.Directories.PreCompiled =  host.Directories.PreCompiled / ghdlFilesDirectoryName
 
+		self._withCoverage =            False
+
 		self._PrepareSimulationEnvironment()
 		self._PrepareSimulator()
 
@@ -85,6 +88,11 @@ class Simulator(BaseSimulator):
 		backend =         ghdlSection['Backend']
 		self._toolChain = GHDL(self.Host.Platform, self.DryRun, binaryPath, version, backend, logger=self.Logger)
 
+	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None, withCoverage=False):
+		self._withCoverage = withCoverage
+
+		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
+
 	def _RunAnalysis(self, testbench):
 		""""""
 
@@ -98,6 +106,11 @@ class Simulator(BaseSimulator):
 		ghdl.Parameters[ghdl.FlagMultiByteComments] = True
 		ghdl.Parameters[ghdl.FlagSynBinding] =        True
 		ghdl.Parameters[ghdl.FlagPSL] =               True
+
+		if (self._withCoverage is True):
+			ghdl.Parameters[ghdl.FlagDebug] =           True
+			ghdl.Parameters[ghdl.FlagProfileArcs] =     True
+			ghdl.Parameters[ghdl.FlagTestCoverage] =    True
 
 		self._SetVHDLVersionAndIEEEFlavor(ghdl)
 		self._SetExternalLibraryReferences(ghdl)
@@ -154,6 +167,9 @@ class Simulator(BaseSimulator):
 		ghdl.Parameters[ghdl.SwitchVHDLLibrary] =     VHDL_TESTBENCH_LIBRARY_NAME
 		ghdl.Parameters[ghdl.ArgTopLevel] =           testbench.ModuleName
 		ghdl.Parameters[ghdl.FlagExplicit] =          True
+
+		if (self._withCoverage is True):
+			ghdl.Parameters[ghdl.SwitchLinkerOption] =  ("-L/opt/ghdl/0.34-dev-gcc4/lib/gcc/x86_64-unknown-linux-gnu/4.9.4", "-lgcov", "--coverage")
 
 		self._SetVHDLVersionAndIEEEFlavor(ghdl)
 		self._SetExternalLibraryReferences(ghdl)
@@ -259,3 +275,23 @@ class Simulator(BaseSimulator):
 					buffer += line
 			with gtkwSaveFilePath.open('w') as gtkwHandle:
 				gtkwHandle.write(buffer)
+
+	def _RunCoverage(self, testbench):
+		if (self._withCoverage is False):
+			pass
+			# self.LogError("No coverage information collected.")
+			# return
+
+		coverageStatisticsFile =            "coverage.info"
+		coverageStatisticsOutputDirectory = "html"
+
+		lCov = LCov(self.Host.Platform, self.DryRun, logger=self.Logger)
+		lCov.Parameters[lCov.FlagCapture] =       True
+		lCov.Parameters[lCov.SwitchDirectory] =   "."
+		lCov.Parameters[lCov.SwitchOutputFile] =  coverageStatisticsFile
+		lCov.Execute()
+
+		genHtml = GenHtml(self.Host.Platform, self.DryRun, logger=self.Logger)
+		genHtml.Parameters[genHtml.SwitchOutputDirectory] = coverageStatisticsOutputDirectory
+		genHtml.Parameters[genHtml.SwitchInputFiles] =      [coverageStatisticsFile]
+		genHtml.Execute()

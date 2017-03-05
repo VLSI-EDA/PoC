@@ -1,3 +1,5 @@
+.. include:: shields.inc
+
 .. raw:: latex
 
    \part{Introduction}
@@ -23,51 +25,41 @@ Germany |br|
 
 .. only:: html
 
-   .. image:: /_static/logos/GitHub-Mark-32px.png
-      :scale: 60
+   |SHIELD:svg:GH-Logo|
+   |SHIELD:svg:Travis-CI|
+   |SHIELD:svg:AppVeyor|
+   |SHIELD:svg:Landscape|
+   |SHIELD:svg:Requirements|
+   |br|
+   |SHIELD:svg:Gitter:PoC|
+   |SHIELD:svg:Gitter:News|
+   |br|
+   |SHIELD:svg:GH-Tag|
+   |SHIELD:svg:GH-Release|
+   |SHIELD:svg:License-Code|
+   |SHIELD:svg:License-Docs|
+   |hr|
+
+.. only:: latex
+
+   .. image:: https://img.shields.io/badge/-VLSI--EDA/PoC-323131.png?style=flat&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAABKVBMVEX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FOe9X6AAAAYnRSTlMAAQIDBAcIDA0PEBESFBUWGBkeHyEoMTIzNDU4OTw%2BP0JGWVxeX2BiY2RlZ2hvc3R1eHp%2Bio%2BXm52epKmqq62usLe5wcLDxMnQ0dLW2tvc3t%2Fh4uPo6uvs8fLz9fb3%2Bvv8%2FsuNaVkAAAF7SURBVHgBjdHZW9NAFAXwE0iElCARZCkuIotEUFyQBSJERBEILaAo6d6e%2F%2F%2BPcO58aZslD%2Fxe5mHuPfOdbzA06R1e1sn65aE3ibw5v8OBjj%2BHNHuvx5Tenp1av2bOdSJkKWKBaAmxhYiFogVoEzckw%2BModXcckryZgDigsgLLu1MVT09V1TvPwgqVAyhlinmpMjsCZWRWCsxTlAEEFIvIWKQIALdLsYaMNYqui02KPw4ynN8Um%2FAp1pGzTuEj1Ek2cmz9dogmlVsUuKXSBEUFBaoUoKihQI0iPqaQMxWvnlOsImeV4hz7FBcmMswLin0sU9tBxg61ZYw3qB25SHhyRK0xDuySX179INtfN8qjOvz5u6BNjbsAplvsbVm%2FqAQGFOMb%2B1rTULZJPnsqf%2FMC2kv2bUOYZ%2BR3lLzPr0ehPWbszITmVsn3GCqRWtVFbKZC%2Fvz45tOj1EBlBgPOCUUpOXDiIMF4%2Bzc98G%2FDQNrY1tW9Bc26v%2Fowhof6D6AkqSgsdGGuAAAAAElFTkSuQmCC
       :target: https://www.github.com/VLSI-EDA/PoC
       :alt: Source Code on GitHub
-   .. image:: https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release
-      :target: https://travis-ci.org/VLSI-EDA/PoC
-      :alt: Build status by Travis-CI
-   .. image:: https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/release?svg=true
-      :target: https://ci.appveyor.com/project/Paebbels/poc/branch/release
-      :alt: Build status by AppVeyor
-   .. image:: https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat
-      :target: https://landscape.io/github/VLSI-EDA/PoC/release
-      :alt: Code Health
-   .. image:: https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch=release
-      :target: https://requires.io/github/VLSI-EDA/PoC/requirements/?branch=release
-      :alt: Requirements Status
 
-   .. raw:: html
-
-      <br />
-
-   .. image:: https://badges.gitter.im/VLSI-EDA/PoC.svg
-      :target: https://gitter.im/VLSI-EDA/PoC
-      :alt: Join
-   .. image:: https://img.shields.io/badge/news-Subscribe%20to%20VLSI--EDA%2FNews-orange.svg
-      :target: https://gitter.im/VLSI-EDA/News
-      :alt: Subscribe to VLSI-EDA/News
-
-   .. raw:: html
-
-      <br />
-
-   .. image:: https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat
-      :alt: Latest tag
-   .. image:: https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat
-      :target: https://github.com/VLSI-EDA/PoC/releases
-      :alt: Latest release
-   .. image:: https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat
-      :target: References/Licenses/License.html
-      :alt: Apache License 2.0
-
-   .. raw:: html
-
-      <hr />
-
+.. #
+   |SHIELD:png:GH-Logo|
+   |SHIELD:png:Travis-CI|
+   |SHIELD:png:AppVeyor|
+   |SHIELD:png:Landscape|
+   |SHIELD:png:Requirements|
+   |br|
+   |SHIELD:png:Gitter:PoC|
+   |SHIELD:png:Gitter:News|
+   |br|
+   |SHIELD:png:GH-Tag|
+   |SHIELD:png:GH-Release|
+   |SHIELD:png:License-Code|
+   |SHIELD:png:License-Docs|
 
 The PoC-Library Documentation
 #############################
@@ -198,4 +190,5 @@ following `biblatex <https://www.ctan.org/pkg/biblatex>`_ entry to cite us:
       :caption: Internal
       :hidden:
 
+      Internal/ToDo
       Internal/Sphinx
