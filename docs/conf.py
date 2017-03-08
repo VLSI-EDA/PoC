@@ -56,9 +56,9 @@ extensions = [
 	'sphinxcontrib.wavedrom',
 	# 'sphinxcontrib.textstyle',
 	# 'sphinxcontrib.spelling',
-	'autoapi.sphinx',
 	# 'changelog',
 # local extensions (patched)
+	'autoapi.sphinx',
 	'autoprogram',               #'sphinxcontrib.autoprogram',
 # local extensions
 	'DocumentMember',
@@ -95,14 +95,14 @@ autodoc_member_order = "bysource"
 
 # Extract Python documentation and generate ReST files.
 autoapi_modules = {
-  'PoC':        {'override': False,	'output': "PyInfrastructure", 'template': "script"},
-  'Base':       {'override': False,	'output': "PyInfrastructure"},
-  'Compiler':   {'override': False,	'output': "PyInfrastructure"},
-  'DataBase':   {'override': False,	'output': "PyInfrastructure"},
-  'Parser':     {'override': False,	'output': "PyInfrastructure"},
-  'Simulator':  {'override': False,	'output': "PyInfrastructure"},
-  'ToolChain':  {'override': False,	'output': "PyInfrastructure"},
-  'lib':        {'override': False,	'output': "PyInfrastructure"}
+  'PoC':        {'output': "PyInfrastructure", 'template': "script"},
+  'Base':       {'output': "PyInfrastructure"},
+  'Compiler':   {'output': "PyInfrastructure"},
+  'DataBase':   {'output': "PyInfrastructure"},
+  'Parser':     {'output': "PyInfrastructure"},
+  'Simulator':  {'output': "PyInfrastructure"},
+  'ToolChain':  {'output': "PyInfrastructure"},
+  'lib':        {'output': "PyInfrastructure"}
 }
 
 # Add any paths that contain templates here, relative to this directory.
@@ -501,18 +501,6 @@ changelog_render_changeset = "http://bitbucket.org/myusername/myproject/changese
 # ==============================================================================
 def setup(app):
 	app.add_stylesheet('css/custom.css')
-	if (app.buildername == "pickle"):
-		pyInfrastructureDirectory = Path("PyInfrastructure")
-		print("Removing created files from '{0!s}'...".format(pyInfrastructureDirectory))
-		for path in pyInfrastructureDirectory.iterdir():
-			if (path.name.endswith(".rst") and (path.name != (pyInfrastructureDirectory / "index.rst"))):
-				print("  {0!s}".format(path))
-				path.unlink()
-		print()
-
-		# print(app.config.values['autoapi_modules'])
-		# m = app.config.values['autoapi_modules']
-		# app.config.values['autoapi_modules'] = ({}, m[1], m[2])
 
 	if tags.has('PoCInternal'):
 		app.add_config_value('visibility', 'PoCInternal', True)
