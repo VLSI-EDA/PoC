@@ -4,7 +4,7 @@
 .. include:: <isonum.txt>
 .. include:: <mmlalias.txt>
 
-.. # define a hard kine break for HTML
+.. # define a hard line break for HTML
 .. |br| raw:: html
 
    <br />
