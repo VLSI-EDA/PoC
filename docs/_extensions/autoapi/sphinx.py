@@ -121,7 +121,7 @@ def builder_inited(app):
     # Overwrite all files in an ReadTheDocs environment when the first builder runs (pickle)
     overrideDefault = True
     if (environ.get('READTHEDOCS') == "True"):
-      if (app.buildername == "pickle"):
+      #if (app.buildername != "pickle"):
         overrideDefault = False
 
     # Get template environment
