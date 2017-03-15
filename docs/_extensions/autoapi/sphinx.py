@@ -127,6 +127,10 @@ def builder_inited(app):
     # Get template environment
     template_env = get_template_env(app)
 
+    print("===============================")
+    print("overrideDefault set to: {0!s}".format(overrideDefault))
+    print("===============================")
+
     for module, overrides in modules.items():
 
         # Get options
