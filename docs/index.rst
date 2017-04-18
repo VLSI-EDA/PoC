@@ -85,17 +85,11 @@ shipped with a Python based infrastructure to offer a command line based fronten
    News
    ****
 
-   13.05.2016 - PoC 1.0.0 was released.
-   ====================================
-
 .. only:: latex
 
-   .. rubric:: 13.05.2016 - PoC 1.0.0 was released.
+   .. rubric:: News
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+See :ref:`Change Log <CHANGE>` for latest updates.
 
 
 .. only:: html

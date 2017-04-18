@@ -330,6 +330,9 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 	class SwitchIEEEAsserts(metaclass=LongValuedFlagArgument):
 		_name =     "ieee-asserts"
 
+	class SwitchStopDelta(metaclass=LongValuedFlagArgument):
+		_name =     "stop-delta"
+
 	class SwitchVCDWaveform(metaclass=LongValuedFlagArgument):
 		_name =     "vcd"
 
@@ -347,6 +350,7 @@ class GHDL(OutputFilteredExecutable, ToolMixIn):
 
 	RunOptions = CommandLineArgumentList(
 		SwitchIEEEAsserts,
+		SwitchStopDelta,
 		SwitchVCDWaveform,
 		SwitchVCDGZWaveform,
 		SwitchFastWaveform,
