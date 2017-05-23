@@ -14,7 +14,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2007-2017 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -121,6 +121,8 @@ $OSVVM_Files = @(
 	"ScoreboardPkg.vhd"
 )
 
+$ResolvedPrecompileDir = Convert-Path ( Resolve-Path "$PoCRootDir\$PrecompiledDir" )
+
 # GHDL
 # ==============================================================================
 if ($GHDL)
@@ -132,7 +134,7 @@ if ($GHDL)
 	$GHDLDirName =		Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir = Convert-Path (Resolve-Path "$PoCRootDir\$PrecompiledDir\$GHDLDirName")
+	$DestDir = $ResolvedPrecompileDir + "\$GHDLDirName"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
@@ -169,8 +171,7 @@ if ($ActiveHDL)
 	$ActiveHDLDirName =	Get-ActiveHDLDirectoryName $PoCPS1 -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	# Assemble output directory
-	$ActiveHDLDestDir =	"$PoCRootDir\$PrecompiledDir\$ActiveHDLDirName"
-	$DestDir =					"$ActiveHDLDestDir"
+	$DestDir = $ResolvedPrecompileDir + "\$ActiveHDLDirName"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
@@ -228,9 +229,8 @@ if ($ModelSim -or $QuestaSim)
 	$VSimDirName =	Get-ModelSimDirectoryName $PoCPS1 -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	# Assemble output directory
-	$VSimDestDir =	Convert-Path (Resolve-Path "$PoCRootDir\$PrecompiledDir\$VSimDirName")
-	$DestDir =			"$VSimDestDir"
-	$ModelSimINI =	"$VSimDestDir\modelsim.ini"
+	$DestDir =			$ResolvedPrecompileDir + "\$VSimDirName"
+	$ModelSimINI =	"$DestDir\modelsim.ini"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 

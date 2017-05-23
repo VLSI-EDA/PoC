@@ -92,9 +92,10 @@ if ($All)
 	$QuestaSim =	$true
 }
 
-$PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
-$UVVMDirName =			"uvvm"
-$SourceDirectory =	"$PoCRootDir\$UVVMSourceDirectory"
+$PreCompiledDir =				Get-PrecompiledDirectoryName $PoCPS1
+$UVVMDirName =					"uvvm"
+$SourceDirectory =			"$PoCRootDir\$UVVMSourceDirectory"
+$ResolvedPrecompileDir = Convert-Path ( Resolve-Path "$PoCRootDir\$PrecompiledDir" )
 
 $UVVM_Util_Files = @(
 	"uvvm_util\src\types_pkg.vhd",
@@ -197,7 +198,7 @@ if ($GHDL)
 	$GHDLDirName =		Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName\$UVVMDirName"
+	$DestDir = $ResolvedPrecompileDir + "\$GHDLDirName\$UVVMDirName"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
@@ -233,9 +234,7 @@ if ($ActiveHDL)
 	$ActiveHDLDirName =	Get-ActiveHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$ActiveHDLDestDir =	"$PoCRootDir\$PrecompiledDir\$ActiveHDLDirName"
-	$DestDir =			"$ActiveHDLDestDir\$UVVMDirName"
-	$ModelSimINI =	"$ActiveHDLDestDir\modelsim.ini"
+	$DestDir = 			$ResolvedPrecompileDir + "\$ActiveHDLDirName\$UVVMDirName"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
@@ -347,9 +346,8 @@ if ($ModelSim)
 	$VSimDirName =	Get-ModelSimDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$VSimDestDir =	"$PoCRootDir\$PrecompiledDir\$VSimDirName"
-	$DestDir =			"$VSimDestDir\$UVVMDirName"
-	$ModelSimINI =	"$VSimDestDir\modelsim.ini"
+	$DestDir = 			$ResolvedPrecompileDir + "\$VSimDirName\$UVVMDirName"
+	$ModelSimINI =	"$DestDir\modelsim.ini"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
