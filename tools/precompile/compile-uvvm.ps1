@@ -118,6 +118,19 @@ $UVVM_VVC_Files = @(
 	"uvvm_vvc_framework\src\ti_uvvm_engine.vhd"
 )
 $VIP_Files = @{
+	"Avalon_MM" = @{
+		"Library" =	"bitvis_vip_avalon_mm";
+		"Files" =		@(
+			"bitvis_vip_avalon_mm\src\avalon_mm_bfm_pkg.vhd",
+			"bitvis_vip_avalon_mm\src\vvc_cmd_pkg.vhd",
+			"uvvm_vvc_framework\src_target_dependent\td_target_support_pkg.vhd",
+			"uvvm_vvc_framework\src_target_dependent\td_vvc_framework_common_methods_pkg.vhd",
+			"bitvis_vip_avalon_mm\src\vvc_methods_pkg.vhd",
+			"uvvm_vvc_framework\src_target_dependent\td_queue_pkg.vhd",
+			"uvvm_vvc_framework\src_target_dependent\td_vvc_entity_support_pkg.vhd",
+			"bitvis_vip_avalon_mm\src\avalon_mm_vvc.vhd"
+		)
+	};
 	"AXILite" = @{
 		"Library" =	"bitvis_vip_axilite";
 		"Files" =		@(
@@ -144,6 +157,19 @@ $VIP_Files = @{
 			"bitvis_vip_axistream\src\axistream_vvc.vhd"
 		)
 	};
+	"GPIO" = @{
+		"Library" =	"bitvis_vip_gpio";
+		"Files" =		@(
+			"bitvis_vip_gpio\src\gpio_bfm_pkg.vhd",
+			"bitvis_vip_gpio\src\vvc_cmd_pkg.vhd",
+			"uvvm_vvc_framework\src_target_dependent\td_target_support_pkg.vhd",
+			"uvvm_vvc_framework\src_target_dependent\td_vvc_framework_common_methods_pkg.vhd",
+			"bitvis_vip_gpio\src\vvc_methods_pkg.vhd",
+			"uvvm_vvc_framework\src_target_dependent\td_queue_pkg.vhd",
+			"uvvm_vvc_framework\src_target_dependent\td_vvc_entity_support_pkg.vhd",
+			"bitvis_vip_gpio\src\gpio_vvc.vhd"
+		)
+	};
 	"I2C" = @{
 		"Library" =	"bitvis_vip_i2c";
 		"Files" =		@(
@@ -168,6 +194,19 @@ $VIP_Files = @{
 			"uvvm_vvc_framework/src_target_dependent/td_queue_pkg.vhd",
 			"uvvm_vvc_framework/src_target_dependent/td_vvc_entity_support_pkg.vhd",
 			"bitvis_vip_sbi/src/sbi_vvc.vhd"
+		)
+	};
+	"SPI" = @{
+		"Library" =	"bitvis_vip_spi";
+		"Files" =		@(
+			"bitvis_vip_spi/src/spi_bfm_pkg.vhd",
+			"bitvis_vip_spi/src/vvc_cmd_pkg.vhd",
+			"uvvm_vvc_framework/src_target_dependent/td_target_support_pkg.vhd",
+			"uvvm_vvc_framework/src_target_dependent/td_vvc_framework_common_methods_pkg.vhd",
+			"bitvis_vip_spi/src/vvc_methods_pkg.vhd",
+			"uvvm_vvc_framework/src_target_dependent/td_queue_pkg.vhd",
+			"uvvm_vvc_framework/src_target_dependent/td_vvc_entity_support_pkg.vhd",
+			"bitvis_vip_spi/src/spi_vvc.vhd"
 		)
 	};
 	"UART" = @{

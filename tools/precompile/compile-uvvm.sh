@@ -254,6 +254,35 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	done
 
 	# Files
+	Library=bitvis_vip_avalon_mm
+	Files=(
+		bitvis_vip_avalon_mm/src/avalon_mm_bfm_pkg.vhd
+		bitvis_vip_avalon_mm/src/vvc_cmd_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_target_support_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_vvc_framework_common_methods_pkg.vhd
+		bitvis_vip_avalon_mm/src/vvc_methods_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_queue_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_vvc_entity_support_pkg.vhd
+		bitvis_vip_avalon_mm/src/avalon_mm_vvc.vhd
+	)
+
+	# Compile libraries with vcom, executed in destination directory
+	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
+	$VSimBinDir/vlib $Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
+
+	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
+	ERRORCOUNT=0
+	for File in ${Files[@]}; do
+		echo "  Compiling '$File'..."
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
+		if [ $? -ne 0 ]; then
+			let ERRORCOUNT++
+		fi
+	done
+
+	# Files
 	Library=bitvis_vip_axilite
 	Files=(
 		bitvis_vip_axilite/src/axilite_bfm_pkg.vhd
@@ -312,6 +341,35 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	done
 
 	# Files
+	Library=bitvis_vip_gpio
+	Files=(
+		bitvis_vip_gpio/src/gpio_bfm_pkg.vhd
+		bitvis_vip_gpio/src/vvc_cmd_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_target_support_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_vvc_framework_common_methods_pkg.vhd
+		bitvis_vip_gpio/src/vvc_methods_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_queue_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_vvc_entity_support_pkg.vhd
+		bitvis_vip_gpio/src/gpio_vvc.vhd
+	)
+
+	# Compile libraries with vcom, executed in destination directory
+	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
+	$VSimBinDir/vlib $Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
+
+	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
+	ERRORCOUNT=0
+	for File in ${Files[@]}; do
+		echo "  Compiling '$File'..."
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
+		if [ $? -ne 0 ]; then
+			let ERRORCOUNT++
+		fi
+	done
+
+	# Files
 	Library=bitvis_vip_i2c
 	Files=(
 		bitvis_vip_i2c/src/i2c_bfm_pkg.vhd
@@ -351,6 +409,35 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		uvvm_vvc_framework/src_target_dependent/td_queue_pkg.vhd
 		uvvm_vvc_framework/src_target_dependent/td_vvc_entity_support_pkg.vhd
 		bitvis_vip_sbi/src/sbi_vvc.vhd
+	)
+
+	# Compile libraries with vcom, executed in destination directory
+	echo -e "${YELLOW}Creating library '$Library' with vlib/vmap...${ANSI_NOCOLOR}"
+	$VSimBinDir/vlib $Library
+	$VSimBinDir/vmap -del $Library
+	$VSimBinDir/vmap $Library $DestDir/$Library
+
+	echo -e "${YELLOW}Compiling library '$Library' with vcom...${ANSI_NOCOLOR}"
+	ERRORCOUNT=0
+	for File in ${Files[@]}; do
+		echo "  Compiling '$File'..."
+		$VSimBinDir/vcom -suppress 1346,1236 -2008 -work $Library $SourceDir/$File
+		if [ $? -ne 0 ]; then
+			let ERRORCOUNT++
+		fi
+	done
+
+	# Files
+	Library=bitvis_vip_spi
+	Files=(
+		bitvis_vip_spi/src/spi_bfm_pkg.vhd
+		bitvis_vip_spi/src/vvc_cmd_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_target_support_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_vvc_framework_common_methods_pkg.vhd
+		bitvis_vip_spi/src/vvc_methods_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_queue_pkg.vhd
+		uvvm_vvc_framework/src_target_dependent/td_vvc_entity_support_pkg.vhd
+		bitvis_vip_spi/src/spi_vvc.vhd
 	)
 
 	# Compile libraries with vcom, executed in destination directory
