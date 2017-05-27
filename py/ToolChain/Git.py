@@ -65,16 +65,20 @@ class Configuration(ToolConfiguration):
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "2.8.2",
+				"Version":                "2.12.2",
 				"InstallationDirectory":  "C:/Program Files/Git",
-				"BinaryDirectory":        "${InstallationDirectory}/cmd"
+				"BinaryDirectory":        "${InstallationDirectory}/cmd",
+				"HasInstalledGitFilters": "False",
+				"HasInstalledGitHooks":   "False"
 			}
 		},
 		"Linux": {
 			_section: {
 				"Version":                "2.8.1",
 				"InstallationDirectory":  "/usr/bin",
-				"BinaryDirectory":        "${InstallationDirectory}"
+				"BinaryDirectory":        "${InstallationDirectory}",
+				"HasInstalledGitFilters": "False",
+				"HasInstalledGitHooks":   "False"
 			}
 		}
 	}                                                   #: The template for the configuration sections represented as nested dictionaries.

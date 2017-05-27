@@ -14,7 +14,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2007-2017 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,8 +98,9 @@ if ($All)
 	$QuestaSim =	$true
 }
 
-$PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
-$AlteraDirName =		Get-AlteraDirectoryName $PoCPS1
+$PreCompiledDir =				Get-PrecompiledDirectoryName $PoCPS1
+$AlteraDirName =				Get-AlteraDirectoryName $PoCPS1
+$ResolvedPrecompileDir = Convert-Path ( Resolve-Path "$PoCRootDir\$PrecompiledDir" )
 
 # GHDL
 # ==============================================================================
@@ -113,7 +114,7 @@ if ($GHDL)
 	$GHDLDirName =			Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
+	$DestDir = $ResolvedPrecompileDir + "\$GHDLDirName\$AlteraDirName"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
@@ -131,7 +132,7 @@ if ($GHDL)
 	{	$env:GHDL = $GHDLBinDir		}
 
 	if ($VHDL93)
-	{	$Command = "$GHDLAlteraScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$AlteraDirName -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command = "$GHDLAlteraScript -All -VHDL93 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -139,7 +140,7 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLAlteraScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$AlteraDirName -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command = "$GHDLAlteraScript -All -VHDL2008 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -189,7 +190,7 @@ foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
 		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
 		# Assemble output directory
-		$DestDir="$PoCRootDir\$PrecompiledDir\$ToolDirName\$AlteraDirName"
+		$DestDir = $ResolvedPrecompileDir + "\$ToolDirName\$AlteraDirName"
 		# Create and change to destination directory
 		Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 

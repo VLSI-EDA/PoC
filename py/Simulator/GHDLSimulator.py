@@ -203,7 +203,8 @@ class Simulator(BaseSimulator):
 		self._SetExternalLibraryReferences(ghdl)
 
 		# configure RUNOPTS
-		ghdl.RunOptions[ghdl.SwitchIEEEAsserts] = "disable-at-0"		# enable, disable, disable-at-0
+		ghdl.RunOptions[ghdl.SwitchIEEEAsserts] = "disable-at-0"    # enable, disable, disable-at-0
+
 		# set dump format to save simulation results to *.vcd file
 		if (SimulationSteps.ShowWaveform in self._simulationSteps):
 			configSection = self.Host.PoCConfig[testbench.ConfigSectionName]
