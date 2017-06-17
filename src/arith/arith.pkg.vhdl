@@ -121,6 +121,16 @@ package arith is
 			val		: out std_logic_vector(BITS-1 downto 0));
 	end component;
 
+	component arith_trng is
+		generic (
+			BITS : positive	 -- Width: Number of Oscillators
+		);
+		port (
+			clk : in  std_logic;				  							 -- Clock
+			rnd : out std_logic_vector(BITS-1 downto 0)  -- Random Oscillator Samples
+		);
+	end component;
+
 	component arith_muls_wide
 		generic (
 			NA		: integer range 2 to 18;
