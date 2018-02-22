@@ -30,7 +30,7 @@ from pathlib                      import Path
 from re                           import compile as re_compile, subn as re_subn, IGNORECASE as RE_IGNORECASE, MULTILINE as RE_MULTILINE, DOTALL as RE_DOTALL
 from shutil                       import copy as shutil_copy
 
-from flags                        import Flags
+#from flags                        import Flags
 
 from lib.Functions                import Init
 from lib.Parser                   import ParserException
