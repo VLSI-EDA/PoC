@@ -23,6 +23,7 @@ The package [`PoC.misc`][misc.pkg] holds all component declarations for this nam
 
 ## Entities
 
+ -  [`misc_Delay`][misc_Delay]
  -  [`misc_FrequencyMeasurement`][misc_FrequencyMeasurement] - implements a module to
     measure a signal's frequency relative to a reference clock's frequency.
  -  [`misc_bit_lz`][misc_bit_lz]
@@ -35,5 +36,6 @@ The package [`PoC.misc`][misc.pkg] holds all component declarations for this nam
 
  [misc.pkg]:		misc.pkg.vhdl
 
+ [misc_Delay]: misc_Delay.vhdl
  [misc_FrequencyMeasurement]:	misc_FrequencyMeasurement.vhdl
  [misc_bit_lz]: misc_bit_lz.vhdl
