@@ -36,5 +36,6 @@ The package [`PoC.misc`][misc.pkg] holds all component declarations for this nam
 
  [misc.pkg]:		misc.pkg.vhdl
 
+ [misc_Delay]: misc_Delay.vhdl
  [misc_FrequencyMeasurement]:	misc_FrequencyMeasurement.vhdl
  [misc_bit_lz]: misc_bit_lz.vhdl
