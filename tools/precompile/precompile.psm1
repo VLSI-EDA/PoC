@@ -14,7 +14,8 @@
 #	output streams (stdout and stderr).
 #
 # ==============================================================================
-#	Copyright (C) 2015-2016 Patrick Lehmann
+# Copyright 2007-2017 Technische Universitaet Dresden - Germany
+#											Chair of VLSI-Design, Diagnostics and Architecture
 #
 #	GHDL is free software; you can redistribute it and/or modify it under
 #	the terms of the GNU General Public License as published by the Free
@@ -94,9 +95,13 @@ function Get-PrecompiledDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:PrecompiledFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:PrecompiledFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get precompiled directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -114,9 +119,13 @@ function Get-AlteraDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:AlteraSpecificFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:AlteraSpecificFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Altera directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -134,9 +143,13 @@ function Get-LatticeDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:LatticeSpecificFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:LatticeSpecificFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Lattice directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -154,9 +167,13 @@ function Get-XilinxDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:XilinxSpecificFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:XilinxSpecificFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Xilinx directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -174,9 +191,13 @@ function Get-ActiveHDLDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:ActiveHDLFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:ActiveHDLFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Aldec Active-HDL directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -194,9 +215,13 @@ function Get-RivieraPRODirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:RivieraPROFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:RivieraPROFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Aldec Riviera-PRO directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -214,9 +239,13 @@ function Get-GHDLDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:GHDLFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:GHDLFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get GHDL directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -234,9 +263,13 @@ function Get-ModelSimDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:ModelSimFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:ModelSimFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Mentor ModelSim directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -254,9 +287,13 @@ function Get-QuestaSimDirectoryName
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query CONFIG.DirectoryNames:QuestaSimFiles"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query CONFIG.DirectoryNames:QuestaSimFiles"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Mentor QuestaSim directory name." -ForegroundColor Red
 		Write-Host "$Result" -ForegroundColor Red
@@ -274,9 +311,13 @@ function Get-ActiveHDLInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.ActiveHDL:InstallationDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.ActiveHDL:InstallationDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Active-HDL installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -295,9 +336,13 @@ function Get-ActiveHDLBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.ActiveHDL:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.ActiveHDL:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Active-HDL binary directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -316,9 +361,13 @@ function Get-RivieraPROInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Aldec.RivieraPRO:InstallationDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Aldec.RivieraPRO:InstallationDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Aldec Riviera-PRO installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -337,9 +386,13 @@ function Get-RivieraPROBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Aldec.RivieraPRO:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Aldec.RivieraPRO:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Aldec Riviera-PRO binary directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -358,9 +411,13 @@ function Get-GHDLBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.GHDL:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.GHDL:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get GHDL binary directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -379,9 +436,13 @@ function Get-GHDLScriptDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.GHDL:ScriptDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.GHDL:ScriptDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get GHDL script directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -400,9 +461,13 @@ function Get-ModelSimInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.ModelSim:InstallationDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.ModelSim:InstallationDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get ModelSim installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -421,9 +486,13 @@ function Get-ModelSimBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.ModelSim:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.ModelSim:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get ModelSim binary directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -442,9 +511,13 @@ function Get-QuestaSimInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Mentor.QuestaSim:InstallationDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Mentor.QuestaSim:InstallationDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get QuestaSim installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -463,9 +536,13 @@ function Get-QuestaSimBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Mentor.QuestaSim:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Mentor.QuestaSim:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get QuestaSim binary directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -484,9 +561,13 @@ function Get-QuartusInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Quartus:InstallationDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Quartus:InstallationDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Quartus installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -505,9 +586,13 @@ function Get-QuartusBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Quartus:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Quartus:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Quartus installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -526,9 +611,13 @@ function Get-DiamondInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Lattice.Diamond:InstallationDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Lattice.Diamond:InstallationDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Lattice Diamond installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -547,9 +636,13 @@ function Get-DiamondBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Lattice.Diamond:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Lattice.Diamond:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Lattice Diamond installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -568,9 +661,13 @@ function Get-ISEInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Xilinx.ISE:InstallationDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Xilinx.ISE:InstallationDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Xilinx ISE installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -589,9 +686,13 @@ function Get-ISEBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Xilinx.ISE:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Xilinx.ISE:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Xilinx ISE installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -610,9 +711,13 @@ function Get-VivadoInstallationDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Xilinx.Vivado:InstallationDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Xilinx.Vivado:InstallationDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Xilinx Vivado installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow
@@ -631,9 +736,13 @@ function Get-VivadoBinaryDirectory
 	param(
 		[Parameter(Mandatory=$true)][string]$PoCPS1
 	)
+	# set default values
+	$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+	$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-	$Command = "$PoCPS1 query INSTALL.Xilinx.Vivado:BinaryDirectory"
-	$Result = Invoke-Expression $Command
+	$Command =				"$PoCPS1 query INSTALL.Xilinx.Vivado:BinaryDirectory"
+	$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
+	$Result =					Invoke-Expression $Command
 	if (($LastExitCode -ne 0) -or ($Result -eq ""))
 	{	Write-Host "[ERROR]: Cannot get Xilinx Vivado installation directory." -ForegroundColor Red
 		Write-Host "         $Result" -ForegroundColor Yellow

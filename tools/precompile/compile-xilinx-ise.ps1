@@ -137,7 +137,8 @@ if ($GHDL)
 
 	{	$env:GHDL = $GHDLBinDir		}
 	if ($VHDL93)
-	{	$Command = "$GHDLXilinxScript -All -VHDL93 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLXilinxScript' -All -VHDL93 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red
@@ -145,7 +146,8 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLXilinxScript -All -VHDL2008 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLXilinxScript' -All -VHDL2008 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red
@@ -221,8 +223,8 @@ foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
 		$Language =						"all"
 		$TargetArchitecture =	"all"
 
-		$Command = "$ISE_compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $ToolBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise"
-		$EnableDebug -and		(Write-Host "  $Command" -ForegroundColor DarkGray	) | Out-Null
+		$Command = "& '$ISE_compxlib' -64bit -s $Simulator -l $Language -dir $DestDir -p $ToolBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise"
+		$EnableDebug -and	(Write-Host "  $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if (-not $?)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red

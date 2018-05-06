@@ -132,7 +132,8 @@ if ($GHDL)
 	{	$env:GHDL = $GHDLBinDir		}
 
 	if ($VHDL93)
-	{	$Command = "$GHDLAlteraScript -All -VHDL93 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLAlteraScript' -All -VHDL93 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -140,7 +141,8 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLAlteraScript -All -VHDL2008 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLAlteraScript' -All -VHDL2008 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -210,7 +212,8 @@ foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
 		)
 
 		# compile common libraries
-		$Command = "$Quartus_sh --simlib_comp -tool $Simulator -language $Language -tool_path $ToolBinDir -directory $DestDir -rtl_only"
+		$Command = "& '$Quartus_sh' --simlib_comp -tool $Simulator -language $Language -tool_path $ToolBinDir -directory $DestDir -rtl_only"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While compiling common libraries." -ForegroundColor Red
@@ -220,7 +223,8 @@ foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
 		$ToolBinDir_TclPath =	$ToolBinDir.Replace("\", "/")
 		$DestDir_TclPath =		$DestDir.Replace("\", "/")
 		foreach ($Family in $TargetArchitectures)
-		{	$Command = "$Quartus_sh --simlib_comp -tool $Simulator -language $Language -family $Family -tool_path $ToolBinDir_TclPath -directory $DestDir_TclPath -rtl_only"
+		{	$Command = "& '$Quartus_sh' --simlib_comp -tool $Simulator -language $Language -family $Family -tool_path $ToolBinDir_TclPath -directory $DestDir_TclPath -rtl_only"
+			$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 			Invoke-Expression $Command
 			if ($LastExitCode -ne 0)
 			{	Write-Host "[ERROR]: While compiling family '$Family' libraries." -ForegroundColor Red

@@ -2,32 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1217729-6dda-4bce-a9eb-baa5346607ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/__dryrun_ghdl_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/__dryrun_ghdl_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/__dryrun_isim_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/__dryrun_isim_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/__dryrun_rpro_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/__dryrun_rpro_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/__dryrun_xsim_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/__dryrun_xsim_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/asim_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/asim_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/configure.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/configure.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/configure___set_default_tools.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/configure___set_default_tools.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/configure_altera.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/configure_altera.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/configure_ghdl.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/configure_ghdl.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/configure_git.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/configure_git.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/configure_intel.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/configure_intel.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/configure_lattice.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/configure_lattice.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/configure_mentor_modelsim.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/configure_mentor_modelsim.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/coregen_PoC_xil_mig_Atlys_1x128.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/coregen_PoC_xil_mig_Atlys_1x128.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/ghdl_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/ghdl_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/isim_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/isim_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/list_netlist_PoC__.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/list_netlist_PoC__.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/list_testbench_PoC__.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/list_testbench_PoC__.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/list_testbench_PoC_sort_____kind_cocotb.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/list_testbench_PoC_sort_____kind_cocotb.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/lse_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/lse_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/quartus_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/quartus_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/query_Xilinx_ISE_SettingsFile.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/query_Xilinx_ISE_SettingsFile.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/rpro_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/rpro_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/vsim_PoC_arith_prng.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/vsim_PoC_arith_prng.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/xsim_PoC_arith_prng___std_08.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/xsim_PoC_arith_prng___std_08.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/xst_PoC_cache_par.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/xst_PoC_cache_par.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PoC.py" afterPath="$PROJECT_DIR$/PoC.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChain/Altera/ModelSim.py" afterPath="$PROJECT_DIR$/ToolChain/Altera/ModelSim.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChain/Altera/Quartus.py" afterPath="$PROJECT_DIR$/ToolChain/Altera/Quartus.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChain/GTKWave.py" afterPath="$PROJECT_DIR$/ToolChain/GTKWave.py" />
@@ -35,6 +11,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChain/Intel/Quartus.py" afterPath="$PROJECT_DIR$/ToolChain/Intel/Quartus.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChain/Intel/__init__.py" afterPath="$PROJECT_DIR$/ToolChain/Intel/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py" afterPath="$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToolChain/__init__.py" afterPath="$PROJECT_DIR$/ToolChain/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.entity.ini" afterPath="$PROJECT_DIR$/config.entity.ini" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/Functions.py" afterPath="$PROJECT_DIR$/lib/Functions.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../tools/precompile/compile-uvvm.ps1" afterPath="$PROJECT_DIR$/../tools/precompile/compile-uvvm.ps1" />
@@ -52,6 +29,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/py$configure_git.coverage" NAME="configure git Coverage Results" MODIFIED="1487212164330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
     <SUITE FILE_PATH="coverage/py$ghdl_PoC_arith_prng.coverage" NAME="ghdl PoC.arith.prng Coverage Results" MODIFIED="1487189841604" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../temp" />
+    <SUITE FILE_PATH="coverage/py$configure_intel.coverage" NAME="configure intel Coverage Results" MODIFIED="1497126166232" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
     <SUITE FILE_PATH="coverage/py$__dryrun_rpro_PoC_arith_prng.coverage" NAME="--dryrun rpro PoC.arith.prng Coverage Results" MODIFIED="1485906206398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../temp" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -75,8 +53,28 @@
       <file leaf-file-name="Quartus.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ToolChain/Intel/Quartus.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+            <state relative-caret-position="357">
+              <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.private.old.ini" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config.private.old.ini">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="768">
+              <caret line="137" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.private.ini" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/config.private.ini">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="30" lean-forward="false" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -85,7 +83,7 @@
       <file leaf-file-name="ModelSim.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
+            <state relative-caret-position="1479">
               <caret line="87" column="28" lean-forward="false" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
               <folding />
             </state>
@@ -95,38 +93,8 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ToolChain/Intel/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="701">
-              <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.private.ini" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.private.ini">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="707">
-              <caret line="118" column="23" lean-forward="false" selection-start-line="118" selection-start-column="23" selection-end-line="118" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GTKWave.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ToolChain/GTKWave.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Quartus.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ToolChain/Altera/Quartus.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1343">
-              <caret line="79" column="41" lean-forward="false" selection-start-line="79" selection-start-column="41" selection-end-line="79" selection-end-column="41" />
+            <state relative-caret-position="680">
+              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -135,18 +103,18 @@
       <file leaf-file-name="ModelSim.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ToolChain/Altera/ModelSim.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
+            <state relative-caret-position="765">
               <caret line="45" column="37" lean-forward="false" selection-start-line="43" selection-start-column="18" selection-end-line="45" selection-end-column="37" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ModelSim.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ModelSim.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ToolChain/Intel/ModelSim.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="30" column="47" lean-forward="true" selection-start-line="30" selection-start-column="47" selection-end-line="30" selection-end-column="47" />
+            <state relative-caret-position="2244">
+              <caret line="132" column="22" lean-forward="false" selection-start-line="132" selection-start-column="22" selection-end-line="132" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -155,16 +123,26 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ToolChain/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="650" column="6" lean-forward="false" selection-start-line="650" selection-start-column="6" selection-end-line="650" selection-end-column="6" />
+            <state relative-caret-position="12682">
+              <caret line="746" column="38" lean-forward="false" selection-start-line="746" selection-start-column="38" selection-end-line="746" selection-end-column="38" />
               <folding>
-                <marker date="1493241270354" expanded="true" signature="5296:6207" ph="..." />
-                <marker date="1493241270354" expanded="true" signature="5991:5997" ph="..." />
-                <marker date="1493241270354" expanded="true" signature="22880:23106" ph="..." />
-                <marker date="1493241270354" expanded="true" signature="22971:22977" ph="..." />
-                <marker date="1493241270354" expanded="true" signature="24510:28261" ph="..." />
-                <marker date="1493241270354" expanded="true" signature="24617:24623" ph="..." />
+                <marker date="1497815902710" expanded="true" signature="5296:6207" ph="..." />
+                <marker date="1497815902710" expanded="true" signature="5991:5997" ph="..." />
+                <marker date="1497815902710" expanded="true" signature="22880:23106" ph="..." />
+                <marker date="1497815902710" expanded="true" signature="22971:22977" ph="..." />
+                <marker date="1497815902710" expanded="true" signature="24510:28745" ph="..." />
+                <marker date="1497815902710" expanded="true" signature="24617:24623" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Quartus.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChain/Altera/Quartus.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1547">
+              <caret line="91" column="14" lean-forward="false" selection-start-line="91" selection-start-column="14" selection-end-line="91" selection-end-column="14" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -180,36 +158,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>re.</find>
-      <find>QuestaSimFiles</find>
-      <find>stat</find>
-      <find>sys</find>
-      <find>C:</find>
-      <find>/</find>
-      <find>platform</find>
-      <find>rpro</find>
-      <find>.rst-content .secti</find>
-      <find>li</find>
-      <find>`</find>
-      <find>Modelsim ini file</find>
-      <find>-C</find>
-      <find>cov</find>
-      <find>wave</find>
-      <find>-L</find>
-      <find>_ExtractSimulationSteps</find>
-      <find>self._host.PoCConfig[self._section]</find>
-      <find>HasInstalledGitFilters</find>
-      <find>Quartur</find>
-      <find>Altera</find>
-      <find>Secti</find>
-      <find>Section=</find>
-      <find>Section=&quot;</find>
       <find>b</find>
       <find>black</find>
       <find>.</find>
       <find>.78</find>
       <find>78</find>
       <find>78&quot;</find>
+      <find>poc.sh</find>
+      <find>poc.</find>
+      <find>poc.ps</find>
+      <find>set-defa</find>
+      <find>s</find>
+      <find>se</find>
+      <find>set-def</find>
+      <find>set-de</find>
+      <find>set-d</find>
+      <find>set-</find>
+      <find>set</find>
+      <find>configure</find>
+      <find>In</find>
+      <find>INSTAL</find>
+      <find>INSTALL.Inte</find>
+      <find>INSTALL.Intel</find>
+      <find>INSTALL.Intel.</find>
+      <find>INSTALL.Intel.Quar</find>
+      <find>INSTALL.Intel.Quart</find>
+      <find>INSTALL.Intel.Quartus</find>
+      <find>m</find>
+      <find>modelsim</find>
+      <find>modelsim intel ed</find>
+      <find>modelsim intel edi</find>
     </findStrings>
     <replaceStrings>
       <replace>if ((self._logger is not None) and condition):</replace>
@@ -227,7 +205,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Wrapper/Lattice.Diamond.sh" />
         <option value="$PROJECT_DIR$/Wrapper/Lattice.Diamond.psm1" />
         <option value="$PROJECT_DIR$/Compiler/XSTCompiler.py" />
         <option value="$PROJECT_DIR$/Compiler/VivadoCompiler.py" />
@@ -262,10 +239,8 @@
         <option value="$PROJECT_DIR$/Simulator/ModelSimSimulator.py" />
         <option value="$PROJECT_DIR$/config.boards.ini" />
         <option value="$PROJECT_DIR$/private.ini" />
-        <option value="$PROJECT_DIR$/ToolChain/__init__.py" />
         <option value="$PROJECT_DIR$/ToolChain/GHDL.py" />
         <option value="$PROJECT_DIR$/Simulator/__init__.py" />
-        <option value="$PROJECT_DIR$/PoC.py" />
         <option value="$PROJECT_DIR$/ToolChain/GNU.py" />
         <option value="$PROJECT_DIR$/Simulator/GHDLSimulator.py" />
         <option value="$PROJECT_DIR$/ToolChain/Git.py" />
@@ -275,9 +250,12 @@
         <option value="$PROJECT_DIR$/ToolChain/Intel/__init__.py" />
         <option value="$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py" />
         <option value="$PROJECT_DIR$/lib/Functions.py" />
-        <option value="$PROJECT_DIR$/config.private.ini" />
         <option value="$PROJECT_DIR$/ToolChain/GTKWave.py" />
         <option value="$PROJECT_DIR$/ToolChain/Intel/ModelSim.py" />
+        <option value="$PROJECT_DIR$/config.private.ini" />
+        <option value="$PROJECT_DIR$/PoC.py" />
+        <option value="$PROJECT_DIR$/ToolChain/__init__.py" />
+        <option value="$PROJECT_DIR$/config.private.old.ini" />
       </list>
     </option>
   </component>
@@ -288,10 +266,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="-7" />
     <option name="width" value="1684" />
-    <option name="height" value="1034" />
+    <option name="height" value="1027" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -328,21 +305,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="py">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -383,24 +345,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Mentor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ToolChain" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="Intel" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -423,22 +367,19 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
           <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ToolChain" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Aldec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="py">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -468,19 +409,19 @@
     <property name="js.eslint.eslintPackage" value="" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\git\GitHub\Paebbels\PoC\py\ToolChains" />
-      <recent name="C:\git\GitHub\Paebbels\PoC\py\Simulator" />
-      <recent name="C:\git\GitHub\Paebbels\PoC\py\ToolChains\Lattice" />
-      <recent name="C:\git\GitHub\Paebbels\PoC\py\Compiler" />
-      <recent name="C:\git\GitHub\Paebbels\PoC\py\Parser" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\git\GitHub\Paebbels\PoC\py" />
       <recent name="C:\git\GitHub\Paebbels\PoC\py\lib" />
       <recent name="C:\git\GitHub\Paebbels\PoC\py\Base" />
       <recent name="C:\git\GitHub\Paebbels\PoC\py\Base" />
       <recent name="C:\git\GitHub\Paebbels\PoC\py\PoC" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\Wrapper" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\ToolChains" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\Simulator" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\ToolChains\Lattice" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\Compiler" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -495,7 +436,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.coregen PoC.xil.mig.Atlys_1x128">
+  <component name="RunManager" selected="Python.configure intel">
     <configuration default="true" type="BashConfigurationType" factoryName="Bash">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="INTERPRETER_PATH" value="" />
@@ -696,32 +637,32 @@
       <method />
     </configuration>
     <list size="26">
-      <item index="0" class="java.lang.String" itemvalue="Python.configure" />
-      <item index="1" class="java.lang.String" itemvalue="Python.configure git" />
-      <item index="2" class="java.lang.String" itemvalue="Python.configure altera" />
-      <item index="3" class="java.lang.String" itemvalue="Python.configure lattice" />
-      <item index="4" class="java.lang.String" itemvalue="Python.configure mentor.modelsim" />
-      <item index="5" class="java.lang.String" itemvalue="Python.configure ghdl" />
-      <item index="6" class="java.lang.String" itemvalue="Python.configure --set-default-tools" />
-      <item index="7" class="java.lang.String" itemvalue="Python.configure intel" />
-      <item index="8" class="java.lang.String" itemvalue="Python.query Xilinx.ISE:SettingsFile" />
-      <item index="9" class="java.lang.String" itemvalue="Python.list-netlist PoC.*" />
-      <item index="10" class="java.lang.String" itemvalue="Python.list-testbench PoC.*" />
-      <item index="11" class="java.lang.String" itemvalue="Python.list-testbench PoC.sort.? --kind=cocotb" />
-      <item index="12" class="java.lang.String" itemvalue="Python.asim PoC.arith.prng" />
-      <item index="13" class="java.lang.String" itemvalue="Python.rpro PoC.arith.prng" />
-      <item index="14" class="java.lang.String" itemvalue="Python.--dryrun rpro PoC.arith.prng" />
-      <item index="15" class="java.lang.String" itemvalue="Python.ghdl PoC.arith.prng" />
-      <item index="16" class="java.lang.String" itemvalue="Python.--dryrun ghdl PoC.arith.prng" />
-      <item index="17" class="java.lang.String" itemvalue="Python.isim PoC.arith.prng" />
-      <item index="18" class="java.lang.String" itemvalue="Python.--dryrun isim PoC.arith.prng" />
-      <item index="19" class="java.lang.String" itemvalue="Python.xsim PoC.arith.prng --std=08" />
-      <item index="20" class="java.lang.String" itemvalue="Python.--dryrun xsim PoC.arith.prng" />
+      <item index="0" class="java.lang.String" itemvalue="Python.ghdl PoC.arith.prng" />
+      <item index="1" class="java.lang.String" itemvalue="Python.--dryrun ghdl PoC.arith.prng" />
+      <item index="2" class="java.lang.String" itemvalue="Python.isim PoC.arith.prng" />
+      <item index="3" class="java.lang.String" itemvalue="Python.--dryrun isim PoC.arith.prng" />
+      <item index="4" class="java.lang.String" itemvalue="Python.rpro PoC.arith.prng" />
+      <item index="5" class="java.lang.String" itemvalue="Python.--dryrun rpro PoC.arith.prng" />
+      <item index="6" class="java.lang.String" itemvalue="Python.xsim PoC.arith.prng --std=08" />
+      <item index="7" class="java.lang.String" itemvalue="Python.--dryrun xsim PoC.arith.prng" />
+      <item index="8" class="java.lang.String" itemvalue="Python.asim PoC.arith.prng" />
+      <item index="9" class="java.lang.String" itemvalue="Python.configure" />
+      <item index="10" class="java.lang.String" itemvalue="Python.configure git" />
+      <item index="11" class="java.lang.String" itemvalue="Python.configure altera" />
+      <item index="12" class="java.lang.String" itemvalue="Python.configure lattice" />
+      <item index="13" class="java.lang.String" itemvalue="Python.configure mentor.modelsim" />
+      <item index="14" class="java.lang.String" itemvalue="Python.configure ghdl" />
+      <item index="15" class="java.lang.String" itemvalue="Python.configure --set-default-tools" />
+      <item index="16" class="java.lang.String" itemvalue="Python.configure intel" />
+      <item index="17" class="java.lang.String" itemvalue="Python.coregen PoC.xil.mig.Atlys_1x128" />
+      <item index="18" class="java.lang.String" itemvalue="Python.list-netlist PoC.*" />
+      <item index="19" class="java.lang.String" itemvalue="Python.list-testbench PoC.*" />
+      <item index="20" class="java.lang.String" itemvalue="Python.list-testbench PoC.sort.? --kind=cocotb" />
       <item index="21" class="java.lang.String" itemvalue="Python.lse PoC.arith.prng" />
       <item index="22" class="java.lang.String" itemvalue="Python.quartus PoC.arith.prng" />
-      <item index="23" class="java.lang.String" itemvalue="Python.xst PoC.cache.par" />
+      <item index="23" class="java.lang.String" itemvalue="Python.query Xilinx.ISE:SettingsFile" />
       <item index="24" class="java.lang.String" itemvalue="Python.vsim PoC.arith.prng" />
-      <item index="25" class="java.lang.String" itemvalue="Python.coregen PoC.xil.mig.Atlys_1x128" />
+      <item index="25" class="java.lang.String" itemvalue="Python.xst PoC.cache.par" />
     </list>
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -772,21 +713,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1684" height="1034" extended-state="0" />
+    <frame x="-7" y="0" width="1684" height="1027" extended-state="0" />
     <editor active="true" />
     <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21709718" sideWeight="0.48669624" order="0" side_tool="false" content_ui="combo" x="778" y="490" width="124" height="255" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32815966" sideWeight="0.49758744" order="6" side_tool="false" content_ui="tabs" x="-1206" y="358" width="1898" height="296" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32594234" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32594234" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32705098" sideWeight="0.49758744" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32705098" sideWeight="0.49276236" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32594234" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32815966" sideWeight="0.49758744" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20479704" sideWeight="0.48669624" order="0" side_tool="false" content_ui="combo" x="778" y="490" width="124" height="255" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3736142" sideWeight="0.49367756" order="1" side_tool="false" content_ui="tabs" x="131" y="418" width="1898" height="200" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16789667" sideWeight="0.49177632" order="3" side_tool="false" content_ui="tabs" x="803" y="490" width="74" height="40" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32815966" sideWeight="0.49758744" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5282392" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1920" y="0" width="1920" height="1018" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16965227" sideWeight="0.51330376" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5288248" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1920" y="0" width="1920" height="1018" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -795,6 +735,7 @@
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16897655" sideWeight="0.5082237" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3736142" sideWeight="0.49367756" order="1" side_tool="false" content_ui="tabs" x="131" y="418" width="1898" height="200" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -861,14 +802,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Base/Shared.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="59" column="12" lean-forward="true" selection-start-line="59" selection-start-column="12" selection-end-line="59" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/Python 3.5/Lib/shutil.py" />
     <entry file="file://$PROJECT_DIR$/Compiler/XCICompiler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
@@ -1055,13 +988,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PoC.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16592">
-          <caret line="976" column="0" lean-forward="false" selection-start-line="976" selection-start-column="0" selection-end-line="976" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Simulator/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2992">
@@ -1087,7 +1013,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="292">
           <caret line="274" column="0" lean-forward="false" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1095,93 +1020,107 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
           <caret line="46" column="23" lean-forward="false" selection-start-line="46" selection-start-column="23" selection-end-line="46" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Altera/Quartus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1343">
-          <caret line="79" column="41" lean-forward="false" selection-start-line="79" selection-start-column="41" selection-end-line="79" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Intel/Quartus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="650" column="6" lean-forward="false" selection-start-line="650" selection-start-column="6" selection-end-line="650" selection-end-column="6" />
-          <folding>
-            <marker date="1493241270354" expanded="true" signature="5296:6207" ph="..." />
-            <marker date="1493241270354" expanded="true" signature="5991:5997" ph="..." />
-            <marker date="1493241270354" expanded="true" signature="22880:23106" ph="..." />
-            <marker date="1493241270354" expanded="true" signature="22971:22977" ph="..." />
-            <marker date="1493241270354" expanded="true" signature="24510:28261" ph="..." />
-            <marker date="1493241270354" expanded="true" signature="24617:24623" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Intel/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="701">
-          <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ToolChain/Altera/ModelSim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
+        <state relative-caret-position="765">
           <caret line="45" column="37" lean-forward="false" selection-start-line="43" selection-start-column="18" selection-end-line="45" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.private.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="707">
-          <caret line="118" column="23" lean-forward="false" selection-start-line="118" selection-start-column="23" selection-end-line="118" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/GTKWave.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="129" column="0" lean-forward="true" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
+        <state relative-caret-position="1479">
           <caret line="87" column="28" lean-forward="false" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.private.ini" />
+    <entry file="file://$PROJECT_DIR$/PoC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="521">
+          <caret line="471" column="0" lean-forward="false" selection-start-line="471" selection-start-column="0" selection-end-line="471" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/Functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="159" column="14" lean-forward="false" selection-start-line="159" selection-start-column="14" selection-end-line="159" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/GTKWave.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="817">
+          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Intel/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Altera/Quartus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1547">
+          <caret line="91" column="14" lean-forward="false" selection-start-line="91" selection-start-column="14" selection-end-line="91" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ToolChain/Intel/ModelSim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="30" column="47" lean-forward="true" selection-start-line="30" selection-start-column="47" selection-end-line="30" selection-end-column="47" />
+        <state relative-caret-position="2244">
+          <caret line="132" column="22" lean-forward="false" selection-start-line="132" selection-start-column="22" selection-end-line="132" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12682">
+          <caret line="746" column="38" lean-forward="false" selection-start-line="746" selection-start-column="38" selection-end-line="746" selection-end-column="38" />
+          <folding>
+            <marker date="1497815902710" expanded="true" signature="5296:6207" ph="..." />
+            <marker date="1497815902710" expanded="true" signature="5991:5997" ph="..." />
+            <marker date="1497815902710" expanded="true" signature="22880:23106" ph="..." />
+            <marker date="1497815902710" expanded="true" signature="22971:22977" ph="..." />
+            <marker date="1497815902710" expanded="true" signature="24510:28745" ph="..." />
+            <marker date="1497815902710" expanded="true" signature="24617:24623" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Intel/Quartus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.private.old.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="768">
+          <caret line="137" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.private.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="30" lean-forward="false" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
           <folding />
         </state>
       </provider>

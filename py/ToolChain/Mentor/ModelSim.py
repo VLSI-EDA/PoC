@@ -86,8 +86,10 @@ class ModelSimEditions(Edition):
 	ModelSimDE =                    EditionDescription(Name="ModelSim DE",                      Section="INSTALL.Mentor.ModelSimDE")
 	ModelSimSE32 =                  EditionDescription(Name="ModelSim SE 32-bit",               Section="INSTALL.Mentor.ModelSimSE32")
 	ModelSimSE64 =                  EditionDescription(Name="ModelSim SE 64-bit",               Section="INSTALL.Mentor.ModelSimSE64")
-	ModelSimAlteraEdition =         EditionDescription(Name="ModelSim Altera Edition",          Section="INSTALL.Altera.ModelSim")
-	ModelSimIntelEdition =          EditionDescription(Name="ModelSim Intel Edition",           Section="INSTALL.Intel.ModelSim")
+	ModelSimAlteraEdition =         EditionDescription(Name="ModelSim Altera Edition",          Section="INSTALL.Altera.ModelSimAE")
+	ModelSimAlteraStarterEdition =  EditionDescription(Name="ModelSim Altera Starter Edition",  Section="INSTALL.Altera.ModelSimASE")
+	ModelSimIntelEdition =          EditionDescription(Name="ModelSim Intel Edition",           Section="INSTALL.Intel.ModelSimAE")
+	ModelSimIntelStarterEdition =   EditionDescription(Name="ModelSim Intel Starter Edition",   Section="INSTALL.Intel.ModelSimASE")
 	QuestaSim =                     EditionDescription(Name="QuestaSim",                        Section="INSTALL.Mentor.QuestaSim")
 
 

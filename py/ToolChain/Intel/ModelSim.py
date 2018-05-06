@@ -41,7 +41,9 @@ from ToolChain.Intel              import IntelException
 __api__ = [
 	'ModelSimException',
 	'IntelModelSimEditions',
-	'Configuration'
+	'Configuration',
+	"IntelEditionConfiguration",
+	"IntelStarterEditionConfiguration"
 ]
 __all__ = __api__
 
@@ -58,31 +60,7 @@ class IntelModelSimEditions(Edition):
 
 class Configuration(Mentor_ModelSim_Configuration):
 	_vendor =               "Intel"                     #: The name of the tools vendor.
-	_toolName =             "Intel ModelSim"            #: The name of the tool.
-	_section  =             "INSTALL.Intel.ModelSim"    #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
 	_multiVersionSupport =  False                       #: Intel ModelSim Edition doesn't support multiple versions.
-	_template = {
-		"Windows": {
-			_section: {
-				"Version":                "10.5b",
-				"Edition":                "ModelSim Intel Edition",
-				"InstallationDirectory":  "${INSTALL.Intel:InstallationDirectory}/${INSTALL.Intel.Quartus:Version}/modelsim_ae",  # _ase
-				"BinaryDirectory":        "${InstallationDirectory}/win32aloem",
-				"AdditionalVComOptions":  "",
-				"AdditionalVSimOptions":  ""
-			}
-		},
-		"Linux": {
-			_section: {
-				"Version":                "10.5b",
-				"Edition":                "ModelSim Intel Edition",
-				"InstallationDirectory":  "${INSTALL.Intel:InstallationDirectory}/${INSTALL.Intel.Quartus:Version}/modelsim_ae",
-				"BinaryDirectory":        "${InstallationDirectory}/linuxaloem",
-				"AdditionalVComOptions":  "",
-				"AdditionalVSimOptions":  ""
-			}
-		}
-	}                                                   #: The template for the configuration sections represented as nested dictionaries.
 
 	def CheckDependency(self):
 		"""Check if general Intel support is configured in PoC."""
@@ -150,3 +128,60 @@ class Configuration(Mentor_ModelSim_Configuration):
 					version = match.group(1)
 
 		self._host.PoCConfig[self._section]['Version'] = version
+
+
+class IntelEditionConfiguration(Configuration):
+	_toolName =             "Intel ModelSim"           #: The name of the tool.
+	__editionName =         "ModelSim Intel Edition"   #: The name of the tool.
+	_section  =             "INSTALL.Intel.ModelSimAE" #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_template = {
+		"Windows": {
+			_section: {
+				"Version":                "10.5b",
+				"Edition":                __editionName,
+				"InstallationDirectory":  "${INSTALL.Intel:InstallationDirectory}/${INSTALL.Intel.Quartus:Version}/modelsim_ae",
+				"BinaryDirectory":        "${InstallationDirectory}/win32aloem",
+				"AdditionalVComOptions":  "",
+				"AdditionalVSimOptions":  ""
+			}
+		},
+		"Linux": {
+			_section: {
+				"Version":                "10.5b",
+				"Edition":                __editionName,
+				"InstallationDirectory":  "${INSTALL.Intel:InstallationDirectory}/${INSTALL.Intel.Quartus:Version}/modelsim_ae",
+				"BinaryDirectory":        "${InstallationDirectory}/linuxaloem",
+				"AdditionalVComOptions":  "",
+				"AdditionalVSimOptions":  ""
+			}
+		}
+	}
+
+
+class IntelStarterEditionConfiguration(Configuration):
+	_toolName =             "Intel ModelSim (Starter Edition)" #: The name of the tool.
+	__editionName =         "ModelSim Intel Starter Edition"   #:
+	_section  =             "INSTALL.Intel.ModelSimASE"        #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_template = {
+		"Windows": {
+			_section: {
+				"Version":                "10.5b",
+				"Edition":                __editionName,
+				"InstallationDirectory":  "${INSTALL.Intel:InstallationDirectory}/${INSTALL.Intel.Quartus:Version}/modelsim_ase",
+				"BinaryDirectory":        "${InstallationDirectory}/win32aloem",
+				"AdditionalVComOptions":  "",
+				"AdditionalVSimOptions":  ""
+			}
+		},
+		"Linux": {
+			_section: {
+				"Version":                "10.5b",
+				"Edition":                __editionName,
+				"InstallationDirectory":  "${INSTALL.Intel:InstallationDirectory}/${INSTALL.Intel.Quartus:Version}/modelsim_ase",
+				"BinaryDirectory":        "${InstallationDirectory}/linuxaloem",
+				"AdditionalVComOptions":  "",
+				"AdditionalVSimOptions":  ""
+			}
+		}
+	}
+

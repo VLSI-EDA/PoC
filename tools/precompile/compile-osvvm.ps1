@@ -148,7 +148,8 @@ if ($GHDL)
 	if (-not (Test-Path env:GHDL))
 	{	$env:GHDL = $GHDLBinDir		}
 
-	$Command = "$GHDLOSVVMScript -All -Source $SourceDirectory -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	$Command = "& '$GHDLOSVVMScript' -All -Source $SourceDirectory -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 	Invoke-Expression $Command
 	if ($LastExitCode -ne 0)
 	{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -180,18 +181,24 @@ if ($ActiveHDL)
 
 	# Compile libraries with vcom, executed in destination directory
 	Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow
-	$InvokeExpr = "$ActiveHDLBinDir\vlib.exe " + $Library + " 2>&1"
+	$InvokeExpr =				"& '$ActiveHDLBinDir\vlib.exe' " + $Library + " 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-	$InvokeExpr = "$ActiveHDLBinDir\vmap.exe -del " + $Library + " 2>&1"
+	
+	$InvokeExpr =				"& '$ActiveHDLBinDir\vmap.exe' -del " + $Library + " 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-	$InvokeExpr = "$ActiveHDLBinDir\vmap.exe " + $Library + " $DestDir\$Library 2>&1"
+	
+	$InvokeExpr =				"& '$ActiveHDLBinDir\vmap.exe' " + $Library + " $DestDir\$Library 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	Write-Host "Compiling library '$Library' with vcom..." -ForegroundColor Yellow
 	$ErrorCount += 0
 	foreach ($File in $SourceFiles)
 	{	Write-Host "Compiling '$File'..." -ForegroundColor DarkCyan
-		$InvokeExpr = "$ActiveHDLBinDir\vcom.exe -2008 -work $Library " + $File + " 2>&1"
+		$InvokeExpr =				"& '$ActiveHDLBinDir\vcom.exe' -2008 -work $Library " + $File + " 2>&1"
+		$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
 		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVComLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 		if (($LastExitCode -ne 0) -or $ErrorRecordFound)
 		{	$ErrorCount += 1
@@ -239,19 +246,24 @@ if ($ModelSim -or $QuestaSim)
 
 	# Compile libraries with vcom, executed in destination directory
 	Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow
-	$InvokeExpr = "$VSimBinDir\vlib.exe " + $Library + " 2>&1"
+	$InvokeExpr =				"& '$VSimBinDir\vlib.exe' " + $Library + " 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVLibLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-	$InvokeExpr = "$VSimBinDir\vmap.exe -modelsimini $ModelSimINI -del " + $Library + " 2>&1"
+	
+	$InvokeExpr =				"& '$VSimBinDir\vmap.exe' -modelsimini $ModelSimINI -del " + $Library + " 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-	$InvokeExpr = "$VSimBinDir\vmap.exe -modelsimini $ModelSimINI " + $Library + " $DestDir\$Library 2>&1"
+	
+	$InvokeExpr =				"& '$VSimBinDir\vmap.exe' -modelsimini $ModelSimINI " + $Library + " $DestDir\$Library 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
 	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	Write-Host "Compiling library '$Library' with vcom..." -ForegroundColor Yellow
 	$ErrorCount += 0
 	foreach ($File in $SourceFiles)
 	{	Write-Host "Compiling '$File'..." -ForegroundColor DarkCyan
-		$InvokeExpr = "$VSimBinDir\vcom.exe -suppress 1246 -2008 -modelsimini $ModelSimINI -work $Library " + $File + " 2>&1"
-		$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:$EnableVerbose -Debug:$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+		$InvokeExpr =				"& '$VSimBinDir\vcom.exe' -suppress 1246 -2008 -modelsimini $ModelSimINI -work $Library " + $File + " 2>&1"
+		$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
 		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 		if (($LastExitCode -ne 0) -or $ErrorRecordFound)
 		{	$ErrorCount += 1
