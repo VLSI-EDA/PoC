@@ -48,7 +48,8 @@ if [ -e $GRC_DEB ]; then
 		echo -e "${GREEN}Installation [SUCCESSFUL]${NOCOLOR}"
 	else
 		echo 1>&2 -e "${RED}Installation [FAILED]${NOCOLOR}"
-		exit 1
+		exit 0
+		#exit 1
 	fi
 fi
 
