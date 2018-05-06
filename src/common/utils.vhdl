@@ -32,9 +32,10 @@
 -- =============================================================================
 
 library	IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
-use IEEE.math_real.all;
+use     IEEE.std_logic_1164.all;
+use     IEEE.numeric_std.all;
+use     IEEE.math_real.all;
+
 
 package utils is
 
@@ -61,13 +62,39 @@ package utils is
 
 	--+ Enums ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	-- Intellectual Property (IP) type
-	type T_IPSTYLE				is (IPSTYLE_UNKNOWN, IPSTYLE_HARD, IPSTYLE_SOFT);
+	type T_IPSTYLE        is (IPSTYLE_UNKNOWN, IPSTYLE_HARD, IPSTYLE_SOFT);
 
-	-- Bit Order
-	type T_BIT_ORDER			is (LSB_FIRST, MSB_FIRST);
+	-- Bit order
+	type T_BIT_ORDER      is (LSB_FIRST, MSB_FIRST);
+	function "not"(left : T_BIT_ORDER) return T_BIT_ORDER;
 
-	-- Byte Order (Endian)
-	type T_BYTE_ORDER			is (LITTLE_ENDIAN, BIG_ENDIAN);
+	-- Byte order (Endian)
+	type T_BYTE_ORDER     is (LITTLE_ENDIAN, BIG_ENDIAN);
+	function "not"(left : T_BYTE_ORDER) return T_BYTE_ORDER;
+
+	-- Active logic level
+  type T_POLARITY       is (HIGH_ACTIVE, LOW_ACTIVE);
+	function "not"(left : T_POLARITY) return T_POLARITY;
+	function "xor"(left : T_POLARITY; right : bit) return bit;
+	function "xor"(left : T_POLARITY; right : bit_vector) return bit_vector;
+	function "xor"(left : T_POLARITY; right : std_logic) return std_logic;
+	function "xor"(left : T_POLARITY; right : std_logic_vector) return std_logic_vector;
+	function "xor"(left : bit; right : T_POLARITY) return bit;
+	function "xor"(left : bit_vector; right : T_POLARITY) return bit_vector;
+	function "xor"(left : std_logic; right : T_POLARITY) return std_logic;
+	function "xor"(left : std_logic_vector; right : T_POLARITY) return std_logic_vector;
+	function "xnor"(left : T_POLARITY; right : bit) return bit;
+	function "xnor"(left : T_POLARITY; right : bit_vector) return bit_vector;
+	function "xnor"(left : T_POLARITY; right : std_logic) return std_logic;
+	function "xnor"(left : T_POLARITY; right : std_logic_vector) return std_logic_vector;
+	function "xnor"(left : bit; right : T_POLARITY) return bit;
+	function "xnor"(left : bit_vector; right : T_POLARITY) return bit_vector;
+	function "xnor"(left : std_logic; right : T_POLARITY) return std_logic;
+	function "xnor"(left : std_logic_vector; right : T_POLARITY) return std_logic_vector;
+	
+	-- active clock edge
+	type T_CLOCK_EDGE     is (RISING_EDGE, FALLING_EDGE);
+	function "not"(left : T_CLOCK_EDGE) return T_CLOCK_EDGE;
 
 	-- rounding style
 	type T_ROUNDING_STYLE	is (ROUND_TO_NEAREST, ROUND_TO_ZERO, ROUND_TO_INF, ROUND_UP, ROUND_DOWN);
@@ -254,8 +281,8 @@ package utils is
 	function genmask_low(Bits : natural; MaskLength : positive) return std_logic_vector;
 	function genmask_alternate(len : positive; lsb : std_logic := '0') return std_logic_vector;
 
-	--+ Encodings ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+	-- Encodings
+	-- ===========================================================================
   -- One-Hot-Code to Binary-Code.
 	--  If a non-negative value empty_val is specified, its unsigned
 	--  representation will be returned upon an all-zero input. As a consequence
@@ -269,13 +296,18 @@ package utils is
   -- @synthesis supported
   --
   function gray2bin (gray_val : std_logic_vector) return std_logic_vector;
+  function gray2bin (gray_val : std_logic_vector) return unsigned;
 
 	-- Binary-Code to One-Hot-Code
-	function bin2onehot(value : std_logic_vector) return std_logic_vector;
+	function bin2onehot(value : std_logic_vector)  return std_logic_vector;
+	function bin2onehot(value : unsigned)          return std_logic_vector;
+	-- Binary-Code to One-Cold-Code
+	function bin2onecold(value : std_logic_vector) return std_logic_vector;
+	function bin2onecold(value : unsigned)         return std_logic_vector;
 
 	-- Binary-Code to Gray-Code
 	function bin2gray(value : std_logic_vector) return std_logic_vector;
-
+	function bin2gray(value : unsigned)         return std_logic_vector;
 end package;
 
 
@@ -299,6 +331,145 @@ package body utils is
 
 	-- deferred constant assignment
 	constant SIMULATION	: boolean		:= is_simulation;
+
+	-- New operators for new enumeration types
+	-- ===========================================================================
+	-- Bit order
+	function "not"(left : T_BIT_ORDER) return T_BIT_ORDER is
+	begin
+		return T_BIT_ORDER'val((T_BIT_ORDER'pos(left) + 1) mod 2);
+	end function;
+
+	-- Byte order (Endian)
+	function "not"(left : T_BYTE_ORDER) return T_BYTE_ORDER is
+	begin
+		return T_BYTE_ORDER'val((T_BYTE_ORDER'pos(left) + 1) mod 2);
+	end function;
+
+	-- Active logic level
+	function "not"(left : T_POLARITY) return T_POLARITY is
+	begin
+		return T_POLARITY'val((T_POLARITY'pos(left) + 1) mod 2);
+	end function;
+	
+	function "xor"(left : T_POLARITY; right : bit) return bit is
+	begin
+		if (left = HIGH_ACTIVE) then
+			return right;
+		else
+			return not right;
+		end if; 
+	end function;
+	
+	function "xor"(left : T_POLARITY; right : bit_vector) return bit_vector is
+	begin
+		if (left = HIGH_ACTIVE) then
+			return right;
+		else
+			return not right;
+		end if; 
+	end function;
+	
+	function "xor"(left : T_POLARITY; right : std_logic) return std_logic is
+	begin
+		if (left = HIGH_ACTIVE) then
+			return right;
+		else
+			return not right;
+		end if; 
+	end function;
+	
+	function "xor"(left : T_POLARITY; right : std_logic_vector) return std_logic_vector is
+	begin
+		if (left = HIGH_ACTIVE) then
+			return right;
+		else
+			return not right;
+		end if; 
+	end function;
+	
+	function "xor"(left : bit; right : T_POLARITY) return bit is
+	begin
+			if (right = HIGH_ACTIVE) then
+				return left;
+			else
+				return not left;
+			end if; 
+	end function;
+	
+	function "xor"(left : bit_vector; right : T_POLARITY) return bit_vector is
+	begin
+			if (right = HIGH_ACTIVE) then
+				return left;
+			else
+				return not left;
+			end if; 
+	end function;
+	
+	function "xor"(left : std_logic; right : T_POLARITY) return std_logic is
+	begin
+		if (right = HIGH_ACTIVE) then
+			return left;
+		else
+			return not left;
+		end if; 
+	end function;
+	
+	function "xor"(left : std_logic_vector; right : T_POLARITY) return std_logic_vector is
+	begin
+		if (right = HIGH_ACTIVE) then
+			return left;
+		else
+			return not left;
+		end if; 
+	end function;
+	
+	function "xnor"(left : T_POLARITY; right : bit) return bit is
+	begin
+		return not (left xor right);
+	end function;
+	
+	function "xnor"(left : T_POLARITY; right : bit_vector) return bit_vector is
+	begin
+		return not (left xor right);
+	end function;
+	
+	function "xnor"(left : T_POLARITY; right : std_logic) return std_logic is
+	begin
+		return not (left xor right);
+	end function;
+	
+	function "xnor"(left : T_POLARITY; right : std_logic_vector) return std_logic_vector is
+	begin
+		return not (left xor right);
+	end function;
+	
+	function "xnor"(left : bit; right : T_POLARITY) return bit is
+	begin
+		return not (left xor right);
+	end function;
+	
+	function "xnor"(left : bit_vector; right : T_POLARITY) return bit_vector is
+	begin
+		return not (left xor right);
+	end function;
+	
+	function "xnor"(left : std_logic; right : T_POLARITY) return std_logic is
+	begin
+		return not (left xor right);
+	end function;
+	
+	function "xnor"(left : std_logic_vector; right : T_POLARITY) return std_logic_vector is
+	begin
+		return not (left xor right);
+	end function;
+
+	-- active clock edge
+	function "not"(left : T_CLOCK_EDGE) return T_CLOCK_EDGE is
+	begin
+		return T_CLOCK_EDGE'val((T_CLOCK_EDGE'pos(left) + 1) mod 2);
+	end function;
+	
 
 	-- Divisions: div_*
 	-- ===========================================================================
@@ -949,6 +1120,11 @@ package body utils is
     res := tmp(tmp'left-1 downto 0);
 		return  res;
 	end function;
+	
+	function gray2bin(gray_val : std_logic_vector) return unsigned is
+	begin
+		return unsigned(std_logic_vector'(gray2bin(gray_val)));
+	end function;
 
 	-- Binary-Code to One-Hot-Code
 	function bin2onehot(Value : std_logic_vector) return std_logic_vector is
@@ -957,6 +1133,11 @@ package body utils is
 		result	:= (others => '0');
 		result(to_index(Value, 0)) := '1';
 		return result;
+	end function;
+			
+	function bin2onehot(Value : unsigned) return std_logic_vector is
+	begin
+		return bin2onehot(std_logic_vector(Value));
 	end function;
 
 	-- Binary-Code to Gray-Code
@@ -968,6 +1149,23 @@ package body utils is
 		res := tmp(Value'length downto 1);
 		return  res;
 	end function;
+					
+	function bin2gray(Value : unsigned) return std_logic_vector is
+	begin
+		return bin2gray(std_logic_vector(Value));
+	end function;
+
+	-- Binary-Code to One-Cold-Code
+	function bin2onecold(value : std_logic_vector) return std_logic_vector is
+	begin
+		return not bin2onehot(value);
+	end function;
+							
+	function bin2onecold(Value : unsigned) return std_logic_vector is
+	begin
+		return bin2onecold(std_logic_vector(Value));
+	end function;
+
 
 	-- bit searching / bit indices
 	-- ==========================================================================

@@ -1042,6 +1042,68 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
 
+	# ----------------------------------------------------------------------------
+	# create the sub-parser for the "msim" command
+	# ----------------------------------------------------------------------------
+	@CommandGroupAttribute("Simulation commands")
+	@CommandAttribute("msim", help="Simulate a PoC Entity with Mentor ModelSim (msim).",
+					  description=dedent("""\
+		Simulate a PoC Entity with Mentor ModelSim (msim).
+		"""))
+	@PoCEntityAttribute()
+	@BoardDeviceAttributeGroup()
+	@VHDLVersionAttribute()
+	@SimulationStepsAttributeGroup()
+	@SwitchArgumentAttribute("--with-coverage", dest="WithCoverage", help="Compile with coverage information.")
+	def HandleModelSimSimulation(self, args):
+		self.PrintHeadline()
+		self.__PrepareForSimulation()
+		self._CheckModelSim()
+
+		fqnList = self._ExtractFQNs(args.FQN)
+		board = self._ExtractBoard(args.BoardName, args.DeviceName)
+		vhdlVersion = self._ExtractVHDLVersion(args.VHDLVersion)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False,
+													   args.Recompile, args.Simulate, args.ShowWave,
+													   args.ShowCoverage, args.Resimulate, args.ShowReport, False)
+
+		simulator = QuestaSimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion, withCoverage=args.WithCoverage)
+
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
+
+	# ----------------------------------------------------------------------------
+	# create the sub-parser for the "vsim" command
+	# ----------------------------------------------------------------------------
+	@CommandGroupAttribute("Simulation commands")
+	@CommandAttribute("vsim", help="Simulate a PoC Entity with any Mentor QuestaSim or ModelSim (vsim).",
+					  description=dedent("""\
+		Simulate a PoC Entity with any Mentor QuestaSim or ModelSim (vsim).
+		"""))
+	@PoCEntityAttribute()
+	@BoardDeviceAttributeGroup()
+	@VHDLVersionAttribute()
+	@SimulationStepsAttributeGroup()
+	@SwitchArgumentAttribute("--with-coverage", dest="WithCoverage", help="Compile with coverage information.")
+	def HandleAnyMentorSimulation(self, args):
+		self.PrintHeadline()
+		self.__PrepareForSimulation()
+		self._CheckModelSim()
+
+		fqnList = self._ExtractFQNs(args.FQN)
+		board = self._ExtractBoard(args.BoardName, args.DeviceName)
+		vhdlVersion = self._ExtractVHDLVersion(args.VHDLVersion)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False,
+													   args.Recompile, args.Simulate, args.ShowWave,
+													   args.ShowCoverage, args.Resimulate, args.ShowReport,
+													   False)
+
+		simulator = QuestaSimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion,
+									 withCoverage=args.WithCoverage)
+
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
+
 
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "rsim" command
@@ -1069,18 +1131,18 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 
 	# ----------------------------------------------------------------------------
-	# create the sub-parser for the "vsim" command
+	# create the sub-parser for the "qsim" command
 	# ----------------------------------------------------------------------------
 	@CommandGroupAttribute("Simulation commands")
-	@CommandAttribute("vsim", help="Simulate a PoC Entity with Mentor QuestaSim or ModelSim (vsim).", description=dedent("""\
-		Simulate a PoC Entity with Mentor QuestaSim or ModelSim (vsim).
+	@CommandAttribute("qsim", help="Simulate a PoC Entity with Mentor QuestaSim (qsim).", description=dedent("""\
+		Simulate a PoC Entity with Mentor QuestaSim (qsim).
 		"""))
 	@PoCEntityAttribute()
 	@BoardDeviceAttributeGroup()
 	@VHDLVersionAttribute()
 	@SimulationStepsAttributeGroup()
 	@SwitchArgumentAttribute("--with-coverage", dest="WithCoverage", help="Compile with coverage information.")
-	def HandleQuestaSimulation(self, args):
+	def HandleQuestaSimSimulation(self, args):
 		self.PrintHeadline()
 		self.__PrepareForSimulation()
 		self._CheckModelSim()

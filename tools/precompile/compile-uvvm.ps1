@@ -118,18 +118,25 @@ $UVVM_VVC_Files = @(
 	"uvvm_vvc_framework\src\ti_uvvm_engine.vhd"
 )
 
-$VIP_Files = @{}
-foreach ($VIPDirectory in (Get-ChildItem *vip* -Path $SourceDirectory -Directory))
-{	$Name = $VIPDirectory.Name
-	$VIP_Files[$Name] = @{
-		"Library" =	$Name
-		"Files" =	 [System.Collections.ArrayList] @()
-	}
 
-	foreach ($Line in (Get-Content "$VIPDirectory\script\compile_order.txt"))
-	{	$File = $Line.Replace("/", "\")
-		$File = $VIPDirectory.FullName + "\src\$File"
-		$VIP_Files[$Name]["Files"].Add($File) | Out-Null
+if ($ActiveHDL -or $RivieraPRO -or $ModelSim)
+{	Write-Host "Reading VIP compile order files..." -ForegroundColor Yellow
+	$VIP_Files = @{}
+	foreach ($VIPDirectory in (Get-ChildItem -Path $SourceDirectory -Directory "*VIP*"))
+	{	$VIPName =      $VIPDirectory.Name
+
+		$EnableVerbose -and (Write-Host "  Found VIP: $VIPName"		-ForegroundColor Gray                                                                 ) | Out-Null
+		$EnableDebug -and   (Write-Host "    Reading compile order from '$SourceDirectory\$VIPName\script\compile_order.txt'" -ForegroundColor DarkGray	) | Out-Null
+
+		$VIPFiles = Get-Content "$SourceDirectory\$VIPName\script\compile_order.txt" | %{ Resolve-Path "$SourceDirectory\$VIPName\script\$_" }
+		if ($EnableDebug)
+		{	foreach ($File in $VIPFiles)
+			{	Write-Host "      $File" -ForegroundColor DarkGray }
+		}
+		$VIP_Files[$VIPName] = @{
+			"Library" =		$VIPName;
+			"Files" =			$VIPFiles
+		};
 	}
 }
 
@@ -178,7 +185,7 @@ if ($ActiveHDL)
 {	Write-Host "Pre-compiling UVVM's simulation libraries for Active-HDL" -ForegroundColor Cyan
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$ActiveHDLBinDir =		Get-ActiveHDLBinaryDirectory $PoCPS1
+	$ActiveHDLBinDir =	Get-ActiveHDLBinaryDirectory $PoCPS1
 	$ActiveHDLDirName =	Get-ActiveHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
@@ -252,7 +259,7 @@ if ($ActiveHDL)
 
 	foreach ($vip in $VIP_Files.Keys)
 	{	$Library =			$VIP_Files[$vip]["Library"]
-		$SourceFiles =	$VIP_Files[$vip]["Files"] | % { "$SourceDirectory\$_" }
+		$SourceFiles =	$VIP_Files[$vip]["Files"] #| % { "$SourceDirectory\$_" }
 
 		# Compile libraries with vcom, executed in destination directory
 		Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow
@@ -312,9 +319,10 @@ if ($ModelSim)
 	$VSimDirName =	Get-ModelSimDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir = 			$ResolvedPrecompileDir + "\$VSimDirName\$UVVMDirName"
+	$DestDir = 			$ResolvedPrecompileDir + "\$VSimDirName"
 	$ModelSimINI =	"$DestDir\modelsim.ini"
 	# Create and change to destination directory
+	$DestDir = 			$DestDir + "\$UVVMDirName"
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 
@@ -383,7 +391,7 @@ if ($ModelSim)
 
 	foreach ($vip in $VIP_Files.Keys)
 	{	$Library =			$VIP_Files[$vip]["Library"]
-		$SourceFiles =	$VIP_Files[$vip]["Files"] | % { "$SourceDirectory\$_" }
+		$SourceFiles =	$VIP_Files[$vip]["Files"] #| % { "$SourceDirectory\$_" }
 
 		# Compile libraries with vcom, executed in destination directory
 		Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow

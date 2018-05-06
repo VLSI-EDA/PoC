@@ -120,7 +120,7 @@ package xil is
 		);
 	end component;
 
-	component xil_SystemMonitor_Virtex6 is
+	component xil_SystemMonitor is
 		port (
 			Reset						: in	std_logic;				-- Reset signal for the System Monitor control logic
 
@@ -131,17 +131,4 @@ package xil is
 			VN							: in	std_logic
 		);
 	end component;
-
-	component xil_SystemMonitor_Series7 is
-		port (
-			Reset						: in	std_logic;				-- Reset signal for the System Monitor control logic
-
-			Alarm_UserTemp	: out	std_logic;				-- Temperature-sensor alarm output
-			Alarm_OverTemp	: out	std_logic;				-- Over-Temperature alarm output
-			Alarm						: out	std_logic;				-- OR'ed output of all the alarms
-			VP							: in	std_logic;				-- Dedicated analog input pair
-			VN							: in	std_logic
-		);
-	end component;
-
 end package;
