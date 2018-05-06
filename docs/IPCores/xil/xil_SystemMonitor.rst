@@ -19,11 +19,10 @@ PoC.xil.SystemMonitor
       * |gh-src| :pocsrc:`Sourcecode <xil/xil_SystemMonitor.vhdl>`
       * |gh-tb| :poctb:`Testbench <xil/xil_SystemMonitor_tb.vhdl>`
 
-This module generates a PWM signal for a 3-pin (transistor controlled) or
-4-pin fan header. The FPGAs temperature is read from device specific system
-monitors (normal, user temperature, over temperature).
+This module wraps a SYSMON or XADC to report if preconfigured temperature values
+are overrun. The XADC was formerly known as "System Monitor".
 
-**For example the Xilinx System Monitors are configured as follows:**
+.. rubric:: Temperature Curve
 
 .. code-block:: none
 
@@ -47,7 +46,7 @@ monitors (normal, user temperature, over temperature).
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 62-73
+   :lines: 59-69
 
 
 
