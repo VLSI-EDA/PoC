@@ -7,16 +7,21 @@ matrix:
       dist: trusty
       python: "3.6"
       before_install:
-        - sudo apt-get update
+        - sudo apt-get -qq update
         - sudo apt-get install -y libgnat-4.8
         - sudo ./tools/Travis-CI/grc.setup.sh
     - env: CONFIG="Precise,Python3.6,gnat-5"
       os: linux
       python: "3.6"
-      addons:
-        apt:
-          packages:
-            - gnat-5
+      before_install:
+        - sudo apt-get -qq update
+        - sudo apt-get install -y libgnat-4.8
+        - wget https://korpus.sk/~garabik/software/grc/grc_1.11.3-1_all.deb
+        - sudo dpkg -i grc_1.11.3-1_all.deb
+#      addons:
+#        apt:
+#          packages:
+#            - gnat-5
   allow_failures:
     - env: CONFIG="Precise,Python3.6,gnat-5"
 install:

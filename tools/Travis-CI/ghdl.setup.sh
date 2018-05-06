@@ -1,13 +1,14 @@
 #! /usr/bin/env bash
 
 # configure variables in the section below
-GHDL_BACKEND="llvm-3.5"
-GHDL_VERSION="0.34-dev"
-RELEASE_DATE="2017-03-01"
-PLATFORM="ubu1404"
+GHDL_BACKEND="llvm-3.8"
+#GHDL_VERSION="0.36-dev"
+GHDL_VERSION="0.35"
+RELEASE_DATE="2017-12-14"
+PLATFORM="ubuntu14"
 
 GITHUB_SERVER="https://github.com"
-GITHUB_SLUG="tgingold/ghdl"
+GITHUB_SLUG="ghdl/ghdl"
 
 TRAVIS_DIR="temp/Travis-CI"
 
@@ -15,12 +16,13 @@ TRAVIS_DIR="temp/Travis-CI"
 # assemble the GitHub URL
 # --------------------------------------
 # example: 2016-05-03
-GITHUB_TAGNAME="$RELEASE_DATE"
+#GITHUB_TAGNAME="$RELEASE_DATE"
+GITHUB_TAGNAME="v$GHDL_VERSION"
 
-# example: ghdl-0.34-dev-llvm-3.5-2017-03-01-ubu1404.tgz
-GITHUB_RELEASE_FILE="ghdl-$GHDL_VERSION-$GHDL_BACKEND-$RELEASE_DATE-$PLATFORM.tgz"
+# example: ghdl-0.36-dev-llvm-3.8-ubuntu14.tgz
+GITHUB_RELEASE_FILE="ghdl-$GHDL_VERSION-$GHDL_BACKEND-$PLATFORM.tgz"
 
-# example: https://github.com/tgingold/ghdl/releases/download/2016.05.03/ghdl-0.34dev-llvm-2016-05-03.tar.gz
+# example: https://github.com/ghdl/ghdl/releases/download/v0.36-dev/ghdl-0.36dev-llvm-3.8-ubuntu14.tgz
 GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHUB_RELEASE_FILE"
 
 
