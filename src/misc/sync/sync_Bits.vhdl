@@ -41,13 +41,13 @@
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
---										 Chair of VLSI-Design, Diagnostics and Architecture
+--                     Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
 --
---		http://www.apache.org/licenses/LICENSE-2.0
+--    http://www.apache.org/licenses/LICENSE-2.0
 --
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
@@ -56,93 +56,92 @@
 -- limitations under the License.
 -- =============================================================================
 
-library	IEEE;
-use			IEEE.STD_LOGIC_1164.all;
+library IEEE;
+use     IEEE.STD_LOGIC_1164.all;
 
-library	PoC;
-use			PoC.config.all;
-use			PoC.utils.all;
-use			PoC.sync.all;
+library PoC;
+use     PoC.config.all;
+use     PoC.utils.all;
+use     PoC.sync.all;
 
 
 entity sync_Bits is
   generic (
-	  BITS					: positive						:= 1;									-- number of bit to be synchronized
-		INIT					: std_logic_vector		:= x"00000000";				-- initialitation bits
-		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
-	);
+    BITS          : positive            := 1;                       -- number of bit to be synchronized
+    INIT          : std_logic_vector    := x"00000000";             -- initialization bits
+    SYNC_DEPTH    : T_MISC_SYNC_DEPTH   := T_MISC_SYNC_DEPTH'low    -- generate SYNC_DEPTH many stages, at least 2
+  );
   port (
-		Clock					: in	std_logic;														-- <Clock>	output clock domain
-		Input					: in	std_logic_vector(BITS - 1 downto 0);	-- @async:	input bits
-		Output				: out std_logic_vector(BITS - 1 downto 0)		-- @Clock:	output bits
-	);
+    Clock         : in  std_logic;                                  -- <Clock>  output clock domain
+    Input         : in  std_logic_vector(BITS - 1 downto 0);        -- @async:  input bits
+    Output        : out std_logic_vector(BITS - 1 downto 0)         -- @Clock:  output bits
+  );
 end entity;
 
 
 architecture rtl of sync_Bits is
-	constant INIT_I		: std_logic_vector		:= resize(descend(INIT), BITS);
-	constant DEV_INFO : T_DEVICE_INFO				:= DEVICE_INFO;
+  constant INIT_I    : std_logic_vector    := resize(descend(INIT), BITS);
+  constant DEV_INFO : T_DEVICE_INFO        := DEVICE_INFO;
 begin
-	genGeneric : if ((DEV_INFO.Vendor /= VENDOR_ALTERA) and (DEV_INFO.Vendor /= VENDOR_XILINX)) generate
-		attribute ASYNC_REG							: string;
-		attribute SHREG_EXTRACT					: string;
+  genGeneric : if ((DEV_INFO.Vendor /= VENDOR_ALTERA) and (DEV_INFO.Vendor /= VENDOR_XILINX)) generate
+    attribute ASYNC_REG              : string;
+    attribute SHREG_EXTRACT          : string;
 
-	begin
-		gen : for i in 0 to BITS - 1 generate
-			signal Data_async							: std_logic;
-			signal Data_meta							: std_logic																		:= INIT_I(i);
-			signal Data_sync							: std_logic_vector(SYNC_DEPTH - 1 downto 1)		:= (others => INIT_I(i));
+  begin
+    gen : for i in 0 to BITS - 1 generate
+      signal Data_async              : std_logic;
+      signal Data_meta              : std_logic                                    := INIT_I(i);
+      signal Data_sync              : std_logic_vector(SYNC_DEPTH - 1 downto 1)    := (others => INIT_I(i));
 
-			-- Mark register DataSync_async's input as asynchronous and ignore timings (TIG)
-			attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
+      -- Mark register DataSync_async's input as asynchronous and ignore timings (TIG)
+      attribute ASYNC_REG      of Data_meta  : signal is "TRUE";
 
-			-- Prevent XST from translating two FFs into SRL plus FF
-			attribute SHREG_EXTRACT of Data_meta	: signal is "NO";
-			attribute SHREG_EXTRACT of Data_sync	: signal is "NO";
+      -- Prevent XST from translating two FFs into SRL plus FF
+      attribute SHREG_EXTRACT of Data_meta  : signal is "NO";
+      attribute SHREG_EXTRACT of Data_sync  : signal is "NO";
 
-		begin
-			Data_async			<= Input(i);
+    begin
+      Data_async      <= Input(i);
 
-			process(Clock)
-			begin
-				if rising_edge(Clock) then
-					Data_meta		<= Data_async;
-					Data_sync		<= Data_sync(Data_sync'high - 1 downto 1) & Data_meta;
-				end if;
-			end process;
+      process(Clock)
+      begin
+        if rising_edge(Clock) then
+          Data_meta    <= Data_async;
+          Data_sync    <= Data_sync(Data_sync'high - 1 downto 1) & Data_meta;
+        end if;
+      end process;
 
-			Output(i)	<= Data_sync(Data_sync'high);
-		end generate;
-	end generate;
+      Output(i)  <= Data_sync(Data_sync'high);
+    end generate;
+  end generate;
 
-	-- use dedicated and optimized 2 D-FF synchronizer for Altera FPGAs
-	genAltera : if (DEV_INFO.Vendor = VENDOR_ALTERA) generate
-		sync : sync_Bits_Altera
-			generic map (
-				BITS				=> BITS,
-				INIT				=> INIT_I,
-				SYNC_DEPTH	=> SYNC_DEPTH
-			)
-			port map (
-				Clock			=> Clock,
-				Input			=> Input,
-				Output		=> Output
-			);
-	end generate;
+  -- use dedicated and optimized 2 D-FF synchronizer for Altera FPGAs
+  genAltera : if (DEV_INFO.Vendor = VENDOR_ALTERA) generate
+    sync : sync_Bits_Altera
+      generic map (
+        BITS        => BITS,
+        INIT        => INIT_I,
+        SYNC_DEPTH  => SYNC_DEPTH
+      )
+      port map (
+        Clock      => Clock,
+        Input      => Input,
+        Output    => Output
+      );
+  end generate;
 
-	-- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
-	genXilinx : if (DEV_INFO.Vendor = VENDOR_XILINX) generate
-		sync : sync_Bits_Xilinx
-			generic map (
-				BITS				=> BITS,
-				INIT				=> INIT_I,
-				SYNC_DEPTH	=> SYNC_DEPTH
-			)
-			port map (
-				Clock			=> Clock,
-				Input			=> Input,
-				Output		=> Output
-			);
-	end generate;
-
+  -- use dedicated and optimized 2 D-FF synchronizer for Xilinx FPGAs
+  genXilinx : if (DEV_INFO.Vendor = VENDOR_XILINX) generate
+    sync : sync_Bits_Xilinx
+      generic map (
+        BITS        => BITS,
+        INIT        => INIT_I,
+        SYNC_DEPTH  => SYNC_DEPTH
+      )
+      port map (
+        Clock      => Clock,
+        Input      => Input,
+        Output    => Output
+      );
+  end generate;
 end architecture;

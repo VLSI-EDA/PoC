@@ -58,14 +58,14 @@ class Simulator(BaseSimulator):
 
 	def _PrepareSimulator(self):
 		# create the RivieraPRO executable factory
-		self.LogVerbose("Preparing Mentor simulator.")
-		# for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Mentor.RivieraPRO', 'INSTALL.Altera.RivieraPRO']:
+		self.LogVerbose("Preparing Aldec simulator.")
+		# for sectionName in ['INSTALL.Aldec.QuestaSim', 'INSTALL.Aldec.RivieraPRO', 'INSTALL.Altera.RivieraPRO']:
 		# 	if (len(self.Host.PoCConfig.options(sectionName)) != 0):
 		# 		break
 		# else:
 		# XXX: check SectionName if RivieraPRO is configured
 		# 	raise NotConfiguredException(
-		# 		"Neither Mentor Graphics RivieraPRO, RivieraPRO PE nor RivieraPRO Altera-Edition are configured on this system.")
+		# 		"Neither Aldec Graphics RivieraPRO, RivieraPRO PE nor RivieraPRO Altera-Edition are configured on this system.")
 
 		# questaSection = self.Host.PoCConfig[sectionName]
 		# binaryPath = Path(questaSection['BinaryDirectory'])

@@ -42,7 +42,7 @@ This implementation uses carry chains for wider implementations.
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 50-61
+   :lines: 51-62
 
 
 

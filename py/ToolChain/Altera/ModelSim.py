@@ -41,7 +41,9 @@ from ToolChain.Mentor.ModelSim    import Configuration as Mentor_ModelSim_Config
 __api__ = [
 	'ModelSimException',
 	'AlteraModelSimEditions',
-	'Configuration'
+	'Configuration',
+	"AlteraEditionConfiguration",
+	"AlteraStarterEditionConfiguration"
 ]
 __all__ = __api__
 
@@ -59,31 +61,7 @@ class AlteraModelSimEditions(Edition):
 
 class Configuration(Mentor_ModelSim_Configuration):
 	_vendor =               "Altera"                    #: The name of the tools vendor.
-	_toolName =             "ModelSim Altera Edition"   #: The name of the tool.
-	_section  =             "INSTALL.Altera.ModelSim"   #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
-	_multiVersionSupport =  False                       #: Altera ModelSim Edition doesn't support multiple versions.
-	_template = {
-		"Windows": {
-			_section: {
-				"Version":                "10.4b",
-				"Edition":                "ModelSim Altera Edition",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ae",
-				"BinaryDirectory":        "${InstallationDirectory}/win32aloem",
-				"AdditionalVComOptions":  "",
-				"AdditionalVSimOptions":  ""
-			}
-		},
-		"Linux": {
-			_section: {
-				"Version":                "10.4b",
-				"Edition":                "ModelSim Altera Edition",
-				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ae",
-				"BinaryDirectory":        "${InstallationDirectory}/linuxaloem",
-				"AdditionalVComOptions":  "",
-				"AdditionalVSimOptions":  ""
-			}
-		}
-	}                                                   #: The template for the configuration sections represented as nested dictionaries.
+	_multiVersionSupport =  False                       #: ModelSim Altera (Starter) Edition doesn't support multiple versions.
 
 	def CheckDependency(self):
 		"""Check if general Altera support is configured in PoC."""
@@ -151,3 +129,59 @@ class Configuration(Mentor_ModelSim_Configuration):
 					version = match.group(1)
 
 		self._host.PoCConfig[self._section]['Version'] = version
+
+
+class AlteraEditionConfiguration(Configuration):
+	_toolName =             "Altera ModelSim"           #: The name of the tool.
+	__editionName =         "ModelSim Altera Edition"   #: The name of the tool.
+	_section  =             "INSTALL.Altera.ModelSimAE" #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_template = {
+		"Windows": {
+			_section: {
+				"Version":                "10.5b",
+				"Edition":                __editionName,
+				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ae",
+				"BinaryDirectory":        "${InstallationDirectory}/win32aloem",
+				"AdditionalVComOptions":  "",
+				"AdditionalVSimOptions":  ""
+			}
+		},
+		"Linux": {
+			_section: {
+				"Version":                "10.5b",
+				"Edition":                __editionName,
+				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ae",
+				"BinaryDirectory":        "${InstallationDirectory}/linuxaloem",
+				"AdditionalVComOptions":  "",
+				"AdditionalVSimOptions":  ""
+			}
+		}
+	}
+
+
+class AlteraStarterEditionConfiguration(Configuration):
+	_toolName =             "Altera ModelSim (Starter Edition)" #: The name of the tool.
+	__editionName =         "ModelSim Altera Starter Edition"   #: The name of the tool.
+	_section  =             "INSTALL.Altera.ModelSimASE"        #: The name of the configuration section. Pattern: ``INSTALL.Vendor.ToolName``.
+	_template = {
+		"Windows": {
+			_section: {
+				"Version":                "10.5b",
+				"Edition":                __editionName,
+				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ase",
+				"BinaryDirectory":        "${InstallationDirectory}/win32aloem",
+				"AdditionalVComOptions":  "",
+				"AdditionalVSimOptions":  ""
+			}
+		},
+		"Linux": {
+			_section: {
+				"Version":                "10.5b",
+				"Edition":                __editionName,
+				"InstallationDirectory":  "${INSTALL.Altera:InstallationDirectory}/${INSTALL.Altera.Quartus:Version}/modelsim_ase",
+				"BinaryDirectory":        "${InstallationDirectory}/linuxaloem",
+				"AdditionalVComOptions":  "",
+				"AdditionalVSimOptions":  ""
+			}
+		}
+	}

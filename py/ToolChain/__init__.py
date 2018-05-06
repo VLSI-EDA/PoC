@@ -706,10 +706,13 @@ class Configurator(ILogable, AskMixIn):
 		from .Aldec.RivieraPRO    import Configuration as RivieraPRO_Configuration
 		from .Altera              import Configuration as Altera_Configuration
 		from .Altera.Quartus      import Configuration as AlteraQuartus_Configuration
-		from .Altera.ModelSim     import Configuration as AlteraModelSim_Configuration
+		from .Altera.ModelSim     import AlteraEditionConfiguration as AlteraModelSim_Configuration
+		from .Altera.ModelSim     import AlteraStarterEditionConfiguration as AlteraModelSimStarter_Configuration
 		from .Intel               import Configuration as Intel_Configuration
-		from .Intel.Quartus       import Configuration as IntelQuartus_Configuration
-		from .Intel.ModelSim      import Configuration as IntelModelSim_Configuration
+		from .Intel.Quartus       import QuartusPrimeConfiguration as IntelQuartusPrime_Configuration
+		from .Intel.Quartus       import QuartusPrimeLiteConfiguration as IntelQuartusPrimeLite_Configuration
+		from .Intel.ModelSim      import IntelEditionConfiguration as IntelModelSim_Configuration
+		from .Intel.ModelSim      import IntelStarterEditionConfiguration as IntelModelSimStarter_Configuration
 		from .GHDL                import Configuration as GHDL_Configuration
 		from .GTKWave             import Configuration as GTKW_Configuration
 		from .Lattice             import Configuration as Lattice_Configuration
@@ -738,10 +741,13 @@ class Configurator(ILogable, AskMixIn):
 			Altera_Configuration,
 			AlteraQuartus_Configuration,
 			AlteraModelSim_Configuration,
+			AlteraModelSimStarter_Configuration,
 			# Intel products
 			Intel_Configuration,
-			IntelQuartus_Configuration,
+			IntelQuartusPrime_Configuration,
+			IntelQuartusPrimeLite_Configuration,
 			IntelModelSim_Configuration,
+			IntelModelSimStarter_Configuration,
 			# Lattice products
 			Lattice_Configuration,
 			Diamond_Configuration,
@@ -880,7 +886,7 @@ class Configurator(ILogable, AskMixIn):
 		if self._AskConfigureDefaultTools():
 			self._ConfigureDefaultTools()
 		else:
-			self.LogWarning("You can rerun this configuration step with '.\poc.ps1 configure --set-default-tools'.", indent=1)
+			self.LogWarning("You can rerun this configuration step with '.\poc.ps1 select'.", indent=1)
 
 		# Write and re-read configuration
 		self._host.SaveAndReloadPoCConfiguration()

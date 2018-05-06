@@ -14,7 +14,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2007-2017 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,8 +98,9 @@ if ($All)
 	$QuestaSim =	$true
 }
 
-$PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
-$LatticeDirName =		Get-LatticeDirectoryName $PoCPS1
+$PreCompiledDir =				Get-PrecompiledDirectoryName $PoCPS1
+$LatticeDirName =				Get-LatticeDirectoryName $PoCPS1
+$ResolvedPrecompileDir = Convert-Path ( Resolve-Path "$PoCRootDir\$PrecompiledDir" )
 
 # GHDL
 # ==============================================================================
@@ -113,7 +114,7 @@ if ($GHDL)
 	$GHDLDirName =			Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
+	$DestDir = $ResolvedPrecompileDir + "\$GHDLDirName\$LatticeDirName"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
@@ -126,12 +127,13 @@ if ($GHDL)
 	$DiamondInstallDir =	Get-DiamondInstallationDirectory $PoCPS1
 	$SourceDir =					"$DiamondInstallDir\cae_library\simulation\vhdl"
 
-	# export GHDL environment variable if not allready set
+	# export GHDL environment variable if not already set
 	if (-not (Test-Path env:GHDL))
 	{	$env:GHDL = $GHDLBinDir		}
 
 	if ($VHDL93)
-	{	$Command = "$GHDLLatticeScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$LatticeDirName -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLLatticeScript' -All -VHDL93 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -139,7 +141,8 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLLatticeScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$LatticeDirName -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLLatticeScript' -All -VHDL2008 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -197,7 +200,7 @@ if ($GHDL)
 		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
 		# Assemble output directory
-		$DestDir="$PoCRootDir\$PrecompiledDir\$ToolDirName\$LatticeDirName"
+		$DestDir = $ResolvedPrecompileDir + "\$ToolDirName\$LatticeDirName"
 		# Create and change to destination directory
 		Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 

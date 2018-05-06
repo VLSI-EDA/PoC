@@ -2,11 +2,60 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1217729-6dda-4bce-a9eb-baa5346607ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../lib/osvvm" afterPath="$PROJECT_DIR$/../lib/osvvm" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.gitignore" afterPath="$PROJECT_DIR$/../.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../docs/ChangeLog/2015/v0.1.0.rst" afterPath="$PROJECT_DIR$/../docs/ChangeLog/2015/v0.1.0.rst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../src/sort/sort_LeastFrequentlyUsed.vhdl" afterPath="$PROJECT_DIR$/../src/sort/sort_LeastFrequentlyUsed.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../docs/IPCores/arith/arith_firstone.rst" afterPath="$PROJECT_DIR$/../docs/IPCores/arith/arith_firstone.rst" />
+      <change beforePath="$PROJECT_DIR$/../lib/cocotb" afterPath="$PROJECT_DIR$/../lib/cocotb" />
+      <change beforePath="$PROJECT_DIR$/../lib/osvvm" afterPath="$PROJECT_DIR$/../lib/osvvm" />
+      <change beforePath="$PROJECT_DIR$/../lib/uvvm" afterPath="$PROJECT_DIR$/../lib/uvvm" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change beforePath="$PROJECT_DIR$/.idea/py.iml" afterPath="$PROJECT_DIR$/.idea/py.iml" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/PoC.py" afterPath="$PROJECT_DIR$/PoC.py" />
+      <change beforePath="$PROJECT_DIR$/Simulator/RivieraPROSimulator.py" afterPath="$PROJECT_DIR$/Simulator/RivieraPROSimulator.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/Aldec/ActiveHDL.py" afterPath="$PROJECT_DIR$/ToolChain/Aldec/ActiveHDL.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/Aldec/RivieraPRO.py" afterPath="$PROJECT_DIR$/ToolChain/Aldec/RivieraPRO.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/Altera/ModelSim.py" afterPath="$PROJECT_DIR$/ToolChain/Altera/ModelSim.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/Altera/Quartus.py" afterPath="$PROJECT_DIR$/ToolChain/Altera/Quartus.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/GTKWave.py" afterPath="$PROJECT_DIR$/ToolChain/GTKWave.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/Intel/ModelSim.py" afterPath="$PROJECT_DIR$/ToolChain/Intel/ModelSim.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/Intel/Quartus.py" afterPath="$PROJECT_DIR$/ToolChain/Intel/Quartus.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/Intel/__init__.py" afterPath="$PROJECT_DIR$/ToolChain/Intel/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py" afterPath="$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py" />
+      <change beforePath="$PROJECT_DIR$/ToolChain/__init__.py" afterPath="$PROJECT_DIR$/ToolChain/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/config.defaults.ini" afterPath="$PROJECT_DIR$/config.defaults.ini" />
+      <change beforePath="$PROJECT_DIR$/config.entity.ini" afterPath="$PROJECT_DIR$/config.entity.ini" />
+      <change beforePath="$PROJECT_DIR$/lib/Functions.py" afterPath="$PROJECT_DIR$/lib/Functions.py" />
+      <change beforePath="$PROJECT_DIR$/../sim/vSim.batch.tcl" afterPath="$PROJECT_DIR$/../sim/vSim.batch.tcl" />
+      <change beforePath="$PROJECT_DIR$/../src/arith/arith_firstone.vhdl" afterPath="$PROJECT_DIR$/../src/arith/arith_firstone.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/common/config.vhdl" afterPath="$PROJECT_DIR$/../src/common/config.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/common/utils.vhdl" afterPath="$PROJECT_DIR$/../src/common/utils.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/io/io_FanControl.vhdl" afterPath="$PROJECT_DIR$/../src/io/io_FanControl.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync.pkg.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync.pkg.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Bits.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Bits.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Bits_Altera.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Bits_Altera.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Bits_Xilinx.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Bits_Xilinx.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Command.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Command.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Pulse.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Pulse.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Pulse_Altera.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Pulse_Altera.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Pulse_Xilinx.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Pulse_Xilinx.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Reset.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Reset.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Reset_Altera.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Reset_Altera.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Reset_Xilinx.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Reset_Xilinx.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Strobe.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Strobe.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/misc/sync/sync_Vector.vhdl" afterPath="$PROJECT_DIR$/../src/misc/sync/sync_Vector.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/xil/xil.pkg.vhdl" afterPath="$PROJECT_DIR$/../src/xil/xil.pkg.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../src/xil/xil_SystemMonitor_Series7.vhdl" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/../src/xil/xil_SystemMonitor_Virtex6.vhdl" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/../tb/arith/arith_firstone_tb.vhdl" afterPath="$PROJECT_DIR$/../tb/arith/arith_firstone_tb.vhdl" />
+      <change beforePath="$PROJECT_DIR$/../tools/precompile/compile-altera.ps1" afterPath="$PROJECT_DIR$/../tools/precompile/compile-altera.ps1" />
+      <change beforePath="$PROJECT_DIR$/../tools/precompile/compile-lattice.ps1" afterPath="$PROJECT_DIR$/../tools/precompile/compile-lattice.ps1" />
+      <change beforePath="$PROJECT_DIR$/../tools/precompile/compile-osvvm.ps1" afterPath="$PROJECT_DIR$/../tools/precompile/compile-osvvm.ps1" />
+      <change beforePath="$PROJECT_DIR$/../tools/precompile/compile-uvvm.ps1" afterPath="$PROJECT_DIR$/../tools/precompile/compile-uvvm.ps1" />
+      <change beforePath="$PROJECT_DIR$/../tools/precompile/compile-uvvm.sh" afterPath="$PROJECT_DIR$/../tools/precompile/compile-uvvm.sh" />
+      <change beforePath="$PROJECT_DIR$/../tools/precompile/compile-xilinx-ise.ps1" afterPath="$PROJECT_DIR$/../tools/precompile/compile-xilinx-ise.ps1" />
+      <change beforePath="$PROJECT_DIR$/../tools/precompile/compile-xilinx-vivado.ps1" afterPath="$PROJECT_DIR$/../tools/precompile/compile-xilinx-vivado.ps1" />
+      <change beforePath="$PROJECT_DIR$/../tools/precompile/precompile.psm1" afterPath="$PROJECT_DIR$/../tools/precompile/precompile.psm1" />
+      <change beforePath="$PROJECT_DIR$/../ucf/KC705/GPIO.LED.xdc" afterPath="$PROJECT_DIR$/../ucf/KC705/GPIO.LED.xdc" />
     </list>
     <ignored path="py.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -18,42 +67,35 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/py$__dryrun_rpro_PoC_arith_prng.coverage" NAME="--dryrun rpro PoC.arith.prng Coverage Results" MODIFIED="1485906206398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../temp" />
-    <SUITE FILE_PATH="coverage/py$ghdl_PoC_arith_prng.coverage" NAME="ghdl PoC.arith.prng Coverage Results" MODIFIED="1487189841604" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../temp" />
     <SUITE FILE_PATH="coverage/py$configure_git.coverage" NAME="configure git Coverage Results" MODIFIED="1487212164330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
+    <SUITE FILE_PATH="coverage/py$__dryrun_rpro_PoC_arith_prng.coverage" NAME="--dryrun rpro PoC.arith.prng Coverage Results" MODIFIED="1485906206398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../temp" />
+    <SUITE FILE_PATH="coverage/py$configure_intel.coverage" NAME="configure intel Coverage Results" MODIFIED="1497126166232" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
+    <SUITE FILE_PATH="coverage/py$ghdl_PoC_arith_prng.coverage" NAME="ghdl PoC.arith.prng Coverage Results" MODIFIED="1487189841604" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../temp" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
   <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
     <option name="GROUP_SCHEMA" value="true" />
     <option name="GROUP_CONTENTS" value="false" />
     <option name="SORT_POSITIONED" value="false" />
     <option name="SHOW_TABLE_DETAILS" value="true" />
     <option name="SHOW_EMPTY_GROUPS" value="false" />
     <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand />
+    <select />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="py" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ModelSim.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ToolChain/Altera/ModelSim.py">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="675">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChain/Aldec/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="95" column="11" lean-forward="true" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.private.ini" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.private.ini">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="243" column="0" lean-forward="false" selection-start-line="243" selection-start-column="0" selection-end-line="243" selection-end-column="0" />
+            <state relative-caret-position="1480">
+              <caret line="41" column="48" lean-forward="false" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -62,48 +104,78 @@
       <file leaf-file-name="PoC.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PoC.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="976" column="0" lean-forward="false" selection-start-line="976" selection-start-column="0" selection-end-line="976" selection-end-column="0" />
+            <state relative-caret-position="41366">
+              <caret line="1126" column="28" lean-forward="false" selection-start-line="1126" selection-start-column="28" selection-end-line="1126" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ArgParseAttributes.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/pyAttribute/ArgParseAttributes.py">
+      <file leaf-file-name="RivieraPROSimulator.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Simulator/RivieraPROSimulator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="186" column="0" lean-forward="false" selection-start-line="186" selection-start-column="0" selection-end-line="186" selection-end-column="0" />
+            <state relative-caret-position="1665">
+              <caret line="52" column="8" lean-forward="false" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GNU.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ToolChain/GNU.py">
+      <file leaf-file-name="QuestaSimulator.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Simulator/QuestaSimulator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="225" column="29" lean-forward="false" selection-start-line="225" selection-start-column="29" selection-end-line="225" selection-end-column="29" />
+            <state relative-caret-position="1554">
+              <caret line="50" column="64" lean-forward="false" selection-start-line="50" selection-start-column="64" selection-end-line="50" selection-end-column="64" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GHDLSimulator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py">
+      <file leaf-file-name="ActiveHDL.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChain/Aldec/ActiveHDL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="187" column="4" lean-forward="true" selection-start-line="187" selection-start-column="4" selection-end-line="187" selection-end-column="4" />
+            <state relative-caret-position="18056">
+              <caret line="501" column="26" lean-forward="false" selection-start-line="501" selection-start-column="26" selection-end-line="501" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Git.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ToolChain/Git.py">
+      <file leaf-file-name="RivieraPRO.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ToolChain/Aldec/RivieraPRO.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="146" column="0" lean-forward="true" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+            <state relative-caret-position="13468">
+              <caret line="375" column="29" lean-forward="false" selection-start-line="375" selection-start-column="29" selection-end-line="375" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/SphinxExtensions/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1295">
+              <caret line="35" column="29" lean-forward="false" selection-start-line="35" selection-start-column="6" selection-end-line="35" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Decorators.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/Decorators.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1850">
+              <caret line="52" column="28" lean-forward="false" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Functions.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/Functions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5809">
+              <caret line="159" column="14" lean-forward="false" selection-start-line="159" selection-start-column="14" selection-end-line="159" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -112,35 +184,8 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Simulator/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="176" column="0" lean-forward="false" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
-              <folding>
-                <element signature="e#2164#2271#2" expanded="true" />
-                <element signature="e#2348#2444#2" expanded="true" />
-                <element signature="e#2520#2639#2" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ToolChain/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="175" column="9" lean-forward="false" selection-start-line="175" selection-start-column="9" selection-end-line="175" selection-end-column="9" />
-              <folding>
-                <element signature="e#2110#2207#2" expanded="true" />
-                <element signature="e#2260#2360#2" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Executable.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Base/Executable.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1418">
-              <caret line="599" column="10" lean-forward="false" selection-start-line="599" selection-start-column="10" selection-end-line="599" selection-end-column="10" />
+            <state relative-caret-position="3441">
+              <caret line="107" column="17" lean-forward="false" selection-start-line="107" selection-start-column="17" selection-end-line="107" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -157,35 +202,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>if self._logger is not None:</find>
-      <find>, *args, **kwargs</find>
-      <find>modelsimi</find>
+      <find>se</find>
+      <find>set-def</find>
+      <find>set-de</find>
+      <find>set-d</find>
+      <find>set-</find>
+      <find>set</find>
+      <find>configure</find>
+      <find>In</find>
+      <find>INSTAL</find>
+      <find>INSTALL.Inte</find>
+      <find>INSTALL.Intel</find>
+      <find>INSTALL.Intel.</find>
+      <find>INSTALL.Intel.Quar</find>
+      <find>INSTALL.Intel.Quart</find>
+      <find>INSTALL.Intel.Quartus</find>
       <find>modelsim</find>
-      <find>ModelS</find>
-      <find>\{type</find>
-      <find>ModelSimPE</find>
-      <find>iic</find>
-      <find>ModelSim</find>
-      <find>invok</find>
-      <find>ISE</find>
-      <find>re.</find>
-      <find>QuestaSimFiles</find>
-      <find>stat</find>
-      <find>sys</find>
-      <find>C:</find>
-      <find>/</find>
-      <find>platform</find>
-      <find>rpro</find>
-      <find>.rst-content .secti</find>
-      <find>li</find>
-      <find>`</find>
-      <find>Modelsim ini file</find>
-      <find>-C</find>
-      <find>cov</find>
-      <find>wave</find>
-      <find>-L</find>
-      <find>_ExtractSimulationSteps</find>
-      <find>self._host.PoCConfig[self._section]</find>
+      <find>modelsim intel ed</find>
+      <find>modelsim intel edi</find>
+      <find>&quot;</find>
+      <find>&quot;&quot;&quot;</find>
+      <find>DocumentMemberAttribute</find>
+      <find>r</find>
+      <find>refle</find>
+      <find>ref</find>
+      <find>t</find>
+      <find>type</find>
+      <find>m</find>
+      <find>metho</find>
+      <find>method</find>
+      <find>Mentor</find>
     </findStrings>
     <replaceStrings>
       <replace>if ((self._logger is not None) and condition):</replace>
@@ -193,6 +239,9 @@
       <replace>ModelSimFiles</replace>
       <replace>/opt</replace>
       <replace>gitSection</replace>
+      <replace>Quartus</replace>
+      <replace>Intel</replace>
+      <replace>Aldec</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -201,32 +250,21 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ToolChains/Xilinx/Vivado.py" />
-        <option value="$PROJECT_DIR$/ToolChains/Xilinx/ISE.py" />
-        <option value="$PROJECT_DIR$/.publish" />
-        <option value="$PROJECT_DIR$/Wrapper/Lattice.Diamond.sh" />
-        <option value="$PROJECT_DIR$/Wrapper/Lattice.Diamond.psm1" />
-        <option value="$PROJECT_DIR$/Compiler/XSTCompiler.py" />
         <option value="$PROJECT_DIR$/Compiler/VivadoCompiler.py" />
         <option value="$PROJECT_DIR$/Compiler/LSECompiler.py" />
         <option value="$PROJECT_DIR$/ToolChain/Windows.py" />
-        <option value="$PROJECT_DIR$/ToolChain/GTKWave.py" />
         <option value="$PROJECT_DIR$/DataBase/Entity.py" />
         <option value="$PROJECT_DIR$/Simulator/ISESimulator.py" />
         <option value="$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py" />
         <option value="$PROJECT_DIR$/Simulator/VivadoSimulator.py" />
         <option value="$PROJECT_DIR$/ToolChain/Xilinx/ISE.py" />
         <option value="$PROJECT_DIR$/ToolChain/Xilinx/Vivado.py" />
-        <option value="$PROJECT_DIR$/lib/Functions.py" />
         <option value="$PROJECT_DIR$/../tools/AppVeyor/config.private.ini" />
         <option value="$PROJECT_DIR$/../tools/Travis-CI/config.private.ini" />
-        <option value="$PROJECT_DIR$/ToolChain/Aldec/RivieraPRO.py" />
         <option value="$PROJECT_DIR$/Simulator/.publish" />
         <option value="$PROJECT_DIR$/../docs/_themes/sphinx_rtd_theme/sphinx_rtd_theme/static/css/theme.css" />
         <option value="$PROJECT_DIR$/../docs/_build/html/_static/css/custom.css" />
         <option value="$PROJECT_DIR$/../docs/_build/html/_static/css/theme.css" />
-        <option value="$PROJECT_DIR$/ToolChain/Aldec/ActiveHDL.py" />
-        <option value="$PROJECT_DIR$/Simulator/RivieraPROSimulator.py" />
         <option value="$PROJECT_DIR$/Base/Shared.py" />
         <option value="$PROJECT_DIR$/Compiler/XCICompiler.py" />
         <option value="$PROJECT_DIR$/Compiler/XCOCompiler.py" />
@@ -238,20 +276,31 @@
         <option value="$PROJECT_DIR$/args.py" />
         <option value="$PROJECT_DIR$/Simulator/QuestaSimulator.py" />
         <option value="$PROJECT_DIR$/Base/Executable.py" />
-        <option value="$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py" />
         <option value="$PROJECT_DIR$/Simulator/ModelSimSimulator.py" />
         <option value="$PROJECT_DIR$/config.boards.ini" />
-        <option value="$PROJECT_DIR$/ToolChain/Intel/ModelSim.py" />
-        <option value="$PROJECT_DIR$/ToolChain/Altera/ModelSim.py" />
         <option value="$PROJECT_DIR$/private.ini" />
-        <option value="$PROJECT_DIR$/ToolChain/__init__.py" />
         <option value="$PROJECT_DIR$/ToolChain/GHDL.py" />
         <option value="$PROJECT_DIR$/Simulator/__init__.py" />
-        <option value="$PROJECT_DIR$/PoC.py" />
         <option value="$PROJECT_DIR$/ToolChain/GNU.py" />
         <option value="$PROJECT_DIR$/Simulator/GHDLSimulator.py" />
-        <option value="$PROJECT_DIR$/config.private.ini" />
         <option value="$PROJECT_DIR$/ToolChain/Git.py" />
+        <option value="$PROJECT_DIR$/ToolChain/Altera/ModelSim.py" />
+        <option value="$PROJECT_DIR$/ToolChain/Intel/Quartus.py" />
+        <option value="$PROJECT_DIR$/ToolChain/Altera/Quartus.py" />
+        <option value="$PROJECT_DIR$/ToolChain/Intel/__init__.py" />
+        <option value="$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py" />
+        <option value="$PROJECT_DIR$/lib/Functions.py" />
+        <option value="$PROJECT_DIR$/ToolChain/GTKWave.py" />
+        <option value="$PROJECT_DIR$/ToolChain/Intel/ModelSim.py" />
+        <option value="$PROJECT_DIR$/ToolChain/__init__.py" />
+        <option value="$PROJECT_DIR$/config.private.old.ini" />
+        <option value="$PROJECT_DIR$/config.private.ini" />
+        <option value="$PROJECT_DIR$/config.entity.ini" />
+        <option value="$PROJECT_DIR$/config.defaults.ini" />
+        <option value="$PROJECT_DIR$/PoC.py" />
+        <option value="$PROJECT_DIR$/ToolChain/Aldec/ActiveHDL.py" />
+        <option value="$PROJECT_DIR$/ToolChain/Aldec/RivieraPRO.py" />
+        <option value="$PROJECT_DIR$/Simulator/RivieraPROSimulator.py" />
       </list>
     </option>
   </component>
@@ -261,11 +310,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1034" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="807" />
+    <option name="y" value="269" />
+    <option name="width" value="2588" />
+    <option name="height" value="1418" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -280,7 +329,7 @@
         </expanded-state>
         <selected-state>
           <State>
-            <id>PyPep8Inspection</id>
+            <id>PyPep8NamingInspection</id>
           </State>
         </selected-state>
       </profile-state>
@@ -302,72 +351,24 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ToolChain" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ToolChain" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Mentor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
+          <expand>
+            <path>
+              <item name="py" type="b2602c69:ProjectViewProjectNode" />
+              <item name="py" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="py">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tools/AppVeyor/config.private.ini" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../lib/vunit" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="233" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="239" />
@@ -388,32 +389,64 @@
     <property name="js.eslint.eslintPackage" value="" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\git\PoC\py\ToolChains" />
-      <recent name="D:\git\PoC\py\Simulator" />
-      <recent name="G:\git\PoC\py\ToolChains\Lattice" />
-      <recent name="G:\git\PoC\py\Compiler" />
-      <recent name="G:\git\PoC\py\Parser" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="G:\git\PoC\py" />
-      <recent name="G:\git\PoC\py\lib" />
-      <recent name="D:\git\PoC\py\Base" />
-      <recent name="G:\git\PoC\py\Base" />
-      <recent name="G:\git\PoC\py\PoC" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\lib" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\Base" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\Base" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\PoC" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\Wrapper" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\ToolChains" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\Simulator" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\ToolChains\Lattice" />
+      <recent name="C:\git\GitHub\Paebbels\PoC\py\Compiler" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.configure git">
-    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.configure intel">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="INTERPRETER_PATH" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="0" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
-      <module name="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
       <envs />
-      <method />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <module name="py" />
     </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -433,6 +466,13 @@
       <option name="CUSTOM_SETTINGS" value="false" />
       <option name="USE_OPTIONS" value="false" />
       <option name="OPTIONS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
+      <node-interpreter value="project" />
+      <working-dir value="" />
+      <envs />
+      <scope-kind value="ALL" />
       <method />
     </configuration>
     <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
@@ -472,25 +512,22 @@
       <option name="ADDITIONAL_ARGS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
       <method />
     </configuration>
-    <configuration default="true" type="Tox" factoryName="Tox">
+    <configuration default="true" type="tests" factoryName="Nosetests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
@@ -499,24 +536,45 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <module name="py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
-    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
       <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
-    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
-      <command value="run" />
-      <scripts />
-      <node-interpreter value="project" />
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
       <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Attests">
@@ -557,585 +615,34 @@
       <option name="TEST_TYPE" value="TEST_SCRIPT" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
-      <method />
     </configuration>
-    <configuration default="true" type="tests" factoryName="Nosetests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Unittests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="py.test">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="testToRun" value="" />
-      <option name="keywords" value="" />
-      <option name="params" value="" />
-      <option name="USE_PARAM" value="false" />
-      <option name="USE_KEYWORD" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="configure" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: configure">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d configure" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="configure git" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: configure">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d configure git" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="configure altera" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: configure">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d configure altera" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="configure lattice" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: configure">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d configure lattice" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="configure mentor.modelsim" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: configure">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d configure mentor.modelsim" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="configure ghdl" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: configure">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d configure ghdl" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="configure --set-default-tools" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: configure">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d configure --set-default-tools" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="query Xilinx.ISE:SettingsFile" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: query">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="query Xilinx.ISE:SettingsFile" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="list-netlist PoC.*" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: list-***">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d list-netlist PoC.*" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="list-testbench PoC.*" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: list-***">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d list-testbench PoC.*" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="list-testbench PoC.sort.? --kind=cocotb" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: list-***">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d list-testbench PoC.sort.? --kind=cocotb" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="asim PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: asim">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d asim PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="rpro PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: rpro">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d rpro PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="--dryrun rpro PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: rpro">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="--dryrun rpro PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="ghdl PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: ghdl">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d ghdl PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="--dryrun ghdl PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: ghdl">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="--dryrun ghdl PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="isim PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: isim">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-        <env name="XILINX" value="C:\Xilinx\14.7\ISE_DS\ISE" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d isim PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="--dryrun isim PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: isim">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-        <env name="XILINX" value="C:\Xilinx\14.7\ISE_DS\ISE" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="--dryrun isim PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="xsim PoC.arith.prng --std=08" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: xsim">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-        <env name="XILINX_VIVADO" value="C:\Xilinx\Vivado\2016.1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d xsim PoC.arith.prng --std=08" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="--dryrun xsim PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: xsim">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-        <env name="XILINX_VIVADO" value="C:\Xilinx\Vivado\2016.1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="--dryrun xsim PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="lse PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: lse">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d lse PoC.arith.prng --board=ECP5Versa" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="quartus PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: quartus">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d quartus PoC.arith.prng --board=DE4" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="xst PoC.cache.par" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: xst">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-        <env name="XILINX" value="C:\Xilinx\14.7\ISE_DS\ISE" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d xst PoC.cache.par --board=KC705" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="vsim PoC.arith.prng" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: vsim">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\poc" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d vsim PoC.arith.prng" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="coregen PoC.xil.mig.Atlys_1x128" type="PythonConfigurationType" factoryName="Python" folderName="Patrick: coregen">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="0" />
-        <env name="PoCRootDirectory" value="D:\git\PoC" />
-        <env name="XILINX" value="C:\Xilinx\14.7\ISE_DS\ISE" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python 3.6\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../temp" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PoC.py" />
-      <option name="PARAMETERS" value="-d coregen PoC.xil.mig.Atlys_1x128 --board=Atlys" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <list size="25">
-      <item index="0" class="java.lang.String" itemvalue="Python.configure" />
-      <item index="1" class="java.lang.String" itemvalue="Python.configure git" />
-      <item index="2" class="java.lang.String" itemvalue="Python.configure altera" />
-      <item index="3" class="java.lang.String" itemvalue="Python.configure lattice" />
-      <item index="4" class="java.lang.String" itemvalue="Python.configure mentor.modelsim" />
-      <item index="5" class="java.lang.String" itemvalue="Python.configure ghdl" />
-      <item index="6" class="java.lang.String" itemvalue="Python.configure --set-default-tools" />
-      <item index="7" class="java.lang.String" itemvalue="Python.query Xilinx.ISE:SettingsFile" />
-      <item index="8" class="java.lang.String" itemvalue="Python.list-netlist PoC.*" />
-      <item index="9" class="java.lang.String" itemvalue="Python.list-testbench PoC.*" />
-      <item index="10" class="java.lang.String" itemvalue="Python.list-testbench PoC.sort.? --kind=cocotb" />
-      <item index="11" class="java.lang.String" itemvalue="Python.asim PoC.arith.prng" />
-      <item index="12" class="java.lang.String" itemvalue="Python.rpro PoC.arith.prng" />
-      <item index="13" class="java.lang.String" itemvalue="Python.--dryrun rpro PoC.arith.prng" />
-      <item index="14" class="java.lang.String" itemvalue="Python.ghdl PoC.arith.prng" />
-      <item index="15" class="java.lang.String" itemvalue="Python.--dryrun ghdl PoC.arith.prng" />
-      <item index="16" class="java.lang.String" itemvalue="Python.isim PoC.arith.prng" />
-      <item index="17" class="java.lang.String" itemvalue="Python.--dryrun isim PoC.arith.prng" />
-      <item index="18" class="java.lang.String" itemvalue="Python.xsim PoC.arith.prng --std=08" />
-      <item index="19" class="java.lang.String" itemvalue="Python.--dryrun xsim PoC.arith.prng" />
-      <item index="20" class="java.lang.String" itemvalue="Python.lse PoC.arith.prng" />
-      <item index="21" class="java.lang.String" itemvalue="Python.quartus PoC.arith.prng" />
-      <item index="22" class="java.lang.String" itemvalue="Python.xst PoC.cache.par" />
-      <item index="23" class="java.lang.String" itemvalue="Python.vsim PoC.arith.prng" />
-      <item index="24" class="java.lang.String" itemvalue="Python.coregen PoC.xil.mig.Atlys_1x128" />
+    <list size="26">
+      <item index="0" class="java.lang.String" itemvalue="Python.asim PoC.arith.prng" />
+      <item index="1" class="java.lang.String" itemvalue="Python.configure" />
+      <item index="2" class="java.lang.String" itemvalue="Python.configure git" />
+      <item index="3" class="java.lang.String" itemvalue="Python.configure altera" />
+      <item index="4" class="java.lang.String" itemvalue="Python.configure lattice" />
+      <item index="5" class="java.lang.String" itemvalue="Python.configure mentor.modelsim" />
+      <item index="6" class="java.lang.String" itemvalue="Python.configure ghdl" />
+      <item index="7" class="java.lang.String" itemvalue="Python.configure --set-default-tools" />
+      <item index="8" class="java.lang.String" itemvalue="Python.configure intel" />
+      <item index="9" class="java.lang.String" itemvalue="Python.coregen PoC.xil.mig.Atlys_1x128" />
+      <item index="10" class="java.lang.String" itemvalue="Python.ghdl PoC.arith.prng" />
+      <item index="11" class="java.lang.String" itemvalue="Python.--dryrun ghdl PoC.arith.prng" />
+      <item index="12" class="java.lang.String" itemvalue="Python.isim PoC.arith.prng" />
+      <item index="13" class="java.lang.String" itemvalue="Python.--dryrun isim PoC.arith.prng" />
+      <item index="14" class="java.lang.String" itemvalue="Python.list-netlist PoC.*" />
+      <item index="15" class="java.lang.String" itemvalue="Python.list-testbench PoC.*" />
+      <item index="16" class="java.lang.String" itemvalue="Python.list-testbench PoC.sort.? --kind=cocotb" />
+      <item index="17" class="java.lang.String" itemvalue="Python.lse PoC.arith.prng" />
+      <item index="18" class="java.lang.String" itemvalue="Python.quartus PoC.arith.prng" />
+      <item index="19" class="java.lang.String" itemvalue="Python.query Xilinx.ISE:SettingsFile" />
+      <item index="20" class="java.lang.String" itemvalue="Python.rpro PoC.arith.prng" />
+      <item index="21" class="java.lang.String" itemvalue="Python.--dryrun rpro PoC.arith.prng" />
+      <item index="22" class="java.lang.String" itemvalue="Python.vsim PoC.arith.prng" />
+      <item index="23" class="java.lang.String" itemvalue="Python.xsim PoC.arith.prng --std=08" />
+      <item index="24" class="java.lang.String" itemvalue="Python.--dryrun xsim PoC.arith.prng" />
+      <item index="25" class="java.lang.String" itemvalue="Python.xst PoC.cache.par" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
@@ -1157,7 +664,6 @@
   <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
-      <todo-filter name="Question" />
       <is-preview-enabled value="true" />
     </todo-panel>
     <todo-panel id="all">
@@ -1167,21 +673,18 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1034" extended-state="7" />
-    <editor active="true" />
+    <frame x="-14" y="-14" width="3868" height="2006" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19296375" sideWeight="0.48669624" order="0" side_tool="false" content_ui="combo" x="778" y="490" width="124" height="255" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11953125" sideWeight="0.48669624" order="0" side_tool="false" content_ui="combo" x="778" y="490" width="124" height="255" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32815966" sideWeight="0.49758744" order="6" side_tool="false" content_ui="tabs" x="-1206" y="358" width="1898" height="296" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32594234" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3736142" sideWeight="0.49367756" order="1" side_tool="false" content_ui="tabs" x="131" y="418" width="1898" height="200" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32705098" sideWeight="0.49758744" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32705098" sideWeight="0.49276236" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3257979" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32594234" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16897655" sideWeight="0.49177632" order="3" side_tool="false" content_ui="tabs" x="803" y="490" width="74" height="40" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="1.0" sideWeight="0.49758744" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32705098" sideWeight="0.49276236" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.146875" sideWeight="0.49177632" order="3" side_tool="false" content_ui="tabs" x="803" y="490" width="74" height="40" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32815966" sideWeight="0.49758744" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5282392" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1920" y="0" width="1920" height="1018" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16965227" sideWeight="0.51330376" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5288248" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1920" y="0" width="1920" height="1018" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1189,11 +692,37 @@
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16897655" sideWeight="0.5082237" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3736142" sideWeight="0.49367756" order="1" side_tool="false" content_ui="tabs" x="131" y="418" width="1898" height="200" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32815966" sideWeight="0.49758744" order="6" side_tool="false" content_ui="tabs" x="-1206" y="358" width="1898" height="296" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3257979" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39977852" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32705098" sideWeight="0.49758744" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32705098" sideWeight="0.49276236" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32594234" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16897655" sideWeight="0.5082237" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32815966" sideWeight="0.49758744" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11965812" sideWeight="0.48669624" order="0" side_tool="false" content_ui="combo" x="778" y="490" width="124" height="255" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3736142" sideWeight="0.49367756" order="1" side_tool="false" content_ui="tabs" x="131" y="418" width="1898" height="200" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14690171" sideWeight="0.49177632" order="3" side_tool="false" content_ui="tabs" x="803" y="490" width="74" height="40" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16965227" sideWeight="0.51330376" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5282392" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1920" y="0" width="1920" height="1018" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="processedProjectFiles" value="true" />
+    <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -1206,6 +735,14 @@
               </option>
               <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
                 <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
               </option>
             </State>
           </value>
@@ -1232,6 +769,11 @@
           <line>317</line>
           <option name="timeStamp" value="128" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ToolChain/Intel/ModelSim.py</url>
+          <line>93</line>
+          <option name="timeStamp" value="140" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog>
@@ -1240,7 +782,7 @@
           </selected-grouping-rules>
         </breakpoints-dialog>
       </breakpoints-dialog>
-      <option name="time" value="140" />
+      <option name="time" value="141" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1250,118 +792,8 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Simulator/RivieraPROSimulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="88" column="49" lean-forward="true" selection-start-line="88" selection-start-column="49" selection-end-line="88" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Decorators.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="75" column="6" lean-forward="false" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Xilinx/ISE.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="131" column="14" lean-forward="false" selection-start-line="131" selection-start-column="14" selection-end-line="131" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Simulator/ISESimulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="101" column="77" lean-forward="false" selection-start-line="101" selection-start-column="77" selection-end-line="101" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Base/Shared.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="59" column="12" lean-forward="true" selection-start-line="59" selection-start-column="12" selection-end-line="59" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/Python 3.5/Lib/shutil.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="220" column="4" lean-forward="false" selection-start-line="220" selection-start-column="4" selection-end-line="220" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Compiler/XCICompiler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="207" column="52" lean-forward="false" selection-start-line="207" selection-start-column="52" selection-end-line="207" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Compiler/XCOCompiler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="209" column="52" lean-forward="false" selection-start-line="209" selection-start-column="52" selection-end-line="209" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataBase/TestCase.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
-          <caret line="270" column="30" lean-forward="false" selection-start-line="270" selection-start-column="30" selection-end-line="270" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Parser/VHDLParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="226" column="21" lean-forward="false" selection-start-line="226" selection-start-column="21" selection-end-line="226" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/ExtendedConfigParser/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="227" column="17" lean-forward="false" selection-start-line="227" selection-start-column="17" selection-end-line="227" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Altera/Quartus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="340" column="6" lean-forward="false" selection-start-line="340" selection-start-column="6" selection-end-line="340" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/CodeDOM.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="76" column="12" lean-forward="false" selection-start-line="76" selection-start-column="12" selection-end-line="76" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/args.py" />
-    <entry file="file://$PROJECT_DIR$/arg.py" />
-    <entry file="file://$PROJECT_DIR$/TODO.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="0">
-            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/deco1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-749">
-          <caret line="10" column="20" lean-forward="true" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.md" />
+    <entry file="file://$PROJECT_DIR$/deco1.py" />
     <entry file="file://$PROJECT_DIR$/Simulator/ActiveHDLSimulator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -1380,7 +812,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5576">
           <caret line="328" column="30" lean-forward="false" selection-start-line="328" selection-start-column="30" selection-end-line="328" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1388,7 +819,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3434">
           <caret line="202" column="20" lean-forward="false" selection-start-line="202" selection-start-column="20" selection-end-line="202" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1406,49 +836,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Simulator/QuestaSimulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="50" column="64" lean-forward="false" selection-start-line="50" selection-start-column="64" selection-end-line="50" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="uml://Python/PoC.PileOfCores">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>Python</ID>
-          <OriginalElement>PoC.PileOfCores</OriginalElement>
-          <nodes>
-            <node x="" y="">_collections_abc.Hashable</node>
-            <node x="" y="">Base.Logging.ILogable</node>
-            <node x="" y="">lib.pyAttribute.AttributeHelperMixin</node>
-            <node x="" y="">object</node>
-            <node x="" y="">lib.pyAttribute.ArgParseAttributes.ArgParseMixin</node>
-            <node x="" y="">PoC.PileOfCores</node>
-          </nodes>
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="1.0" x="214.0" y="173.0" />
-          <SelectedNodes />
-          <Categories />
-          <SCOPE>All</SCOPE>
-        </state>
-      </provider>
-    </entry>
+    <entry file="uml://Python/PoC.PileOfCores" />
     <entry file="file://$PROJECT_DIR$/config.boards.ini">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="53" column="26" lean-forward="true" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.defaults.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="619">
-          <caret line="313" column="13" lean-forward="false" selection-start-line="313" selection-start-column="13" selection-end-line="313" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1456,7 +848,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="136" column="10" lean-forward="false" selection-start-line="136" selection-start-column="10" selection-end-line="136" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1464,15 +855,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="364">
           <caret line="139" column="43" lean-forward="true" selection-start-line="139" selection-start-column="43" selection-end-line="139" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.entity.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="1170" column="21" lean-forward="true" selection-start-line="1170" selection-start-column="21" selection-end-line="1170" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1480,173 +862,240 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="954">
           <caret line="366" column="18" lean-forward="true" selection-start-line="366" selection-start-column="18" selection-end-line="366" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Intel/ModelSim.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1054">
-          <caret line="62" column="62" lean-forward="false" selection-start-line="62" selection-start-column="62" selection-end-line="62" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Mentor/PrecisionRTL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="35" column="12" lean-forward="true" selection-start-line="35" selection-start-column="12" selection-end-line="35" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Mentor/.publish">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.private.2017.02.11-03.07.54.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.private.2017.02.11-03.07.33.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/private.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="35" lean-forward="false" selection-start-line="2" selection-start-column="35" selection-end-line="2" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6135">
-          <caret line="119" column="36" lean-forward="true" selection-start-line="119" selection-start-column="36" selection-end-line="119" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Mentor/PrecisionRTL.py" />
+    <entry file="file://$PROJECT_DIR$/ToolChain/Mentor/.publish" />
+    <entry file="file://$PROJECT_DIR$/config.private.2017.02.11-03.07.54.ini" />
+    <entry file="file://$PROJECT_DIR$/config.private.2017.02.11-03.07.33.ini" />
+    <entry file="file://$PROJECT_DIR$/private.ini" />
     <entry file="file://$PROJECT_DIR$/Simulator/ModelSimSimulator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="580">
           <caret line="101" column="60" lean-forward="true" selection-start-line="88" selection-start-column="2" selection-end-line="101" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Altera/ModelSim.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="95" column="11" lean-forward="true" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/GHDL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="279" column="45" lean-forward="false" selection-start-line="279" selection-start-column="45" selection-end-line="279" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="52" lean-forward="false" selection-start-line="0" selection-start-column="52" selection-end-line="0" selection-end-column="52" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Base/Executable.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1418">
+        <state relative-caret-position="10183">
           <caret line="599" column="10" lean-forward="false" selection-start-line="599" selection-start-column="10" selection-end-line="599" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ToolChain/GNU.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
+        <state relative-caret-position="3825">
           <caret line="225" column="29" lean-forward="false" selection-start-line="225" selection-start-column="29" selection-end-line="225" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/pyAttribute/ArgParseAttributes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
+        <state relative-caret-position="3162">
           <caret line="186" column="0" lean-forward="false" selection-start-line="186" selection-start-column="0" selection-end-line="186" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PoC.py">
+    <entry file="file://$PROJECT_DIR$/ToolChain/Git.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="976" column="0" lean-forward="false" selection-start-line="976" selection-start-column="0" selection-end-line="976" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="85">
+          <caret line="53" column="17" lean-forward="true" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Simulator/__init__.py">
+    <entry file="file://$PROJECT_DIR$/ToolChain/Altera/ModelSim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="176" column="0" lean-forward="false" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
-          <folding>
-            <element signature="e#2164#2271#2" expanded="true" />
-            <element signature="e#2348#2444#2" expanded="true" />
-            <element signature="e#2520#2639#2" expanded="true" />
-          </folding>
+        <state relative-caret-position="1406">
+          <caret line="45" column="37" lean-forward="false" selection-start-line="43" selection-start-column="18" selection-end-line="45" selection-end-column="37" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py">
+    <entry file="file://$PROJECT_DIR$/ToolChain/Mentor/ModelSim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="187" column="4" lean-forward="true" selection-start-line="187" selection-start-column="4" selection-end-line="187" selection-end-column="4" />
+        <state relative-caret-position="2627">
+          <caret line="87" column="28" lean-forward="false" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.private.ini" />
+    <entry file="file://$PROJECT_DIR$/ToolChain/GTKWave.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="817">
+          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Intel/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1480">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Altera/Quartus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2960">
+          <caret line="91" column="14" lean-forward="false" selection-start-line="91" selection-start-column="14" selection-end-line="91" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27306">
+          <caret line="746" column="38" lean-forward="false" selection-start-line="746" selection-start-column="38" selection-end-line="746" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Intel/Quartus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5180">
+          <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.private.old.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5069">
+          <caret line="137" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Intel/ModelSim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="116" column="65" lean-forward="false" selection-start-line="116" selection-start-column="64" selection-end-line="116" selection-end-column="65" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config.private.ini">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="243" column="0" lean-forward="false" selection-start-line="243" selection-start-column="0" selection-end-line="243" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/GHDLSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="156" column="78" lean-forward="false" selection-start-line="156" selection-start-column="78" selection-end-line="156" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/VivadoSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Compiler/XSTCompiler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="50" column="22" lean-forward="false" selection-start-line="50" selection-start-column="22" selection-end-line="50" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/GHDL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8892">
+          <caret line="259" column="51" lean-forward="false" selection-start-line="259" selection-start-column="51" selection-end-line="259" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.entity.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3672">
+          <caret line="102" column="45" lean-forward="false" selection-start-line="102" selection-start-column="45" selection-end-line="102" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.defaults.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6048">
+          <caret line="168" column="0" lean-forward="false" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.private.2017.06.26-11.36.39.ini" />
+    <entry file="file://$PROJECT_DIR$/Simulator/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3441">
+          <caret line="107" column="17" lean-forward="false" selection-start-line="107" selection-start-column="17" selection-end-line="107" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/__init__.py">
+    <entry file="file://$PROJECT_DIR$/lib/Functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="175" column="9" lean-forward="false" selection-start-line="175" selection-start-column="9" selection-end-line="175" selection-end-column="9" />
-          <folding>
-            <element signature="e#2110#2207#2" expanded="true" />
-            <element signature="e#2260#2360#2" expanded="true" />
-          </folding>
+        <state relative-caret-position="5809">
+          <caret line="159" column="14" lean-forward="false" selection-start-line="159" selection-start-column="14" selection-end-line="159" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ToolChain/Git.py">
+    <entry file="file://$PROJECT_DIR$/lib/Decorators.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="146" column="0" lean-forward="true" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+        <state relative-caret-position="1850">
+          <caret line="52" column="28" lean-forward="false" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SphinxExtensions/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1295">
+          <caret line="35" column="29" lean-forward="false" selection-start-line="35" selection-start-column="6" selection-end-line="35" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Aldec/RivieraPRO.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13468">
+          <caret line="375" column="29" lean-forward="false" selection-start-line="375" selection-start-column="29" selection-end-line="375" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Aldec/ActiveHDL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18056">
+          <caret line="501" column="26" lean-forward="false" selection-start-line="501" selection-start-column="26" selection-end-line="501" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/QuestaSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1554">
+          <caret line="50" column="64" lean-forward="false" selection-start-line="50" selection-start-column="64" selection-end-line="50" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PoC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="41366">
+          <caret line="1126" column="28" lean-forward="false" selection-start-line="1126" selection-start-column="28" selection-end-line="1126" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ToolChain/Aldec/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1480">
+          <caret line="41" column="48" lean-forward="false" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Simulator/RivieraPROSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1665">
+          <caret line="52" column="8" lean-forward="false" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
           <folding />
         </state>
       </provider>

@@ -41,13 +41,13 @@
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
---										 Chair of VLSI-Design, Diagnostics and Architecture
+--                     Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
 --
---		http://www.apache.org/licenses/LICENSE-2.0
+--    http://www.apache.org/licenses/LICENSE-2.0
 --
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
@@ -56,46 +56,46 @@
 -- limitations under the License.
 -- =============================================================================
 
-library	IEEE;
-use			IEEE.STD_LOGIC_1164.all;
+library IEEE;
+use     IEEE.STD_LOGIC_1164.all;
 
-library	PoC;
-use			PoC.config.all;
-use			PoC.utils.all;
-use			PoC.sync.all;
+library PoC;
+use     PoC.config.all;
+use     PoC.utils.all;
+use     PoC.sync.all;
 
 
 entity sync_Pulse is
-  generic (
-	  BITS					: positive						:= 1;									-- number of bit to be synchronized
-		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
+	generic (
+		BITS          : positive            := 1;                       -- number of bit to be synchronized
+		SYNC_DEPTH    : T_MISC_SYNC_DEPTH   := T_MISC_SYNC_DEPTH'low    -- generate SYNC_DEPTH many stages, at least 2
 	);
-  port (
-		Clock					: in	std_logic;														-- <Clock>	output clock domain
-		Input					: in	std_logic_vector(BITS - 1 downto 0);	-- @async:	input bits
-		Output				: out std_logic_vector(BITS - 1 downto 0)		-- @Clock:	output bits
+	port (
+		Clock         : in  std_logic;                                  -- <Clock>  output clock domain
+		Input         : in  std_logic_vector(BITS - 1 downto 0);        -- @async:  input bits
+		Output        : out std_logic_vector(BITS - 1 downto 0)         -- @Clock:  output bits
 	);
 end entity;
 
 
 architecture rtl of sync_Pulse is
-	constant DEV_INFO : T_DEVICE_INFO				:= DEVICE_INFO;
+	constant DEV_INFO : T_DEVICE_INFO        := DEVICE_INFO;
 begin
 	genGeneric : if ((DEV_INFO.Vendor /= VENDOR_ALTERA) and (DEV_INFO.Vendor /= VENDOR_XILINX)) generate
-		attribute ASYNC_REG							: string;
-		attribute SHREG_EXTRACT					: string;
+		attribute ASYNC_REG              : string;
+		attribute SHREG_EXTRACT          : string;
 	begin
 		gen : for i in 0 to BITS - 1 generate
-			signal Data_async							: std_logic;
-			signal Data_meta							: std_logic																		:= INIT_I(i);
-			signal Data_sync							: std_logic_vector(SYNC_DEPTH - 1 downto 1)		:= (others => INIT_I(i));
+			signal Data_async              : std_logic;
+			signal Data_meta              : std_logic                                    := INIT_I(i);
+			signal Data_sync              : std_logic_vector(SYNC_DEPTH - 1 downto 1)    := (others => INIT_I(i));
 
 			-- Mark register DataSync_async's input as asynchronous and ignore timings (TIG)
-			attribute ASYNC_REG			of Data_meta	: signal is "TRUE";
+			attribute ASYNC_REG      of Data_meta  : signal is "TRUE";
 
 			-- Prevent XST from translating two FFs into SRL plus FF
-			attribute SHREG_EXTRACT of Data_meta	: signal is "NO";
-			attribute SHREG_EXTRACT of Data_sync	: signal is "NO";
+			attribute SHREG_EXTRACT of Data_meta  : signal is "NO";
+			attribute SHREG_EXTRACT of Data_sync  : signal is "NO";
 
 		begin
 			process(Input(i), Data_sync(Data_sync'high))
@@ -110,12 +110,12 @@ begin
 			process(Clock)
 			begin
 				if rising_edge(Clock) then
-					Data_meta		<= Data_async;
-					Data_sync		<= Data_sync(Data_sync'high - 1 downto 1) & Data_meta;
+					Data_meta    <= Data_async;
+					Data_sync    <= Data_sync(Data_sync'high - 1 downto 1) & Data_meta;
 				end if;
 			end process;
 
-			Output(i)	<= Data_sync(Data_sync'high);
+			Output(i)  <= Data_sync(Data_sync'high);
 		end generate;
 	end generate;
 
@@ -123,13 +123,13 @@ begin
 	genAltera : if (DEV_INFO.Vendor = VENDOR_ALTERA) generate
 		sync : sync_Pulse_Altera
 			generic map (
-				BITS				=> BITS,
-				SYNC_DEPTH	=> SYNC_DEPTH
+				BITS        => BITS,
+				SYNC_DEPTH  => SYNC_DEPTH
 			)
 			port map (
-				Clock			=> Clock,
-				Input			=> Input,
-				Output		=> Output
+				Clock      => Clock,
+				Input      => Input,
+				Output    => Output
 			);
 	end generate;
 
@@ -137,14 +137,13 @@ begin
 	genXilinx : if (DEV_INFO.Vendor = VENDOR_XILINX) generate
 		sync : sync_Pulse_Xilinx
 			generic map (
-				BITS				=> BITS,
-				SYNC_DEPTH	=> SYNC_DEPTH
+				BITS        => BITS,
+				SYNC_DEPTH  => SYNC_DEPTH
 			)
 			port map (
-				Clock			=> Clock,
-				Input			=> Input,
-				Output		=> Output
+				Clock      => Clock,
+				Input      => Input,
+				Output    => Output
 			);
 	end generate;
-
 end architecture;

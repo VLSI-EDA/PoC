@@ -14,7 +14,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2007-2017 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,9 +102,10 @@ if ($All)
 	$QuestaSim =	$true
 }
 
-$PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
-$XilinxDirName =		Get-XilinxDirectoryName $PoCPS1
-$XilinxDirName2 =		"$XilinxDirName-ise"
+$PreCompiledDir =					Get-PrecompiledDirectoryName $PoCPS1
+$XilinxDirName =					Get-XilinxDirectoryName $PoCPS1
+$XilinxDirName2 =					"$XilinxDirName-ise"
+$ResolvedPrecompileDir =	Convert-Path ( Resolve-Path "$PoCRootDir\$PrecompiledDir" )
 
 # GHDL
 # ==============================================================================
@@ -118,7 +119,7 @@ if ($GHDL)
 	$GHDLDirName =			Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
+	$DestDir = $ResolvedPrecompileDir + "\$GHDLDirName\$XilinxDirName2"
 	# Create and change to destination directory
 	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
@@ -136,7 +137,8 @@ if ($GHDL)
 
 	{	$env:GHDL = $GHDLBinDir		}
 	if ($VHDL93)
-	{	$Command = "$GHDLXilinxScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$XilinxDirName2 -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLXilinxScript' -All -VHDL93 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red
@@ -144,7 +146,8 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLXilinxScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$XilinxDirName2 -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLXilinxScript' -All -VHDL2008 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red
@@ -202,7 +205,7 @@ foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
 		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
 		# Assemble output directory
-		$DestDir="$PoCRootDir\$PrecompiledDir\$ToolDirName\$XilinxDirName2"
+		$DestDir = $ResolvedPrecompileDir + "\$ToolDirName\$XilinxDirName2"
 		# Create and change to destination directory
 		Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
@@ -220,8 +223,8 @@ foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
 		$Language =						"all"
 		$TargetArchitecture =	"all"
 
-		$Command = "$ISE_compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $ToolBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise"
-		$EnableDebug -and		(Write-Host "  $Command" -ForegroundColor DarkGray	) | Out-Null
+		$Command = "& '$ISE_compxlib' -64bit -s $Simulator -l $Language -dir $DestDir -p $ToolBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise"
+		$EnableDebug -and	(Write-Host "  $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if (-not $?)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red

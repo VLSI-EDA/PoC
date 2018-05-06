@@ -61,7 +61,7 @@ class Configuration(ToolConfiguration):
 	_template = {
 		"Windows": {
 			_section: {
-				"Version":                "3.3.78",
+				"Version":                "3.3.80",
 				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
 				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "C:/Program Files (x86)/GTKWave"),
 				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
@@ -69,7 +69,7 @@ class Configuration(ToolConfiguration):
 		},
 		"Linux": {
 			_section: {
-				"Version":                "3.3.78",
+				"Version":                "3.3.80",
 				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
 				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "/usr/bin"),
 				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}")
@@ -77,7 +77,7 @@ class Configuration(ToolConfiguration):
 		},
 		"Darwin": {
 			_section: {
-				"Version":                "3.3.78",
+				"Version":                "3.3.80",
 				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
 				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "/usr/bin"),
 				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}")
@@ -95,7 +95,7 @@ class Configuration(ToolConfiguration):
 				self.ClearSection()
 			else:
 				# Configure GTKWave version
-				version = "3.3.78"
+				version = "3.3.80"
 				if self._multiVersionSupport:
 					self.PrepareVersionedSections()
 					sectionName = self._host.PoCConfig[self._section]['SectionName']

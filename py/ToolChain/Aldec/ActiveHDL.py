@@ -499,6 +499,8 @@ def VSimFilter(gen):
 			yield LogEntry(line, Severity.Verbose)
 		elif (line.startswith("ELBREAD: Warning: ") and line.endswith("not bound.")):
 			yield LogEntry(line, Severity.Error)
+		elif line.startswith("ELBREAD: Error: "):
+			yield LogEntry(line, Severity.Error)
 		elif line.startswith("ELBREAD: "):
 			yield LogEntry(line, Severity.Verbose)
 		elif line.startswith("ELAB2: "):

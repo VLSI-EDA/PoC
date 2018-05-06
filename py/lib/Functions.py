@@ -126,7 +126,7 @@ class Init:
 	def init(cls):
 		from colorama import init, Back as Background
 		init()#strip=False)
-		print(Background.BLACK, end="")
+		# print(Background.BLACK, end="")
 
 	from colorama import Fore as Foreground
 	Foreground = {

@@ -62,6 +62,13 @@ class QuartusException(AlteraException):
 
 
 @unique
+class AlteraQuartusPrimeEditions(Edition):
+	"""Enumeration of all Quartus Prime editions provided by Mentor Graphics itself."""
+	QuartusII =       EditionDescription(Name="Quartus II",      Section=None)
+	QuartusIILite =   EditionDescription(Name="Quartus II Lite", Section=None)
+
+
+@unique
 class QuartusEditions(Edition):
 	"""Enumeration of all Quartus editions provided by Altera itself."""
 	AlteraQuartus =   EditionDescription(Name="Altera Quartus", Section="INSTALL.Altera.Quartus")

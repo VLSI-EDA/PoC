@@ -56,7 +56,7 @@ class Configuration(VendorConfiguration):
 		},
 		"Linux": {
 			_section: {
-				"InstallationDirectory": "/opt/Intel"
+				"InstallationDirectory": "/opt/IntelFPGA"
 			}
 		}
 	}                                                   #: The template for the configuration sections represented as nested dictionaries.
@@ -66,6 +66,11 @@ class Configuration(VendorConfiguration):
 		# if (Intel is not None):
 		# 	return str(Path(Intel).parent.parent)
 
-		path = self._TestDefaultInstallPath({"Windows": "IntelFPGA", "Linux": "Intel"})
-		if path is None: return super()._GetDefaultInstallationDirectory()
+		path = self._TestDefaultInstallPath({
+			"Windows":  ("IntelFPGA", "intelFPGA_lite"),
+			"Linux":    ("intelFPGA", "IntelFPGA", "intelFPGA_lite")
+		})
+		if path is None:
+			return super()._GetDefaultInstallationDirectory()
+
 		return path.as_posix()

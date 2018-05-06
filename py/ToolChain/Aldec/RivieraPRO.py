@@ -66,7 +66,7 @@ class Configuration(ToolConfiguration):
 	_template = {
 		"Linux": {
 			_section: {
-				"Version":                "2016.10",
+				"Version":                "2017.02",
 				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
 				"Edition":                ("${${SectionName}:Edition}",               "Riviera-PRO"),
 				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Aldec:InstallationDirectory}/Riviera-PRO"),
@@ -75,11 +75,11 @@ class Configuration(ToolConfiguration):
 		},
 		"Windows": {
 			_section: {
-				"Version":                "2016.10",
+				"Version":                "2017.02",
 				"SectionName":            ("%{PathWithRoot}#${Version}",              None),
 				"Edition":                ("${${SectionName}:Edition}",               "Riviera-PRO"),
-				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Aldec:InstallationDirectory}/Riviera-PRO"),
-				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/BIN")
+				"InstallationDirectory":  ("${${SectionName}:InstallationDirectory}", "${INSTALL.Aldec:InstallationDirectory}/Riviera-PRO-${Version}-x64"),
+				"BinaryDirectory":        ("${${SectionName}:BinaryDirectory}",       "${InstallationDirectory}/bin")
 			}
 		}
 	}                                                   #: The template for the configuration sections represented as nested dictionaries.
@@ -391,14 +391,74 @@ class VHDLSimulator(OutputFilteredExecutable, ToolMixIn):
 def VLibFilter(gen):
 	"""A line based output stream filter for Riviera-PRO's VHDL library management tool."""
 	for line in gen:
-		yield LogEntry(line, Severity.Normal)
+		if line.startswith("ALIB: Library "):
+			yield LogEntry(line, Severity.Verbose)
+		else:
+			yield LogEntry(line, Severity.Normal)
 
 def VComFilter(gen): # mccabe:disable=MC0001
 	"""A line based output stream filter for Riviera-PRO's VHDL compiler."""
 	for line in gen:
-		yield LogEntry(line, Severity.Normal)
+		if line.startswith("Aldec, Inc. VHDL Compiler"):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("DAGGEN WARNING DAGGEN_0523"):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("ACOMP Initializing"):
+			yield LogEntry(line, Severity.Debug)
+		elif line.startswith("VLM Initialized with path"):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("VLM ERROR "):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("COMP96 File: "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("COMP96 Compile Package "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("COMP96 Compile Entity "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("COMP96 Compile Architecture "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("COMP96 Compile success "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("COMP96 Compile failure "):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("COMP96 WARNING "):
+			yield LogEntry(line, Severity.Warning)
+		elif line.startswith("ELAB1 WARNING ELAB1_0026:"):
+			yield LogEntry(line, Severity.Warning)
+		elif line.startswith("COMP96 ERROR "):
+			yield LogEntry(line, Severity.Error)
+		else:
+			yield LogEntry(line, Severity.Normal)
 
 def VSimFilter(gen):
 	"""A line based output stream filter for Riviera-PRO's VHDL simulator."""
+	PoCOutputFound = False
 	for line in gen:
-		yield LogEntry(line, Severity.Normal)
+		if line.startswith("asim"):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("# VSIM: "):
+			yield LogEntry(line, Severity.Verbose)
+		elif (line.startswith("# ELBREAD: Warning: ") and line.endswith("not bound.")):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("# ELBREAD: Error: "):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("# SCRIPTER: Error: "):
+			yield LogEntry(line, Severity.Error)
+		elif line.startswith("# ELBREAD: "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("# ELAB2: "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("# SLP: "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("# Allocation: "):
+			yield LogEntry(line, Severity.Verbose)
+		elif line.startswith("# KERNEL: ========================================"):
+			PoCOutputFound = True
+			yield LogEntry(line[10:], Severity.Normal)
+		elif line.startswith("# KERNEL: "):
+			if (not PoCOutputFound):
+				yield LogEntry(line, Severity.Verbose)
+			else:
+				yield LogEntry(line[10:], Severity.Normal)
+		else:
+			yield LogEntry(line, Severity.Normal)
