@@ -296,7 +296,7 @@ if ($changes)
 if ($PoC)
 {	cd "$SphinxRootDir"
 	Write-Host "Expanding labels..." -Foreground Yellow
-	py -3 ..\temp\sphinx\inventory.py --file _build\html\objects.inv --rst > ..\temp\sphinx\PoC.inventory.rst
+	py -3 _tools\inventory.py --file _build\html\objects.inv --rst > ..\temp\sphinx\PoC.inventory.rst
 	
 	Write-Host "Stripping file from Python labels..." -Foreground Yellow
 	$strippedFileContent = ""
