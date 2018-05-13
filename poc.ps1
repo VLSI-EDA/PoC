@@ -5,18 +5,19 @@
 # ==============================================================================
 #	Authors:						Patrick Lehmann
 #
-#	PowerShell Script:	Wrapper Script to execute <PoC-Root>/py/PoC.py
+#	PowerShell Script:	Wrapper Script to execute <PoC-Root>/lib/pyIPCMI/pyIPCMI.py
 #
 # Description:
 # ------------------------------------
 #	This is a bash wrapper script (executable) which:
 #		- saves the current working directory as an environment variable
-#		- delegates the call to <PoC-Root>/py/wrapper.sh
+#		- delegates the call to <PoC-Root>/lib/pyIPCMI/Wrapper/wrapper.sh
 #
 # License:
 # ==============================================================================
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
+# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,26 +32,32 @@
 # limitations under the License.
 # ==============================================================================
 #
-# Change this, if PoC solutions and PoC projects are used
-$PoC_RelPath =					"."		# relative path to PoC root directory
-$PoC_Solution =					""		# solution name
+# Change this, if pyIPCMI solutions and pyIPCMI projects are used
+$Library_RelPath =      "."   # relative path to PoC root directory
+$Library =              "PoC" # library name
+$Solution =             ""    # solution name
+$Project =              ""    # project name
+
+# Configure pyIPCMI environment here
+$pyIPCMI_Dir =          "lib\pyIPCMI"
+
 
 # save parameters and current working directory
-$PyWrapper_WorkingDir =	Get-Location
+$Wrapper_WorkingDir =   Get-Location
+$Library_RootDir =      Convert-Path (Resolve-Path ($PSScriptRoot + "\" + $Library_RelPath))
 
-# Configure PoC environment here
-$PoC_PythonDir =				"py"
-$PoC_ScriptPy =					"$PoC_PythonDir\PoC.py"
-$PoC_WrapperDir =				"py\Wrapper"
-$PoC_Module =						"PoC"
-$PoC_Wrapper =					"Wrapper.ps1"
-
-# load PoC module
-$PoCRootDir =						Convert-Path (Resolve-Path ($PSScriptRoot + "\" + $PoC_RelPath))
-Import-Module "$PoCRootDir\$PoC_WrapperDir\$PoC_Module.psm1" -ArgumentList @($PoCRootDir)
+# load pyIPCMI module
+$pyIPCMI_PSModule = "pyIPCMI"
+Import-Module "$Library_RootDir\$pyIPCMI_Dir\$pyIPCMI_PSModule.psm1" -ArgumentList @(
+	$Library_RootDir,
+	$Library,
+	$pyIPCMI_Dir,
+	$pyIPCMI_PSModule,
+	$Solution
+)
 
 # scan script parameters and mark environment to be loaded
-$Debug, $PyWrapper_LoadEnv = Get-PoCEnvironmentArray $args
+$Debug, $PyWrapper_LoadEnv = Get-PyIPCMIEnvironmentArray $args
 # execute vendor and tool pre-hook files if present
 Invoke-OpenEnvironment $PyWrapper_LoadEnv | Out-Null
 
@@ -59,11 +66,13 @@ if ($Debug -eq $true ) {
 	Write-Host "This is the PoC-Library script wrapper operating in debug mode." -ForegroundColor Yellow
 	Write-Host ""
 	Write-Host "Directories:" -ForegroundColor Yellow
-	Write-Host "  PoC Root        $PoCRootDir" -ForegroundColor Yellow
-	Write-Host "  Working         $PyWrapper_WorkingDir" -ForegroundColor Yellow
+	Write-Host "  PoC Root        $Library_RootDir" -ForegroundColor Yellow
+	Write-Host "  Working         $Wrapper_WorkingDir" -ForegroundColor Yellow
 	Write-Host "Script:" -ForegroundColor Yellow
-	Write-Host "  Filename        $PoC_ScriptPy" -ForegroundColor Yellow
-	Write-Host "  Solution        $PoC_Solution" -ForegroundColor Yellow
+	Write-Host "  Filename        $pyIPCMI_FrontEndPy" -ForegroundColor Yellow
+	Write-Host "  Library         $Library" -ForegroundColor Yellow
+	Write-Host "  Solution        $Solution" -ForegroundColor Yellow
+	Write-Host "  Project         $Project" -ForegroundColor Yellow
 	Write-Host "  Parameters      $args" -ForegroundColor Yellow
 	Write-Host "Load Environment:" -ForegroundColor Yellow
 	Write-Host "  Lattice Diamond $($PyWrapper_LoadEnv['Lattice']['Tools']['Diamond']['Load'])"	-ForegroundColor Yellow
@@ -73,10 +82,10 @@ if ($Debug -eq $true ) {
 }
 
 # execute script with appropriate Python interpreter and all given parameters
-if ($PoC_Solution -eq "")
-{	$Command = "$Python_Interpreter $Python_Parameters $PoCRootDir\$PoC_ScriptPy $args"													}
+if ($Solution -eq "")
+{	$Command = "$Python_Interpreter $Python_Parameters $pyIPCMI_FrontEndPy $args"													}
 else
-{	$Command = "$Python_Interpreter $Python_Parameters $PoCRootDir\$PoC_ScriptPy --sln=$PoC_Solution $args"			}
+{	$Command = "$Python_Interpreter $Python_Parameters $pyIPCMI_FrontEndPy --sln=$Solution $args"			}
 
 # execute script with appropriate Python interpreter and all given parameters
 if ($Debug -eq $true)	{	Write-Host "launching: '$Command'" -ForegroundColor Yellow	}
@@ -87,12 +96,16 @@ $PyWrapper_ExitCode = $LastExitCode
 Invoke-CloseEnvironment $PyWrapper_LoadEnv | Out-Null
 
 # unload PowerShell module
-Remove-Module $PoC_Module
+Remove-Module $pyIPCMI_PSModule
 # clean up environment variables
-$env:PoCRootDirectory =			$null
+$env:LibraryRootDirectory =   $null
+$env:Library =                $null
+$env:pyIPCMIRootDirectory =   $null
+$env:pyIPCMIConfigDirectory = $null
+$env:pyIPCMIFrontEnd =        $null
 
 # restore working directory if changed
-Set-Location $PyWrapper_WorkingDir
+Set-Location $Wrapper_WorkingDir
 
 # return exit status
 exit $PyWrapper_ExitCode
