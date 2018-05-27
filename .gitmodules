@@ -13,3 +13,6 @@
 [submodule "lib/uvvm"]
 	path = lib/uvvm
 	url = https://github.com/VLSI-EDA/UVVM_All.git
+[submodule "lib/pyIPCMI"]
+	path = lib/pyIPCMI
+	url = gitlab.plc2.de:GitHub/PLC2/pyIPCMI.git
