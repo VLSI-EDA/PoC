@@ -2,7 +2,7 @@
 
 ## Licensing
 PoC is published under the [Apache License, Version 2.0](LICENSE.md).
-Please, make sure you are able and willing to submit your contibutions to
+Please, make sure you are able and willing to submit your contributions to
 this license.
 
 ## Naming
@@ -34,7 +34,7 @@ this license.
 ```vhdl
 -- ===========================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
--- 	     	       Chair for VLSI-Design, Diagnostics and Architecture
+-- 	     	             Chair for VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ this license.
 3. Use all upper case for constants and generic parameters.
 
 ### Signal Initialization
-1. Specify an initiatilizer for all signals that are to represent sequential
+1. Specify an initializer for all signals that are to represent sequential
    logic, i.e. some state. If their initial state is irrelevant, initialize
    them to a don't-care value as appropriate, e.g. `(others => '-')`. Typically
    the same initial state should be assigned upon a reset condition.
