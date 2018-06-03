@@ -12,7 +12,7 @@
 	url = ../sphinx_rtd_theme.git
 [submodule "lib/uvvm"]
 	path = lib/uvvm
-	url = ../UVVM_All.git
+	url = ../UVVM.git
 [submodule "lib/pyIPCMI"]
 	path = lib/pyIPCMI
 	url = ../pyIPCMI.git
