@@ -1,6 +1,9 @@
 stages:
   - Selftest
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 pyIPCMI-Selftest:
   stage: Selftest
   before_script:
