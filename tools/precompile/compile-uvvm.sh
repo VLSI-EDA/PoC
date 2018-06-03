@@ -16,7 +16,8 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2017 Technische Universitaet Dresden - Germany
+# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
+# Copyright 2007-2017 Technische Universität Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,11 +48,13 @@ PoCRootDir="$($READLINK -f $ScriptDir/../..)"
 PoC_sh=$PoCRootDir/poc.sh
 
 # source shared file from precompile directory
-source $ScriptDir/shared.sh
+source $ScriptDir/precompile.sh
 
 
 # command line argument processing
 NO_COMMAND=1
+VERBOSE=0
+DEBUG=0
 while [[ $# > 0 ]]; do
 	key="$1"
 	case $key in
@@ -69,6 +72,13 @@ while [[ $# > 0 ]]; do
 		--questa)
 		COMPILE_FOR_VSIM=TRUE
 		NO_COMMAND=0
+		;;
+		-v|--verbose)
+		VERBOSE=1
+		;;
+		-d|--debug)
+		VERBOSE=1
+		DEBUG=1
 		;;
 		-h|--help)
 		HELP=TRUE
@@ -102,6 +112,10 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  -h --help             Print this help page"
 	# echo "  -c --clean            Remove all generated files"
 	echo ""
+	echo "Common options:"
+	echo "  -v --verbose          Print verbose messages."
+	echo "  -d --debug            Print debug messages."
+	echo ""
 	echo "Tool chain:"
 	echo "  -a --all              Compile for all tool chains."
 	echo "     --ghdl             Compile for GHDL."
@@ -112,15 +126,20 @@ fi
 
 
 if [ "$COMPILE_ALL" == "TRUE" ]; then
+	test $VERBOSE -eq 1 && echo "  Enables all tool chains: GHDL, vsim"
 	COMPILE_FOR_GHDL=TRUE
 	COMPILE_FOR_VSIM=TRUE
 fi
 
+test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'CONFIG.DirectoryNames:PrecompiledFiles'"
+test $DEBUG   -eq 1 && echo "    $PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null"
 PrecompiledDir=$($PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${COLORED_ERROR} Cannot get precompiled dir.${ANSI_NOCOLOR}"
 	echo 1>&2 -e "${ANSI_RED}$PrecompiledDir${ANSI_NOCOLOR}"
 	exit -1;
+elif [ $DEBUG -eq 1 ]; then
+	echo "    Return value: $PrecompiledDir"
 fi
 
 UVVMDirName=uvvm

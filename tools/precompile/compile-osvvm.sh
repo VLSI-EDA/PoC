@@ -17,7 +17,8 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
+# Copyright 2007-2016 Technische Universität Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,11 +49,13 @@ PoCRootDir="$($READLINK -f $ScriptDir/../..)"
 PoC_sh=$PoCRootDir/poc.sh
 
 # source shared file from precompile directory
-source $ScriptDir/shared.sh
+source $ScriptDir/precompile.sh
 
 
 # command line argument processing
 NO_COMMAND=1
+VERBOSE=0
+DEBUG=0
 while [[ $# > 0 ]]; do
 	key="$1"
 	case $key in
@@ -70,6 +73,13 @@ while [[ $# > 0 ]]; do
 		--questa)
 		COMPILE_FOR_VSIM=TRUE
 		NO_COMMAND=0
+		;;
+		-v|--verbose)
+		VERBOSE=1
+		;;
+		-d|--debug)
+		VERBOSE=1
+		DEBUG=1
 		;;
 		-h|--help)
 		HELP=TRUE
@@ -100,8 +110,12 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  compile-osvvm.sh [-c] [--help|--all|--ghdl|--questa]"
 	echo ""
 	echo "Common commands:"
-	echo "  -h --help             Print this help page"
+	echo "  -h --help             Print this help page."
 	# echo "  -c --clean            Remove all generated files"
+	echo ""
+	echo "Common options:"
+	echo "  -v --verbose          Print verbose messages."
+	echo "  -d --debug            Print debug messages."
 	echo ""
 	echo "Tool chain:"
 	echo "  -a --all              Compile for all tool chains."
@@ -113,15 +127,20 @@ fi
 
 
 if [ "$COMPILE_ALL" == "TRUE" ]; then
+	test $VERBOSE -eq 1 && echo "  Enables all tool chains: GHDL, vsim"
 	COMPILE_FOR_GHDL=TRUE
 	COMPILE_FOR_VSIM=TRUE
 fi
 
+test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'CONFIG.DirectoryNames:PrecompiledFiles'"
+test $DEBUG   -eq 1 && echo "    $PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null"
 PrecompiledDir=$($PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${COLORED_ERROR} Cannot get precompiled dir.${ANSI_NOCOLOR}"
 	echo 1>&2 -e "${ANSI_RED}$PrecompiledDir${ANSI_NOCOLOR}"
 	exit -1;
+elif [ $DEBUG -eq 1 ]; then
+	echo "    Return value: $PrecompiledDir"
 fi
 
 
@@ -140,7 +159,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# -> $DestinationDirectory
 	CreateDestinationDirectory $DestDir
 
-	# Assemble Altera compile script path
+	# Assemble OSVVM compile script path
 	GHDLOSVVMScript="$($READLINK -f $GHDLScriptDir/compile-osvvm.sh)"
 
 
@@ -148,14 +167,14 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	OSVVMInstallDir=$PoCRootDir/$OSVVMLibDir
 	SourceDir=$OSVVMInstallDir
 
-	# export GHDL binary dir if not allready set
+	# export GHDL binary dir if not already set
 	if [ -z $GHDL ]; then
 		export GHDL=$GHDLBinDir/ghdl
 	fi
 
 	BASH=$(which bash)
 
-	# compile all architectures, skip existing and large files, no wanrings
+	# compile all architectures, skip existing and large files, no warnings
 	$BASH $GHDLOSVVMScript --all -n --src $SourceDir --out "."
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
@@ -186,7 +205,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	CreateDestinationDirectory $DestDir
 
 
-	# clean osvvm directory
+	# clean OSVVM directory
 	if [ -d $DestDir/osvvm ]; then
 		echo -e "${YELLOW}Cleaning library 'osvvm' ...${ANSI_NOCOLOR}"
 		rm -rf osvvm
