@@ -19,6 +19,7 @@
 #
 # License:
 # ==============================================================================
+# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
@@ -34,14 +35,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
+#
+# Change this, if pyIPCMI solutions and pyIPCMI projects are used
+Library_RelPath="."  # relative path to PoC root directory
+Library="PoC"        # library name
+Solution=""          # solution name
+Project=""           # project name
 
-# configure wrapper here
-PyWrapper_BashScriptDir="py/Wrapper"
-PyWrapper_Script=PoC.py
-PyWrapper_MinVersion=3.5.0
-
-PyWrapper_RelPath="."
-PyWrapper_Solution=""
+# Configure pyIPCMI environment here
+pyIPCMI_Dir="lib/pyIPCMI"
+pyIPCMI_BashModule="pyIPCMI"
 
 # work around for Darwin (Mac OS)
 READLINK=readlink; if [[ $(uname) == "Darwin" ]]; then READLINK=greadlink; fi
@@ -57,13 +60,13 @@ done
 SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # save parameters and script directory
-PyWrapper_Parameters=$@
-PyWrapper_WorkingDir=$(pwd)
-PoC_RootDir_RelPath="$SCRIPT_DIR/."
-PoC_RootDir=$(cd "$PoC_RootDir_RelPath/$PyWrapper_RelPath" && pwd)
+Wrapper_Parameters=$@
+Wrapper_WorkingDirectory=$(pwd)
+Library_RootDir_RelPath="$SCRIPT_DIR/."
+Library_RootDirectory=$(cd "$Library_RootDir_RelPath/$Library_RelPath" && pwd)
 
 # invoke main wrapper
-source "$PoC_RootDir/$PyWrapper_BashScriptDir/wrapper.sh"
+source "$Library_RootDirectory/$pyIPCMI_Dir/$pyIPCMI_BashModule.sh"
 
 # return exit status
 exit $PoC_ExitCode
