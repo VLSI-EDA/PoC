@@ -5,8 +5,8 @@ pyIPCMI-Selftest:
   stage: Selftest
   before_script:
     - pip3 install -r tools/GitLab-CI/requirements.txt
-    - ./tools/GitLab-CI/GHDL.setup.sh
-    - ./tools/GitLab-CI/PoC.setup.sh
+    - ./tools/GitLab-CI/ghdl.setup.sh
+    - ./tools/GitLab-CI/poc.setup.sh
   script:
-    - ./tools/GitLab-CI/PoC.dryrun.sh
-    - ./tools/GitLab-CI/PoC.run.sh "PoC.*"
+    - ./tools/GitLab-CI/poc.dryrun.sh
+    - ./tools/GitLab-CI/poc.run.sh "PoC.*"
