@@ -21,8 +21,8 @@ echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}             Configuring PoC            ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 
-echo -e "${CYAN}Copy config.private.ini into ./py directory${NOCOLOR}"
-cp ./tools/Travis-CI/config.private.ini ./py
+echo -e "${CYAN}Copy config.private.ini into ./pyIPCMI directory${NOCOLOR}"
+cp ./tools/Travis-CI/config.private.ini ./.pyIPCMI
 ExitIfError $? "${RED}Copying of ./tools/Travis-CI/config.private.ini [FAILED]${NOCOLOR}"
 
 echo -e "${CYAN}Copy my_project.vhdl into ./tb/common directory${NOCOLOR}"
