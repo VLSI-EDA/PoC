@@ -40,7 +40,7 @@ echo -e "${CYAN}Test PoC front-end script.${NOCOLOR}"
 ExitIfError $? "${RED}Testing PoC front-end script [FAILED]${NOCOLOR}"
 
 echo -e "${CYAN}Pre-compiling OSVVM for GHDL into ./temp/precompiled/ghdl/osvvm directory${NOCOLOR}"
-./tools/precompile/compile-osvvm.sh -d --ghdl
+./tools/precompile/compile-osvvm.sh --ghdl
 ExitIfError $? "${RED}Pre-compiling OSVVM for GHDL [FAILED]${NOCOLOR}"
 
 echo -e "${CYAN}Pre-compiling UVVM for GHDL into ./temp/precompiled/ghdl/uvvm directory${NOCOLOR}"
