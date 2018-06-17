@@ -151,10 +151,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# <= $GHDLBinDir
 	# <= $GHDLScriptDir
 	# <= $GHDLDirName
-	GetGHDLDirectories $PoC_sh
-	test $DEBUG   -eq 1 && echo "  GHDLBinDir:       $GHDLBinDir"
-	test $DEBUG   -eq 1 && echo "  GHDLScriptDir:    $GHDLScriptDir"
-	test $DEBUG   -eq 1 && echo "  GHDLDirName:      $GHDLDirName"
+	GetGHDLDirectories $PoC_sh $VERBOSE $DEBUG
 	
 	# Assemble output directory
 	DestDir=$PoCRootDir/$PrecompiledDir/$GHDLDirName
@@ -202,7 +199,7 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	# Get GHDL directories
 	# <= $VSimBinDir
 	# <= $VSimDirName
-	GetVSimDirectories $PoC_sh
+	GetVSimDirectories $PoC_sh $VERBOSE $DEBUG
 
 	# Assemble output directory
 	DestDir=$PoCRootDir/$PrecompiledDir/$VSimDirName
