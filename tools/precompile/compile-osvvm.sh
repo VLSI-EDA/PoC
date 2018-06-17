@@ -152,7 +152,10 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 	# <= $GHDLScriptDir
 	# <= $GHDLDirName
 	GetGHDLDirectories $PoC_sh
-
+	test $DEBUG   -eq 1 && echo "  GHDLBinDir:       $GHDLBinDir"
+	test $DEBUG   -eq 1 && echo "  GHDLScriptDir:    $GHDLScriptDir"
+	test $DEBUG   -eq 1 && echo "  GHDLDirName:      $GHDLDirName"
+	
 	# Assemble output directory
 	DestDir=$PoCRootDir/$PrecompiledDir/$GHDLDirName
 	# Create and change to destination directory
@@ -161,7 +164,7 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 
 	# Assemble OSVVM compile script path
 	GHDLOSVVMScript="$($READLINK -f $GHDLScriptDir/compile-osvvm.sh)"
-
+	test $DEBUG   -eq 1 && echo "  GHDLOSVVMScript:  $GHDLOSVVMScript"
 
 	# Get OSVVM installation directory
 	OSVVMInstallDir=$PoCRootDir/$OSVVMLibDir
@@ -169,12 +172,15 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 
 	# export GHDL binary dir if not already set
 	if [ -z $GHDL ]; then
+		test $VERBOSE -eq 1 && echo "export GHDL=$GHDLBinDir/ghdl"
 		export GHDL=$GHDLBinDir/ghdl
 	fi
 
 	BASH=$(which bash)
 
 	# compile all architectures, skip existing and large files, no warnings
+	test $VERBOSE -eq 1 && echo "Calling compile-osvvm.sh from GHDL"
+	test $DEBUG   -eq 1 && echo "  $BASH $GHDLOSVVMScript --all -n --src $SourceDir --out \".\""
 	$BASH $GHDLOSVVMScript --all -n --src $SourceDir --out "."
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} While executing vendor library compile script from GHDL.${ANSI_NOCOLOR}"
