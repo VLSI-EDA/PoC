@@ -12,7 +12,7 @@ NOCOLOR='\e[0m'			# No Color
 
 POCROOT=$(pwd)
 
-TRAVIS_DIR=$POCROOT/tools/Travis-CI
+GITLAB_DIR=$POCROOT/tools/GitLab-CI
 
 # -> LastExitCode
 # -> Error message
@@ -31,9 +31,9 @@ echo -e "${CYAN}mkdir -p $POC_GHDL_DIR && cd $POC_GHDL_DIR${NOCOLOR}"
 mkdir -p $POC_GHDL_DIR && cd $POC_GHDL_DIR
 
 # Check if output filter grcat is available and install it
-if grcat $TRAVIS_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
+if grcat $GITLAB_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
 	echo -e "Pipe STDOUT through grcat ..."
-	{ coproc grcat $TRAVIS_DIR/poc.run.grcrules 1>&3; } 3>&1
+	{ coproc grcat $GITLAB_DIR/poc.run.grcrules 1>&3; } 3>&1
   exec 1>&${COPROC[1]}-
 fi
 

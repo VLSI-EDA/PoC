@@ -10,7 +10,7 @@ PLATFORM="ubuntu14"
 GITHUB_SERVER="https://github.com"
 GITHUB_SLUG="ghdl/ghdl"
 
-TRAVIS_DIR="temp/Travis-CI"
+GITLAB_DIR="temp/GirLab-CI"
 
 
 # assemble the GitHub URL
@@ -43,9 +43,9 @@ NOCOLOR='\e[0m'			# No Color
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}     Downloading and installing GHDL    ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
-echo -e "${CYAN}mkdir -p $TRAVIS_DIR${NOCOLOR}"
-mkdir -p $TRAVIS_DIR
-cd $TRAVIS_DIR
+echo -e "${CYAN}mkdir -p $GITLAB_DIR${NOCOLOR}"
+mkdir -p $GITLAB_DIR
+cd $GITLAB_DIR
 
 # downloading GHDL
 echo -e "${CYAN}Downloading $GHDL_TARBALL from $GITHUB_URL...${NOCOLOR}"
