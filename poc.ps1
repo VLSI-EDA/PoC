@@ -15,9 +15,9 @@
 #
 # License:
 # ==============================================================================
+# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
 # Copyright 2007-2016 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
-# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,16 +40,16 @@ $Project =              ""    # project name
 
 # Configure pyIPCMI environment here
 $pyIPCMI_Dir =          "lib\pyIPCMI"
+$pyIPCMI_PSModule =     "pyIPCMI"
 
 
 # save parameters and current working directory
-$Wrapper_WorkingDir =   Get-Location
-$Library_RootDir =      Convert-Path (Resolve-Path ($PSScriptRoot + "\" + $Library_RelPath))
+$Wrapper_WorkingDirectory = Get-Location
+$Library_RootDirectory =    Convert-Path (Resolve-Path ($PSScriptRoot + "\" + $Library_RelPath))
 
 # load pyIPCMI module
-$pyIPCMI_PSModule = "pyIPCMI"
-Import-Module "$Library_RootDir\$pyIPCMI_Dir\$pyIPCMI_PSModule.psm1" -ArgumentList @(
-	$Library_RootDir,
+Import-Module "$Library_RootDirectory\$pyIPCMI_Dir\$pyIPCMI_PSModule.psm1" -ArgumentList @(
+	$Library_RootDirectory,
 	$Library,
 	$pyIPCMI_Dir,
 	$pyIPCMI_PSModule,
@@ -66,8 +66,9 @@ if ($Debug -eq $true ) {
 	Write-Host "This is the PoC-Library script wrapper operating in debug mode." -ForegroundColor Yellow
 	Write-Host ""
 	Write-Host "Directories:" -ForegroundColor Yellow
-	Write-Host "  PoC Root        $Library_RootDir" -ForegroundColor Yellow
-	Write-Host "  Working         $Wrapper_WorkingDir" -ForegroundColor Yellow
+	Write-Host "  Library Root    $Library_RootDirectory" -ForegroundColor Yellow
+	Write-Host "  pyIPCMI Root    $pyIPCMI_RootDirectory" -ForegroundColor Yellow
+	Write-Host "  Working         $Wrapper_WorkingDirectory" -ForegroundColor Yellow
 	Write-Host "Script:" -ForegroundColor Yellow
 	Write-Host "  Filename        $pyIPCMI_FrontEndPy" -ForegroundColor Yellow
 	Write-Host "  Library         $Library" -ForegroundColor Yellow
@@ -105,7 +106,7 @@ $env:pyIPCMIConfigDirectory = $null
 $env:pyIPCMIFrontEnd =        $null
 
 # restore working directory if changed
-Set-Location $Wrapper_WorkingDir
+Set-Location $Wrapper_WorkingDirectory
 
 # return exit status
 exit $PyWrapper_ExitCode

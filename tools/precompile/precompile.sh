@@ -14,7 +14,8 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
+# Copyright 2007-2016 Technische Universität Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,8 +89,12 @@ CreateDestinationDirectory() {
 # <= $GHDLDirName
 GetGHDLDirectories() {
 	PoC_sh=$1
+	VERBOSE=$2
+	DEBUG=$2
 
 	# Get GHDL binary directory
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'INSTALL.GHDL:BinaryDirectory'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query INSTALL.GHDL:BinaryDirectory 2>/dev/null"
 	GHDLBinDir=$($PoC_sh query INSTALL.GHDL:BinaryDirectory 2>/dev/null)	# Path to the simulators bin directory
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Cannot get GHDL binary directory.${ANSI_NOCOLOR}"
@@ -97,8 +102,11 @@ GetGHDLDirectories() {
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your GHDL installation.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
+	test $DEBUG   -eq 1 && echo "    Return value: $GHDLBinDir"
 
 	# Get GHDL script directory
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'INSTALL.GHDL:ScriptDirectory'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query INSTALL.GHDL:ScriptDirectory 2>/dev/null"
 	GHDLScriptDir=$($PoC_sh query INSTALL.GHDL:ScriptDirectory 2>/dev/null)	# Path to the simulators bin directory
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Cannot get GHDL vendor script directory.${ANSI_NOCOLOR}"
@@ -106,14 +114,18 @@ GetGHDLDirectories() {
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your GHDL installation.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
+	test $DEBUG   -eq 1 && echo "    Return value: $GHDLScriptDir"
 
-	#
+	# Get directory name for GHDL specific files
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'CONFIG.DirectoryNames:GHDLFiles'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query CONFIG.DirectoryNames:GHDLFiles 2>/dev/null"
 	GHDLDirName=$($PoC_sh query CONFIG.DirectoryNames:GHDLFiles 2>/dev/null)
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Cannot get GHDL directory name.${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${COLORED_MESSAGE} $GHDLDirName${ANSI_NOCOLOR}"
 		exit -1;
 	fi
+	test $DEBUG   -eq 1 && echo "    Return value: $GHDLDirName"
 }
 
 # GetVSimDirectories
@@ -121,7 +133,13 @@ GetGHDLDirectories() {
 # <= $VSimBinDir
 # <= $VSimDirName
 GetVSimDirectories() {
+	PoC_sh=$1
+	VERBOSE=$2
+	DEBUG=$2
+	
 	# Get QuestaSim/ModelSim binary
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'ModelSim:BinaryDirectory'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query ModelSim:BinaryDirectory 2>/dev/null"
 	VSimBinDir=$($PoC_sh query ModelSim:BinaryDirectory 2>/dev/null)	# Path to the simulators bin directory
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Cannot get QuestaSim/ModelSim binary directory.${ANSI_NOCOLOR}"
@@ -129,13 +147,18 @@ GetVSimDirectories() {
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Mentor QuestaSim/ModelSim installation.${ANSI_NOCOLOR}"
 		exit -1;
 	fi
+	test $DEBUG   -eq 1 && echo "    Return value: $VSimBinDir"
 
+	# Get directory name for QuestaSim specific files
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'CONFIG.DirectoryNames:QuestaSimFiles'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query CONFIG.DirectoryNames:QuestaSimFiles 2>/dev/null"
 	VSimDirName=$($PoC_sh query CONFIG.DirectoryNames:QuestaSimFiles 2>/dev/null)
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Cannot get QuestaSim directory name.${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${COLORED_MESSAGE} $VSimDirName${ANSI_NOCOLOR}"
 		exit -1;
 	fi
+	test $DEBUG   -eq 1 && echo "    Return value: $VSimDirName"
 }
 
 CreateLocalModelsim_ini() {
