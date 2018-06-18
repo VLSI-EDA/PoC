@@ -137,6 +137,7 @@ architecture rtl of sdram_ctrl_phy_de0 is
 
   -- control / data signals for read
   -- adjust read delay through length of vector
+  signal dq_i        : std_logic_vector(15 downto 0);
   signal rden_r      : std_logic_vector(CL downto 0);
   signal rstb_r      : std_logic;
   signal rdata_r     : std_logic_vector(15 downto 0);
@@ -220,9 +221,26 @@ begin  -- rtl
     end if;
   end process;
 
-  dq_obuf: for i in 0 to 15 generate
-    sd_dq(i) <= dq_o_r(i) when dq_en_r(i) = '1' else 'Z';
-  end generate dq_obuf;
+  -----------------------------------------------------------------------------
+  -- DQ I/O Buffers
+  -----------------------------------------------------------------------------
+
+	-- Explicit instantiation of I/O buffers. May be required if entity is part
+	-- of a netlist, which is used in another design.
+	-- If altiobuf_bidir is used instead, then meaningless warnings are issued by
+	-- Quartus.
+  dq_obuf : altiobuf_out generic map (
+    NUMBER_OF_CHANNELS => 16, USE_OE => "TRUE")
+    port map (
+      datain    => dq_o_r,
+      oe        => dq_en_r,
+      dataout   => sd_dq);
+
+  dq_ibuf : altiobuf_in generic map (
+    NUMBER_OF_CHANNELS => 16)
+    port map (
+      datain    => sd_dq,
+      dataout   => dq_i);
 
   -----------------------------------------------------------------------------
   -- Read data capture
@@ -242,7 +260,7 @@ begin  -- rtl
 
       -- Data capture
       if rden_r(rden_r'left) = '1' then
-        rdata_r <= sd_dq;
+        rdata_r <= dq_i;
       end if;
     end if;
   end process;

@@ -1,0 +1,15 @@
+stages:
+  - Selftest
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+pyIPCMI-Selftest:
+  stage: Selftest
+  before_script:
+    - pip3 install -r tools/GitLab-CI/requirements.txt
+#    - ./tools/GitLab-CI/ghdl.setup.sh
+    - ./tools/GitLab-CI/poc.setup.sh
+  script:
+#    - ./tools/GitLab-CI/poc.dryrun.sh
+    - ./tools/GitLab-CI/poc.run.sh "PoC.*"

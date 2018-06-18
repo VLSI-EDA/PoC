@@ -14,7 +14,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2007-2017 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,10 @@
 # This CmdLet:
 #   (1) Creates a sub-directory 'xilinx-ise' in the current working directory
 #   (2) Compiles all Xilinx ISE simulation libraries and packages for
+#       o Active-HDL
+#       o Riviera-PRO
 #       o GHDL
+#       o ModelSim
 #       o QuestaSim
 #   (3) Creates a symlink 'xilinx' -> 'xilinx-ise'
 #
@@ -46,11 +49,16 @@ param(
 	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
+	# Pre-compile the Xilinx ISE libraries for Active-HDL.
+	[switch]$ActiveHDL =	$false,
+	# Pre-compile the Xilinx ISE libraries for Riviera-PRO.
+	[switch]$RivieraPRO =	$false,
 	# Pre-compile the Xilinx ISE libraries for GHDL.
 	[switch]$GHDL =				$false,
-
+	# Pre-compile the Xilinx ISE libraries for ModelSim.
+	[switch]$ModelSim =		$false,
 	# Pre-compile the Xilinx ISE libraries for QuestaSim.
-	[switch]$Questa =			$false,
+	[switch]$QuestaSim =			$false,
 
 	# Change the 'xilinx' symlink to 'xilinx-ise'.
 	[switch]$ReLink =			$false,
@@ -74,29 +82,30 @@ $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
 
-# set default values
-$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
-
 Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -ArgumentList "$WorkingDir"
 
 # Display help if no command was selected
-$Help = $Help -or (-not ($All -or $GHDL -or $Questa))
-
-if ($Help)
+if ($Help -or (-not ($All -or $ActiveHDL -or $RivieraPRO -or $GHDL -or $ModelSim -or $QuestaSim)))
 {	Get-Help $MYINVOCATION.InvocationName -Detailed
 	Exit-PrecompileScript
 }
 
-$GHDL,$Questa =			Resolve-Simulator $All $GHDL $Questa
-$VHDL93,$VHDL2008 = Resolve-VHDLVersion $VHDL93 $VHDL2008
+# set default values
+$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
 
-$PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
-$XilinxDirName =		Get-XilinxDirectoryName $PoCPS1
-$XilinxDirName2 =		"$XilinxDirName-ise"
+if ($All)
+{	$ActiveHDL =	$true
+	$RivieraPRO =	$true
+	$GHDL =				$true
+	$ModelSim =		$true
+	$QuestaSim =	$true
+}
+
+$PreCompiledDir =					Get-PrecompiledDirectoryName $PoCPS1
+$XilinxDirName =					Get-XilinxDirectoryName $PoCPS1
+$XilinxDirName2 =					"$XilinxDirName-ise"
+$ResolvedPrecompileDir =	Convert-Path ( Resolve-Path "$PoCRootDir\$PrecompiledDir" )
 
 # GHDL
 # ==============================================================================
@@ -104,14 +113,15 @@ if ($GHDL)
 {	Write-Host "Pre-compiling Xilinx's simulation libraries for GHDL" -ForegroundColor Cyan
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$GHDLBinDir =			Get-GHDLBinaryDirectory $PoCPS1
-	$GHDLScriptDir =	Get-GHDLScriptDirectory $PoCPS1
-	$GHDLDirName =		Get-GHDLDirectoryName $PoCPS1
+	$VHDL93,$VHDL2008 = Resolve-VHDLVersion $VHDL93 $VHDL2008
+	$GHDLBinDir =				Get-GHDLBinaryDirectory $PoCPS1
+	$GHDLScriptDir =		Get-GHDLScriptDirectory $PoCPS1
+	$GHDLDirName =			Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
+	$DestDir = $ResolvedPrecompileDir + "\$GHDLDirName\$XilinxDirName2"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$GHDLXilinxScript = "$GHDLScriptDir\compile-xilinx-ise.ps1"
 	if (-not (Test-Path $GHDLXilinxScript -PathType Leaf))
@@ -127,7 +137,8 @@ if ($GHDL)
 
 	{	$env:GHDL = $GHDLBinDir		}
 	if ($VHDL93)
-	{	$Command = "$GHDLXilinxScript -All -VHDL93 -Source $SourceDir -Output $DestDir\$XilinxDirName2 -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLXilinxScript' -All -VHDL93 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red
@@ -135,7 +146,8 @@ if ($GHDL)
 		}
 	}
 	if ($VHDL2008)
-	{	$Command = "$GHDLXilinxScript -All -VHDL2008 -Source $SourceDir -Output $DestDir\$XilinxDirName2 -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	{	$Command =				"& '$GHDLXilinxScript' -All -VHDL2008 -Source $SourceDir -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+		$EnableDebug -and	(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
 		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red
@@ -156,49 +168,82 @@ if ($GHDL)
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 }
 
-# QuestaSim/ModelSim
+# Supported pre-compilations by Xilinx ISE (Active-HDL, Riviera-PRO, ModelSim, QuestaSim)
 # ==============================================================================
-if ($Questa)
-{	Write-Host "Pre-compiling Xilinx's simulation libraries for QuestaSim" -ForegroundColor Cyan
-	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
+{	if (Get-Variable $tool -ValueOnly)
+	{	switch ($tool)
+		{	"ActiveHDL"
+			{	Write-Host "Pre-compiling Xilinx's simulation libraries for Active-HDL..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-ActiveHDLBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-ActiveHDLDirectoryName $PoCPS1
+				$Simulator =			"active_hdl"
+				break;
+			}
+			"RivieraPRO"
+			{	Write-Host "Pre-compiling Xilinx's simulation libraries for Riviera-PRO..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-RivieraPROBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-RivieraPRODirectoryName $PoCPS1
+				$Simulator =			"riviera"
+				break;
+			}
+			"ModelSim"
+			{	Write-Host "Pre-compiling Xilinx's simulation libraries for ModelSim..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-ModelSimBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-ModelSimDirectoryName $PoCPS1
+				$Simulator =			"mti_se"  # mti_se   mti_pe    mti_de
+				break;
+			}
+			"QuestaSim"
+			{	Write-Host "Pre-compiling Xilinx's simulation libraries for QuestaSim..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-QuestaSimBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-QuestaSimDirectoryName $PoCPS1
+				$Simulator =			"questa"
+				break;
+			}
+		}
+		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$VSimBinDir =			Get-ModelSimBinaryDirectory $PoCPS1
-	$VSimDirName =		Get-QuestaSimDirectoryName $PoCPS1
+		# Assemble output directory
+		$DestDir = $ResolvedPrecompileDir + "\$ToolDirName\$XilinxDirName2"
+		# Create and change to destination directory
+		Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
-	# Assemble output directory
-	$DestDir="$PoCRootDir\$PrecompiledDir\$VSimDirName\$XilinxDirName2"
-	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+		$ISEBinDir = 		Get-ISEBinaryDirectory $PoCPS1
+		$ISE_compxlib =	"$ISEBinDir\compxlib.exe"
+		Open-ISEEnvironment $PoCPS1
 
-	$ISEBinDir = 		Get-ISEBinaryDirectory $PoCPS1
-	$ISE_compxlib =	"$ISEBinDir\compxlib.exe"
-	Open-ISEEnvironment $PoCPS1
+		switch ($tool)
+		{	"ModelSim"
+			{	New-ModelSim_ini	}
+			"QuestaSim"
+			{	New-ModelSim_ini	}
+		}
 
-	New-ModelSim_ini
+		$Language =						"all"
+		$TargetArchitecture =	"all"
 
-	$Simulator =					"questa"
-	$Language =						"vhdl"
-	$TargetArchitecture =	"all"
+		$Command = "& '$ISE_compxlib' -64bit -s $Simulator -l $Language -dir $DestDir -p $ToolBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise"
+		$EnableDebug -and	(Write-Host "  $Command" -ForegroundColor DarkGray	) | Out-Null
+		Invoke-Expression $Command
+		if (-not $?)
+		{	Write-Host "[ERROR]: Error while compiling Xilinx ISE libraries." -ForegroundColor Red
+			Exit-PrecompileScript -1
+		}
 
-	$Command = "$ISE_compxlib -64bit -s $Simulator -l $Language -dir $DestDir -p $VSimBinDir -arch $TargetArchitecture -lib unisim -lib simprim -lib xilinxcorelib -intstyle ise"
-	Invoke-Expression $Command
-	if (-not $?)
-	{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
-		Exit-PrecompileScript -1
+		rm $XilinxDirName -ErrorAction SilentlyContinue
+		# New-Symlink $XilinxDirName2 $XilinxDirName -ErrorAction SilentlyContinue
+		# if ($LastExitCode -ne 0)
+		# {	Write-Host "[ERROR]: While creating a symlink. Not enough rights?" -ForegroundColor Red
+			# Exit-PrecompileScript -1
+		# }
+
+		Close-ISEEnvironment
+
+		# restore working directory
+		cd $WorkingDir
+		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 	}
-
-	rm $XilinxDirName -ErrorAction SilentlyContinue
-	# New-Symlink $XilinxDirName2 $XilinxDirName -ErrorAction SilentlyContinue
-	# if ($LastExitCode -ne 0)
-	# {	Write-Host "[ERROR]: While creating a symlink. Not enough rights?" -ForegroundColor Red
-		# Exit-PrecompileScript -1
-	# }
-
-	Close-ISEEnvironment
-
-	# restore working directory
-	cd $WorkingDir
-	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 }
 
 Write-Host "[COMPLETE]" -ForegroundColor Green

@@ -9,34 +9,37 @@
 __pycache__
 
 # ignore build directories
-/docs/_build/
-/docs/PyInfrastructure/*
-!/docs/PyInfrastructure/.gitempty
-!/docs/PyInfrastructure/.publish
-!/docs/PyInfrastructure/README.md
-!/docs/PyInfrastructure/index.rst
+docs/_build/
+docs/PyInfrastructure/*
+!docs/PyInfrastructure/.gitempty
+!docs/PyInfrastructure/.publish
+!docs/PyInfrastructure/README.md
+!docs/PyInfrastructure/index.rst
 
 
 # ignore files in netlist/
-/netlist/
-!/netlist/configuration.ini
-!/netlist/netlist.ps1
-!/netlist/netlist.sh
-!/netlist/template.cgc
+netlist/
+!netlist/configuration.ini
+!netlist/netlist.ps1
+!netlist/netlist.sh
+!netlist/template.cgc
 
 # ignore folders
-/docs/_build/
-/py/Wrapper/Hooks/*
-!/py/Wrapper/Hooks/README.md
-/temp/*
-!/temp/.*
-!/temp/*.*
-/temp/precompiled/*
-!/temp/precompiled/.*
+docs/_build/
+.pyIPCMI/Wrapper/Hooks/*
+!.pyIPCMI/Wrapper/Hooks/README.md
+temp/*
+!temp/.*
+!temp/*.*
+temp/precompiled/*
+!temp/precompiled/.*
 
-# ignore files from PoC
-/py/config.private.ini
-/tb/common/my_project.vhdl
+# ignore private files from pyIPCMI
+.pyIPCMI/config.private.ini
+
+# ignore private files from PoC
+tb/common/my_project.vhdl
+
 
 # ignore external tool files: ActiveHDL, QuestaSim
 /prj/ActiveHDL/*

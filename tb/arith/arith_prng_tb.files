@@ -8,8 +8,8 @@
 include				"src/arith/arith_prng.files"								# Unit Under Test
 
 # Testbench file(s)
-if (Tool in ["Xilinx_iSim", "Xilinx_xSim"]) then
-	vhdl	test	"tb/arith/arith_prng_tb.iSim.vhdl"					# Testbench
+if ((Tool in ["Xilinx_iSim", "Xilinx_xSim"]) and (VHDLVersion < 2008)) then
+	vhdl	test	"tb/arith/arith_prng_tb.isim.vhdl"					# Testbench
 else
 	vhdl	test	"tb/arith/arith_prng_tb.vhdl"								# Testbench
 end if

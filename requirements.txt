@@ -1,2 +1,2 @@
-colorama==0.3.7
-py-flags==1.1.0
+colorama>=0.3.7
+py-flags>=1.1.2

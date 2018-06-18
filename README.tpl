@@ -1,12 +1,13 @@
 {@GENERATED_HEADER@}
 # The PoC-Library
 
-[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/{@BRANCH@}/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/{@BRANCH@})
 [![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch={@BRANCH@})](https://travis-ci.org/VLSI-EDA/PoC/branches)
 [![Build status by AppVeyor](https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/{@BRANCH@}?svg=true)](https://ci.appveyor.com/project/Paebbels/poc/branch/{@BRANCH@})
 [![Documentation Status](https://readthedocs.org/projects/poc-library/badge/?version=latest)](http://poc-library.readthedocs.io/en/latest/?badge=latest)
-[![Requirements Status](https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch={@BRANCH@})](https://requires.io/github/VLSI-EDA/PoC/requirements/?branch={@BRANCH@})
+[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/{@BRANCH@}/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/{@BRANCH@})
+[![Requirements Status](https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch={@BRANCH@})](https://requires.io/github/VLSI-EDA/PoC/requirements/?branch={@BRANCH@})  
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC)
+[![Subscribe for news at https://gitter.im/VLSI-EDA/News](https://img.shields.io/badge/news-Subscribe%20to%20VLSI--EDA%2FNews-orange.svg)](https://gitter.im/VLSI-EDA/News)  
 ![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)
 [![Latest release](https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat)](https://github.com/VLSI-EDA/PoC/releases)
 [![Apache License 2.0](https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat)](LICENSE.md)

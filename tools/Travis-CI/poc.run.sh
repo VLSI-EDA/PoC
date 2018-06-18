@@ -14,6 +14,15 @@ POCROOT=$(pwd)
 
 TRAVIS_DIR=$POCROOT/tools/Travis-CI
 
+# -> LastExitCode
+# -> Error message
+ExitIfError() {
+	if [ $1 -ne 0 ]; then
+		echo 1>&2 -e $2
+		exit 1
+	fi
+}
+
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}    Running PoC testbenches with GHDL   ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
@@ -28,10 +37,13 @@ if grcat $TRAVIS_DIR/poc.run.grcrules</dev/null 2>/dev/null; then
   exec 1>&${COPROC[1]}-
 fi
 
+echo -e "Testing PoC infrastructure (1/2)..."
+$POCROOT/poc.sh list-testbench "PoC.*"
+ExitIfError $? "${RED}Testing command 'list-testbench' [FAILED]${NOCOLOR}"
 
-echo -e "Testing PoC infrastructure (1/1)..."
-$POCROOT/poc.sh list-testbenches "PoC.*"
-
+echo -e "Testing PoC infrastructure (2/2)..."
+$POCROOT/poc.sh list-netlist "PoC.*"
+ExitIfError $? "${RED}Testing command 'list-netlist' [FAILED]${NOCOLOR}"
 
 echo -e "Running one testbenche in debug mode..."
 $POCROOT/poc.sh -d ghdl "PoC.arith.prng"

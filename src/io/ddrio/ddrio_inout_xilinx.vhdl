@@ -67,6 +67,7 @@ begin
 		signal o 		: std_logic;
 		signal oe_n : std_logic;
 		signal t    : std_logic;
+		signal inp  : std_logic;
 	begin
 		off : ODDR
 			generic map(
@@ -91,7 +92,7 @@ begin
 			port map (
 				C		=> ClockIn,
 				CE	=> ClockInEnable,
-				D		=> Pad(i),
+				D		=> inp,
 				Q1	=> DataIn_high(i),
 				Q2	=> DataIn_low(i),
 				R		=> '0',
@@ -116,6 +117,13 @@ begin
 				S		=> '0'
 			);
 
-			Pad(i) <= o when t = '0' else 'Z';  -- 't' is low-active!
+		-- Explicit instantiation of tri-statable I/O buffers. Required if entity
+		-- is part of a netlist, which is used in another design.
+		buf : IOBUF
+			port map (
+				I  => o,
+				T  => t,
+				IO => Pad(i),
+				O  => inp);
 	end generate;
 end architecture;

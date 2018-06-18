@@ -17,7 +17,8 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
+# Copyright 2007-2016 Technische Universität Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,11 +46,13 @@ PoCRootDir="$($READLINK -f $ScriptDir/../..)"
 PoC_sh=$PoCRootDir/poc.sh
 
 # source shared file from precompile directory
-source $ScriptDir/shared.sh
+source $ScriptDir/precompile.sh
 
 
 # command line argument processing
 NO_COMMAND=1
+VERBOSE=0
+DEBUG=0
 VHDL93=0
 VHDL2008=0
 while [[ $# > 0 ]]; do
@@ -69,6 +72,13 @@ while [[ $# > 0 ]]; do
 		--questa)
 		COMPILE_FOR_VSIM=TRUE
 		NO_COMMAND=0
+		;;
+		-v|--verbose)
+		VERBOSE=1
+		;;
+		-d|--debug)
+		VERBOSE=1
+		DEBUG=1
 		;;
 		-h|--help)
 		HELP=TRUE
@@ -108,6 +118,10 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  -h --help             Print this help page"
 	# echo "  -c --clean            Remove all generated files"
 	echo ""
+	echo "Common options:"
+	echo "  -v --verbose          Print verbose messages."
+	echo "  -d --debug            Print debug messages."
+	echo ""
 	echo "Tool chain:"
 	echo "  -a --all              Compile for all tool chains."
 	echo "     --ghdl             Compile for GHDL."
@@ -122,6 +136,7 @@ fi
 
 
 if [ "$COMPILE_ALL" == "TRUE" ]; then
+	test $VERBOSE -eq 1 && echo "  Enables all tool chains: GHDL, vsim"
 	COMPILE_FOR_GHDL=TRUE
 	COMPILE_FOR_VSIM=TRUE
 fi
@@ -130,18 +145,26 @@ if [ \( $VHDL93 -eq 0 \) -a \( $VHDL2008 -eq 0 \) ]; then
 	VHDL2008=1
 fi
 
+test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'CONFIG.DirectoryNames:PrecompiledFiles'"
+test $DEBUG   -eq 1 && echo "    $PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null"
 PrecompiledDir=$($PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${COLORED_ERROR} Cannot get precompiled directory name.${ANSI_NOCOLOR}"
 	echo 1>&2 -e "${ANSI_RED}$PrecompiledDir${ANSI_NOCOLOR}"
 	exit -1;
+elif [ $DEBUG -eq 1 ]; then
+	echo "    Return value: $PrecompiledDir"
 fi
 
+test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'CONFIG.DirectoryNames:XilinxSpecificFiles'"
+test $DEBUG   -eq 1 && echo "    $PoC_sh query CONFIG.DirectoryNames:XilinxSpecificFiles 2>/dev/null"
 XilinxDirName=$($PoC_sh query CONFIG.DirectoryNames:XilinxSpecificFiles 2>/dev/null)
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx directory name.${ANSI_NOCOLOR}"
 	echo 1>&2 -e "${ANSI_RED}$XilinxDirName${ANSI_NOCOLOR}"
 	exit -1;
+elif [ $DEBUG -eq 1 ]; then
+	echo "    Return value: $XilinxDirName"
 fi
 XilinxDirName2=$XilinxDirName-ise
 
@@ -165,12 +188,16 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 
 
 	# Get Xilinx installation directory
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'INSTALL.Xilinx.ISE:InstallationDirectory'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query INSTALL.Xilinx.ISE:InstallationDirectory 2>/dev/null"
 	ISEInstallDir=$($PoC_sh query INSTALL.Xilinx.ISE:InstallationDirectory 2>/dev/null)
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx ISE installation directory.${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${COLORED_MESSAGE} $ISEInstallDir${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
 		exit -1;
+	elif [ $DEBUG -eq 1 ]; then
+		echo "    Return value: $ISEInstallDir"
 	fi
 	SourceDir=$ISEInstallDir/ISE/vhdl/src
 
@@ -218,12 +245,16 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 
 	# if XILINX environment variable is not set, load ISE environment
 	if [ -z "$XILINX" ]; then
+		test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'Xilinx.ISE:SettingsFile'"
+		test $DEBUG   -eq 1 && echo "    $PoC_sh query Xilinx.ISE:SettingsFile 2>/dev/null"
 		ISE_SettingsFile=$($PoC_sh query Xilinx.ISE:SettingsFile)
 		if [ $? -ne 0 ]; then
 			echo 1>&2 -e "${COLORED_ERROR} No Xilinx ISE installation found.${ANSI_NOCOLOR}"
 			echo 1>&2 -e "${COLORED_MESSAGE} $ISE_SettingsFile${ANSI_NOCOLOR}"
 			echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
 			exit -1
+		elif [ $DEBUG -eq 1 ]; then
+			echo "    Return value: $ISE_SettingsFile"
 		fi
 		echo -e "${ANSI_YELLOW}Loading Xilinx ISE environment '$ISE_SettingsFile'${ANSI_NOCOLOR}"
 		RescueArgs=$@
@@ -231,13 +262,17 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		source "$ISE_SettingsFile"
 		set -- $RescueArgs
 	fi
-
+	
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'INSTALL.Xilinx.ISE:BinaryDirectory'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query INSTALL.Xilinx.ISE:BinaryDirectory 2>/dev/null"
 	ISEBinDir=$($PoC_sh query INSTALL.Xilinx.ISE:BinaryDirectory 2>/dev/null)
   if [ $? -ne 0 ]; then
 	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx ISE binary directory.${ANSI_NOCOLOR}"
 	  echo 1>&2 -e "${COLORED_MESSAGE} $ISEBinDir${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx ISE installation.${ANSI_NOCOLOR}"
 		exit -1;
+	elif [ $DEBUG -eq 1 ]; then
+		echo "    Return value: $ISEBinDir"
   fi
 	ISE_compxlib=$ISEBinDir/compxlib
 
@@ -260,4 +295,3 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	rm -f $XilinxDirName
 	ln -s $XilinxDirName2 $XilinxDirName
 fi
-

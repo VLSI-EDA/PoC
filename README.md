@@ -1,13 +1,13 @@
 <!--- DO NOT EDIT! This file is generated from .tpl --->
 # The PoC-Library
 
-[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=master)](https://travis-ci.org/VLSI-EDA/PoC/branches)
-[![Build status by AppVeyor](https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/master?svg=true)](https://ci.appveyor.com/project/Paebbels/poc/branch/master)
+[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release)](https://travis-ci.org/VLSI-EDA/PoC/branches)
+[![Build status by AppVeyor](https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/release?svg=true)](https://ci.appveyor.com/project/Paebbels/poc/branch/release)
 [![Documentation Status](https://readthedocs.org/projects/poc-library/badge/?version=latest)](http://poc-library.readthedocs.io/en/latest/?badge=latest)
-[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/master/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/master)
-[![Requirements Status](https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch=master)](https://requires.io/github/VLSI-EDA/PoC/requirements/?branch=master)  
+[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
+[![Requirements Status](https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch=release)](https://requires.io/github/VLSI-EDA/PoC/requirements/?branch=release)  
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC)
-[![Subscribe to VLSI-EDA/News](https://img.shields.io/badge/News-Subscribe%20to%20VLSI--EDA%2FNews-orange.svg)](https://gitter.im/VLSI-EDA/News)  
+[![Subscribe for news at https://gitter.im/VLSI-EDA/News](https://img.shields.io/badge/news-Subscribe%20to%20VLSI--EDA%2FNews-orange.svg)](https://gitter.im/VLSI-EDA/News)  
 ![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)
 [![Latest release](https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat)](https://github.com/VLSI-EDA/PoC/releases)
 [![Apache License 2.0](https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat)](LICENSE.md)
@@ -103,13 +103,13 @@ All dependencies are available as GitHub repositories and are linked to PoC as G
 
 [201]: http://poc-library.readthedocs.io/en/latest/UsingPoC/index.html
 [202]: http://poc-library.readthedocs.io/
-[205]: https://github.com/VLSI-EDA/PoC/tree/master/lib
+[205]: https://github.com/VLSI-EDA/PoC/tree/release/lib
 [206]: http://poc-library.readthedocs.io/en/latest/Miscelaneous/ThirdParty.html
 
 
 ### 2.2 Download
 
-The PoC-Library can be downloaded as a [zip-file][221] (latest 'master' branch), cloned with `git clone`
+The PoC-Library can be downloaded as a [zip-file][221] (latest 'release' branch), cloned with `git clone`
 or embedded with `git submodule add` from GitHub. GitHub offers HTTPS and SSH as transfer protocols. See
 the [Download][222] page for further details. The installation directory is referred to as `PoCRoot`.
 
@@ -118,7 +118,7 @@ Protocol | Git Clone Command
 HTTPS    | `git clone --recursive https://github.com/VLSI-EDA/PoC.git PoC`
 SSH      | `git clone --recursive ssh://git@github.com:VLSI-EDA/PoC.git PoC`
 
-[221]: https://github.com/VLSI-EDA/PoC/archive/master.zip
+[221]: https://github.com/VLSI-EDA/PoC/archive/release.zip
 [222]: http://poc-library.readthedocs.io/en/latest/UsingPoC/Download.html
 
 ### 2.3 Configuring PoC on a Local System
@@ -191,7 +191,7 @@ cp lib\PoC\src\common\my_config.vhdl.template src\common\my_config.vhdl
 cp lib\PoC\src\common\my_project.vhdl.template src\common\my_project.vhdl
 ```
 
-[my_config.vhdl](https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_config.vhdl.template) defines
+[my_config.vhdl](https://github.com/VLSI-EDA/PoC/blob/release/src/common/my_config.vhdl.template) defines
 two global constants, which need to be adjusted:
 
 ```vhdl
@@ -199,7 +199,7 @@ constant MY_BOARD            : string := "CHANGE THIS"; -- e.g. Custom, ML505, K
 constant MY_DEVICE           : string := "CHANGE THIS"; -- e.g. None, XC5VLX50T-1FF1136, EP2SGX90FF1508C3
 ```
 
-[my_project.vhdl](https://github.com/VLSI-EDA/PoC/blob/master/src/common/my_project.vhdl.template) also
+[my_project.vhdl](https://github.com/VLSI-EDA/PoC/blob/release/src/common/my_project.vhdl.template) also
 defines two global constants, which need to be adjusted:
 
 ```vhdl

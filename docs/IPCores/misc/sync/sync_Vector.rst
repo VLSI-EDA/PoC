@@ -1,10 +1,3 @@
-.. # Load pre-defined aliases from docutils
-   # <file> is used to denote the special path
-   # <Python>\Lib\site-packages\docutils\parsers\rst\include
-
-.. include:: <mmlalias.txt>
-.. include:: <isonum.txt>
-
 .. _IP:sync_Vector:
 
 PoC.misc.sync.Vector
@@ -34,7 +27,7 @@ to capture the input for the new output. A busy flag is additionally
 calculated for the input clock domain.
 
 Constraints:
-  This module uses sub modules which need to be constrainted. Please
+  This module uses sub modules which need to be constrained. Please
   attend to the notes of the instantiated sub modules.
 
 
@@ -45,7 +38,7 @@ Constraints:
    :language: vhdl
    :tab-width: 2
    :linenos:
-   :lines: 49-63
+   :lines: 50-65
 
 
 
