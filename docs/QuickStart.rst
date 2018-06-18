@@ -178,7 +178,7 @@ list of steps can be found at :doc:`Integration </UsingPoC/Integration>`.
 
    cd ProjectRoot
    mkdir lib | cd
-   git submodule add https://github.com:VLSI-EDA/PoC.git PoC
+   git submodule add https://github.com/VLSI-EDA/PoC.git PoC
    cd PoC
    git remote rename origin github
    cd ..\..

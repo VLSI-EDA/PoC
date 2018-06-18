@@ -53,7 +53,7 @@ architecture tb of arith_firstone_tb is
   constant N : positive := 8;
 	constant simTestID	: T_SIM_TEST_ID			:= simCreateTest("Test setup for N=" & integer'image(N));
 
-	signal Clock	: std_logic;
+	signal Clock	: std_logic  := '1';
 
   -- component ports
   signal tin  : std_logic;
@@ -64,9 +64,10 @@ architecture tb of arith_firstone_tb is
 
 begin
 	-- initialize global simulation status
-	simInitialize;
+	simInitialize(MaxSimulationRuntime => 1 ms);
 	-- generate global testbench clock and reset
 	simGenerateClock(simTestID, Clock, CLOCK_FREQ);
+	-- Clock <= not Clock after 10 ns;
 
   -- component instantiation
   DUT : entity PoC.arith_firstone
@@ -105,6 +106,7 @@ begin
 		simDeactivateProcess(simProcessID);
 		-- Report overall result
 		simFinalize;
+		std.env.stop;
 		wait;  -- forever
   end process;
 

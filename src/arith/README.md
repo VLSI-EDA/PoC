@@ -36,14 +36,14 @@ namespace as well as public constants and functions.
  [arith_carrychain_inc]:  arith_carrychain_inc.vhdl
  [arith_convert_bin2bcd]:	arith_convert_bin2bcd.vhdl
  [arith_counter_bcd]:		arith_counter_bcd.vhdl
- [arith_counter_free]:		arith_counter_freev
+ [arith_counter_free]:		arith_counter_free.vhdl
  [arith_counter_gray]:		arith_counter_gray.vhdl
  [arith_counter_ring]:		arith_counter_ring.vhdl
- [arith_div]:				arith_addw.vhdl
+ [arith_div]:				arith_div.vhdl
  [arith_firstone]:			arith_firstone.vhdl
  [arith_muls_wide]:			arith_muls_wide.vhdl
- [arith_prefix_and]:		arith_addw.vhdl
- [arith_prefix_or]:			arith_addw.vhdl
+ [arith_prefix_and]:		arith_prefix_and.vhdl
+ [arith_prefix_or]:			arith_prefix_or.vhdl
  [arith_prng]:				arith_prng.vhdl
  [arith_same]:				arith_same.vhdl
  [arith_scaler]:			arith_scaler.vhdl

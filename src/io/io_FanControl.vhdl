@@ -104,20 +104,9 @@ begin
 		signal TC_Timeout					: std_logic;
 		signal StartUp						: std_logic;
 	begin
-		genML605 : if str_imatch(BOARD_NAME, "ML605") generate
-			SystemMonitor : xil_SystemMonitor_Virtex6
-				port map (
-					Reset								=> Reset,										-- Reset signal for the System Monitor control logic
-
-					Alarm_UserTemp			=> UserTemperature_async,		-- Temperature-sensor alarm output
-					Alarm_OverTemp			=> OverTemperature_async,		-- Over-Temperature alarm output
-					Alarm								=> open,										-- OR'ed output of all the Alarms
-					VP									=> '0',											-- Dedicated Analog Input Pair
-					VN									=> '0'
-				);
-		end generate;
-		genSeries7Board : if str_imatch(BOARD_NAME, "KC705") or str_imatch(BOARD_NAME, "VC707") generate
-			SystemMonitor : xil_SystemMonitor_Series7
+		genXilinxBoard : if str_imatch(BOARD_NAME, "ML605") or str_imatch(BOARD_NAME, "KC705") or
+		                    str_imatch(BOARD_NAME, "VC707") or str_imatch(BOARD_NAME, "KCU105") generate
+			SystemMonitor : xil_SystemMonitor
 				port map (
 					Reset								=> Reset,										-- Reset signal for the System Monitor control logic
 
@@ -129,7 +118,7 @@ begin
 				);
 		end generate;
 
-		sync : entity PoC.sync_Bits
+		sync : entity PoC.sync_Bits_Xilinx
 			generic map (
 				BITS			=> 2
 			)

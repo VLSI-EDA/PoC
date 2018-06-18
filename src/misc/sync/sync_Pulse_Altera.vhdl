@@ -2,9 +2,9 @@
 -- vim: tabstop=2:shiftwidth=2:noexpandtab
 -- kate: tab-width 2; replace-tabs off; indent-width 2;
 -- =============================================================================
--- Authors:				 	Patrick Lehmann
+-- Authors:           Patrick Lehmann
 --
--- Entity:				 	sync_Pulse_Altera
+-- Entity:           sync_Pulse_Altera
 --
 -- Description:
 -- -------------------------------------
@@ -25,13 +25,13 @@
 -- License:
 -- =============================================================================
 -- Copyright 2007-2016 Technische Universitaet Dresden - Germany
---										 Chair of VLSI-Design, Diagnostics and Architecture
+--                     Chair of VLSI-Design, Diagnostics and Architecture
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
 --
---		http://www.apache.org/licenses/LICENSE-2.0
+--    http://www.apache.org/licenses/LICENSE-2.0
 --
 -- Unless required by applicable law or agreed to in writing, software
 -- distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,42 +41,42 @@
 -- =============================================================================
 
 library IEEE;
-use			IEEE.STD_LOGIC_1164.all;
+use     IEEE.STD_LOGIC_1164.all;
 
-library	PoC;
-use			PoC.sync.all;
+library PoC;
+use     PoC.sync.all;
 
 
 entity sync_Pulse_Altera is
 	generic (
-		BITS					: positive						:= 1;									-- number of bit to be synchronized
-		SYNC_DEPTH		: T_MISC_SYNC_DEPTH		:= 2									-- generate SYNC_DEPTH many stages, at least 2
+		BITS          : positive            := 1;                       -- number of bit to be synchronized
+		SYNC_DEPTH    : T_MISC_SYNC_DEPTH   := T_MISC_SYNC_DEPTH'low    -- generate SYNC_DEPTH many stages, at least 2
 	);
 	port (
-		Clock					: in	std_logic;														-- Clock to be synchronized to
-		Input					: in	std_logic_vector(BITS - 1 downto 0);	-- Data to be synchronized
-		Output				: out	std_logic_vector(BITS - 1 downto 0)		-- synchronised data
+		Clock         : in  std_logic;                                  -- <Clock>  output clock domain
+		Input         : in  std_logic_vector(BITS - 1 downto 0);        -- @async:  input bits
+		Output        : out std_logic_vector(BITS - 1 downto 0)         -- @Clock:  output bits
 	);
 end entity;
 
 
 architecture rtl of sync_Pulse_Altera is
-	attribute PRESERVE					: boolean;
-	attribute ALTERA_ATTRIBUTE	: string;
+	attribute PRESERVE          : boolean;
+	attribute ALTERA_ATTRIBUTE  : string;
 
 	-- Apply a SDC constraint to meta stable flip flop
-	attribute ALTERA_ATTRIBUTE of rtl				: architecture is "-name SDC_STATEMENT ""set_false_path -to [get_registers {*|sync_Pulse_Altera:*|\gen:*:Data_meta}] """;
+	attribute ALTERA_ATTRIBUTE of rtl        : architecture is "-name SDC_STATEMENT ""set_false_path -to [get_registers {*|sync_Pulse_Altera:*|\gen:*:Data_meta}] """;
 begin
 	gen : for i in 0 to BITS - 1 generate
-		signal Data_async				: std_logic;
-		signal Data_meta				: std_logic																		:= INIT(i);
-		signal Data_sync				: std_logic_vector(SYNC_DEPTH - 1 downto 0)		:= (others => INIT(i));
+		signal Data_async        : std_logic;
+		signal Data_meta        : std_logic                                    := INIT(i);
+		signal Data_sync        : std_logic_vector(SYNC_DEPTH - 1 downto 0)    := (others => INIT(i));
 
 		-- preserve both registers (no optimization, shift register extraction, ...)
-		attribute PRESERVE of Data_meta						: signal is TRUE;
-		attribute PRESERVE of Data_sync						: signal is TRUE;
-		-- Notity the synthesizer / timing analysator to identity a synchronizer circuit
-		attribute ALTERA_ATTRIBUTE of Data_meta		: signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
+		attribute PRESERVE of Data_meta            : signal is TRUE;
+		attribute PRESERVE of Data_sync            : signal is TRUE;
+		-- Notify the synthesizer / timing analyzer to identity a synchronizer circuit
+		attribute ALTERA_ATTRIBUTE of Data_meta    : signal is "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
 	begin
 		process(Input(i), Data_sync(Data_sync'high))
 		begin
@@ -95,6 +95,6 @@ begin
 			end if;
 		end process;
 
-		Output(i)		<= Data_sync(Data_sync'high);
+		Output(i)    <= Data_sync(Data_sync'high);
 	end generate;
 end architecture;

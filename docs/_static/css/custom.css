@@ -1,3 +1,53 @@
 .wy-table-responsive table td {
 	white-space: normal;
 }
+
+/* Set text justification in paragraphs and list items to fully justified */
+.section p {
+	text-align:justify;
+}
+
+.simple li {
+	text-align:justify;
+}
+
+.release-notes  {
+#  margin-bottom:44px;
+  list-style-type: none;
+  display:table;
+}
+
+.release-notes .container ul {
+#  margin-bottom:44px;
+  list-style-type: none;
+  display:table;
+}
+
+.release-notes .container li {
+  padding-left:80px;
+  margin:0 0 12px;
+}
+
+.change-label-container {
+  float:left;
+  margin-left:-80px;
+  width: 70px;
+  text-align:right;
+}
+
+.change-label {
+  font-style: normal;
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 3px;
+  display: inline-block;
+  text-transform:uppercase;
+  font-size:11px;
+}
+
+.change-new           {background-color: #6cc644}
+.change-added       {background-color: #6cc644}
+.change-fixed       {background-color: #428dc9}
+.change-improved {background-color: #9361cc}
+.change-updated   {background-color: #9361cc}
+.change-removed   {background-color: #e18c58}

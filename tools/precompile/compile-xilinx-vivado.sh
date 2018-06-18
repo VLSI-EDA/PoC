@@ -17,7 +17,8 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2017-2018 Patrick Lehmann - Bötzingen, Germany
+# Copyright 2007-2016 Technische Universität Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,11 +46,13 @@ PoCRootDir="$($READLINK -f $ScriptDir/../..)"
 PoC_sh=$PoCRootDir/poc.sh
 
 # source shared file from precompile directory
-source $ScriptDir/shared.sh
+source $ScriptDir/precompile.sh
 
 
 # command line argument processing
 NO_COMMAND=1
+VERBOSE=0
+DEBUG=0
 VHDL93=0
 VHDL2008=0
 while [[ $# > 0 ]]; do
@@ -69,6 +72,13 @@ while [[ $# > 0 ]]; do
 		--questa)
 		COMPILE_FOR_VSIM=TRUE
 		NO_COMMAND=0
+		;;
+		-v|--verbose)
+		VERBOSE=1
+		;;
+		-d|--debug)
+		VERBOSE=1
+		DEBUG=1
 		;;
 		-h|--help)
 		HELP=TRUE
@@ -108,6 +118,10 @@ if [ "$HELP" == "TRUE" ]; then
 	echo "  -h --help             Print this help page"
 	# echo "  -c --clean            Remove all generated files"
 	echo ""
+	echo "Common options:"
+	echo "  -v --verbose          Print verbose messages."
+	echo "  -d --debug            Print debug messages."
+	echo ""
 	echo "Tool chain:"
 	echo "  -a --all              Compile for all tool chains."
 	echo "     --ghdl             Compile for GHDL."
@@ -122,26 +136,35 @@ fi
 
 
 if [ "$COMPILE_ALL" == "TRUE" ]; then
+	test $VERBOSE -eq 1 && echo "  Enables all tool chains: GHDL, vsim"
 	COMPILE_FOR_GHDL=TRUE
 	COMPILE_FOR_VSIM=TRUE
 fi
-if [ \( $VHDL93 -eq 0 \) -a \( $VHDL2008 -eq 0 \) ]; then
+if [[ ( $VHDL93 -eq 0 ) && ( $VHDL2008 -eq 0 ) ]]; then
 	VHDL93=1
 	VHDL2008=1
 fi
 
+test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'CONFIG.DirectoryNames:PrecompiledFiles'"
+test $DEBUG   -eq 1 && echo "    $PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null"
 PrecompiledDir=$($PoC_sh query CONFIG.DirectoryNames:PrecompiledFiles 2>/dev/null)
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${COLORED_ERROR} Cannot get precompiled directory.${ANSI_NOCOLOR}"
 	echo 1>&2 -e "${ANSI_RED}$PrecompiledDir${ANSI_NOCOLOR}"
 	exit -1;
+elif [ $DEBUG -eq 1 ]; then
+	echo "    Return value: $PrecompiledDir"
 fi
 
+test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'CONFIG.DirectoryNames:XilinxSpecificFiles'"
+test $DEBUG   -eq 1 && echo "    $PoC_sh query CONFIG.DirectoryNames:XilinxSpecificFiles 2>/dev/null"
 XilinxDirName=$($PoC_sh query CONFIG.DirectoryNames:XilinxSpecificFiles 2>/dev/null)
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx directory.${ANSI_NOCOLOR}"
 	echo 1>&2 -e "${ANSI_RED}$XilinxDirName${ANSI_NOCOLOR}"
 	exit -1;
+elif [ $DEBUG -eq 1 ]; then
+	echo "    Return value: $XilinxDirName"
 fi
 XilinxDirName2=$XilinxDirName-vivado
 
@@ -165,12 +188,16 @@ if [ "$COMPILE_FOR_GHDL" == "TRUE" ]; then
 
 
 	# Get Xilinx installation directory
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'INSTALL.Xilinx.Vivado:InstallationDirectory'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query INSTALL.Xilinx.Vivado:InstallationDirectory 2>/dev/null"
 	VivadoInstallDir=$($PoC_sh query INSTALL.Xilinx.Vivado:InstallationDirectory 2>/dev/null)
 	if [ $? -ne 0 ]; then
 		echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx Vivado installation directory.${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${COLORED_MESSAGE} $VivadoInstallDir${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx Vivado installation.${ANSI_NOCOLOR}"
 		exit -1;
+	elif [ $DEBUG -eq 1 ]; then
+		echo "    Return value: $VivadoInstallDir"
 	fi
 	SourceDir=$VivadoInstallDir/data/vhdl/src
 
@@ -219,12 +246,16 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 
 	# if XILINX_VIVADO environment variable is not set, load Vivado environment
 	if [ -z "$XILINX_VIVADO" ]; then
+		test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'Xilinx.Vivado:SettingsFile'"
+		test $DEBUG   -eq 1 && echo "    $PoC_sh query Xilinx.Vivado:SettingsFile 2>/dev/null"
 		Vivado_SettingsFile=$($PoC_sh query Xilinx.Vivado:SettingsFile)
 		if [ $? -ne 0 ]; then
 			echo 1>&2 -e "${COLORED_ERROR} No Xilinx Vivado installation found.${ANSI_NOCOLOR}"
 			echo 1>&2 -e "${COLORED_MESSAGE} $Vivado_SettingsFile${ANSI_NOCOLOR}"
 			echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx Vivado installation.${ANSI_NOCOLOR}"
 			exit -1
+		elif [ $DEBUG -eq 1 ]; then
+			echo "    Return value: $Vivado_SettingsFile"
 		fi
 		echo -e "${ANSI_YELLOW}Loading Xilinx Vivado environment '$Vivado_SettingsFile'${ANSI_NOCOLOR}"
 		RescueArgs=$@
@@ -233,12 +264,16 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 		set -- $RescueArgs
 	fi
 
+	test $VERBOSE -eq 1 && echo "  Query pyIPCMI for 'INSTALL.Xilinx.Vivado:BinaryDirectory'"
+	test $DEBUG   -eq 1 && echo "    $PoC_sh query INSTALL.Xilinx.Vivado:BinaryDirectory 2>/dev/null"
 	VivadoBinDir=$($PoC_sh query INSTALL.Xilinx.Vivado:BinaryDirectory 2>/dev/null)
   if [ $? -ne 0 ]; then
 	  echo 1>&2 -e "${COLORED_ERROR} Cannot get Xilinx Vivado binary directory.${ANSI_NOCOLOR}"
 	  echo 1>&2 -e "${COLORED_MESSAGE} $VivadoBinDir${ANSI_NOCOLOR}"
 		echo 1>&2 -e "${ANSI_YELLOW}Run 'poc.sh configure' to configure your Xilinx Vivado installation.${ANSI_NOCOLOR}"
 		exit -1;
+	elif [ $DEBUG -eq 1 ]; then
+		echo "    Return value: $VivadoBinDir"
   fi
 	Vivado_tcl=$VivadoBinDir/vivado
 

@@ -14,7 +14,7 @@
 #
 # License:
 # ==============================================================================
-# Copyright 2007-2016 Technische Universitaet Dresden - Germany
+# Copyright 2007-2017 Technische Universitaet Dresden - Germany
 #											Chair of VLSI-Design, Diagnostics and Architecture
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,19 +37,25 @@
 # This CmdLet:
 #   (1) Creates a sub-directory 'osvvm' in the current working directory
 #   (2) Compiles all OSVVM simulation libraries and packages for
+#       o Active-HDL
 #       o GHDL
-#       o QuestaSim
+#       o ModelSim/QuestaSim
 #
 [CmdletBinding()]
 param(
 	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
+	# Pre-compile the OSVVM libraries for Active-HDL.
+	[switch]$ActiveHDL =	$false,
+	# Pre-compile the OSVVM libraries for Riviera-PRO.
+	[switch]$RivieraPRO =	$false,
 	# Pre-compile the OSVVM libraries for GHDL.
 	[switch]$GHDL =				$false,
-
+	# Pre-compile the OSVVM libraries for ModelSim.
+	[switch]$ModelSim =		$false,
 	# Pre-compile the OSVVM libraries for QuestaSim.
-	[switch]$Questa =			$false,
+	[switch]$QuestaSim =	$false,
 
 	# Clean up directory before analyzing.
 	[switch]$Clean =			$false,
@@ -66,28 +72,56 @@ $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
 
-# set default values
-$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
-
 Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -ArgumentList "$WorkingDir"
 
 # Display help if no command was selected
-$Help = $Help -or (-not ($All -or $GHDL -or $Questa))
-
-if ($Help)
+if ($Help -or (-not ($All -or $ActiveHDL -or $RivieraPRO -or $GHDL -or $ModelSim -or $QuestaSim)))
 {	Get-Help $MYINVOCATION.InvocationName -Detailed
 	Exit-PrecompileScript
 }
 
-$GHDL,$Questa =			Resolve-Simulator $All $GHDL $Questa
+# set default values
+$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
+
+if ($All)
+{	$ActiveHDL =	$true
+	$RivieraPRO =	$true
+	$GHDL =				$true
+	$ModelSim =		$true
+	$QuestaSim =	$true
+}
 
 $PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
-$OSVVMDirName =			"osvvm"
+# $OSVVMDirName =			"osvvm"
 $SourceDirectory =	"$PoCRootDir\$OSVVMSourceDirectory"
+
+$OSVVM_Files = @(
+	"NamePkg.vhd",
+	"OsvvmGlobalPkg.vhd",
+	"VendorCovApiPkg.vhd",
+	"TranscriptPkg.vhd",
+	"TextUtilPkg.vhd",
+	"AlertLogPkg.vhd",
+	"MessagePkg.vhd",
+	"SortListPkg_int.vhd",
+	"RandomBasePkg.vhd",
+	"RandomPkg.vhd",
+	"CoveragePkg.vhd",
+	"MemoryPkg.vhd",
+	"ScoreboardGenericPkg.vhd",
+	"ScoreboardPkg_slv.vhd",
+	"ScoreboardPkg_int.vhd",
+	"ResolutionPkg.vhd",
+	"TbUtilPkg.vhd",
+	"OsvvmContext.vhd"
+
+	"SortListGenericPkg.vhd",
+	"SortListPkg.vhd",
+	"ScoreboardPkg.vhd"
+)
+
+$ResolvedPrecompileDir = Convert-Path ( Resolve-Path "$PoCRootDir\$PrecompiledDir" )
 
 # GHDL
 # ==============================================================================
@@ -100,9 +134,9 @@ if ($GHDL)
 	$GHDLDirName =		Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
-	$DestDir = Convert-Path (Resolve-Path "$PoCRootDir\$PrecompiledDir\$GHDLDirName")
+	$DestDir = $ResolvedPrecompileDir + "\$GHDLDirName"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$GHDLOSVVMScript = "$GHDLScriptDir\compile-osvvm.ps1"
 	if (-not (Test-Path $GHDLOSVVMScript -PathType Leaf))
@@ -114,7 +148,8 @@ if ($GHDL)
 	if (-not (Test-Path env:GHDL))
 	{	$env:GHDL = $GHDLBinDir		}
 
-	$Command = "$GHDLOSVVMScript -All -Source $SourceDirectory -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	$Command = "& '$GHDLOSVVMScript' -All -Source $SourceDirectory -Output $DestDir -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $Command" -ForegroundColor DarkGray	) | Out-Null
 	Invoke-Expression $Command
 	if ($LastExitCode -ne 0)
 	{	Write-Host "[ERROR]: While executing vendor library compile script from GHDL." -ForegroundColor Red
@@ -127,58 +162,45 @@ if ($GHDL)
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 }
 
-# QuestaSim/ModelSim
+# Active-HDL
 # ==============================================================================
-if ($Questa)
-{	Write-Host "Pre-compiling OSVVM's simulation libraries for QuestaSim" -ForegroundColor Cyan
+if ($ActiveHDL)
+{	Write-Host "Pre-compiling OSVVM's simulation libraries for Active-HDL" -ForegroundColor Cyan
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$VSimBinDir =			Get-ModelSimBinaryDirectory $PoCPS1
-	$VSimDirName =		Get-QuestaSimDirectoryName $PoCPS1
+	$ActiveHDLBinDir =	Get-ActiveHDLBinaryDirectory $PoCPS1 -Verbose:$EnableVerbose -Debug:$EnableDebug
+	$ActiveHDLDirName =	Get-ActiveHDLDirectoryName $PoCPS1 -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	# Assemble output directory
-	$DestDir = Convert-Path (Resolve-Path "$PoCRootDir\$PrecompiledDir\$VSimDirName\$OSVVMDirName")
+	$DestDir = $ResolvedPrecompileDir + "\$ActiveHDLDirName"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
-	cd ..
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$Library = "osvvm"
-	$Files = @(
-		"NamePkg.vhd",
-		"OsvvmGlobalPkg.vhd",
-		"TextUtilPkg.vhd",
-		"TranscriptPkg.vhd",
-		"AlertLogPkg.vhd",
-		"MemoryPkg.vhd",
-		"MessagePkg.vhd",
-		"SortListGenericPkg.vhd",
-		"SortListPkg.vhd",
-		"SortListPkg_int.vhd",
-		"RandomBasePkg.vhd",
-		"RandomPkg.vhd",
-		"CoveragePkg.vhd",
-		"ScoreboardGenericPkg.vhd",
-		"ScoreboardPkg.vhd",
-		"OsvvmContext.vhd"
-	)
-	$SourceFiles = $Files | % { "$SourceDirectory\$_" }
+	$SourceFiles = $OSVVM_Files | % { "$SourceDirectory\$_" }
 
 	# Compile libraries with vcom, executed in destination directory
 	Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow
-	$InvokeExpr = "$VSimBinDir\vlib.exe " + $Library + " 2>&1"
-	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVLibLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-	$InvokeExpr = "$VSimBinDir\vmap.exe -del " + $Library + " 2>&1"
-	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-	$InvokeExpr = "$VSimBinDir\vmap.exe " + $Library + " $DestDir\$Library 2>&1"
-	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	$InvokeExpr =				"& '$ActiveHDLBinDir\vlib.exe' " + $Library + " 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	
+	$InvokeExpr =				"& '$ActiveHDLBinDir\vmap.exe' -del " + $Library + " 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	
+	$InvokeExpr =				"& '$ActiveHDLBinDir\vmap.exe' " + $Library + " $DestDir\$Library 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	Write-Host "Compiling library '$Library' with vcom..." -ForegroundColor Yellow
 	$ErrorCount += 0
 	foreach ($File in $SourceFiles)
 	{	Write-Host "Compiling '$File'..." -ForegroundColor DarkCyan
-		$InvokeExpr = "$VSimBinDir\vcom.exe -suppress 1246 -2008 -work $Library " + $File + " 2>&1"
-		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredQuestaVComLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
-		if ($LastExitCode -ne 0)
+		$InvokeExpr =				"& '$ActiveHDLBinDir\vcom.exe' -2008 -work $Library " + $File + " 2>&1"
+		$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVLibLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredActiveHDLVComLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+		if (($LastExitCode -ne 0) -or $ErrorRecordFound)
 		{	$ErrorCount += 1
 			if ($HaltOnError)
 			{	break		}
@@ -188,8 +210,76 @@ if ($Questa)
 	# restore working directory
 	cd $WorkingDir
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+	Write-Host "Compiling OSVVM packages with Active-HDL " -NoNewline
+	if ($ErrorCount -gt 0)
+	{	Write-Host "[FAILED]" -ForegroundColor Red				}
+	else
+	{	Write-Host "[SUCCESSFUL]" -ForegroundColor Green	}
 }
 
-Write-Host "[COMPLETE]" -ForegroundColor Green
+# Riviera-PRO
+# ==============================================================================
+if ($RivieraPRO)
+{	Write-Host "Pre-compiling OSVVM's simulation libraries for Riviera-PRO" -ForegroundColor Cyan
+	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+
+	Write-Host "Not yet supported." -ForegroundColor Red
+}
+
+# QuestaSim/ModelSim
+# ==============================================================================
+if ($ModelSim -or $QuestaSim)
+{	Write-Host "Pre-compiling OSVVM's simulation libraries for ModelSim/QuestaSim" -ForegroundColor Cyan
+	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+
+	$VSimBinDir =		Get-ModelSimBinaryDirectory $PoCPS1 -Verbose:$EnableVerbose -Debug:$EnableDebug
+	$VSimDirName =	Get-ModelSimDirectoryName $PoCPS1 -Verbose:$EnableVerbose -Debug:$EnableDebug
+
+	# Assemble output directory
+	$DestDir =			$ResolvedPrecompileDir + "\$VSimDirName"
+	$ModelSimINI =	"$DestDir\modelsim.ini"
+	# Create and change to destination directory
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
+
+	$Library = "osvvm"
+	$SourceFiles = $OSVVM_Files | % { "$SourceDirectory\$_" }
+
+	# Compile libraries with vcom, executed in destination directory
+	Write-Host "Creating library '$Library' with vlib/vmap..." -ForegroundColor Yellow
+	$InvokeExpr =				"& '$VSimBinDir\vlib.exe' " + $Library + " 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVLibLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	
+	$InvokeExpr =				"& '$VSimBinDir\vmap.exe' -modelsimini $ModelSimINI -del " + $Library + " 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+	
+	$InvokeExpr =				"& '$VSimBinDir\vmap.exe' -modelsimini $ModelSimINI " + $Library + " $DestDir\$Library 2>&1"
+	$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+	$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVMapLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+
+	Write-Host "Compiling library '$Library' with vcom..." -ForegroundColor Yellow
+	$ErrorCount += 0
+	foreach ($File in $SourceFiles)
+	{	Write-Host "Compiling '$File'..." -ForegroundColor DarkCyan
+		$InvokeExpr =				"& '$VSimBinDir\vcom.exe' -suppress 1246 -2008 -modelsimini $ModelSimINI -work $Library " + $File + " 2>&1"
+		$EnableDebug -and		(Write-Host "  Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings `"  `" -Verbose:`$$EnableVerbose -Debug:`$$EnableDebug" -ForegroundColor DarkGray	) | Out-Null
+		$ErrorRecordFound = Invoke-Expression $InvokeExpr | Restore-NativeCommandStream | Write-ColoredModelSimVComLine $SuppressWarnings "  " -Verbose:$EnableVerbose -Debug:$EnableDebug
+		if (($LastExitCode -ne 0) -or $ErrorRecordFound)
+		{	$ErrorCount += 1
+			if ($HaltOnError)
+			{	break		}
+		}
+	}
+
+	# restore working directory
+	cd $WorkingDir
+	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+	Write-Host "Compiling OSVVM packages with ModelSim/QuestaSim " -NoNewline
+	if ($ErrorCount -gt 0)
+	{	Write-Host "[FAILED]" -ForegroundColor Red				}
+	else
+	{	Write-Host "[SUCCESSFUL]" -ForegroundColor Green	}
+}
 
 Exit-PrecompileScript
