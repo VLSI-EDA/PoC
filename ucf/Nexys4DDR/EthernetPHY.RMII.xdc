@@ -30,7 +30,7 @@ set_property PACKAGE_PIN  D5        [ get_ports Nexys4DDR_EthernetPHY_Clock ]
 ## {OUT}    TXD0
 set_property PACKAGE_PIN  A10       [ get_ports Nexys4DDR_EthernetPHY_TX_Data[0] ]
 ## {OUT}    TXD1
-set_property PACKAGE_PIN  A8        [ get_ports Nexys4DDR_EthernetPHY_TX_Data[1] ]]
+set_property PACKAGE_PIN  A8        [ get_ports Nexys4DDR_EthernetPHY_TX_Data[1] ]
 ## {OUT}    TXEN
 set_property PACKAGE_PIN  B9        [ get_ports Nexys4DDR_EthernetPHY_TX_Valid ]
 ##
