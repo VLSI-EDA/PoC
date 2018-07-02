@@ -1,8 +1,8 @@
 ## =============================================================================================================================================================
 ## Xilinx Design Constraint File (XDC)
 ## =============================================================================================================================================================
-## Board:         Digilent - Arty_S7
-## FPGA:          Xilinx Artix 7
+## Board:         Digilent - ArtyS7
+## FPGA:          Xilinx Spartan 7
 ## =============================================================================================================================================================
 ## Communication BUS
 ## =============================================================================================================================================================
@@ -10,14 +10,12 @@
 ## =============================================================================================================================================================
 ## -----------------------------------------------------------------------------
 ##	Bank:					15
-##		VCCO:				3.3V (VCC3V3)
+##	VCCO:					3.3V (VCC3V3)
 ##	Location:				CK_SDA,CK_SCL
 ## -----------------------------------------------------------------------------
 ## {INOUT}	 SerialClock - CK_SCL
-set_property PACKAGE_PIN		J14		[get_ports Arty_S7_IIC_SerialClock]	#IO_L24N_T3_RS0_15
+set_property PACKAGE_PIN		J14		[ get_ports ArtyS7_IIC_SerialClock ]	
 ## {INOUT}	 SerialData - CK_SDA
-set_property PACKAGE_PIN		J13		[get_ports Arty_S7_IIC_SerialData]	#IO_L24P_T3_RS1_15
+set_property PACKAGE_PIN		J13		[ get_ports ArtyS7_IIC_SerialData ]	
 
-# Ignore timings on async I/O pins
-set_false_path							-to		[get_ports -regexp {Arty_S7_IIC_.*}]
-set_false_path							-from	[get_ports -regexp {Arty_S7_IIC_Serial.*}]
+
