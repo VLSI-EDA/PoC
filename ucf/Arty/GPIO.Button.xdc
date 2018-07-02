@@ -10,14 +10,14 @@
 ## =============================================================================================================================================================
 ## -----------------------------------------------------------------------------
 ##	Bank:			16				
-##		VCCO:		VCC3V3			
+##	VCCO:			VCC3V3			
 ##	Location:		BTN0,BTN1,BTN2,BTN3			
 ## -----------------------------------------------------------------------------
 ## {IN}    BTN0
-set_property PACKAGE_PIN   D9     [ get_ports Arty_GPIO_Button[0] ]	#IO_L6N_T0_VREF_16
+set_property PACKAGE_PIN   D9     [ get_ports Arty_GPIO_Button[0] ]	
 ## {IN}    BTN1
-set_property PACKAGE_PIN   C9     [ get_ports Arty_GPIO_Button[1] ]	#IO_L11P_T1_SRCC_16
+set_property PACKAGE_PIN   C9     [ get_ports Arty_GPIO_Button[1] ]	
 ## {IN}    BTN2
-set_property PACKAGE_PIN   B9     [ get_ports Arty_GPIO_Button[2] ]	#IO_L11N_T1_SRCC_16
+set_property PACKAGE_PIN   B9     [ get_ports Arty_GPIO_Button[2] ]	
 ## {IN}    BTN3
-set_property PACKAGE_PIN   B8     [ get_ports Arty_GPIO_Button[3] ]	#IO_L12P_T1_MRCC_16
+set_property PACKAGE_PIN   B8     [ get_ports Arty_GPIO_Button[3] ]	
