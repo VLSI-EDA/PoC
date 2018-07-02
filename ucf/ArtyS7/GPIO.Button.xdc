@@ -1,8 +1,8 @@
 ## =============================================================================================================================================================
 ## Xilinx Design Constraint File (XDC)
 ## =============================================================================================================================================================
-## Board:         Digilent - Arty_S7
-## FPGA:          Xilinx Artix 7
+## Board:         Digilent - ArtyS7
+## FPGA:          Xilinx Spartan 7
 ## =============================================================================================================================================================
 ## General Purpose I/O 
 ## =============================================================================================================================================================
@@ -10,14 +10,14 @@
 ## =============================================================================================================================================================
 ## -----------------------------------------------------------------------------
 ##	Bank:			15				
-##		VCCO:		VCC3V3			
+##	VCCO:			VCC3V3			
 ##	Location:		BTN0,BTN1,BTN2,BTN3			
 ## -----------------------------------------------------------------------------
 ## {IN}    BTN0
-set_property PACKAGE_PIN   G15     [ get_ports Arty_S7_GPIO_Button[0] ]	#IO_L18N_T2_A23_15
+set_property PACKAGE_PIN   G15     [ get_ports ArtyS7_GPIO_Button[0] ]	
 ## {IN}    BTN1
-set_property PACKAGE_PIN   K16     [ get_ports Arty_S7_GPIO_Button[1] ]	#IO_L19P_T3_A22_15
+set_property PACKAGE_PIN   K16     [ get_ports ArtyS7_GPIO_Button[1] ]	
 ## {IN}    BTN2
-set_property PACKAGE_PIN   J16     [ get_ports Arty_S7_GPIO_Button[2] ]	#IO_L19N_T3_A21_VREF_15
+set_property PACKAGE_PIN   J16     [ get_ports ArtyS7_GPIO_Button[2] ]	
 ## {IN}    BTN3
-set_property PACKAGE_PIN   H13     [ get_ports Arty_S7_GPIO_Button[3] ]	#IO_L20P_T3_A20_15
+set_property PACKAGE_PIN   H13     [ get_ports ArtyS7_GPIO_Button[3] ]	
