@@ -15,19 +15,19 @@
 ## -----------------------------------------------------------------------------
 
 ## {IN}			JB1_P
-set_property PACKAGE_PIN  P17        [ get_ports ArtyS7_PMOD_PortJB[0] ] 
+set_property PACKAGE_PIN  P17        [ get_ports ArtyS7_PMOD_JB_Port[0] ] 
 ## {IN}			JB1_N                                
-set_property PACKAGE_PIN  P18        [ get_ports ArtyS7_PMOD_PortJB[1] ] 
+set_property PACKAGE_PIN  P18        [ get_ports ArtyS7_PMOD_JB_Port[1] ] 
 ## {IN}			JB2_P                               
-set_property PACKAGE_PIN  R18        [ get_ports ArtyS7_PMOD_PortJB[2] ] 
+set_property PACKAGE_PIN  R18        [ get_ports ArtyS7_PMOD_JB_Port[2] ] 
 ## {IN}			JB2_N                                
-set_property PACKAGE_PIN  T18        [ get_ports ArtyS7_PMOD_PortJB[3] ] 
+set_property PACKAGE_PIN  T18        [ get_ports ArtyS7_PMOD_JB_Port[3] ] 
 ## {IN}			JB3_P                                
-set_property PACKAGE_PIN  P14        [ get_ports ArtyS7_PMOD_PortJB[4] ] 
+set_property PACKAGE_PIN  P14        [ get_ports ArtyS7_PMOD_JB_Port[4] ] 
 ## {IN}			JB3_N                                
-set_property PACKAGE_PIN  P15        [ get_ports ArtyS7_PMOD_PortJB[5] ] 
+set_property PACKAGE_PIN  P15        [ get_ports ArtyS7_PMOD_JB_Port[5] ] 
 ## {IN}			JB4_P                                
-set_property PACKAGE_PIN  N15        [ get_ports ArtyS7_PMOD_PortJB[6] ] 
+set_property PACKAGE_PIN  N15        [ get_ports ArtyS7_PMOD_JB_Port[6] ] 
 ## {IN}			JB4_N                                
-set_property PACKAGE_PIN  P16        [ get_ports ArtyS7_PMOD_PortJB[7] ] 
+set_property PACKAGE_PIN  P16        [ get_ports ArtyS7_PMOD_JB_Port[7] ] 
 
