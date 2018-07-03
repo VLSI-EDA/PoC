@@ -149,7 +149,8 @@ package body config_private is
 	constant C_BOARD_ETH_HARD_GMII_88E1111  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("HARD", "GMII", "MARVEL_88E1111", x"07", "GMII",  "MDIO");
 	constant C_BOARD_ETH_SOFT_SGMII_88E1111  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "SGMII", "MDIO_OVER_IIC");
 	constant C_BOARD_ETH_SOFT_MII_LAN8720A  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "SMSC_LAN8720A",  x"01", "MII",   "MDIO");
-
+	constant C_BOARD_ETH_SOFT_MII_DP83848J  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "TI_ DP83848J",  x"01", "MII",   "MDIO");
+	
 	constant C_BOARD_ETH_NONE    : T_BOARD_ETHERNET_DESC_VECTOR(T_BOARD_ETHERNET_DESC_INDEX)  := (others => C_BOARD_ETH_EMPTY);
 
 
@@ -355,6 +356,14 @@ package body config_private is
 			UART =>						C_BOARD_UART_DTE_921600_NONE,
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
+		),(
+			BoardName =>			conf("Arty"),
+			FPGADevice =>			conf("XC7A35T-L1CSG324I"),			         -- XC7A35T-L1CSG324I
+			UART =>						C_BOARD_UART_DTE_921600_NONE,
+			Ethernet => (
+				0 =>			C_BOARD_ETH_SOFT_MII_DP83848J,
+				others =>	C_BOARD_ETH_EMPTY),
+			EthernetCount =>	1
 		),
     -- Custom Board (MUST BE LAST ONE)
     -- =========================================================================
@@ -461,12 +470,12 @@ package config is
 		DEVICE_SMARTFUSION2,                                                -- Microsemi.SmartFusion
 		DEVICE_POLARFIRE,                                                   -- Microsemi.PolarFire
     -- Xilinx
-		DEVICE_SPARTAN3, DEVICE_SPARTAN6,																    -- Xilinx.Spartan
-		DEVICE_ZYNQ7, DEVICE_ZYNQ_ULTRA_PLUS,														    -- Xilinx.Zynq
-		DEVICE_ARTIX7,																									    -- Xilinx.Artix
+		DEVICE_SPARTAN3, DEVICE_SPARTAN6, DEVICE_SPARTAN7					-- Xilinx.Spartan
+		DEVICE_ZYNQ7, DEVICE_ZYNQ_ULTRA_PLUS,								-- Xilinx.Zynq
+		DEVICE_ARTIX7,														-- Xilinx.Artix
 		DEVICE_KINTEX7, DEVICE_KINTEX_ULTRA, DEVICE_KINTEX_ULTRA_PLUS,	    -- Xilinx.Kintex
 		DEVICE_VIRTEX4, DEVICE_VIRTEX5,	DEVICE_VIRTEX6, DEVICE_VIRTEX7,	    -- Xilinx.Virtex
-			DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS									    --
+		DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS									    --
 	);
 
   -- List of known device subtypes
@@ -509,10 +518,10 @@ package config is
 		TRANSCEIVER_MGT,																								    -- Lattice transceiver
     -- Xilinx transceivers
 		TRANSCEIVER_GTP_DUAL,	TRANSCEIVER_GTPE1, TRANSCEIVER_GTPE2,			    -- Xilinx GTP transceivers
-		TRANSCEIVER_GTX,			TRANSCEIVER_GTXE1, TRANSCEIVER_GTXE2,			    -- Xilinx GTX transceivers
-		TRANSCEIVER_GTH,			TRANSCEIVER_GTHE1, TRANSCEIVER_GTHE2, TRANSCEIVER_GTHE3, TRANSCEIVER_GTHE4,			    -- Xilinx GTH transceivers
-		TRANSCEIVER_GTZ,																								    -- Xilinx GTZ transceivers
-		TRANSCEIVER_GTY																									    -- Xilinx GTY transceivers
+		TRANSCEIVER_GTX,		TRANSCEIVER_GTXE1, TRANSCEIVER_GTXE2,			    -- Xilinx GTX transceivers
+		TRANSCEIVER_GTH,		TRANSCEIVER_GTHE1, TRANSCEIVER_GTHE2, TRANSCEIVER_GTHE3, TRANSCEIVER_GTHE4,			    -- Xilinx GTH transceivers
+		TRANSCEIVER_GTZ,																								-- Xilinx GTZ transceivers
+		TRANSCEIVER_GTY																									-- Xilinx GTY transceivers
 	);
 
   -- Properties of an FPGA architecture
@@ -533,28 +542,28 @@ package config is
   -- Functions extracting board and PCB properties from "MY_BOARD"
   -- which is declared in package "my_config".
   -- ===========================================================================
-	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY)								return natural;
-	function BOARD_INFO(BoardConfig : string := C_BOARD_STRING_EMPTY)						return T_BOARD_INFO;
-	function BOARD_NAME(BoardConfig : string := C_BOARD_STRING_EMPTY) 					return string;
-	function BOARD_DEVICE(BoardConfig : string := C_BOARD_STRING_EMPTY) 				return string;
-	function BOARD_UART_BAUDRATE(BoardConfig : string := C_BOARD_STRING_EMPTY)	return string;
+	function BOARD(BoardConfig : string := C_BOARD_STRING_EMPTY)					return natural;
+	function BOARD_INFO(BoardConfig : string := C_BOARD_STRING_EMPTY)				return T_BOARD_INFO;
+	function BOARD_NAME(BoardConfig : string := C_BOARD_STRING_EMPTY) 				return string;
+	function BOARD_DEVICE(BoardConfig : string := C_BOARD_STRING_EMPTY) 			return string;
+	function BOARD_UART_BAUDRATE(BoardConfig : string := C_BOARD_STRING_EMPTY)		return string;
 
   -- Functions extracting device and architecture properties from "MY_DEVICE"
   -- which is declared in package "my_config".
   -- ===========================================================================
-	function VENDOR(DeviceString : string := C_DEVICE_STRING_EMPTY)							return T_VENDOR;
+	function VENDOR(DeviceString : string := C_DEVICE_STRING_EMPTY)					return T_VENDOR;
 	function SYNTHESIS_TOOL(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_SYNTHESIS_TOOL;
-	function DEVICE(DeviceString : string := C_DEVICE_STRING_EMPTY)							return T_DEVICE;
+	function DEVICE(DeviceString : string := C_DEVICE_STRING_EMPTY)					return T_DEVICE;
 	function DEVICE_FAMILY(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_FAMILY;
 	function DEVICE_SUBTYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_SUBTYPE;
 	function DEVICE_SERIES(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_SERIES;
-	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY)	return natural;
+	function DEVICE_GENERATION(DeviceString : string := C_DEVICE_STRING_EMPTY)		return natural;
 	function DEVICE_NUMBER(DeviceString : string := C_DEVICE_STRING_EMPTY)			return natural;
 
 	function TRANSCEIVER_TYPE(DeviceString : string := C_DEVICE_STRING_EMPTY)		return T_TRANSCEIVER;
-	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY)					return positive;
+	function LUT_FANIN(DeviceString : string := C_DEVICE_STRING_EMPTY)				return positive;
 
-	function DEVICE_INFO(DeviceString : string := C_DEVICE_STRING_EMPTY)				return T_DEVICE_INFO;
+	function DEVICE_INFO(DeviceString : string := C_DEVICE_STRING_EMPTY)			return T_DEVICE_INFO;
 
   -- Convert T_DEVICE to string representation as required by "altera_mf" library
   -- ===========================================================================
@@ -849,6 +858,7 @@ package body config is
 					when "KU"	 =>		return DEVICE_KINTEX_ULTRA;
 					when "3S"	 =>		return DEVICE_SPARTAN3;
 					when "6S"	 =>		return DEVICE_SPARTAN6;
+					when "7S"	 =>		return DEVICE_SPARTAN7;
 					when "4V"	 =>		return DEVICE_VIRTEX4;
 					when "5V"	 =>		return DEVICE_VIRTEX5;
 					when "6V"	 =>		return DEVICE_VIRTEX6;
@@ -910,7 +920,7 @@ package body config is
 			when DEVICE_GENERIC =>
 				return DEVICE_SERIES_GENERIC;
 	    -- all Xilinx ****7 devices
-			when DEVICE_ARTIX7 | DEVICE_KINTEX7 | DEVICE_VIRTEX7 | DEVICE_ZYNQ7 =>
+			when DEVICE_ARTIX7 | DEVICE_KINTEX7 | DEVICE_VIRTEX7 | DEVICE_ZYNQ7 | DEVICE_SPARTAN7 =>
 				return DEVICE_SERIES_7_SERIES;
 	    -- all Xilinx ****UltraScale devices
 			when DEVICE_KINTEX_ULTRA | DEVICE_VIRTEX_ULTRA =>
@@ -1007,7 +1017,12 @@ package body config is
 				elsif	((DEV_SUB_STR = "LX") and (			str_find(MY_DEV(7 to MY_DEV'high), "T"))) then	return DEVICE_SUBTYPE_LXT;
 				else	report "Unknown Virtex-5 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
-
+			
+			when DEVICE_SPARTAN7 =>
+				if		((str_find(MY_DEV(5 to MY_DEV'high)))) then	return DEVICE_SUBTYPE_X;
+				else	report "Unknown Spartan-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
+				end if;
+			
       when DEVICE_VIRTEX4 =>
         report "Unkown Virtex 4" severity failure;
 
@@ -1080,6 +1095,7 @@ package body config is
 
 			when DEVICE_SPARTAN3 =>																						return 4;
 			when DEVICE_SPARTAN6 =>																						return 6;
+			when DEVICE_SPARTAN7 =>				return 7;
 			when DEVICE_VIRTEX4 | DEVICE_VIRTEX5 | DEVICE_VIRTEX6 =>					return 6;
 
 			when others => report "LUT fan-in is unknown for the given device, using default (4)." severity failure;
@@ -1110,7 +1126,9 @@ package body config is
 					when DEVICE_SUBTYPE_LX =>			return TRANSCEIVER_NONE;
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTPE1;
 					when others =>								report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
-				end case;
+			end case;
+			
+			when DEVICE_SPARTAN7 =>  				return TRANSCEIVER_GTPE2;
 
 			when DEVICE_VIRTEX4 =>
 					report "Unknown Virtex-4" severity failure;
@@ -1134,11 +1152,13 @@ package body config is
 					when others =>								report "Unknown Virtex-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 				end case;
 
-			when DEVICE_ARTIX7 =>							return TRANSCEIVER_GTPE2;
+			when DEVICE_ARTIX7 =>						return TRANSCEIVER_GTPE2;
 			when DEVICE_KINTEX7 =>						return TRANSCEIVER_GTXE2;
 			when DEVICE_VIRTEX7 =>
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_T =>			return TRANSCEIVER_GTXE2;
+					when DEVICE_SUBTYPE_X =>			return TRANSCEIVER_GTXE2;
+					
 					when DEVICE_SUBTYPE_XT =>
 						if DEV_NUM = 485 then			return TRANSCEIVER_GTXE2;
 						else												return TRANSCEIVER_GTHE2;
