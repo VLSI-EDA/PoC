@@ -15,20 +15,20 @@
 ## -----------------------------------------------------------------------------
 
 ## {IN}			JA1_P
-set_property PACKAGE_PIN  L17        [ get_ports ArtyS7_PMOD_JA_Port[0] ]  
+set_property PACKAGE_PIN  L17        [ get_ports ArtyS7_PMOD_PortA[0] ]  
 ## {IN}			JA1_N                                        
-set_property PACKAGE_PIN  L18        [ get_ports ArtyS7_PMOD_JA_Port[1] ]  
+set_property PACKAGE_PIN  L18        [ get_ports ArtyS7_PMOD_PortA[1] ]  
 ## {IN}			JA2_P                                       
-set_property PACKAGE_PIN  M14        [ get_ports ArtyS7_PMOD_JA_Port[2] ]  
+set_property PACKAGE_PIN  M14        [ get_ports ArtyS7_PMOD_PortA[2] ]  
 ## {IN}			JA2_N                                       
-set_property PACKAGE_PIN  N14        [ get_ports ArtyS7_PMOD_JA_Port[3] ]  
+set_property PACKAGE_PIN  N14        [ get_ports ArtyS7_PMOD_PortA[3] ]  
 ## {IN}			JA3_P                                         
-set_property PACKAGE_PIN  M16        [ get_ports ArtyS7_PMOD_JA_Port[4] ]  
+set_property PACKAGE_PIN  M16        [ get_ports ArtyS7_PMOD_PortA[4] ]  
 ## {IN}			JA3_N                                         
-set_property PACKAGE_PIN  M17        [ get_ports ArtyS7_PMOD_JA_Port[5] ]  
+set_property PACKAGE_PIN  M17        [ get_ports ArtyS7_PMOD_PortA[5] ]  
 ## {IN}			JA4_P                                         
-set_property PACKAGE_PIN  M18        [ get_ports ArtyS7_PMOD_JA_Port[6] ]  
+set_property PACKAGE_PIN  M18        [ get_ports ArtyS7_PMOD_PortA[6] ]  
 ## {IN}			JA4_N                                        
-set_property PACKAGE_PIN  N18        [ get_ports ArtyS7_PMOD_JA_Port[7] ]  
+set_property PACKAGE_PIN  N18        [ get_ports ArtyS7_PMOD_PortA[7] ]  
 
 
