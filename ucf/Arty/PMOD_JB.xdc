@@ -15,18 +15,18 @@
 ## -----------------------------------------------------------------------------
 
 ## {IN}			JB1_P
-set_property PACKAGE_PIN  E15        [ get_ports Arty_PMOD_JB[1]_P ] 
+set_property PACKAGE_PIN  E15        [ get_ports Arty_PMOD_PortB[1]_P ] 
 ## {IN}			JB1_N
-set_property PACKAGE_PIN  E16        [ get_ports Arty_PMOD_JB[1]_N ] 
+set_property PACKAGE_PIN  E16        [ get_ports Arty_PMOD_PortB[1]_N ] 
 ## {IN}			JB2_P
-set_property PACKAGE_PIN  D15        [ get_ports Arty_PMOD_JB[2]_P ] 
+set_property PACKAGE_PIN  D15        [ get_ports Arty_PMOD_PortB[2]_P ] 
 ## {IN}			JB2_N
-set_property PACKAGE_PIN  C15        [ get_ports Arty_PMOD_JB[2]_N ] 
+set_property PACKAGE_PIN  C15        [ get_ports Arty_PMOD_PortB[2]_N ] 
 ## {IN}			JB3_P
-set_property PACKAGE_PIN  J17        [ get_ports Arty_PMOD_JB[3]_P ] 
+set_property PACKAGE_PIN  J17        [ get_ports Arty_PMOD_PortB[3]_P ] 
 ## {IN}			JB3_N
-set_property PACKAGE_PIN  J18        [ get_ports Arty_PMOD_JB[3]_N ] 
+set_property PACKAGE_PIN  J18        [ get_ports Arty_PMOD_PortB[3]_N ] 
 ## {IN}			JB4_P
-set_property PACKAGE_PIN  K15        [ get_ports Arty_PMOD_JB[4]_P ] 
+set_property PACKAGE_PIN  K15        [ get_ports Arty_PMOD_PortB[4]_P ] 
 ## {IN}			JB4_N
-set_property PACKAGE_PIN  J15        [ get_ports Arty_PMOD_JB[4]_N ] 
+set_property PACKAGE_PIN  J15        [ get_ports Arty_PMOD_PortB[4]_N ] 
