@@ -149,7 +149,7 @@ package body config_private is
 	constant C_BOARD_ETH_HARD_GMII_88E1111  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("HARD", "GMII", "MARVEL_88E1111", x"07", "GMII",  "MDIO");
 	constant C_BOARD_ETH_SOFT_SGMII_88E1111  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "SGMII", "MDIO_OVER_IIC");
 	constant C_BOARD_ETH_SOFT_MII_LAN8720A  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "SMSC_LAN8720A",  x"01", "MII",   "MDIO");
-	constant C_BOARD_ETH_SOFT_MII_DP83848J  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "TI_ DP83848J",  x"01", "MII",   "MDIO");
+	constant C_BOARD_ETH_SOFT_MII_DP83848J  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "TI_DP83848J",  x"01", "MII",   "MDIO");
 	
 	constant C_BOARD_ETH_NONE    : T_BOARD_ETHERNET_DESC_VECTOR(T_BOARD_ETHERNET_DESC_INDEX)  := (others => C_BOARD_ETH_EMPTY);
 
@@ -1019,7 +1019,7 @@ package body config is
 				end if;
 			
 			when DEVICE_SPARTAN7 =>
-				if		((str_find(MY_DEV(5 to MY_DEV'high)))) then	return DEVICE_SUBTYPE_X;
+				if		((str_find(MY_DEV(7 to MY_DEV'high)))) then	return DEVICE_SUBTYPE_X;
 				else	report "Unknown Spartan-7 subtype: MY_DEVICE = '" & MY_DEV & "'" severity failure;
 				end if;
 			
