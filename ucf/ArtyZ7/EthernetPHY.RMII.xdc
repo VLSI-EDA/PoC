@@ -31,9 +31,6 @@ set_property PACKAGE_PIN  B18       [ get_ports ArtyZ7_EthernetPHY_TX_Data[1] ]
 set_property PACKAGE_PIN  D10       [ get_ports ArtyZ7_EthernetPHY_TX_Data[2] ]	
 ## {OUT}    TXD3
 set_property PACKAGE_PIN  A17       [ get_ports ArtyZ7_EthernetPHY_TX_Data[3] ]	
-## {OUT}    TXCTL
-set_property PACKAGE_PIN  F14       [ get_ports ArtyZ7_EthernetPHY_TX_CTL ]	
-
 
 ## single-ended, parallel RX path
 ## -------------------------------------
@@ -45,6 +42,3 @@ set_property PACKAGE_PIN  A16       [ get_ports ArtyZ7_EthernetPHY_RX_Data[1] ]
 set_property PACKAGE_PIN  F15       [ get_ports ArtyZ7_EthernetPHY_RX_Data[2] ]	
 ## {IN}     RXD3
 set_property PACKAGE_PIN  A15       [ get_ports ArtyZ7_EthernetPHY_RX_Data[3] ]	
-## {OUT}    RXCTL
-set_property PACKAGE_PIN  D13       [ get_ports ArtyZ7_EthernetPHY_RX_CTL ]	
-
