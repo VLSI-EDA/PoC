@@ -17,9 +17,9 @@
 ## common signals and management
 ## -------------------------------------
 ## {OUT}    
-set_property PACKAGE_PIN  B5        [ get_ports EthernetPHY_Reset_B ]			
+set_property PACKAGE_PIN  B5        [ get_ports EthernetPHY_Reset_n ]			
 ## {OUT}    
-set_property PACKAGE_PIN  E9        [ get_ports EthernetPHY_INT_B ]		
+set_property PACKAGE_PIN  E9        [ get_ports EthernetPHY_INT_n ]		
 ## {INOUT}  
 set_property PACKAGE_PIN  C10       [ get_ports EthernetPHY_Management_MDC ]				
 ## {INOUT}  
