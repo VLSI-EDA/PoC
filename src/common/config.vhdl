@@ -1202,7 +1202,7 @@ package body config is
 			when DEVICE_ARRIA1    => return "Arria";
 			when DEVICE_ARRIA2    => return "Arria II";
 			when DEVICE_ARRIA5    => return "Arria V";
-			when DEVICE_ARRIA10    => return "Arria 10";
+			when DEVICE_ARRIA10   => return "Arria 10";
 			when DEVICE_CYCLONE1  => return "Cyclone";
 			when DEVICE_CYCLONE2  => return "Cyclone II";
 			when DEVICE_CYCLONE3  => return "Cyclone III";
