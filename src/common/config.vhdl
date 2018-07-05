@@ -1125,7 +1125,7 @@ package body config is
 				case DEV_SUB is
 					when DEVICE_SUBTYPE_LX =>			return TRANSCEIVER_NONE;
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTPE1;
-					when others =>								report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
+					when others => 	report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 			end case;
 			
 			when DEVICE_SPARTAN7 =>  				return TRANSCEIVER_NONE;
