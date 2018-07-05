@@ -14,7 +14,7 @@
 ##	Location:					J9 
 ## -----------------------------------------------------------------------------
 
-## single-ended, parallel TX path
+## single-ended, Clock TX,RX path
 ## -------------------------------------
 ## {OUT}    CLKIN
 set_property PACKAGE_PIN  H16        [ get_ports Arty_EthernetPHY_TX_Clock ]	
