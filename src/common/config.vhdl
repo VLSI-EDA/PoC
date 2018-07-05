@@ -1128,7 +1128,7 @@ package body config is
 					when others =>								report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
 			end case;
 			
-			when DEVICE_SPARTAN7 =>  				return TRANSCEIVER_GTPE2;
+			when DEVICE_SPARTAN7 =>  				return TRANSCEIVER_NONE;
 
 			when DEVICE_VIRTEX4 =>
 					report "Unknown Virtex-4" severity failure;
