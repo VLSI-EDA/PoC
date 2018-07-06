@@ -35,7 +35,7 @@
 
 package my_config is
   -- Change these lines to setup configuration.
-  constant MY_BOARD		: string	:= "ArtyS7";	-- ArtyS7 - Xilinx Spartan 7 reference design board: XC7S6
+  constant MY_BOARD		: string	:= "ArtyS7";	-- ArtyS7 - Xilinx Spartan 7 reference design board: XC7S25-1CSGA324C
   constant MY_DEVICE	: string	:= "None";		-- infer from MY_BOARD
 
 	-- For internal use only
