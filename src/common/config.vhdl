@@ -1125,16 +1125,16 @@ package body config is
 					when DEVICE_SUBTYPE_LX =>		return TRANSCEIVER_NONE;
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTPE1;
 					when others => 	report "Unknown Spartan-6 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
-			end case;
+				end case;
 			
-			when DEVICE_SPARTAN7 =>  	return TRANSCEIVER_NONE;
+			when DEVICE_SPARTAN7 =>  		  return TRANSCEIVER_NONE;
 
 			when DEVICE_VIRTEX4 =>
 					report "Unknown Virtex-4" severity failure;
 
 			when DEVICE_VIRTEX5 =>
 				case DEV_SUB is
-					when DEVICE_SUBTYPE_LX =>		return TRANSCEIVER_NONE;
+					when DEVICE_SUBTYPE_LX 	=>		return TRANSCEIVER_NONE;
 					when DEVICE_SUBTYPE_SXT =>		return TRANSCEIVER_GTP_DUAL;
 					when DEVICE_SUBTYPE_LXT =>		return TRANSCEIVER_GTP_DUAL;
 					when DEVICE_SUBTYPE_TXT =>		return TRANSCEIVER_GTX;
@@ -1160,7 +1160,7 @@ package body config is
 					
 					when DEVICE_SUBTYPE_XT =>
 						if DEV_NUM = 485 then			return TRANSCEIVER_GTXE2;
-						else												return TRANSCEIVER_GTHE2;
+						else							return TRANSCEIVER_GTHE2;
 						end if;
 					when DEVICE_SUBTYPE_HT =>			return TRANSCEIVER_GTHE2;
 					when others =>						report "Unknown Virtex-7 subtype: " & T_DEVICE_SUBTYPE'image(DEV_SUB) severity failure;
@@ -1179,17 +1179,17 @@ package body config is
 
   -- purpose: extract architecture properties from DEVICE
 	function DEVICE_INFO(DeviceString : string := C_DEVICE_STRING_EMPTY) return T_DEVICE_INFO is
-		variable Result		      : T_DEVICE_INFO;
+		variable Result		    : T_DEVICE_INFO;
 	begin
-		Result.Vendor			      := VENDOR(DeviceString);
-		Result.Device			      := DEVICE(DeviceString);
-		Result.DevFamily	      := DEVICE_FAMILY(DeviceString);
-		Result.DevSubType	      := DEVICE_SUBTYPE(DeviceString);
-		Result.DevSeries	      := DEVICE_SERIES(DeviceString);
+		Result.Vendor			:= VENDOR(DeviceString);
+		Result.Device			:= DEVICE(DeviceString);
+		Result.DevFamily	    := DEVICE_FAMILY(DeviceString);
+		Result.DevSubType	    := DEVICE_SUBTYPE(DeviceString);
+		Result.DevSeries	    := DEVICE_SERIES(DeviceString);
 		Result.DevGeneration    := DEVICE_GENERATION(DeviceString);
-		Result.DevNumber	      := DEVICE_NUMBER(DeviceString);
+		Result.DevNumber	    := DEVICE_NUMBER(DeviceString);
 		Result.TransceiverType  := TRANSCEIVER_TYPE(DeviceString);
-		Result.LUT_FanIn	      := LUT_FANIN(DeviceString);
+		Result.LUT_FanIn	    := LUT_FANIN(DeviceString);
 
 		return Result;
 	end function;
