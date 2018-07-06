@@ -144,12 +144,13 @@ package body config_private is
 		return Result;
 	end function;
 
-	constant C_BOARD_ETH_EMPTY				: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("", "", "", x"00", "", "");
-	constant C_BOARD_ETH_SOFT_GMII_88E1111  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "GMII",  "MDIO");
-	constant C_BOARD_ETH_HARD_GMII_88E1111  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("HARD", "GMII", "MARVEL_88E1111", x"07", "GMII",  "MDIO");
-	constant C_BOARD_ETH_SOFT_SGMII_88E1111 : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "SGMII", "MDIO_OVER_IIC");
-	constant C_BOARD_ETH_SOFT_MII_LAN8720A  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "SMSC_LAN8720A",  x"01", "MII",   "MDIO");
-	constant C_BOARD_ETH_SOFT_MII_DP83848J  : T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "TI_DP83848J",  x"01", "MII",   "MDIO");
+	constant C_BOARD_ETH_EMPTY						: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("", "", "", x"00", "", "");
+	constant C_BOARD_ETH_SOFT_GMII_88E1111  		: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "GMII",  "MDIO");
+	constant C_BOARD_ETH_HARD_GMII_88E1111  		: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("HARD", "GMII", "MARVEL_88E1111", x"07", "GMII",  "MDIO");
+	constant C_BOARD_ETH_SOFT_SGMII_88E1111 		: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "SGMII", "MDIO_OVER_IIC");
+	constant C_BOARD_ETH_SOFT_MII_LAN8720A  		: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "SMSC_LAN8720A",  x"01", "MII",   "MDIO");
+	constant C_BOARD_ETH_SOFT_MII_DP83848J  		: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "TI_DP83848J",  x"01", "MII",   "MDIO");
+	constant C_BOARD_ETH_SOFT_RGMII_RTL8211E-VL  	: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  " RTL8211E-VL",  x"01", "RGMII",   "MDIO");
 	
 	constant C_BOARD_ETH_NONE    : T_BOARD_ETHERNET_DESC_VECTOR(T_BOARD_ETHERNET_DESC_INDEX)  := (others => C_BOARD_ETH_EMPTY);
 
@@ -228,31 +229,31 @@ package body config_private is
     -- =========================================================================
 		(
 			BoardName =>		conf("S3SK200"),
-			FPGADevice => 		conf("XC3S200-4FT256"),						    -- XC3S200-4FT256
+			FPGADevice => 		conf("XC3S200-4FT256"),						-- XC3S200-4FT256
 			UART =>				C_BOARD_UART_EMPTY,
 			Ethernet =>			C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
 			BoardName =>		conf("S3SK1000"),
-			FPGADevice =>		conf("XC3S1000-4FT256"),					    -- XC2S1000-4FT256
+			FPGADevice =>		conf("XC3S1000-4FT256"),					-- XC2S1000-4FT256
 			UART =>				C_BOARD_UART_EMPTY,
 			Ethernet =>			C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
 			BoardName =>		conf("S3ESK500"),
-			FPGADevice =>		conf("XC3S500E-4FG320"),					    -- XC3S500E-4FG320
+			FPGADevice =>		conf("XC3S500E-4FG320"),					-- XC3S500E-4FG320
 			UART =>				C_BOARD_UART_EMPTY,
 			Ethernet =>			C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
 			BoardName =>		conf("S3ESK1600"),
-			FPGADevice =>		conf("XC3S1600E-4FG320"),					    -- XC3S1600E-4FG320
+			FPGADevice =>		conf("XC3S1600E-4FG320"),					 -- XC3S1600E-4FG320
 			UART =>				C_BOARD_UART_EMPTY,
 			Ethernet =>			C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
 			BoardName =>		conf("ATLYS"),
-			FPGADevice =>		conf("XC6SLX45-3CSG324"),					    -- XC6SLX45-3CSG324
+			FPGADevice =>		conf("XC6SLX45-3CSG324"),					 -- XC6SLX45-3CSG324
 			UART =>				C_BOARD_UART_DCE_460800_NONE,
 			Ethernet =>	(
 				0 =>			C_BOARD_ETH_HARD_GMII_88E1111,
@@ -260,13 +261,13 @@ package body config_private is
 			EthernetCount =>	1
 		),(
 			BoardName =>		conf("ZC706"),
-			FPGADevice =>		conf("XC7Z045-2FFG900"),					    -- XC7Z045-2FFG900C
+			FPGADevice =>		conf("XC7Z045-2FFG900"),					 -- XC7Z045-2FFG900C
 			UART =>				C_BOARD_UART_DTE_921600_NONE,
 			Ethernet =>			C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
 			BoardName =>		conf("ZedBoard"),
-			FPGADevice =>		conf("XC7Z020-1CLG484"),					    -- XC7Z020-1CLG484
+			FPGADevice =>		conf("XC7Z020-1CLG484"),					 -- XC7Z020-1CLG484
 			UART =>				C_BOARD_UART_DTE_921600_NONE,
 			Ethernet =>			C_BOARD_ETH_NONE,
 			EthernetCount =>	0
@@ -280,7 +281,7 @@ package body config_private is
 			EthernetCount =>	1
 		),(
 			BoardName =>		conf("Nexys4"),
-			FPGADevice =>		conf("XC7A100T-1CG324C"),					    -- XC7A100T-1CG324C
+			FPGADevice =>		conf("XC7A100T-1CG324C"),					-- XC7A100T-1CG324C
 			UART =>				C_BOARD_UART_DTE_921600_NONE,
 			Ethernet => (
 				0 =>			C_BOARD_ETH_SOFT_MII_LAN8720A,
@@ -288,7 +289,7 @@ package body config_private is
 			EthernetCount =>	1
 		),(
 			BoardName =>		conf("Nexys4DDR"),
-			FPGADevice =>		conf("XC7A100T-1CG324C"),					    -- XC7A100T-1CG324C
+			FPGADevice =>		conf("XC7A100T-1CG324C"),					-- XC7A100T-1CG324C
 			UART =>				C_BOARD_UART_DTE_921600_NONE,
 			Ethernet => (
 				0 =>			C_BOARD_ETH_SOFT_MII_LAN8720A,
@@ -359,9 +360,23 @@ package body config_private is
 		),(
 			BoardName =>		conf("Arty"),
 			FPGADevice =>		conf("XC7A35T-L1CSG324I"),			         -- XC7A35T-L1CSG324I
-			UART =>				C_BOARD_UART_DTE_921600_NONE,
+			UART =>				C_BOARD_UART_DCE_115200_NONE,
 			Ethernet => (
 				0 =>			C_BOARD_ETH_SOFT_MII_DP83848J,
+				others =>		C_BOARD_ETH_EMPTY),
+			EthernetCount =>	1
+		),(
+			BoardName =>		conf("ArtyS7"),
+			FPGADevice =>		conf("XC7S25-1CSGA324C"),			         -- XC7S25-1CSGA324C
+			UART =>				C_BOARD_UART_DCE_115200_NONE,
+			Ethernet =>			C_BOARD_ETH_NONE,
+			EthernetCount =>	0
+		),(
+			BoardName =>		conf("ArtyZ7"),
+			FPGADevice =>		conf("XC7Z020-1CLG400C"),			         -- XC7Z010-1CLG400C
+			UART =>				C_BOARD_UART_DCE_115200_NONE,
+			Ethernet => (
+				0 =>			C_BOARD_ETH_SOFT_RGMII_DP83848J,
 				others =>		C_BOARD_ETH_EMPTY),
 			EthernetCount =>	1
 		),
@@ -456,16 +471,16 @@ package config is
 		DEVICE_UNKNOWN,
 		DEVICE_GENERIC,
     -- Altera
-		DEVICE_MAX2, DEVICE_MAX10,																			    -- Altera.Max
-		DEVICE_ARRIA1, DEVICE_ARRIA2, DEVICE_ARRIA5, DEVICE_ARRIA10,		    -- Altera.Arria
+		DEVICE_MAX2, DEVICE_MAX10,											 -- Altera.Max
+		DEVICE_ARRIA1, DEVICE_ARRIA2, DEVICE_ARRIA5, DEVICE_ARRIA10,		 -- Altera.Arria
 		DEVICE_CYCLONE1, DEVICE_CYCLONE2, DEVICE_CYCLONE3, DEVICE_CYCLONE4,  -- Altera.Cyclone
-			DEVICE_CYCLONE5,																							    --
+		DEVICE_CYCLONE5,													 --
 		DEVICE_STRATIX1, DEVICE_STRATIX2, DEVICE_STRATIX3, DEVICE_STRATIX4,  -- Altera.Stratix
-			DEVICE_STRATIX5, DEVICE_STRATIX10,														    --
+		DEVICE_STRATIX5, DEVICE_STRATIX10,									 --
     -- Lattice
-		DEVICE_ICE40, DEVICE_ICE65, DEVICE_ICE5,												    -- Lattice.iCE
-		DEVICE_MACHXO, DEVICE_MACHXO2,																	    -- Lattice.MachXO
-		DEVICE_ECP3, DEVICE_ECP4, DEVICE_ECP5,													    -- Lattice.ECP
+		DEVICE_ICE40, DEVICE_ICE65, DEVICE_ICE5,							-- Lattice.iCE
+		DEVICE_MACHXO, DEVICE_MACHXO2,									    -- Lattice.MachXO
+		DEVICE_ECP3, DEVICE_ECP4, DEVICE_ECP5,								-- Lattice.ECP
     -- Microsemi
 		DEVICE_SMARTFUSION2,                                                -- Microsemi.SmartFusion
 		DEVICE_POLARFIRE,                                                   -- Microsemi.PolarFire
@@ -475,7 +490,7 @@ package config is
 		DEVICE_ARTIX7,														-- Xilinx.Artix
 		DEVICE_KINTEX7, DEVICE_KINTEX_ULTRA, DEVICE_KINTEX_ULTRA_PLUS,	    -- Xilinx.Kintex
 		DEVICE_VIRTEX4, DEVICE_VIRTEX5,	DEVICE_VIRTEX6, DEVICE_VIRTEX7,	    -- Xilinx.Virtex
-		DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS									    --
+		DEVICE_VIRTEX_ULTRA, DEVICE_VIRTEX_ULTRA_PLUS						--
 	);
 
   -- List of known device subtypes
