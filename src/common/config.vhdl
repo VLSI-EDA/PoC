@@ -150,7 +150,7 @@ package body config_private is
 	constant C_BOARD_ETH_SOFT_SGMII_88E1111 		: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "GMII", "MARVEL_88E1111", x"07", "SGMII", "MDIO_OVER_IIC");
 	constant C_BOARD_ETH_SOFT_MII_LAN8720A  		: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "SMSC_LAN8720A",  x"01", "MII",   "MDIO");
 	constant C_BOARD_ETH_SOFT_MII_DP83848J  		: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "TI_DP83848J",  x"01", "MII",   "MDIO");
-	constant C_BOARD_ETH_SOFT_RGMII_RTL8211E-VL  	: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  " RTL8211E-VL",  x"01", "RGMII",   "MDIO");
+	constant C_BOARD_ETH_SOFT_RGMII_RTL8211E-VL  	: T_BOARD_ETHERNET_DESC    := brd_CreateEthernet("SOFT", "MII",  "RTL8211E-VL",  x"01", "RGMII",   "MDIO");
 	
 	constant C_BOARD_ETH_NONE    : T_BOARD_ETHERNET_DESC_VECTOR(T_BOARD_ETHERNET_DESC_INDEX)  := (others => C_BOARD_ETH_EMPTY);
 
@@ -376,7 +376,7 @@ package body config_private is
 			FPGADevice =>		conf("XC7Z020-1CLG400C"),			         -- XC7Z010-1CLG400C
 			UART =>				C_BOARD_UART_DCE_115200_NONE,
 			Ethernet => (
-				0 =>			C_BOARD_ETH_SOFT_RGMII_DP83848J,
+				0 =>			C_BOARD_ETH_SOFT_RGMII_RTL8211E-VL,
 				others =>		C_BOARD_ETH_EMPTY),
 			EthernetCount =>	1
 		),
