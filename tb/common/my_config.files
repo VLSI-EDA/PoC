@@ -86,6 +86,12 @@ elseif (BoardName = "AC701") then
 elseif (BoardName = "Arty") then
 	vhdl	poc	"tb/common/my_config_Arty.vhdl"	
 	
+elseif (BoardName = "Nexys4") then
+	vhdl	poc	"tb/common/my_config_Nexys4.vhdl"	
+
+elseif (BoardName = "Nexys4DDR") then
+	vhdl	poc	"tb/common/my_config_Nexys4DDR.vhdl"	
+	
 # Kintex-7 BoardNames
 elseif (BoardName = "KC705") then
 	vhdl	poc	"tb/common/my_config_KC705.vhdl"
