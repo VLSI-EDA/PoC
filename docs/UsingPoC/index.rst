@@ -8,7 +8,7 @@ are fulfilled. Chose one of the following integration kinds:
 
 * Stand-Alone IP Core Library:
     Download PoC as archive file (\*.zip) from GitHub as latest branch copy or
-    as tagged release file. IP cores can be copyed into one or more destination
+    as tagged release file. IP cores can be copied into one or more destination
     projects or the projects link to the selected IP core source files.
 
     **Advantages:**
