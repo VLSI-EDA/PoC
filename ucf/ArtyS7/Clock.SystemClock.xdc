@@ -26,4 +26,4 @@ set_property PACKAGE_PIN    F14       [ get_ports ArtyS7_SystemClock_12MHz ]
 set_property IOSTANDARD     LVCMOS33  [ get_ports ArtyS7_SystemClock_12MHz ]
 
 # specify a 12 MHz clock
-create_clock -period 0.833 -name PIN_SystemClock_12MHz [ get_ports ArtyS7_SystemClock_12MHz ]
+create_clock -period 83.3 -name PIN_SystemClock_12MHz [ get_ports ArtyS7_SystemClock_12MHz ]
