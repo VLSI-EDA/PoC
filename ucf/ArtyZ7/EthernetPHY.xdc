@@ -18,7 +18,7 @@
 ## -------------------------------------
 ## {OUT}    
 set_property PACKAGE_PIN  B5        [ get_ports EthernetPHY_Reset_n ]			
-## {OUT}    
+## {IN}    
 set_property PACKAGE_PIN  E9        [ get_ports EthernetPHY_INT_n ]		
 ## {INOUT}  
 set_property PACKAGE_PIN  C10       [ get_ports EthernetPHY_Management_MDC ]				
