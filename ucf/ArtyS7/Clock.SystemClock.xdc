@@ -23,4 +23,4 @@ set_property PACKAGE_PIN    R2       [ get_ports ArtyS7_SystemClock_100MHz ]
 # set I/O standard
 set_property IOSTANDARD     LVCMOS33  [ get_ports ArtyS7_SystemClock_100MHz ]
 # specify a 100 MHz clock
-create_clock -period 10*10-9 -name PIN_SystemClock_100MHz [ get_ports ArtyS7_SystemClock_100MHz ]
+create_clock -period 10 -name PIN_SystemClock_100MHz [ get_ports ArtyS7_SystemClock_100MHz ]
