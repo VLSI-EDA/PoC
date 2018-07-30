@@ -26,8 +26,9 @@ set_property PACKAGE_PIN  M15       [ get_ports ArtyZ7_GPIO_LED[5]_R ]
 set_property PACKAGE_PIN  L14       [ get_ports ArtyZ7_GPIO_LED[5]_G ]
 ## {OUT}	LD5.B;
 set_property PACKAGE_PIN  G14       [ get_ports ArtyZ7_GPIO_LED[5]_B ]
+
 # set I/O standard
-set_property IOSTANDARD   LVCMOS33  [ get_ports -regexp {ArtyZ7_GPIO_LED\[\d\]_[RGB]} ]
+set_property IOSTANDARD   LVCMOS33  [ get_ports -regexp {ArtyZ7_GPIO_LED\[\d\]\[[RGB]\]} ]
 
 # Ignore timings on async I/O pins
-set_false_path                  -to [ get_ports -regexp {ArtyZ7_GPIO_LED\[\d\]_[RGB]} ]
+set_false_path                  -to [ get_ports -regexp {ArtyZ7_GPIO_LED\[\d\]\[[RGB]\]} ]
