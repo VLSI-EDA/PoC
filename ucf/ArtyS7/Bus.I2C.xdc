@@ -1,26 +1,21 @@
 ## =============================================================================================================================================================
 ## Xilinx Design Constraint File (XDC)
 ## =============================================================================================================================================================
-##	Board:					Digilent - Arty S7
-##	FPGA:						Xilinx Spartan-7
-##		Device:				XC7S50
-##		Package:			CSGA324
-##		Speedgrade:		
-##
+## Board:         Digilent - ArtyS7
+## FPGA:          Xilinx Spartan 7
 ## =============================================================================================================================================================
-## Clock Sources
+## Communication BUS
 ## =============================================================================================================================================================
-##
-## System Clock
+## I2C
+## =============================================================================================================================================================
 ## -----------------------------------------------------------------------------
-##		Bank:						34
-##			VCCO:					3.3V (VCC3V3)
-##		Location:				IC2 (ASEM1)
-##			Vendor:				Abracon Corp.
-##			Device:				ASEM1-100.000Mhz-LC-T - 1 to 150 MHz Ultra Miniature Pure Silicon Clock Oscillator
-##			Frequency:		100 MHz, 50ppm
-set_property PACKAGE_PIN    R2       [ get_ports ArtyS7_SystemClock_100MHz ]
-# set I/O standard
-set_property IOSTANDARD     LVCMOS33  [ get_ports ArtyS7_SystemClock_100MHz ]
-# specify a 100 MHz clock
-create_clock -period 10 -name PIN_SystemClock_100MHz [ get_ports ArtyS7_SystemClock_100MHz ]
+##	Bank:					15
+##	VCCO:					3.3V (VCC3V3)
+##	Location:				CK_SDA,CK_SCL
+## -----------------------------------------------------------------------------
+## {INOUT}	 SerialClock - CK_SCL
+set_property PACKAGE_PIN		J14		[ get_ports ArtyS7_IIC_SerialClock ]	
+## {INOUT}	 SerialData - CK_SDA
+set_property PACKAGE_PIN		J13		[ get_ports ArtyS7_IIC_SerialData ]	
+
+
