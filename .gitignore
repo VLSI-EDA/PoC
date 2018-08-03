@@ -10,11 +10,11 @@ __pycache__
 
 # ignore build directories
 docs/_build/
-docs/PyInfrastructure/*
-!docs/PyInfrastructure/.gitempty
-!docs/PyInfrastructure/.publish
-!docs/PyInfrastructure/README.md
-!docs/PyInfrastructure/index.rst
+docs/pyIPCMI/*
+!docs/pyIPCMI/.gitempty
+!docs/pyIPCMI/.publish
+!docs/pyIPCMI/README.md
+!docs/pyIPCMI/index.rst
 
 
 # ignore files in netlist/
