@@ -64,16 +64,33 @@ elseif (BoardName = "S3ESK500") then
 # Spartan-6 boards
 elseif (BoardName = "Atlys") then
 	vhdl	poc	"tb/common/my_config_Atlys.vhdl"
-
+	
+# Spartan-7 boards
+elseif (BoardName = "ArtyS7") then
+	vhdl	poc	"tb/common/my_config_ArtyS7.vhdl"
+	
 # Zynq-7000 boards
 elseif (BoardName = "ZC706") then
 	vhdl	poc	"tb/common/my_config_ZC706.vhdl"
+	
 elseif (BoardName = "ZedBoard") then
 	vhdl	poc	"tb/common/my_config_ZedBoard.vhdl"
 
+elseif (BoardName = "ArtyZ7") then
+	vhdl	poc	"tb/common/my_config_ArtyZ7.vhdl"
+		
 # Artix-7 BoardNames
 elseif (BoardName = "AC701") then
 	vhdl	poc	"tb/common/my_config_AC701.vhdl"
+
+elseif (BoardName = "Arty") then
+	vhdl	poc	"tb/common/my_config_Arty.vhdl"	
+	
+elseif (BoardName = "Nexys4") then
+	vhdl	poc	"tb/common/my_config_Nexys4.vhdl"	
+
+elseif (BoardName = "Nexys4DDR") then
+	vhdl	poc	"tb/common/my_config_Nexys4DDR.vhdl"	
 	
 # Kintex-7 BoardNames
 elseif (BoardName = "KC705") then
