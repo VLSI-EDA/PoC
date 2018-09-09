@@ -4,7 +4,7 @@ Python Infrastructure
 
 .. toctree::
 
-   PoC
+   pyIPCMI
 
 
 .. toctree::
@@ -18,7 +18,7 @@ Python Infrastructure
    lib
 
 .. #
-   automodule:: PoC
+   automodule:: pyIPCMI
    :members:
    :undoc-members:
    :inherited-members:

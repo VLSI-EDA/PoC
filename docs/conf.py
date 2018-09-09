@@ -23,7 +23,8 @@ from textwrap   import dedent
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../py'))
+#sys.path.insert(0, os.path.abspath('../py'))
+sys.path.insert(0, os.path.abspath('../lib/pyIPCMI/'))
 sys.path.insert(0, os.path.abspath('_extensions'))
 sys.path.insert(0, os.path.abspath('_themes/sphinx_rtd_theme'))
 
@@ -62,7 +63,7 @@ extensions = [
 	'autoprogram',               #'sphinxcontrib.autoprogram',
 # local extensions
 	'DocumentMember',
-	'poc'
+	'pyIPCMI'
 ]
 
 for tag in tags:
@@ -82,10 +83,10 @@ if tags.has('PoCCleanUp'):
 	else:
 		print("Removing old build directory '{0!s}'... [SKIPPED]".format(buildDirectory))
 
-	pyInfrastructureDirectory = Path("PyInfrastructure")
-	print("Removing created files from '{0!s}'...".format(pyInfrastructureDirectory))
-	for path in pyInfrastructureDirectory.iterdir():
-		if (path.name.endswith(".rst") and (path.name != (pyInfrastructureDirectory / "index.rst"))):
+	pyIPCMIDirectory = Path("pyIPCMI")
+	print("Removing created files from '{0!s}'...".format(pyIPCMIDirectory))
+	for path in pyIPCMIDirectory.iterdir():
+		if (path.name.endswith(".rst") and (path.name != (pyIPCMIDirectory / "index.rst"))):
 			print("  {0!s}".format(path))
 			path.unlink()
 	print()
@@ -95,14 +96,14 @@ autodoc_member_order = "bysource"
 
 # Extract Python documentation and generate ReST files.
 autoapi_modules = {
-  'PoC':        {'output': "PyInfrastructure", 'template': "script"},
-  'Base':       {'output': "PyInfrastructure"},
-  'Compiler':   {'output': "PyInfrastructure"},
-  'DataBase':   {'output': "PyInfrastructure"},
-  'Parser':     {'output': "PyInfrastructure"},
-  'Simulator':  {'output': "PyInfrastructure"},
-  'ToolChain':  {'output': "PyInfrastructure"},
-  'lib':        {'output': "PyInfrastructure"}
+  'pyIPCMI':    {'output': "pyIPCMI", 'template': "script"},
+  'pyIPCMI.Base':       {'output': "pyIPCMI"},
+  'pyIPCMI.Compiler':   {'output': "pyIPCMI"},
+  'pyIPCMI.DataBase':   {'output': "pyIPCMI"},
+  'pyIPCMI.Parser':     {'output': "pyIPCMI"},
+  'pyIPCMI.Simulator':  {'output': "pyIPCMI"},
+  'pyIPCMI.ToolChain':  {'output': "pyIPCMI"},
+  'lib':        {'output': "pyIPCMI"}
 }
 
 # Add any paths that contain templates here, relative to this directory.
