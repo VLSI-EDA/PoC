@@ -141,6 +141,7 @@ package utils is
 	function ite(cond : boolean; value1 : std_logic_vector; value2 : std_logic_vector) return std_logic_vector;
 	function ite(cond : boolean; value1 : bit_vector; value2 : bit_vector) return bit_vector;
 	function ite(cond : boolean; value1 : unsigned; value2 : unsigned) return unsigned;
+	function ite(cond : boolean; value1 : signed; value2 : signed) return signed;
 	function ite(cond : boolean; value1 : character; value2 : character) return character;
 	function ite(cond : boolean; value1 : string; value2 : string) return string;
 
@@ -614,6 +615,15 @@ package body utils is
 			return value2;
 		end if;
 	end function;
+
+	function ite(cond : boolean; value1 : signed; value2 : signed) return signed is
+		begin
+			if cond then
+				return value1;
+			else
+				return value2;
+			end if;
+		end function;
 
 	function ite(cond : boolean; value1 : character; value2 : character) return character is
 	begin
