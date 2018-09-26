@@ -1,7 +1,9 @@
 #! /usr/bin/env bash
 
 # configure variables in the section below
-GRC_FILE="grc_1.11.3-1_all.deb"
+GRC_VERSION="$(curl -s https://api.github.com/repos/garabik/grc/releases/latest | grep "tag_name" | cut -d : -f 2 | tr -d \, | tr -d \" | cut -c3-)"
+GRC_FILE="grc_${GRC_VERSION}-1_all.deb"
+#GRC_FILE="grc_1.11.3-1_all.deb"
 #GRC_FILE="grc_1.9-1_all.deb"
 TEMP_DIR="temp"
 
@@ -23,16 +25,15 @@ MAGENTA='\e[1;35m'	# Magenta
 CYAN='\e[1;36m'			# Cyan
 NOCOLOR='\e[0m'			# No Color
 
-
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}     Downloading and installing grcat   ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${CYAN}mkdir -p $TEMP_DIR${NOCOLOR}"
 mkdir -p $TEMP_DIR && cd $TEMP_DIR
 
-# downloading GHDL
-echo -e "${CYAN}Downloading $GRC_DEB from $GRC_URL...${NOCOLOR}"
-wget -q $GRC_URL -O $GRC_DEB
+# downloading GRC
+echo -e "${CYAN}Downloading $GRC_FILE from $GRC_URL...${NOCOLOR}"
+curl -L $GRC_URL -o $GRC_DEB
 if [ $? -eq 0 ]; then
 	echo -e "${GREEN}Download [SUCCESSFUL]${NOCOLOR}"
 else
@@ -43,7 +44,8 @@ fi
 # install grcat
 if [ -e $GRC_DEB ]; then
 	echo -e "${CYAN}Installing $GRC_DEB... ${NOCOLOR}"
-	sudo dpkg -i $GRC_DEB
+	FORCE="$([ "$(command -v python3)" != "/usr/bin/python3" ] && echo "--ignore-depends=python3:any")"
+	dpkg $FORCE -i $GRC_DEB
 	if [ $? -eq 0 ]; then
 		echo -e "${GREEN}Installation [SUCCESSFUL]${NOCOLOR}"
 	else
