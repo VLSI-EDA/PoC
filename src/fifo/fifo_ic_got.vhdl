@@ -291,7 +291,7 @@ begin
   gEstateWr: if ESTATE_WR_BITS >= 1 generate
     signal  d : unsigned(A_BITS-1 downto 0);
   begin
-    d         <= unsigned(gray2bin(OPc(A_BITS-1 downto 0))) + not unsigned(gray2bin(IP0(A_BITS-1 downto 0)));
+    d         <= gray2bin(OPc(A_BITS-1 downto 0)) + not gray2bin(IP0(A_BITS-1 downto 0));
     estate_wr <= (others => '0') when Ful = '1' else
                  std_logic_vector(d(d'left downto d'left-ESTATE_WR_BITS+1));
   end generate gEstateWr;
@@ -303,7 +303,7 @@ begin
   gFstateRd: if FSTATE_RD_BITS >= 1 generate
     signal  d : unsigned(A_BITS-1 downto 0);
   begin
-    d         <= unsigned(gray2bin(IPc(A_BITS-1 downto 0))) + not unsigned(gray2bin(OP0(A_BITS-1 downto 0)));
+    d         <= gray2bin(IPc(A_BITS-1 downto 0)) + not gray2bin(OP0(A_BITS-1 downto 0));
     fstate_rd <= (others => '0') when Avl = '0' else
                  std_logic_vector(d(d'left downto d'left-FSTATE_RD_BITS+1));
   end generate gFstateRd;
