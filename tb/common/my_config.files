@@ -72,6 +72,9 @@ elseif (BoardName = "ZedBoard") then
 	vhdl	poc	"tb/common/my_config_ZedBoard.vhdl"
 
 # Artix-7 BoardNames
+elseif (BoardName = "Nexys4DDR") then
+	vhdl	poc	"tb/common/my_config_Nexys4DDR.vhdl"
+	
 elseif (BoardName = "AC701") then
 	vhdl	poc	"tb/common/my_config_AC701.vhdl"
 	

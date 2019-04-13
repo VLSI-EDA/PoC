@@ -254,6 +254,12 @@ package body config_private is
 			Ethernet =>				C_BOARD_ETH_NONE,
 			EthernetCount =>	0
 		),(
+			BoardName =>			conf("NEXYS4DDR"),
+			FPGADevice =>			conf("XC7A100T-1CSG324"),						-- XC7A100T-1CSG324
+			UART =>						C_BOARD_UART_EMPTY,
+			Ethernet =>       C_BOARD_ETH_NONE,
+			EthernetCount =>	0
+		),(
 			BoardName =>			conf("AC701"),
 			FPGADevice =>			conf("XC7A200T-2FBG676C"),						-- XC7A200T-2FBG676C
 			UART =>						C_BOARD_UART_DTE_921600_NONE,
