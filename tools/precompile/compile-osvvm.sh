@@ -201,20 +201,26 @@ if [ "$COMPILE_FOR_VSIM" == "TRUE" ]; then
 	Files=(
 		NamePkg.vhd
 		OsvvmGlobalPkg.vhd
-		TextUtilPkg.vhd
+		VendorCovApiPkg.vhd
 		TranscriptPkg.vhd
+		TextUtilPkg.vhd
 		AlertLogPkg.vhd
-		MemoryPkg.vhd
 		MessagePkg.vhd
-		SortListGenericPkg.vhd
-		SortListPkg.vhd
 		SortListPkg_int.vhd
 		RandomBasePkg.vhd
 		RandomPkg.vhd
 		CoveragePkg.vhd
+		MemoryPkg.vhd
 		ScoreboardGenericPkg.vhd
-		ScoreboardPkg.vhd
+		ScoreboardPkg_slv.vhd
+		ScoreboardPkg_int.vhd
+		ResolutionPkg.vhd
+		TbUtilPkg.vhd
 		OsvvmContext.vhd
+
+		SortListGenericPkg.vhd
+		SortListPkg.vhd
+		ScoreboardPkg.vhd
 	)
 
 	# Compile libraries with vcom, executed in destination directory

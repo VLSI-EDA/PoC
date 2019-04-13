@@ -4,7 +4,7 @@
 #
 # ==============================================================================
 # Authors:              Patrick Lehmann
-#												Martin Zabel
+#                       Martin Zabel
 #
 # Python Main Module:   Entry point to the testbench tools in PoC repository.
 #
@@ -36,7 +36,7 @@
 # load dependencies
 from argparse                           import RawDescriptionHelpFormatter
 from configparser                       import Error as ConfigParser_Error, DuplicateOptionError
-from datetime import datetime
+from datetime                           import datetime
 from os                                 import environ
 from pathlib                            import Path
 from platform                           import system as platform_system
@@ -44,37 +44,49 @@ from shutil                             import copy as shutil_copy
 from sys                                import argv as sys_argv
 from textwrap                           import dedent
 
-from Compiler                           import CompilerException, CompileSteps
-from Base.Exceptions                    import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
-from Base.Logging                       import ILogable, Logger, Severity
-from Base.Project                       import VHDLVersion
-from Compiler.LSECompiler               import Compiler as LSECompiler
-from Compiler.QuartusCompiler           import Compiler as MapCompiler
-from Compiler.ISECompiler               import Compiler as ISECompiler
-from Compiler.XCICompiler               import Compiler as XCICompiler
-from Compiler.XCOCompiler               import Compiler as XCOCompiler
-from Compiler.XSTCompiler               import Compiler as XSTCompiler
-from Compiler.VivadoCompiler            import Compiler as VivadoCompiler
-from DataBase                           import Query
-from DataBase.Config                    import Board
-from DataBase.Entity                    import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
-from DataBase.Solution                  import Repository
-from Simulator                          import Simulator as BaseSimulator, SimulatorException, SimulationSteps
-from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
-from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
-from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
-from Simulator.ISESimulator             import Simulator as ISESimulator
-from Simulator.QuestaSimulator          import Simulator as QuestaSimulator
-from Simulator.VivadoSimulator          import Simulator as VivadoSimulator
-from ToolChains                         import ToolChainException, Configurator, ConfigurationException
-from ToolChains.GHDL                    import Configuration as GHDLConfiguration
-from lib.pyAttribute.ArgParseAttributes import ArgParseMixin
-from lib.pyAttribute.ArgParseAttributes import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
-from lib.pyAttribute.ArgParseAttributes import CommonArgumentAttribute, CommonSwitchArgumentAttribute
-from lib.ExtendedConfigParser           import ExtendedConfigParser
-from lib.Functions                      import Init, Exit
-from lib.Parser                         import ParserException
-from lib.pyAttribute                    import Attribute
+def printImportError(ex):
+	platform = platform_system()
+	print("IMPORT ERROR: One or more Python packages are not available in your environment.")
+	print("Missing package: '{0}'\n".format(ex.name))
+	if (platform == "Windows"): print("Run: 'py.exe -3 -m pip install -r requirements.txt'\n")
+	elif (platform == "Linux"): print("Run: 'python3 -m pip install -r requirements.txt'\n")
+	exit(1)
+
+try:
+	from Compiler                           import CompilerException, CompileSteps
+	from Base.Exceptions                    import ExceptionBase, CommonException, PlatformNotSupportedException, EnvironmentException, NotConfiguredException
+	from Base.Logging                       import ILogable, Logger, Severity
+	from Base.Project                       import VHDLVersion
+	from Compiler.LSECompiler               import Compiler as LSECompiler
+	from Compiler.QuartusCompiler           import Compiler as MapCompiler
+	from Compiler.ISECompiler               import Compiler as ISECompiler
+	from Compiler.XCICompiler               import Compiler as XCICompiler
+	from Compiler.XCOCompiler               import Compiler as XCOCompiler
+	from Compiler.XSTCompiler               import Compiler as XSTCompiler
+	from Compiler.VivadoCompiler            import Compiler as VivadoCompiler
+	from DataBase                           import Query
+	from DataBase.Config                    import Board
+	from DataBase.Entity                    import NamespaceRoot, FQN, EntityTypes, WildCard, TestbenchKind, NetlistKind
+	from DataBase.Solution                  import Repository
+	from Simulator                          import Simulator as BaseSimulator, SimulatorException, SimulationSteps
+	from Simulator.ActiveHDLSimulator       import Simulator as ActiveHDLSimulator
+	from Simulator.RivieraPROSimulator      import Simulator as RivieraPROSimulator
+	from Simulator.CocotbSimulator          import Simulator as CocotbSimulator
+	from Simulator.GHDLSimulator            import Simulator as GHDLSimulator
+	from Simulator.ISESimulator             import Simulator as ISESimulator
+	from Simulator.ModelSimSimulator        import Simulator as QuestaSimulator
+	from Simulator.VivadoSimulator          import Simulator as VivadoSimulator
+	from ToolChain                          import ToolChainException, Configurator, ConfigurationException
+	from ToolChain.GHDL                     import Configuration as GHDLConfiguration
+	from lib.pyAttribute.ArgParseAttributes import ArgParseMixin
+	from lib.pyAttribute.ArgParseAttributes import CommandAttribute, CommandGroupAttribute, ArgumentAttribute, SwitchArgumentAttribute, DefaultAttribute
+	from lib.pyAttribute.ArgParseAttributes import CommonArgumentAttribute, CommonSwitchArgumentAttribute
+	from lib.ExtendedConfigParser           import ExtendedConfigParser
+	from lib.Functions                      import Init, Exit
+	from lib.Parser                         import ParserException
+	from lib.pyAttribute                    import Attribute
+except ImportError as ex:
+	printImportError(ex)
 
 
 __author__ =      "Patrick Lehmann, Martin Zabel"
@@ -396,7 +408,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 	# ----------------------------------------------------------------------------
 	# create the sub-parser for the "help" command
 	# ----------------------------------------------------------------------------
-	@CommandAttribute("help", help="help help")
+	@CommandAttribute("help", help="Display help page(s) for the given command name.")
 	@ArgumentAttribute(metavar="Command", dest="Command", type=str, nargs="?", help="Print help page(s) for a command.")
 	def HandleHelp(self, args):
 		self.PrintHeadline()
@@ -408,6 +420,7 @@ class PileOfCores(ILogable, ArgParseMixin):
 		else:
 			self.SubParsers[args.Command].print_help()
 		Exit.exit()
+
 
 	# ============================================================================
 	# Configuration commands
@@ -700,17 +713,15 @@ class PileOfCores(ILogable, ArgParseMixin):
 		if (vhdlVersion is None):       return defaultVersion
 		else:                           return VHDLVersion.Parse(vhdlVersion)
 
-	# TODO: move to Configuration class in ToolChains.Xilinx.Vivado
+	# TODO: move to Configuration class in ToolChain.Xilinx.Vivado
 	def _CheckVivadoEnvironment(self):
 		# check if Vivado is configure
 		if (len(self.PoCConfig.options("INSTALL.Xilinx.Vivado")) == 0): raise NotConfiguredException("Xilinx Vivado is not configured on this system.")
-		if (environ.get('XILINX_VIVADO') is None):                      raise EnvironmentException("Xilinx Vivado environment is not loaded in this shell environment.")
 
-	# TODO: move to Configuration class in ToolChains.Xilinx.ISE
+	# TODO: move to Configuration class in ToolChain.Xilinx.ISE
 	def _CheckISEEnvironment(self):
 		# check if ISE is configure
 		if (len(self.PoCConfig.options("INSTALL.Xilinx.ISE")) == 0):    raise NotConfiguredException("Xilinx ISE is not configured on this system.")
-		if (environ.get('XILINX') is None):                             raise EnvironmentException("Xilinx ISE environment is not loaded in this shell environment.")
 
 	@staticmethod
 	def _ExtractSimulationSteps(guiMode, analyze, elaborate, optimize, recompile, simulate, showWaveform, resimulate, showReport, cleanUp):
@@ -924,6 +935,30 @@ class PileOfCores(ILogable, ArgParseMixin):
 
 		simulator = ISESimulator(self, self.DryRun, simulationSteps)
 		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=VHDLVersion.VHDL93)
+
+		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
+
+
+	# ----------------------------------------------------------------------------
+	# create the sub-parser for the "rsim" command
+	# ----------------------------------------------------------------------------
+	@CommandGroupAttribute("Simulation commands")
+	@CommandAttribute("rpro", help="Simulate a PoC Entity with Aldec Riviera-PRO (rpro)")
+	@PoCEntityAttribute()
+	@BoardDeviceAttributeGroup()
+	@VHDLVersionAttribute()
+	@SimulationStepsAttribute()
+	def HandleRivieraPROSimulation(self, args):
+		self.PrintHeadline()
+		self.__PrepareForSimulation()
+
+		fqnList =         self._ExtractFQNs(args.FQN)
+		board =           self._ExtractBoard(args.BoardName, args.DeviceName)
+		simulationSteps = self._ExtractSimulationSteps(args.GUIMode, args.Analyze, args.Elaborate, False, args.Recompile, args.Simulate, args.ShowWave, args.Resimulate, args.ShowReport, False)
+		vhdlVersion =     self._ExtractVHDLVersion(args.VHDLVersion)
+
+		simulator = RivieraPROSimulator(self, self.DryRun, simulationSteps)
+		allPassed = simulator.RunAll(fqnList, board=board, vhdlVersion=vhdlVersion)
 
 		Exit.exit(1 if ((SimulationSteps.Simulate in simulationSteps) and not allPassed) else 0)
 
@@ -1284,6 +1319,7 @@ def main(): # mccabe:disable=MC0001
 	except PlatformNotSupportedException as ex: Exit.printPlatformNotSupportedException(ex)
 	except ExceptionBase as ex:                 Exit.printExceptionBase(ex)
 	except NotImplementedError as ex:           Exit.printNotImplementedError(ex)
+	except ImportError as ex:                   printImportError(ex)
 	except Exception as ex:                     Exit.printException(ex)
 
 # entry point

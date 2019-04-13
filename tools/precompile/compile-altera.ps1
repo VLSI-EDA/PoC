@@ -37,7 +37,10 @@
 # This CmdLet:
 #   (1) Creates a sub-directory 'altera' in the current working directory
 #   (2) Compiles all Altera Quartus simulation libraries and packages for
+#       o Active-HDL
+#       o Riviera-PRO
 #       o GHDL
+#       o ModelSim
 #       o QuestaSim
 #
 [CmdletBinding()]
@@ -45,11 +48,16 @@ param(
 	# Pre-compile all libraries and packages for all simulators.
 	[switch]$All =				$false,
 
-	# Pre-compile the Altera Quartus libraries for GHDL.
+	# Pre-compile the Altera libraries for Active-HDL.
+	[switch]$ActiveHDL =	$false,
+	# Pre-compile the Altera libraries for Riviera-PRO.
+	[switch]$RivieraPRO =	$false,
+	# Pre-compile the Altera libraries for GHDL.
 	[switch]$GHDL =				$false,
-
-	# Pre-compile the Altera Quartus libraries for QuestaSim.
-	[switch]$Questa =			$false,
+	# Pre-compile the Altera libraries for ModelSim.
+	[switch]$ModelSim =		$false,
+	# Pre-compile the Altera libraries for QuestaSim.
+	[switch]$QuestaSim =	$false,
 
 	# Set VHDL Standard to '93.
 	[switch]$VHDL93 =			$false,
@@ -70,25 +78,25 @@ $WorkingDir =		Get-Location
 $PoCRootDir =		Convert-Path (Resolve-Path ($PSScriptRoot + $PoCRootDir))
 $PoCPS1 =				"$PoCRootDir\poc.ps1"
 
-# set default values
-$EnableVerbose =			$PSCmdlet.MyInvocation.BoundParameters["Verbose"]
-$EnableDebug =				$PSCmdlet.MyInvocation.BoundParameters["Debug"]
-if ($EnableVerbose -eq $null)	{	$EnableVerbose =	$false	}
-if ($EnableDebug	 -eq $null)	{	$EnableDebug =		$false	}
-if ($EnableDebug	 -eq $true)	{	$EnableVerbose =	$true		}
-
-Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -Scope Local -ArgumentList "$WorkingDir"
+Import-Module $PSScriptRoot\precompile.psm1 -Verbose:$false -Debug:$false -ArgumentList "$WorkingDir"
 
 # Display help if no command was selected
-$Help = $Help -or (-not ($All -or $GHDL -or $Questa))
-
-if ($Help)
+if ($Help -or (-not ($All -or $ActiveHDL -or $RivieraPRO -or $GHDL -or $ModelSim -or $QuestaSim)))
 {	Get-Help $MYINVOCATION.InvocationName -Detailed
 	Exit-PrecompileScript
 }
 
-$GHDL,$Questa =			Resolve-Simulator $All $GHDL $Questa
-$VHDL93,$VHDL2008 = Resolve-VHDLVersion $VHDL93 $VHDL2008
+# set default values
+$EnableDebug =		[bool]$PSCmdlet.MyInvocation.BoundParameters["Debug"]
+$EnableVerbose =	[bool]$PSCmdlet.MyInvocation.BoundParameters["Verbose"] -or $EnableDebug
+
+if ($All)
+{	$ActiveHDL =	$true
+	$RivieraPRO =	$true
+	$GHDL =				$true
+	$ModelSim =		$true
+	$QuestaSim =	$true
+}
 
 $PreCompiledDir =		Get-PrecompiledDirectoryName $PoCPS1
 $AlteraDirName =		Get-AlteraDirectoryName $PoCPS1
@@ -99,14 +107,15 @@ if ($GHDL)
 {	Write-Host "Pre-compiling Altera's simulation libraries for GHDL" -ForegroundColor Cyan
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$GHDLBinDir =			Get-GHDLBinaryDirectory $PoCPS1
-	$GHDLScriptDir =	Get-GHDLScriptDirectory $PoCPS1
-	$GHDLDirName =		Get-GHDLDirectoryName $PoCPS1
+	$VHDL93,$VHDL2008 = Resolve-VHDLVersion $VHDL93 $VHDL2008
+	$GHDLBinDir =				Get-GHDLBinaryDirectory $PoCPS1
+	$GHDLScriptDir =		Get-GHDLScriptDirectory $PoCPS1
+	$GHDLDirName =			Get-GHDLDirectoryName $PoCPS1
 
 	# Assemble output directory
 	$DestDir = "$PoCRootDir\$PrecompiledDir\$GHDLDirName"
 	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+	Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
 	$GHDLAlteraScript = "$GHDLScriptDir\compile-altera.ps1"
 	if (-not (Test-Path $GHDLAlteraScript -PathType Leaf))
@@ -143,53 +152,85 @@ if ($GHDL)
 	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 }
 
-# QuestaSim/ModelSim
+# Supported pre-compilations by Altera (Active-HDL, Riviera-PRO, ModelSim, QuestaSim)
 # ==============================================================================
-if ($Questa)
-{	Write-Host "Pre-compiling Altera's simulation libraries for QuestaSim" -ForegroundColor Cyan
-	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+foreach ($tool in @("ActiveHDL", "RivieraPRO", "ModelSim", "QuestaSim"))
+{	if (Get-Variable $tool -ValueOnly)
+	{	switch ($tool)
+		{	"ActiveHDL"
+			{	Write-Host "Pre-compiling Altera's simulation libraries for Active-HDL..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-ActiveHDLBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-ActiveHDLDirectoryName $PoCPS1
+				$Simulator =			"activehdl"
+				break;
+			}
+			"RivieraPRO"
+			{	Write-Host "Pre-compiling Altera's simulation libraries for Riviera-PRO..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-RivieraPROBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-RivieraPRODirectoryName $PoCPS1
+				$Simulator =			"riviera"
+				break;
+			}
+			"ModelSim"
+			{	Write-Host "Pre-compiling Altera's simulation libraries for ModelSim..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-ModelSimBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-ModelSimDirectoryName $PoCPS1
+				$Simulator =			"modelsim"
+				break;
+			}
+			"QuestaSim"
+			{	Write-Host "Pre-compiling Altera's simulation libraries for QuestaSim..." -ForegroundColor Cyan
+				$ToolBinDir =			Get-QuestaSimBinaryDirectory $PoCPS1
+				$ToolDirName =		Get-QuestaSimDirectoryName $PoCPS1
+				$Simulator =			"questasim"
+				break;
+			}
+		}
+		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
 
-	$VSimBinDir =			Get-ModelSimBinaryDirectory $PoCPS1
-	$VSimDirName =		Get-QuestaSimDirectoryName $PoCPS1
+		# Assemble output directory
+		$DestDir="$PoCRootDir\$PrecompiledDir\$ToolDirName\$AlteraDirName"
+		# Create and change to destination directory
+		Initialize-DestinationDirectory $DestDir -Verbose:$EnableVerbose -Debug:$EnableDebug
 
-	# Assemble output directory
-	$DestDir="$PoCRootDir\$PrecompiledDir\$VSimDirName\$AlteraDirName"
-	# Create and change to destination directory
-	Initialize-DestinationDirectory $DestDir
+		$QuartusBinDir = 	Get-QuartusBinaryDirectory $PoCPS1
+		$Quartus_sh =			"$QuartusBinDir\quartus_sh.exe"
 
-	$QuartusBinDir = 	Get-QuartusBinaryDirectory $PoCPS1
-	$Quartus_sh =			"$QuartusBinDir\quartus_sh.exe"
+		switch ($tool)
+		{	"ModelSim"
+			{	New-ModelSim_ini	}
+			"QuestaSim"
+			{	New-ModelSim_ini	}
+		}
 
-	New-ModelSim_ini
+		$Language =							"vhdl"
+		$TargetArchitectures =	@(
+			"all"
+		)
 
-	$Simulator =						"questasim"
-	$Language =							"vhdl"
-	$TargetArchitectures =	@(
-		"all"
-	)
-
-	# compile common libraries
-	$Command = "$Quartus_sh --simlib_comp -tool $Simulator -language $Language -tool_path $VSimBinDir -directory $DestDir -rtl_only"
-	Invoke-Expression $Command
-	if ($LastExitCode -ne 0)
-	{	Write-Host "[ERROR]: While compiling common libraries." -ForegroundColor Red
-		Exit-PrecompileScript -1
-	}
-
-	$VSimBinDir_TclPath =	$VSimBinDir.Replace("\", "/")
-	$DestDir_TclPath =		$DestDir.Replace("\", "/")
-	foreach ($Family in $TargetArchitectures)
-	{	$Command = "$Quartus_sh --simlib_comp -tool $Simulator -language $Language -family $Family -tool_path $VSimBinDir_TclPath -directory $DestDir_TclPath -rtl_only"
+		# compile common libraries
+		$Command = "$Quartus_sh --simlib_comp -tool $Simulator -language $Language -tool_path $ToolBinDir -directory $DestDir -rtl_only"
 		Invoke-Expression $Command
 		if ($LastExitCode -ne 0)
-		{	Write-Host "[ERROR]: While compiling family '$Family' libraries." -ForegroundColor Red
+		{	Write-Host "[ERROR]: While compiling common libraries." -ForegroundColor Red
 			Exit-PrecompileScript -1
 		}
-	}
 
-	# restore working directory
-	cd $WorkingDir
-	Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+		$ToolBinDir_TclPath =	$ToolBinDir.Replace("\", "/")
+		$DestDir_TclPath =		$DestDir.Replace("\", "/")
+		foreach ($Family in $TargetArchitectures)
+		{	$Command = "$Quartus_sh --simlib_comp -tool $Simulator -language $Language -family $Family -tool_path $ToolBinDir_TclPath -directory $DestDir_TclPath -rtl_only"
+			Invoke-Expression $Command
+			if ($LastExitCode -ne 0)
+			{	Write-Host "[ERROR]: While compiling family '$Family' libraries." -ForegroundColor Red
+				Exit-PrecompileScript -1
+			}
+		}
+
+		# restore working directory
+		cd $WorkingDir
+		Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Cyan
+	}
 }
 
 Write-Host "[COMPLETE]" -ForegroundColor Green

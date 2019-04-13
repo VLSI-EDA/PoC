@@ -32,7 +32,7 @@ from pathlib                    import Path
 
 from Base.Project               import ToolChain, Tool
 from DataBase.Entity            import WildCard
-from ToolChains.Altera.Quartus  import QuartusException, Quartus, QuartusSettings, QuartusProjectFile
+from ToolChain.Altera.Quartus   import QuartusException, Quartus, QuartusSettings, QuartusProjectFile
 from Compiler                   import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 

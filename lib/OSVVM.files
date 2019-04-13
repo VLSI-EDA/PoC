@@ -26,18 +26,24 @@ elseif (VHDLVersion = 2008) then
 		end if
 	else
 		# TODO self-compile section?
-		vhdl	osvvm	"lib/osvvm/NamePkg.vhd"									# OSVVM 
-		vhdl	osvvm	"lib/osvvm/OsvvmGlobalPkg.vhd"					# OSVVM 
-		vhdl	osvvm	"lib/osvvm/TextUtilPkg.vhd"							# OSVVM 
-		vhdl	osvvm	"lib/osvvm/TranscriptPkg.vhd"						# OSVVM 
-		vhdl	osvvm	"lib/osvvm/AlertLogPkg.vhd"							# OSVVM 
-		vhdl	osvvm	"lib/osvvm/MemoryPkg.vhd"								# OSVVM 
-		vhdl	osvvm	"lib/osvvm/MessagePkg.vhd"							# OSVVM 
-		vhdl	osvvm	"lib/osvvm/SortListPkg_int.vhd"					# OSVVM 
-		vhdl	osvvm	"lib/osvvm/RandomBasePkg.vhd"						# OSVVM 
-		vhdl	osvvm	"lib/osvvm/RandomPkg.vhd"								# OSVVM 
-		vhdl	osvvm	"lib/osvvm/CoveragePkg.vhd"							# OSVVM 
-		vhdl	osvvm	"lib/osvvm/OsvvmContext.vhd"						# OSVVM 
+		vhdl	osvvm	"lib/osvvm/NamePkg.vhd"                 # OSVVM
+		vhdl	osvvm	"lib/osvvm/OsvvmGlobalPkg.vhd"          # OSVVM
+		vhdl	osvvm	"lib/osvvm/VendorCovApiPkg.vhd"         # OSVVM
+		vhdl	osvvm	"lib/osvvm/TranscriptPkg.vhd"           # OSVVM
+		vhdl	osvvm	"lib/osvvm/TextUtilPkg.vhd"             # OSVVM
+		vhdl	osvvm	"lib/osvvm/AlertLogPkg.vhd"             # OSVVM
+		vhdl	osvvm	"lib/osvvm/MessagePkg.vhd"              # OSVVM
+		vhdl	osvvm	"lib/osvvm/SortListPkg_int.vhd"         # OSVVM
+		vhdl	osvvm	"lib/osvvm/RandomBasePkg.vhd"           # OSVVM
+		vhdl	osvvm	"lib/osvvm/RandomPkg.vhd"               # OSVVM
+		vhdl	osvvm	"lib/osvvm/CoveragePkg.vhd"             # OSVVM
+		vhdl	osvvm	"lib/osvvm/MemoryPkg.vhd"               # OSVVM
+		vhdl	osvvm	"lib/osvvm/ScoreboardGenericPkg.vhd"    # OSVVM
+		vhdl	osvvm	"lib/osvvm/ScoreboardPkg_slv.vhd"       # OSVVM
+		vhdl	osvvm	"lib/osvvm/ScoreboardPkg_int.vhd"       # OSVVM
+		vhdl	osvvm	"lib/osvvm/ResolutionPkg.vhd"           # OSVVM
+		vhdl	osvvm	"lib/osvvm/TbUtilPkg.vhd"               # OSVVM
+		vhdl	osvvm	"lib/osvvm/OsvvmContext.vhd"            # OSVVM
 	end if
 else
 	report "VHDL version not supported by OSVVM."

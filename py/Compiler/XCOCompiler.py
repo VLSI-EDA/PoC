@@ -35,7 +35,7 @@ from textwrap               import dedent
 
 from Base.Project           import ToolChain, Tool
 from DataBase.Entity        import WildCard
-from ToolChains.Xilinx.ISE  import ISE, ISEException
+from ToolChain.Xilinx.ISE   import ISE, ISEException
 from Compiler               import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
@@ -60,11 +60,12 @@ class Compiler(BaseCompiler):
 
 	def _PrepareCompiler(self):
 		super()._PrepareCompiler()
-
-		iseSection = self.Host.PoCConfig['INSTALL.Xilinx.ISE']
-		binaryPath = Path(iseSection['BinaryDirectory'])
-		version = iseSection['Version']
-		self._toolChain = ISE(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		iseSection =            self.Host.PoCConfig['INSTALL.Xilinx.ISE']
+		version =               iseSection['Version']
+		installationDirectory = Path(iseSection['InstallationDirectory'])
+		binaryPath =            Path(iseSection['BinaryDirectory'])
+		self._toolChain =       ISE(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		self._toolChain.PreparseEnvironment(installationDirectory)
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		"""Run a list of netlist compilations. Expand wildcards to all selected netlists."""

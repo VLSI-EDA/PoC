@@ -107,28 +107,34 @@ class Environment(Enum):
 class ToolChain(Enum):
 	Any =                0
 	Aldec_ActiveHDL =   10
+	Aldec_RivieraPRO =  15
 	Altera_Quartus =    20
 	Altera_ModelSim =   21
 	Cocotb =            30
 	GHDL_GTKWave =      40
-	Lattice_Diamond =   50
-	Mentor_QuestaSim =  60
-	Xilinx_ISE =        70
-	Xilinx_PlanAhead =  71
-	Xilinx_Vivado =     72
+	Intel_Quartus =     50
+	Intel_ModelSim =    51
+	Lattice_Diamond =   60
+	Lattice_Synplify =  65
+	Mentor_ModelSim =   70
+	Mentor_QuestaSim =  75
+	Xilinx_ISE =        80
+	Xilinx_PlanAhead =  81
+	Xilinx_Vivado =     82
 
 
 @unique
 class Tool(Enum):      # ID     Short Name       Long Name
 	Any =                 0
 	Aldec_aSim =         ("ASIM",   "Aldec Active-HDL",         "Aldec Active-HDL")
+	Aldec_rPro =         ("RPRO",   "Aldec Riviera-PRO",        "Aldec Riviera-PRO")
 	Altera_Quartus_Map = ("QMAP",   "Quartus Map",              "Altera Quartus Map (quartus_map)")
 	# ModelSim Altera Edition?
 	Cocotb_QuestaSim =   ("COCO",   "Cocotb",                   "Coroutine Cosimulation Testbench (Cocotb)")
 	GHDL =               ("GHDL",   "GHDL",                     "GHDL")
 	GTKwave =            ("GTKW",   "GTKWave",                  "GTKWave")
 	Lattice_LSE =        ("LSE",    "Lattice LSE",              "Lattice Synthesis Engine (LSE)")
-	Mentor_vSim =        ("VSIM",   "Mentor QuestaSim",         "Mentor Graphics QuestaSim (vSim)")
+	Mentor_vSim =        ("VSIM",   "Mentor ModelSim",          "Mentor Graphics ModelSim (vSim)")
 	# Mentor ModelSim?
 	Xilinx_iSim =        ("XSIM",   "Xilinx iSim",              "Xilinx ISE Simulator (iSim)")
 	Xilinx_XST =         ("XST",    "Xilinx XST",               "Xilinx Synthesis Tool (XST)")

@@ -30,7 +30,7 @@
 from enum                 import Enum, unique
 from re                   import compile as re_compile
 
-from ToolChains import ConfigurationException
+from ToolChain            import ConfigurationException
 
 
 __api__ = [
