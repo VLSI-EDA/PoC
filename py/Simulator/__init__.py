@@ -31,17 +31,15 @@ from enum               import Enum, unique
 
 from flags              import Flags
 
-from lib.Functions      import Init
-from lib.Decorators     import MethodAlias
 from Base               import IHost
 from Base.Exceptions    import ExceptionBase, SkipableException
 from Base.Logging       import LogEntry
 from Base.Project       import Environment, VHDLVersion
 from Base.Shared        import Shared, to_time
-from DataBase.Entity    import WildCard
+from DataBase.Entity    import WildCard, SimulationResult
 from DataBase.TestCase  import TestCase, SimulationStatus, TestSuite
-
-# required for autoapi.sphinx
+from lib.Decorators     import MethodAlias
+from lib.Functions      import Init
 from lib.SphinxExtensions import DocumentMemberAttribute
 
 
@@ -109,16 +107,6 @@ class SimulationState(Enum):
 	Optimize =    3
 	Simulate =    4
 	View =        5
-
-@unique
-class SimulationResult(Enum):
-	"""Simulation result enumeration."""
-	NotRun =      0
-	Error =       1
-	Failed =      2
-	NoAsserts =   3
-	Passed =      4
-	GUIRun =      5
 
 
 class Simulator(Shared):
@@ -235,8 +223,6 @@ class Simulator(Shared):
 		"""Write the Testbench message line, create a PoCProject and add the first *.files file to it."""
 		self.LogQuiet("{CYAN}Testbench: {0!s}{NOCOLOR}".format(testbench.Parent, **Init.Foreground))
 
-		testbench.Result = SimulationResult.NotRun
-
 		self._vhdlVersion =  vhdlVersion
 		self._vhdlGenerics = vhdlGenerics
 
@@ -314,6 +300,7 @@ class Simulator(Shared):
 
 	__SIMULATION_REPORT_COLOR_TABLE__ = {
 		SimulationStatus.Unknown:             "RED",
+		SimulationStatus.DryRun:              "YELLOW",
 		SimulationStatus.InternalError:       "DARK_RED",
 		SimulationStatus.SystemError:         "DARK_RED",
 		SimulationStatus.AnalyzeError:        "DARK_RED",
@@ -327,6 +314,7 @@ class Simulator(Shared):
 
 	__SIMULATION_REPORT_STATUS_TEXT_TABLE__ = {
 		SimulationStatus.Unknown:             "-- ?? --",
+		SimulationStatus.DryRun:              "DRY RUN",
 		SimulationStatus.InternalError:       "INT. ERROR",
 		SimulationStatus.SystemError:         "SYS. ERROR",
 		SimulationStatus.AnalyzeError:        "ANA. ERROR",

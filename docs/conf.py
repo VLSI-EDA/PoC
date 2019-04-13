@@ -108,17 +108,14 @@ author = 'Patrick Lehmann, Thomas B. Preusser, Martin Zabel'
 def _IsUnderGitControl():
 	return (check_output(["git", "rev-parse", "--is-inside-work-tree"], universal_newlines=True).strip() == "true")
 
-def _LatestTagHash():
-	return check_output(["git", "rev-list", "--tags", "--max-count=1"], universal_newlines=True).strip()
-
-def _LatestTagName(latestTagHash):
-	return check_output(["git", "describe", "--tags", latestTagHash], universal_newlines=True).strip()
+def _LatestTagName():
+	return check_output(["git", "describe", "--abbrev=0", "--tags"], universal_newlines=True).strip()
 
 version = "1.1"     # The short X.Y version.
-release = "1.1.0"   # The full version, including alpha/beta/rc tags.
+release = "1.1.1"   # The full version, including alpha/beta/rc tags.
 try:
 	if _IsUnderGitControl:
-		latestTagName = _LatestTagName(_LatestTagHash())[1:]		# remove prefix "v"
+		latestTagName = _LatestTagName()[1:]		# remove prefix "v"
 		versionParts =  latestTagName.split("-")[0].split(".")
 
 		version = ".".join(versionParts[:2])

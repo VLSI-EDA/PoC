@@ -38,7 +38,7 @@ param(
 #
 # ==============================================================================
 # find suitable python version for PoC
-$PythonVersion_Major, $PythonVersion_Minor =	(3, 5)
+$PythonVersion_Major, $PythonVersion_Minor =	(3, 4)
 
 $Py_exe =		"py.exe"
 $Command =	"$Py_exe -{0} -c `"import sys; sys.exit(not (0x{0:00}{1:00}0000 < sys.hexversion < 0x04000000))`"" -f ($PythonVersion_Major, $PythonVersion_Minor)
@@ -154,7 +154,7 @@ $PoC_Environments =	@{
 				"PSModule" =			"Mentor.PrecisionRTL.psm1";
 				"PreHookFile" =		"Mentor.PrecisionRTL.pre.ps1";
 				"PostHookFile" =	"Mentor.PrecisionRTL.post.ps1"};
-			"ModelSim" =		@{
+			"ModelSim" =		  @{
 				"Load" =				$false;
 				"Commands" =		@("vsim", "msim");
 				"PSModule" =			"Mentor.ModelSim.psm1";
@@ -162,7 +162,7 @@ $PoC_Environments =	@{
 				"PostHookFile" =	"Mentor.ModelSim.post.ps1"};
 			"QuestaSim" =			@{
 				"Load" =				$false;
-				"Commands" =		@("vsim", "qsim");
+				"Commands" =		@("qsim");
 				"PSModule" =			"Mentor.QuestaSim.psm1";
 				"PreHookFile" =		"Mentor.QuestaSim.pre.ps1";
 				"PostHookFile" =	"Mentor.QuestaSim.post.ps1"

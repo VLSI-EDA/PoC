@@ -33,7 +33,7 @@ from flags                import Flags
 
 from lib.Functions        import Init
 from lib.Decorators       import LazyLoadTrigger, ILazyLoadable
-from ToolChains           import ConfigurationException
+from ToolChain            import ConfigurationException
 
 
 __api__ = [
@@ -512,12 +512,24 @@ class LazyPathElement(PathElement, ILazyLoadable):
 		return "{0!s}.{1}".format(self._parent, self._name)
 
 
+@unique
+class SimulationResult(Enum):
+	"""Simulation result enumeration."""
+	NotRun =      0
+	DryRun =      1
+	Error =       2
+	Failed =      3
+	NoAsserts =   4
+	Passed =      5
+	GUIRun =      6
+
+
 class Testbench(LazyPathElement):
 	def __init__(self, host, name, configSectionName, parent):
 		self._kind =        TestbenchKind.Unknown
 		self._moduleName =  ""
 		self._filesFile =   None
-		self._result =      None
+		self._result =      SimulationResult.NotRun
 		super().__init__(host, name, configSectionName, parent)
 
 	@property

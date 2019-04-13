@@ -33,7 +33,7 @@ from textwrap                import dedent
 from Base.Project            import FileTypes, ToolChain, Tool
 from DataBase.Config         import Vendors
 from DataBase.Entity         import WildCard
-from ToolChains.GNU          import Make
+from ToolChain.GNU           import Make
 from Simulator               import SimulatorException, SimulationSteps, Simulator as BaseSimulator
 
 

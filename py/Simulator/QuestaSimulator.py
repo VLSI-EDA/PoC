@@ -6,7 +6,7 @@
 # Authors:          Patrick Lehmann
 #                   Martin Zabel
 #
-# Python Module:    Mentor QuestaSim simulator.
+# Python Module:    Mentor ModelSim simulator.
 #
 # License:
 # ==============================================================================
@@ -32,9 +32,10 @@ from textwrap                     import dedent
 
 from Base.Project                 import FileTypes, ToolChain, Tool
 from DataBase.Config              import Vendors
-from ToolChains.Mentor.QuestaSim  import QuestaSim, QuestaSimException
+from ToolChain.Mentor.ModelSim    import ModelSim
+from ToolChain.Mentor.QuestaSim   import QuestaSimException
 from Simulator                    import VHDL_TESTBENCH_LIBRARY_NAME, SimulatorException, SkipableSimulatorException, SimulationSteps, Simulator as BaseSimulator
-
+from Simulator.ModelSimSimulator  import Simulator as ModelSimSimulator_Simulator
 
 __api__ = [
 	'Simulator'
@@ -42,12 +43,12 @@ __api__ = [
 __all__ = __api__
 
 
-class Simulator(BaseSimulator):
+class Simulator(ModelSimSimulator_Simulator):
 	TOOL_CHAIN =      ToolChain.Mentor_QuestaSim
 	TOOL =            Tool.Mentor_vSim
 
 	def __init__(self, host, dryRun, simulationSteps):
-		# A separate elaboration step is not implemented in QuestaSim
+		# A separate elaboration step is not implemented in ModelSim
 		simulationSteps &= ~SimulationSteps.Elaborate
 		super().__init__(host, dryRun, simulationSteps)
 
@@ -63,7 +64,7 @@ class Simulator(BaseSimulator):
 			self._PrepareSimulator()
 
 	def _PrepareSimulator(self):
-		# create the QuestaSim executable factory
+		# create the ModelSim executable factory
 		self.LogVerbose("Preparing Mentor simulator.")
 		# for sectionName in ['INSTALL.Mentor.QuestaSim', 'INSTALL.Mentor.ModelSim', 'INSTALL.Altera.ModelSim']:
 		# 	if (len(self.Host.PoCConfig.options(sectionName)) != 0):
@@ -71,7 +72,7 @@ class Simulator(BaseSimulator):
 		# else:
 		# XXX: check SectionName if ModelSim is configured
 		# 	raise NotConfiguredException(
-		# 		"Neither Mentor Graphics QuestaSim, ModelSim PE nor ModelSim Altera-Edition are configured on this system.")
+		# 		"Neither Mentor Graphics ModelSim, ModelSim PE nor ModelSim Altera-Edition are configured on this system.")
 
 		# questaSection = self.Host.PoCConfig[sectionName]
 		# binaryPath = Path(questaSection['BinaryDirectory'])
@@ -79,10 +80,10 @@ class Simulator(BaseSimulator):
 
 		binaryPath =  Path(self.Host.PoCConfig['INSTALL.ModelSim']['BinaryDirectory'])
 		version =     self.Host.PoCConfig['INSTALL.ModelSim']['Version']
-		self._toolChain = QuestaSim(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		self._toolChain = ModelSim(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
 
 	def Run(self, testbench, board, vhdlVersion, vhdlGenerics=None):
-		# TODO: refactor into a ModelSim module, shared by QuestaSim and Cocotb (-> MixIn class)?
+		# TODO: refactor into a ModelSim module, shared by ModelSim and Cocotb (-> MixIn class)?
 		# select modelsim.ini
 		self._modelsimIniPath = self.Directories.PreCompiled
 		if board.Device.Vendor is Vendors.Altera:
@@ -100,13 +101,13 @@ class Simulator(BaseSimulator):
 		super().Run(testbench, board, vhdlVersion, vhdlGenerics)
 
 	def _RunAnalysis(self, _):
-		# create a QuestaVHDLCompiler instance
+		# create a ModelSimVHDLCompiler instance
 		vlib = self._toolChain.GetVHDLLibraryTool()
 		for lib in self._pocProject.VHDLLibraries:
 			vlib.Parameters[vlib.SwitchLibraryName] = lib.Name
 			vlib.CreateLibrary()
 
-		# create a QuestaVHDLCompiler instance
+		# create a ModelSimVHDLCompiler instance
 		vcom = self._toolChain.GetVHDLCompiler()
 		vcom.Parameters[vcom.FlagQuietMode] =         True
 		vcom.Parameters[vcom.FlagExplicit] =          True
@@ -170,7 +171,7 @@ class Simulator(BaseSimulator):
 		tclBatchFilePath =        self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimBatchScript']
 		tclDefaultBatchFilePath = self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultBatchScript']
 
-		# create a QuestaSimulator instance
+		# create a ModelSimSimulator instance
 		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:
@@ -201,7 +202,7 @@ class Simulator(BaseSimulator):
 		tclDefaultGUIFilePath =   self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultGUIScript']
 		tclDefaultWaveFilePath =  self.Host.Directories.Root / self.Host.PoCConfig[testbench.ConfigSectionName]['vSimDefaultWaveScript']
 
-		# create a QuestaSimulator instance
+		# create a ModelSimSimulator instance
 		vsim = self._toolChain.GetSimulator()
 		vsim.Parameters[vsim.SwitchModelSimIniFile] = self._modelsimIniPath.as_posix()
 		# vsim.Parameters[vsim.FlagOptimization] =      True			# FIXME:

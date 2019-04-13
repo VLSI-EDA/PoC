@@ -34,7 +34,7 @@ from textwrap                 import dedent
 
 from Base.Project             import ToolChain, Tool
 from DataBase.Entity          import WildCard
-from ToolChains.Xilinx.Vivado import Vivado, VivadoException
+from ToolChain.Xilinx.Vivado  import Vivado, VivadoException
 from Compiler                 import CompilerException, SkipableCompilerException, CompileState, Compiler as BaseCompiler
 
 
@@ -59,11 +59,12 @@ class Compiler(BaseCompiler):
 
 	def _PrepareCompiler(self):
 		super()._PrepareCompiler()
-
-		vivadoSection = self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
-		binaryPath =    Path(vivadoSection['BinaryDirectory'])
-		version =       vivadoSection['Version']
-		self._toolChain = Vivado(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		vivadoSection =         self.Host.PoCConfig['INSTALL.Xilinx.Vivado']
+		version =               vivadoSection['Version']
+		installationDirectory = Path(vivadoSection['InstallationDirectory'])
+		binaryPath =            Path(vivadoSection['BinaryDirectory'])
+		self._toolChain =       Vivado(self.Host.Platform, self.DryRun, binaryPath, version, logger=self.Logger)
+		self._toolChain.PreparseEnvironment(installationDirectory)
 
 	def RunAll(self, fqnList, *args, **kwargs):
 		"""Run a list of netlist compilations. Expand wildcards to all selected netlists."""
