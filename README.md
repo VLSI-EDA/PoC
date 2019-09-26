@@ -5,7 +5,8 @@
 [![Build status by AppVeyor](https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/release?svg=true)](https://ci.appveyor.com/project/Paebbels/poc/branch/release)
 [![Documentation Status](https://readthedocs.org/projects/poc-library/badge/?version=latest)](http://poc-library.readthedocs.io/en/latest/?badge=latest)
 [![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
-[![Requirements Status](https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch=release)](https://requires.io/github/VLSI-EDA/PoC/requirements/?branch=release)  
+[![Requirements Status](https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch=release)](https://requires.io/github/VLSI-EDA/PoC/requirements/?branch=release) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FVLSI-EDA%2FPoC.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FVLSI-EDA%2FPoC?ref=badge_shield)
+ 
 [![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC)
 [![Subscribe for news at https://gitter.im/VLSI-EDA/News](https://img.shields.io/badge/news-Subscribe%20to%20VLSI--EDA%2FNews-orange.svg)](https://gitter.im/VLSI-EDA/News)  
 ![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)
@@ -303,3 +304,7 @@ The PoC-Library hosted at [GitHub.com](https://www.github.com). Please use the f
   urldate={2016-10-28},
 }
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FVLSI-EDA%2FPoC.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FVLSI-EDA%2FPoC?ref=badge_large)
