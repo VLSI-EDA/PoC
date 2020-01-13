@@ -96,9 +96,9 @@ entity sync_Bit_Xilinx is
     SYNC_DEPTH    : T_MISC_SYNC_DEPTH   := T_MISC_SYNC_DEPTH'low    -- generate SYNC_DEPTH many stages, at least 2
   );
   port (
-    Clock         : in  std_logic;                                  -- <Clock>  output clock domain
-    Input         : in  std_logic_vector(BITS - 1 downto 0);        -- @async:  input bits
-    Output        : out std_logic_vector(BITS - 1 downto 0)         -- @Clock:  output bits
+    Clock         : in  std_logic;        -- <Clock>  output clock domain
+    Input         : in  std_logic;        -- @async:  input bit
+    Output        : out std_logic         -- @Clock:  output bit
   );
 end entity;
 
