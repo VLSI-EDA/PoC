@@ -64,6 +64,8 @@ elseif (BoardName = "S3ESK500") then
 # Spartan-6 boards
 elseif (BoardName = "Atlys") then
 	vhdl	poc	"tb/common/my_config_Atlys.vhdl"
+elseif (BoardName = "QM_XC6SLX16_DDR3") then
+	vhdl	poc	"tb/common/my_config_QM_XC6SLX16_DDR3.vhdl"
 
 # Zynq-7000 boards
 elseif (BoardName = "ZC706") then
