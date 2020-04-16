@@ -27,7 +27,7 @@
 -- |            | transactions as required for the PoC.Mem interface.|
 -- +------------+----------------------------------------------------+
 --
--- Tested with: CLK_PERIOD = ???, CL=2, BL=1.
+-- Tested with: CLK_PERIOD = 10.0, CL=2, BL=1.
 --
 -- Operation
 -- *********
