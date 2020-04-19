@@ -35,7 +35,7 @@
 -- Command, address and write data is sampled with ``clk``.
 -- Read data is also aligned with ``clk``.
 --
--- For description on ``clkout`` see
+-- For description of ``clkout`` and datapath signals see
 -- :ref:`sdram_ctrl_phy_qm_xc6slx16_sdram <IP:sdram_ctrl_phy_qm_xc6slx16_sdram>`.
 --
 -- Synchronous resets are used.
@@ -84,6 +84,7 @@ entity sdram_ctrl_qm_xc6slx16_sdram is
     user_write       : in  std_logic;
     user_addr        : in  std_logic_vector(23 downto 0);
     user_wdata       : in  std_logic_vector(15 downto 0);
+    user_wmask       : in  std_logic_vector(1 downto 0) := (others => '0');
     user_got_cmd     : out std_logic;
     user_got_wdata   : out std_logic;
     user_rdata       : out std_logic_vector(15 downto 0);
@@ -97,6 +98,7 @@ entity sdram_ctrl_qm_xc6slx16_sdram is
     sd_we  : out   std_logic;
     sd_ba  : out   std_logic_vector(1 downto 0);
     sd_a   : out   std_logic_vector(12 downto 0);
+    sd_dqm : out   std_logic_vector(1 downto 0);
     sd_dq  : inout std_logic_vector(15 downto 0));
 
 end sdram_ctrl_qm_xc6slx16_sdram;
@@ -195,6 +197,7 @@ begin  -- rtl
       sd_a_nxt   => sd_a_nxt,
       wren_nxt   => wren_nxt,
       wdata_nxt  => user_wdata,
+      wmask_nxt  => user_wmask,
       rden_nxt   => rden_nxt,
       rdata      => user_rdata,
       rstb       => user_rstb,
@@ -206,6 +209,7 @@ begin  -- rtl
       sd_we      => sd_we,
       sd_ba      => sd_ba,
       sd_a       => sd_a,
+			sd_dqm     => sd_dqm,
       sd_dq      => sd_dq);
 
 end rtl;

@@ -33,6 +33,21 @@
 -- Datapath Signals
 -- ****************
 --
+-- +--------------------+------------------------------------------------+
+-- + wr_en_nxt          | Write enable, see below.                       |
+-- +--------------------+------------------------------------------------+
+-- | wdata_nxt          | The data to be written to the memory.          |
+-- +--------------------+------------------------------------------------+
+-- | wmask_nxt          | Write-mask, for each byte: '0' = write byte,   |
+-- |                    | '1' = mask byte from write.                    |
+-- +--------------------+------------------------------------------------+
+-- + rd_en_nxt          | Write enable, see below.                       |
+-- +--------------------+------------------------------------------------+
+-- | rstb               | High-active read-strobe.                       |
+-- +--------------------+------------------------------------------------+
+-- | rdata              | The read-data returned from the memory.        |
+-- +--------------------+------------------------------------------------+
+--
 -- Command signals and write data are sampled with ``clk``.
 -- Read data is also aligned with ``clk``.
 --
@@ -97,6 +112,7 @@ entity sdram_ctrl_phy_qm_xc6slx16_sdram is
 
     wren_nxt  : in std_logic;
     wdata_nxt : in std_logic_vector(15 downto 0);
+    wmask_nxt : in std_logic_vector(1 downto 0);
 
     rden_nxt : in  std_logic;
     rdata    : out std_logic_vector(15 downto 0);
@@ -110,6 +126,7 @@ entity sdram_ctrl_phy_qm_xc6slx16_sdram is
     sd_we  : out   std_logic;
     sd_ba  : out   std_logic_vector(1 downto 0);
     sd_a   : out   std_logic_vector(12 downto 0);
+		sd_dqm : out   std_logic_vector(1 downto 0);
     sd_dq  : inout std_logic_vector(15 downto 0));
 
 end sdram_ctrl_phy_qm_xc6slx16_sdram;
@@ -127,6 +144,7 @@ architecture rtl of sdram_ctrl_phy_qm_xc6slx16_sdram is
   -- control / data signals for write
   signal dq_en_r : std_logic_vector(15 downto 0);
   signal dq_o_r  : std_logic_vector(15 downto 0);
+  signal dqm_r   : std_logic_vector(1 downto 0);
 
   -- control / data signals for read
   -- adjust read delay through length of vector
@@ -205,6 +223,7 @@ begin  -- rtl
       -- prevent unnecessary toggling
       if wren_nxt = '1' then
         dq_o_r <= wdata_nxt;
+				dqm_r  <= wmask_nxt;
       end if;
 
       if rst = '1' then
@@ -218,6 +237,8 @@ begin  -- rtl
   dq_obuf: for i in 0 to 15 generate
     sd_dq(i) <= dq_o_r(i) when dq_en_r(i) = '1' else 'Z';
   end generate dq_obuf;
+
+	sd_dqm <= dqm_r;
 
   -----------------------------------------------------------------------------
   -- Read data capture
