@@ -14,8 +14,7 @@
 --
 -- Simplifies the application interface ("app") of the Xilinx MIG IP core.
 -- The PoC.Mem interface provides single-cycle fully pipelined read/write access
--- to the memory. All accesses are word-aligned. Always all bytes of a word are
--- written to the memory. More details can be found
+-- to the memory. All accesses are word-aligned. More details can be found
 -- :ref:`here <INT:PoC.Mem>`.
 --
 -- Generic parameters:
