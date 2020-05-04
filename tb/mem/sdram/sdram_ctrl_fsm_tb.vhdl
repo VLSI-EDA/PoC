@@ -147,12 +147,20 @@ begin  -- architecture sim
     wait until rising_edge(clk);
     rst  <= '0';
 
-    -- 1) Wait until initialization has almost completed
+    -- 1) Check LOAD MODE REGISTER during initialization
     -- =================================================
 		user_cmd_valid   <= '0';
 		user_wdata_valid <= '0';
-		wait for 100 us; -- INIT_WAIT_NS
-    wait until rising_edge(clk);
+    wait until rising_edge(clk) and	sd_cs_nxt = '0' and
+			sd_ras_nxt = '0' and sd_cas_nxt ='0' and sd_we_nxt = '0';
+		simAssertion(sd_a_nxt = "000000" &
+								 std_logic_vector(to_unsigned(CL, 3)) &
+								 "0" &
+								 std_logic_vector(to_unsigned(log2ceil(BL), 3)),
+								 "Mode register value incorrect!");
+		simAssertion(sd_ba_nxt = "00",
+								 "Mode register bank address incorrect!");
+		
 
     -- 1) Issue single write burst
     -- ===========================
