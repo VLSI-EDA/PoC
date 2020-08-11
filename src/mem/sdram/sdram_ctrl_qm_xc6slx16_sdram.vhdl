@@ -116,12 +116,12 @@ architecture rtl of sdram_ctrl_qm_xc6slx16_sdram is
 
   -- Divide timings from datasheet by clock period.
   -- SDRAM device: MT48LC16M16A2-75
-  constant T_MRD     : integer := integer(ceil(2.0/CLK_PERIOD));
+  constant T_MRD     : integer := 2; -- fix
   constant T_RAS     : integer := integer(ceil(44.0/CLK_PERIOD));
   constant T_RCD     : integer := integer(ceil(20.0/CLK_PERIOD));
   constant T_RFC     : integer := integer(ceil(66.0/CLK_PERIOD));
   constant T_RP      : integer := integer(ceil(20.0/CLK_PERIOD));
-  constant T_WR      : integer := integer(ceil(15.0/CLK_PERIOD));
+  constant T_WR      : integer := 1 + integer(ceil(7.5/CLK_PERIOD));
   constant T_WTR     : integer := 1;
   constant T_REFI    : integer := integer(ceil((7812.0)/CLK_PERIOD))-50; -- 64 ms / 8192 rows
   constant INIT_WAIT : integer := integer(ceil(100000.0/  -- 100 us

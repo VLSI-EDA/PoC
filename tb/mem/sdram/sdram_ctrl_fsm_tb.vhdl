@@ -62,12 +62,12 @@ architecture sim of sdram_ctrl_fsm_tb is
 
   -- Divide timings from datasheet by clock period.
   -- Example SDRAM device: MT48LC16M16A2-75
-  constant T_MRD     : integer := integer(ceil(2.0/CLK_PERIOD));
+  constant T_MRD     : integer := 2; -- fix
   constant T_RAS     : integer := integer(ceil(44.0/CLK_PERIOD));
   constant T_RCD     : integer := integer(ceil(20.0/CLK_PERIOD));
   constant T_RFC     : integer := integer(ceil(66.0/CLK_PERIOD));
   constant T_RP      : integer := integer(ceil(20.0/CLK_PERIOD));
-  constant T_WR      : integer := integer(ceil(15.0/CLK_PERIOD));
+  constant T_WR      : integer := 1 + integer(ceil(7.5/CLK_PERIOD));
   constant T_WTR     : integer := 1;
   constant T_REFI    : integer := integer(ceil((7812.0)/CLK_PERIOD))-50; -- 64 ms / 8192 rows
 	constant INIT_WAIT_NS : real := 100000.0; -- 100 us, must match below
@@ -162,8 +162,8 @@ begin  -- architecture sim
 								 "Mode register bank address incorrect!");
 		
 
-    -- 1) Issue single write burst
-    -- ===========================
+    -- 1) Issue write bursts
+    -- =====================
 		user_cmd_valid <= '1';
 		user_write <= '1';
 		user_addr  <= std_logic_vector(to_unsigned(0, user_addr'length));
@@ -178,11 +178,36 @@ begin  -- architecture sim
 			wait until rising_edge(clk);
 		end loop;
 
-    -- 2) Issue single read burst
-    -- ===========================
+		user_cmd_valid <= '1';
+		user_write <= '1';
+		user_addr  <= std_logic_vector(to_unsigned(BL, user_addr'length));
+		user_wdata_valid <= '1';
+    wait until rising_edge(clk) and user_got_cmd = '1';
+		for i in 0 to BL-1 loop
+			simAssertion(user_got_wdata = '1',
+									 "Write data not acknowledged @ i=" & integer'image(i));
+			simAssertion(wren_nxt = '1',
+									 "Write data not enabled @ i=" & integer'image(i));
+			user_cmd_valid <= '0';
+			wait until rising_edge(clk);
+		end loop;
+
+    -- 2) Issue read bursts
+    -- ====================
 		user_cmd_valid <= '1';
 		user_write <= '0';
 		user_addr  <= std_logic_vector(to_unsigned(0, user_addr'length));
+    wait until rising_edge(clk) and user_got_cmd = '1';
+		for i in 0 to BL-1 loop
+			simAssertion(rden_nxt = '1',
+									 "Read data not enabled @ i=" & integer'image(i));
+			user_cmd_valid <= '0';
+			wait until rising_edge(clk);
+		end loop;
+
+		user_cmd_valid <= '1';
+		user_write <= '0';
+		user_addr  <= std_logic_vector(to_unsigned(BL, user_addr'length));
     wait until rising_edge(clk) and user_got_cmd = '1';
 		for i in 0 to BL-1 loop
 			simAssertion(rden_nxt = '1',
