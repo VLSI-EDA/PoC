@@ -1,0 +1,3 @@
+
+NET "c3_sys_clk"		TNM_NET = "NET_mig_QM_XC6SLX16_DDR3_c3_sys_clk";
+TIMESPEC "TS_mig_QM_XC6SLX16_DDR3_c3_sys_clk" = PERIOD "NET_mig_QM_XC6SLX16_DDR3_c3_sys_clk"	50 MHz	HIGH 50 %;		## 50 MHz board clock (50%/50% duty-cycle)

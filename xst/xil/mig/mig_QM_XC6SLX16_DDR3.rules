@@ -1,0 +1,36 @@
+# EMACS settings: -*-	tab-width: 2; indent-tabs-mode: t -*-
+# vim: tabstop=2:shiftwidth=2:noexpandtab
+# kate: tab-width 2; replace-tabs off; indent-width 2;
+# ==============================================================================
+# Note: all files are relative to PoC root directory
+#
+PreProcessRules
+	# Empty
+End PreProcessRules
+
+PostProcessRules
+	# copy output files into netlist directory
+	Copy "${SPECIAL:OutputDir}/${TopLevel}.ngc"														To "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.ngc"
+	Copy "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}_top.vhd"		To "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.vhdl"
+	
+	# patch top-level according to the generic values used while synthesis
+	File "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}.vhdl"
+		Replace "(architecture arc of ${TopLevel} is).*(end  arc;)"	With "\\1\\nbegin\\n\\2"	Options DotAll
+		Replace "generic.*port"																			With "port"								Options DotAll
+		Replace "C3_NUM_DQ_PINS"																		With "16"
+		Replace "C3_MEM_ADDR_WIDTH"																	With "14"
+		Replace "C3_MEM_BANKADDR_WIDTH"															With "3"
+		Replace "C3_P0_MASK_SIZE"																		With "16"
+		Replace "C3_P0_DATA_PORT_SIZE"															With "128"
+	End File
+	
+	# delete intermediate files from CoreGen step
+	Delete "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/iodrp_controller.vhd"
+	Delete "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/iodrp_mcb_controller.vhd"
+	Delete "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/mcb_raw_wrapper.vhd"
+	Delete "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/mcb_soft_calibration_top.vhd"
+	Delete "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/mcb_soft_calibration.vhd"
+	Delete "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/memc3_infrastructure.vhd"
+	Delete "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/memc3_wrapper.vhd"
+	Delete "${PoC:NLDir}/${SPECIAL:Device}/${RelDir}/${TopLevel}_top.vhd"
+End PostProcessRules

@@ -18,8 +18,7 @@
 --
 -- Simplifies the User Interface ("user") of the Xilinx MIG IP core (UG388).
 -- The PoC.Mem interface provides single-cycle fully pipelined read/write access
--- to the memory. All accesses are word-aligned. Always all bytes of a word are
--- written to the memory. More details can be found
+-- to the memory. All accesses are word-aligned. More details can be found
 -- :ref:`here <INT:PoC.Mem>`.
 --
 -- Generic parameters:

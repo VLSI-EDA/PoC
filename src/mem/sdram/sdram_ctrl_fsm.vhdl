@@ -210,7 +210,7 @@ architecture rtl of sdram_ctrl_fsm is
   --   bit 8: reset DLL
   constant MODE_REG : std_logic_vector(8 downto 0) :=
     "00" & std_logic_vector(to_unsigned(CL, 3)) &
-    "0"  & std_logic_vector(to_unsigned(BL-1, 3));
+    "0"  & std_logic_vector(to_unsigned(log2ceil(BL), 3));
 
   --------
   -- Timer
