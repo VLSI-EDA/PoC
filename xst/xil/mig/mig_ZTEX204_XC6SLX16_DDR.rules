@@ -18,8 +18,8 @@ PostProcessRules
 		Replace "(architecture arc of ${TopLevel} is).*(end  arc;)"	With "\\1\\nbegin\\n\\2"	Options DotAll
 		Replace "generic.*port"																			With "port"								Options DotAll
 		Replace "C3_NUM_DQ_PINS"																		With "16"
-		Replace "C3_MEM_ADDR_WIDTH"																	With "14"
-		Replace "C3_MEM_BANKADDR_WIDTH"															With "3"
+		Replace "C3_MEM_ADDR_WIDTH"																	With "13"
+		Replace "C3_MEM_BANKADDR_WIDTH"															With "2"
 		Replace "C3_P0_MASK_SIZE"																		With "16"
 		Replace "C3_P0_DATA_PORT_SIZE"															With "128"
 	End File
