@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project NoOfControllers="1" >
+    <ModuleName>mig_ZTEX204_XCS6LX16_DDR</ModuleName>
+    <TargetFPGA>xc6slx16-ftg256/-2</TargetFPGA>
+    <Version>3.92</Version>
+    <Controller number="3" >
+        <MemoryDevice>DDR_SDRAM/Components/MT46V32M16XX-5B-IT</MemoryDevice>
+        <TimePeriod>5000</TimePeriod>
+        <EnableVoltageRange>0</EnableVoltageRange>
+        <DataMask>1</DataMask>
+        <CustomPart>FALSE</CustomPart>
+        <NewPartName></NewPartName>
+        <RowAddress>13</RowAddress>
+        <ColAddress>10</ColAddress>
+        <BankAddress>2</BankAddress>
+        <TimingParameters>
+            <Parameters twtr="2" trefi="7.8" twr="15" trfc="70" trp="15" tras="40" trcd="15" />
+        </TimingParameters>
+        <mrBurstLength name="Burst Length" >8(011)</mrBurstLength>
+        <mrCasLatency name="CAS Latency" >3</mrCasLatency>
+        <emrDllEnable name="DLL Enable" >Enable-Normal</emrDllEnable>
+        <emrOutputDriveStrength name="Output Drive Strength" >Normal</emrOutputDriveStrength>
+        <PortInterface>NATIVE</PortInterface>
+        <Class>Class II</Class>
+        <DataClass>Class II</DataClass>
+        <InputPinTermination>EXTERN_TERM</InputPinTermination>
+        <DataTermination>25 Ohms</DataTermination>
+        <CalibrationRowAddress></CalibrationRowAddress>
+        <CalibrationColumnAddress></CalibrationColumnAddress>
+        <CalibrationBankAddress></CalibrationBankAddress>
+        <SystemClock>Single-Ended</SystemClock>
+        <BypassCalibration>1</BypassCalibration>
+        <DebugSignals>Disable</DebugSignals>
+        <SystemClock>Single-Ended</SystemClock>
+        <Configuration>One 128-bit bi-directional port</Configuration>
+        <RzqPin>M4</RzqPin>
+        <ZioPin>M5</ZioPin>
+        <PortsSelected>Port0</PortsSelected>
+        <PortDirections>Bi-directional</PortDirections>
+        <UserMemoryAddressMap>ROW_BANK_COLUMN</UserMemoryAddressMap>
+        <ArbitrationAlgorithm>Round Robin</ArbitrationAlgorithm>
+        <TimeSlot0>0</TimeSlot0>
+        <TimeSlot1>0</TimeSlot1>
+        <TimeSlot2>0</TimeSlot2>
+        <TimeSlot3>0</TimeSlot3>
+        <TimeSlot4>0</TimeSlot4>
+        <TimeSlot5>0</TimeSlot5>
+        <TimeSlot6>0</TimeSlot6>
+        <TimeSlot7>0</TimeSlot7>
+        <TimeSlot8>0</TimeSlot8>
+        <TimeSlot9>0</TimeSlot9>
+        <TimeSlot10>0</TimeSlot10>
+        <TimeSlot11>0</TimeSlot11>
+    </Controller>
+</Project>

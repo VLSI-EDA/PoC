@@ -122,7 +122,6 @@ architecture rtl of mem_timeslice_arbiter is
 	constant TAG_BITS : natural := log2ceil(PORTS);
 	
 	-- Selected Port, encoded one-hot and binary
-	signal sel_onehot_r : std_logic_vector(PORTS-1 downto 0);
 	signal sel_bin_r    : unsigned(log2ceil(PORTS)-1 downto 0);
 	signal sel_port     : integer range 0 to PORTS-1;
 
@@ -156,14 +155,11 @@ begin  -- rtl
 		if rising_edge(clk) then
 			if rst = '1' then
 				-- Select port 0 after reset
-				sel_onehot_r <= (0 => '1', others => '0');
 				sel_bin_r    <= (others => '0');
 			elsif mem_rdy_2 = '1' then
 				-- Select next port with each clock cycle, but only if right side is ready.
 				-- This is to ensure, that the "free" bandwidth is distributed equally across
 				-- the ports.
-				sel_onehot_r <= sel_onehot_r(sel_onehot_r'left-1 downto 0) &
-												sel_onehot_r(sel_onehot_r'left);
 				if sel_bin_r = PORTS-1 then
 					sel_bin_r <= (others => '0');
 				else
