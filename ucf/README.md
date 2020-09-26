@@ -27,8 +27,12 @@
  -  Spartan Boards
      -  [`S3SK`][brd_s3sk]
      -  [`S3ESK`][brd_s3esk]
+     -  [`ZTEX204`][brd_ztex204]
      -  [`Atlys`][brd_atlys]
  -  Artix Boards
+     -  [`Nexys4DDR`][brd_nexys4ddr]
+     -  [`Arty_A035`][brd_arty_a035]
+     -  [`Arty_A100`][brd_arty_a100]
  -  Kintex Boards
      -  [`KC705`][brd_kc705]
  -  Virtex Boards
@@ -47,7 +51,11 @@
  [brd_de5]:					DE5
  [brd_s3sk]:				S3SK
  [brd_s3esk]:				S3ESK
- [brd_atlys]:				Atlys
+ [brd_ztex204]:			ZTEX204
+ [brd_atlys]:				ATLYS
+ [brd_arty_a035]:       ARTY_A035
+ [brd_arty_a100]:       ARTY_A100
+ [brd_nexys4ddr]:       NEXYS4DDR
  [brd_kc705]:				KC705
  [brd_ml505]:				ML505
  [brd_xupv5]:				XUPV5
