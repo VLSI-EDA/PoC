@@ -142,18 +142,24 @@ architecture rtl of sdram_ctrl_phy_qm_xc6slx16_sdram is
   signal sd_a_r   : std_logic_vector(12 downto 0);
 
   -- control / data signals for write
-  signal dq_en_r : std_logic_vector(15 downto 0);
+  signal dq_hz_r : std_logic_vector(15 downto 0); -- high-impedance
   signal dq_o_r  : std_logic_vector(15 downto 0);
   signal dqm_r   : std_logic_vector(1 downto 0);
 
   -- control / data signals for read
   -- adjust read delay through length of vector
+  signal sd_dq_in    : std_logic_vector(15 downto 0);
   signal rden_r      : std_logic_vector(CL downto 0);
   signal rstb_r      : std_logic;
   signal rdata_r     : std_logic_vector(15 downto 0);
 
   attribute keep : string;
   attribute keep of rden_r : signal is "true";
+
+	-- Force one tri-state control register per DQ pin to have a short critical
+	-- path between the control register and the output, so that, FFs in IOBs can
+	-- be used.
+	attribute keep of dq_hz_r : signal is "true";
 
 begin  -- rtl
 
@@ -227,15 +233,21 @@ begin  -- rtl
       end if;
 
       if rst = '1' then
-        dq_en_r <= (others => '0');
+				-- disable output upon reset
+        dq_hz_r <= (others => '1');
       else
-        dq_en_r <= (others => wren_nxt);
+				-- disable output when not writing
+        dq_hz_r <= (others => not wren_nxt);
       end if;
     end if;
   end process;
 
   dq_obuf: for i in 0 to 15 generate
-    sd_dq(i) <= dq_o_r(i) when dq_en_r(i) = '1' else 'Z';
+		buf: OBUFT port map(
+			I => dq_o_r(i),
+			T => dq_hz_r(i),
+			O => sd_dq(i)
+		);
   end generate dq_obuf;
 
 	sd_dqm <= dqm_r;
@@ -243,6 +255,13 @@ begin  -- rtl
   -----------------------------------------------------------------------------
   -- Read data capture
   -----------------------------------------------------------------------------
+
+  dq_ibuf: for i in 0 to 15 generate
+		buf: IBUF port map(
+			I => sd_dq(i),
+			O => sd_dq_in(i)
+		);
+  end generate dq_ibuf;
 
   process (clk)
   begin  -- process
@@ -258,7 +277,7 @@ begin  -- rtl
 
       -- Data capture
       if rden_r(rden_r'left) = '1' then
-        rdata_r <= sd_dq;
+        rdata_r <= sd_dq_in;
       end if;
     end if;
   end process;
