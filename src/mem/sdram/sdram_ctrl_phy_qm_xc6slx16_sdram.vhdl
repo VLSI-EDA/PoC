@@ -161,6 +161,19 @@ architecture rtl of sdram_ctrl_phy_qm_xc6slx16_sdram is
 	-- be used.
 	attribute keep of dq_hz_r : signal is "true";
 
+  -- Force Command, DQ and DQ-control signals into IOBs
+  attribute iob : string;
+  attribute iob of sd_cke_r : signal is "true";
+  attribute iob of sd_cs_r  : signal is "true";
+  attribute iob of sd_ras_r : signal is "true";
+  attribute iob of sd_cas_r : signal is "true";
+  attribute iob of sd_we_r  : signal is "true";
+  attribute iob of sd_ba_r  : signal is "true";
+  attribute iob of sd_a_r   : signal is "true";
+  attribute iob of dq_o_r   : signal is "true";
+  attribute iob of dq_hz_r  : signal is "true";
+  attribute iob of dqm_r    : signal is "true";
+  attribute iob of rdata_r  : signal is "true";
 begin  -- rtl
 
   -----------------------------------------------------------------------------
