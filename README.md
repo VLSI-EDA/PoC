@@ -1,17 +1,21 @@
 <!--- DO NOT EDIT! This file is generated from .tpl --->
+
+> [!CAUTION] 
+> **The PoC-Library** has been forked to https://github.com/VHDL/PoC.
+>
+> Further development, bug fixing and issue resolution will be handled at `github.com/VHDL/PoC` owned by the [Open-Source VHDL Group](https://github.com/VHDL).
+> All code will be checked with reworked [OSVVM](https://github.com/OSVVM/OSVVM) testbenches and checked by [GHDL](https://github.com/ghdl/ghdl) and [NVC](https://github.com/nickg/nvc) via GitHub Actions.  
+> An updated documentation is published at: https://vhdl.github.io/PoC/
+
+> [!TIP]
+> In case you liked this PoC-Library, we would be happy if you could transfer your stars (🌟) and watches (👁) to the [new location](https://github.com/VHDL/PoC).
+
 # The PoC-Library
 
-[![Build Status by Travis-CI](https://travis-ci.org/VLSI-EDA/PoC.svg?branch=release)](https://travis-ci.org/VLSI-EDA/PoC/branches)
 [![Build status by AppVeyor](https://ci.appveyor.com/api/projects/status/r5dtv6amsppigpsp/branch/release?svg=true)](https://ci.appveyor.com/project/Paebbels/poc/branch/release)
 [![Documentation Status](https://readthedocs.org/projects/poc-library/badge/?version=latest)](http://poc-library.readthedocs.io/en/latest/?badge=latest)
-[![Python Infrastructure tested by Landscape.io](https://landscape.io/github/VLSI-EDA/PoC/release/landscape.svg?style=flat)](https://landscape.io/github/VLSI-EDA/PoC/release)
-[![Requirements Status](https://requires.io/github/VLSI-EDA/PoC/requirements.svg?branch=release)](https://requires.io/github/VLSI-EDA/PoC/requirements/?branch=release) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FVLSI-EDA%2FPoC.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FVLSI-EDA%2FPoC?ref=badge_shield)
- 
-[![Join the chat at https://gitter.im/VLSI-EDA/PoC](https://badges.gitter.im/VLSI-EDA/PoC.svg)](https://gitter.im/VLSI-EDA/PoC)
-[![Subscribe for news at https://gitter.im/VLSI-EDA/News](https://img.shields.io/badge/news-Subscribe%20to%20VLSI--EDA%2FNews-orange.svg)](https://gitter.im/VLSI-EDA/News)  
-![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)
-[![Latest release](https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat)](https://github.com/VLSI-EDA/PoC/releases)
-[![Apache License 2.0](https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat)](LICENSE.md)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FVLSI-EDA%2FPoC.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FVLSI-EDA%2FPoC?ref=badge_shield)  
+![Latest tag](https://img.shields.io/github/tag/VLSI-EDA/PoC.svg?style=flat)[![Latest release](https://img.shields.io/github/release/VLSI-EDA/PoC.svg?style=flat)](https://github.com/VLSI-EDA/PoC/releases)[![Apache License 2.0](https://img.shields.io/github/license/VLSI-EDA/PoC.svg?style=flat)](LICENSE.md)
 
 
 This library is published and maintained by **Chair for VLSI Design, Diagnostics and Architecture** - 
